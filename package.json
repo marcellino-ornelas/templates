@@ -1,0 +1,25 @@
+{
+  "name": "Templates",
+  "version": "1.0.0",
+  "description": "",
+  "main": "template.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6"
+  },
+  "dependencies": {
+    "async": "^2.6.1",
+    "dot": "^1.1.2",
+    "filenamify": "^2.1.0",
+    "fs-extra": "^7.0.1",
+    "valid-filename": "^2.0.1"
+  }
+}
