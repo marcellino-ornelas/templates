@@ -86,5 +86,9 @@ utils.isValue = function(val) {
   return val !== null && val !== undefined;
 };
 
+utils.isString = function(str) {
+  return typeof str === 'string';
+};
+
 // utils.INVALID_FILES_ERROR = `\
 // Invalid file names. Before trying to run the command again, please check the names of your components that they would like to make. Names of components should contain only letters.`;
