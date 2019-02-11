@@ -2,7 +2,7 @@
 
 /*
  * Modules
-*/
+ */
 const path = require('path');
 const fs = require('fs-extra');
 const dot = require('dot');
@@ -263,7 +263,7 @@ fs.ensureDirSync(CACHE_LOCATION);
 
 /*
  * Templates
-*/
+ */
 class Template {
   constructor(opts = defaultOpts) {
     this.templates = {};
@@ -291,9 +291,10 @@ class Template {
     const isLocationAbsolute = path.isAbsolute(templateLocation);
 
     switch (true) {
-      case !isLocationAbsolute && /\//g.test(templateLocation):
-        console.log('github coming soon');
-        break;
+      // case !isLocationAbsolute && /\//g.test(templateLocation):
+      //   console.log('github coming soon');
+      //   break;
+
       case !/\W/gi.test(templateLocation):
         const cachedPackageLocation = path.join(
           CACHE_LOCATION,
@@ -307,8 +308,8 @@ class Template {
         }
 
         this.src = path.join(cachedPackageLocation, '.template');
-
         break;
+
       default:
         const src = isLocationAbsolute ? templateLocation : process.cwd();
         this.src = path.join(src, '.template');
@@ -366,14 +367,14 @@ class Template {
   }
 
   /*
-   * Render 
-   *  
+   * Render
+   *
    * This function will render all compiled packages that were passed into template instance at creation.
-   * 
+   *
    * @arg dest {string} Path to where the compiled files save at
    * @arg data {object} This will be passed into doT for env variables in template files
-   * @arg cb {function} Function to be called when all files and directories have been rendered. 
-  */
+   * @arg cb {function} Function to be called when all files and directories have been rendered.
+   */
   render(dest, data, cb) {
     if (!dest || utils.isString(dest)) {
       throw new Error('some error message for parameters');
@@ -456,7 +457,7 @@ class Template {
 /*
  * Helper functions
  * Move all to utils
-*/
+ */
 
 function transverseFileTree(src, cb) {
   const compilePackageDirectory = function(srcPath, relativePathFromSrc = '') {

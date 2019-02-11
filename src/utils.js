@@ -2,29 +2,42 @@
  * Utils.js
  *
  * Helper functions
-*/
+ */
 
 /*
  * Modules
-*/
-const async = require('async');
-const path = require('path');
-const fs = require('fs-extra');
-const validFilename = require('valid-filename');
-const filenamify = require('filenamify');
+ */
+// // const async = require("async");
+const path = require("path");
+const fs = require("fs");
+const validFilename = require("valid-filename");
+const filenamify = require("filenamify");
 
 var utils = (exports = module.exports);
 
 const test = false;
 
+utils.promisify = function(func, _this = null) {
+  return function() {
+    const args = arguments;
+    return new Promise(function(resolve, reject) {
+      Array.prototype.push.call(args, function(err, data) {
+        err ? reject(err) : resolve(data);
+      });
+
+      func.apply(_this, args);
+    });
+  };
+};
+
 utils.capitalize = function capitalize(name) {
   /*
    * Capitalize the first character in the string
    * @argument { str } should take a be a single word
-  */
+   */
 
   if (!name) {
-    throw new Error('Capitalize only accepts a non-empty string as a argument');
+    throw new Error("Capitalize only accepts a non-empty string as a argument");
   }
 
   let firstCharCapitalized = name[0].toUpperCase();
@@ -37,7 +50,7 @@ utils.capitalize = function capitalize(name) {
 
 utils.normalizeFileName = function normalizeReactComponentName(fileName) {
   return !validFilename(fileName)
-    ? filenamify(fileName, { replacement: '-' })
+    ? filenamify(fileName, { replacement: "-" })
     : fileName;
 };
 
@@ -45,17 +58,27 @@ utils.normalizeFileName = function normalizeReactComponentName(fileName) {
  * isDir
  *
  * @arg path {string} Directory path to check
-*/
+ */
 utils.isDir = function(path) {
   let dir;
   try {
     dir = fs.lstatSync(path);
   } catch (e) {
-    console.log('internal error: ', e);
+    console.log("internal error: ", e);
     return false;
   }
 
   return dir.isDirectory();
+};
+
+utils.couldMatch = function(matcher, obj) {
+  for (let key in matcher) {
+    const mVal = matcher[key];
+    if (!obj.hasOwnProperty(key) || mVal !== obj[key]) {
+      return false;
+    }
+  }
+  return true;
 };
 
 /*
@@ -65,7 +88,7 @@ utils.isDir = function(path) {
  *
  * @arg dest {string} Destination path to save all directories to
  * @arg dirs {string} All directories that need to be made
-*/
+ */
 utils.ensureDirectories = function(dest, dirs) {
   const inProgressDirectories = dirs.map(function(dirToMake) {
     return fs.ensureDir(path.join(dest, dirToMake));
@@ -75,11 +98,11 @@ utils.ensureDirectories = function(dest, dirs) {
 };
 
 utils.isFunc = function(fn) {
-  return typeof fn === 'function';
+  return typeof fn === "function";
 };
 
 utils.isBool = function(bool) {
-  return typeof bool === 'boolean';
+  return typeof bool === "boolean";
 };
 
 utils.isValue = function(val) {
@@ -87,7 +110,7 @@ utils.isValue = function(val) {
 };
 
 utils.isString = function(str) {
-  return typeof str === 'string';
+  return typeof str === "string";
 };
 
 // utils.INVALID_FILES_ERROR = `\

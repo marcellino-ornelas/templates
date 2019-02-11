@@ -1,4 +1,4 @@
-const Queue = require('./queue.js');
+const Queue = require("./queue.js");
 /**
  * Tree
  */
@@ -21,9 +21,17 @@ class Tree {
     return tree;
   }
 
+  isRoot() {
+    return this.depth === 0;
+  }
+
   hasChildren() {
     return !!this.children.length;
   }
+
+  /**
+   * Breath Methods
+   */
 
   breathFirstEach(cb) {
     const queue = new Queue();
@@ -32,7 +40,9 @@ class Tree {
     while (queue.size() > 0) {
       const currentTree = queue.peek();
 
-      cb(currentTree);
+      if (cb(currentTree) === false) {
+        break;
+      }
 
       if (currentTree.hasChildren()) {
         currentTree.children.forEach(childTree => {
@@ -43,6 +53,43 @@ class Tree {
       queue.dequeue();
     }
   }
+
+  breathFirstSelect(cb) {
+    const filtered = [];
+
+    this.breathFirstEach(function(tree) {
+      if (cb(tree)) {
+        filtered.push(tree);
+      }
+    });
+
+    return filtered;
+  }
+
+  /**
+   * Depth Methods
+   */
+
+  depthFirstEach(cb) {
+    // change to stack
+    function recurseChildren(tree) {
+      cb(tree);
+      return tree.hasChildren() && tree.children.forEach(recurseChildren);
+    }
+    recurseChildren(this);
+  }
+
+  depthFirstSelect(cb) {
+    const filtered = [];
+
+    this.depthFirstEach(function(tree) {
+      if (cb(tree)) {
+        filtered.push(tree);
+      }
+    });
+
+    return filtered;
+  }
 }
 
 // const root = new Tree(1);
@@ -52,7 +99,7 @@ class Tree {
 
 // _2.addChild(4);
 
-// root.breathFirstEach(node => {
+// root.depthFirstEach(node => {
 //   console.log(node.value);
 // });
 
