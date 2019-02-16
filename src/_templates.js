@@ -1,9 +1,9 @@
-const dot = require("dot");
-const path = require("path");
-const fs = require("fs");
-const is = require("is");
-const utils = require("./utils");
-const { DirNode } = require("./FileTree");
+const dot = require('dot');
+const path = require('path');
+const fs = require('fs');
+const is = require('is');
+const utils = require('./utils');
+const { DirNode } = require('./FileTree');
 // const Tree = require();
 
 let test = true;
@@ -44,7 +44,7 @@ class Templates {
   use(templateLocation, packages) {
     if (!templateLocation || !is.string(templateLocation)) {
       throw new Error(
-        "Use takes one string argument. The string can be a url to a github repo or a path to local file"
+        'Use takes one string argument. The string can be a url to a github repo or a path to local file'
       );
     }
 
@@ -72,7 +72,7 @@ class Templates {
 
       default:
         const src = isLocationAbsolute ? templateLocation : process.cwd();
-        this.src = path.join(src, ".tps");
+        this.src = path.join(src, '.tps');
         break;
     }
 
@@ -85,7 +85,6 @@ class Templates {
 
   /**
    * Include packages to use in the render process
-
    * @param  {} packages
    */
   loadPackages(packages) {
@@ -93,23 +92,23 @@ class Templates {
       if (is.string(packages) && packages) {
         packages = [packages];
       } else {
-        throw new TypeError("Argument must be a string or an array of stings");
+        throw new TypeError('Argument must be a string or an array of stings');
       }
     }
 
     if (!this.src) {
-      throw new Error("Must specfiy a template folder to use");
+      throw new Error('Must specfiy a template folder to use');
     }
 
     packages.forEach(_package => this.loadPackage(_package));
   }
 
   /**
-   * @param  {} _package
+   * @param {} _package
    */
   loadPackage(_package) {
     if (!is.string(_package)) {
-      throw new TypeError("Argument must be a string");
+      throw new TypeError('Argument must be a string');
     }
 
     if (this.packages.hasOwnProperty(_package)) {
@@ -121,10 +120,10 @@ class Templates {
   }
 
   render(dest, data, cb) {
-    mkDir(dest, { recursive: true })
-      .then(() => this._renderAllDirectories())
+    return mkDir(dest, { recursive: true })
+      .then(() => this._renderAllDirectories(dest))
       .catch(function(err) {
-        console.log("There was a error while rendering your template", err);
+        console.log('There was a error while rendering your template', err);
       });
 
     // Make all directorys first
@@ -136,33 +135,30 @@ class Templates {
     const dirsInProgress = [];
     const dirTracker = {};
 
-    const packages = this.packagesUsed.forEach(
-      pkgName => this.packages[pkgName]
-    );
+    const packages = this.packagesUsed.map(pkgName => this.packages[pkgName]);
 
     packages.forEach(pkg => {
       const dirNodes = pkg.depthFirstSelect(function(tree) {
-        return !tree.isRoot() && tree.is("dir");
+        return !tree.isRoot() && tree.is('dir');
       });
 
-      console.log(
-        "building directories",
-        dirNodes.filter(dirNode => !dirTracker.hasOwnProperty(dirNode.path))
-      );
-      return;
       const pkgDirsToBeMade = dirNodes
         .filter(dirNode => !dirTracker.hasOwnProperty(dirNode.path))
         .map(function(dirNode) {
-          return mkDir(dirNode.path).then(function() {
-            console.log(dirNode.path, "is done");
+          const newPath = path.join(
+            dest,
+            dirNode.getRelativePathFrom(pkg, false)
+          );
+
+          return mkDir(newPath).then(function() {
             dirTracker[dirNode.path] = true;
           });
         });
 
-      dirsInProgress.push(pkgDirsToBeMade);
-    });
+      const dirsInProgressForPackage = Promise.all(pkgDirsToBeMade);
 
-    console.log(dirsInProgress);
+      dirsInProgress.push(dirsInProgressForPackage);
+    });
 
     return Promise.all(dirsInProgress);
   }
@@ -173,13 +169,13 @@ class Templates {
 //
 // /Users/marcelinoornelas/Desktop/development/Templates/src/hey
 
-const tps = new Templates();
-console.log(path.join(__dirname, "hey"));
-tps.use(path.join(__dirname, "../__tests__/"));
+// const tps = new Templates();
+// console.log(path.join(__dirname, 'hey'));
+// tps.use(path.join(__dirname, '../__tests__/'));
 
-tps.loadPackages(["main"]);
-// console.log(tps);
-tps.render(path.join(__dirname, "hey"));
+// tps.loadPackages(['main']);
+// // console.log(tps);
+// tps.render(path.join(__dirname, 'hey'));
 
 // console.log(tps);
 

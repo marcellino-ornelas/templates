@@ -1,11 +1,23 @@
 const path = require('path');
+const fs = require('fs');
 const Templates = require('../src/_templates');
+const Playground = require('./support/playground');
+const utils = require('./support/utils');
 
 /**
  * Constants
  */
-
 const TEMPLATES_PATH = __dirname;
+const allMainAndStorePackageFiles = [
+  './index.js.dot',
+  './db',
+  './db/db.js',
+  './server',
+  './storeUtils',
+  './storeUtils/user.js'
+];
+
+const playground = new Playground(TEMPLATES_PATH);
 
 /**
  * Templates testing
@@ -18,14 +30,25 @@ const TEMPLATES_PATH = __dirname;
 // should always look in `.tps/`
 
 describe('Templates', () => {
+  let tps;
+
+  beforeAll(done => {
+    // Make a folder to to render templates inside
+    playground.create(done);
+  });
+
+  afterAll(done => {
+    // Remove playground folder
+    playground.destory(done);
+  });
+
+  beforeEach(() => {
+    tps = new Templates();
+    tps.use(TEMPLATES_PATH);
+  });
+
   describe('Packages', () => {
-    let tps;
-
-    beforeEach(() => {
-      tps = new Templates();
-      tps.use(TEMPLATES_PATH);
-    });
-
+    // TODO
     it.skip('should be able to compile default packages', () => {});
     it('should be able to compile a package', () => {
       tps.loadPackages('main');
@@ -56,6 +79,31 @@ describe('Templates', () => {
       expect(() => {
         tps.loadPackage('main');
       }).toThrow();
+    });
+  });
+
+  describe('Render Process', () => {
+    let sectionName = 'render-process';
+
+    beforeAll(done => {
+      playground.addSection(sectionName, done);
+    });
+
+    beforeEach(done => {
+      // TODO: take out when default packages works
+      tps.loadPackages(['main', 'store']);
+    });
+
+    it.skip('should be able to render a local template', () => {
+      const playbox = playground.section(sectionName);
+      const destPath = path.join(playbox, 'App');
+
+      return tps.render(destPath, {}).then(() => {
+        const check = allMainAndStorePackageFiles.map(fileOrDir =>
+          path.join(destPath, fileOrDir)
+        );
+        expect(utils.hasAllFileAndDirs(destPath, check)).toBeTruthy();
+      });
     });
   });
 });

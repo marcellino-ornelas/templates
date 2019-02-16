@@ -5,7 +5,7 @@
   "main": "template.js",
   "scripts": {
     "build": "babel src -d lib",
-    "test": "jest"
+    "test": "jest --testPathPattern .jest.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",
+    "fs-extra": "^7.0.1",
     "jest": "^24.0.0"
   },
   "dependencies": {

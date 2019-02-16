@@ -1,11 +1,11 @@
-const fs = require("fs");
-const deepIs = require("deep-is");
-const is = require("is");
-const path = require("path");
-const utils = require("./utils");
+const fs = require('fs');
+const deepIs = require('deep-is');
+const is = require('is');
+const path = require('path');
+const utils = require('./utils');
 
-const Tree = require("./data-structures/tree");
-const stack = require("./data-structures/stack");
+const Tree = require('./data-structures/tree');
+const stack = require('./data-structures/stack');
 
 class Node extends Tree {
   constructor(name, type, parentDirectory) {
@@ -41,23 +41,23 @@ class Node extends Tree {
     return tree;
   }
 
-  getRelativePathFrom(parentDirNode) {
+  getRelativePathFrom(parentDirNode, includeParentNode = true) {
     let child = this;
     let pathStack = new stack();
 
     do {
       if (!child.parent) {
         throw new Error(
-          "The DirNode you passed in is not a parent of this Node"
+          'The DirNode you passed in is not a parent of this Node'
         );
       }
       pathStack.push(child.name);
     } while (parentDirNode !== (child = child.parent));
 
     // add parent name top end of stack
-    pathStack.push(parentDirNode.name);
+    includeParentNode && pathStack.push(parentDirNode.name);
 
-    let relativePath = "";
+    let relativePath = '';
 
     while (pathStack.size()) {
       relativePath = path.join(relativePath, pathStack.pop());
@@ -69,7 +69,7 @@ class Node extends Tree {
 
 class FileNode extends Node {
   constructor(name, parentDirectory) {
-    super(name, "file", parentDirectory);
+    super(name, 'file', parentDirectory);
 
     // Get the extention and real name of the file
     const { ext, name: fileName } = path.parse(name);
@@ -86,7 +86,7 @@ class FileNode extends Node {
   }
 
   addChild() {
-    throw Error("Cannot add children to FileNodes");
+    throw Error('Cannot add children to FileNodes');
   }
 
   hasChildren() {
@@ -95,8 +95,14 @@ class FileNode extends Node {
 }
 
 class DirNode extends Node {
-  constructor(name, parentDirectory = process.cwd()) {
-    super(name, "dir", parentDirectory);
+  constructor(name, parentDirectory, verbose) {
+    if (name && !parentDirectory) {
+      const lastSlashIndex = name.lastIndexOf('/');
+      parentDirectory = name.slice(0, lastSlashIndex);
+      name = name.slice(lastSlashIndex + 1);
+    }
+
+    super(name, 'dir', parentDirectory);
 
     this._renderChildren();
   }
@@ -114,9 +120,17 @@ class DirNode extends Node {
     });
   }
 
+  eachChild(cb) {
+    this.breathFirstEach(tree => {
+      if (!tree.isRoot()) {
+        cb(tree);
+      }
+    });
+  }
+
   find(selectBy = {}) {
     if (is.empty(selectBy)) {
-      console.log("is empty");
+      console.log('is empty');
       return [];
     }
     return this.breathFirstSelect(tree => {
