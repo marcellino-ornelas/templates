@@ -122,6 +122,7 @@ class Templates {
   render(dest, data, cb) {
     return mkDir(dest, { recursive: true })
       .then(() => this._renderAllDirectories(dest))
+      .then(() => this._renderAllFiles(dest))
       .catch(function(err) {
         console.log('There was a error while rendering your template', err);
       });
@@ -130,6 +131,8 @@ class Templates {
     // this._renderAllDirectories(dest);
     // render all files
   }
+
+  _renderAllFiles() {}
 
   _renderAllDirectories(dest) {
     const dirsInProgress = [];
@@ -144,20 +147,16 @@ class Templates {
 
       const pkgDirsToBeMade = dirNodes
         .filter(dirNode => !dirTracker.hasOwnProperty(dirNode.path))
-        .map(function(dirNode) {
-          const newPath = path.join(
-            dest,
-            dirNode.getRelativePathFrom(pkg, false)
-          );
+        .forEach(function(dirNode) {
+          const relativePathFromPkg = dirNode.getRelativePathFrom(pkg, false);
+          const pkgPathInNewLocation = path.join(dest, relativePathFromPkg);
 
-          return mkDir(newPath).then(function() {
+          const dirInProgress = mkDir(pkgPathInNewLocation).then(function() {
             dirTracker[dirNode.path] = true;
           });
+
+          dirsInProgress.push(dirInProgress);
         });
-
-      const dirsInProgressForPackage = Promise.all(pkgDirsToBeMade);
-
-      dirsInProgress.push(dirsInProgressForPackage);
     });
 
     return Promise.all(dirsInProgress);
