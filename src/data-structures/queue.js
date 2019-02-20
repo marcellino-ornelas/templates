@@ -37,6 +37,17 @@ var Queue = function() {
   this.peek = function() {
     return outbox.next() || inbox.next();
   };
+
+  this.log = function() {
+    console.log(
+      'queue: ',
+      inbox
+        .stack()
+        .reverse()
+        .concat(outbox.stack())
+        .map(c => c.name)
+    );
+  };
 };
 
 module.exports = Queue;

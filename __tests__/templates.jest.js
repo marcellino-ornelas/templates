@@ -9,7 +9,7 @@ const utils = require('./support/utils');
  */
 const TEMPLATES_PATH = __dirname;
 const allMainAndStorePackageFiles = [
-  './index.js.dot',
+  './index.js',
   './db',
   './db/db.js',
   './server',
@@ -47,7 +47,7 @@ describe('Templates', () => {
     tps.use(TEMPLATES_PATH);
   });
 
-  describe('Packages', () => {
+  describe.skip('Packages', () => {
     // TODO
     it.skip('should be able to compile default packages', () => {});
     it('should be able to compile a package', () => {
@@ -89,12 +89,12 @@ describe('Templates', () => {
       playground.addSection(sectionName, done);
     });
 
-    beforeEach(done => {
+    beforeEach(() => {
       // TODO: take out when default packages works
       tps.loadPackages(['main', 'store']);
     });
 
-    it.skip('should be able to render a local template', () => {
+    it('should be able to render a local template', () => {
       const playbox = playground.section(sectionName);
       const destPath = path.join(playbox, 'App');
 

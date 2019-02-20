@@ -4,10 +4,10 @@ const fs = require('fs');
 const is = require('is');
 const utils = require('./utils');
 const { DirNode } = require('./FileTree');
-// const Tree = require();
+const File = require('./File');
 
 let test = true;
-const verbose = false;
+const verbose = true;
 
 dot.templateSettings.strip = false;
 dot.log = verbose;
@@ -23,16 +23,12 @@ const mkDir = utils.promisify(fs.mkdir, fs);
  */
 class Templates {
   constructor() {
-    this.opts = {};
+    this.opts = {
+      verbose: false
+    };
     this.packages = {};
     this.packagesUsed = [];
-  }
-
-  /**
-   * Log only if verbose flag is set
-   */
-  log() {
-    this.opts.verbose && console.log.apply(console, arguments);
+    this.compiledFiles = [];
   }
 
   /**
@@ -115,14 +111,25 @@ class Templates {
       throw new Error(`Package: ${_package} was already compiled`);
     }
 
-    this.packages[_package] = new DirNode(_package, this.src);
+    const newPkg = (this.packages[_package] = new DirNode(_package, this.src));
+
+    this._compileFilesFromPackage(_package);
+
+    this._log();
+    this._log('package finished compiling', this.name);
+    this._log();
+
     this.packagesUsed.push(_package);
+  }
+
+  pkg(packageName) {
+    return this.packages[packageName];
   }
 
   render(dest, data, cb) {
     return mkDir(dest, { recursive: true })
       .then(() => this._renderAllDirectories(dest))
-      .then(() => this._renderAllFiles(dest))
+      .then(() => this._renderAllFiles(dest, data))
       .catch(function(err) {
         console.log('There was a error while rendering your template', err);
       });
@@ -132,34 +139,59 @@ class Templates {
     // render all files
   }
 
-  _renderAllFiles() {}
+  _renderAllFiles(dest, data) {
+    this._log();
+    this._log('+++++++++ render files +++++++++++++');
+    this._log();
+    const filesInProgress = this.compiledFiles.map(file => {
+      // this._log(`   `, '-> created file ->', file._dest(dest));
+      file.create(dest, data);
+    });
+    // .then(() => this._log(`File: Created at ${file._dest(dest)}`))
+    return Promise.all(filesInProgress);
+  }
 
   _renderAllDirectories(dest) {
-    const dirsInProgress = [];
+    this._log();
+    this._log('+++++++++ render directories +++++++++++++');
+    this._log();
     const dirTracker = {};
 
-    const packages = this.packagesUsed.map(pkgName => this.packages[pkgName]);
+    const dirsInProgress = [];
 
-    packages.forEach(pkg => {
-      const dirNodes = pkg.depthFirstSelect(function(tree) {
-        return !tree.isRoot() && tree.is('dir');
-      });
+    this._getPackageArray().forEach(pkg => {
+      this._log('package name', pkg.name);
+      pkg.find({ type: 'dir' }).forEach(dirNode => {
+        if (dirTracker.hasOwnProperty(dirNode.path)) return;
+        const relativePathFromPkg = dirNode.getRelativePathFrom(pkg, false);
+        const pkgPathInNewLocation = path.join(dest, relativePathFromPkg);
 
-      const pkgDirsToBeMade = dirNodes
-        .filter(dirNode => !dirTracker.hasOwnProperty(dirNode.path))
-        .forEach(function(dirNode) {
-          const relativePathFromPkg = dirNode.getRelativePathFrom(pkg, false);
-          const pkgPathInNewLocation = path.join(dest, relativePathFromPkg);
-
-          const dirInProgress = mkDir(pkgPathInNewLocation).then(function() {
-            dirTracker[dirNode.path] = true;
-          });
-
-          dirsInProgress.push(dirInProgress);
+        this._log(`   `, '-> created', pkgPathInNewLocation);
+        return mkDir(pkgPathInNewLocation).then(() => {
+          dirTracker[dirNode.path] = true;
         });
+      });
     });
-
     return Promise.all(dirsInProgress);
+  }
+
+  _compileFilesFromPackage(packageName) {
+    const pkg = this.pkg(packageName);
+
+    pkg.find({ type: 'file' }).forEach(fileNode => {
+      this.compiledFiles.push(new File(fileNode));
+    });
+  }
+
+  _getPackageArray() {
+    return this.packagesUsed.map(pkgName => this.packages[pkgName]);
+  }
+
+  /**
+   * Log only if verbose is true
+   */
+  _log() {
+    this.opts.verbose && console.log.apply(console, arguments);
   }
 }
 
@@ -169,11 +201,11 @@ class Templates {
 // /Users/marcelinoornelas/Desktop/development/Templates/src/hey
 
 // const tps = new Templates();
-// console.log(path.join(__dirname, 'hey'));
+// // console.log(path.join(__dirname, 'hey'));
 // tps.use(path.join(__dirname, '../__tests__/'));
 
 // tps.loadPackages(['main']);
-// // console.log(tps);
+// // // console.log(tps);
 // tps.render(path.join(__dirname, 'hey'));
 
 // console.log(tps);

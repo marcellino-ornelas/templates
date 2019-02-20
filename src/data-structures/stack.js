@@ -3,34 +3,40 @@
  */
 var Stack = function() {
   var storage = [];
-  var length = 0;
+  // var length = 0;
 
   // add an item to the top of the stack
   this.push = function() {
-    storage[length++] = arguments[0];
+    storage.push.apply(storage, arguments);
   };
 
   // remove an item from the top of the stack
   this.pop = function() {
-    if (length) {
-      var value = storage[--length];
-      delete storage[length];
+    if (storage.length) {
+      var value = storage.pop();
+
       return value;
     }
   };
 
+  this.stack = function() {
+    return storage;
+  };
+
   this.next = function() {
-    if (!length) {
+    if (!storage.length) {
       return void 0;
     }
 
-    return storage[length - 1];
+    return storage[storage.length - 1];
   };
 
   // return the number of items in the stack
   this.size = function() {
-    return length;
+    return storage.length;
   };
 };
+
+let s = new Stack();
 
 module.exports = Stack;

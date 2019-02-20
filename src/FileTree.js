@@ -8,35 +8,46 @@ const Tree = require('./data-structures/tree');
 const stack = require('./data-structures/stack');
 
 class Node extends Tree {
-  constructor(name, type, parentDirectory) {
+  constructor(name, type, parentDirectory, verbose) {
     super();
 
-    const isDir = is.instance(parentDirectory, Node);
+    const isNode = is.instance(parentDirectory, Node);
     // parse file path to get name and path/to/file
-    if (!isDir && !is.string(parentDirectory)) {
+    if (!isNode && !is.string(parentDirectory)) {
       throw new TypeError(`Argument must be a String`);
     }
 
+    this.depth = isNode ? parentDirectory.depth + 1 : 0;
+    this.verbose = verbose || false;
     this.name = name;
-    this.parent = isDir ? parentDirectory : null;
     this.type = type;
-    const dirPath = isDir ? this.parent.path : parentDirectory;
-    this.parentPath = dirPath;
-    this.path = path.join(dirPath, this.name);
+    this.parent = isNode ? parentDirectory : null;
+    this.parentPath = isNode ? this.parent.path : parentDirectory;
+    this.path = path.join(this.parentPath, this.name);
+    this.pathFromRoot = isNode
+      ? path.join(parentDirectory.pathFromRoot, this.name)
+      : '.';
+
+    if (verbose) {
+      console.log('==============================================');
+      console.log('name', this.name);
+      console.log('path', this.path);
+    }
   }
 
   is(type) {
     return this.type === type;
   }
 
+  get(name) {
+    return this.children.find(tree => tree.name === name);
+  }
+
   addChild(value) {
     if (!is.instance(value, Node)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);
     }
-
     var tree = value;
-    tree.depth = this.depth + 1;
-
     this.children.push(tree);
     return tree;
   }
@@ -65,11 +76,24 @@ class Node extends Tree {
 
     return relativePath;
   }
+
+  logTree(names = []) {
+    this.breathFirstEach(tree => {
+      console.log(`${'  '.repeat(tree.depth * 2)}${tree.name}: `);
+      names.forEach(name => {
+        console.log(
+          `${'  '.repeat(tree.depth * 3)} -> ${name}: ${tree[name]} `
+        );
+      });
+      // console.log(`${'  '.repeat(tree.depth * 2)}|`);
+      // console.log(`${'\t'.repeat(this.depth * 2)}|`);
+    });
+  }
 }
 
 class FileNode extends Node {
-  constructor(name, parentDirectory) {
-    super(name, 'file', parentDirectory);
+  constructor(name, parentDirectory, verbose) {
+    super(name, 'file', parentDirectory, verbose);
 
     // Get the extention and real name of the file
     const { ext, name: fileName } = path.parse(name);
@@ -78,7 +102,7 @@ class FileNode extends Node {
     this.ext = ext;
 
     this.children = undefined;
-    this.data = this._getFileData();
+    // this.data = this._getFileData();
   }
 
   _getFileData() {
@@ -98,23 +122,22 @@ class DirNode extends Node {
   constructor(name, parentDirectory, verbose) {
     if (name && !parentDirectory) {
       const lastSlashIndex = name.lastIndexOf('/');
-      parentDirectory = name.slice(0, lastSlashIndex);
-      name = name.slice(lastSlashIndex + 1);
+      parentDirectory = path.dirname(name);
+      name = path.basename(name);
     }
+    // this.verbose = verbose || false;
 
-    super(name, 'dir', parentDirectory);
-
+    super(name, 'dir', parentDirectory, verbose);
     this._renderChildren();
   }
 
   _renderChildren() {
     const dirContents = fs.readdirSync(this.path);
-
     dirContents.forEach(name => {
       const dirContentPath = path.join(this.path, name);
       const isDir = utils.isDir(dirContentPath);
       const ContentType = isDir ? DirNode : FileNode;
-      const newNode = new ContentType(name, this);
+      const newNode = new ContentType(name, this, this.verbose);
 
       this.addChild(newNode);
     });
@@ -122,22 +145,33 @@ class DirNode extends Node {
 
   eachChild(cb) {
     this.breathFirstEach(tree => {
-      if (!tree.isRoot()) {
+      if (this !== tree) {
         cb(tree);
       }
     });
   }
 
+  selectChildren(cb) {
+    const found = [];
+    this.eachChild(tree => {
+      if (cb(tree)) {
+        found.push(tree);
+      }
+    });
+    return found;
+  }
+
   find(selectBy = {}) {
-    if (is.empty(selectBy)) {
-      console.log('is empty');
-      return [];
-    }
-    return this.breathFirstSelect(tree => {
-      return this !== tree && utils.couldMatch(selectBy, tree);
+    return this.selectChildren(tree => {
+      return utils.couldMatch(selectBy, tree);
     });
   }
 }
+
+// const mainDir = new DirNode('store', path.join(__dirname, '../__tests__/.tps'));
+// console.log('main Directory', mainDir);
+
+// console.log('final check', mainDir.find({ name: 'db.js' })[0].pathFromRoot);
 
 module.exports.DirNode = DirNode;
 module.exports.FileNode = FileNode;

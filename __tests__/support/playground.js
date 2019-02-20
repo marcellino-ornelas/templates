@@ -25,10 +25,8 @@ class Playground {
   }
 
   destory(done) {
-    console.log('hellllloooooowwwwwww', this.path);
     fs.remove(this.path, err => {
-      console.log(err);
-      !err && console.log('deleted');
+      if (err) throw err;
       done();
     });
   }
@@ -46,9 +44,6 @@ class Playground {
     }
 
     const section = new Playground(this.path, name);
-
-    console.log('section', section);
-
     this.sections[name] = section.path;
 
     section.create(function(err) {

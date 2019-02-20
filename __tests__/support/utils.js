@@ -13,31 +13,36 @@ const utils = (exports = module.exports);
 
 utils.hasAllFileAndDirs = (path, filesAndDirs) => {
   const fileSystemTree = new DirNode(path);
-  console.log(fileSystemTree);
+
   const hasAll = true;
   let found = 0;
+  let paths = {};
 
-  // console.log(filesAndDirs);
-  const f = [];
+  filesAndDirs.forEach(fileOrDir => {
+    if (paths.hasOwnProperty(fileOrDir))
+      throw new Error('There are duplicate file paths array');
 
-  fileSystemTree.eachChild(tree => {
-    f.push(tree.name);
-  });
-  // console.log('files', f);
-
-  fileSystemTree.eachChild(tree => {
-    // console.log(
-    //   tree.name,
-    //   '=====',
-    //   tree.path,
-    //   filesAndDirs.includes(tree.path)b
-    // );
-    const answer = filesAndDirs.includes(tree.path);
-
-    answer && found++;
+    paths[fileOrDir] = false;
   });
 
-  // console.log('here', filesAndDirs.length, found);
+  fileSystemTree.eachChild(tree => {
+    const answer = paths.hasOwnProperty(tree.path);
 
-  return filesAndDirs.length === found;
+    if (answer && paths[tree.path]) {
+      throw new Error(
+        'Looks like you have duplicate files in your DirNode tree???'
+      );
+    } else if (answer) {
+      paths[tree.path] = true;
+    }
+  });
+
+  for (let key in paths) {
+    if (!paths[key]) {
+      console.log('does not have file', key);
+      return false;
+    }
+  }
+
+  return true;
 };

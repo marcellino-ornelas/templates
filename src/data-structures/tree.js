@@ -1,4 +1,4 @@
-const Queue = require("./queue.js");
+const Queue = require('./queue.js');
 /**
  * Tree
  */
@@ -38,7 +38,7 @@ class Tree {
     queue.enqueue(this);
 
     while (queue.size() > 0) {
-      const currentTree = queue.peek();
+      const currentTree = queue.dequeue();
 
       if (cb(currentTree) === false) {
         break;
@@ -49,8 +49,6 @@ class Tree {
           queue.enqueue(childTree);
         });
       }
-
-      queue.dequeue();
     }
   }
 
