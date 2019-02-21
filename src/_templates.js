@@ -12,14 +12,21 @@ const verbose = true;
 dot.templateSettings.strip = false;
 dot.log = verbose;
 
-const defaultOpts = {
+/**
+ * default options for Templates
+ * @namespace
+ * @constant
+ * @property {Boolean} verbose - log extra information to the console
+ */
+const DEFAULT_OPTIONS = {
   verbose: false
 };
 
 const mkDir = utils.promisify(fs.mkdir, fs);
 
 /**
- * Templates
+ * template class
+ * @class
  */
 class Templates {
   constructor() {
@@ -32,10 +39,9 @@ class Templates {
   }
 
   /**
-   * Specifiy what template folder to use for rendering
-   * @param  {String}        templateLocation - location to templating folder or url to github
-   * @param  {Array<String>} packages         - list of packages to include
-   * @return {undefined}
+   * Specifiy what template package you would like to use
+   * @param {String}   templateLocation - location to templating folder or url to github
+   * @param {String[]} packages         - list of packages to include
    */
   use(templateLocation, packages) {
     if (!templateLocation || !is.string(templateLocation)) {
@@ -81,7 +87,7 @@ class Templates {
 
   /**
    * Include packages to use in the render process
-   * @param  {} packages
+   * @param {String|String[]} packages - packages from the template package you would like to use
    */
   loadPackages(packages) {
     if (!Array.isArray(packages)) {
@@ -100,7 +106,7 @@ class Templates {
   }
 
   /**
-   * @param {} _package
+   * @param {String} _package - package from the template you would like to use
    */
   loadPackage(_package) {
     if (!is.string(_package)) {
@@ -122,59 +128,78 @@ class Templates {
     this.packagesUsed.push(_package);
   }
 
+  /**
+   * @param {String} packageName - name of a package
+   * @returns {DirNode} - directory tree repesentation of package
+   */
   pkg(packageName) {
     return this.packages[packageName];
   }
 
-  render(dest, data, cb) {
+  /**
+   * @param {String} dest - destination to render your new template to
+   * @param {Object} [data={}] - data to pass to doT. This will be used when rendering dot files/syntax
+   * @param {Function} [cb] - callback function to call when done
+   * @returns {Promise} return promise when done if no cb is defined
+   */
+  render(dest, data = {}, cb) {
     return mkDir(dest, { recursive: true })
       .then(() => this._renderAllDirectories(dest))
       .then(() => this._renderAllFiles(dest, data))
       .catch(function(err) {
         console.log('There was a error while rendering your template', err);
       });
-
-    // Make all directorys first
-    // this._renderAllDirectories(dest);
-    // render all files
   }
-
+  /**
+   * Creates all files that our template uses in `dest` folder
+   * @param {String} dest - destination path to render all files to
+   * @param {Object} [data={}] - data passed in for dot
+   */
   _renderAllFiles(dest, data) {
     this._log();
     this._log('+++++++++ render files +++++++++++++');
     this._log();
     const filesInProgress = this.compiledFiles.map(file => {
-      // this._log(`   `, '-> created file ->', file._dest(dest));
       file.create(dest, data);
     });
-    // .then(() => this._log(`File: Created at ${file._dest(dest)}`))
     return Promise.all(filesInProgress);
   }
 
+  /**
+   * Creates all directories that our template uses in `dest` folder
+   * @private
+   * @param {String} dest - destination path to make all directories. Should be a folder
+   */
   _renderAllDirectories(dest) {
     this._log();
     this._log('+++++++++ render directories +++++++++++++');
     this._log();
-    const dirTracker = {};
 
+    const dirTracker = {};
     const dirsInProgress = [];
 
     this._getPackageArray().forEach(pkg => {
       this._log('package name', pkg.name);
-      pkg.find({ type: 'dir' }).forEach(dirNode => {
-        if (dirTracker.hasOwnProperty(dirNode.path)) return;
-        const relativePathFromPkg = dirNode.getRelativePathFrom(pkg, false);
-        const pkgPathInNewLocation = path.join(dest, relativePathFromPkg);
 
-        this._log(`   `, '-> created', pkgPathInNewLocation);
-        return mkDir(pkgPathInNewLocation).then(() => {
+      pkg.find({ type: 'dir' }).forEach(dirNode => {
+        /* skip if directory has already been made */
+        if (dirTracker.hasOwnProperty(dirNode.path)) return;
+        const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
+        const dirPathInNewLocation = path.join(dest, dirPathRelativeFromPkg);
+        this._log(`   `, '-> created', dirPathInNewLocation);
+        return mkDir(dirPathInNewLocation).then(() => {
+          /* mark directory as already made */
           dirTracker[dirNode.path] = true;
         });
       });
     });
     return Promise.all(dirsInProgress);
   }
-
+  /**
+   * Compile all files that need to be made for render process
+   * @private
+   * @param {String} packageName - name of package
+   */
   _compileFilesFromPackage(packageName) {
     const pkg = this.pkg(packageName);
 
@@ -183,31 +208,22 @@ class Templates {
     });
   }
 
+  /**
+   * Creates a array of all packages user wants for render process
+   * @private
+   * @returns {DirNode[]} - array of all the packages
+   */
   _getPackageArray() {
-    return this.packagesUsed.map(pkgName => this.packages[pkgName]);
+    return this.packagesUsed.map(pkgName => this.pkg(pkgName));
   }
 
   /**
    * Log only if verbose is true
+   * @private
    */
   _log() {
     this.opts.verbose && console.log.apply(console, arguments);
   }
 }
-
-// '/Users/marcelinoornelas/Desktop/development/Templates/__tests__/.tps/main
-// 'main'
-//
-// /Users/marcelinoornelas/Desktop/development/Templates/src/hey
-
-// const tps = new Templates();
-// // console.log(path.join(__dirname, 'hey'));
-// tps.use(path.join(__dirname, '../__tests__/'));
-
-// tps.loadPackages(['main']);
-// // // console.log(tps);
-// tps.render(path.join(__dirname, 'hey'));
-
-// console.log(tps);
 
 module.exports = Templates;
