@@ -1,6 +1,6 @@
-const dot = require('dot');
-const path = require('path');
-const fs = require('fs-extra');
+import dot from 'dot';
+import path from 'path';
+import fs from 'fs-extra';
 /*
  * File
  */

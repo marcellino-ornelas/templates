@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const { DirNode } = require('../../src/FileTree');
+const { DirNode } = require('../../lib/fileSystemTree');
 
 /**
  * Constants

@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const Templates = require('../src/_templates');
+const Templates = require('../lib/_templates');
 const Playground = require('./support/playground');
 const utils = require('./support/utils');
 
@@ -47,7 +47,7 @@ describe('Templates', () => {
     tps.use(TEMPLATES_PATH);
   });
 
-  describe.skip('Packages', () => {
+  describe('Packages', () => {
     // TODO
     it.skip('should be able to compile default packages', () => {});
     it('should be able to compile a package', () => {

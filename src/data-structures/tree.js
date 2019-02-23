@@ -1,4 +1,4 @@
-const Queue = require('./queue.js');
+import Queue from './queue.js';
 /**
  * Tree
  */

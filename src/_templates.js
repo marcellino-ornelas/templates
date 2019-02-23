@@ -1,10 +1,10 @@
-const dot = require('dot');
-const path = require('path');
-const fs = require('fs');
-const is = require('is');
-const utils = require('./utils');
-const { DirNode } = require('./FileTree');
-const File = require('./File');
+import dot from 'dot';
+import path from 'path';
+import fs from 'fs';
+import is from 'is';
+import utils from './utils';
+import DirNode from './fileSystemTree';
+import File from './File';
 
 let test = true;
 const verbose = true;

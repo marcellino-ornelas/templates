@@ -1,4 +1,4 @@
-const Stack = require('./stack');
+import Stack from './stack';
 
 /**
  * Queue Class

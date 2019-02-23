@@ -7,11 +7,11 @@
 /*
  * Modules
  */
-// // const async = require("async");
-const path = require("path");
-const fs = require("fs");
-const validFilename = require("valid-filename");
-const filenamify = require("filenamify");
+// // import async from "async";
+import path from "path";
+import fs from "fs";
+import validFilename from "valid-filename";
+import filenamify from "filenamify";
 
 var utils = (exports = module.exports);
 
