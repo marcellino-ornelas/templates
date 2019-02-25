@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const Templates = require('../lib/_templates');
+const Templates = require('../lib/templates');
 const Playground = require('./support/playground');
 const utils = require('./support/utils');
 

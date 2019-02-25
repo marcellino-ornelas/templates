@@ -4,9 +4,11 @@
   "description": "",
   "main": "template.js",
   "scripts": {
+    "build:code": "./node_modules/.bin/babel src --out-dir .",
+    "build:dev": "npm run build:code -- -w",
     "build": "npm run build:code",
-    "build:code": "babel src -d lib --ignore src/tests",
-    "test": "npm run build && jest --testPathPattern .jest.js"
+    "test": "npm run build:code && jest --testPathPattern .jest.js",
+    "cli": "node ./cli/cli.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
     "is": "^3.3.0",
-    "valid-filename": "^2.0.1"
+    "valid-filename": "^2.0.1",
+    "yargs": "^13.2.1"
   }
 }

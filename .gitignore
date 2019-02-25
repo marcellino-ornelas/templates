@@ -1,3 +1,4 @@
 node_modules/
 lib/
 templates/
+.DS_Store
