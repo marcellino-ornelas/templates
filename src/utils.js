@@ -1,13 +1,6 @@
 /*
- * Utils.js
- *
- * Helper functions
- */
-
-/*
  * Modules
  */
-// // import async from "async";
 import path from 'path';
 import fs from 'fs';
 import validFilename from 'valid-filename';
@@ -15,8 +8,12 @@ import filenamify from 'filenamify';
 
 var utils = (exports = module.exports);
 
-const test = false;
-
+/**
+ * Turn a regular node style callback function into a promise
+ * @param   {Function} func - Function to turn into promise
+ * @param   {Object} [_this=null] - Object to use as this object when calling `func`
+ * @returns {Function} - promisified function
+ */
 utils.promisify = function(func, _this = null) {
   return function() {
     const args = arguments;
@@ -30,12 +27,12 @@ utils.promisify = function(func, _this = null) {
   };
 };
 
+/**
+ * Capitalize the first character in the string
+ * @param   {string} name - name to capitalize
+ * @returns {string} - name with a capital first letter
+ */
 utils.capitalize = function capitalize(name) {
-  /*
-   * Capitalize the first character in the string
-   * @argument { str } should take a be a single word
-   */
-
   if (!name) {
     throw new Error('Capitalize only accepts a non-empty string as a argument');
   }
@@ -48,16 +45,21 @@ utils.capitalize = function capitalize(name) {
     : firstCharCapitalized + name.slice(1);
 };
 
+/**
+ * Convert a filename into a valid filename. Replaces all bad characters with `-`
+ * @param   {string} fileName - Name of file
+ * @returns {string} - valid file name
+ */
 utils.normalizeFileName = function normalizeReactComponentName(fileName) {
   return !validFilename(fileName)
     ? filenamify(fileName, { replacement: '-' })
     : fileName;
 };
 
-/*
- * isDir
- *
- * @arg path {string} Directory path to check
+/**
+ * Check to see if the `path` is a valid directory
+ * @param   {string} path - path to file or directory
+ * @returns {boolean} - `path` is a directory
  */
 utils.isDir = function(path) {
   let dir;
@@ -71,6 +73,11 @@ utils.isDir = function(path) {
   return dir.isDirectory();
 };
 
+/**
+ * Loop through a object property. Will break out of loop if `cb` returns false
+ * @param {Object} obj - object to loop through
+ * @param {function(*, String):(void|boolean)} cb - Function to call on every property
+ */
 utils.eachObj = function(obj, cb) {
   for (let key in obj) {
     if (!obj.hasOwnProperty(key)) {
@@ -83,6 +90,12 @@ utils.eachObj = function(obj, cb) {
   }
 };
 
+/**
+ * Check to see if `obj` matches `matcher`
+ * @param   {Object} matcher
+ * @param   {Object} obj - object to match against `matcher`
+ * @returns {boolean} - did match or not
+ */
 utils.couldMatch = function(matcher, obj) {
   let matched = true;
 
@@ -93,22 +106,12 @@ utils.couldMatch = function(matcher, obj) {
   return matched;
 };
 
-/*
- * Ensure Directories
- *
- * This function creates all directories in the destination path.
- *
- * @arg dest {string} Destination path to save all directories to
- * @arg dirs {string} All directories that need to be made
+/**
+ * Makes `options` inherit all properties it ddoesnt have from `default`
+ * @param {Object} [options={}]
+ * @param {Object} defaults - default properties that you want `options` to have
+ * @returns {Object} - options with all default properties
  */
-utils.ensureDirectories = function(dest, dirs) {
-  const inProgressDirectories = dirs.map(function(dirToMake) {
-    return fs.ensureDir(path.join(dest, dirToMake));
-  });
-
-  return Promise.all(inProgressDirectories);
-};
-
 utils.defaults = function(options = {}, defaults) {
   utils.eachObj(defaults, (val, key) => {
     if (!options.hasOwnProperty(key)) {
@@ -118,6 +121,3 @@ utils.defaults = function(options = {}, defaults) {
 
   return options;
 };
-
-// utils.INVALID_FILES_ERROR = `\
-// Invalid file names. Before trying to run the command again, please check the names of your components that they would like to make. Names of components should contain only letters.`;
