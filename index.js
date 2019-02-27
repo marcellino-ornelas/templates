@@ -1,1 +1,1 @@
-module.exports = require('./lib/template');
+module.exports = require('./lib/templates');

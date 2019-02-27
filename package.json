@@ -4,7 +4,7 @@
   "description": "",
   "main": "template.js",
   "scripts": {
-    "build:code": "./node_modules/.bin/babel src --out-dir .",
+    "build:code": "./node_modules/.bin/babel src --out-dir lib",
     "build:dev": "npm run build:code -- -w",
     "build": "npm run build:code",
     "test": "npm run build:code && jest --testPathPattern .jest.js",

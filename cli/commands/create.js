@@ -1,3 +1,6 @@
+const Template = require('../../lib/templates');
+const path = require('path');
+
 exports.command = 'create <names...>';
 
 exports.description = 'create a new folder with template';
@@ -17,6 +20,17 @@ exports.builder = yargs =>
     });
 
 exports.handler = function(argv) {
-  // do something with argv.
-  console.log('create args', argv);
+  const temp = new Template();
+  const dest = process.cwd();
+  const src = path.join(dest, '__tests__');
+
+  temp.use(src);
+
+  // TODO: Take out when default package is initalized
+  temp.loadPackage('main');
+
+  const buildPaths = argv.names.map(name => path.join(dest, name));
+  const builders = buildPaths.map(buildPath => temp.render(buildPath));
+
+  Promise.all(builders).then(() => console.log('process done'));
 };
