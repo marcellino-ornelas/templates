@@ -25,10 +25,8 @@ const mkDir = utils.promisify(fs.mkdir, fs);
  * @class
  */
 class Templates {
-  constructor() {
-    this.opts = {
-      verbose: false
-    };
+  constructor(opts = {}) {
+    this.opts = utils.defaults(opts, DEFAULT_OPTIONS);
     this.packages = {};
     this.packagesUsed = [];
     this.compiledFiles = [];

@@ -8,10 +8,10 @@
  * Modules
  */
 // // import async from "async";
-import path from "path";
-import fs from "fs";
-import validFilename from "valid-filename";
-import filenamify from "filenamify";
+import path from 'path';
+import fs from 'fs';
+import validFilename from 'valid-filename';
+import filenamify from 'filenamify';
 
 var utils = (exports = module.exports);
 
@@ -37,7 +37,7 @@ utils.capitalize = function capitalize(name) {
    */
 
   if (!name) {
-    throw new Error("Capitalize only accepts a non-empty string as a argument");
+    throw new Error('Capitalize only accepts a non-empty string as a argument');
   }
 
   let firstCharCapitalized = name[0].toUpperCase();
@@ -50,7 +50,7 @@ utils.capitalize = function capitalize(name) {
 
 utils.normalizeFileName = function normalizeReactComponentName(fileName) {
   return !validFilename(fileName)
-    ? filenamify(fileName, { replacement: "-" })
+    ? filenamify(fileName, { replacement: '-' })
     : fileName;
 };
 
@@ -64,11 +64,23 @@ utils.isDir = function(path) {
   try {
     dir = fs.lstatSync(path);
   } catch (e) {
-    console.log("internal error: ", e);
+    console.log('internal error: ', e);
     return false;
   }
 
   return dir.isDirectory();
+};
+
+utils.eachObj = function(obj, cb) {
+  for (let key in obj) {
+    if (!obj.hasOwnProperty(key)) {
+      continue;
+    }
+    const val = obj[key];
+    if (cb(val, key) === false) {
+      break;
+    }
+  }
 };
 
 utils.couldMatch = function(matcher, obj) {
@@ -97,20 +109,14 @@ utils.ensureDirectories = function(dest, dirs) {
   return Promise.all(inProgressDirectories);
 };
 
-utils.isFunc = function(fn) {
-  return typeof fn === "function";
-};
+utils.defaults = function(options = {}, defaults) {
+  utils.eachObj(defaults, (val, key) => {
+    if (!options.hasOwnProperty(key)) {
+      options[key] = val;
+    }
+  });
 
-utils.isBool = function(bool) {
-  return typeof bool === "boolean";
-};
-
-utils.isValue = function(val) {
-  return val !== null && val !== undefined;
-};
-
-utils.isString = function(str) {
-  return typeof str === "string";
+  return options;
 };
 
 // utils.INVALID_FILES_ERROR = `\
