@@ -84,13 +84,13 @@ utils.eachObj = function(obj, cb) {
 };
 
 utils.couldMatch = function(matcher, obj) {
-  for (let key in matcher) {
-    const mVal = matcher[key];
-    if (!obj.hasOwnProperty(key) || mVal !== obj[key]) {
-      return false;
-    }
-  }
-  return true;
+  let matched = true;
+
+  utils.eachObj(matcher, (val, key) => {
+    return (matched = val === obj[key]);
+  });
+
+  return matched;
 };
 
 /*
