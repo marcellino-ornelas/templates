@@ -10,9 +10,8 @@ dot.templateSettings.strip = false;
 
 /**
  * Default options for Templates
- * @namespace
- * @constant
- * @property {Boolean} verbose - log extra information to the console
+ * @typedef  {Object} TemplateOptions
+ * @property {boolean} verbose - log extra information to the console
  */
 const DEFAULT_OPTIONS = {
   verbose: false
@@ -21,11 +20,14 @@ const DEFAULT_OPTIONS = {
 const mkDir = utils.promisify(fs.mkdir, fs);
 
 /**
- * Template class
  * @class
+ * @classdesc Create a new instance of a temnplate
  */
 class Templates {
-  constructor(opts = {}) {
+  /**
+   * @param {TemplateOptions} opts - options to pass to templates
+   */
+  constructor(opts) {
     this.opts = utils.defaults(opts, DEFAULT_OPTIONS);
     this.packages = {};
     this.packagesUsed = [];
