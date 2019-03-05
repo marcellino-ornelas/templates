@@ -8,7 +8,8 @@
     "build:dev": "npm run build:code -- -w",
     "build": "npm run build:code",
     "test": "npm run build:code && jest --testPathPattern .jest.js",
-    "cli": "node ./cli/cli.js"
+    "cli": "node ./cli/cli.js",
+    "ct": "npm run cli -- create --use hey App"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
   "dependencies": {
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
+    "find-up": "^3.0.0",
     "is": "^3.3.0",
     "valid-filename": "^2.0.1",
     "yargs": "^13.2.1"

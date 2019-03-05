@@ -87,12 +87,12 @@ describe('Templates', () => {
 
     beforeAll(done => {
       playground.addSection(sectionName, done);
-    });
-
-    beforeEach(() => {
       // TODO: take out when default packages works
       tps.loadPackages(['main', 'store']);
     });
+
+    // beforeEach(() => {
+    // });
 
     it('should be able to render a local template', () => {
       const playbox = playground.section(sectionName);

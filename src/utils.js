@@ -73,6 +73,14 @@ utils.isDir = function(path) {
   return dir.isDirectory();
 };
 
+utils.json = function(jsonFile) {
+  try {
+    return JSON.parse(fs.readFileSync(jsonFile));
+  } catch (err) {
+    return {};
+  }
+};
+
 /**
  * Loop through a object property. Will break out of loop if `cb` returns false
  * @param {Object} obj - object to loop through
@@ -107,7 +115,7 @@ utils.couldMatch = function(matcher, obj) {
 };
 
 /**
- * Makes `options` inherit all properties it ddoesnt have from `default`
+ * Makes `options` inherit all properties it doesnt have from `default`
  * @param {Object} [options={}]
  * @param {Object} defaults - default properties that you want `options` to have
  * @returns {Object} - options with all default properties
