@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import validFilename from 'valid-filename';
 import filenamify from 'filenamify';
+import findUp from 'find-up';
 
 var utils = (exports = module.exports);
 
@@ -66,7 +67,6 @@ utils.isDir = function(path) {
   try {
     dir = fs.lstatSync(path);
   } catch (e) {
-    console.log('internal error: ', e);
     return false;
   }
 
@@ -129,3 +129,11 @@ utils.defaults = function(options = {}, defaults) {
 
   return options;
 };
+
+utils.findUp = function(folder, cwd = process.cwd()) {
+  return findUp.sync(folder, {
+    cwd
+  });
+};
+
+// utils.findTps = function()

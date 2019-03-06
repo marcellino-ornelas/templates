@@ -2,17 +2,16 @@ const path = require('path');
 const os = require('os');
 const findUp = require('find-up');
 const Template = require('../../lib/templates');
-const utils = require('../lib/utils');
+const utils = require('../../lib/utils');
+const TPS = require('../../lib/utilities/constants');
 
-const TPS_GLOBAL_PATH = path.join(os.homedir(), '.tps');
-const TPS_LOCAL_PATH = findUp.sync('.tps');
-const TPS_GLOBAL_CONFIG_PATH = path.join(TPS_GLOBAL_PATH, '.tpsrc');
-const TPS_CONFIG = utils.json(TPS_GLOBAL_CONFIG_PATH);
+let TPS_CONFIG = utils.json(TPS.GLOBAL_CONFIG_PATH);
 
-if (TPS_LOCAL_PATH && TPS_LOCAL_PATH !== TPS_GLOBAL_PATH) {
-  const TPS_LOCAL_CONFIG_PATH = path.join(TPS_LOCAL_PATH, '.tpsrc');
-  TPS_CONFIG = utils.defaults(utils.json(TPS_LOCAL_CONFIG_PATH), TPS_CONFIG);
+if (TPS.LOCAL_CONFIG_PATH) {
+  TPS_CONFIG = utils.defaults(utils.json(TPS.LOCAL_CONFIG_PATH), TPS_CONFIG);
 }
+
+console.log();
 
 // TEST
 // make ~/.tps/.tpsrc
@@ -45,7 +44,7 @@ exports.handler = function(argv) {
 
   // temp.use(src);
 
-  // // TODO: Take out when default package is initalized
+  // TODO: Take out when default package is initalized
   // temp.loadPackage('main');
 
   // const buildPaths = argv.names.map(name => path.join(dest, name));
