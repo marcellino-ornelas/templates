@@ -75,7 +75,8 @@ utils.isDir = function(path) {
 
 utils.json = function(jsonFile) {
   try {
-    return JSON.parse(fs.readFileSync(jsonFile));
+    const jsonContents = fs.readFileSync(jsonFile);
+    return JSON.parse(jsonContents);
   } catch (err) {
     return {};
   }
