@@ -5,6 +5,7 @@ import is from 'is';
 import utils from './utils';
 import DirNode from './fileSystemTree';
 import File from './File';
+import * as TPS from './utilities/constants';
 
 dot.templateSettings.strip = false;
 
@@ -36,54 +37,42 @@ class Templates {
 
   /**
    * Specifiy what template package you would like to use
-   * @param {String}   templateLocation - location to templating folder or url to github
-   * @param {String[]} packages         - list of packages to include
+   * @param {String} templateName - location to templating folder or url to github
+   * @param {object} [opts={}]    - options for use
+   * @param {string} opts.tpsPath - .tps folder you want to load template from
    */
-  use(templateLocation, packages) {
-    if (!templateLocation || !is.string(templateLocation)) {
+  use(templateName, opts = {}) {
+    if (!templateName || !is.string(templateName)) {
       throw new Error(
-        'Use takes one string argument. The string can be a url to a github repo or a path to local file'
+        'Use takes one string argument. The string can be a url to a github repo or a global or local template name'
       );
     }
 
-    const isLocationAbsolute = path.isAbsolute(templateLocation);
+    const localPath = opts.tpsPath || TPS.LOCAL_PATH;
+    const maybe_local_temp = `${localPath}/${templateName}`;
+    const maybe_global_temp = `${TPS.GLOBAL_PATH}/${templateName}`;
 
     switch (true) {
-      // case !isLocationAbsolute && /\//g.test(templateLocation):
-      //   console.log('github coming soon');
-      //   break;
-
-      // case !/\W/gi.test(templateLocation):
-      //   const cachedPackageLocation = path.join(
-      //     CACHE_LOCATION,
-      //     templateLocation
-      //   );
-
-      //   if (!utils.isDir(cachedPackageLocation)) {
-      //     throw new Error(
-      //       'No cached template found. Please use a valid template name'
-      //     );
-      //   }
-
-      //   this.src = path.join(cachedPackageLocation, '.tps');
-      //   break;
-
-      default:
-        const src = isLocationAbsolute ? templateLocation : process.cwd();
-        this.src = path.join(src, '.tps');
+      case localPath && utils.isDir(maybe_local_temp):
+        this.src = maybe_local_temp;
         break;
+      case TPS.GLOBAL_PATH && utils.isDir(maybe_global_temp):
+        this.src = maybe_global_temp;
+        break;
+      default:
+        throw new Error(`Template '${templateName}' was not found.`);
     }
 
+    this.template = templateName;
+
+    this._log(`[TEMPLATE LOCATION]: Found '${templateName}' at ${this.src}`);
     // TODO
     // load settings && load default packages
-
-    // load packages
-    packages && this.loadPackages(packages);
   }
 
   /**
    * Include packages to use in the render process
-   * @param {String|String[]} packages - packages from the template package you would like to use
+   * @param {string|string[]} packages - packages from the template package you would like to use
    */
   loadPackages(packages) {
     if (!Array.isArray(packages)) {
@@ -118,7 +107,7 @@ class Templates {
     this._compileFilesFromPackage(_package);
 
     this._log();
-    this._log('package finished compiling', this.name);
+    this._log('package finished compiling', this.template);
     this._log();
 
     this.packagesUsed.push(_package);
@@ -175,7 +164,7 @@ class Templates {
     const dirsInProgress = [];
 
     this._getPackageArray().forEach(pkg => {
-      this._log('package name', pkg.name);
+      // this._log('package name', pkg.name);
 
       pkg.find({ type: 'dir' }).forEach(dirNode => {
         /* skip if directory has already been made */
@@ -189,7 +178,8 @@ class Templates {
         });
       });
     });
-    return Promise.all(dirsInProgress);
+
+    return dirsInProgress.length && Promise.all(dirsInProgress);
   }
   /**
    * Compile all files that need to be made for render process

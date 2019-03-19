@@ -1,13 +1,11 @@
-const path = require('path');
-const fs = require('fs');
-const Templates = require('../lib/templates');
-const Playground = require('./support/playground');
-const utils = require('./support/utils');
+import path from 'path';
+import Playground from './support/playground';
+import * as utils from './support/utils';
 
 /**
  * Constants
  */
-const TEMPLATES_PATH = __dirname;
+// const TEMPLATES_PATH = ;
 const allMainAndStorePackageFiles = [
   './index.js',
   './db',
@@ -17,29 +15,53 @@ const allMainAndStorePackageFiles = [
   './storeUtils/user.js'
 ];
 
-const playground = new Playground(TEMPLATES_PATH);
+const playground = new Playground(__dirname);
 
-describe.skip('Templates', () => {
-  beforeAll(done => {
-    // Make a folder to to render templates inside
-    playground.create(done);
-  });
+describe('Command Line: ', () => {
+  beforeAll(() => playground.create());
 
-  afterAll(done => {
-    // Remove playground folder
-    playground.destory(done);
-  });
+  // afterAll(() => playground.destory());
 
   describe('create', () => {
     let sectionName = 'create';
 
-    beforeAll(done => {
-      playground.addSection(sectionName, done);
-    });
+    beforeAll(() => playground.addSection(sectionName));
 
-    it('should render a template folder', () => {
+    it('should be able to use the create command in cli', done => {
       const playbox = playground.section(sectionName);
       const destPath = path.join(playbox, 'App');
+
+      utils.spawn(
+        ['create', '--use=testing', 'App'],
+        {
+          cwd: playbox
+        },
+        function(err, stdout) {
+          expect(err).toBeNull();
+
+          expect(
+            utils.hasAllFileAndDirs(destPath, allMainAndStorePackageFiles)
+          ).toBeTruthy();
+
+          done();
+        }
+      );
+    });
+
+    // it('should crea', () => {
+    //   const playbox = playground.section(sectionName);
+    //   const destPath = path.join(playbox, 'App');
+    // });
+  });
+
+  describe.skip('init', () => {
+    let sectionName = 'init';
+
+    beforeAll(() => playground.addSection(sectionName));
+
+    it('should be able to use the create command in cli', () => {
+      const playbox = playground.section(sectionName);
+      utils.spawn();
     });
   });
 });

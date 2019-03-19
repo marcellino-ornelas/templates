@@ -2,14 +2,15 @@
  * Modules
  */
 
-const path = require('path');
-const fs = require('fs');
-const { DirNode, FileNode } = require('../lib/fileSystemTree');
+import path from 'path';
+import fs from 'fs';
+import { DirNode, FileNode } from '../lib/fileSystemTree';
+import * as TPS from '../lib/utilities/constants';
 
 /*
  * Constants
  */
-const PATH_TO_TEMPLATES = path.join(__dirname, '.tps');
+const PATH_TO_TEMPLATES = path.join(TPS.MAIN_TPS, 'testing');
 const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('File Tree', () => {

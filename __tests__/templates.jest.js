@@ -1,8 +1,7 @@
-const path = require('path');
-const fs = require('fs');
-const Templates = require('../lib/templates');
-const Playground = require('./support/playground');
-const utils = require('./support/utils');
+import path from 'path';
+import Templates from '../lib/templates';
+import Playground from './support/playground';
+import * as utils from './support/utils';
 
 /**
  * Constants
@@ -22,12 +21,6 @@ const playground = new Playground(TEMPLATES_PATH);
 /**
  * Templates testing
  */
-// const temps = new Template();
-
-// const packages = [];
-// temps.use('<template-folder>', packages);
-// temps.use('<template-name>');
-// should always look in `.tps/`
 
 describe('Templates', () => {
   let tps;
@@ -42,12 +35,16 @@ describe('Templates', () => {
     playground.destory(done);
   });
 
-  beforeEach(() => {
-    tps = new Templates();
-    tps.use(TEMPLATES_PATH);
-  });
+  // beforeEach(() => {
+  //   tps = new Templates();
+  //   tps.use('testing');
+  // });
 
-  describe('Packages', () => {
+  describe.skip('Packages', () => {
+    beforeEach(() => {
+      tps = new Templates();
+      tps.use('testing');
+    });
     // TODO
     it.skip('should be able to compile default packages', () => {});
     it('should be able to compile a package', () => {
@@ -88,21 +85,22 @@ describe('Templates', () => {
     beforeAll(done => {
       playground.addSection(sectionName, done);
       // TODO: take out when default packages works
-      tps.loadPackages(['main', 'store']);
     });
 
-    // beforeEach(() => {
-    // });
+    beforeEach(() => {
+      tps = new Templates();
+      tps.use('testing');
+      tps.loadPackages(['main', 'store']);
+    });
 
     it('should be able to render a local template', () => {
       const playbox = playground.section(sectionName);
       const destPath = path.join(playbox, 'App');
 
       return tps.render(destPath, {}).then(() => {
-        const check = allMainAndStorePackageFiles.map(fileOrDir =>
-          path.join(destPath, fileOrDir)
-        );
-        expect(utils.hasAllFileAndDirs(destPath, check)).toBeTruthy();
+        expect(
+          utils.hasAllFileAndDirs(destPath, allMainAndStorePackageFiles)
+        ).toBeTruthy();
       });
     });
   });

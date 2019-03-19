@@ -1,26 +1,45 @@
 /**
  * Modules
  */
-const fs = require('fs');
-const path = require('path');
-const { DirNode } = require('../../lib/fileSystemTree');
+import fs from 'fs';
+import path from 'path';
+import { DirNode } from '../../lib/fileSystemTree';
+import child from 'child_process';
+import { MAIN_DIR } from '../../lib/utilities/constants';
+import is from 'is';
 
 /**
  * Constants
  */
+const cliPath = path.join(MAIN_DIR, 'cli/index.js');
 
-const utils = (exports = module.exports);
+// const utils = (exports = module.exports);
 
-utils.hasAllFileAndDirs = (path, filesAndDirs) => {
-  const fileSystemTree = new DirNode(path);
+export function hasAllFileAndDirs(dirPath, filesAndDirs = [], verbose) {
+  if (!is.string(dirPath)) {
+    throw new TypeError('Path must be a string');
+  } else if (!is.array(filesAndDirs) || !filesAndDirs.length) {
+    throw new TypeError(
+      'filesAndDirs must be a array of file paths and directory paths'
+    );
+  }
+
+  const fileSystemTree = new DirNode(dirPath, null);
+
+  if (verbose) fileSystemTree.logTree(['pathFromRoot', 'path']);
 
   const hasAll = true;
   let found = 0;
   let paths = {};
 
-  filesAndDirs.forEach(fileOrDir => {
-    if (paths.hasOwnProperty(fileOrDir))
+  // Create full paths
+  const check = filesAndDirs.map(fileOrDir => path.join(dirPath, fileOrDir));
+
+  // save all paths to compare later
+  check.forEach(fileOrDir => {
+    if (paths.hasOwnProperty(fileOrDir)) {
       throw new Error('There are duplicate file paths array');
+    }
 
     paths[fileOrDir] = false;
   });
@@ -45,4 +64,21 @@ utils.hasAllFileAndDirs = (path, filesAndDirs) => {
   }
 
   return true;
-};
+}
+
+export function spawn(additionalArgs = [], opts = {}, done) {
+  if (!done) {
+    if (is.function(opts)) {
+      done = opts;
+      opts = {};
+    } else {
+      throw new Error('Callback function is required');
+    }
+  }
+  const args = [cliPath].concat(additionalArgs);
+  child.execFile('node', args, opts, function(err, stdout, stderr) {
+    err && console.log('err:', err);
+    stderr && console.log('stderr:', stderr);
+    done(err, stdout);
+  });
+}

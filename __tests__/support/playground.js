@@ -1,8 +1,8 @@
 /**
  * Modules
  */
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
 
 /**
  * Constants
@@ -21,14 +21,27 @@ class Playground {
   }
 
   create(done) {
-    fs.mkdir(this.path, done);
+    if (done) {
+      fs.mkdir(this.path, done);
+    } else {
+      return new Promise((resolve, reject) => {
+        fs.mkdir(this.path, function(err) {
+          err ? reject(err) : resolve();
+        });
+      });
+    }
   }
 
   destory(done) {
-    fs.remove(this.path, err => {
-      if (err) throw err;
-      done();
-    });
+    if (done) {
+      fs.remove(this.path, done);
+    } else {
+      return new Promise((resolve, reject) => {
+        fs.remove(this.path, function(err) {
+          err ? reject(err) : resolve();
+        });
+      });
+    }
   }
 
   /**
@@ -46,12 +59,11 @@ class Playground {
     const section = new Playground(this.path, name);
     this.sections[name] = section.path;
 
-    section.create(function(err) {
-      if (err) {
-        throw err;
-      }
-      cb();
-    });
+    if (cb) {
+      section.create(cb);
+    } else {
+      return section.create();
+    }
   }
 
   section(name) {
