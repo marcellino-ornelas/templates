@@ -20,7 +20,7 @@ const playground = new Playground(__dirname);
 describe('Command Line: ', () => {
   beforeAll(() => playground.create());
 
-  // afterAll(() => playground.destory());
+  afterAll(() => playground.destory());
 
   describe('create', () => {
     let sectionName = 'create';
