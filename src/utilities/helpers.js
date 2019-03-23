@@ -66,6 +66,14 @@ export function defaults(options = {}, defaults) {
   return options;
 }
 
+export function cliLog(str) {
+  const string = str
+    .split(/\n/)
+    .map(s => s.trim())
+    .join('\n');
+  console.log(string);
+}
+
 // /**
 //  * Capitalize the first character in the string
 //  * @param   {string} name - name to capitalize
