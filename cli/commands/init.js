@@ -3,22 +3,20 @@ const os = require('os');
 const findUp = require('find-up');
 const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');
-const utils = require('../../lib/utils');
+const { isDir } = require('../../lib/utilities/fileSystem');
 
 exports.command = 'init';
 
 exports.description = 'Initialize local settings';
 
-// exports.builder = yargs =>
-//   yargs.option('override', {
-//     alias: 'o',
-//     describe: 'Overwrite global and local settings',
-//     type: 'boolean'
-//   });
+exports.builder = yargs =>
+  yargs.option('force', {
+    alias: 'f',
+    describe: 'Initialize tps in cwd no matter what',
+    type: 'boolean'
+  });
 
 exports.handler = function(argv) {
-  console.log(argv);
-
   const temp = new Template();
   const localDest = process.cwd();
 
@@ -31,17 +29,24 @@ exports.handler = function(argv) {
 
   const inProcessBuilds = [];
 
-  if (argv.override || !TPS.HAS_GLOBAL) {
+  if (!TPS.HAS_GLOBAL) {
     inProcessBuilds.push(temp.render(TPS.GLOBAL_PATH));
   }
 
-  if (argv.override || !utils.isDir(TPS.LOCAL_PATH)) {
+  if (argv.force || isDir(TPS.LOCAL_PATH)) {
+    if (isDir(TPS.INIT_LOCAL_PATH)) {
+    }
     inProcessBuilds.push(temp.render(TPS.INIT_LOCAL_PATH));
   } else {
     console.log('You already have a init folder');
+    process.exit(1);
+    // throw new Error('tps is already initialized');
   }
 
   Promise.all(inProcessBuilds)
     .then(() => console.log('Init process complete'))
-    .catch(err => console.error(err));
+    .catch(err => {
+      console.error(err);
+      process.exit(1);
+    });
 };

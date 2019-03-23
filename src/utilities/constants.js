@@ -1,6 +1,6 @@
 import os from 'os';
 import path from 'path';
-import utils from '../../lib/utils';
+import { isDir, findUp } from './fileSystem';
 
 export const USER_HOME = os.homedir();
 export const MAIN_DIR = path.resolve(__dirname, '../../');
@@ -23,12 +23,12 @@ export const GLOBAL_PATH = path.join(USER_HOME, TPS_FOLDER);
 
 export const GLOBAL_CONFIG_PATH = path.join(GLOBAL_PATH, SETTINGS_FILE);
 
-export const HAS_GLOBAL = utils.isDir(GLOBAL_PATH);
+export const HAS_GLOBAL = isDir(GLOBAL_PATH);
 
 /**
  * local
  */
-const tps_local = utils.findUp(TPS_FOLDER);
+const tps_local = findUp(TPS_FOLDER);
 const has_local = tps_local && tps_local !== GLOBAL_PATH;
 
 export const LOCAL_PATH = has_local ? tps_local : null;

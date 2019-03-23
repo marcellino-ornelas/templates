@@ -1,19 +1,12 @@
 import path from 'path';
 import Playground from './support/playground';
 import * as utils from './support/utils';
+import { TESTING_PACKAGE_FILES, INIT_PACKAGE_FILES } from './support/constants';
+import fs from 'fs';
 
 /**
  * Constants
  */
-// const TEMPLATES_PATH = ;
-const allMainAndStorePackageFiles = [
-  './index.js',
-  './db',
-  './db/db.js',
-  './server',
-  './storeUtils',
-  './storeUtils/user.js'
-];
 
 const playground = new Playground(__dirname);
 
@@ -22,7 +15,7 @@ describe('Command Line: ', () => {
 
   afterAll(() => playground.destory());
 
-  describe('create', () => {
+  describe.skip('create', () => {
     let sectionName = 'create';
 
     beforeAll(() => playground.addSection(sectionName));
@@ -37,31 +30,38 @@ describe('Command Line: ', () => {
           cwd: playbox
         },
         function(err, stdout) {
-          expect(err).toBeNull();
-
           expect(
-            utils.hasAllFileAndDirs(destPath, allMainAndStorePackageFiles)
+            utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
           ).toBeTruthy();
 
           done();
         }
       );
     });
-
-    // it('should crea', () => {
-    //   const playbox = playground.section(sectionName);
-    //   const destPath = path.join(playbox, 'App');
-    // });
   });
 
-  describe.skip('init', () => {
+  describe('init', () => {
     let sectionName = 'init';
 
     beforeAll(() => playground.addSection(sectionName));
 
-    it('should be able to use the create command in cli', () => {
+    it('should be able to use the create command in cli', done => {
       const playbox = playground.section(sectionName);
-      utils.spawn();
+      const destPath = path.join(playbox, '.tps');
+
+      utils.spawn(
+        ['init', '--force'],
+        {
+          cwd: playbox
+        },
+        function(err, stdout) {
+          expect(
+            utils.hasAllFileAndDirs(destPath, INIT_PACKAGE_FILES)
+          ).toBeTruthy();
+
+          done();
+        }
+      );
     });
   });
 });

@@ -2,18 +2,16 @@
  * Modules
  */
 import fs from 'fs';
-import path from 'path';
-import { DirNode } from '../../lib/fileSystemTree';
 import child from 'child_process';
-import { MAIN_DIR } from '../../lib/utilities/constants';
+import path from 'path';
 import is from 'is';
+import { DirNode } from '../../lib/fileSystemTree';
+import { MAIN_DIR } from '../../lib/utilities/constants';
 
 /**
  * Constants
  */
 const cliPath = path.join(MAIN_DIR, 'cli/index.js');
-
-// const utils = (exports = module.exports);
 
 export function hasAllFileAndDirs(dirPath, filesAndDirs = [], verbose) {
   if (!is.string(dirPath)) {
@@ -77,8 +75,8 @@ export function spawn(additionalArgs = [], opts = {}, done) {
   }
   const args = [cliPath].concat(additionalArgs);
   child.execFile('node', args, opts, function(err, stdout, stderr) {
-    err && console.log('err:', err);
-    stderr && console.log('stderr:', stderr);
+    // stderr && console.log('stderr:', stderr);
+    expect(err).toBeNull();
     done(err, stdout);
   });
 }

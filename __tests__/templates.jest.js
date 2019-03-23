@@ -1,20 +1,13 @@
 import path from 'path';
 import Templates from '../lib/templates';
 import Playground from './support/playground';
+import { TESTING_PACKAGE_FILES } from './support/constants';
 import * as utils from './support/utils';
 
 /**
  * Constants
  */
 const TEMPLATES_PATH = __dirname;
-const allMainAndStorePackageFiles = [
-  './index.js',
-  './db',
-  './db/db.js',
-  './server',
-  './storeUtils',
-  './storeUtils/user.js'
-];
 
 const playground = new Playground(TEMPLATES_PATH);
 
@@ -99,7 +92,7 @@ describe('Templates', () => {
 
       return tps.render(destPath, {}).then(() => {
         expect(
-          utils.hasAllFileAndDirs(destPath, allMainAndStorePackageFiles)
+          utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
         ).toBeTruthy();
       });
     });

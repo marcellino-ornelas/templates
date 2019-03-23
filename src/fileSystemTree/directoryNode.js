@@ -3,6 +3,8 @@ import FileNode from './fileNode';
 import path from 'path';
 import fs from 'fs';
 import utils from '../utils';
+import { isDir } from '../utilities/fileSystem';
+import { couldMatchObj } from '../utilities/helpers';
 
 export class DirectoryNode extends FileSystemNode {
   constructor(name, parentDirNode, verbose) {
@@ -20,8 +22,7 @@ export class DirectoryNode extends FileSystemNode {
     const dirContents = fs.readdirSync(this.path);
     dirContents.forEach(name => {
       const dirContentPath = path.join(this.path, name);
-      const isDir = utils.isDir(dirContentPath);
-      const ContentType = isDir ? DirectoryNode : FileNode;
+      const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;
       const newFSNode = new ContentType(name, this, this.verbose);
 
       this.addChild(newFSNode);
@@ -48,7 +49,7 @@ export class DirectoryNode extends FileSystemNode {
 
   find(selectBy = {}) {
     return this.selectChildren(fsNode => {
-      return utils.couldMatch(selectBy, fsNode);
+      return couldMatchObj(selectBy, fsNode);
     });
   }
 }

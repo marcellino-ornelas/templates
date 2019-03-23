@@ -2,10 +2,11 @@ import dot from 'dot';
 import path from 'path';
 import fs from 'fs';
 import is from 'is';
-import utils from './utils';
 import DirNode from './fileSystemTree';
 import File from './File';
 import * as TPS from './utilities/constants';
+import { isDir } from './utilities/fileSystem';
+import { promisify, defaults } from './utilities/helpers';
 
 dot.templateSettings.strip = false;
 
@@ -18,7 +19,7 @@ const DEFAULT_OPTIONS = {
   verbose: false
 };
 
-const mkDir = utils.promisify(fs.mkdir, fs);
+const mkDir = promisify(fs.mkdir, fs);
 
 /**
  * @class
@@ -29,7 +30,7 @@ class Templates {
    * @param {TemplateOptions} opts - options to pass to templates
    */
   constructor(opts) {
-    this.opts = utils.defaults(opts, DEFAULT_OPTIONS);
+    this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.packages = {};
     this.packagesUsed = [];
     this.compiledFiles = [];
@@ -53,10 +54,10 @@ class Templates {
     const maybe_global_temp = `${TPS.GLOBAL_PATH}/${templateName}`;
 
     switch (true) {
-      case localPath && utils.isDir(maybe_local_temp):
+      case localPath && isDir(maybe_local_temp):
         this.src = maybe_local_temp;
         break;
-      case TPS.GLOBAL_PATH && utils.isDir(maybe_global_temp):
+      case TPS.GLOBAL_PATH && isDir(maybe_global_temp):
         this.src = maybe_global_temp;
         break;
       default:

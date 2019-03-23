@@ -1,15 +1,15 @@
 const path = require('path');
 const Template = require('../../lib/templates');
+const { json, isDir } = require('../../lib/utilities/fileSystem');
 const utils = require('../../lib/utils');
 const TPS = require('../../lib/utilities/constants');
+const { defaults } = require('../../lib/utilities/helpers');
 
-let TPS_CONFIG = utils.json(TPS.GLOBAL_CONFIG_PATH);
+let TPS_CONFIG = json(TPS.GLOBAL_CONFIG_PATH);
 
 if (TPS.LOCAL_CONFIG_PATH) {
-  TPS_CONFIG = utils.defaults(utils.json(TPS.LOCAL_CONFIG_PATH), TPS_CONFIG);
+  TPS_CONFIG = defaults(json(TPS.LOCAL_CONFIG_PATH), TPS_CONFIG);
 }
-
-console.log(TPS_CONFIG);
 
 exports.command = 'create <names...>';
 
