@@ -40,7 +40,6 @@ exports.handler = function(argv) {
   } else {
     console.log('You already have a init folder');
     process.exit(1);
-    // throw new Error('tps is already initialized');
   }
 
   Promise.all(inProcessBuilds)

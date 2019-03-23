@@ -2,9 +2,8 @@ import FileSystemNode from './fileSystemNode';
 import FileNode from './fileNode';
 import path from 'path';
 import fs from 'fs';
-import utils from '../utils';
-import { isDir } from '../utilities/fileSystem';
-import { couldMatchObj } from '../utilities/helpers';
+import { isDir } from '@tps/utilities/fileSystem';
+import { couldMatchObj } from '@tps/utilities/helpers';
 
 export class DirectoryNode extends FileSystemNode {
   constructor(name, parentDirNode, verbose) {

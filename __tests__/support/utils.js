@@ -5,8 +5,8 @@ import fs from 'fs';
 import child from 'child_process';
 import path from 'path';
 import is from 'is';
-import { DirNode } from '../../lib/fileSystemTree';
-import { MAIN_DIR } from '../../lib/utilities/constants';
+import { DirNode } from '@tps/fileSystemTree';
+import { MAIN_DIR } from '@tps/utilities/constants';
 
 /**
  * Constants

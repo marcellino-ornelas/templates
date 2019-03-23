@@ -1,5 +1,5 @@
 import path from 'path';
-import Templates from '../lib/templates';
+import Templates from '@tps/templates';
 import Playground from './support/playground';
 import { TESTING_PACKAGE_FILES } from './support/constants';
 import * as utils from './support/utils';

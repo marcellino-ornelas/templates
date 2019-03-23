@@ -2,11 +2,11 @@ import dot from 'dot';
 import path from 'path';
 import fs from 'fs';
 import is from 'is';
-import DirNode from './fileSystemTree';
-import File from './File';
-import * as TPS from './utilities/constants';
-import { isDir } from './utilities/fileSystem';
-import { promisify, defaults } from './utilities/helpers';
+import DirNode from '@tps/fileSystemTree';
+import File from '@tps/File';
+import * as TPS from '@tps/utilities/constants';
+import { isDir } from '@tps/utilities/fileSystem';
+import { promisify, defaults } from '@tps/utilities/helpers';
 
 dot.templateSettings.strip = false;
 

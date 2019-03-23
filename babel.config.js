@@ -1,3 +1,15 @@
 const presets = [['@babel/env']];
 
-module.exports = { presets };
+const plugins = [
+  [
+    require.resolve('babel-plugin-module-resolver'),
+    {
+      root: ['./'],
+      alias: {
+        '@tps': './src'
+      }
+    }
+  ]
+];
+
+module.exports = { presets, plugins };
