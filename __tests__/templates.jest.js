@@ -18,28 +18,19 @@ const playground = new Playground(TEMPLATES_PATH);
 describe('Templates', () => {
   let tps;
 
-  beforeAll(done => {
-    // Make a folder to to render templates inside
-    playground.create(done);
-  });
+  beforeAll(() => playground.create());
 
-  afterAll(done => {
-    // Remove playground folder
-    playground.destory(done);
-  });
-
-  // beforeEach(() => {
-  //   tps = new Templates();
-  //   tps.use('testing');
-  // });
+  afterAll(() => playground.destory());
 
   describe.skip('Packages', () => {
     beforeEach(() => {
       tps = new Templates();
       tps.use('testing');
     });
+
     // TODO
     it.skip('should be able to compile default packages', () => {});
+
     it('should be able to compile a package', () => {
       tps.loadPackages('main');
       expect(tps.packages).toHaveProperty('main');
@@ -73,12 +64,7 @@ describe('Templates', () => {
   });
 
   describe('Render Process', () => {
-    let sectionName = 'render-process';
-
-    beforeAll(done => {
-      playground.addSection(sectionName, done);
-      // TODO: take out when default packages works
-    });
+    beforeAll(() => playground.createBox('render_process'));
 
     beforeEach(() => {
       tps = new Templates();
@@ -87,8 +73,7 @@ describe('Templates', () => {
     });
 
     it('should be able to render a local template', () => {
-      const playbox = playground.section(sectionName);
-      const destPath = path.join(playbox, 'App');
+      const destPath = playground.pathTo('App');
 
       return tps.render(destPath, {}).then(() => {
         expect(

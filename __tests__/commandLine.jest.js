@@ -15,53 +15,81 @@ describe('Command Line: ', () => {
 
   afterAll(() => playground.destory());
 
-  describe.skip('create', () => {
-    let sectionName = 'create';
-
-    beforeAll(() => playground.addSection(sectionName));
+  describe('create', () => {
+    let cwd;
+    beforeAll(() =>
+      playground.createBox('create').then(() => {
+        cwd = playground.box();
+      })
+    );
 
     it('should be able to use the create command in cli', done => {
-      const playbox = playground.section(sectionName);
-      const destPath = path.join(playbox, 'App');
+      const destPath = playground.pathTo('App');
+      const cmd = ['create', '--use=testing', 'App'];
 
-      utils.spawn(
-        ['create', '--use=testing', 'App'],
-        {
-          cwd: playbox
-        },
-        function(err, stdout) {
-          expect(
-            utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-          ).toBeTruthy();
+      utils.spawn(cmd, { cwd }, function(err, stdout) {
+        expect(
+          utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+        ).toBeTruthy();
 
-          done();
-        }
-      );
+        done();
+      });
     });
   });
 
   describe('init', () => {
-    let sectionName = 'init';
+    let destPath;
+    let cwd;
 
-    beforeAll(() => playground.addSection(sectionName));
+    beforeAll(() =>
+      playground.createBox('init').then(() => {
+        cwd = playground.box();
+        destPath = playground.pathTo('.tps');
+      })
+    );
 
-    it('should be able to use the create command in cli', done => {
-      const playbox = playground.section(sectionName);
-      const destPath = path.join(playbox, '.tps');
+    it('should not initailize if parents directory is initialized', done => {
+      utils.spawn(['init'], { cwd }, function(err, stdout) {
+        expect(err).toBeDefined();
+        expect(stdout).toBeDefined();
+        done();
+      });
+    });
 
-      utils.spawn(
-        ['init', '--force'],
-        {
-          cwd: playbox
-        },
-        function(err, stdout) {
-          expect(
-            utils.hasAllFileAndDirs(destPath, INIT_PACKAGE_FILES)
-          ).toBeTruthy();
+    it('should be able initialize tps', done => {
+      //need to add --force because of .tps folder in main templates repo
+      utils.spawn(['init', '--force'], { cwd }, function(err, stdout) {
+        expect(err).toBeNull();
+        expect(
+          utils.hasAllFileAndDirs(destPath, INIT_PACKAGE_FILES)
+        ).toBeTruthy();
 
-          done();
-        }
-      );
+        done();
+      });
+    });
+
+    it('should not initialize if folder is already initialized', () => {
+      utils.spawn(['init', '--force'], { cwd }, function(err, stdout) {
+        expect(err).toBeDefined();
+        expect(stdout).toBeDefined();
+        done();
+      });
     });
   });
 });
+
+// function init(destPath, args) {
+//   utils.spawn(
+//     ['init'].concat(args),
+//     {
+//       cwd: path.dirname(playbox)
+//     },
+//     function(err, stdout) {
+//       expect(
+//         utils.hasAllFileAndDirs(destPath, INIT_PACKAGE_FILES)
+//       ).toBeTruthy();
+
+//       done();
+//     }
+//   );
+// }

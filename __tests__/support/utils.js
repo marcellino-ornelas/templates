@@ -75,8 +75,9 @@ export function spawn(additionalArgs = [], opts = {}, done) {
   }
   const args = [cliPath].concat(additionalArgs);
   child.execFile('node', args, opts, function(err, stdout, stderr) {
-    // stderr && console.log('stderr:', stderr);
-    expect(err).toBeNull();
+    if (err) {
+      console.log(stdout);
+    }
     done(err, stdout);
   });
 }

@@ -4,8 +4,8 @@
 
 import path from 'path';
 import fs from 'fs';
-import { DirNode, FileNode } from '../lib/fileSystemTree';
-import * as TPS from '../lib/utilities/constants';
+import { DirNode, FileNode } from '@tps/fileSystemTree';
+import * as TPS from '@tps/utilities/constants';
 
 /*
  * Constants

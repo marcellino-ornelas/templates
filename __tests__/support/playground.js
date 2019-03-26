@@ -3,17 +3,33 @@
  */
 import fs from 'fs-extra';
 import path from 'path';
+import is from 'is';
 
 /**
  * Constants
  */
 const TESTING_PLAYGROUND_NAME = 'testing_playground';
 
+const stamp = () => Date.now();
+
+// const cbOrPromise = (cb, ...args) => {
+//   if(is.function(cb)){
+//     cb(...args);
+//   } else {
+//     return new Promise(){
+
+//     }
+//   }
+// }
+
 class Playground {
-  constructor(dirPath, name = `${TESTING_PLAYGROUND_NAME}_${Date.now()}`) {
+  constructor(dirPath, name = TESTING_PLAYGROUND_NAME) {
     this.dirPath = dirPath;
-    this.name = name;
-    this.sections = {};
+    this._name = name;
+    this.stamp = stamp();
+    this.name = `${name}_${this.stamp}`;
+    this.boxes = {};
+    this.current = null;
   }
 
   get path() {
@@ -44,34 +60,58 @@ class Playground {
     }
   }
 
+  createBox(name, cb) {
+    const box = new Playground(this.path, name);
+
+    if (this.boxes.hasOwnProperty(box.name)) {
+      throw new Error('two boxes are the same');
+    }
+    this.boxes[box.name] = box;
+    this.current = box;
+
+    if (cb) {
+      box.create(cb);
+    } else {
+      return box.create();
+    }
+  }
+
+  box() {
+    return this.current.path;
+  }
+
+  pathTo(filePath) {
+    return path.join(this.box(), filePath);
+  }
+
   /**
    * Sections
    */
-  hasSection(name) {
-    return this.sections.hasOwnProperty(name);
-  }
+  // hasSection(name) {
+  //   return this.sections.hasOwnProperty(name);
+  // }
 
-  addSection(name, cb) {
-    if (this.hasSection(name)) {
-      throw new Error('Sections was already created');
-    }
+  // addSection(name, cb) {
+  //   if (this.hasSection(name)) {
+  //     throw new Error('Sections was already created');
+  //   }
 
-    const section = new Playground(this.path, name);
-    this.sections[name] = section.path;
+  //   const section = new Playground(this.path, name);
+  //   this.sections[name] = section.path;
 
-    if (cb) {
-      section.create(cb);
-    } else {
-      return section.create();
-    }
-  }
+  //   if (cb) {
+  //     section.create(cb);
+  //   } else {
+  //     return section.create();
+  //   }
+  // }
 
-  section(name) {
-    if (!this.hasSection(name)) {
-      throw new Error('No section availiable');
-    }
-    return this.sections[name];
-  }
+  // section(name) {
+  //   if (!this.hasSection(name)) {
+  //     throw new Error('No section availiable');
+  //   }
+  //   return this.sections[name];
+  // }
 }
 
 module.exports = Playground;

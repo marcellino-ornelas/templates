@@ -3,7 +3,7 @@ const Template = require('../../lib/templates');
 const { json, isDir } = require('../../lib/utilities/fileSystem');
 const utils = require('../../lib/utils');
 const TPS = require('../../lib/utilities/constants');
-const { defaults } = require('../../lib/utilities/helpers');
+const { defaults, cliLog } = require('../../lib/utilities/helpers');
 
 let TPS_CONFIG = json(TPS.GLOBAL_CONFIG_PATH);
 

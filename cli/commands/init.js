@@ -4,6 +4,7 @@ const findUp = require('find-up');
 const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');
 const { isDir } = require('../../lib/utilities/fileSystem');
+const { cliLog } = require('../../lib/utilities/helpers');
 
 exports.command = 'init';
 
@@ -24,7 +25,7 @@ exports.handler = function(argv) {
     tpsPath: TPS.MAIN_TPS
   });
 
-  // TODO: Take out
+  // TODO: Take out when default packages are ready
   temp.loadPackage('default');
 
   const inProcessBuilds = [];
@@ -33,17 +34,25 @@ exports.handler = function(argv) {
     inProcessBuilds.push(temp.render(TPS.GLOBAL_PATH));
   }
 
-  if (argv.force || isDir(TPS.LOCAL_PATH)) {
+  if (argv.force || !isDir(TPS.LOCAL_PATH)) {
     if (isDir(TPS.INIT_LOCAL_PATH)) {
+      cliLog('This folder is already initialized with tps');
+      process.exit(1);
+    } else {
+      inProcessBuilds.push(temp.render(TPS.INIT_LOCAL_PATH));
     }
-    inProcessBuilds.push(temp.render(TPS.INIT_LOCAL_PATH));
   } else {
-    console.log('You already have a init folder');
+    cliLog(`\
+      tps is already initialized in a parent directory.
+      Use this command to initialized this folder anyways.
+      'tps init --force'
+      [Current tps location]: ${TPS.LOCAL_PATH}
+    `);
     process.exit(1);
   }
 
   Promise.all(inProcessBuilds)
-    .then(() => console.log('Init process complete'))
+    .then(() => cliLog('Init process complete'))
     .catch(err => {
       console.error(err);
       process.exit(1);
