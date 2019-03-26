@@ -37,5 +37,5 @@ export const LOCAL_CONFIG_PATH = has_local
   ? path.join(LOCAL_PATH, SETTINGS_FILE)
   : null;
 
-export const INIT_LOCAL_PATH = path.join(process.cwd(), TPS_FOLDER);
+export const INIT_LOCAL_PATH = path.join(process.cwd());
 export const MAIN_TPS = `${MAIN_DIR}/${TPS_FOLDER}`;

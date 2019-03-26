@@ -129,11 +129,13 @@ class Templates {
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, data = {}, cb) {
-    return mkDir(dest, { recursive: true })
+    return Promise.resolve()
+      .then(() => !isDir(dest) && mkDir(dest, { recursive: true }))
       .then(() => this._renderAllDirectories(dest))
       .then(() => this._renderAllFiles(dest, data))
       .catch(function(err) {
         console.log('There was a error while rendering your template', err);
+        process.exit(1);
       });
   }
   /**

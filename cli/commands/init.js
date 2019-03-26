@@ -35,7 +35,8 @@ exports.handler = function(argv) {
   }
 
   if (argv.force || !isDir(TPS.LOCAL_PATH)) {
-    if (isDir(TPS.INIT_LOCAL_PATH)) {
+    const initFolder = path.join(TPS.INIT_LOCAL_PATH, TPS.TPS_FOLDER);
+    if (isDir(initFolder)) {
       cliLog('This folder is already initialized with tps');
       process.exit(1);
     } else {

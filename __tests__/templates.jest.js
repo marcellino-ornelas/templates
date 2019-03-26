@@ -14,7 +14,6 @@ const playground = new Playground(TEMPLATES_PATH);
 /**
  * Templates testing
  */
-
 describe('Templates', () => {
   let tps;
 

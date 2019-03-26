@@ -49,7 +49,7 @@ describe('Command Line: ', () => {
     );
 
     it('should not initailize if parents directory is initialized', done => {
-      utils.spawn(['init'], { cwd }, function(err, stdout) {
+      utils.spawn(['init'], { cwd, fail: true }, function(err, stdout) {
         expect(err).toBeDefined();
         expect(stdout).toBeDefined();
         done();
@@ -69,7 +69,10 @@ describe('Command Line: ', () => {
     });
 
     it('should not initialize if folder is already initialized', () => {
-      utils.spawn(['init', '--force'], { cwd }, function(err, stdout) {
+      utils.spawn(['init', '--force'], { cwd, fail: true }, function(
+        err,
+        stdout
+      ) {
         expect(err).toBeDefined();
         expect(stdout).toBeDefined();
         done();
@@ -77,19 +80,3 @@ describe('Command Line: ', () => {
     });
   });
 });
-
-// function init(destPath, args) {
-//   utils.spawn(
-//     ['init'].concat(args),
-//     {
-//       cwd: path.dirname(playbox)
-//     },
-//     function(err, stdout) {
-//       expect(
-//         utils.hasAllFileAndDirs(destPath, INIT_PACKAGE_FILES)
-//       ).toBeTruthy();
-
-//       done();
-//     }
-//   );
-// }
