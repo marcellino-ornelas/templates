@@ -31,7 +31,6 @@ class File {
 
   create(newDest, data) {
     const dest = path.join(this._dest(newDest), this.fileName(data));
-    // console.log(`   `, '-> created file ->', dest);
 
     return new Promise((resolve, reject) => {
       if (this.isDot) {
@@ -39,7 +38,8 @@ class File {
         const dotCompiled = dot.template(fileData);
 
         fs.writeFile(dest, dotCompiled(data), err => {
-          if (err) console.log({ name: this._name, error: err });
+          if (err)
+            console.log('Error in File', { name: this._name, error: err });
           err ? reject({ name: this._name, error: err }) : resolve();
         });
       } else {

@@ -16,6 +16,16 @@ export function isDir(path) {
   return dir.isDirectory();
 }
 
+export function isFile(path) {
+  let file;
+  try {
+    file = fs.lstatSync(path);
+  } catch (e) {
+    return false;
+  }
+  return file.isFile();
+}
+
 export function json(jsonFile) {
   try {
     const jsonContents = fs.readFileSync(jsonFile);

@@ -5,10 +5,11 @@
   "main": "template.js",
   "scripts": {
     "build:code": "./node_modules/.bin/babel src --out-dir lib",
-    "build:dev": "npm run build:code -- -w",
-    "build": "npm run build:code",
-    "test:hey": "npm run build:code && jest --testPathPattern .jest.js",
-    "test": "jest --testPathPattern .jest.js",
+    "build:dev": "BABEL_ENV=development npm run build:code -- -w",
+    "build:prod": "BABEL_ENV=production npm run build:code",
+    "build": "npm run build",
+    "test": "npm run test:core",
+    "test:core": "npm run build:code && BABEL_ENV=development jest --testPathPattern .jest.js",
     "cli": "node ./cli",
     "ct": "npm run cli -- create --use hey App"
   },
@@ -28,6 +29,7 @@
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
     "find-up": "^3.0.0",
+    "inquirer": "^6.2.2",
     "is": "^3.3.0",
     "valid-filename": "^2.0.1",
     "yargs": "^13.2.1"

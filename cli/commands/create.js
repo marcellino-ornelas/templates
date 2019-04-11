@@ -5,11 +5,11 @@ const { json, isDir } = require('../../lib/utilities/fileSystem');
 const utils = require('../../lib/utils');
 const TPS = require('../../lib/utilities/constants');
 const { defaults, cliLog } = require('../../lib/utilities/helpers');
-let TPS_CONFIG = json(TPS.GLOBAL_CONFIG_PATH);
+// let TPS_CONFIG = json(TPS.GLOBAL_CONFIG_PATH);
 
-if (TPS.LOCAL_CONFIG_PATH) {
-  TPS_CONFIG = defaults(json(TPS.LOCAL_CONFIG_PATH), TPS_CONFIG);
-}
+// if (TPS.LOCAL_CONFIG_PATH) {
+//   TPS_CONFIG = defaults(json(TPS.LOCAL_CONFIG_PATH), TPS_CONFIG);
+// }
 
 exports.command = 'create [names...]';
 

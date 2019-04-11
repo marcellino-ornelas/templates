@@ -25,7 +25,7 @@ describe('Command Line: ', () => {
 
     it('should be able to use the create command in cli', done => {
       const destPath = playground.pathTo('App');
-      const cmd = ['create', '--use=testing', 'App'];
+      const cmd = ['create', '--use=testing', '-v', 'App'];
 
       utils.spawn(cmd, { cwd }, function(err, stdout) {
         expect(

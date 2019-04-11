@@ -1,0 +1,15 @@
+{
+  "default": "default",
+  "prompts": [
+    {
+      "name": "global",
+      "flag": "global",
+      "flag:advanced": {
+        "long": "global",
+        "short": "c"
+      },
+      "message": "is this a global project",
+      "default": ""
+    }
+  ]
+}

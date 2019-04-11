@@ -1,5 +1,14 @@
 const presets = [['@babel/env']];
 
+const presetsProduction = [
+  [
+    '@babel/env',
+    {
+      node: 'current'
+    }
+  ]
+];
+
 const plugins = [
   [
     require.resolve('babel-plugin-module-resolver'),
@@ -13,3 +22,15 @@ const plugins = [
 ];
 
 module.exports = { presets, plugins };
+module.exports = {
+  env: {
+    development: {
+      presets,
+      plugins
+    },
+    production: {
+      presets: presetsProduction,
+      plugins
+    }
+  }
+};

@@ -1,3 +1,5 @@
+import is from 'is';
+
 /**
  * Turn a regular node style callback function into a promise
  * @param   {Function} func - Function to turn into promise
@@ -24,7 +26,7 @@ export function promisify(func, _this = null) {
  */
 export function eachObj(obj, cb) {
   for (let key in obj) {
-    if (!obj.hasOwnProperty(key)) {
+    if (!obj.hasOwnProperty(key) || is.undef(obj[key])) {
       continue;
     }
     const val = obj[key];
