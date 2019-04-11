@@ -1,3 +1,5 @@
+import path from 'path';
+
 export const TESTING_PACKAGE_FILES = [
   './index.js',
   './db',
@@ -8,3 +10,5 @@ export const TESTING_PACKAGE_FILES = [
 ];
 
 export const INIT_PACKAGE_FILES = ['.tpsrc'];
+
+export const TESTING_DIR = path.join(__dirname, '../');

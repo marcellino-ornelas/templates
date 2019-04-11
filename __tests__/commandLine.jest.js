@@ -1,14 +1,16 @@
-import path from 'path';
 import Playground from './support/playground';
 import * as utils from './support/utils';
-import { TESTING_PACKAGE_FILES, INIT_PACKAGE_FILES } from './support/constants';
-import fs from 'fs';
+import {
+  TESTING_PACKAGE_FILES,
+  INIT_PACKAGE_FILES,
+  TESTING_DIR
+} from './support/constants';
 
 /**
  * Constants
  */
 
-const playground = new Playground(__dirname);
+const playground = new Playground(TESTING_DIR);
 
 describe('Command Line: ', () => {
   beforeAll(() => playground.create());

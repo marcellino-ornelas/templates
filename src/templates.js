@@ -180,7 +180,7 @@ class Templates extends VerboseLogger {
    * @param {Function} [cb] - callback function to call when done
    * @returns {Promise} return promise when done if no cb is defined
    */
-  render(dest, data = {}, cb) {
+  render(dest, data = {}) {
     return (
       Promise.resolve()
         // .then(() => this._answerRestOfPrompts())

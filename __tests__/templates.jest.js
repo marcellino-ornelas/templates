@@ -1,7 +1,7 @@
 import path from 'path';
 import Templates from '@tps/templates';
 import Playground from './support/playground';
-import { TESTING_PACKAGE_FILES } from './support/constants';
+import { TESTING_PACKAGE_FILES, TESTING_DIR } from './support/constants';
 import * as utils from './support/utils';
 
 /**
@@ -9,7 +9,7 @@ import * as utils from './support/utils';
  */
 const TEMPLATES_PATH = __dirname;
 
-const playground = new Playground(TEMPLATES_PATH);
+const playground = new Playground(TESTING_DIR);
 
 /**
  * Templates testing
