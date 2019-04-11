@@ -1,10 +1,10 @@
-import Playground from './support/playground';
-import * as utils from './support/utils';
+import Playground from '../support/playground';
+import * as utils from '../support/utils';
 import {
   TESTING_PACKAGE_FILES,
   INIT_PACKAGE_FILES,
   TESTING_DIR
-} from './support/constants';
+} from '../support/constants';
 
 /**
  * Constants
@@ -46,7 +46,7 @@ describe('Command Line: ', () => {
     });
   });
 
-  it('should not initialize if folder is already initialized', () => {
+  it('should not initialize if folder is already initialized', done => {
     utils.spawn(['init', '--force'], { cwd, fail: true }, function(
       err,
       stdout
