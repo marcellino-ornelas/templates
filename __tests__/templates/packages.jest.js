@@ -11,8 +11,16 @@ describe('[Templates] Packages:', () => {
     tps.use('testing');
   });
 
-  // TODO
-  it.skip('should be able to compile default packages', () => {});
+  it('should be able to compile default package', () => {
+    expect(tps.packages).toHaveProperty('default');
+  });
+
+  it('should not load default package if turn off', () => {
+    const tpsNoDefault = new Templates({ default: false });
+
+    expect(tpsNoDefault.opts.default).toBeFalsy();
+    expect(tpsNoDefault.packages).not.toHaveProperty('default');
+  });
 
   it('should be able to compile a package', () => {
     tps.loadPackages('main');

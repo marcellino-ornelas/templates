@@ -27,16 +27,23 @@ exports.builder = yargs =>
       alias: 'p',
       describe: 'Aditional Packages to use when building your template',
       type: 'array'
+    })
+    .option('no-default', {
+      alias: 'p',
+      describe: 'Aditional Packages to use when building your template',
+      type: 'array'
     });
 
 exports.handler = function(argv) {
   const temp = new Template({ verbose: argv.verbose });
   const dest = process.cwd();
 
+  console.log(argv);
+
   temp.use(argv.use);
 
   // TODO: Take out when default package is initalized
-  temp.loadPackage('default');
+  // temp.loadPackage('default');
 
   if (argv.packages && argv.packages.length) {
     temp.loadPackage(argv.packages);

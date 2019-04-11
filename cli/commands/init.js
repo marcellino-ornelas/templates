@@ -25,9 +25,6 @@ exports.handler = function(argv) {
     tpsPath: TPS.MAIN_TPS
   });
 
-  // TODO: Take out when default packages are ready
-  temp.loadPackage('default');
-
   const inProcessBuilds = [];
 
   if (!TPS.HAS_GLOBAL) {

@@ -9,7 +9,7 @@
     "build:prod": "BABEL_ENV=production npm run build:code",
     "build": "npm run build",
     "test": "npm run test:core",
-    "test:core": "npm run build:code && BABEL_ENV=development jest --testPathPattern .jest.js",
+    "test:core": "npm run build:code && BABEL_ENV=development jest",
     "cli": "node ./cli",
     "ct": "npm run cli -- create --use hey App"
   },

@@ -25,18 +25,19 @@ describe('[Templates] Render Process:', () => {
 
   beforeEach(() => {
     // add no default to this test to only test packages
-    tps = new Templates();
+    tps = new Templates({ default: false });
     tps.use('testing');
     tps.loadPackages(['main', 'store']);
   });
 
-  it('should be able to render a local template', () => {
+  it('should be able to render a local template', done => {
     const destPath = playground.pathTo('App');
 
-    return tps.render(destPath, {}).then(() => {
+    tps.render(destPath, {}).then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
+      done();
     });
   });
 });

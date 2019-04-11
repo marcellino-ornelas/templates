@@ -17,12 +17,16 @@ dot.templateSettings.strip = false;
 /**
  * Default options for Templates
  * @typedef  {Object} TemplateOptions
- * @property {boolean} verbose - log extra information to the console
+ * @property {boolean} verbose - Log extra information to the console
+ * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
+ * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
+ * @property {boolean} default - Don't load the default folder
  */
 const DEFAULT_OPTIONS = {
   verbose: false,
   noLocalConfig: false,
-  noGlobalConfig: false
+  noGlobalConfig: false,
+  default: true
 };
 
 const mkDir = promisify(fs.mkdir, fs);
@@ -99,7 +103,7 @@ class Templates extends VerboseLogger {
       }
 
       if (this.templateSettings.prompts) {
-        this._log('[TPS]: Loading prompts ...');
+        this._log('[TPS INFO]: Loading prompts ...');
         this._prompts = new Prompter(
           this.templateSettings.prompts,
           this.config
@@ -110,6 +114,10 @@ class Templates extends VerboseLogger {
     this._loadTpsConfig(templateName);
     // TODO
     // load settings && load default packages
+    const defaultFolder = path.join(this.src, 'default');
+    if (this.opts.default && isDir(defaultFolder)) {
+      this.loadPackage('default');
+    }
   }
 
   /**
@@ -164,14 +172,14 @@ class Templates extends VerboseLogger {
   }
 
   /**
-   * @param {object} obj - object to load configs from
+   * @param {object} config - object to load configs from
    * @returns {Templates} `this`
    */
-  loadConfig(obj) {
-    if (!is.object(obj)) {
-      throw new Error('loadConfig takes a object as a argument');
+  loadConfig(config) {
+    if (!is.object(config)) {
+      throw new Error('config must be a object');
     }
-    return this._config.load(obj);
+    return this._config.load(config);
   }
 
   /**
