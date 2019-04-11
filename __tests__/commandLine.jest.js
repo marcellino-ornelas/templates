@@ -12,7 +12,7 @@ import {
 
 const playground = new Playground(TESTING_DIR);
 
-describe('Command Line: ', () => {
+describe.skip('Command Line: ', () => {
   beforeAll(() => playground.create());
 
   afterAll(() => playground.destory());
