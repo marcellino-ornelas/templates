@@ -2,6 +2,10 @@ import os from 'os';
 import path from 'path';
 import { isDir, findUp } from './fileSystem';
 
+/**
+ * Enviroment
+ */
+export const IS_TESTING = process.env.NODE_ENV === 'test';
 export const USER_HOME = os.homedir();
 export const MAIN_DIR = path.resolve(__dirname, '../../');
 

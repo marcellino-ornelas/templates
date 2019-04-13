@@ -133,10 +133,6 @@ class Templates extends VerboseLogger {
       }
     }
 
-    if (!this.src) {
-      throw new Error('Must specfiy a template folder to use');
-    }
-
     packages.forEach(_package => this.loadPackage(_package));
   }
 
@@ -144,6 +140,10 @@ class Templates extends VerboseLogger {
    * @param {String} _package - package from the template you would like to use
    */
   loadPackage(_package) {
+    if (!this.src) {
+      throw new Error('Must specfiy a template folder to use');
+    }
+
     if (!is.string(_package)) {
       throw new TypeError('Argument must be a string');
     }
@@ -189,17 +189,19 @@ class Templates extends VerboseLogger {
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, data = {}) {
-    return (
-      Promise.resolve()
-        // .then(() => this._answerRestOfPrompts())
-        .then(() => !isDir(dest) && mkDir(dest, { recursive: true }))
-        .then(() => this._renderAllDirectories(dest))
-        .then(() => this._renderAllFiles(dest, data))
-        .catch(function(err) {
+    return Promise.resolve()
+      .then(() => this._answerRestOfPrompts())
+      .then(() => !isDir(dest) && mkDir(dest, { recursive: true }))
+      .then(() => this._renderAllDirectories(dest))
+      .then(() => this._renderAllFiles(dest, data))
+      .catch(function(err) {
+        if (TPS.IS_TESTING) {
+          throw err;
+        } else {
           console.log('There was a error while rendering your template', err);
           process.exit(1);
-        })
-    );
+        }
+      });
   }
 
   /**
@@ -277,21 +279,22 @@ class Templates extends VerboseLogger {
     return !this._prompts
       ? null
       : this._prompts.getAnswers().then(answers => {
-          console.log('ANSWERS', answers);
           eachObj(answers, (answer, answerName) => {
-            if (!answer)
-              switch (true) {
-                case is.bool(answer):
-                  return this.loadPackage(answerName);
-                case is.string(answer) && answer.length:
-                  return this.loadPackage(answer);
-                case is.array(answer) && !is.array.empty(answer):
-                  return this.loadPackages(answer);
-                default:
-                  throw new Error(
-                    'Data type is not supported as answer to a tps prompt'
-                  );
-              }
+            if (!answer) {
+              return;
+            }
+            switch (true) {
+              case is.bool(answer):
+                return this.loadPackage(answerName);
+              case is.string(answer) && !!answer.length:
+                return this.loadPackage(answer);
+              case is.array(answer) && !is.array.empty(answer):
+                return this.loadPackages(answer);
+              default:
+                throw new Error(
+                  'Data type is not supported as answer to a tps prompt'
+                );
+            }
           });
         });
   }

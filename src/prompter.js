@@ -4,15 +4,10 @@ import inquirer from 'inquirer';
 import { defaults } from '@tps/utilities/helpers';
 import { eachObj } from './utilities/helpers';
 
-var prompt = inquirer.createPromptModule();
-
 export default class Prompter {
   constructor(prompts, answers) {
-    // this.answers = answers;
     this.answers = {};
     this.prompts = prompts.map(p => new Prompt(p));
-    // this.needPrompts = this.prompts.map(p => p.name);
-
     if (answers) {
       this.setAnswers(answers);
     }
@@ -61,7 +56,7 @@ export default class Prompter {
     if (is.array.empty(needAnswers)) {
       action = Promise.resolve();
     } else {
-      action = prompt(this.prompts).then(newAnswers => {
+      action = inquirer.prompt(this.prompts).then(newAnswers => {
         this.setAnswers(newAnswers);
       });
     }
@@ -86,6 +81,7 @@ class Prompt {
     this.name = prompt.name;
     this.message = prompt.message || prompt.question;
     this.default = prompt.default;
+    this.choices = prompt.choices;
 
     if (prompt.flag) {
       if (is.object(prompt.flag)) {
