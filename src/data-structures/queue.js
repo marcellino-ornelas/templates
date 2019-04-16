@@ -1,13 +1,12 @@
 import Stack from './stack';
 
-class Queue {
+export default class Queue {
   constructor() {
     this.inbox = new Stack();
     this.outbox = new Stack();
   }
 
   enqueue(...args) {
-    args.forEach(item => console.log(item));
     args.forEach(item => {
       this.inbox.push(item);
     });
@@ -40,5 +39,3 @@ class Queue {
     console.log('queue: ', queue);
   }
 }
-
-module.exports = Queue;
