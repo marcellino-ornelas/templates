@@ -1,19 +1,20 @@
-import FileSystemNode from './fileSystemNode';
-import FileNode from './fileNode';
 import path from 'path';
 import fs from 'fs';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
+import FileSystemNode from './fileSystemNode';
+import FileNode from './fileNode';
 
 export class DirectoryNode extends FileSystemNode {
   constructor(name, parentDirNode, verbose) {
+    let parentDir = parentDirNode;
     if (name && !parentDirNode) {
-      parentDirNode = path.dirname(name);
+      parentDir = path.dirname(name);
       name = path.basename(name);
     }
     // this.verbose = verbose || false;
 
-    super(name, 'dir', parentDirNode, verbose);
+    super(name, 'dir', parentDir, verbose);
     this._renderChildren();
   }
 

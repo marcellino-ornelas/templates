@@ -7,7 +7,9 @@ export default class VerboseLogger {
    * Log only if verbose is true
    * @private
    */
-  _log() {
-    this.verbose && console.log.apply(console, arguments);
+  _log(...args) {
+    if (this.verbose) {
+      console.log(...args);
+    }
   }
 }

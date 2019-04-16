@@ -43,14 +43,14 @@ export class FileSystemNode extends Tree {
     if (!is.instance(value, FileSystemNode)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);
     }
-    var tree = value;
+    const tree = value;
     this.children.push(tree);
     return tree;
   }
 
   getRelativePathFrom(parentDirNode, includeParentNode = true) {
     let child = this;
-    let pathStack = new Stack();
+    const pathStack = new Stack();
 
     do {
       if (!child.parent) {
@@ -59,10 +59,13 @@ export class FileSystemNode extends Tree {
         );
       }
       pathStack.push(child.name);
-    } while (parentDirNode !== (child = child.parent));
+      child = child.parent;
+    } while (parentDirNode !== child);
 
-    // add parent name top end of stack
-    includeParentNode && pathStack.push(parentDirNode.name);
+    // Add parent name top end of stack
+    if (includeParentNode) {
+      pathStack.push(parentDirNode.name);
+    }
 
     let relativePath = '';
 
