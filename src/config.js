@@ -1,7 +1,4 @@
-import is from 'is';
-import * as TPS from '@tps/utilities/constants';
 import { defaults } from '@tps/utilities/helpers';
-import { json } from '@tps/utilities/fileSystem';
 
 export default class Config {
   constructor() {
@@ -18,6 +15,6 @@ export default class Config {
   }
 
   set(prop, value) {
-    this.configurations[name] = value;
+    this.configurations[prop] = value;
   }
 }

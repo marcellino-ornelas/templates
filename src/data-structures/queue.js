@@ -1,53 +1,44 @@
 import Stack from './stack';
 
-/**
- * Queue Class
- */
-var Queue = function() {
-  // Use two `stack` instances to implement your `queue` Class
-  var inbox = new Stack();
-  var outbox = new Stack();
+class Queue {
+  constructor() {
+    this.inbox = new Stack();
+    this.outbox = new Stack();
+  }
 
-  // called to add an item to the `queue`
-  this.enqueue = function() {
-    // inbox.push.apply(inbox, arguments);
-    //
-    Array.prototype.forEach.call(arguments, item => {
-      inbox.push(item);
+  enqueue(...args) {
+    args.forEach(item => console.log(item));
+    args.forEach(item => {
+      this.inbox.push(item);
     });
-    // TODO: implement `enqueue`
-  };
+  }
 
-  // called to remove an item from the `queue`
-  this.dequeue = function() {
-    if (outbox.size() === 0) {
-      while (inbox.size() !== 0) {
-        outbox.push(inbox.pop());
+  dequeue() {
+    if (this.outbox.size() === 0) {
+      while (this.inbox.size() !== 0) {
+        this.outbox.push(this.inbox.pop());
       }
     }
-    return outbox.pop();
-  };
+    return this.outbox.pop();
+  }
 
-  // should return the number of items in the queue
-  this.size = function() {
-    return inbox.size() + outbox.size();
-    // TODO: implement `size`
-  };
+  size() {
+    return this.inbox.size() + this.outbox.size();
+  }
 
-  this.peek = function() {
-    return outbox.next() || inbox.next();
-  };
+  peek() {
+    return this.outbox.next() || this.inbox.next();
+  }
 
-  this.log = function() {
-    console.log(
-      'queue: ',
-      inbox
-        .stack()
-        .reverse()
-        .concat(outbox.stack())
-        .map(c => c.name)
-    );
-  };
-};
+  log(filter) {
+    const cb = filter || (c => c);
+    const queue = this.inbox
+      .stack()
+      .reverse()
+      .concat(this.outbox.stack())
+      .map(cb);
+    console.log('queue: ', queue);
+  }
+}
 
 module.exports = Queue;

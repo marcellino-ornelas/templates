@@ -1,42 +1,32 @@
-/**
- * Stack Class
- */
-var Stack = function() {
-  var storage = [];
-  // var length = 0;
+export default class Stack {
+  constructor() {
+    this._stack = [];
+  }
 
-  // add an item to the top of the stack
-  this.push = function() {
-    storage.push.apply(storage, arguments);
-  };
+  push(...args) {
+    this._stack.push(...args);
+  }
 
   // remove an item from the top of the stack
-  this.pop = function() {
-    if (storage.length) {
-      var value = storage.pop();
+  pop() {
+    return this._stack.pop();
+  }
 
-      return value;
-    }
-  };
+  stack() {
+    return this._stack;
+  }
 
-  this.stack = function() {
-    return storage;
-  };
-
-  this.next = function() {
-    if (!storage.length) {
-      return void 0;
+  next() {
+    const len = this.size();
+    if (!len) {
+      return undefined;
     }
 
-    return storage[storage.length - 1];
-  };
+    return this._stack[len - 1];
+  }
 
   // return the number of items in the stack
-  this.size = function() {
-    return storage.length;
-  };
-};
-
-let s = new Stack();
-
-module.exports = Stack;
+  size() {
+    return this._stack.length;
+  }
+}

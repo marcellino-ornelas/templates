@@ -1,4 +1,4 @@
-import Queue from './queue.js';
+import Queue from './queue';
 /**
  * Tree
  */
@@ -12,7 +12,7 @@ class Tree {
   }
 
   addChild(value) {
-    var tree =
+    const tree =
       value instanceof this.constructor ? value : new this.constructor(value);
     tree.depth = this.depth + 1;
 
@@ -55,7 +55,7 @@ class Tree {
   breathFirstSelect(cb) {
     const filtered = [];
 
-    this.breathFirstEach(function(tree) {
+    this.breathFirstEach(tree => {
       if (cb(tree)) {
         filtered.push(tree);
       }
@@ -80,7 +80,7 @@ class Tree {
   depthFirstSelect(cb) {
     const filtered = [];
 
-    this.depthFirstEach(function(tree) {
+    this.depthFirstEach(tree => {
       if (cb(tree)) {
         filtered.push(tree);
       }
@@ -89,16 +89,5 @@ class Tree {
     return filtered;
   }
 }
-
-// const root = new Tree(1);
-
-// const _2 = root.addChild(2);
-// const _3 = root.addChild(3);
-
-// _2.addChild(4);
-
-// root.depthFirstEach(node => {
-//   console.log(node.value);
-// });
 
 module.exports = Tree;
