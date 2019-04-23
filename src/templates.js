@@ -9,7 +9,7 @@ import { isDir, json, isFile } from '@tps/utilities/fileSystem';
 import Config from '@tps/config';
 import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
-import { eachObj, promisify, defaults } from '@tps/utilities/helpers';
+import { eachObj, promisify, defaults, hasProp } from '@tps/utilities/helpers';
 
 dot.templateSettings.strip = false;
 
@@ -122,9 +122,10 @@ class Templates extends VerboseLogger {
 
   /**
    * Include packages to use in the render process
-   * @param {string|string[]} packages - packages from the template package you would like to use
+   * @param {string|string[]} newPackages - packages from the template package you would like to use
    */
-  loadPackages(packages) {
+  loadPackages(newPackages) {
+    let packages = newPackages;
     if (!Array.isArray(packages)) {
       if (is.string(packages) && packages) {
         packages = [packages];
@@ -148,7 +149,7 @@ class Templates extends VerboseLogger {
       throw new TypeError('Argument must be a string');
     }
 
-    if (this.packages.hasOwnProperty(newPackageName)) {
+    if (hasProp(this.packages, newPackageName)) {
       throw new Error(`Package: ${newPackageName} was already compiled`);
     }
 
@@ -194,7 +195,7 @@ class Templates extends VerboseLogger {
       .then(() => !isDir(dest) && mkDir(dest, { recursive: true }))
       .then(() => this._renderAllDirectories(dest))
       .then(() => this._renderAllFiles(dest, data))
-      .catch(function(err) {
+      .catch(err => {
         if (TPS.IS_TESTING) {
           throw err;
         } else {
@@ -237,7 +238,7 @@ class Templates extends VerboseLogger {
 
       pkg.find({ type: 'dir' }).forEach(dirNode => {
         /* skip if directory has already been made */
-        if (dirTracker.hasOwnProperty(dirNode.path)) return;
+        if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
         const dirPathInNewLocation = path.join(dest, dirPathRelativeFromPkg);
 
@@ -253,6 +254,7 @@ class Templates extends VerboseLogger {
 
     return dirsInProgress.length && Promise.all(dirsInProgress);
   }
+
   /**
    * Compile all files that need to be made for render process
    * @private
@@ -280,16 +282,18 @@ class Templates extends VerboseLogger {
       ? null
       : this._prompts.getAnswers().then(answers => {
           eachObj(answers, (answer, answerName) => {
-            if (!answer) {
-              return;
-            }
             switch (true) {
+              case is.undef(answer):
+                break;
               case is.bool(answer):
-                return this.loadPackage(answerName);
+                this.loadPackage(answerName);
+                break;
               case is.string(answer) && !!answer.length:
-                return this.loadPackage(answer);
+                this.loadPackage(answer);
+                break;
               case is.array(answer) && !is.array.empty(answer):
-                return this.loadPackages(answer);
+                this.loadPackages(answer);
+                break;
               default:
                 throw new Error(
                   'Data type is not supported as answer to a tps prompt'
@@ -301,22 +305,22 @@ class Templates extends VerboseLogger {
 
   _loadTpsConfig(templateName) {
     if (!this.opts.noGlobalConfig && TPS.HAS_GLOBAL) {
-      let globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
-      return this._loadTpsSpecificConfig(templateName, globalConfig);
+      const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
+      this._loadTpsSpecificConfig(templateName, globalConfig);
     }
 
     if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {
       const localConfig = json(TPS.LOCAL_CONFIG_PATH);
-      return this._loadTpsSpecificConfig(templateName, localConfig);
+      this._loadTpsSpecificConfig(templateName, localConfig);
     }
   }
 
   _loadTpsSpecificConfig(templateName, config) {
     const hasConfigObject =
-      config.hasOwnProperty(templateName) && is.object(config[templateName]);
+      hasProp(config, templateName) && is.object(config[templateName]);
 
     if (hasConfigObject) {
-      return this.loadConfig(config[templateName]);
+      this.loadConfig(config[templateName]);
     }
   }
 }

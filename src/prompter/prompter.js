@@ -60,14 +60,16 @@ export default class Prompter {
     }
 
     return action.then(() => {
-      const answers = this.prompts.reduce((answerObj, prompt) => {
+      const answers = {};
+
+      this.prompts.forEach(prompt => {
         const { name } = prompt;
         const answer = this.answers[name];
 
-        answerObj[name] = answer;
+        answers[name] = answer;
 
-        return answerObj;
-      }, {});
+        return answers;
+      });
 
       return Promise.resolve(answers);
     });
