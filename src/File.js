@@ -1,6 +1,6 @@
 import dot from 'dot';
 import path from 'path';
-import fs from 'fs-extra';
+import fs from 'fs';
 /*
  * File
  */
@@ -8,7 +8,7 @@ const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
 
 class File {
-  constructor(/* dest,  */ fileNode) {
+  constructor(fileNode) {
     let fileName = fileNode.name;
 
     if (DOT_EXTENTION_MATCH.test(fileName)) {
@@ -38,9 +38,13 @@ class File {
         const dotCompiled = dot.template(fileData);
 
         fs.writeFile(dest, dotCompiled(data), err => {
-          if (err)
-            console.log('Error in File', { name: this._name, error: err });
-          err ? reject({ name: this._name, error: err }) : resolve();
+          if (err) {
+            reject(
+              new Error(`${this._name} threw a error while creating ${err}`)
+            );
+          } else {
+            resolve();
+          }
         });
       } else {
         const srcFile = fs.createReadStream(this.src, {
@@ -55,11 +59,14 @@ class File {
   }
 
   _addDefaultExtention(name) {
+    let fileName = name;
+
+    // Might need to change
     if (!/\./g.test(name)) {
-      name += '.js';
+      fileName += '.js';
     }
 
-    return name;
+    return fileName;
   }
 
   _dest(newDest) {

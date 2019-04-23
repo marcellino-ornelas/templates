@@ -19,7 +19,8 @@ const config = {
     ],
     'func-names': [2, 'as-needed'],
     'import/no-named-as-default': 0,
-    'class-methods-use-this': 0
+    'class-methods-use-this': 0,
+    'no-plusplus': [2, { allowForLoopAfterthoughts: true }]
   }
 };
 

@@ -6,11 +6,10 @@ import DirNode from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json, isFile } from '@tps/utilities/fileSystem';
-import { promisify, defaults } from '@tps/utilities/helpers';
 import Config from '@tps/config';
 import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
-import { eachObj } from './utilities/helpers';
+import { eachObj, promisify, defaults } from '@tps/utilities/helpers';
 
 dot.templateSettings.strip = false;
 
@@ -66,15 +65,15 @@ class Templates extends VerboseLogger {
     }
 
     const localPath = opts.tpsPath || TPS.LOCAL_PATH;
-    const maybe_local_temp = `${localPath}/${templateName}`;
-    const maybe_global_temp = `${TPS.GLOBAL_PATH}/${templateName}`;
+    const maybeLocalTemp = `${localPath}/${templateName}`;
+    const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
 
     switch (true) {
-      case localPath && isDir(maybe_local_temp):
-        this.src = maybe_local_temp;
+      case localPath && isDir(maybeLocalTemp):
+        this.src = maybeLocalTemp;
         break;
-      case TPS.GLOBAL_PATH && isDir(maybe_global_temp):
-        this.src = maybe_global_temp;
+      case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
+        this.src = maybeGlobalTemp;
         break;
       default:
         throw new Error(`Template '${templateName}' was not found.`);
@@ -93,6 +92,7 @@ class Templates extends VerboseLogger {
       );
 
       try {
+        // eslint-disable-next-line
         this.templateSettings = require(this.templateSettingsPath) || {};
       } catch (e) {
         throw new Error(
@@ -133,34 +133,34 @@ class Templates extends VerboseLogger {
       }
     }
 
-    packages.forEach(_package => this.loadPackage(_package));
+    packages.forEach(p => this.loadPackage(p));
   }
 
   /**
-   * @param {String} _package - package from the template you would like to use
+   * @param {String} newPackage - package from the template you would like to use
    */
-  loadPackage(_package) {
+  loadPackage(newPackageName) {
     if (!this.src) {
       throw new Error('Must specfiy a template folder to use');
     }
 
-    if (!is.string(_package)) {
+    if (!is.string(newPackageName)) {
       throw new TypeError('Argument must be a string');
     }
 
-    if (this.packages.hasOwnProperty(_package)) {
-      throw new Error(`Package: ${_package} was already compiled`);
+    if (this.packages.hasOwnProperty(newPackageName)) {
+      throw new Error(`Package: ${newPackageName} was already compiled`);
     }
 
-    const newPkg = (this.packages[_package] = new DirNode(_package, this.src));
+    this.packages[newPackageName] = new DirNode(newPackageName, this.src);
 
-    this._compileFilesFromPackage(_package);
+    this._compileFilesFromPackage(newPackageName);
 
     this._log();
     this._log('package finished compiling', this.template);
     this._log();
 
-    this.packagesUsed.push(_package);
+    this.packagesUsed.push(newPackageName);
   }
 
   /**

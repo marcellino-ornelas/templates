@@ -1,8 +1,6 @@
-import path from 'path';
 import is from 'is';
 import inquirer from 'inquirer';
-import { defaults } from '@tps/utilities/helpers';
-import { eachObj } from './utilities/helpers';
+import Prompt from './prompt';
 
 export default class Prompter {
   constructor(prompts, answers) {
@@ -14,8 +12,8 @@ export default class Prompter {
   }
 
   getPrompt(name) {
-    const prompt = this.prompts.find(prompt => {
-      return prompt.name === name;
+    const prompt = this.prompts.find(p => {
+      return p.name === name;
     });
 
     if (!prompt) throw new Error(`There is no prompt with name: ${name}`);
@@ -46,7 +44,7 @@ export default class Prompter {
   }
 
   hasAnswerToPrompt(prompt, answers = this.answers) {
-    return this._getAnswerToPrompt(prompt, answers) ? true : false;
+    return !!this._getAnswerToPrompt(prompt, answers);
   }
 
   getAnswers() {
@@ -75,49 +73,3 @@ export default class Prompter {
     });
   }
 }
-
-class Prompt {
-  constructor(prompt = {}) {
-    this.name = prompt.name;
-    this.message = prompt.message || prompt.question;
-    this.default = prompt.default;
-    this.choices = prompt.choices;
-
-    if (prompt.flag) {
-      if (is.object(prompt.flag)) {
-        this.longFlag = prompt.flag.long || this.name;
-        this.shortFlag = prompt.flag.short || null;
-      } else {
-        this.longFlag = prompt.flag || this.name;
-      }
-    } else {
-      this.longFlag = this.name;
-    }
-  }
-}
-
-// const prompts = [
-//   {
-//     name: 'global',
-//     flag: 'global',
-//     message: 'is this global',
-//     default: 'no'
-//   },
-//   {
-//     name: 'noCss',
-//     flag: {
-//       long: 'noCss',
-//       short: 'c'
-//     },
-//     message: 'want to use css?',
-//     default: 'no'
-//   }
-// ];
-
-// const p = new Prompter(prompts, { c: 'yes' });
-
-// console.log('prompts', p.prompts);
-
-// p.getAnswers().then(answers => {
-//   console.log('answers', answers);
-// });

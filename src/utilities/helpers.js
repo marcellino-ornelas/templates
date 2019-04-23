@@ -7,16 +7,24 @@ import is from 'is';
  * @returns {Function} - promisified function
  */
 export function promisify(func, _this = null) {
-  return function() {
-    const args = arguments;
-    return new Promise(function(resolve, reject) {
-      Array.prototype.push.call(args, function(err, data) {
-        err ? reject(err) : resolve(data);
+  const fn = func.bind(_this);
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      args.push((err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
       });
 
-      func.apply(_this, args);
+      fn(...args);
     });
   };
+}
+
+export function hasProp(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 /**
@@ -25,13 +33,15 @@ export function promisify(func, _this = null) {
  * @param {function(*, String):(void|boolean)} cb - Function to call on every property
  */
 export function eachObj(obj, cb) {
-  for (let key in obj) {
-    if (!obj.hasOwnProperty(key) || is.undef(obj[key])) {
-      continue;
-    }
-    const val = obj[key];
-    if (cb(val, key) === false) {
-      break;
+  const keys = Object.keys(obj);
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (!is.undef(obj[key])) {
+      const val = obj[key];
+      if (cb(val, key) === false) {
+        break;
+      }
     }
   }
 }
@@ -46,7 +56,8 @@ export function couldMatchObj(matcher, obj) {
   let matched = true;
 
   eachObj(matcher, (val, key) => {
-    return (matched = val === obj[key]);
+    matched = val === obj[key];
+    return matched;
   });
 
   return matched;
@@ -55,17 +66,19 @@ export function couldMatchObj(matcher, obj) {
 /**
  * Makes `options` inherit all properties it doesnt have from `default`
  * @param {Object} [options={}]
- * @param {Object} defaults - default properties that you want `options` to have
+ * @param {Object} defaultObj - default properties that you want `options` to have
  * @returns {Object} - options with all default properties
  */
-export function defaults(options = {}, defaults) {
-  eachObj(defaults, (val, key) => {
-    if (!options.hasOwnProperty(key)) {
-      options[key] = val;
+export function defaults(options = {}, defaultObj) {
+  const newObj = { ...options };
+
+  eachObj(defaultObj, (val, key) => {
+    if (!hasProp(options, key)) {
+      newObj[key] = val;
     }
   });
 
-  return options;
+  return newObj;
 }
 
 export function cliLog(str) {
@@ -73,6 +86,7 @@ export function cliLog(str) {
     .split(/\n/)
     .map(s => s.trim())
     .join('\n');
+  // eslint-disable-next-line
   console.log(string);
 }
 

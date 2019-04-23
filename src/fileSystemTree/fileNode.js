@@ -1,6 +1,6 @@
-import FileSystemNode from './fileSystemNode';
 import path from 'path';
 import fs from 'fs';
+import FileSystemNode from './fileSystemNode';
 
 export class FileNode extends FileSystemNode {
   constructor(name, parentDirectory, verbose) {
