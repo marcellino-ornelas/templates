@@ -1,4 +1,7 @@
 {
+  "alias": {
+    "cssType": ["css", "c"]
+  },
   "prompts": [
     {
       "name": "cssType",
@@ -6,9 +9,10 @@
       "default": "css",
       "choices": ["less", "css"],
       "flag": {
-        "long": "cssType",
+        "long": "css",
         "short": "c"
-      }
+      },
+      "alias": ["css", "c"]
     }
   ]
 }
