@@ -39,7 +39,7 @@ export default class Prompter {
   }
 
   hasAnswerToPrompt(promptOrName, answers = this.answers) {
-    let prompt = is.string(promptOrName)
+    const prompt = is.string(promptOrName)
       ? this.getPrompt(promptOrName)
       : promptOrName;
     return is.defined(answers[prompt.name]);
