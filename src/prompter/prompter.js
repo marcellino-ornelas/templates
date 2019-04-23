@@ -22,10 +22,10 @@ export default class Prompter {
   }
 
   setAnswers(answers) {
-    this._getPromptsThatNeedAnswers().forEach(p => {
-      if (this.hasAnswerToPrompt(p, answers)) {
-        const answer = this._getAnswerToPrompt(p, answers);
-        this.setAnswer(p.name, answer);
+    this._getPromptsThatNeedAnswers().forEach(prompt => {
+      const answer = prompt.answerWith(answers);
+      if (answer) {
+        this.setAnswer(prompt.name, answer);
       }
     });
   }
@@ -34,17 +34,15 @@ export default class Prompter {
     this.answers[name] = answer;
   }
 
-  _getAnswerToPrompt(prompt, answers) {
-    const { shortFlag, longFlag, name } = prompt;
-    return answers[shortFlag] || answers[longFlag] || answers[name];
-  }
-
   _getPromptsThatNeedAnswers() {
     return this.prompts.filter(p => !this.hasAnswerToPrompt(p));
   }
 
-  hasAnswerToPrompt(prompt, answers = this.answers) {
-    return !!this._getAnswerToPrompt(prompt, answers);
+  hasAnswerToPrompt(promptOrName, answers = this.answers) {
+    let prompt = is.string(promptOrName)
+      ? this.getPrompt(promptOrName)
+      : promptOrName;
+    return is.defined(answers[prompt.name]);
   }
 
   getAnswers() {
@@ -54,7 +52,7 @@ export default class Prompter {
     if (is.array.empty(needAnswers)) {
       action = Promise.resolve();
     } else {
-      action = inquirer.prompt(this.prompts).then(newAnswers => {
+      action = inquirer.prompt(needAnswers).then(newAnswers => {
         this.setAnswers(newAnswers);
       });
     }

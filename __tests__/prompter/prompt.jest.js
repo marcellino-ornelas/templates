@@ -1,47 +1,34 @@
 import Prompter from '@tps/prompter';
 import { PROMPTER_QUESTIONS } from '../support/constants';
+import { array } from 'is';
 
 const prompter = new Prompter(PROMPTER_QUESTIONS);
 
 describe('[Prompter] Prompt:', () => {
-  it('should have correct properties for simple flag', () => {
-    const prompt = prompter.getPrompt('test-normal-flag');
+  let prompt = prompter.getPrompt('testingPrompt');
 
+  it('should have all correct properties', () => {
     expect(prompt).toEqual(
       expect.objectContaining({
-        name: 'test-normal-flag',
-        longFlag: 'test1',
-        message: 'test-normal-flag',
-        default: ''
+        name: 'testingPrompt',
+        aliases: expect.arrayContaining(['test1', 't']),
+        message: 'This is a testing testing prompt',
+        default: 'dont have feauture yet',
+        choices: expect.any(Array)
       })
     );
   });
 
-  it('should have correct properties for advanced flag ( long )', () => {
-    const prompt = prompter.getPrompt('test-advanced-long');
+  it.each([['name', 'testingPrompt'], ['alias', 't']])(
+    'should answer prompt by %s',
+    (name, testingPrompt) => {
+      const answers = { [testingPrompt]: 'data' };
+      expect(prompt.answerWith(answers)).toEqual('data');
+    }
+  );
 
-    expect(prompt).toEqual(
-      expect.objectContaining({
-        name: 'test-advanced-long',
-        longFlag: 'test2',
-        shortFlag: null,
-        message: 'test-advanced-long',
-        default: ''
-      })
-    );
-  });
-
-  it('should have correct properties for advanced flag ( short )', () => {
-    const prompt = prompter.getPrompt('test-advanced-short');
-
-    expect(prompt).toEqual(
-      expect.objectContaining({
-        name: 'test-advanced-short',
-        longFlag: 'test3',
-        shortFlag: 'd',
-        message: 'test-advanced-short',
-        default: ''
-      })
-    );
+  it('should return undefined if not correct answers', () => {
+    const answers = { randomKey: 'data' };
+    expect(prompt.answerWith(answers)).toBeUndefined();
   });
 });

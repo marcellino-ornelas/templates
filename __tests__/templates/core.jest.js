@@ -55,7 +55,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   describe('When Rendering with prompts', () => {
-    describe('it should be able to render a template with a package', () => {
+    describe('', () => {
       let tps;
       beforeEach(() => {
         // add no default to this test to only test packages
@@ -65,44 +65,11 @@ describe('[Templates] Render Process:', () => {
         return playground.createBox('render_process_prompts');
       });
 
-      // it.each(
-      //   [{ name: 'short flag', flagType: 'css' }],
-      //   [{ name: 'long flag', flagType: 'c' }]
-      // )('when passed an answer by ');
-
       it.each([['css', 'index.css'], ['less', 'index.less']])(
-        'when passed a value of was answered %s',
+        'it should render a template with values passed into prompt',
         (answer, expected, done) => {
           const destPath = playground.pathTo('App');
           inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
-
-          tps.render(destPath, {}).then(() => {
-            expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
-            expect(tps.packages).toHaveProperty(answer);
-            done();
-          });
-        }
-      );
-
-      it.each([['css', 'index.css'], ['less', 'index.less']])(
-        'when a value of was answered %s for long flag',
-        (answer, expected, done) => {
-          const destPath = playground.pathTo('App');
-          inquirer.prompt = jest.fn().mockResolvedValue({ css: answer });
-
-          tps.render(destPath, {}).then(() => {
-            expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
-            expect(tps.packages).toHaveProperty(answer);
-            done();
-          });
-        }
-      );
-
-      it.each([['css', 'index.css'], ['less', 'index.less']])(
-        'when a value of was answered %s for short flag',
-        (answer, expected, done) => {
-          const destPath = playground.pathTo('App');
-          inquirer.prompt = jest.fn().mockResolvedValue({ c: answer });
 
           tps.render(destPath, {}).then(() => {
             expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();

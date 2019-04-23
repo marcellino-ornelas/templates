@@ -1,18 +1,11 @@
 {
-  "alias": {
-    "cssType": ["css", "c"]
-  },
   "prompts": [
     {
       "name": "cssType",
       "message": "What css language would you like to use?",
       "default": "css",
       "choices": ["less", "css"],
-      "flag": {
-        "long": "css",
-        "short": "c"
-      },
-      "alias": ["css", "c"]
+      "aliases": ["css", "c"]
     }
   ]
 }

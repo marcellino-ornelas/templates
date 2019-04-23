@@ -5,17 +5,21 @@ export default class Prompt {
     this.name = prompt.name;
     this.message = prompt.message || prompt.question;
     this.default = prompt.default;
-    this.choices = prompt.choices;
+    this.choices = prompt.choices || [];
+    this.aliases = prompt.aliases || [];
+  }
 
-    if (prompt.flag) {
-      if (is.object(prompt.flag)) {
-        this.longFlag = prompt.flag.long || this.name;
-        this.shortFlag = prompt.flag.short || null;
-      } else {
-        this.longFlag = prompt.flag || this.name;
-      }
-    } else {
-      this.longFlag = this.name;
+  answerWith(answers) {
+    const canAnswerBy = [this.name, ...this.aliases];
+
+    const didAnswerBy = canAnswerBy.find(by => {
+      return is.defined(answers[by]);
+    });
+
+    if (!didAnswerBy) {
+      return undefined;
     }
+
+    return answers[didAnswerBy];
   }
 }

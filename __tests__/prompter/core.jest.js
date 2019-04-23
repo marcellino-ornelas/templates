@@ -5,9 +5,7 @@ import Prompter from '@tps/prompter';
 import { PROMPTER_QUESTIONS } from '../support/constants';
 
 const ANSWER_TO_PROMPTS = {
-  'test-normal-flag': 'value1',
-  'test-advanced-long': 'value2',
-  'test-advanced-short': 'value3'
+  testingPrompt: 'data'
 };
 
 describe('[Prompter] Core:', () => {
@@ -24,17 +22,21 @@ describe('[Prompter] Core:', () => {
     });
   });
 
-  it('should have all prompt answer when flags are put in', () => {
+  it('should have all prompt answer when answered with alias', () => {
     prompter.setAnswers({
-      'test-normal-flag': 'value1',
-      // testing long flag
-      test2: 'value2',
-      // testing short flag
-      d: 'value3'
+      t: 'data'
     });
 
     prompter.getAnswers().then(promptAnswers => {
       expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
     });
+  });
+
+  it('should tell you if it has answer to a prompt', () => {
+    prompter.setAnswers({
+      t: 'oh ya!'
+    });
+
+    expect(prompter.hasAnswerToPrompt('testingPrompt')).toBeTruthy();
   });
 });

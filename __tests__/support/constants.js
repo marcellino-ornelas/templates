@@ -19,26 +19,9 @@ export const TESTING_DIR = path.join(__dirname, '../');
 
 export const PROMPTER_QUESTIONS = [
   {
-    name: 'test-normal-flag',
-    flag: 'test1',
-    question: 'test-normal-flag',
-    default: ''
-  },
-  {
-    name: 'test-advanced-long',
-    flag: {
-      long: 'test2'
-    },
-    question: 'test-advanced-long',
-    default: ''
-  },
-  {
-    name: 'test-advanced-short',
-    flag: {
-      long: 'test3',
-      short: 'd'
-    },
-    question: 'test-advanced-short',
-    default: ''
+    name: 'testingPrompt',
+    aliases: ['test1', 't'],
+    message: 'This is a testing testing prompt',
+    default: 'dont have feauture yet'
   }
 ];
