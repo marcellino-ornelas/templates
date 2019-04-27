@@ -1,6 +1,4 @@
 const path = require('path');
-const os = require('os');
-const findUp = require('find-up');
 const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');
 const { isDir } = require('../../lib/utilities/fileSystem');
@@ -18,7 +16,9 @@ exports.builder = yargs =>
   });
 
 exports.handler = function(argv) {
-  const temp = new Template();
+  const temp = new Template({
+    force: argv.force
+  });
   const localDest = process.cwd();
 
   temp.use('init', {

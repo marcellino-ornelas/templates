@@ -1,14 +1,20 @@
 import is from 'is';
 import inquirer from 'inquirer';
 import Prompt from './prompt';
+import { hasProp } from '@tps/utilities/helpers';
 
 export default class Prompter {
   constructor(prompts, answers) {
     this.answers = {};
     this.prompts = prompts.map(p => new Prompt(p));
+    this.answered = 0;
     if (answers) {
       this.setAnswers(answers);
     }
+  }
+
+  needsAnswers() {
+    return this.prompts.length !== this.answered;
   }
 
   getPrompt(name) {
@@ -24,13 +30,16 @@ export default class Prompter {
   setAnswers(answers) {
     this._getPromptsThatNeedAnswers().forEach(prompt => {
       const answer = prompt.answerWith(answers);
-      if (answer) {
+      if (is.defined(answer)) {
         this.setAnswer(prompt.name, answer);
       }
     });
   }
 
   setAnswer(name, answer) {
+    if (!hasProp(this.answers, name)) {
+      this.answered += 1;
+    }
     this.answers[name] = answer;
   }
 
@@ -46,15 +55,16 @@ export default class Prompter {
   }
 
   getAnswers() {
-    const needAnswers = this._getPromptsThatNeedAnswers();
     let action;
 
-    if (is.array.empty(needAnswers)) {
+    if (!this.needsAnswers()) {
       action = Promise.resolve();
     } else {
-      action = inquirer.prompt(needAnswers).then(newAnswers => {
-        this.setAnswers(newAnswers);
-      });
+      action = inquirer
+        .prompt(this._getPromptsThatNeedAnswers())
+        .then(newAnswers => {
+          this.setAnswers(newAnswers);
+        });
     }
 
     return action.then(() => {

@@ -19,7 +19,14 @@ export class DirectoryNode extends FileSystemNode {
   }
 
   _renderChildren() {
-    const dirContents = fs.readdirSync(this.path);
+    let dirContents;
+
+    try {
+      dirContents = fs.readdirSync(this.path);
+    } catch (e) {
+      throw new Error(`[TPS ERROR] Path is not a directory (${this.path})`);
+    }
+
     dirContents.forEach(name => {
       const dirContentPath = path.join(this.path, name);
       const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;

@@ -4,6 +4,8 @@
 import fs from 'fs-extra';
 import path from 'path';
 import is from 'is';
+import { isDir } from '../../lib/utilities/fileSystem';
+import { isFile } from '@babel/types';
 
 /**
  * Constants
@@ -81,37 +83,15 @@ class Playground {
   }
 
   pathTo(filePath) {
-    return path.join(this.box(), filePath);
+    const pathToFile = path.join(this.box(), filePath);
+    const isFileOrDir = isDir(pathToFile) || isFile(pathToFile);
+    if (!isFileOrDir) {
+      console.log(
+        `[PLAYGROUND WARNING] Path is not a file or directory (${pathToFile})`
+      );
+    }
+    return pathToFile;
   }
-
-  /**
-   * Sections
-   */
-  // hasSection(name) {
-  //   return this.sections.hasOwnProperty(name);
-  // }
-
-  // addSection(name, cb) {
-  //   if (this.hasSection(name)) {
-  //     throw new Error('Sections was already created');
-  //   }
-
-  //   const section = new Playground(this.path, name);
-  //   this.sections[name] = section.path;
-
-  //   if (cb) {
-  //     section.create(cb);
-  //   } else {
-  //     return section.create();
-  //   }
-  // }
-
-  // section(name) {
-  //   if (!this.hasSection(name)) {
-  //     throw new Error('No section availiable');
-  //   }
-  //   return this.sections[name];
-  // }
 }
 
 module.exports = Playground;

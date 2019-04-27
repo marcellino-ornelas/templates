@@ -77,6 +77,7 @@ export function spawn(additionalArgs = [], opts = {}, done) {
   child.execFile('node', args, opts, function(err, stdout, stderr) {
     if (!opts.fail && err) {
       console.log(`[CMD: ${args.join(' ')}]`, stdout);
+      console.log('Error: ', err);
     }
     done(err, stdout);
   });

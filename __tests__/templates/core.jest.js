@@ -55,51 +55,40 @@ describe('[Templates] Render Process:', () => {
   });
 
   describe('When Rendering with prompts', () => {
-    describe('', () => {
-      let tps;
-      beforeEach(() => {
-        // add no default to this test to only test packages
-        tps = new Templates({ default: false });
-        tps.use('testing-prompt');
+    let tps;
+    beforeEach(() => {
+      // add no default to this test to only test packages
+      tps = new Templates({ default: false });
+      tps.use('testing-prompt');
 
-        return playground.createBox('render_process_prompts');
-      });
-
-      it.each([['css', 'index.css'], ['less', 'index.less']])(
-        'it should render a template with values passed into prompt',
-        (answer, expected, done) => {
-          const destPath = playground.pathTo('App');
-          inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
-
-          tps.render(destPath, {}).then(() => {
-            expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
-            expect(tps.packages).toHaveProperty(answer);
-            done();
-          });
-        }
-      );
+      return playground.createBox('render_process_prompts');
     });
 
-    // it('should be able to render a template by name', done => {
-    //   const destPath = playground.pathTo('App');
-    //   inquirer.prompt = jest.fn().mockResolvedValue({ cssType: 'css' });
+    it.each([['css', 'index.css'], ['less', 'index.less']])(
+      'it should render a template with values passed into prompt',
+      (answer, expected, done) => {
+        const destPath = playground.pathTo('App');
+        inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
-    //   tps.render(destPath, {}).then(() => {
-    //     expect(utils.hasAllFileAndDirs(destPath, ['index.css'])).toBeTruthy();
-    //     done();
-    //   });
-    // });
+        tps.render(destPath, {}).then(() => {
+          expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
+          expect(tps.packages).toHaveProperty(answer);
+          done();
+        });
+      }
+    );
 
-    // it('should be able to render a template when passed in ', done => {
-    //   const destPath = playground.pathTo('App');
-    //   inquirer.prompt = jest.fn().mockResolvedValue({ cssType: 'less' });
+    it('should render a template when answering prompt with alias', done => {
+      const destPath = playground.pathTo('App');
+      tps.loadConfig({ c: 'less' });
 
-    //   tps.render(destPath, {}).then(() => {
-    //     expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
-    //     done();
-    //   });
-    // });
+      expect(tps._prompts.needsAnswers()).toBeFalsy();
 
-    // it('should be able to render a template when passed a long flag', () => {});
+      tps.render(destPath, {}).then(() => {
+        expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
+        expect(tps.packages).toHaveProperty('less');
+        done();
+      });
+    });
   });
 });

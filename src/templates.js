@@ -20,12 +20,14 @@ dot.templateSettings.strip = false;
  * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
  * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
  * @property {boolean} default - Don't load the default folder
+ * @property {bool} force - Force creation of template. This will over write files
  */
 const DEFAULT_OPTIONS = {
   verbose: false,
   noLocalConfig: false,
   noGlobalConfig: false,
-  default: true
+  default: true,
+  force: false
 };
 
 const mkDir = promisify(fs.mkdir, fs);
@@ -53,9 +55,9 @@ class Templates extends VerboseLogger {
 
   /**
    * Specifiy what template package you would like to use
-   * @param {String} templateName - location to templating folder or url to github
+   * @param {String} templateName - location to templating folder or url to Github
    * @param {object} [opts={}]    - options for use
-   * @param {string} opts.tpsPath - .tps folder you want to load template from
+   * @param {string} opts.tpsPath - `.tps/` folder you want to load template from
    */
   use(templateName, opts = {}) {
     if (!templateName || !is.string(templateName)) {
@@ -112,8 +114,8 @@ class Templates extends VerboseLogger {
     }
 
     this._loadTpsConfig(templateName);
-    // TODO
-    // load settings && load default packages
+
+    // load default package if applicable
     const defaultFolder = path.join(this.src, 'default');
     if (this.opts.default && isDir(defaultFolder)) {
       this.loadPackage('default');
@@ -142,7 +144,7 @@ class Templates extends VerboseLogger {
    */
   loadPackage(newPackageName) {
     if (!this.src) {
-      throw new Error('Must specfiy a template folder to use');
+      throw new Error('Must specify a template folder to use');
     }
 
     if (!is.string(newPackageName)) {
@@ -166,7 +168,7 @@ class Templates extends VerboseLogger {
 
   /**
    * @param {String} packageName - name of a package
-   * @returns {DirNode} - directory tree repesentation of package
+   * @returns {DirNode} - directory tree representation of package
    */
   pkg(packageName) {
     return this.packages[packageName];
@@ -180,6 +182,9 @@ class Templates extends VerboseLogger {
     if (!is.object(config)) {
       throw new Error('config must be a object');
     }
+    if (this._prompts) {
+      this._prompts.setAnswers(config);
+    }
     return this._config.load(config);
   }
 
@@ -192,14 +197,21 @@ class Templates extends VerboseLogger {
   render(dest, data = {}) {
     return Promise.resolve()
       .then(() => this._answerRestOfPrompts())
-      .then(() => !isDir(dest) && mkDir(dest, { recursive: true }))
+      .then(() => {
+        if (!this.opts.force && isDir(dest)) {
+          throw new Error('Directory already exists. Aborting process');
+        } else {
+          mkDir(dest, { recursive: true });
+        }
+      })
       .then(() => this._renderAllDirectories(dest))
       .then(() => this._renderAllFiles(dest, data))
       .catch(err => {
         if (TPS.IS_TESTING) {
           throw err;
         } else {
-          console.log('There was a error while rendering your template', err);
+          console.log('There was a error while rendering your template');
+          console.log(err);
           process.exit(1);
         }
       });
@@ -299,6 +311,7 @@ class Templates extends VerboseLogger {
                   'Data type is not supported as answer to a tps prompt'
                 );
             }
+            this._config.set(answerName, answer);
           });
         });
   }
