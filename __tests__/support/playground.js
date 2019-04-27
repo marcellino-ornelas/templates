@@ -22,11 +22,12 @@ class Playground {
     this.dirPath = dirPath;
     this._name = name;
 
-    let nameWithStamp;
     do {
-      if (nameWithStamp) {
+      if (this.name) {
         console.log(
-          `[PLAYGROUND INFO] playground name was already selected (${nameWithStamp})`
+          `[PLAYGROUND INFO] playground name was already selected (${
+            this.name
+          })`
         );
       }
       this.stamp = stamp();
