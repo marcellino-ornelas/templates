@@ -36,11 +36,9 @@ exports.handler = function(argv) {
   }
 
   tps.loadConfig(argv);
-  console.log(tps.config);
-  // console.log('heloo', tps._prompts.needsAnswers());
 
-  console.log('after load config');
   let buildPaths;
+
   // if no paths specified then create items in cwd
   if (is.array(argv.names) && !is.array.empty(argv.names)) {
     buildPaths = argv.names.map(name => path.join(dest, name));

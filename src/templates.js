@@ -54,7 +54,7 @@ class Templates extends VerboseLogger {
   }
 
   /**
-   * Specifiy what template package you would like to use
+   * Specify what template package you would like to use
    * @param {String} templateName - location to templating folder or url to Github
    * @param {object} [opts={}]    - options for use
    * @param {string} opts.tpsPath - `.tps/` folder you want to load template from
@@ -62,7 +62,7 @@ class Templates extends VerboseLogger {
   use(templateName, opts = {}) {
     if (!templateName || !is.string(templateName)) {
       throw new Error(
-        'Use takes one string argument. The string can be a url to a github repo or a global or local template name'
+        'Use takes one string argument. The string can be a url to a Github repo or a global or local template name'
       );
     }
 

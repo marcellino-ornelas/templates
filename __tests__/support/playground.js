@@ -3,33 +3,39 @@
  */
 import fs from 'fs-extra';
 import path from 'path';
-import is from 'is';
-import { isDir } from '../../lib/utilities/fileSystem';
-import { isFile } from '@babel/types';
+import { isFile, isDir } from '@tps/utilities/fileSystem';
+import { hasProp } from '@tps/utilities/helpers';
+import crypto from 'crypto';
 
 /**
  * Constants
  */
 const TESTING_PLAYGROUND_NAME = 'testing_playground';
 
-const stamp = () => Date.now();
+const stamp = (len = 10) =>
+  crypto.randomBytes(Math.ceil(len / 2)).toString('hex', 0, len);
 
-// const cbOrPromise = (cb, ...args) => {
-//   if(is.function(cb)){
-//     cb(...args);
-//   } else {
-//     return new Promise(){
-
-//     }
-//   }
-// }
+const box_tracker = {};
 
 class Playground {
   constructor(dirPath, name = TESTING_PLAYGROUND_NAME) {
     this.dirPath = dirPath;
     this._name = name;
-    this.stamp = stamp();
-    this.name = `${name}_${this.stamp}`;
+
+    let nameWithStamp;
+    do {
+      if (nameWithStamp) {
+        console.log(
+          `[PLAYGROUND INFO] playground name was already selected (${nameWithStamp})`
+        );
+      }
+      this.stamp = stamp();
+      this.name = `${name}_${this.stamp}`;
+    } while (hasProp(box_tracker, this.name));
+
+    // track box name so it will never have duplicates
+    box_tracker[this.name] = true;
+
     this.boxes = {};
     this.current = null;
   }
@@ -85,11 +91,6 @@ class Playground {
   pathTo(filePath) {
     const pathToFile = path.join(this.box(), filePath);
     const isFileOrDir = isDir(pathToFile) || isFile(pathToFile);
-    if (!isFileOrDir) {
-      console.log(
-        `[PLAYGROUND WARNING] Path is not a file or directory (${pathToFile})`
-      );
-    }
     return pathToFile;
   }
 }
