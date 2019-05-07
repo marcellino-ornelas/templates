@@ -15,7 +15,8 @@ const plugins = [
     {
       root: ['./'],
       alias: {
-        '@tps': './src'
+        '@tps': './src',
+        '@test': './__tests__'
       }
     }
   ]

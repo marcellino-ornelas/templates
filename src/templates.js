@@ -1,4 +1,3 @@
-import dot from 'dot';
 import path from 'path';
 import fs from 'fs';
 import is from 'is';
@@ -11,7 +10,7 @@ import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
 import { eachObj, promisify, defaults, hasProp } from '@tps/utilities/helpers';
 
-dot.templateSettings.strip = false;
+// dot.templateSettings.strip = false;
 
 /**
  * Default options for Templates
@@ -20,14 +19,15 @@ dot.templateSettings.strip = false;
  * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
  * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
  * @property {boolean} default - Don't load the default folder
- * @property {bool} force - Force creation of template. This will over write files
+ * @property {boolean} force - Force creation of template. This will over write files
  */
 const DEFAULT_OPTIONS = {
   verbose: false,
   noLocalConfig: false,
   noGlobalConfig: false,
   default: true,
-  force: false
+  force: false,
+  newFolder: true
 };
 
 const mkDir = promisify(fs.mkdir, fs);
@@ -47,6 +47,9 @@ class Templates extends VerboseLogger {
     this.packagesUsed = [];
     this.compiledFiles = [];
     this._config = new Config();
+    this.src = null;
+    this.templateLocation = null;
+    this._prompts = null;
   }
 
   get config() {
@@ -72,20 +75,33 @@ class Templates extends VerboseLogger {
 
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
-        this.src = maybeLocalTemp;
+        this.templateLocation = maybeLocalTemp;
         break;
       case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
-        this.src = maybeGlobalTemp;
+        this.templateLocation = maybeGlobalTemp;
         break;
       default:
         throw new Error(`Template '${templateName}' was not found.`);
     }
 
+    // set template location
+    this.src = this.templateLocation;
+
     this.template = templateName;
-    this._log(`[TPS INFO]: Found '${templateName}' template at ${this.src}`);
+    this._log(
+      `[TPS INFO]: Found '${templateName}' template at ${this.templateLocation}`
+    );
 
-    this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
+    this._loadTpsConfig(templateName);
 
+    this._handleTpsConfig();
+
+    this.templateSettingsPath = path.join(
+      this.templateLocation,
+      TPS.TEMPLATE_SETTINGS_FILE
+    );
+
+    // load Settings
     if (isFile(this.templateSettingsPath)) {
       this._log(
         `[TPS INFO]: Loading ${templateName} settings file ${
@@ -113,10 +129,8 @@ class Templates extends VerboseLogger {
       }
     }
 
-    this._loadTpsConfig(templateName);
-
     // load default package if applicable
-    const defaultFolder = path.join(this.src, 'default');
+    const defaultFolder = path.join(this.templateLocation, 'default');
     if (this.opts.default && isDir(defaultFolder)) {
       this.loadPackage('default');
     }
@@ -143,7 +157,7 @@ class Templates extends VerboseLogger {
    * @param {String} newPackage - package from the template you would like to use
    */
   loadPackage(newPackageName) {
-    if (!this.src) {
+    if (!this.templateLocation) {
       throw new Error('Must specify a template folder to use');
     }
 
@@ -155,7 +169,10 @@ class Templates extends VerboseLogger {
       throw new Error(`Package: ${newPackageName} was already compiled`);
     }
 
-    this.packages[newPackageName] = new DirNode(newPackageName, this.src);
+    this.packages[newPackageName] = new DirNode(
+      newPackageName,
+      this.templateLocation
+    );
 
     this._compileFilesFromPackage(newPackageName);
 
@@ -180,7 +197,7 @@ class Templates extends VerboseLogger {
    */
   loadConfig(config) {
     if (!is.object(config)) {
-      throw new Error('config must be a object');
+      this._error('config must be a object');
     }
     if (this._prompts) {
       this._prompts.setAnswers(config);
@@ -195,17 +212,57 @@ class Templates extends VerboseLogger {
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, data = {}) {
+    if (!dest) {
+      this._error(
+        'PARAM: dest must be a string of a folder you would like to create'
+      );
+    }
+
+    const CWD = process.cwd();
+    let destPath = dest;
+    const DEST_IS_CWD = CWD === destPath;
+    let name;
+
+    if (!DEST_IS_CWD) {
+      name = data.name || path.basename(destPath);
+    } else {
+      name = data.name;
+    }
+
+    const dataForTemplating = {
+      ...data,
+      template: this.template,
+      name
+    };
+
+    this._log(`[TPS INFO]: Rendering template at (${destPath})`);
+
     return Promise.resolve()
-      .then(() => this._answerRestOfPrompts())
       .then(() => {
-        if (!this.opts.force && isDir(dest)) {
-          throw new Error('Directory already exists. Aborting process');
-        } else {
-          mkDir(dest, { recursive: true });
+        if (!DEST_IS_CWD && this.opts.newFolder) {
+          if (!this.opts.force && isDir(destPath)) {
+            this._error(
+              `Directory already exists. Aborting process. (${destPath})`
+            );
+          }
+
+          if (this.config.dest) {
+            this._log('[TPS INFO]: Applying config `dest` to render path');
+            const tpsRenderPath = destPath.replace(`${CWD}/`, '');
+
+            destPath = path.resolve(this.config.dest, tpsRenderPath);
+          }
+
+          this._log('[TPS INFO]: Rendering template');
+          return mkDir(destPath, { recursive: true });
         }
       })
-      .then(() => this._renderAllDirectories(dest))
-      .then(() => this._renderAllFiles(dest, data))
+      .then(() => this._answerRestOfPrompts())
+      .then(() => {
+        this._log(`[TPS INFO]: rendering template at ${destPath}`);
+      })
+      .then(() => this._renderAllDirectories(destPath))
+      .then(() => this._renderAllFiles(destPath, dataForTemplating))
       .catch(err => {
         if (TPS.IS_TESTING) {
           throw err;
@@ -314,6 +371,20 @@ class Templates extends VerboseLogger {
             this._config.set(answerName, answer);
           });
         });
+  }
+
+  /**
+   * Configurations
+   */
+
+  _handleTpsConfig() {
+    const { dest } = this.config;
+
+    if (dest) {
+      if (path.isAbsolute(dest)) {
+        this._error(`[tpsrc Config]: dest cannot be a a absolute path`);
+      }
+    }
   }
 
   _loadTpsConfig(templateName) {

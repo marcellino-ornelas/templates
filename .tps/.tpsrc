@@ -1,5 +1,8 @@
 {
   "testing": {
     "name": "testing-config"
+  },
+  "new-test": {
+    "dest": "__tests__"
   }
 }

@@ -91,7 +91,6 @@ class Playground {
 
   pathTo(filePath) {
     const pathToFile = path.join(this.box(), filePath);
-    const isFileOrDir = isDir(pathToFile) || isFile(pathToFile);
     return pathToFile;
   }
 }

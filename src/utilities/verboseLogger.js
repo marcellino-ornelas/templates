@@ -1,6 +1,7 @@
 export default class VerboseLogger {
-  constructor(verbose = false) {
+  constructor(/* handle = '', */ verbose = false) {
     this.verbose = verbose;
+    // this.handle = handle;
   }
 
   /**
@@ -9,7 +10,23 @@ export default class VerboseLogger {
    */
   _log(...args) {
     if (this.verbose) {
-      console.log(...args);
+      this._logWithHandle(args);
     }
+  }
+
+  _logWithHandle(args) {
+    // if (this.handle) {
+    //   console.log(this.handle, ...args);
+    // } else {
+    console.log(...args);
+    // }
+  }
+
+  _error(msg) {
+    let message = msg;
+    // if (this.handle) {
+    //   message = `${this.handle}${message}`;
+    // }
+    throw new Error(message);
   }
 }

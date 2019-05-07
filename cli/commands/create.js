@@ -23,10 +23,19 @@ exports.builder = yargs =>
       alias: 'p',
       describe: 'Additional Packages to use when building your template',
       type: 'array'
+    })
+    .option('name', {
+      alias: 'n',
+      describe:
+        'Name for template rendering. defaults to base name of the destination path',
+      type: 'string'
     });
 
 exports.handler = function(argv) {
-  const tps = new Template({ verbose: argv.verbose });
+  const tps = new Template({
+    verbose: argv.verbose
+  });
+
   const dest = process.cwd();
 
   tps.use(argv.use);
@@ -46,7 +55,13 @@ exports.handler = function(argv) {
     buildPaths = [dest];
   }
 
-  const builders = buildPaths.map(buildPath => tps.render(buildPath));
+  const renderData = {
+    name: argv.name
+  };
+
+  const builders = buildPaths.map(buildPath =>
+    tps.render(buildPath, renderData)
+  );
 
   Promise.all(builders).then(() => console.log('process done'));
 };

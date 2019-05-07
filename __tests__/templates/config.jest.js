@@ -35,7 +35,7 @@ describe('[Templates] Config: ', () => {
       expect(config).toEqual(expect.objectContaining(newConfig));
     });
 
-    it('should throw error if it doesnt recieve an object as a argument', () => {
+    it("should throw error if it doesn't receive an object as a argument", () => {
       const badConifgs = ['hey', false, true, 3456, []];
 
       badConifgs.forEach(badConifg => {

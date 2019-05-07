@@ -1,11 +1,12 @@
-import dot from 'dot';
+import dot from '@tps/dot';
 import path from 'path';
 import fs from 'fs';
+
 /*
  * File
  */
 const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
-const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
+// const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
 
 class File {
   constructor(fileNode) {
