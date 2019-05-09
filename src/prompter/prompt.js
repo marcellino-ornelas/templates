@@ -2,11 +2,28 @@ import is from 'is';
 
 export default class Prompt {
   constructor(prompt = {}) {
+    this.aliases = prompt.aliases || [];
+    this.tpsType = prompt.tpsType;
+
+    if (!['package', 'data'].includes(this.tpsType)) {
+      throw new Error(
+        "Invalid prop type in prompts. tpsType must be either 'package' or 'data'"
+      );
+    }
+
+    // inquire props
     this.name = prompt.name;
+    this.type = prompt.type;
     this.message = prompt.message || prompt.question;
     this.default = prompt.default;
     this.choices = prompt.choices || [];
-    this.aliases = prompt.aliases || [];
+    this.validate = prompt.validate;
+    this.filter = prompt.filter;
+    this.transformer = prompt.transformer;
+    this.when = prompt.when;
+    this.pageSize = prompt.pageSize;
+    this.prefix = prompt.prefix;
+    this.suffix = prompt.suffix;
   }
 
   answerWith(answers) {
@@ -16,10 +33,6 @@ export default class Prompt {
       return is.defined(answers[by]);
     });
 
-    if (!didAnswerBy) {
-      return undefined;
-    }
-
-    return answers[didAnswerBy];
+    return !didAnswerBy ? undefined : answers[didAnswerBy];
   }
 }
