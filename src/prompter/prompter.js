@@ -60,6 +60,7 @@ export default class Prompter {
     if (!this.needsAnswers()) {
       action = Promise.resolve();
     } else {
+      console.log('prompts', this._getPromptsThatNeedAnswers());
       action = inquirer
         .prompt(this._getPromptsThatNeedAnswers())
         .then(newAnswers => {

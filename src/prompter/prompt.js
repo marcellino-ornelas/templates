@@ -3,7 +3,7 @@ import is from 'is';
 export default class Prompt {
   constructor(prompt = {}) {
     this.aliases = prompt.aliases || [];
-    this.tpsType = prompt.tpsType;
+    this.tpsType = prompt.tpsType || 'package';
 
     if (!['package', 'data'].includes(this.tpsType)) {
       throw new Error(
@@ -24,6 +24,14 @@ export default class Prompt {
     this.pageSize = prompt.pageSize;
     this.prefix = prompt.prefix;
     this.suffix = prompt.suffix;
+  }
+
+  isData() {
+    return this.tpsType === 'data';
+  }
+
+  isPkg() {
+    return !this.isData();
   }
 
   answerWith(answers) {

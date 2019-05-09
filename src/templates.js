@@ -50,6 +50,7 @@ class Templates extends VerboseLogger {
     this.src = null;
     this.templateLocation = null;
     this._prompts = null;
+    this.data = {};
   }
 
   get config() {
@@ -217,10 +218,10 @@ class Templates extends VerboseLogger {
         'PARAM: dest must be a string of a folder you would like to create'
       );
     }
-
     const CWD = process.cwd();
     let destPath = dest;
     const DEST_IS_CWD = CWD === destPath;
+    let dataForTemplating;
     let name;
 
     if (!DEST_IS_CWD) {
@@ -228,12 +229,6 @@ class Templates extends VerboseLogger {
     } else {
       name = data.name;
     }
-
-    const dataForTemplating = {
-      ...data,
-      template: this.template,
-      name
-    };
 
     this._log(`[TPS INFO]: Rendering template at (${destPath})`);
 
@@ -261,6 +256,14 @@ class Templates extends VerboseLogger {
       .then(() => {
         this._log(`[TPS INFO]: rendering template at ${destPath}`);
       })
+      .then(() => {
+        dataForTemplating = {
+          ...data,
+          template: this.template,
+          name,
+          config: { ...this.config }
+        };
+      })
       .then(() => this._renderAllDirectories(destPath))
       .then(() => this._renderAllFiles(destPath, dataForTemplating))
       .catch(err => {
@@ -269,6 +272,7 @@ class Templates extends VerboseLogger {
         } else {
           console.log('There was a error while rendering your template');
           console.log(err);
+          fs.rmdirSync(destPath);
           process.exit(1);
         }
       });
@@ -351,22 +355,24 @@ class Templates extends VerboseLogger {
       ? null
       : this._prompts.getAnswers().then(answers => {
           eachObj(answers, (answer, answerName) => {
-            switch (true) {
-              case is.undef(answer):
-                break;
-              case is.bool(answer):
-                this.loadPackage(answerName);
-                break;
-              case is.string(answer) && !!answer.length:
-                this.loadPackage(answer);
-                break;
-              case is.array(answer) && !is.array.empty(answer):
-                this.loadPackages(answer);
-                break;
-              default:
-                throw new Error(
-                  'Data type is not supported as answer to a tps prompt'
-                );
+            if (this._prompts.getPrompt(answerName).isPkg()) {
+              switch (true) {
+                case is.undef(answer):
+                  break;
+                case is.bool(answer):
+                  this.loadPackage(answerName);
+                  break;
+                case is.string(answer) && !!answer.length:
+                  this.loadPackage(answer);
+                  break;
+                case is.array(answer) && !is.array.empty(answer):
+                  this.loadPackages(answer);
+                  break;
+                default:
+                  throw new Error(
+                    'Data type is not supported as answer to a tps prompt'
+                  );
+              }
             }
             this._config.set(answerName, answer);
           });

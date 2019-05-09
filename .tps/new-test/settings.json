@@ -1,3 +1,12 @@
 {
-  "prompts": []
+  "prompts": [
+    {
+      "name": "playground",
+      "type": "confirm",
+      "tpsType": "data",
+      "message": "Will this test create new files in our fileSystem?",
+      "default": false,
+      "aliases": ["p"]
+    }
+  ]
 }
