@@ -212,23 +212,38 @@ class Templates extends VerboseLogger {
    * @param {Function} [cb] - callback function to call when done
    * @returns {Promise} return promise when done if no cb is defined
    */
-  render(dest, data = {}) {
-    if (!dest) {
-      this._error(
-        'PARAM: dest must be a string of a folder you would like to create'
-      );
-    }
-    const CWD = process.cwd();
-    let destPath = dest;
-    const DEST_IS_CWD = CWD === destPath;
+  render(dest, buildPaths, data = {}) {
+    const buildPathsIsString = is.string(buildPaths);
+    const buildPathsIsEmptyString = buildPathsIsString && !buildPaths;
     let dataForTemplating;
-    let name;
+    let useCWD = false;
+    let pathsToCreate = buildPaths;
+    // const DEST_IS_CWD = TPS.CWD === destPath;
+    let name = data.name;
 
-    if (!DEST_IS_CWD) {
-      name = data.name || path.basename(destPath);
+    if (buildPathsIsString && !buildPathsIsEmptyString) {
+      pathsToCreate = [buildPaths];
     } else {
-      name = data.name;
+      useCWD = true;
+      pathsToCreate = [dest];
     }
+
+    // Append dest config
+    const finalDest = path.join(dest, this.config.dest);
+
+    pathsToCreate = pathsToCreate.map(buildPath =>
+      path.join(finalDest, buildPath)
+    );
+
+    // if (!useCWD) {
+
+    // }
+
+    // if (!DEST_IS_CWD) {
+    //   name = data.name || path.basename(destPath);
+    // } else {
+    //   name = data.name;
+    // }
 
     this._log(`[TPS INFO]: Rendering template at (${destPath})`);
 
