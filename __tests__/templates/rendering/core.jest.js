@@ -23,10 +23,27 @@ describe('[Templates] Render Process:', () => {
 
       const destPath = playground.pathTo('App');
 
-      tps.render(destPath, {}).then(() => {
+      tps.render(playground.box(), 'App').then(() => {
         expect(
           utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
         ).toBeTruthy();
+        done();
+      });
+    });
+
+    it('should be able to render a local template with multiple build paths', done => {
+      let tps = new Templates();
+      tps.use('testing');
+
+      const buildPaths = ['App', 'Box', 'New'];
+
+      tps.render(playground.box(), buildPaths).then(() => {
+        buildPaths.forEach(buildPath => {
+          const destPath = playground.pathTo(buildPath);
+          expect(
+            utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+          ).toBeTruthy();
+        });
         done();
       });
     });
@@ -38,7 +55,7 @@ describe('[Templates] Render Process:', () => {
 
       const destPath = playground.pathTo('App');
 
-      tps.render(destPath, {}).then(() => {
+      tps.render(playground.box(), 'App').then(() => {
         expect(
           utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
         ).toBeTruthy();

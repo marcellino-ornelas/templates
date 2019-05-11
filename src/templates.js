@@ -208,79 +208,77 @@ class Templates extends VerboseLogger {
 
   /**
    * @param {String} dest - destination to render your new template to
+   * @param {string|string[]} buildPaths - templates you would like to create
    * @param {Object} [data={}] - data to pass to doT. This will be used when rendering dot files/syntax
-   * @param {Function} [cb] - callback function to call when done
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, buildPaths, data = {}) {
-    const buildPathsIsString = is.string(buildPaths);
-    const buildPathsIsEmptyString = buildPathsIsString && !buildPaths;
     let dataForTemplating;
-    let useCWD = false;
+    let buildInDest = false;
     let pathsToCreate = buildPaths;
-    // const DEST_IS_CWD = TPS.CWD === destPath;
     let name = data.name;
+    const finalDest = dest;
 
-    if (buildPathsIsString && !buildPathsIsEmptyString) {
+    if (!buildPaths) {
+      buildInDest = true;
+      pathsToCreate = ['./'];
+    } else if (is.string(buildPaths)) {
       pathsToCreate = [buildPaths];
-    } else {
-      useCWD = true;
-      pathsToCreate = [dest];
+    }
+
+    this._log('[TPS INFO] Build paths: ', pathsToCreate);
+
+    if (is.array.empty(buildPaths)) {
+      this.error('Param `buildPaths` need to be a string or array of strings');
     }
 
     // Append dest config
-    const finalDest = path.join(dest, this.config.dest);
+    if (this.config.dest) {
+      finalDest = path.join(dest, this.config.dest);
+    }
 
+    // Create absolute paths
     pathsToCreate = pathsToCreate.map(buildPath =>
       path.join(finalDest, buildPath)
     );
 
-    // if (!useCWD) {
-
-    // }
-
-    // if (!DEST_IS_CWD) {
-    //   name = data.name || path.basename(destPath);
-    // } else {
-    //   name = data.name;
-    // }
-
-    this._log(`[TPS INFO]: Rendering template at (${destPath})`);
-
     return Promise.resolve()
-      .then(() => {
-        if (!DEST_IS_CWD && this.opts.newFolder) {
-          if (!this.opts.force && isDir(destPath)) {
-            this._error(
-              `Directory already exists. Aborting process. (${destPath})`
-            );
-          }
-
-          if (this.config.dest) {
-            this._log('[TPS INFO]: Applying config `dest` to render path');
-            const tpsRenderPath = destPath.replace(`${CWD}/`, '');
-
-            destPath = path.resolve(this.config.dest, tpsRenderPath);
-          }
-
-          this._log('[TPS INFO]: Rendering template');
-          return mkDir(destPath, { recursive: true });
-        }
-      })
       .then(() => this._answerRestOfPrompts())
       .then(() => {
-        this._log(`[TPS INFO]: rendering template at ${destPath}`);
+        const isDestCreated = isDir(dest);
+        if (!isDestCreated) {
+          this.error(`Destination does not exist ${finalDest}`);
+        }
+        this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
       })
       .then(() => {
         dataForTemplating = {
           ...data,
           template: this.template,
-          name,
           config: { ...this.config }
         };
       })
-      .then(() => this._renderAllDirectories(destPath))
-      .then(() => this._renderAllFiles(destPath, dataForTemplating))
+      .then(() => {
+        const builders = pathsToCreate.map(buildPath => {
+          const { name, dir } = path.parse(buildPath);
+
+          return Promise.resolve()
+            .then(() => {
+              // Create a new folder unless told not to
+              // if we are building the template in dest folder don't create new folder
+              if (this.opts.newFolder && !buildInDest) {
+                return mkDir(buildPath, { recursive: true });
+              }
+            })
+            .then(() => this._renderAllDirectories(buildPath))
+            .then(() =>
+              this._renderAllFiles(buildPath, { name, ...dataForTemplating })
+            )
+            .then(() => this._log(`Template build at ${buildPath}`));
+        });
+
+        return Promise.all(builders);
+      })
       .catch(err => {
         if (TPS.IS_TESTING) {
           throw err;

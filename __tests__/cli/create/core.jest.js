@@ -15,7 +15,7 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_core'));
 
-  it('should be able to use the create command in cli', done => {
+  it.only('should be able to use the create command in cli', done => {
     const destPath = playground.pathTo('App');
     const cmd = ['create', '--use=testing', '-v', 'App'];
 

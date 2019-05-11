@@ -34,7 +34,7 @@ describe('[Templates] Render Process:', () => {
         const destPath = playground.pathTo('App');
         inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
-        tps.render(destPath, {}).then(() => {
+        tps.render(playground.box(), 'App').then(() => {
           expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
           expect(tps.packages).toHaveProperty(answer);
           done();
@@ -48,7 +48,7 @@ describe('[Templates] Render Process:', () => {
 
       expect(tps._prompts.needsAnswers()).toBeFalsy();
 
-      tps.render(destPath, {}).then(() => {
+      tps.render(playground.box(), 'App').then(() => {
         expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
         expect(tps.packages).toHaveProperty('less');
         done();

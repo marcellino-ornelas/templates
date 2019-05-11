@@ -19,16 +19,21 @@ exports.builder = yargs =>
       describe: 'Additional Packages to use when building your template',
       type: 'array'
     })
-    .option('no-default', {
-      alias: 'p',
-      describe: 'Additional Packages to use when building your template',
-      type: 'array'
-    })
+    // .option('no-default', {
+    //   alias: 'p',
+    //   describe: 'Additional Packages to use when building your template',
+    //   type: 'array'
+    // })
     .option('name', {
       alias: 'n',
       describe:
         'Name for template rendering. defaults to base name of the destination path',
       type: 'string'
+    })
+    .option('noNewFolder', {
+      alias: 'f',
+      describe: "Don't create a new folder",
+      type: 'boolean'
     })
     .option('dest', {
       alias: 'd',
@@ -37,8 +42,6 @@ exports.builder = yargs =>
     });
 
 exports.handler = function(argv) {
-  const hasExtraPackages = !is.array.empty(argv.packages);
-  const hasBuildPaths = is.array.empty(argv.buildPaths);
   const dest = argv.dest || process.cwd();
 
   const tps = new Template({
@@ -47,13 +50,16 @@ exports.handler = function(argv) {
 
   tps.use(argv.use);
 
-  if (hasExtraPackages) {
-    tps.loadPackage(argv.packages);
+  if (is.array(argv.packages) && !is.array.empty(argv.packages)) {
+    tps.loadPackages(argv.packages);
   }
 
   tps.loadConfig(argv);
 
+  const hasBuildPaths = !is.array.empty(argv.buildPaths);
   const renderItems = hasBuildPaths ? argv.buildPaths : null;
+
+  console.log('buildPaths', argv.buildPaths);
 
   const renderData = {
     name: argv.name
