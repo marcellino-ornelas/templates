@@ -22,12 +22,20 @@ class File {
     this._dotNameCompiled = dot.template(this._name);
     this.src = fileNode.path;
     this.fileNode = fileNode;
+    const fileData = fs.readFileSync(this.src);
+    this.fileDataTemplate = dot.template(fileData);
 
     this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
   }
 
   fileName(data) {
-    return this._addDefaultExtention(this._dotNameCompiled(data));
+    let fileName;
+    try {
+      fileName = this._dotNameCompiled(data);
+    } catch (e) {
+      console.log('file name error', e);
+    }
+    return this._addDefaultExtention(fileName);
   }
 
   create(newDest, data) {
@@ -35,10 +43,14 @@ class File {
 
     return new Promise((resolve, reject) => {
       if (this.isDot) {
-        const fileData = fs.readFileSync(this.src);
-        const dotCompiled = dot.template(fileData);
-
-        fs.writeFile(dest, dotCompiled(data), err => {
+        let fileData;
+        try {
+          fileData = this.fileDataTemplate(data);
+        } catch (e) {
+          console.log('dot error', e);
+        }
+        console.log(dest);
+        fs.writeFile(dest, fileData, err => {
           if (err) {
             reject(
               new Error(`${this._name} threw a error while creating ${err}`)

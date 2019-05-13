@@ -15,7 +15,25 @@ export default class Prompt {
     this.name = prompt.name;
     this.type = prompt.type;
     this.message = prompt.message || prompt.question;
-    this.default = prompt.default;
+
+    let defaultValue;
+    const isPrompterDefaultIndex = ['list', 'rawlist', 'expand'].includes(
+      prompt.type
+    );
+
+    if (isPrompterDefaultIndex) {
+      let defaultFromChoices = this.choices[prompt.default];
+
+      if (is.func(this.filter)) {
+        defaultFromChoices = this.filter(defaultFromChoices);
+      }
+
+      defaultValue = defaultFromChoices;
+    } else {
+      defaultValue = prompt.default;
+    }
+
+    this.default = defaultValue;
     this.choices = prompt.choices || [];
     this.validate = prompt.validate;
     this.filter = prompt.filter;

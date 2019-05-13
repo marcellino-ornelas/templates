@@ -51,7 +51,8 @@ exports.handler = function(argv) {
 
   const tps = new Template({
     verbose: argv.verbose,
-    default
+    default: argv.default,
+    newFolder: !argv.noNewFolder
   });
 
   tps.use(argv.use);

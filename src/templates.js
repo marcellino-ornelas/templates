@@ -123,7 +123,9 @@ class Templates extends VerboseLogger {
 
       if (this.templateSettings.prompts) {
         this._log('[TPS INFO]: Loading prompts ...');
-        this._prompts = new Prompter(this.templateSettings.prompts);
+        this._prompts = new Prompter(this.templateSettings.prompts, {
+          default: this.opts.default
+        });
 
         this._prompts.setAnswers(this.config);
       }
@@ -212,11 +214,10 @@ class Templates extends VerboseLogger {
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, buildPaths, data = {}) {
-    let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
     let name = data.name;
-    const finalDest = dest;
+    let finalDest = dest;
 
     if (!buildPaths) {
       buildInDest = true;
@@ -241,6 +242,14 @@ class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
+    const dataForTemplating = {
+      ...data,
+      template: this.template,
+      config: { ...this.config }
+    };
+
+    const buildNewFolder = this.opts.newFolder && !buildInDest;
+
     return Promise.resolve()
       .then(() => this._answerRestOfPrompts())
       .then(() => {
@@ -251,29 +260,31 @@ class Templates extends VerboseLogger {
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
       })
       .then(() => {
-        dataForTemplating = {
-          ...data,
-          template: this.template,
-          config: { ...this.config }
-        };
-      })
-      .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
-
           return Promise.resolve()
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
-              if (this.opts.newFolder && !buildInDest) {
+              if (buildNewFolder) {
                 return mkDir(buildPath, { recursive: true });
               }
             })
             .then(() => this._renderAllDirectories(buildPath))
-            .then(() =>
-              this._renderAllFiles(buildPath, { name, ...dataForTemplating })
-            )
-            .then(() => this._log(`Template build at ${buildPath}`));
+            .then(() => {
+              const renderData = defaults({ name }, dataForTemplating);
+
+              return this._renderAllFiles(buildPath, renderData);
+            })
+            .then(() => this._log(`Template build at ${buildPath}`))
+            .catch(err => {
+              // clean up
+              if (buildNewFolder) {
+                fs.rmdirSync(buildPath);
+              }
+
+              return Promise.reject(err);
+            });
         });
 
         return Promise.all(builders);
@@ -284,7 +295,6 @@ class Templates extends VerboseLogger {
         } else {
           console.log('There was a error while rendering your template');
           console.log(err);
-          fs.rmdirSync(destPath);
           process.exit(1);
         }
       });
