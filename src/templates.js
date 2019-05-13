@@ -10,22 +10,22 @@ import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
 import { eachObj, promisify, defaults, hasProp } from '@tps/utilities/helpers';
 
-// dot.templateSettings.strip = false;
-
 /**
  * Default options for Templates
  * @typedef  {Object} TemplateOptions
  * @property {boolean} verbose - Log extra information to the console
  * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
  * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
- * @property {boolean} default - Don't load the default folder
+ * @property {boolean} defaultPackage - Don't load the default folder
+ * @property {boolean} default - Use all default prompt answers
  * @property {boolean} force - Force creation of template. This will over write files
  */
 const DEFAULT_OPTIONS = {
   verbose: false,
   noLocalConfig: false,
   noGlobalConfig: false,
-  default: true,
+  defaultPackage: true,
+  default: false,
   force: false,
   newFolder: true
 };
@@ -123,16 +123,15 @@ class Templates extends VerboseLogger {
 
       if (this.templateSettings.prompts) {
         this._log('[TPS INFO]: Loading prompts ...');
-        this._prompts = new Prompter(
-          this.templateSettings.prompts,
-          this.config
-        );
+        this._prompts = new Prompter(this.templateSettings.prompts);
+
+        this._prompts.setAnswers(this.config);
       }
     }
 
     // load default package if applicable
     const defaultFolder = path.join(this.templateLocation, 'default');
-    if (this.opts.default && isDir(defaultFolder)) {
+    if (this.opts.defaultPackage && isDir(defaultFolder)) {
       this.loadPackage('default');
     }
   }

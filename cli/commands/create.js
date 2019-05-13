@@ -19,6 +19,11 @@ exports.builder = yargs =>
       describe: 'Additional Packages to use when building your template',
       type: 'array'
     })
+    .option('default', {
+      alias: 'd',
+      type: 'boolean',
+      describe: 'Use all default answers to all prompts'
+    })
     // .option('no-default', {
     //   alias: 'p',
     //   describe: 'Additional Packages to use when building your template',
@@ -45,7 +50,8 @@ exports.handler = function(argv) {
   const dest = argv.dest || process.cwd();
 
   const tps = new Template({
-    verbose: argv.verbose
+    verbose: argv.verbose,
+    default
   });
 
   tps.use(argv.use);
