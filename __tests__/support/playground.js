@@ -45,44 +45,25 @@ class Playground {
     return path.join(this.dirPath, this.name);
   }
 
-  create(done) {
-    if (done) {
-      fs.mkdir(this.path, done);
-    } else {
-      return new Promise((resolve, reject) => {
-        fs.mkdir(this.path, function(err) {
-          err ? reject(err) : resolve();
-        });
-      });
-    }
+  create() {
+    return fs.mkdir(this.path);
   }
 
-  destory(done) {
-    if (done) {
-      fs.remove(this.path, done);
-    } else {
-      return new Promise((resolve, reject) => {
-        fs.remove(this.path, function(err) {
-          err ? reject(err) : resolve();
-        });
-      });
-    }
+  destroy() {
+    return fs.remove(this.path);
   }
 
-  createBox(name, cb) {
+  createBox(name) {
     const box = new Playground(this.path, name);
 
     if (this.boxes.hasOwnProperty(box.name)) {
       throw new Error('two boxes are the same');
     }
+
     this.boxes[box.name] = box;
     this.current = box;
 
-    if (cb) {
-      box.create(cb);
-    } else {
-      return box.create();
-    }
+    return box.create();
   }
 
   box() {

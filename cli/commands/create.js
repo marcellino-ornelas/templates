@@ -72,9 +72,15 @@ exports.handler = function(argv) {
     name: argv.name
   };
 
-  tps.render(dest, renderItems, renderData).then(() => {
-    console.log('process done');
-  });
+  tps
+    .render(dest, renderItems, renderData)
+    .then(() => {
+      console.log('process done');
+    })
+    .catch(e => {
+      console.log('tps error', e);
+      process.exit(1);
+    });
 
   // let buildPaths;
   // // if no paths specified then create items in cwd

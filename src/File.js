@@ -7,7 +7,7 @@ import fs from 'fs';
  */
 const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 // const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
-
+// const FS_FAIL_IF_EXIST = { flags: 'wx' };
 class File {
   constructor(fileNode) {
     let fileName = fileNode.name;
@@ -28,7 +28,7 @@ class File {
     this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
   }
 
-  fileName(data) {
+  fileName(data = {}) {
     let fileName;
     try {
       fileName = this._dotNameCompiled(data);
@@ -39,7 +39,7 @@ class File {
   }
 
   create(newDest, data) {
-    const dest = path.join(this._dest(newDest), this.fileName(data));
+    const dest = this._dest(newDest, data);
 
     return new Promise((resolve, reject) => {
       if (this.isDot) {
@@ -49,23 +49,27 @@ class File {
         } catch (e) {
           console.log('dot error', e);
         }
-        console.log(dest);
-        fs.writeFile(dest, fileData, err => {
+        fs.writeFile(dest, fileData, { flag: 'wx' }, err => {
           if (err) {
+            console.log('create promise error');
             reject(
               new Error(`${this._name} threw a error while creating ${err}`)
             );
           } else {
-            resolve();
+            resolve(dest);
           }
         });
       } else {
         const srcFile = fs.createReadStream(this.src, {
           flag: 'r'
         });
+        console.log('creating file at', dest);
         const destFile = fs.createWriteStream(dest, { flags: 'wx' });
-        destFile.on('error', reject);
-        destFile.on('finish', resolve);
+        destFile.on('error', err => {
+          console.log('write stream error');
+          reject(err);
+        });
+        destFile.on('finish', () => resolve(dest));
         srcFile.pipe(destFile);
       }
     });
@@ -82,8 +86,12 @@ class File {
     return fileName;
   }
 
-  _dest(newDest) {
+  _buildParentDir(newDest) {
     return path.join(newDest, this.relDirectoryFromPkg);
+  }
+
+  _dest(dest, data) {
+    return path.join(this._buildParentDir(dest), this.fileName(data));
   }
 }
 

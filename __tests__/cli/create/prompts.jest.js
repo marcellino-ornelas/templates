@@ -11,7 +11,7 @@ const playground = new Playground(TESTING_DIR);
 describe('[cli] Create:', () => {
   beforeAll(() => playground.create());
 
-  afterAll(() => playground.destory());
+  afterAll(() => playground.destroy());
 
   beforeEach(() => playground.createBox('create_prompt'));
 

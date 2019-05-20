@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
 import is from 'is';
 import DirNode from '@tps/fileSystemTree';
 import File from '@tps/File';
@@ -30,8 +30,6 @@ const DEFAULT_OPTIONS = {
   newFolder: true
 };
 
-const mkDir = promisify(fs.mkdir, fs);
-
 /**
  * @class
  * @classdesc Create a new instance of a template
@@ -50,6 +48,8 @@ class Templates extends VerboseLogger {
     this.src = null;
     this.templateLocation = null;
     this._prompts = null;
+    this.successfulBuilds = new SuccessfulBuild();
+    this.buildErrors = [];
     this.data = {};
   }
 
@@ -214,6 +214,7 @@ class Templates extends VerboseLogger {
    * @returns {Promise} return promise when done if no cb is defined
    */
   render(dest, buildPaths, data = {}) {
+    let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
     let name = data.name;
@@ -242,19 +243,22 @@ class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
-    const dataForTemplating = {
-      ...data,
-      template: this.template,
-      config: { ...this.config }
-    };
-
+    console.log(this.opts.newFolder, buildInDest, !buildInDest);
     const buildNewFolder = this.opts.newFolder && !buildInDest;
+    console.log('new folder', buildNewFolder);
+    console.log('paths ', pathsToCreate);
 
     return Promise.resolve()
       .then(() => this._answerRestOfPrompts())
       .then(() => {
-        const isDestCreated = isDir(dest);
-        if (!isDestCreated) {
+        dataForTemplating = {
+          ...data,
+          template: this.template,
+          config: { ...this.config }
+        };
+      })
+      .then(() => {
+        if (!isDir(dest)) {
           this.error(`Destination does not exist ${finalDest}`);
         }
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
@@ -262,41 +266,53 @@ class Templates extends VerboseLogger {
       .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
-          return Promise.resolve()
-            .then(() => {
-              // Create a new folder unless told not to
-              // if we are building the template in dest folder don't create new folder
-              if (buildNewFolder) {
-                return mkDir(buildPath, { recursive: true });
-              }
-            })
-            .then(() => this._renderAllDirectories(buildPath))
-            .then(() => {
-              const renderData = defaults({ name }, dataForTemplating);
+          let realBuildPath = buildPath;
 
-              return this._renderAllFiles(buildPath, renderData);
-            })
-            .then(() => this._log(`Template build at ${buildPath}`))
-            .catch(err => {
-              // clean up
-              if (buildNewFolder) {
-                fs.rmdirSync(buildPath);
-              }
+          console.log('real build path', realBuildPath);
 
-              return Promise.reject(err);
-            });
+          return (
+            Promise.resolve()
+              .then(() => {
+                // Create a new folder unless told not to
+                // if we are building the template in dest folder don't create new folder
+                if (buildNewFolder) {
+                  return fs
+                    .mkdir(realBuildPath, { recursive: true })
+                    .catch(() => {});
+                }
+              })
+              .then(() => console.log(fs.readdirSync(realBuildPath)))
+              // .then(() => new DirNode(realBuildPath).logTree())
+              .then(() => this._renderAllDirectories(realBuildPath))
+              .then(() => {
+                const renderData = defaults({ name }, dataForTemplating);
+
+                return this._renderAllFiles(realBuildPath, renderData);
+              })
+              .then(() => {
+                this._log(`Template build at ${buildPath}`);
+              })
+              .catch(err => {
+                this.buildErrors.push(realBuildPath);
+                console.log('build error', err);
+
+                return Promise.reject(err);
+              })
+          );
         });
 
         return Promise.all(builders);
       })
       .catch(err => {
-        if (TPS.IS_TESTING) {
-          throw err;
-        } else {
-          console.log('There was a error while rendering your template');
-          console.log(err);
-          process.exit(1);
+        try {
+          this._cleanUpFailBuilds(dest, buildNewFolder);
+        } catch (e) {
+          return Promise.reject(e);
         }
+
+        console.log('There was a error while rendering your template');
+        console.log(err);
+        return Promise.reject(err);
       });
   }
 
@@ -310,7 +326,9 @@ class Templates extends VerboseLogger {
     this._log('+++++++++ render files +++++++++++++');
     this._log();
     const filesInProgress = this.compiledFiles.map(file =>
-      file.create(dest, data)
+      file
+        .create(dest, data)
+        .then(dest => this.successfulBuilds.files.push(dest))
     );
     return Promise.all(filesInProgress);
   }
@@ -332,6 +350,7 @@ class Templates extends VerboseLogger {
       // this._log('package name', pkg.name);
 
       pkg.find({ type: 'dir' }).forEach(dirNode => {
+        console.log(dirNode.path);
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
@@ -339,7 +358,8 @@ class Templates extends VerboseLogger {
 
         /* mark directory as already made */
         dirTracker[dirNode.path] = true;
-        const dirInProgress = mkDir(dirPathInNewLocation).then(() => {
+        const dirInProgress = fs.mkdir(dirPathInNewLocation).then(() => {
+          this.successfulBuilds.dirs.push(dirPathInNewLocation);
           this._log(`   `, '-> created', dirPathInNewLocation);
         });
 
@@ -363,8 +383,61 @@ class Templates extends VerboseLogger {
     });
   }
 
+  _cleanUpFailBuilds(builtNewFolder) {
+    const buildErrors = this.buildErrors;
+
+    console.log('clean up has begun', buildErrors);
+
+    const buildPathsRegExp = new RegExp(`^(${buildErrors.join('|')})`, 'g');
+    console.log('reg', buildPathsRegExp);
+    console.log(this.successfulBuilds);
+    let { files, dirs } = this.successfulBuilds;
+
+    const filesIsEmpty = is.array.empty(files);
+    const dirsIsEmpty = is.array.empty(dirs);
+
+    if (filesIsEmpty && dirsIsEmpty) {
+      console.log('no builds');
+      return;
+    }
+
+    if (!dirsIsEmpty) {
+      dirs = dirs
+        .filter(dir => dir.search(buildPathsRegExp) !== -1)
+        .forEach(dir => {
+          console.log('removing', dir);
+          fs.removeSync(dir);
+        });
+    }
+
+    if (!filesIsEmpty) {
+    }
+
+    // files = files.filter(file => buildPathsRegExp.test(file));
+
+    // console.log('files', files);
+    // files.forEach(file => fs.removeSync(file));
+
+    // console.log src/templates.js:249
+    // new folder true
+
+    // console.log src/templates.js:271
+    //   real build path /Users/marcelinoornelas/Desktop/development/Templates/__tests__/testing_playground_3f6d5bd518/render_failed_56c67f70d7/App
+
+    // console.log src/templates.js:380
+    //   reg /\/Users\/marcelinoornelas\/Desktop\/development\/Templates\/__tests__\/testing_playground_3f6d5bd518\/render_failed_56c67f70d7\/App/g
+    // **********
+    // const dirs = this.successfulBuilds.files.filter(() => {});
+
+    // buildErrors.forEach(buildPath => {
+    //   if (builtNewFolder) {
+    //   } else {
+    //   }
+    // });
+  }
+
   /**
-   * Creates a array of all packages user wants for render process
+   * Creates a array of all packages user wants for render process successful
    * @private
    * @returns {DirNode[]} - array of all the packages
    */
@@ -435,6 +508,11 @@ class Templates extends VerboseLogger {
       this.loadConfig(config[templateName]);
     }
   }
+}
+
+function SuccessfulBuild() {
+  this.files = [];
+  this.dirs = [];
 }
 
 module.exports = Templates;

@@ -21,7 +21,7 @@ describe('Command Line: ', () => {
     )
   );
 
-  afterAll(() => playground.destory());
+  afterAll(() => playground.destroy());
 
   let cwd;
 

@@ -16,13 +16,13 @@ const playground = new Playground(TESTING_DIR);
 describe('[Templates] Render Process:', () => {
   beforeAll(() => playground.create());
 
-  afterAll(() => playground.destory());
+  afterAll(() => playground.destroy());
 
   describe('When Rendering with prompts', () => {
     let tps;
     beforeEach(() => {
       // add no default to this test to only test packages
-      tps = new Templates({ default: false });
+      tps = new Templates({ defaultPackage: false });
       tps.use('testing-prompt');
 
       return playground.createBox('render_process_prompts');
