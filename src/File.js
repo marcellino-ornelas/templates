@@ -1,6 +1,7 @@
 import dot from '@tps/dot';
 import path from 'path';
-import fs from 'fs';
+import fs from 'fs-extra';
+import { isFile } from '@tps/utilities/fileSystem';
 
 /*
  * File
@@ -38,40 +39,49 @@ class File {
     return this._addDefaultExtention(fileName);
   }
 
-  create(newDest, data) {
-    const dest = this._dest(newDest, data);
+  // create(newDest, data) {
+  //   const dest = this._dest(newDest, data);
 
+  //   // console.log('creating file at', dest);
+
+  //   if (this.isDot) {
+  //     return this.handleDotFile(dest, data);
+  //   } else {
+  //     return this.handleFile(dest);
+  //   }
+  // }
+
+  renderDotFile(dest, fileData) {
+    // let fileData;
+    // try {
+    //   fileData = this.fileDataTemplate(data);
+    // } catch (e) {
+    //   console.log('dot error', e);
+    //   return Promise.reject(e);
+    // }
+
+    return fs
+      .writeFile(dest, fileData, { flag: 'wx' })
+      .then(() => Promise.resolve(dest));
+  }
+
+  renderFile(dest) {
     return new Promise((resolve, reject) => {
-      if (this.isDot) {
-        let fileData;
-        try {
-          fileData = this.fileDataTemplate(data);
-        } catch (e) {
-          console.log('dot error', e);
-        }
-        fs.writeFile(dest, fileData, { flag: 'wx' }, err => {
-          if (err) {
-            console.log('create promise error');
-            reject(
-              new Error(`${this._name} threw a error while creating ${err}`)
-            );
-          } else {
-            resolve(dest);
-          }
-        });
-      } else {
-        const srcFile = fs.createReadStream(this.src, {
-          flag: 'r'
-        });
-        console.log('creating file at', dest);
-        const destFile = fs.createWriteStream(dest, { flags: 'wx' });
-        destFile.on('error', err => {
-          console.log('write stream error');
-          reject(err);
-        });
-        destFile.on('finish', () => resolve(dest));
-        srcFile.pipe(destFile);
-      }
+      const srcFile = fs.createReadStream(this.src, {
+        flag: 'r'
+      });
+
+      const destFile = fs.createWriteStream(dest, { flags: 'wx' });
+
+      destFile.on('error', err => {
+        console.log('dest', dest);
+        console.log('write stream error', err);
+        reject(err);
+      });
+
+      destFile.on('finish', () => resolve(dest));
+
+      srcFile.pipe(destFile);
     });
   }
 

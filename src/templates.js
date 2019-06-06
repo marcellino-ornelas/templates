@@ -243,10 +243,7 @@ class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
-    console.log(this.opts.newFolder, buildInDest, !buildInDest);
     const buildNewFolder = this.opts.newFolder && !buildInDest;
-    console.log('new folder', buildNewFolder);
-    console.log('paths ', pathsToCreate);
 
     return Promise.resolve()
       .then(() => this._answerRestOfPrompts())
@@ -259,6 +256,7 @@ class Templates extends VerboseLogger {
       })
       .then(() => {
         if (!isDir(dest)) {
+          console.log('Hello HERE at the beginning');
           this.error(`Destination does not exist ${finalDest}`);
         }
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
@@ -267,53 +265,64 @@ class Templates extends VerboseLogger {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
           let realBuildPath = buildPath;
+          const renderData = defaults({ name }, dataForTemplating);
+          console.log('before promise in builder', buildPath);
+          return Promise.resolve()
+            .then(() => this._checkForFiles(realBuildPath, renderData))
+            .then(() => {
+              // Create a new folder unless told not to
+              // if we are building the template in dest folder don't create new folder
+              if (buildNewFolder) {
+                return fs
+                  .mkdir(realBuildPath, { recursive: true })
+                  .catch(err => {
+                    console.log('DIR ERROR', err);
+                  });
+              }
+            })
 
-          console.log('real build path', realBuildPath);
-
-          return (
-            Promise.resolve()
-              .then(() => {
-                // Create a new folder unless told not to
-                // if we are building the template in dest folder don't create new folder
-                if (buildNewFolder) {
-                  return fs
-                    .mkdir(realBuildPath, { recursive: true })
-                    .catch(() => {});
-                }
-              })
-              .then(() => console.log(fs.readdirSync(realBuildPath)))
-              // .then(() => new DirNode(realBuildPath).logTree())
-              .then(() => this._renderAllDirectories(realBuildPath))
-              .then(() => {
-                const renderData = defaults({ name }, dataForTemplating);
-
-                return this._renderAllFiles(realBuildPath, renderData);
-              })
-              .then(() => {
-                this._log(`Template build at ${buildPath}`);
-              })
-              .catch(err => {
-                this.buildErrors.push(realBuildPath);
-                console.log('build error', err);
-
-                return Promise.reject(err);
-              })
-          );
+            .then(() => this._renderAllDirectories(realBuildPath))
+            .then(() => {
+              return this._renderAllFiles(realBuildPath, renderData);
+            })
+            .then(() => {
+              this._log(`Template build at ${buildPath}`);
+            })
+            .catch(err => {
+              console.log('Build Path error', err);
+              //   // this.buildErrors.push(realBuildPath);
+              //   // return Promise.reject(err);
+              this._cleanUpFailBuilds(realBuildPath);
+              return Promise.reject(err);
+            });
         });
 
         return Promise.all(builders);
       })
       .catch(err => {
-        try {
-          this._cleanUpFailBuilds(dest, buildNewFolder);
-        } catch (e) {
-          return Promise.reject(e);
-        }
+        // try {
+        //   this._cleanUpFailBuilds(buildNewFolder);
+        // } catch (e) {
+        //   return Promise.reject(e);
+        // }
 
         console.log('There was a error while rendering your template');
         console.log(err);
         return Promise.reject(err);
       });
+  }
+
+  _checkForFiles(dest, data) {
+    for (let i = 0; i < this.compiledFiles.length; i++) {
+      const file = this.compiledFiles[i];
+      const finalDest = file._dest(dest, data);
+
+      if (isFile(finalDest)) {
+        return Promise.reject(
+          new Error(`[TPS][Failed] File already exists. (${finalDest})`)
+        );
+      }
+    }
   }
 
   /**
@@ -325,12 +334,59 @@ class Templates extends VerboseLogger {
     this._log();
     this._log('+++++++++ render files +++++++++++++');
     this._log();
-    const filesInProgress = this.compiledFiles.map(file =>
-      file
-        .create(dest, data)
-        .then(dest => this.successfulBuilds.files.push(dest))
+
+    const files = this.compiledFiles.filter(file => !file.isDot);
+    const dotFiles = this.compiledFiles.filter(file => file.isDot);
+
+    const dotContents = dotFiles.map(file => {
+      /**
+       * Will throw error if something is wrong with doT
+       */
+      return [file, file._dest(dest, data), file.fileDataTemplate(data)];
+    });
+
+    const filesInProgress = [];
+    let hasErroredOut = false;
+    let error;
+
+    console.log('after dot compile');
+    dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
+      filesInProgress.push(file.renderDotFile(finalDest, dotContentsForFile));
+    });
+
+    files.forEach(file =>
+      filesInProgress.push(
+        file.renderFile(file._dest(dest, data)).catch(err => {
+          if (!hasErroredOut) {
+            hasErroredOut = true;
+            error = err;
+          }
+        })
+      )
     );
-    return Promise.all(filesInProgress);
+
+    return Promise.all(filesInProgress).then(() => {
+      if (hasErroredOut) {
+        console.log('error after all', error);
+        return Promise.reject(error);
+      }
+    });
+
+    // const filesInProgress = this.compiledFiles.map(file =>
+    //   file
+    //     .create(dest, data)
+    //     .then(dest => {
+    //       console.log(`File: was created ${dest} `);
+    //       this.successfulBuilds.files.push(dest);
+    //     })
+    //     .catch(err => {
+    //       if (!hasFailed) {
+    //         hasFailed = true;
+    //         error = err;
+    //       }
+    //     })
+    // );
+    // return Promise.all(filesInProgress).then(() => {});
   }
 
   /**
@@ -345,12 +401,10 @@ class Templates extends VerboseLogger {
 
     const dirTracker = {};
     const dirsInProgress = [];
-
     this._getPackageArray().forEach(pkg => {
       // this._log('package name', pkg.name);
 
       pkg.find({ type: 'dir' }).forEach(dirNode => {
-        console.log(dirNode.path);
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
@@ -358,16 +412,61 @@ class Templates extends VerboseLogger {
 
         /* mark directory as already made */
         dirTracker[dirNode.path] = true;
-        const dirInProgress = fs.mkdir(dirPathInNewLocation).then(() => {
-          this.successfulBuilds.dirs.push(dirPathInNewLocation);
-          this._log(`   `, '-> created', dirPathInNewLocation);
-        });
+        const dirInProgress = fs
+          .mkdir(dirPathInNewLocation)
+          .then(() => {
+            this.successfulBuilds.dirs.push(dirPathInNewLocation);
+            this._log(`   `, '-> created', dirPathInNewLocation);
+          })
+          .catch(() => {
+            /* do nothing if dir already exist */
+          });
 
         dirsInProgress.push(dirInProgress);
       });
     });
 
     return dirsInProgress.length && Promise.all(dirsInProgress);
+  }
+
+  _cleanUpFailBuilds(buildError) {
+    // const buildErrors = this.buildErrors;
+
+    console.log('clean up has begun', buildError);
+
+    // const buildPathsRegExp = new RegExp(`^(${buildErrors.join('|')})`, 'g');
+    let { files, dirs } = this.successfulBuilds;
+
+    console.log('files', files);
+    console.log('dirs', dirs);
+
+    const filesIsEmpty = is.array.empty(files);
+    const dirsIsEmpty = is.array.empty(dirs);
+
+    if (filesIsEmpty && dirsIsEmpty) {
+      return;
+    }
+
+    if (!dirsIsEmpty) {
+      const dirsThatMatch = dirs.filter(dir => dir.includes(buildError));
+
+      dirsThatMatch.forEach(dir => {
+        console.log('removing', dir);
+        fs.removeSync(dir);
+
+        // if directory is removed then we can remove all child files
+        if (!filesIsEmpty) {
+          files = files.filter(file => !file.includes(dir));
+        }
+      });
+    }
+
+    console.log('after dir files', files);
+    if (!filesIsEmpty) {
+      files.forEach(file => {
+        fs.removeSync(file);
+      });
+    }
   }
 
   /**
@@ -381,59 +480,6 @@ class Templates extends VerboseLogger {
     pkg.find({ type: 'file' }).forEach(fileNode => {
       this.compiledFiles.push(new File(fileNode));
     });
-  }
-
-  _cleanUpFailBuilds(builtNewFolder) {
-    const buildErrors = this.buildErrors;
-
-    console.log('clean up has begun', buildErrors);
-
-    const buildPathsRegExp = new RegExp(`^(${buildErrors.join('|')})`, 'g');
-    console.log('reg', buildPathsRegExp);
-    console.log(this.successfulBuilds);
-    let { files, dirs } = this.successfulBuilds;
-
-    const filesIsEmpty = is.array.empty(files);
-    const dirsIsEmpty = is.array.empty(dirs);
-
-    if (filesIsEmpty && dirsIsEmpty) {
-      console.log('no builds');
-      return;
-    }
-
-    if (!dirsIsEmpty) {
-      dirs = dirs
-        .filter(dir => dir.search(buildPathsRegExp) !== -1)
-        .forEach(dir => {
-          console.log('removing', dir);
-          fs.removeSync(dir);
-        });
-    }
-
-    if (!filesIsEmpty) {
-    }
-
-    // files = files.filter(file => buildPathsRegExp.test(file));
-
-    // console.log('files', files);
-    // files.forEach(file => fs.removeSync(file));
-
-    // console.log src/templates.js:249
-    // new folder true
-
-    // console.log src/templates.js:271
-    //   real build path /Users/marcelinoornelas/Desktop/development/Templates/__tests__/testing_playground_3f6d5bd518/render_failed_56c67f70d7/App
-
-    // console.log src/templates.js:380
-    //   reg /\/Users\/marcelinoornelas\/Desktop\/development\/Templates\/__tests__\/testing_playground_3f6d5bd518\/render_failed_56c67f70d7\/App/g
-    // **********
-    // const dirs = this.successfulBuilds.files.filter(() => {});
-
-    // buildErrors.forEach(buildPath => {
-    //   if (builtNewFolder) {
-    //   } else {
-    //   }
-    // });
   }
 
   /**
