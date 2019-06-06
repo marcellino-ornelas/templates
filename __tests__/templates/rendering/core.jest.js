@@ -55,8 +55,6 @@ describe('[Templates] Render Process:', () => {
 
     const destPath = playground.pathTo('App');
 
-    console.log(new DirNode(playground.box()).logTree(['name', 'path']));
-
     tps.render(playground.box(), 'App').then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)

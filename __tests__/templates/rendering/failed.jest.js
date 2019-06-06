@@ -18,10 +18,10 @@ const playground = new Playground(TESTING_DIR);
 describe('[TPS] Rendered Failed Cases:', () => {
   let tps;
   beforeAll(() => playground.create());
-  // afterAll(() => playground.destroy());
+  afterAll(() => playground.destroy());
 
   beforeEach(() => {
-    tps = new Templates({ verbose: true });
+    tps = new Templates();
     tps.use('testing');
 
     return playground.createBox('render_failed');
@@ -67,7 +67,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     });
   });
 
-  it.only('should throw error if file is already created in nested folder', () => {
+  it('should throw error if file is already created in nested folder', () => {
     const file = playground.pathTo('App/storeUtils/user.js');
     const appFolder = playground.pathTo('App');
 

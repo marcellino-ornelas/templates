@@ -256,7 +256,6 @@ class Templates extends VerboseLogger {
       })
       .then(() => {
         if (!isDir(dest)) {
-          console.log('Hello HERE at the beginning');
           this.error(`Destination does not exist ${finalDest}`);
         }
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
@@ -266,7 +265,7 @@ class Templates extends VerboseLogger {
           const { name, dir } = path.parse(buildPath);
           let realBuildPath = buildPath;
           const renderData = defaults({ name }, dataForTemplating);
-          console.log('before promise in builder', buildPath);
+
           return Promise.resolve()
             .then(() => this._checkForFiles(realBuildPath, renderData))
             .then(() => {
@@ -276,7 +275,7 @@ class Templates extends VerboseLogger {
                 return fs
                   .mkdir(realBuildPath, { recursive: true })
                   .catch(err => {
-                    console.log('DIR ERROR', err);
+                    /* noop function */
                   });
               }
             })
@@ -289,9 +288,7 @@ class Templates extends VerboseLogger {
               this._log(`Template build at ${buildPath}`);
             })
             .catch(err => {
-              console.log('Build Path error', err);
-              //   // this.buildErrors.push(realBuildPath);
-              //   // return Promise.reject(err);
+              this._log('Build Path error', err);
               this._cleanUpFailBuilds(realBuildPath);
               return Promise.reject(err);
             });
@@ -300,14 +297,10 @@ class Templates extends VerboseLogger {
         return Promise.all(builders);
       })
       .catch(err => {
-        // try {
-        //   this._cleanUpFailBuilds(buildNewFolder);
-        // } catch (e) {
-        //   return Promise.reject(e);
-        // }
-
-        console.log('There was a error while rendering your template');
-        console.log(err);
+        if (!TPS.IS_TESTING) {
+          console.log('There was a error while rendering your template');
+          console.log(err);
+        }
         return Promise.reject(err);
       });
   }
@@ -349,7 +342,6 @@ class Templates extends VerboseLogger {
     let hasErroredOut = false;
     let error;
 
-    console.log('after dot compile');
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
       filesInProgress.push(file.renderDotFile(finalDest, dotContentsForFile));
     });
@@ -367,26 +359,9 @@ class Templates extends VerboseLogger {
 
     return Promise.all(filesInProgress).then(() => {
       if (hasErroredOut) {
-        console.log('error after all', error);
         return Promise.reject(error);
       }
     });
-
-    // const filesInProgress = this.compiledFiles.map(file =>
-    //   file
-    //     .create(dest, data)
-    //     .then(dest => {
-    //       console.log(`File: was created ${dest} `);
-    //       this.successfulBuilds.files.push(dest);
-    //     })
-    //     .catch(err => {
-    //       if (!hasFailed) {
-    //         hasFailed = true;
-    //         error = err;
-    //       }
-    //     })
-    // );
-    // return Promise.all(filesInProgress).then(() => {});
   }
 
   /**
@@ -430,15 +405,9 @@ class Templates extends VerboseLogger {
   }
 
   _cleanUpFailBuilds(buildError) {
-    // const buildErrors = this.buildErrors;
+    this._log('clean up has begun for', buildError);
 
-    console.log('clean up has begun', buildError);
-
-    // const buildPathsRegExp = new RegExp(`^(${buildErrors.join('|')})`, 'g');
     let { files, dirs } = this.successfulBuilds;
-
-    console.log('files', files);
-    console.log('dirs', dirs);
 
     const filesIsEmpty = is.array.empty(files);
     const dirsIsEmpty = is.array.empty(dirs);
@@ -451,7 +420,6 @@ class Templates extends VerboseLogger {
       const dirsThatMatch = dirs.filter(dir => dir.includes(buildError));
 
       dirsThatMatch.forEach(dir => {
-        console.log('removing', dir);
         fs.removeSync(dir);
 
         // if directory is removed then we can remove all child files
@@ -461,7 +429,6 @@ class Templates extends VerboseLogger {
       });
     }
 
-    console.log('after dir files', files);
     if (!filesIsEmpty) {
       files.forEach(file => {
         fs.removeSync(file);

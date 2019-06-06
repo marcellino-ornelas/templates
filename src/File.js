@@ -39,27 +39,7 @@ class File {
     return this._addDefaultExtention(fileName);
   }
 
-  // create(newDest, data) {
-  //   const dest = this._dest(newDest, data);
-
-  //   // console.log('creating file at', dest);
-
-  //   if (this.isDot) {
-  //     return this.handleDotFile(dest, data);
-  //   } else {
-  //     return this.handleFile(dest);
-  //   }
-  // }
-
   renderDotFile(dest, fileData) {
-    // let fileData;
-    // try {
-    //   fileData = this.fileDataTemplate(data);
-    // } catch (e) {
-    //   console.log('dot error', e);
-    //   return Promise.reject(e);
-    // }
-
     return fs
       .writeFile(dest, fileData, { flag: 'wx' })
       .then(() => Promise.resolve(dest));
