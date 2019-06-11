@@ -2,7 +2,7 @@
  * Modules
  */
 import Prompter from '@tps/prompter';
-import { PROMPTER_QUESTIONS } from '../support/constants';
+import { PROMPTER_QUESTIONS } from '@test/support/constants';
 
 const ANSWER_TO_PROMPTS = {
   testingPrompt: 'data'

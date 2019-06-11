@@ -15,7 +15,7 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_core'));
 
-  it.only('should be able to use the create command in cli', done => {
+  it('should be able to use the create command in cli', done => {
     const destPath = playground.pathTo('App');
     const cmd = ['create', '--use=testing', '-v', 'App'];
 
@@ -28,7 +28,7 @@ describe('[cli] Create:', () => {
     });
   });
 
-  it('should be able to render a template in cwd if no file paths are entered', done => {
+  it.skip('should be able to render a template in cwd if no file paths are entered', done => {
     const destPath = playground.box();
 
     const cmd = ['create', '--use=testing', '-v'];

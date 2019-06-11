@@ -78,6 +78,7 @@ export function spawn(additionalArgs = [], opts = {}, done) {
     if (!opts.fail && err) {
       console.log(`[CMD: ${args.join(' ')}]`, stdout);
       console.log('Error: ', err);
+      expect(err).not.toBeDefined();
     }
     done(err, stdout);
   });

@@ -22,6 +22,6 @@ export const PROMPTER_QUESTIONS = [
     name: 'testingPrompt',
     aliases: ['test1', 't'],
     message: 'This is a testing testing prompt',
-    default: 'dont have feauture yet'
+    default: 'default value'
   }
 ];

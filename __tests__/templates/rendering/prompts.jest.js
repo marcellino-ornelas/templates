@@ -54,5 +54,18 @@ describe('[Templates] Render Process:', () => {
         done();
       });
     });
+
+    it('should render a template when answering prompt with alias', done => {
+      const destPath = playground.pathTo('App');
+      tps.loadConfig({ c: 'less' });
+
+      expect(tps._prompts.needsAnswers()).toBeFalsy();
+
+      tps.render(playground.box(), 'App').then(() => {
+        expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
+        expect(tps.packages).toHaveProperty('less');
+        done();
+      });
+    });
   });
 });

@@ -243,7 +243,11 @@ class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
+    console.log('hello', pathsToCreate);
+
     const buildNewFolder = this.opts.newFolder && !buildInDest;
+
+    this._log('[TPS INFO] Build new folder: ', buildNewFolder);
 
     return Promise.resolve()
       .then(() => this._answerRestOfPrompts())
@@ -255,7 +259,7 @@ class Templates extends VerboseLogger {
         };
       })
       .then(() => {
-        if (!isDir(dest)) {
+        if (!isDir(finalDest)) {
           this.error(`Destination does not exist ${finalDest}`);
         }
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
@@ -263,8 +267,10 @@ class Templates extends VerboseLogger {
       .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
-          let realBuildPath = buildPath;
+          let realBuildPath = buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
+
+          console.log('real build path', realBuildPath);
 
           return Promise.resolve()
             .then(() => this._checkForFiles(realBuildPath, renderData))
@@ -343,19 +349,23 @@ class Templates extends VerboseLogger {
     let error;
 
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
+      this._log(` `, '-> ', finalDest);
       filesInProgress.push(file.renderDotFile(finalDest, dotContentsForFile));
     });
 
-    files.forEach(file =>
+    files.forEach(file => {
+      const finalDest = file._dest(dest, data);
+      this._log(` `, '-> ', finalDest);
       filesInProgress.push(
-        file.renderFile(file._dest(dest, data)).catch(err => {
+        file.renderFile(finalDest).catch(err => {
           if (!hasErroredOut) {
             hasErroredOut = true;
             error = err;
+            this._log('[TPS] errored out', error);
           }
         })
-      )
-    );
+      );
+    });
 
     return Promise.all(filesInProgress).then(() => {
       if (hasErroredOut) {

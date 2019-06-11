@@ -11,7 +11,7 @@ import _ from '@tps/_';
 {{? tps.config.playground }}const playground = new Playground(TESTING_DIR){{?}}
 
 describe('[TPS] _', () => {
-  beforeAll(() => {{? tps.config.playground }}playground.create('_'){{?}} );
+  beforeAll(() => {{? tps.config.playground }}playground.create(){{?}} );
   afterAll(() => {{? tps.config.playground }}playground.destroy(){{?}} );
   beforeEach(() => {{? tps.config.playground }}playground.createBox('_'){{?}});
 

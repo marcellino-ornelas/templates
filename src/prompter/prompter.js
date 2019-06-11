@@ -1,11 +1,26 @@
 import is from 'is';
 import inquirer from 'inquirer';
 import Prompt from './prompt';
-import { hasProp } from '@tps/utilities/helpers';
+import { hasProp, defaults } from '@tps/utilities/helpers';
 
+/**
+ * Default options for Templates
+ * @typedef  {Object} PrompterOpts
+ * @property {boolean} default - Use all default answers
+ */
+const DEFAULT_OPTIONS = {
+  default: false
+};
+
+/**
+ * @class
+ */
 export default class Prompter {
+  /**
+   * @param {PrompterOpts} opts - options to pass to templates
+   */
   constructor(prompts, opts = {}) {
-    this.opts = opts;
+    this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.answers = {};
     this.prompts = prompts.map(p => new Prompt(p));
     this.answered = 0;
