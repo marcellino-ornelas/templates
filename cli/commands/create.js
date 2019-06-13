@@ -66,8 +66,6 @@ exports.handler = function(argv) {
   const hasBuildPaths = !is.array.empty(argv.buildPaths);
   const renderItems = hasBuildPaths ? argv.buildPaths : null;
 
-  console.log('buildPaths', argv.buildPaths);
-
   const renderData = {
     name: argv.name
   };

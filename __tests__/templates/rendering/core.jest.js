@@ -31,6 +31,20 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
+  it('should be able to render a local template with nested directories', done => {
+    let tps = new Templates();
+    tps.use('testing');
+
+    const destPath = playground.pathTo('hey/App');
+
+    tps.render(playground.box(), 'hey/App').then(() => {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+      done();
+    });
+  });
+
   it('should be able to render a local template with multiple build paths', done => {
     let tps = new Templates();
     tps.use('testing');

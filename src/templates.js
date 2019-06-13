@@ -8,7 +8,7 @@ import { isDir, json, isFile } from '@tps/utilities/fileSystem';
 import Config from '@tps/config';
 import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
-import { eachObj, promisify, defaults, hasProp } from '@tps/utilities/helpers';
+import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 
 /**
  * Default options for Templates
@@ -178,9 +178,7 @@ class Templates extends VerboseLogger {
 
     this._compileFilesFromPackage(newPackageName);
 
-    this._log();
     this._log('package finished compiling', this.template);
-    this._log();
 
     this.packagesUsed.push(newPackageName);
   }
@@ -211,7 +209,7 @@ class Templates extends VerboseLogger {
    * @param {String} dest - destination to render your new template to
    * @param {string|string[]} buildPaths - templates you would like to create
    * @param {Object} [data={}] - data to pass to doT. This will be used when rendering dot files/syntax
-   * @returns {Promise} return promise when done if no cb is defined
+   * @returns {Promise}
    */
   render(dest, buildPaths, data = {}) {
     let dataForTemplating;
@@ -243,9 +241,7 @@ class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
-    console.log('hello', pathsToCreate);
-
-    const buildNewFolder = this.opts.newFolder && !buildInDest;
+    const buildNewFolder = this.opts.newFolder;
 
     this._log('[TPS INFO] Build new folder: ', buildNewFolder);
 
@@ -267,22 +263,26 @@ class Templates extends VerboseLogger {
       .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
-          let realBuildPath = buildNewFolder ? buildPath : dir;
+          let realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
 
-          console.log('real build path', realBuildPath);
+          this.opts.verbose && console.log('real build path', realBuildPath);
 
           return Promise.resolve()
             .then(() => this._checkForFiles(realBuildPath, renderData))
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
-              if (buildNewFolder) {
-                return fs
-                  .mkdir(realBuildPath, { recursive: true })
-                  .catch(err => {
-                    /* noop function */
-                  });
+              if (!buildInDest && buildNewFolder) {
+                return (
+                  fs
+                    // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
+                    .ensureDir(realBuildPath)
+                    .catch(err => {
+                      console.log('errrrrrrrooooooorrrrrr', err);
+                      /* noop function */
+                    })
+                );
               }
             })
 
@@ -330,9 +330,7 @@ class Templates extends VerboseLogger {
    * @param {Object} [data={}] - data passed in for dot
    */
   _renderAllFiles(dest, data) {
-    this._log();
     this._log('+++++++++ render files +++++++++++++');
-    this._log();
 
     const files = this.compiledFiles.filter(file => !file.isDot);
     const dotFiles = this.compiledFiles.filter(file => file.isDot);
@@ -350,7 +348,15 @@ class Templates extends VerboseLogger {
 
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
       this._log(` `, '-> ', finalDest);
-      filesInProgress.push(file.renderDotFile(finalDest, dotContentsForFile));
+      filesInProgress.push(
+        file.renderDotFile(finalDest, dotContentsForFile).catch(err => {
+          if (!hasErroredOut) {
+            hasErroredOut = true;
+            error = err;
+            this._log('[TPS] errored out', error);
+          }
+        })
+      );
     });
 
     files.forEach(file => {
@@ -380,9 +386,7 @@ class Templates extends VerboseLogger {
    * @param {String} dest - destination path to make all directories. Should be a folder
    */
   _renderAllDirectories(dest) {
-    this._log();
     this._log('+++++++++ rendering directories +++++++++++++');
-    this._log();
 
     const dirTracker = {};
     const dirsInProgress = [];

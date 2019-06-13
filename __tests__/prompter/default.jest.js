@@ -23,9 +23,7 @@ describe('[Prompter] Default: ', () => {
 
   it('should be able to use defaults option', () => {
     prompter.getAnswers().then(promptAnswers => {
-      expect(promptAnswers).toEqual(
-        expect.objectContaining(DEFAULT_ANSWER_TO_PROMPT)
-      );
+      expect(promptAnswers).toMatchObject(DEFAULT_ANSWER_TO_PROMPT);
     });
   });
 });

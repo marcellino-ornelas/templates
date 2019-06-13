@@ -17,8 +17,10 @@ exports.builder = yargs =>
 
 exports.handler = function(argv) {
   const temp = new Template({
-    force: argv.force
+    force: argv.force,
+    verbose: argv.verbose
   });
+
   const localDest = process.cwd();
 
   temp.use('init', {

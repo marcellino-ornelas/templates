@@ -13,6 +13,8 @@ import {
 const playground = new Playground(TESTING_DIR);
 
 describe('Command Line: ', () => {
+  let cwd;
+
   beforeAll(() =>
     playground.create().then(() =>
       playground.createBox('init').then(() => {
@@ -23,8 +25,6 @@ describe('Command Line: ', () => {
 
   afterAll(() => playground.destroy());
 
-  let cwd;
-
   it('should not initialize if parents directory is initialized', done => {
     utils.spawn(['init'], { cwd, fail: true }, function(err, stdout) {
       expect(err).toBeDefined();
@@ -33,10 +33,10 @@ describe('Command Line: ', () => {
     });
   });
 
-  it('should be able initialize .tps/ folder', done => {
+  it.only('should be able initialize .tps/ folder', done => {
     const initFolder = playground.pathTo('.tps');
     // need to add --force because of .tps folder in main templates repo
-    utils.spawn(['init', '--force'], { cwd }, function(err, stdout) {
+    utils.spawn(['init', '--force', '-v'], { cwd }, function(err, stdout) {
       expect(err).toBeNull();
       expect(
         utils.hasAllFileAndDirs(initFolder, INIT_PACKAGE_FILES)

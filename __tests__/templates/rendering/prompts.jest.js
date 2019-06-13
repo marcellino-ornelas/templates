@@ -35,6 +35,7 @@ describe('[Templates] Render Process:', () => {
         inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
         tps.render(playground.box(), 'App').then(() => {
+          expect(tps.config.cssType).toBe(answer);
           expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
           expect(tps.packages).toHaveProperty(answer);
           done();
@@ -44,6 +45,8 @@ describe('[Templates] Render Process:', () => {
 
     it('should render a template when answering prompt with alias', done => {
       const destPath = playground.pathTo('App');
+      tps.verbose = true;
+
       tps.loadConfig({ c: 'less' });
 
       expect(tps._prompts.needsAnswers()).toBeFalsy();
