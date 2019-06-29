@@ -45,7 +45,6 @@ describe('[Templates] Render Process:', () => {
 
     it('should render a template when answering prompt with alias', done => {
       const destPath = playground.pathTo('App');
-      tps.verbose = true;
 
       tps.loadConfig({ c: 'less' });
 

@@ -85,4 +85,29 @@ describe('[TPS] Rendered Failed Cases:', () => {
       ).toBeFalsy();
     });
   });
+
+  it.only('should create templates for every build path regardless if one build path fails', () => {
+    const fileInApp = playground.pathTo('App/storeUtils/user.js');
+    const appFolder = playground.pathTo('App');
+    const app2Folder = playground.pathTo('App2');
+
+    fs.outputFileSync(fileInApp, 'blah');
+
+    expect(isFile(fileInApp)).toBeTruthy();
+
+    return tps.render(playground.box(), ['App', 'App2']).catch(error => {
+      expect(error).toBeDefined();
+
+      expect(isFile(fileInApp)).toBeTruthy();
+
+      expect(
+        hasAllFileAndDirs(appFolder, ['db', 'server', 'db/db.js', 'index.js'])
+      ).toBeFalsy();
+
+      expect(
+        hasAllFileAndDirs(app2Folder, ['db', 'server', 'db/db.js', 'index.js'])
+      ).toBeTruthy();
+
+    });
+  });
 });

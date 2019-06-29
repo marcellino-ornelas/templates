@@ -285,7 +285,6 @@ class Templates extends VerboseLogger {
                 );
               }
             })
-
             .then(() => this._renderAllDirectories(realBuildPath))
             .then(() => {
               return this._renderAllFiles(realBuildPath, renderData);
@@ -295,12 +294,31 @@ class Templates extends VerboseLogger {
             })
             .catch(err => {
               this._log('Build Path error', err);
-              this._cleanUpFailBuilds(realBuildPath);
-              return Promise.reject(err);
+              this._scheduleCleanUpForBuild(realBuildPath, err);
+              // this._cleanUpFailBuilds(realBuildPath);
+              // return Promise.reject(err);
             });
         });
 
-        return Promise.all(builders);
+        return Promise.all(builders).then(() => {
+          if( is.array.empty(this.buildErrors) ){
+            return;
+          }
+
+          this.buildErrors.forEach(({ buildPath }) => {
+            this._cleanUpFailBuild(buildPath);
+          })
+
+          this.buildErrors.forEach(({ buildPath, error }) => {
+            console.log('Build path failed', buildPath);
+            console.log(error)
+          })
+
+          const errors = this.buildErrors.map(({error}) => error );
+
+          return Promise.reject(errors);
+
+        });
       })
       .catch(err => {
         if (!TPS.IS_TESTING) {
@@ -309,6 +327,49 @@ class Templates extends VerboseLogger {
         }
         return Promise.reject(err);
       });
+  }
+
+  _scheduleCleanUpForBuild(buildPath, err){
+    this.buildErrors.push({ buildPath: buildPath, error: err});
+  }
+
+  _cleanUpFailBuild(buildError) {
+    this._log('clean up has begun for', buildError);
+
+    let buildPath = buildError;
+    const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
+    
+    if (!buildPathNeedsSlash) {
+      buildPath = buildPath + path.sep;
+    }
+
+    let { files, dirs } = this.successfulBuilds;
+
+    const filesIsEmpty = is.array.empty(files);
+    const dirsIsEmpty = is.array.empty(dirs);
+
+    if (filesIsEmpty && dirsIsEmpty) {
+      return;
+    }
+
+    if (!dirsIsEmpty) {
+      const dirsThatMatch = dirs.filter(dir => dir.includes(buildPath));
+
+      dirsThatMatch.forEach(dir => {
+        fs.removeSync(dir);
+
+        // if directory is removed then we can remove all child files
+        if (!filesIsEmpty) {
+          files = files.filter(file => !file.includes(dir));
+        }
+      });
+    }
+
+    if (!filesIsEmpty) {
+      files.forEach(file => {
+        fs.removeSync(file);
+      });
+    }
   }
 
   _checkForFiles(dest, data) {
@@ -346,16 +407,18 @@ class Templates extends VerboseLogger {
     let hasErroredOut = false;
     let error;
 
+    const handleFileErrorCatch = (err) => {
+      if (!hasErroredOut) {
+        hasErroredOut = true;
+        error = err;
+        this._log('[TPS] errored out', error);
+      }
+    }
+
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
       this._log(` `, '-> ', finalDest);
       filesInProgress.push(
-        file.renderDotFile(finalDest, dotContentsForFile).catch(err => {
-          if (!hasErroredOut) {
-            hasErroredOut = true;
-            error = err;
-            this._log('[TPS] errored out', error);
-          }
-        })
+        file.renderDotFile(finalDest, dotContentsForFile).catch(handleFileErrorCatch)
       );
     });
 
@@ -363,13 +426,7 @@ class Templates extends VerboseLogger {
       const finalDest = file._dest(dest, data);
       this._log(` `, '-> ', finalDest);
       filesInProgress.push(
-        file.renderFile(finalDest).catch(err => {
-          if (!hasErroredOut) {
-            hasErroredOut = true;
-            error = err;
-            this._log('[TPS] errored out', error);
-          }
-        })
+        file.renderFile(finalDest).catch(handleFileErrorCatch)
       );
     });
 
@@ -416,38 +473,6 @@ class Templates extends VerboseLogger {
     });
 
     return dirsInProgress.length && Promise.all(dirsInProgress);
-  }
-
-  _cleanUpFailBuilds(buildError) {
-    this._log('clean up has begun for', buildError);
-
-    let { files, dirs } = this.successfulBuilds;
-
-    const filesIsEmpty = is.array.empty(files);
-    const dirsIsEmpty = is.array.empty(dirs);
-
-    if (filesIsEmpty && dirsIsEmpty) {
-      return;
-    }
-
-    if (!dirsIsEmpty) {
-      const dirsThatMatch = dirs.filter(dir => dir.includes(buildError));
-
-      dirsThatMatch.forEach(dir => {
-        fs.removeSync(dir);
-
-        // if directory is removed then we can remove all child files
-        if (!filesIsEmpty) {
-          files = files.filter(file => !file.includes(dir));
-        }
-      });
-    }
-
-    if (!filesIsEmpty) {
-      files.forEach(file => {
-        fs.removeSync(file);
-      });
-    }
   }
 
   /**
