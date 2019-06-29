@@ -86,7 +86,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     });
   });
 
-  it.only('should create templates for every build path regardless if one build path fails', () => {
+  it('should create templates for every build path regardless if one build path fails', () => {
     const fileInApp = playground.pathTo('App/storeUtils/user.js');
     const appFolder = playground.pathTo('App');
     const app2Folder = playground.pathTo('App2');
