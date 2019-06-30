@@ -9,6 +9,14 @@ import Config from '@tps/config';
 import Prompter from '@tps/prompter';
 import VerboseLogger from '@tps/utilities/verboseLogger';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
+import {
+  TemplateNotFoundError,
+  SettingsUnkownFileTypeError,
+  RequiresTemplateError,
+  PackageAlreadyCompiledError,
+  DirectoryNotFoundError,
+  FileExistError
+} from '@tps/errors';
 
 /**
  * Default options for Templates
@@ -82,7 +90,8 @@ class Templates extends VerboseLogger {
         this.templateLocation = maybeGlobalTemp;
         break;
       default:
-        throw new Error(`Template '${templateName}' was not found.`);
+        // throw new Error(`Template '${templateName}' was not found.`);
+        throw new TemplateNotFoundError(templateName);
     }
 
     // set template location
@@ -114,11 +123,7 @@ class Templates extends VerboseLogger {
         // eslint-disable-next-line
         this.templateSettings = require(this.templateSettingsPath) || {};
       } catch (e) {
-        throw new Error(
-          `Could not load settings file! Please make sure this file is a json or js file ${
-            this.templateSettingsPath
-          } `
-        );
+        throw new SettingsUnkownFileTypeError(this.templateSettingsPath);
       }
 
       if (this.templateSettings.prompts) {
@@ -160,7 +165,7 @@ class Templates extends VerboseLogger {
    */
   loadPackage(newPackageName) {
     if (!this.templateLocation) {
-      throw new Error('Must specify a template folder to use');
+      throw new RequiresTemplateError();
     }
 
     if (!is.string(newPackageName)) {
@@ -168,7 +173,7 @@ class Templates extends VerboseLogger {
     }
 
     if (hasProp(this.packages, newPackageName)) {
-      throw new Error(`Package: ${newPackageName} was already compiled`);
+      throw new PackageAlreadyCompiledError(newPackageName);
     }
 
     this.packages[newPackageName] = new DirNode(
@@ -256,7 +261,7 @@ class Templates extends VerboseLogger {
       })
       .then(() => {
         if (!isDir(finalDest)) {
-          this.error(`Destination does not exist ${finalDest}`);
+          throw new DirectoryNotFoundError(finalDest);
         }
         this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
       })
@@ -295,29 +300,26 @@ class Templates extends VerboseLogger {
             .catch(err => {
               this._log('Build Path error', err);
               this._scheduleCleanUpForBuild(realBuildPath, err);
-              // this._cleanUpFailBuilds(realBuildPath);
-              // return Promise.reject(err);
             });
         });
 
         return Promise.all(builders).then(() => {
-          if( is.array.empty(this.buildErrors) ){
+          if (is.array.empty(this.buildErrors)) {
             return;
           }
 
           this.buildErrors.forEach(({ buildPath }) => {
             this._cleanUpFailBuild(buildPath);
-          })
+          });
 
           this.buildErrors.forEach(({ buildPath, error }) => {
             console.log('Build path failed', buildPath);
-            console.log(error)
-          })
+            console.log(error);
+          });
 
-          const errors = this.buildErrors.map(({error}) => error );
+          const errors = this.buildErrors.map(({ error }) => error);
 
-          return Promise.reject(errors);
-
+          return Promise.reject(errors.length === 1 ? errors[0] : errors);
         });
       })
       .catch(err => {
@@ -329,8 +331,8 @@ class Templates extends VerboseLogger {
       });
   }
 
-  _scheduleCleanUpForBuild(buildPath, err){
-    this.buildErrors.push({ buildPath: buildPath, error: err});
+  _scheduleCleanUpForBuild(buildPath, err) {
+    this.buildErrors.push({ buildPath: buildPath, error: err });
   }
 
   _cleanUpFailBuild(buildError) {
@@ -338,7 +340,7 @@ class Templates extends VerboseLogger {
 
     let buildPath = buildError;
     const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
-    
+
     if (!buildPathNeedsSlash) {
       buildPath = buildPath + path.sep;
     }
@@ -378,9 +380,7 @@ class Templates extends VerboseLogger {
       const finalDest = file._dest(dest, data);
 
       if (isFile(finalDest)) {
-        return Promise.reject(
-          new Error(`[TPS][Failed] File already exists. (${finalDest})`)
-        );
+        throw new FileExistError(finalDest);
       }
     }
   }
@@ -407,18 +407,20 @@ class Templates extends VerboseLogger {
     let hasErroredOut = false;
     let error;
 
-    const handleFileErrorCatch = (err) => {
+    const handleFileErrorCatch = err => {
       if (!hasErroredOut) {
         hasErroredOut = true;
         error = err;
         this._log('[TPS] errored out', error);
       }
-    }
+    };
 
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
       this._log(` `, '-> ', finalDest);
       filesInProgress.push(
-        file.renderDotFile(finalDest, dotContentsForFile).catch(handleFileErrorCatch)
+        file
+          .renderDotFile(finalDest, dotContentsForFile)
+          .catch(handleFileErrorCatch)
       );
     });
 

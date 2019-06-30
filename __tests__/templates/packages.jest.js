@@ -1,4 +1,5 @@
 import Templates from '@tps/templates';
+import { RequiresTemplateError } from '@tps/errors';
 
 /**
  * Templates Packages
@@ -9,6 +10,11 @@ describe('[Templates] Packages:', () => {
   beforeEach(() => {
     tps = new Templates();
     tps.use('testing');
+  });
+
+  it('should throw error if no template was set', () => {
+    tps = new Templates();
+    expect(() => tps.loadPackage()).toThrowError(RequiresTemplateError);
   });
 
   it('should be able to compile default package', () => {

@@ -2,7 +2,7 @@ import Templates from '@tps/templates';
 import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
 import * as utils from '@test/support/utils';
-import { DirNode } from '@tps/fileSystemTree';
+import { TemplateNotFound, DirectoryNotFoundError } from '@tps/errors';
 
 /**
  * Constants
@@ -16,6 +16,24 @@ describe('[Templates] Render Process:', () => {
   afterAll(() => playground.destroy());
 
   beforeEach(() => playground.createBox('render_process'));
+
+  it('should throw TemplateNotFound if no template is available', () => {
+    let tps = new Templates();
+
+    expect(() => tps.use('some-random-template')).toThrowError(
+      TemplateNotFound
+    );
+  });
+
+  it('should throw TemplateNotFound if no template is available', () => {
+    let dest = playground.pathTo('non/existent/path');
+    let tps = new Templates();
+    tps.use('testing');
+
+    expect(tps.render(dest, 'App')).rejects.toThrowError(
+      DirectoryNotFoundError
+    );
+  });
 
   it('should be able to render a local template', done => {
     let tps = new Templates();
