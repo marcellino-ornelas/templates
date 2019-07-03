@@ -23,15 +23,15 @@ const plugins = [
 ];
 
 module.exports = { presets, plugins };
-module.exports = {
-  env: {
-    development: {
-      presets,
-      plugins
-    },
-    production: {
-      presets: presetsProduction,
-      plugins
-    }
-  }
-};
+// module.exports = {
+//   presets,
+//   env: {
+//     development: {
+//       plugins
+//     },
+//     production: {
+//       presets: presetsProduction,
+//       plugins
+//     }
+//   }
+// };

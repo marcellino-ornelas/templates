@@ -9,6 +9,7 @@ import { isFile } from '@tps/utilities/fileSystem';
 const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 // const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
 // const FS_FAIL_IF_EXIST = { flags: 'wx' };
+
 class File {
   constructor(fileNode) {
     let fileName = fileNode.name;

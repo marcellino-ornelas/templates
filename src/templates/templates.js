@@ -42,7 +42,7 @@ const DEFAULT_OPTIONS = {
  * @class
  * @classdesc Create a new instance of a template
  */
-class Templates extends VerboseLogger {
+export default class Templates extends VerboseLogger {
   /**
    * @param {TemplateOptions} opts - options to pass to templates
    */
@@ -309,7 +309,7 @@ class Templates extends VerboseLogger {
           }
 
           this.buildErrors.forEach(({ buildPath }) => {
-            this._cleanUpFailBuild(buildPath);
+            this._cleanUpFailBuild(buildPath, buildNewFolder);
           });
 
           this.buildErrors.forEach(({ buildPath, error }) => {
@@ -335,7 +335,7 @@ class Templates extends VerboseLogger {
     this.buildErrors.push({ buildPath: buildPath, error: err });
   }
 
-  _cleanUpFailBuild(buildError) {
+  _cleanUpFailBuild(buildError, buildNewFolder) {
     this._log('clean up has begun for', buildError);
 
     let buildPath = buildError;
@@ -343,6 +343,10 @@ class Templates extends VerboseLogger {
 
     if (!buildPathNeedsSlash) {
       buildPath = buildPath + path.sep;
+    }
+
+    if (buildNewFolder) {
+      fs.removeSync(buildPath);
     }
 
     let { files, dirs } = this.successfulBuilds;
@@ -569,4 +573,4 @@ function SuccessfulBuild() {
   this.dirs = [];
 }
 
-module.exports = Templates;
+// module.exports = Templates;

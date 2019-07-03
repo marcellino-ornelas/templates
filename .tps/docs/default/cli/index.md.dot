@@ -1,0 +1,29 @@
+# Welcome to our CLI documentation
+
+## Commands
+
+- [Create](./commands/create)
+- [Init](./commands/.init)
+
+## Flags
+
+<table id="global-table">
+    <thead>
+        <tr>
+            <th>Flag</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{ var global = tps.options.global; }}
+    {{ for(var optionName in global ){ }}
+        {{ var option = global[optionName]; }}
+        <tr>
+            <td>--{{= optionName }}, {{= option.alias }}</td>
+            <td>{{= option.default || '' }}</td>
+            <td>{{= option.description || '' }}</td>
+        </tr>
+    {{ } }}
+    </tbody>
+</table>

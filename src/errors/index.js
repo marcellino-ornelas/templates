@@ -7,4 +7,4 @@ export {
   default as PackageAlreadyCompiledError
 } from './package-already-compiled';
 export { default as DirectoryNotFoundError } from './directory-not-found';
-export { FileExistError } from './file-exists-error';
+export { default as FileExistError } from './file-exists-error';

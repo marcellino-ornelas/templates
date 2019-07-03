@@ -1,50 +1,50 @@
 const path = require('path');
 const Template = require('../../lib/templates');
 const is = require('is');
+const CREATE_OPTIONS = require('../options/create');
 
 exports.command = 'create [buildPaths...]';
 
 exports.description = 'create a new folder with template';
 
-exports.builder = yargs =>
-  yargs
-    .option('use', {
-      alias: 'u',
-      demandOption: true,
-      describe: 'Template package to create your with',
-      type: 'string'
-    })
-    .option('packages', {
-      alias: 'p',
-      describe: 'Additional Packages to use when building your template',
-      type: 'array'
-    })
-    .option('default', {
-      alias: 'd',
-      type: 'boolean',
-      describe: 'Use all default answers to all prompts'
-    })
-    // .option('no-default', {
-    //   alias: 'p',
-    //   describe: 'Additional Packages to use when building your template',
-    //   type: 'array'
-    // })
-    .option('name', {
-      alias: 'n',
-      describe:
-        'Name for template rendering. defaults to base name of the destination path',
-      type: 'string'
-    })
-    .option('noNewFolder', {
-      alias: 'f',
-      describe: "Don't create a new folder",
-      type: 'boolean'
-    })
-    .option('dest', {
-      alias: 'd',
-      describe: 'Path to the folder you would like to render your template in',
-      type: 'string'
-    });
+exports.builder = yargs => yargs.options(CREATE_OPTIONS);
+// .option('use', {
+//   alias: 'u',
+//   demandOption: true,
+//   describe: 'Template package to create your with',
+//   type: 'string'
+// })
+// .option('packages', {
+//   alias: 'p',
+//   describe: 'Additional Packages to use when building your template',
+//   type: 'array'
+// })
+// .option('default', {
+//   alias: 'd',
+//   type: 'boolean',
+//   describe: 'Use all default answers to all prompts'
+// })
+// // .option('no-default', {
+// //   alias: 'p',
+// //   describe: 'Additional Packages to use when building your template',
+// //   type: 'array'
+// // })
+// .option('name', {
+//   alias: 'n',
+//   describe:
+//     'Name for template rendering. defaults to base name of the destination path',
+//   type: 'string'
+// })
+// .option('noNewFolder', {
+//   alias: 'f',
+//   describe: "Don't create a new folder",
+//   type: 'boolean'
+// })
+// .option('dest', {
+//   alias: 'd',
+//   describe: 'Path to the folder you would like to render your template in',
+//   type: 'string'
+// });
 
 exports.handler = function(argv) {
   const dest = argv.dest || process.cwd();

@@ -1,1 +1,3 @@
-export { default } from './templates'
+import Templates from './templates';
+
+module.exports = Templates;

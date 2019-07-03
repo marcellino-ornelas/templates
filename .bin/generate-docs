@@ -1,0 +1,30 @@
+#!/usr/local/bin/node
+const Templates = require('../lib/templates');
+const CONSTANTS = require('../lib/utilities/constants');
+const OPTIONS = require('../cli/options');
+
+const tps = new Templates({
+  verbose: true
+});
+
+tps.use('docs');
+
+console.log(CONSTANTS.MAIN_DIR);
+
+const data = {
+  options: {
+    create: OPTIONS.CREATE_OPTIONS,
+    init: OPTIONS.INIT_OPTIONS,
+    global: OPTIONS.GLOBAL_OPTIONS
+  }
+};
+
+tps
+  .render(CONSTANTS.MAIN_DIR, 'docs-1', data)
+  .then(() => {
+    console.log('Docs generated');
+  })
+  .catch(e => {
+    console.log('Error generating docs');
+    console.log(e);
+  });

@@ -1,10 +1,7 @@
 const yargs = require('yargs');
+const GLOBAL_OPTIONS = require('./options/global');
 
 yargs
-  .option('verbose', {
-    alias: 'v',
-    describe: 'More in-depth logging',
-    type: 'boolean'
-  })
+  .options(GLOBAL_OPTIONS)
   .commandDir('commands')
   .help().argv;

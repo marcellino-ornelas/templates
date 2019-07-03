@@ -1,0 +1,8 @@
+{
+  "verbose": {
+    "alias": "v",
+    "describe": "More in-depth logging",
+    "type": "boolean",
+    "default": false
+  }
+}
