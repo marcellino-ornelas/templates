@@ -2,16 +2,18 @@
 
 ### Description
 
+Templates allows you to keep all configurations inside a `.tpsrc` file.
+
 create-components-react gives you the capability to make localized settings for any repo. These setting will change the behavior of how create-components-react functions. These settings would be like using the flags in the command line but it will be applied every time a react component is made.
 
-> Note: You should initailize the settings in your repos root directory.
+> Note: You should initialize the settings in your repos root directory.
 
 ---
 
 ### Syntax
 
 ```bash
-ccr init [flags...]
+tps init [flags...]
 ```
 
 #### Parameters
@@ -108,18 +110,18 @@ ccr init [flags...]
 
 ### Examples
 
-First navigate into the directory that you wish to initailize local settings.
+First navigate into the directory that you wish to initialize local settings.
 
 ```bash
 cd some/path/to/repo
 ```
 
-Initailize create-component-react settings
+Initialize create-component-react settings
 
 ```bash
-ccr init
+tps init
 ```
 
-This will create a `.ccr/` folder with `settings.json` file inside it.
+This will create a `.tps/` folder with `settings.json` file inside it.
 
-> Note: If `-t` flag is present it will also make a `templates/` folder inside `.ccr/` folder and initialize templating.
+> Note: If `-t` flag is present it will also make a `templates/` folder inside `.tps/` folder and initialize templating.

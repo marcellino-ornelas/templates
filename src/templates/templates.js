@@ -222,6 +222,7 @@ export default class Templates extends VerboseLogger {
     let pathsToCreate = buildPaths;
     let name = data.name;
     let finalDest = dest;
+    const buildNewFolder = this.opts.newFolder;
 
     if (!buildPaths) {
       buildInDest = true;
@@ -246,13 +247,17 @@ export default class Templates extends VerboseLogger {
       path.join(finalDest, buildPath)
     );
 
-    const buildNewFolder = this.opts.newFolder;
-
     this._log('[TPS INFO] Build new folder: ', buildNewFolder);
 
     return Promise.resolve()
+      .then(() => {
+        if (!isDir(finalDest)) {
+          throw new DirectoryNotFoundError(finalDest);
+        }
+      })
       .then(() => this._answerRestOfPrompts())
       .then(() => {
+        // this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
         dataForTemplating = {
           ...data,
           template: this.template,
@@ -260,21 +265,20 @@ export default class Templates extends VerboseLogger {
         };
       })
       .then(() => {
-        if (!isDir(finalDest)) {
-          throw new DirectoryNotFoundError(finalDest);
-        }
-        this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
-      })
-      .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
           let realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
+          const doesBuildPathExist = isDir(buildPath);
 
           this.opts.verbose && console.log('real build path', realBuildPath);
 
           return Promise.resolve()
-            .then(() => this._checkForFiles(realBuildPath, renderData))
+            .then(
+              () =>
+                doesBuildPathExist &&
+                this._checkForFiles(realBuildPath, renderData)
+            )
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
@@ -291,15 +295,17 @@ export default class Templates extends VerboseLogger {
               }
             })
             .then(() => this._renderAllDirectories(realBuildPath))
-            .then(() => {
-              return this._renderAllFiles(realBuildPath, renderData);
-            })
+            .then(() => this._renderAllFiles(realBuildPath, renderData))
             .then(() => {
               this._log(`Template build at ${buildPath}`);
             })
             .catch(err => {
               this._log('Build Path error', err);
-              this._scheduleCleanUpForBuild(realBuildPath, err);
+              this._scheduleCleanUpForBuild(
+                realBuildPath,
+                err,
+                doesBuildPathExist
+              );
             });
         });
 
@@ -308,8 +314,11 @@ export default class Templates extends VerboseLogger {
             return;
           }
 
-          this.buildErrors.forEach(({ buildPath }) => {
-            this._cleanUpFailBuild(buildPath, buildNewFolder);
+          this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
+            this._cleanUpFailBuild(
+              buildPath,
+              buildNewFolder && !didBuildPathExist
+            );
           });
 
           this.buildErrors.forEach(({ buildPath, error }) => {
@@ -331,8 +340,12 @@ export default class Templates extends VerboseLogger {
       });
   }
 
-  _scheduleCleanUpForBuild(buildPath, err) {
-    this.buildErrors.push({ buildPath: buildPath, error: err });
+  _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
+    this.buildErrors.push({
+      buildPath: buildPath,
+      error: err,
+      didBuildPathExist
+    });
   }
 
   _cleanUpFailBuild(buildError, buildNewFolder) {
