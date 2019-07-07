@@ -28,7 +28,7 @@ describe('[cli] Create:', () => {
     });
   });
 
-  it.skip('should be able to render a template in cwd if no file paths are entered', done => {
+  it('should be able to render a template in cwd if no file paths are entered', done => {
     const destPath = playground.box();
 
     const cmd = ['create', '--use=testing', '-v'];

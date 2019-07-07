@@ -24,10 +24,5 @@
     "alias": "f",
     "describe": "Don\"t create a new folder",
     "type": "boolean"
-  },
-  "dest": {
-    "alias": "d",
-    "describe": "Path to the folder you would like to render your template in",
-    "type": "string"
   }
 }
