@@ -15,9 +15,23 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_core'));
 
-  it('should be able to use the create command in cli', done => {
-    const destPath = playground.pathTo('App');
-    const cmd = ['create', '--use=testing', '-v', 'App'];
+  it('should be able to render a template in cwd if no file paths are entered', done => {
+    const destPath = playground.box();
+
+    const cmd = ['create', '--use=testing', '-v'];
+
+    utils.spawn(cmd, { cwd: destPath }, function(err, stdout) {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+
+      done();
+    });
+  });
+
+  it('should be able to render a template', done => {
+    const destPath = playground.pathTo('app');
+    const cmd = ['create', '--use=testing', '-v', 'app'];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
       expect(
@@ -28,14 +42,44 @@ describe('[cli] Create:', () => {
     });
   });
 
-  it('should be able to render a template in cwd if no file paths are entered', done => {
-    const destPath = playground.box();
+  it('should be able to render a templates in a destination', done => {
+    const destPath = playground.pathTo('app/src/components');
+    const cmd = ['create', '--use=testing', '-v', 'app/src/components'];
 
-    const cmd = ['create', '--use=testing', '-v'];
-
-    utils.spawn(cmd, { cwd: destPath }, function(err, stdout) {
+    utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+
+      done();
+    });
+  });
+
+  it('should be able to render multiple templates', done => {
+    const appDest = playground.pathTo('app');
+    const beeDest = playground.pathTo('bee');
+    const componentDest = playground.pathTo('webapp/src/componants');
+
+    const cmd = [
+      'create',
+      '--use=testing',
+      '-v',
+      'app',
+      'bee',
+      'webapp/src/componants'
+    ];
+
+    utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
+      expect(
+        utils.hasAllFileAndDirs(appDest, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+
+      expect(
+        utils.hasAllFileAndDirs(beeDest, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+
+      expect(
+        utils.hasAllFileAndDirs(componentDest, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
 
       done();

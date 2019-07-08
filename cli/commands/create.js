@@ -12,7 +12,6 @@ exports.builder = CREATE_OPTIONS;
 exports.handler = function(argv) {
   const dest = process.cwd();
 
-  console.log(argv);
   const tps = new Template({
     verbose: argv.verbose,
     default: argv.default,

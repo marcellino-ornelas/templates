@@ -9,14 +9,16 @@ Create a template
 ### Syntax
 
 ```bash
-tps create [flags...] [ComponentNames...]
+tps create --use=<template-name> [flags...] [templates-to-create...]
 ```
 
 #### Parameters
 
-`[flags...]` (optional) flags to change the behavior of create.
+`<template-name>` _(required)_ tps template you want to render with
 
-`[ComponentName...]` (optional) one or more component names, separated by a space, to generate.
+`[flags...]` _(optional)_ flags to change the behavior of create.
+
+`[templates-to-create...]` (optional) one or more component names, separated by a space, to generate.
 
 ---
 
@@ -33,16 +35,18 @@ tps create [flags...] [ComponentNames...]
 
 ### Examples
 
-Use the create command to create a component folder in your current working directory
+Use the create command to create a template in your current working directory
 
 ```bash
 tps create --use=<template-name> app
 ```
 
-    app/
+    ./app/
       <your-template-files> ...
 
-You can also specify a path to place the component. `tps create path_to_folder/<ChildComponent>`.
+You can also specify a path to place the template.
+
+`tps create path/to/folder/<template>`.
 
 ```bash
 tps create --use=<template-name> app/src
@@ -50,11 +54,11 @@ tps create --use=<template-name> app/src
 
 This will create your template inside of `./app/src`
 
-    app/
+    ./app/
       src/
         <your-template-files> ...
 
-> Note: Parent directories will be created if they don't exist.
+> Note: directories will be created if they don't exist.
 
 You can also create multiple components name at the same time `tps create --use=<template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
@@ -71,3 +75,12 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
     webapp/
       src/
         <your-template-files> ...
+
+You can also render your template in your cwd `tps create --use=<template-name>`
+
+```bash
+tps create --use=<template-name>
+```
+
+    ./
+      <your-template-files> ...
