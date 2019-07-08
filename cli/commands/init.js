@@ -28,19 +28,19 @@ exports.handler = function(argv) {
   });
 
   const inProcessBuilds = [];
+  const initFolder = path.join(TPS.INIT_LOCAL_PATH, TPS.TPS_FOLDER);
 
   if (!TPS.HAS_GLOBAL) {
     inProcessBuilds.push(temp.render(TPS.GLOBAL_PATH));
   }
 
+  if (!argv.force && isDir(initFolder)) {
+    cliLog('This folder is already initialized with tps');
+    process.exit(1);
+  }
+
   if (argv.force || !isDir(TPS.LOCAL_PATH)) {
-    const initFolder = path.join(TPS.INIT_LOCAL_PATH, TPS.TPS_FOLDER);
-    if (isDir(initFolder)) {
-      cliLog('This folder is already initialized with tps');
-      process.exit(1);
-    } else {
-      inProcessBuilds.push(temp.render(TPS.INIT_LOCAL_PATH));
-    }
+    inProcessBuilds.push(temp.render(TPS.INIT_LOCAL_PATH));
   } else {
     cliLog(`\
       tps is already initialized in a parent directory.

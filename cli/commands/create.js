@@ -15,7 +15,8 @@ exports.handler = function(argv) {
   const tps = new Template({
     verbose: argv.verbose,
     default: argv.default,
-    newFolder: !argv.noNewFolder
+    newFolder: !argv.noNewFolder,
+    force: argv.force
   });
 
   tps.use(argv.use);

@@ -269,16 +269,16 @@ export default class Templates extends VerboseLogger {
           const { name, dir } = path.parse(buildPath);
           let realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
-          const doesBuildPathExist = isDir(buildPath);
+          const doesBuildPathExist = isDir(realBuildPath);
 
-          this.opts.verbose && console.log('real build path', realBuildPath);
+          this._log('real build path', realBuildPath);
 
           return Promise.resolve()
-            .then(
-              () =>
-                doesBuildPathExist &&
-                this._checkForFiles(realBuildPath, renderData)
-            )
+            .then(() => {
+              if (!this.opts.force && doesBuildPathExist) {
+                return this._checkForFiles(realBuildPath, renderData);
+              }
+            })
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
@@ -501,9 +501,10 @@ export default class Templates extends VerboseLogger {
    */
   _compileFilesFromPackage(packageName) {
     const pkg = this.pkg(packageName);
+    const { force } = this.opts;
 
     pkg.find({ type: 'file' }).forEach(fileNode => {
-      this.compiledFiles.push(new File(fileNode));
+      this.compiledFiles.push(new File(fileNode, { force }));
     });
   }
 

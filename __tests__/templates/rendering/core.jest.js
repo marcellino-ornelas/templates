@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import Templates from '@tps/templates';
 import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
@@ -30,7 +31,7 @@ describe('[Templates] Render Process:', () => {
     let tps = new Templates();
     tps.use('testing');
 
-    expect(tps.render(dest, 'App')).rejects.toThrowError(
+    expect(tps.render(dest, 'app')).rejects.toThrowError(
       DirectoryNotFoundError
     );
   });
@@ -39,9 +40,9 @@ describe('[Templates] Render Process:', () => {
     let tps = new Templates();
     tps.use('testing');
 
-    const destPath = playground.pathTo('App');
+    const destPath = playground.pathTo('app');
 
-    tps.render(playground.box(), 'App').then(() => {
+    tps.render(playground.box(), 'app').then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
@@ -53,9 +54,9 @@ describe('[Templates] Render Process:', () => {
     let tps = new Templates();
     tps.use('testing');
 
-    const destPath = playground.pathTo('hey/App');
+    const destPath = playground.pathTo('hey/app');
 
-    tps.render(playground.box(), 'hey/App').then(() => {
+    tps.render(playground.box(), 'hey/app').then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
@@ -67,7 +68,7 @@ describe('[Templates] Render Process:', () => {
     let tps = new Templates();
     tps.use('testing');
 
-    const buildPaths = ['App', 'Box', 'New'];
+    const buildPaths = ['app', 'Box', 'New'];
 
     tps.render(playground.box(), buildPaths).then(() => {
       buildPaths.forEach(buildPath => {
@@ -85,9 +86,27 @@ describe('[Templates] Render Process:', () => {
     tps.use('testing');
     tps.loadPackages(['main', 'store']);
 
-    const destPath = playground.pathTo('App');
+    const destPath = playground.pathTo('app');
 
-    tps.render(playground.box(), 'App').then(() => {
+    tps.render(playground.box(), 'app').then(() => {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+      done();
+    });
+  });
+
+  it('should be able to render a template with force, if files exist', done => {
+    let tps = new Templates({ force: true });
+    tps.use('testing');
+
+    const indexFile = playground.pathTo('app/index.js');
+
+    fs.outputFileSync(indexFile, 'blah');
+
+    const destPath = playground.pathTo('app');
+
+    tps.render(playground.box(), 'app').then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();

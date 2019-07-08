@@ -26,8 +26,22 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
 
 <table id="create-table">
     <thead>
+      <tr>
+        <th>Flag</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
     </thead>
     <tbody>
+    {{ var create = tps.options.create; }}
+    {{ for(var optionName in create ){ }}
+        {{ var option = create[optionName]; }}
+        <tr>
+            <td>--{{= optionName }}, {{= option.alias }}</td>
+            <td>{{= option.default || '' }}</td>
+            <td>{{= option.description || '' }}</td>
+        </tr>
+    {{ } }}
     </tbody>
 </table>
 

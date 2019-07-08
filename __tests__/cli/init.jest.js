@@ -30,10 +30,14 @@ describe('Command Line: ', () => {
       expect(err).toBeDefined();
       expect(stdout).toBeDefined();
       done();
+
+      expect(stdout).toContain(
+        'tps is already initialized in a parent directory.'
+      );
     });
   });
 
-  it.only('should be able initialize .tps/ folder', done => {
+  it('should be able initialize .tps/ folder', done => {
     const initFolder = playground.pathTo('.tps');
     // need to add --force because of .tps folder in main templates repo
     utils.spawn(['init', '--force', '-v'], { cwd }, function(err, stdout) {
@@ -46,14 +50,15 @@ describe('Command Line: ', () => {
     });
   });
 
-  it('should not initialize if cwd has .tps/ folder already', done => {
-    utils.spawn(['init', '--force'], { cwd, fail: true }, function(
-      err,
-      stdout
-    ) {
-      expect(err).toBeDefined();
-      expect(stdout).toBeDefined();
-      done();
-    });
-  });
+  // it.skip('should not initialize if cwd has .tps/ folder already', done => {
+  //   utils.spawn(['init', '--force'], { cwd, fail: true }, function(
+  //     err,
+  //     stdout
+  //   ) {
+  //     expect(err).toBeDefined();
+  //     expect(stdout).toBeDefined();
+
+  //     done();
+  //   });
+  // });
 });

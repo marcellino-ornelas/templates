@@ -1,6 +1,6 @@
 import dot from '@tps/dot';
 import path from 'path';
-import fs from 'fs-extra';
+import fs, { promises } from 'fs-extra';
 import { isFile } from '@tps/utilities/fileSystem';
 
 /*
@@ -11,7 +11,7 @@ const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 // const FS_FAIL_IF_EXIST = { flags: 'wx' };
 
 class File {
-  constructor(fileNode) {
+  constructor(fileNode, opts = {}) {
     let fileName = fileNode.name;
 
     if (DOT_EXTENTION_MATCH.test(fileName)) {
@@ -19,7 +19,7 @@ class File {
       this.isDot = true;
       fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
     }
-
+    this.opts = opts;
     this._name = fileName;
     this._dotNameCompiled = dot.template(this._name);
     this.src = fileNode.path;
@@ -41,29 +41,34 @@ class File {
   }
 
   renderDotFile(dest, fileData) {
-    return fs
-      .writeFile(dest, fileData, { flag: 'wx' })
+    return Promise.resolve()
+      .then(() => this.opts.force && fs.remove(dest))
+      .then(() => fs.writeFile(dest, fileData, { flag: 'wx' }))
       .then(() => Promise.resolve(dest));
   }
 
   renderFile(dest) {
-    return new Promise((resolve, reject) => {
-      const srcFile = fs.createReadStream(this.src, {
-        flag: 'r'
+    return Promise.resolve()
+      .then(() => this.opts.force && fs.remove(dest))
+      .then(() => {
+        return new Promise((resolve, reject) => {
+          const srcFile = fs.createReadStream(this.src, {
+            flag: 'r'
+          });
+
+          const destFile = fs.createWriteStream(dest, { flags: 'wx' });
+
+          destFile.on('error', err => {
+            console.log('dest', dest);
+            console.log('write stream error', err);
+            reject(err);
+          });
+
+          destFile.on('finish', () => resolve(dest));
+
+          srcFile.pipe(destFile);
+        });
       });
-
-      const destFile = fs.createWriteStream(dest, { flags: 'wx' });
-
-      destFile.on('error', err => {
-        console.log('dest', dest);
-        console.log('write stream error', err);
-        reject(err);
-      });
-
-      destFile.on('finish', () => resolve(dest));
-
-      srcFile.pipe(destFile);
-    });
   }
 
   _addDefaultExtention(name) {

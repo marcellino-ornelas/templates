@@ -4,5 +4,9 @@
     "**/.git": true,
     "**/node_modules": true,
     "**/bower_components": true
+  },
+  "files.associations": {
+    "*.md.dot": "markdown",
+    ".js.dot": "javascript"
   }
 }

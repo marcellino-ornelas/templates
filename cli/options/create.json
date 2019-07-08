@@ -24,5 +24,9 @@
     "alias": "f",
     "describe": "Don\"t create a new folder",
     "type": "boolean"
+  },
+  "force": {
+    "describe": "force the template to be made. This will delete the directory if exists",
+    "type": "boolean"
   }
 }

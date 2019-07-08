@@ -58,7 +58,7 @@ describe('[cli] Create:', () => {
   it('should be able to render multiple templates', done => {
     const appDest = playground.pathTo('app');
     const beeDest = playground.pathTo('bee');
-    const componentDest = playground.pathTo('webapp/src/componants');
+    const componentDest = playground.pathTo('webapp/src/components');
 
     const cmd = [
       'create',
@@ -66,7 +66,7 @@ describe('[cli] Create:', () => {
       '-v',
       'app',
       'bee',
-      'webapp/src/componants'
+      'webapp/src/components'
     ];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
