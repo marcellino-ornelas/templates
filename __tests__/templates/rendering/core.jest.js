@@ -4,6 +4,7 @@ import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
 import * as utils from '@test/support/utils';
 import { TemplateNotFound, DirectoryNotFoundError } from '@tps/errors';
+import { isFile } from '@tps/utilities/fileSystem';
 
 /**
  * Constants
@@ -81,17 +82,21 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
-  it('should be able to render packages', done => {
-    let tps = new Templates({ defaultPackage: false });
+  it("should be able to render a local template and keep all files that don't interfere with the template", done => {
+    let tps = new Templates();
     tps.use('testing');
-    tps.loadPackages(['main', 'store']);
 
     const destPath = playground.pathTo('app');
+    const randomDest = playground.pathTo('app/some-random-file.js');
+
+    fs.outputFileSync(randomDest, 'blah');
 
     tps.render(playground.box(), 'app').then(() => {
       expect(
         utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
+
+      expect(isFile(randomDest)).toBeTruthy();
       done();
     });
   });
@@ -103,6 +108,40 @@ describe('[Templates] Render Process:', () => {
     const indexFile = playground.pathTo('app/index.js');
 
     fs.outputFileSync(indexFile, 'blah');
+
+    const destPath = playground.pathTo('app');
+
+    tps.render(playground.box(), 'app').then(() => {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+      done();
+    });
+  });
+
+  it('should be able to render a template with wipe.', done => {
+    const destPath = playground.pathTo('app');
+    const randomDest = playground.pathTo('app/some-random-file.js');
+
+    let tps = new Templates({ wipe: true });
+    tps.use('testing');
+
+    fs.outputFileSync(randomDest, 'blah');
+
+    tps.render(playground.box(), 'app').then(() => {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
+      ).toBeTruthy();
+
+      expect(isFile(randomDest)).toBeFalsy();
+      done();
+    });
+  });
+
+  it('should be able to render packages', done => {
+    let tps = new Templates({ defaultPackage: false });
+    tps.use('testing');
+    tps.loadPackages(['main', 'store']);
 
     const destPath = playground.pathTo('app');
 

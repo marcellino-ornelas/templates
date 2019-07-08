@@ -26,6 +26,10 @@
     "type": "boolean"
   },
   "force": {
+    "describe": "force the template to be made. This will override any files that tps needs to create",
+    "type": "boolean"
+  },
+  "wipe": {
     "describe": "force the template to be made. This will delete the directory if exists",
     "type": "boolean"
   }

@@ -5,6 +5,7 @@
   "main": "template.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint ./src",
+    "build:docs": "./bin/generate-docs",
     "build:code": "./node_modules/.bin/babel src --out-dir lib",
     "build:dev": "BABEL_ENV=development npm run build:code -- -w",
     "build:prod": "npm run build:code",

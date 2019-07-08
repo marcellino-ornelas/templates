@@ -16,7 +16,8 @@ exports.handler = function(argv) {
     verbose: argv.verbose,
     default: argv.default,
     newFolder: !argv.noNewFolder,
-    force: argv.force
+    force: argv.force,
+    wipe: argv.wipe
   });
 
   tps.use(argv.use);

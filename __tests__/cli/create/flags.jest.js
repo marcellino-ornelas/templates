@@ -4,6 +4,7 @@
 import Playground from '@test/support/playground';
 import * as utils from '@test/support/utils';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/support/constants';
+import fs from 'fs-extra';
 /*
  * Constants
  */
@@ -36,6 +37,22 @@ describe('[cli] Create:', () => {
           'extras.js',
           ...TESTING_PACKAGE_FILES
         ])
+      ).toBeTruthy();
+
+      done();
+    });
+  });
+
+  it('should be able to use --force flag', done => {
+    const destPath = playground.pathTo('app');
+    const indexDest = playground.pathTo('app/index.js');
+    const cmd = ['create', '--use=testing', '--force', 'app'];
+
+    fs.outputFileSync(indexDest, 'blah');
+
+    utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
+      expect(
+        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
       ).toBeTruthy();
 
       done();

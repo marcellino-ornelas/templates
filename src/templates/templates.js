@@ -27,6 +27,7 @@ import {
  * @property {boolean} defaultPackage - Don't load the default folder
  * @property {boolean} default - Use all default prompt answers
  * @property {boolean} force - Force creation of template. This will over write files
+ * @property {boolean} wipe - Force creation of template. This will delete the directory if exists.
  */
 const DEFAULT_OPTIONS = {
   verbose: false,
@@ -35,7 +36,8 @@ const DEFAULT_OPTIONS = {
   defaultPackage: true,
   default: false,
   force: false,
-  newFolder: true
+  newFolder: true,
+  wipe: false
 };
 
 /**
@@ -275,7 +277,11 @@ export default class Templates extends VerboseLogger {
 
           return Promise.resolve()
             .then(() => {
-              if (!this.opts.force && doesBuildPathExist) {
+              if (this.opts.wipe && doesBuildPathExist) {
+                return fs.remove(realBuildPath);
+              }
+
+              if (!this.opts.force && !this.opts.wipe && doesBuildPathExist) {
                 return this._checkForFiles(realBuildPath, renderData);
               }
             })

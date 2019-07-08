@@ -2,7 +2,9 @@
 
 ### Description
 
-Create a template
+Create a template.
+
+> Note: When rendering a template, if a file exists. Tps will throw an error
 
 ---
 
@@ -98,3 +100,14 @@ tps create --use=<template-name>
 
     ./
       <your-template-files> ...
+
+By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
+
+```bash
+tps create --use=<template-name> --force app
+```
+
+    ./app/
+      <your-template-files> ...
+
+Any files that your template will build, will override any files already living in `./app/`.
