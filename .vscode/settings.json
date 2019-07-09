@@ -7,6 +7,6 @@
   },
   "files.associations": {
     "*.md.dot": "markdown",
-    ".js.dot": "javascript"
+    "*.js.dot": "javascript"
   }
 }

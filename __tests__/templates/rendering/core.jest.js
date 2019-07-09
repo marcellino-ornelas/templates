@@ -27,7 +27,7 @@ describe('[Templates] Render Process:', () => {
     );
   });
 
-  it('should throw TemplateNotFound if no template is available', () => {
+  it('should throw DirectoryNotFoundError if dest does not exist', () => {
     let dest = playground.pathTo('non/existent/path');
     let tps = new Templates();
     tps.use('testing');

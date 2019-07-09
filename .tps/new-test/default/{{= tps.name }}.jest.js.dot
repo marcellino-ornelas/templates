@@ -3,7 +3,7 @@
  */
 {{? tps.config.playground }}import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';{{?}}
-import _ from '@tps/_';
+{{? tps.config.modules.length}}{{~ tps.config.modules :module:index }}import {{= module}} from '@tps/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
 
 /*
  * Constants
@@ -11,9 +11,15 @@ import _ from '@tps/_';
 {{? tps.config.playground }}const playground = new Playground(TESTING_DIR){{?}}
 
 describe('[TPS] _', () => {
+  {{? tps.config.modules.includes('templates')}}let tps;{{?}}
+
   beforeAll(() => {{? tps.config.playground }}playground.create(){{?}} );
   afterAll(() => {{? tps.config.playground }}playground.destroy(){{?}} );
-  beforeEach(() => {{? tps.config.playground }}playground.createBox('_'){{?}});
+
+  beforeEach(() => {
+    {{? tps.config.modules.includes('templates')}} tps = new Templates();{{?}}
+    {{? tps.config.playground }}return playground.createBox('_'){{?}}
+  });
 
   it('should', () => {});
 });
