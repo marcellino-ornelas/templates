@@ -1,3 +1,3 @@
 module.exports = {
-  testMatch: ['**/__tests__/**/*jest.js']
+  testMatch: ['**/__tests__/tests/**/*jest.js']
 };

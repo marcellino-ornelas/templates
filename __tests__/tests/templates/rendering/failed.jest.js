@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
 import Templates from '@tps/templates';
-import { hasAllFileAndDirs } from '../../support/utils';
+import { hasAllFileAndDirs } from '@test/support/utils';
 import { TESTING_PACKAGE_FILES } from '@test/support/constants';
 import { isDir, isFile } from '@tps/utilities/fileSystem';
 import { DirNode } from '@tps/fileSystemTree';
@@ -107,7 +107,6 @@ describe('[TPS] Rendered Failed Cases:', () => {
       expect(
         hasAllFileAndDirs(app2Folder, ['db', 'server', 'db/db.js', 'index.js'])
       ).toBeTruthy();
-
     });
   });
 });

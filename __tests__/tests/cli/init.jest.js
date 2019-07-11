@@ -1,10 +1,10 @@
-import Playground from '../support/playground';
-import * as utils from '../support/utils';
+import Playground from '@test/support/playground';
+import * as utils from '@test/support/utils';
 import {
   TESTING_PACKAGE_FILES,
   INIT_PACKAGE_FILES,
   TESTING_DIR
-} from '../support/constants';
+} from '@test/support/constants';
 
 /**
  * Constants
