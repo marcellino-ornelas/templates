@@ -77,13 +77,13 @@ export class FileSystemNode extends Tree {
   }
 
   logTree(names = []) {
-    this.breathFirstEach(tree => {
+    this.depthFirstEach(tree => {
       console.log(`${'  '.repeat(tree.depth * 2)}${tree.name}: `);
       names.forEach(name => {
         console.log(
           `${'  '.repeat(tree.depth * 3)} -> ${name}: ${tree[name]} `
         );
-      });
+      }, true);
       // console.log(`${'  '.repeat(tree.depth * 2)}|`);
       // console.log(`${'\t'.repeat(this.depth * 2)}|`);
     });
