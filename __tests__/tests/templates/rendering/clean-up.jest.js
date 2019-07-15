@@ -4,7 +4,6 @@
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
 import Templates from '@tps/templates';
-import { isDir } from '@tps/utilities/fileSystem';
 
 /*
  * Constants
@@ -35,7 +34,7 @@ describe('[Templates] Render Process:', () => {
 
     tps.render(dest, 'app').catch(() => {
       expect(_renderAllFiles).toHaveBeenCalledTimes(1);
-      expect(isDir(appDest)).toBeFalsy();
+      expect(appDest).not.toBeDirectory();
       done();
     });
   });

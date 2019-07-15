@@ -2,9 +2,7 @@ import fs from 'fs-extra';
 import Templates from '@tps/templates';
 import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
-import * as utils from '@test/support/utils';
 import { TemplateNotFound, DirectoryNotFoundError } from '@tps/errors';
-import { isFile } from '@tps/utilities/fileSystem';
 
 /**
  * Constants
@@ -44,9 +42,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('app');
 
     tps.render(playground.box(), 'app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       done();
     });
   });
@@ -58,9 +54,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('hey/app');
 
     tps.render(playground.box(), 'hey/app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       done();
     });
   });
@@ -74,9 +68,7 @@ describe('[Templates] Render Process:', () => {
     tps.render(playground.box(), buildPaths).then(() => {
       buildPaths.forEach(buildPath => {
         const destPath = playground.pathTo(buildPath);
-        expect(
-          utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-        ).toBeTruthy();
+        expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       });
       done();
     });
@@ -92,11 +84,8 @@ describe('[Templates] Render Process:', () => {
     fs.outputFileSync(randomDest, 'blah');
 
     tps.render(playground.box(), 'app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
-
-      expect(isFile(randomDest)).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+      expect(randomDest).toBeFile();
       done();
     });
   });
@@ -112,9 +101,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('app');
 
     tps.render(playground.box(), 'app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       done();
     });
   });
@@ -129,11 +116,8 @@ describe('[Templates] Render Process:', () => {
     fs.outputFileSync(randomDest, 'blah');
 
     tps.render(playground.box(), 'app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
-
-      expect(isFile(randomDest)).toBeFalsy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+      expect(randomDest).not.toBeFile();
       done();
     });
   });
@@ -146,9 +130,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('app');
 
     tps.render(playground.box(), 'app').then(() => {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       done();
     });
   });

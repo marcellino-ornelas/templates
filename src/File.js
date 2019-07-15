@@ -1,7 +1,6 @@
 import dot from '@tps/dot';
 import path from 'path';
-import fs, { promises } from 'fs-extra';
-import { isFile } from '@tps/utilities/fileSystem';
+import fs from 'fs-extra';
 
 /*
  * File

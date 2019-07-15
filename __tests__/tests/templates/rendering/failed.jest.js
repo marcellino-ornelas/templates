@@ -5,10 +5,7 @@ import fs from 'fs-extra';
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
 import Templates from '@tps/templates';
-import { hasAllFileAndDirs } from '@test/support/utils';
 import { TESTING_PACKAGE_FILES } from '@test/support/constants';
-import { isDir, isFile } from '@tps/utilities/fileSystem';
-import { DirNode } from '@tps/fileSystemTree';
 
 /*
  * Constants
@@ -33,20 +30,22 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     fs.outputFileSync(indexFile, 'blah');
 
-    expect(isDir(appFolder)).toBeTruthy();
-    expect(isFile(indexFile)).toBeTruthy();
+    expect(appFolder).toBeDirectory();
+    expect(indexFile).toBeFile();
 
     jest.setTimeout(100000);
 
     return tps.render(playground.box(), 'App').catch(error => {
       expect(error).toBeDefined();
 
-      expect(isDir(appFolder)).toBeTruthy();
-      expect(isFile(indexFile)).toBeTruthy();
-
-      expect(
-        hasAllFileAndDirs(appFolder, ['db', 'server', 'storeUtils', 'db/db.js'])
-      ).toBeFalsy();
+      expect(appFolder).toBeDirectory();
+      expect(indexFile).toBeFile();
+      expect(appFolder).not.toHaveAllFilesAndDirectories([
+        'db',
+        'server',
+        'storeUtils',
+        'db/db.js'
+      ]);
     });
   });
 
@@ -55,15 +54,16 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const indexFile = playground.pathTo('index.js');
 
     fs.outputFileSync(indexFile, 'blah');
-
-    expect(isFile(indexFile)).toBeTruthy();
+    expect(indexFile).toBeFile();
 
     return tps.render(box).catch(error => {
       expect(error).toBeDefined();
-
-      expect(
-        hasAllFileAndDirs(box, ['db', 'server', 'storeUtils', 'db/db.js'])
-      ).toBeFalsy();
+      expect(box).not.toHaveAllFilesAndDirectories([
+        'db',
+        'server',
+        'storeUtils',
+        'db/db.js'
+      ]);
     });
   });
 
@@ -73,16 +73,17 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     fs.outputFileSync(file, 'blah');
 
-    expect(isFile(file)).toBeTruthy();
+    expect(file).toBeFile();
 
     return tps.render(playground.box(), 'App').catch(error => {
       expect(error).toBeDefined();
-
-      expect(isFile(file)).toBeTruthy();
-
-      expect(
-        hasAllFileAndDirs(appFolder, ['db', 'server', 'db/db.js', 'index.js'])
-      ).toBeFalsy();
+      expect(file).toBeFile();
+      expect(appFolder).not.toHaveAllFilesAndDirectories([
+        'db',
+        'server',
+        'db/db.js',
+        'index.js'
+      ]);
     });
   });
 
@@ -93,20 +94,20 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     fs.outputFileSync(fileInApp, 'blah');
 
-    expect(isFile(fileInApp)).toBeTruthy();
+    expect(fileInApp).toBeFile();
 
     return tps.render(playground.box(), ['App', 'App2']).catch(error => {
       expect(error).toBeDefined();
 
-      expect(isFile(fileInApp)).toBeTruthy();
+      expect(fileInApp).toBeFile();
+      expect(appFolder).not.toHaveAllFilesAndDirectories([
+        'db',
+        'server',
+        'db/db.js',
+        'index.js'
+      ]);
 
-      expect(
-        hasAllFileAndDirs(appFolder, ['db', 'server', 'db/db.js', 'index.js'])
-      ).toBeFalsy();
-
-      expect(
-        hasAllFileAndDirs(app2Folder, ['db', 'server', 'db/db.js', 'index.js'])
-      ).toBeTruthy();
+      expect(app2Folder).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
     });
   });
 });

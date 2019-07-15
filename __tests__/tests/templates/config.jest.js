@@ -12,6 +12,7 @@ describe('[Templates] Config: ', () => {
       });
       tps.use('testing');
     });
+
     it('should load local configurations', () => {
       const config = tps.config;
 

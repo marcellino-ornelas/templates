@@ -32,10 +32,10 @@
     "eslint-plugin-jest": "^22.4.1",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.12.4",
-    "fs-extra": "^7.0.1",
     "jest": "^24.0.0"
   },
   "dependencies": {
+    "fs-extra": "^7.0.1",
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
     "find-up": "^3.0.0",

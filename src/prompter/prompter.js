@@ -1,7 +1,7 @@
 import is from 'is';
 import inquirer from 'inquirer';
-import Prompt from './prompt';
 import { hasProp, defaults } from '@tps/utilities/helpers';
+import Prompt from './prompt';
 
 /**
  * Default options for Templates

@@ -1,7 +1,6 @@
 import Templates from '@tps/templates';
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
-import * as utils from '@test/support/utils';
 
 import inquirer from 'inquirer';
 
@@ -36,8 +35,8 @@ describe('[Templates] Render Process:', () => {
 
         tps.render(playground.box(), 'App').then(() => {
           expect(tps.config.cssType).toBe(answer);
-          expect(utils.hasAllFileAndDirs(destPath, [expected])).toBeTruthy();
           expect(tps.packages).toHaveProperty(answer);
+          expect(destPath).toHaveAllFilesAndDirectories([expected]);
           done();
         });
       }
@@ -52,20 +51,7 @@ describe('[Templates] Render Process:', () => {
       expect(tps._prompts.needsAnswers()).toBeFalsy();
 
       tps.render(playground.box(), 'App').then(() => {
-        expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
-        expect(tps.packages).toHaveProperty('less');
-        done();
-      });
-    });
-
-    it('should render a template when answering prompt with alias', done => {
-      const destPath = playground.pathTo('App');
-      tps.loadConfig({ c: 'less' });
-
-      expect(tps._prompts.needsAnswers()).toBeFalsy();
-
-      tps.render(playground.box(), 'App').then(() => {
-        expect(utils.hasAllFileAndDirs(destPath, ['index.less'])).toBeTruthy();
+        expect(destPath).toHaveAllFilesAndDirectories(['index.less']);
         expect(tps.packages).toHaveProperty('less');
         done();
       });

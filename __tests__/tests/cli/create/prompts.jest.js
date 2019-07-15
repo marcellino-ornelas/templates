@@ -29,9 +29,7 @@ describe('[cli] Create:', () => {
       ];
 
       utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-        expect(
-          utils.hasAllFileAndDirs(destPath, [`index.${cssType}`])
-        ).toBeTruthy();
+        expect(destPath).toHaveAllFilesAndDirectories([`index.${cssType}`]);
 
         done();
       });

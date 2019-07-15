@@ -23,7 +23,7 @@ export default class VerboseLogger {
   }
 
   _error(msg) {
-    let message = msg;
+    const message = msg;
     // if (this.handle) {
     //   message = `${this.handle}${message}`;
     // }

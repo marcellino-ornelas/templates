@@ -269,7 +269,7 @@ export default class Templates extends VerboseLogger {
       .then(() => {
         const builders = pathsToCreate.map(buildPath => {
           const { name, dir } = path.parse(buildPath);
-          let realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
+          const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
           const doesBuildPathExist = isDir(realBuildPath);
 

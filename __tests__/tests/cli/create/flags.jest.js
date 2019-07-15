@@ -21,7 +21,7 @@ describe('[cli] Create:', () => {
     const cmd = ['create', '--use=testing-prompt', '-vd', 'App'];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(utils.hasAllFileAndDirs(destPath, ['index.css'])).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(['index.css']);
 
       done();
     });
@@ -32,12 +32,10 @@ describe('[cli] Create:', () => {
     const cmd = ['create', '-p=extras', '--use=testing', 'App'];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(destPath, [
-          'extras.js',
-          ...TESTING_PACKAGE_FILES
-        ])
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories([
+        'extras.js',
+        ...TESTING_PACKAGE_FILES
+      ]);
 
       done();
     });
@@ -51,9 +49,7 @@ describe('[cli] Create:', () => {
     fs.outputFileSync(indexDest, 'blah');
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 
       done();
     });

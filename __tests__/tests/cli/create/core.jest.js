@@ -21,9 +21,7 @@ describe('[cli] Create:', () => {
     const cmd = ['create', '--use=testing', '-v'];
 
     utils.spawn(cmd, { cwd: destPath }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 
       done();
     });
@@ -34,9 +32,7 @@ describe('[cli] Create:', () => {
     const cmd = ['create', '--use=testing', '-v', 'app'];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 
       done();
     });
@@ -47,9 +43,7 @@ describe('[cli] Create:', () => {
     const cmd = ['create', '--use=testing', '-v', 'app/src/components'];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(destPath, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 
       done();
     });
@@ -70,17 +64,9 @@ describe('[cli] Create:', () => {
     ];
 
     utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-      expect(
-        utils.hasAllFileAndDirs(appDest, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
-
-      expect(
-        utils.hasAllFileAndDirs(beeDest, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
-
-      expect(
-        utils.hasAllFileAndDirs(componentDest, TESTING_PACKAGE_FILES)
-      ).toBeTruthy();
+      [appDest, beeDest, componentDest].forEach(dir =>
+        expect(dir).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES)
+      );
 
       done();
     });

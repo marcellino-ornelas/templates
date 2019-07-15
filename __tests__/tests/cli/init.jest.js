@@ -1,10 +1,6 @@
 import Playground from '@test/support/playground';
 import * as utils from '@test/support/utils';
-import {
-  TESTING_PACKAGE_FILES,
-  INIT_PACKAGE_FILES,
-  TESTING_DIR
-} from '@test/support/constants';
+import { INIT_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
 
 /**
  * Constants
@@ -42,9 +38,8 @@ describe('Command Line: ', () => {
     // need to add --force because of .tps folder in main templates repo
     utils.spawn(['init', '--force', '-v'], { cwd }, function(err, stdout) {
       expect(err).toBeNull();
-      expect(
-        utils.hasAllFileAndDirs(initFolder, INIT_PACKAGE_FILES)
-      ).toBeTruthy();
+
+      expect(initFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
 
       done();
     });
