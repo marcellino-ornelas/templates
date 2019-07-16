@@ -319,7 +319,7 @@ export default class Templates extends VerboseLogger {
           if (is.array.empty(this.buildErrors)) {
             return;
           }
-
+          console.log(this.buildErrors);
           this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
             this._cleanUpFailBuild(
               buildPath,
@@ -480,6 +480,8 @@ export default class Templates extends VerboseLogger {
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
         const dirPathInNewLocation = path.join(dest, dirPathRelativeFromPkg);
+        console.log('dirPathRelativeFromPkg', dirPathRelativeFromPkg);
+        console.log('dirPathInNewLocation', dirPathInNewLocation);
 
         /* mark directory as already made */
         dirTracker[dirNode.path] = true;
@@ -497,7 +499,17 @@ export default class Templates extends VerboseLogger {
       });
     });
 
-    return dirsInProgress.length && Promise.all(dirsInProgress);
+    return (
+      dirsInProgress.length &&
+      Promise.all(dirsInProgress).then(() => {
+        console.log(
+          '/Users/lornelas/Desktop/development/Templates/docs-1/cli/commands/',
+          isDir(
+            '/Users/lornelas/Desktop/development/Templates/docs-1/cli/commands/'
+          )
+        );
+      })
+    );
   }
 
   /**

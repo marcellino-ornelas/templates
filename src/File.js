@@ -1,6 +1,7 @@
 import dot from '@tps/dot';
 import path from 'path';
-import fs from 'fs-extra';
+import fs, { promises } from 'fs-extra';
+import { DirNode } from '@tps/fileSystemTree';
 
 /*
  * File
@@ -42,8 +43,21 @@ class File {
   renderDotFile(dest, fileData) {
     return Promise.resolve()
       .then(() => this.opts.force && fs.remove(dest))
-      .then(() => fs.writeFile(dest, fileData, { flag: 'wx' }))
-      .then(() => Promise.resolve(dest));
+      .catch(e => {
+        console.log('this should be force', e);
+      })
+      .then(() => {})
+      .then(() => fs.writeFile(dest, fileData, { flags: 'w' }))
+      .then(() => Promise.resolve(dest))
+      .catch(error => {
+        console.log('Error in dot config');
+        console.log('dest', dest);
+        new DirNode(
+          '/Users/lornelas/Desktop/development/Templates/docs-1/'
+        ).logTree(['type', 'path']);
+
+        return Promise.reject(error);
+      });
   }
 
   renderFile(dest) {
@@ -52,7 +66,12 @@ class File {
       .then(() => {
         return new Promise((resolve, reject) => {
           const srcFile = fs.createReadStream(this.src, {
-            flag: 'r'
+            flags: 'r'
+          });
+
+          srcFile.on('error', error => {
+            console.log('Read Stream error', error);
+            reject(error);
           });
 
           const destFile = fs.createWriteStream(dest, { flags: 'wx' });

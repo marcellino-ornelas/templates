@@ -4,7 +4,8 @@ const CONSTANTS = require('../lib/utilities/constants');
 const OPTIONS = require('../cli/options');
 
 const tps = new Templates({
-  verbose: true
+  verbose: true,
+  wipe: true
 });
 
 tps.use('docs');

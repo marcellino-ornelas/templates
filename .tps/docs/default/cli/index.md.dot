@@ -3,7 +3,7 @@
 ## Commands
 
 - [Create](./commands/create)
-- [Init](./commands/.init)
+- [Init](./commands/init)
 
 ## Flags
 
@@ -15,7 +15,7 @@
             <th>Description</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody></tbody>
     {{ var global = tps.options.global; }}
     {{ for(var optionName in global ){ }}
         {{ var option = global[optionName]; }}

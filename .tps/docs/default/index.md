@@ -4,8 +4,8 @@
 
 ### CLI
 
-Visit our cli docs [here](./cli)
+Visit our cli docs [here](./cli/index.md)
 
 ### Module Usage
 
-Visit our node module docs [here](./module)
+Visit our node module docs [here](./module/index.md)
