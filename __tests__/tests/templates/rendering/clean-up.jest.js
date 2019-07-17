@@ -5,11 +5,18 @@ import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
 import Templates from '@tps/templates';
 
-const errorMock = jest
+const renderAllDirectoriesMock = jest
   .fn()
   .mockName('_renderAllDirectories')
   .mockImplementation(() => {
-    throw new Error('blah');
+    throw new Error('_renderAllDirectories test');
+  });
+
+const renderAllFilesMock = jest
+  .fn()
+  .mockName('_renderAllDirectories')
+  .mockImplementation(() => {
+    throw new Error('_renderAllDirectories test');
   });
 
 /*
@@ -34,12 +41,7 @@ describe('[Templates] Render Process:', () => {
     tps.verbose = true;
     const dest = playground.box();
     const appDest = playground.pathTo('app');
-    const _renderAllDirectories = (tps._renderAllDirectories = jest
-      .fn()
-      .mockName('_renderAllDirectories')
-      .mockImplementation(() => {
-        throw new Error('blah');
-      }));
+    const _renderAllDirectories = (tps._renderAllDirectories = renderAllDirectoriesMock);
 
     tps.render(dest, 'app').catch(error => {
       expect(_renderAllDirectories).toHaveBeenCalledTimes(1);
@@ -51,12 +53,8 @@ describe('[Templates] Render Process:', () => {
   it('should clean up directory if encounters a error in _renderAllFiles', done => {
     const dest = playground.box();
     const appDest = playground.pathTo('app');
-    const _renderAllFiles = (tps._renderAllFiles = jest
-      .fn()
-      .mockName('_renderAllFiles')
-      .mockImplementation(() => {
-        throw new Error('blah');
-      }));
+
+    const _renderAllFiles = (tps._renderAllFiles = renderAllFilesMock);
 
     tps.render(dest, 'app').catch(err => {
       expect(_renderAllFiles.mock.calls.length).toBe(1);
