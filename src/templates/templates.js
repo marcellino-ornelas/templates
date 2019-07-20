@@ -17,6 +17,7 @@ import {
   DirectoryNotFoundError,
   FileExistError
 } from '@tps/errors';
+import logger from '@tps/utilities/logger';
 
 /**
  * Default options for Templates
@@ -99,10 +100,21 @@ export default class Templates extends VerboseLogger {
     // set template location
     this.src = this.templateLocation;
 
+    // logger.tps.core.log(`Here is your src %${this.src}%`);
+    // logger.tps.core.error(`Here is your src %${this.src}%`);
+    // // logger.prompter.error([1, 2, 3]);
+
+    // logger.prompter.error('hello %h', {
+    //   name: 'lino',
+    //   age: 23456,
+    //   timestamp: 123456789
+    // });
+
     this.template = templateName;
-    this._log(
+    // logger.tps.verbose.log('hey');
+    /* this._log(
       `[TPS INFO]: Found '${templateName}' template at ${this.templateLocation}`
-    );
+    ); */
 
     this._loadTpsConfig(templateName);
 
@@ -219,6 +231,7 @@ export default class Templates extends VerboseLogger {
    * @returns {Promise}
    */
   render(dest, buildPaths, data = {}) {
+    process.exit(0);
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;

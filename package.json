@@ -35,12 +35,17 @@
     "jest": "^24.0.0"
   },
   "dependencies": {
-    "fs-extra": "^7.0.1",
+    "acho": "^4.0.4",
+    "chalk": "^2.4.2",
+    "debug": "^4.1.1",
+    "debugger-256": "^1.6.37",
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
     "find-up": "^3.0.0",
+    "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
     "is": "^3.3.0",
+    "prettyjson-256": "^1.5.18",
     "valid-filename": "^2.0.1",
     "yargs": "^13.2.1"
   }
