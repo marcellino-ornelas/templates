@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "acho": "^4.0.4",
-    "chalk": "^2.4.2",
+    "ansi-colors": "^4.1.1",
     "debug": "^4.1.1",
     "debugger-256": "^1.6.37",
     "dot": "^1.1.2",

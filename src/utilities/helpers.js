@@ -73,7 +73,7 @@ export function defaults(options = {}, defaultObj) {
   const newObj = { ...options };
 
   eachObj(defaultObj, (val, key) => {
-    if (!hasProp(options, key)) {
+    if (!hasProp(options, key) || is.undefined(options[key])) {
       newObj[key] = val;
     }
   });

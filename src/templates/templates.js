@@ -7,7 +7,6 @@ import * as TPS from '@tps/utilities/constants';
 import { isDir, json, isFile } from '@tps/utilities/fileSystem';
 import Config from '@tps/config';
 import Prompter from '@tps/prompter';
-import VerboseLogger from '@tps/utilities/verboseLogger';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
   TemplateNotFoundError,
@@ -45,12 +44,11 @@ const DEFAULT_OPTIONS = {
  * @class
  * @classdesc Create a new instance of a template
  */
-export default class Templates extends VerboseLogger {
+export default class Templates {
   /**
    * @param {TemplateOptions} opts - options to pass to templates
    */
   constructor(opts = {}) {
-    super(opts.verbose);
     this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.packages = {};
     this.packagesUsed = [];
@@ -93,28 +91,15 @@ export default class Templates extends VerboseLogger {
         this.templateLocation = maybeGlobalTemp;
         break;
       default:
-        // throw new Error(`Template '${templateName}' was not found.`);
         throw new TemplateNotFoundError(templateName);
     }
 
+    this.template = templateName;
+    logger.tps.info('Rendering template %s', this.template);
+
     // set template location
     this.src = this.templateLocation;
-
-    // logger.tps.core.log(`Here is your src %${this.src}%`);
-    // logger.tps.core.error(`Here is your src %${this.src}%`);
-    // // logger.prompter.error([1, 2, 3]);
-
-    // logger.prompter.error('hello %h', {
-    //   name: 'lino',
-    //   age: 23456,
-    //   timestamp: 123456789
-    // });
-
-    this.template = templateName;
-    // logger.tps.verbose.log('hey');
-    /* this._log(
-      `[TPS INFO]: Found '${templateName}' template at ${this.templateLocation}`
-    ); */
+    logger.tps.info('Template location %s', this.src);
 
     this._loadTpsConfig(templateName);
 
@@ -127,10 +112,9 @@ export default class Templates extends VerboseLogger {
 
     // load Settings
     if (isFile(this.templateSettingsPath)) {
-      this._log(
-        `[TPS INFO]: Loading ${templateName} settings file ${
-          this.templateSettingsPath
-        }`
+      logger.tps.info(
+        'Loading template settings file %s',
+        this.templateSettingsPath
       );
 
       try {
@@ -141,7 +125,9 @@ export default class Templates extends VerboseLogger {
       }
 
       if (this.templateSettings.prompts) {
-        this._log('[TPS INFO]: Loading prompts ...');
+        logger.tps.info('Loading prompts... %o', {
+          defaultValues: this.opts.default
+        });
         this._prompts = new Prompter(this.templateSettings.prompts, {
           default: this.opts.default
         });
@@ -152,7 +138,9 @@ export default class Templates extends VerboseLogger {
 
     // load default package if applicable
     const defaultFolder = path.join(this.templateLocation, 'default');
-    if (this.opts.defaultPackage && isDir(defaultFolder)) {
+    const shouldLoadDefault = this.opts.defaultPackage && isDir(defaultFolder);
+    logger.tps.info('Loading default package %o', shouldLoadDefault);
+    if (shouldLoadDefault) {
       this.loadPackage('default');
     }
   }
@@ -197,7 +185,8 @@ export default class Templates extends VerboseLogger {
 
     this._compileFilesFromPackage(newPackageName);
 
-    this._log('package finished compiling', this.template);
+    // this._log('package finished compiling', this.template);
+    logger.tps.success('Added package %s', newPackageName);
 
     this.packagesUsed.push(newPackageName);
   }
@@ -512,17 +501,7 @@ export default class Templates extends VerboseLogger {
       });
     });
 
-    return (
-      dirsInProgress.length &&
-      Promise.all(dirsInProgress).then(() => {
-        console.log(
-          '/Users/lornelas/Desktop/development/Templates/docs-1/cli/commands/',
-          isDir(
-            '/Users/lornelas/Desktop/development/Templates/docs-1/cli/commands/'
-          )
-        );
-      })
-    );
+    return dirsInProgress.length && Promise.all(dirsInProgress);
   }
 
   /**
@@ -535,6 +514,7 @@ export default class Templates extends VerboseLogger {
     const { force } = this.opts;
 
     pkg.find({ type: 'file' }).forEach(fileNode => {
+      // TODO: Add a log here
       this.compiledFiles.push(new File(fileNode, { force }));
     });
   }
