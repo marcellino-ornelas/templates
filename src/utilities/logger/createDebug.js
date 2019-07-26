@@ -39,8 +39,8 @@ let pattern = [
 
 const ANSII_RE = new RegExp(pattern, 'g');
 
-debug.formatters.h = v => {
-  return '\n' + render(v, 2);
+debug.formatters.n = v => {
+  return '\n' + pjson.render(v, 2);
 };
 
 /* only used when you want to use inline */
@@ -73,7 +73,8 @@ debug.formatters.s = v => {
 
 /* All objects, arrays */
 debug.formatters.O = v => {
-  return '\n' + pjson.render(v, 2);
+  console.log('hello');
+  return pjson.render(v, 2);
 };
 
 debug.log = function(string, ...rest) {
@@ -84,22 +85,91 @@ debug.log = function(string, ...rest) {
   console.log(filteredString, ...rest);
 };
 
-const createDebug = name => {
-  const logger = debug(name);
+// const createDebug = name => {
+//   const logger = debug(name);
 
-  const innerLoggers = ['info', 'error', 'debug', 'success'].reduce(
-    (acc, logType) => {
-      acc[logType] = logger.extend(logType);
-      acc[logType].color = logger.color;
+//   const innerLoggers = ['info', 'error', 'debug', 'success', 'warn'].reduce(
+//     (acc, logType) => {
+//       acc[logType] = logger.extend(logType);
+//       acc[logType].color = logger.color;
+//       return acc;
+//     },
+//     {}
+//   );
+
+//   // alias
+//   innerLoggers['log'] = innerLoggers.info;
+
+//   return innerLoggers;
+// };
+
+class CreateDebug {
+  constructor(name) {
+    this.logger = debug(name);
+
+    ['info', 'error', 'debug', 'success', 'warn'].reduce((acc, logType) => {
+      acc[logType] = this.logger.extend(logType);
+      acc[logType].color = this.logger.color;
       return acc;
-    },
-    {}
-  );
+    }, this);
 
-  // alias
-  innerLoggers['log'] = innerLoggers.info;
+    // alias
+    this.log = this.info;
+    this._groups = {};
+  }
 
-  return innerLoggers;
-};
+  group(name, { clear = false } = {}) {
+    if (this._groups[name] && !clear) {
+      return this._groups[name];
+    }
 
-export default createDebug;
+    const newGroup = new CreateDebugGroup(name);
+
+    this._groups[name] = newGroup;
+
+    return newGroup;
+  }
+
+  printGroup(group) {
+    let groupArray = group;
+
+    if (is.string(group)) {
+      groupArray = this._groups[group];
+    }
+
+    for (let i = 0; i < groupArray.length; i++) {
+      const [level, ...args] = groupArray[i];
+
+      this[level](...args);
+    }
+
+    this._groups[groupArray.name] = undefined;
+  }
+}
+
+class CreateDebugGroup extends Array {
+  constructor(name) {
+    super();
+    this.name = name;
+  }
+  info(...message) {
+    this.push(['info', ...message]);
+  }
+  error(...message) {
+    this.push(['error', ...message]);
+  }
+  debug(...message) {
+    this.push(['debug', ...message]);
+  }
+  success(...message) {
+    this.push(['success', ...message]);
+  }
+  warn(...message) {
+    this.push(['warn', ...message]);
+  }
+  log(...message) {
+    this.push(['log', ...message]);
+  }
+}
+
+export default CreateDebug;

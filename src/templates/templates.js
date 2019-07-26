@@ -17,6 +17,7 @@ import {
   FileExistError
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
+// import process = require('process');
 
 /**
  * Default options for Templates
@@ -220,7 +221,6 @@ export default class Templates {
    * @returns {Promise}
    */
   render(dest, buildPaths, data = {}) {
-    process.exit(0);
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
@@ -235,10 +235,12 @@ export default class Templates {
       pathsToCreate = [buildPaths];
     }
 
-    this._log('[TPS INFO] Build paths: ', pathsToCreate);
+    // this._log('[TPS INFO] Build paths: ', pathsToCreate);
 
     if (is.array.empty(buildPaths)) {
-      this.error('Param `buildPaths` need to be a string or array of strings');
+      throw new Error(
+        'Param `buildPaths` need to be a string or array of strings'
+      );
     }
 
     // Append dest config
@@ -251,7 +253,9 @@ export default class Templates {
       path.join(finalDest, buildPath)
     );
 
-    this._log('[TPS INFO] Build new folder: ', buildNewFolder);
+    // this._log('[TPS INFO] Build new folder: ', buildNewFolder);
+
+    // process.exit(0);
 
     return Promise.resolve()
       .then(() => {
@@ -275,7 +279,7 @@ export default class Templates {
           const renderData = defaults({ name }, dataForTemplating);
           const doesBuildPathExist = isDir(realBuildPath);
 
-          this._log('real build path', realBuildPath);
+          // this._log('real build path', realBuildPath);
 
           return Promise.resolve()
             .then(() => {
@@ -305,10 +309,10 @@ export default class Templates {
             .then(() => this._renderAllDirectories(realBuildPath))
             .then(() => this._renderAllFiles(realBuildPath, renderData))
             .then(() => {
-              this._log(`Template build at ${buildPath}`);
+              // this._log(`Template build at ${buildPath}`);
             })
             .catch(err => {
-              this._log('Build Path error', err);
+              // this._log('Build Path error', err);
               this._scheduleCleanUpForBuild(
                 realBuildPath,
                 err,
@@ -357,7 +361,7 @@ export default class Templates {
   }
 
   _cleanUpFailBuild(buildError, buildNewFolder) {
-    this._log('clean up has begun for', buildError);
+    // this._log('clean up has begun for', buildError);
 
     let buildPath = buildError;
     const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
@@ -416,7 +420,7 @@ export default class Templates {
    * @param {Object} [data={}] - data passed in for dot
    */
   _renderAllFiles(dest, data) {
-    this._log('+++++++++ render files +++++++++++++');
+    // this._log('+++++++++ render files +++++++++++++');
 
     const files = this.compiledFiles.filter(file => !file.isDot);
     const dotFiles = this.compiledFiles.filter(file => file.isDot);
@@ -436,12 +440,12 @@ export default class Templates {
       if (!hasErroredOut) {
         hasErroredOut = true;
         error = err;
-        this._log('[TPS] errored out', error);
+        // this._log('[TPS] errored out', error);
       }
     };
 
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
-      this._log(` `, '-> ', finalDest);
+      // this._log(` `, '-> ', finalDest);
       filesInProgress.push(
         file
           .renderDotFile(finalDest, dotContentsForFile)
@@ -451,7 +455,7 @@ export default class Templates {
 
     files.forEach(file => {
       const finalDest = file._dest(dest, data);
-      this._log(` `, '-> ', finalDest);
+      // this._log(` `, '-> ', finalDest);
       filesInProgress.push(
         file.renderFile(finalDest).catch(handleFileErrorCatch)
       );
@@ -470,20 +474,21 @@ export default class Templates {
    * @param {String} dest - destination path to make all directories. Should be a folder
    */
   _renderAllDirectories(dest) {
-    this._log('+++++++++ rendering directories +++++++++++++');
-
     const dirTracker = {};
     const dirsInProgress = [];
-    this._getPackageArray().forEach(pkg => {
-      // this._log('package name', pkg.name);
 
+    logger.tps.info('Rendering directories in %s', dest);
+
+    const loggerGroup = logger.tps.group('rendering_directories', {
+      clear: true
+    });
+
+    this._getPackageArray().forEach(pkg => {
       pkg.find({ type: 'dir' }).forEach(dirNode => {
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
         const dirPathInNewLocation = path.join(dest, dirPathRelativeFromPkg);
-        console.log('dirPathRelativeFromPkg', dirPathRelativeFromPkg);
-        console.log('dirPathInNewLocation', dirPathInNewLocation);
 
         /* mark directory as already made */
         dirTracker[dirNode.path] = true;
@@ -491,17 +496,27 @@ export default class Templates {
           .mkdir(dirPathInNewLocation)
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);
-            this._log(`   `, '-> created', dirPathInNewLocation);
+            loggerGroup.info('Created directory -> %s', dirPathRelativeFromPkg);
           })
-          .catch(() => {
+          .catch(err => {
             /* do nothing if dir already exist */
+            loggerGroup.warn(
+              'Creating directory failed %s %n',
+              dirPathInNewLocation,
+              err
+            );
           });
 
         dirsInProgress.push(dirInProgress);
       });
     });
 
-    return dirsInProgress.length && Promise.all(dirsInProgress);
+    return (
+      dirsInProgress.length &&
+      Promise.all(dirsInProgress).then(() => {
+        logger.tps.printGroup('rendering_directories');
+      })
+    );
   }
 
   /**
@@ -514,8 +529,9 @@ export default class Templates {
     const { force } = this.opts;
 
     pkg.find({ type: 'file' }).forEach(fileNode => {
-      // TODO: Add a log here
-      this.compiledFiles.push(new File(fileNode, { force }));
+      const file = new File(fileNode, { force });
+      logger.tps.log('Compiling file -> %s', file._name);
+      this.compiledFiles.push();
     });
   }
 

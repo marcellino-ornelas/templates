@@ -1,11 +1,12 @@
-import createDebug from './createDebug';
-import debug from 'debug';
+import CreateDebug from './createDebug';
 
-const tps = createDebug('tps');
+const tps = new CreateDebug('tps');
 
 const logger = {
   tps: tps,
-  prompter: createDebug('prompter')
+  prompter: new CreateDebug('prompter')
 };
+
+// process.exit(0);
 
 export default logger;

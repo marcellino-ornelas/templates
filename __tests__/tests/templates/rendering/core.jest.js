@@ -35,7 +35,7 @@ describe('[Templates] Render Process:', () => {
     );
   });
 
-  it('should be able to render a local template', done => {
+  it.only('should be able to render a local template', done => {
     let tps = new Templates();
     tps.use('testing');
 
