@@ -3,17 +3,11 @@ import debug from 'debug';
 import colors from 'ansi-colors';
 import pjson from 'prettyjson-256';
 import is from 'is';
+import { defaults } from '@tps/utilities/helpers';
 
 /**
- * Initialize pretty json
+ * Constants
  */
-
-pjson.init({
-  customColors: {
-    red: { fg: [5, 0, 0] },
-    atomicTorquoise: { fg: [5, 2, 0], bg: [0, 2, 4] }
-  }
-});
 
 const newColors = {
   info: colors.blue,
@@ -22,8 +16,6 @@ const newColors = {
   warn: colors.yellow,
   success: colors.green
 };
-
-colors.theme(newColors);
 
 const levels = Object.keys(newColors);
 
@@ -39,17 +31,43 @@ let pattern = [
 
 const ANSII_RE = new RegExp(pattern, 'g');
 
+const PJSON_SETTINGS = {
+  depth: 10
+  // alphabetizeKeys: true
+  // customColors: {
+  //   red: { fg: [5, 0, 0] },
+  //   atomicTorquoise: { fg: [5, 2, 0], bg: [0, 2, 4] }
+  // }
+};
+
+/**
+ * Initialize
+ */
+
+// pjson.init();
+colors.theme(newColors);
+
+const render = (object, indent = 0, opts = {}) => {
+  const options =
+    is.object(opts) && !is.empty(opts)
+      ? defaults(opts, PJSON_SETTINGS)
+      : PJSON_SETTINGS;
+  return pjson.render(object, indent, options);
+};
+
+/**
+ * Formatters
+ */
 debug.formatters.n = v => {
-  return '\n' + pjson.render(v, 2);
+  return '\n' + render(v, 2);
 };
 
 /* only used when you want to use inline */
 debug.formatters.o = v => {
   if (is.object(v)) {
-    let output = pjson
-      .render(v, 2, {
-        depth: 1
-      })
+    let output = render(v, 2, {
+      // depth: 1
+    })
       .replace(/\n/g, '')
       .replace(/\s*:\s*/g, '=');
 
@@ -64,7 +82,7 @@ debug.formatters.o = v => {
   } else if (is.array(v)) {
     return v;
   }
-  return pjson.render(v);
+  return render(v);
 };
 
 debug.formatters.s = v => {
@@ -74,7 +92,7 @@ debug.formatters.s = v => {
 /* All objects, arrays */
 debug.formatters.O = v => {
   console.log('hello');
-  return pjson.render(v, 2);
+  return render(v, 2);
 };
 
 debug.log = function(string, ...rest) {
@@ -84,24 +102,6 @@ debug.log = function(string, ...rest) {
   });
   console.log(filteredString, ...rest);
 };
-
-// const createDebug = name => {
-//   const logger = debug(name);
-
-//   const innerLoggers = ['info', 'error', 'debug', 'success', 'warn'].reduce(
-//     (acc, logType) => {
-//       acc[logType] = logger.extend(logType);
-//       acc[logType].color = logger.color;
-//       return acc;
-//     },
-//     {}
-//   );
-
-//   // alias
-//   innerLoggers['log'] = innerLoggers.info;
-
-//   return innerLoggers;
-// };
 
 class CreateDebug {
   constructor(name) {

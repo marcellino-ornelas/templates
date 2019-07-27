@@ -18,6 +18,7 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 // import process = require('process');
+import colors from 'ansi-colors';
 
 /**
  * Default options for Templates
@@ -236,6 +237,7 @@ export default class Templates {
     }
 
     // this._log('[TPS INFO] Build paths: ', pathsToCreate);
+    logger.tps.info('Build paths: %n', pathsToCreate);
 
     if (is.array.empty(buildPaths)) {
       throw new Error(
@@ -253,9 +255,7 @@ export default class Templates {
       path.join(finalDest, buildPath)
     );
 
-    // this._log('[TPS INFO] Build new folder: ', buildNewFolder);
-
-    // process.exit(0);
+    logger.tps.info('Rendering templates to locations %n', pathsToCreate);
 
     return Promise.resolve()
       .then(() => {
@@ -265,7 +265,8 @@ export default class Templates {
       })
       .then(() => this._answerRestOfPrompts())
       .then(() => {
-        // this._log(`[TPS INFO]: Rendering template at (${finalDest})`);
+        logger.tps.info('Rendering template at %s', finalDest);
+
         dataForTemplating = {
           ...data,
           template: this.template,
@@ -496,13 +497,16 @@ export default class Templates {
           .mkdir(dirPathInNewLocation)
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);
-            loggerGroup.info('Created directory -> %s', dirPathRelativeFromPkg);
+            loggerGroup.info(
+              `   - %s ${colors.green.italic('created')}`,
+              dirPathRelativeFromPkg
+            );
           })
           .catch(err => {
             /* do nothing if dir already exist */
             loggerGroup.warn(
-              'Creating directory failed %s %n',
-              dirPathInNewLocation,
+              `   - %s ${colors.red.italic('failed')} %n`,
+              dirPathRelativeFromPkg,
               err
             );
           });
@@ -528,10 +532,12 @@ export default class Templates {
     const pkg = this.pkg(packageName);
     const { force } = this.opts;
 
+    logger.tps.log('Compiling files %o', { force });
+
     pkg.find({ type: 'file' }).forEach(fileNode => {
       const file = new File(fileNode, { force });
-      logger.tps.log('Compiling file -> %s', file._name);
-      this.compiledFiles.push();
+      logger.tps.log(`  - %s ${colors.green.italic('compiled')}`, file._name);
+      this.compiledFiles.push(file);
     });
   }
 
