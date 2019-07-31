@@ -44,7 +44,6 @@ const PJSON_SETTINGS = {
  * Initialize
  */
 
-// pjson.init();
 colors.theme(newColors);
 
 const render = (object, indent = 0, opts = {}) => {
@@ -91,7 +90,6 @@ debug.formatters.s = v => {
 
 /* All objects, arrays */
 debug.formatters.O = v => {
-  // console.log('hello');
   return render(v, 2);
 };
 
