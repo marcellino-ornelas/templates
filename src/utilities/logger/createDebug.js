@@ -91,7 +91,7 @@ debug.formatters.s = v => {
 
 /* All objects, arrays */
 debug.formatters.O = v => {
-  console.log('hello');
+  // console.log('hello');
   return render(v, 2);
 };
 

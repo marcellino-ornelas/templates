@@ -185,9 +185,10 @@ export default class Templates {
       this.templateLocation
     );
 
+    logger.tps.info('Loading package %s', newPackageName);
+
     this._compileFilesFromPackage(newPackageName);
 
-    // this._log('package finished compiling', this.template);
     logger.tps.success('Added package %s', newPackageName);
 
     this.packagesUsed.push(newPackageName);
@@ -236,7 +237,6 @@ export default class Templates {
       pathsToCreate = [buildPaths];
     }
 
-    // this._log('[TPS INFO] Build paths: ', pathsToCreate);
     logger.tps.info('Build paths: %n', pathsToCreate);
 
     if (is.array.empty(buildPaths)) {
@@ -280,16 +280,32 @@ export default class Templates {
           const renderData = defaults({ name }, dataForTemplating);
           const doesBuildPathExist = isDir(realBuildPath);
 
-          // this._log('real build path', realBuildPath);
+          const groupName = `render_${buildPath}`;
+          const loggerGroup = logger.tps.group(groupName, {
+            clear: true
+          });
+
+          const marker = colors.magenta('*'.repeat(buildPath.length + 12));
+
+          loggerGroup.info(`\n${marker}\nBuild Path: ${buildPath}\n${marker}`);
+
+          loggerGroup.info('Render config: %n', {
+            buildPath: realBuildPath,
+            doesBuildPathExist,
+            buildInDest,
+            buildNewFolder
+          });
 
           return Promise.resolve()
             .then(() => {
-              if (this.opts.wipe && doesBuildPathExist) {
-                return fs.remove(realBuildPath);
-              }
+              const { wipe, force } = this.opts;
 
-              if (!this.opts.force && !this.opts.wipe && doesBuildPathExist) {
-                return this._checkForFiles(realBuildPath, renderData);
+              if (doesBuildPathExist) {
+                if (wipe) {
+                  return fs.remove(realBuildPath);
+                } else if (!force && !wipe) {
+                  return this._checkForFiles(realBuildPath, renderData);
+                }
               }
             })
             .then(() => {
@@ -301,8 +317,10 @@ export default class Templates {
                     // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
                     .ensureDir(realBuildPath)
                     .catch(err => {
-                      console.log('errrrrrrrooooooorrrrrr', err);
-                      /* noop function */
+                      loggerGroup.warn(
+                        'Building build path folder had a issue %n',
+                        err
+                      );
                     })
                 );
               }
@@ -310,23 +328,33 @@ export default class Templates {
             .then(() => this._renderAllDirectories(realBuildPath))
             .then(() => this._renderAllFiles(realBuildPath, renderData))
             .then(() => {
-              // this._log(`Template build at ${buildPath}`);
+              loggerGroup.success(
+                `Build Path: %s ${colors.green.italic('(created)')}`,
+                buildPath
+              );
             })
             .catch(err => {
-              // this._log('Build Path error', err);
+              loggerGroup.error('Build Path: %s %n', buildPath, err);
               this._scheduleCleanUpForBuild(
                 realBuildPath,
                 err,
                 doesBuildPathExist
               );
-            });
+            })
+            .then(() => logger.tps.printGroup(groupName));
         });
 
         return Promise.all(builders).then(() => {
           if (is.array.empty(this.buildErrors)) {
+            logger.tps.success('Finished rendering templates');
             return;
           }
-          console.log(this.buildErrors);
+
+          logger.tps.info('Build Errors: %o', this.buildErrors.length);
+          logger.tps.info(
+            'Build Paths need to be cleaned %n',
+            this.buildErrors.map(({ buildPath }) => buildPath)
+          );
           this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
             this._cleanUpFailBuild(
               buildPath,
@@ -334,26 +362,19 @@ export default class Templates {
             );
           });
 
-          this.buildErrors.forEach(({ buildPath, error }) => {
-            console.log('Build path failed', buildPath);
-            console.log(error);
-          });
-
           const errors = this.buildErrors.map(({ error }) => error);
 
           return Promise.reject(errors.length === 1 ? errors[0] : errors);
         });
-      })
-      .catch(err => {
-        if (!TPS.IS_TESTING) {
-          console.log('There was a error while rendering your template');
-          console.log(err);
-        }
-        return Promise.reject(err);
       });
   }
 
   _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
+    logger.tps
+      .group(`render_${buildPath}`)
+      .info('Build Path schedule for cleaning %s %o', buildPath, {
+        didBuildPathExist
+      });
     this.buildErrors.push({
       buildPath: buildPath,
       error: err,
@@ -362,7 +383,9 @@ export default class Templates {
   }
 
   _cleanUpFailBuild(buildError, buildNewFolder) {
-    // this._log('clean up has begun for', buildError);
+    logger.tps.info('Processing build cleanup %s %o', buildError, {
+      buildNewFolder
+    });
 
     let buildPath = buildError;
     const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
@@ -381,14 +404,24 @@ export default class Templates {
     const dirsIsEmpty = is.array.empty(dirs);
 
     if (filesIsEmpty && dirsIsEmpty) {
+      logger.tps.success('Nothing to clean... Moving on to next');
       return;
     }
 
     if (!dirsIsEmpty) {
       const dirsThatMatch = dirs.filter(dir => dir.includes(buildPath));
 
+      if (!is.array.empty(dirsThatMatch)) {
+        logger.tps.info('Cleaning directories %n', dirsThatMatch);
+      }
+
       dirsThatMatch.forEach(dir => {
-        fs.removeSync(dir);
+        try {
+          fs.removeSync(dir);
+          logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
+        } catch (e) {
+          logger.tps.error('Clean up failed when deleting directories %n', err);
+        }
 
         // if directory is removed then we can remove all child files
         if (!filesIsEmpty) {
@@ -398,10 +431,23 @@ export default class Templates {
     }
 
     if (!filesIsEmpty) {
+      const filesThatMatch = files.filter(file => file.includes(buildPath));
+
+      if (!is.array.empty(filesThatMatch)) {
+        logger.tps.info('Cleaning files %n', filesThatMatch);
+      }
+
       files.forEach(file => {
-        fs.removeSync(file);
+        try {
+          fs.removeSync(file);
+          logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
+        } catch (e) {
+          logger.tps.error('Clean up failed when deleting files %n', err);
+        }
       });
     }
+
+    logger.tps.success('Clean up finished');
   }
 
   _checkForFiles(dest, data) {
@@ -416,12 +462,13 @@ export default class Templates {
   }
 
   /**
-   * Creates all files that our template uses in `dest` folder
-   * @param {String} dest - destination path to render all files to
+   * Creates all files that our template uses in `buildPath` folder
+   * @param {String} buildPath - destination path to render all files to
    * @param {Object} [data={}] - data passed in for dot
    */
-  _renderAllFiles(dest, data) {
-    // this._log('+++++++++ render files +++++++++++++');
+  _renderAllFiles(buildPath, data) {
+    const loggerGroup = logger.tps.group(`render_${buildPath}`);
+    loggerGroup.info('Rendering files');
 
     const files = this.compiledFiles.filter(file => !file.isDot);
     const dotFiles = this.compiledFiles.filter(file => file.isDot);
@@ -430,66 +477,72 @@ export default class Templates {
       /**
        * Will throw error if something is wrong with doT
        */
-      return [file, file._dest(dest, data), file.fileDataTemplate(data)];
+      return [file, file._dest(buildPath, data), file.fileDataTemplate(data)];
     });
 
     const filesInProgress = [];
     let hasErroredOut = false;
     let error;
 
-    const handleFileErrorCatch = err => {
+    const handleFileErrorCatch = (dest, err) => {
+      loggerGroup.error('Error happened when rendering %s %n', dest, err);
       if (!hasErroredOut) {
         hasErroredOut = true;
         error = err;
-        // this._log('[TPS] errored out', error);
       }
     };
 
     dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
-      // this._log(` `, '-> ', finalDest);
+      loggerGroup.info(` - %s ${colors.cyan.italic('(Dot file)')}`, finalDest);
       filesInProgress.push(
         file
           .renderDotFile(finalDest, dotContentsForFile)
-          .catch(handleFileErrorCatch)
+          .catch(err => handleFileErrorCatch(finalDest, err))
       );
     });
 
     files.forEach(file => {
-      const finalDest = file._dest(dest, data);
-      // this._log(` `, '-> ', finalDest);
+      const finalDest = file._dest(buildPath, data);
+      loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
       filesInProgress.push(
-        file.renderFile(finalDest).catch(handleFileErrorCatch)
+        file
+          .renderFile(finalDest)
+          .catch(err => handleFileErrorCatch(finalDest, err))
       );
     });
 
     return Promise.all(filesInProgress).then(() => {
       if (hasErroredOut) {
+        loggerGroup.error(
+          'There was a error when rendering template to %s',
+          buildPath
+        );
         return Promise.reject(error);
       }
     });
   }
 
   /**
-   * Creates all directories that our template uses in `dest` folder
+   * Creates all directories that our template uses in `buildPath` folder
    * @private
-   * @param {String} dest - destination path to make all directories. Should be a folder
+   * @param {String} buildPath - destination path to make all directories. Should be a folder
    */
-  _renderAllDirectories(dest) {
+  _renderAllDirectories(buildPath) {
     const dirTracker = {};
     const dirsInProgress = [];
 
-    logger.tps.info('Rendering directories in %s', dest);
-
-    const loggerGroup = logger.tps.group('rendering_directories', {
-      clear: true
-    });
+    const loggerGroup = logger.tps.group(`render_${buildPath}`);
+    loggerGroup.info('Rendering directories in %s', buildPath);
 
     this._getPackageArray().forEach(pkg => {
       pkg.find({ type: 'dir' }).forEach(dirNode => {
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
-        const dirPathInNewLocation = path.join(dest, dirPathRelativeFromPkg);
+        const dirPathInNewLocation = path.join(
+          buildPath,
+          dirPathRelativeFromPkg
+        );
 
         /* mark directory as already made */
         dirTracker[dirNode.path] = true;
@@ -498,7 +551,7 @@ export default class Templates {
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);
             loggerGroup.info(
-              `   - %s ${colors.green.italic('created')}`,
+              `   - %s ${colors.green.italic('(created)')}`,
               dirPathRelativeFromPkg
             );
           })
@@ -515,12 +568,7 @@ export default class Templates {
       });
     });
 
-    return (
-      dirsInProgress.length &&
-      Promise.all(dirsInProgress).then(() => {
-        logger.tps.printGroup('rendering_directories');
-      })
-    );
+    return dirsInProgress.length && Promise.all(dirsInProgress);
   }
 
   /**
