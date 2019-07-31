@@ -17,13 +17,11 @@ import {
   FileExistError
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
-// import process = require('process');
 import colors from 'ansi-colors';
 
 /**
  * Default options for Templates
  * @typedef  {Object} TemplateOptions
- * @property {boolean} verbose - Log extra information to the console
  * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
  * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
  * @property {boolean} defaultPackage - Don't load the default folder
@@ -32,7 +30,6 @@ import colors from 'ansi-colors';
  * @property {boolean} wipe - Force creation of template. This will delete the directory if exists.
  */
 const DEFAULT_OPTIONS = {
-  verbose: false,
   noLocalConfig: false,
   noGlobalConfig: false,
   defaultPackage: true,

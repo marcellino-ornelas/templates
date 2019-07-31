@@ -1,8 +1,8 @@
 const path = require('path');
+const debug = require('debug');
 const Template = require('../../lib/templates');
 const is = require('is');
 const CREATE_OPTIONS = require('../options/create');
-
 exports.command = 'create [buildPaths...]';
 
 exports.description = 'create a new folder with template';
@@ -12,8 +12,11 @@ exports.builder = CREATE_OPTIONS;
 exports.handler = function(argv) {
   const dest = process.cwd();
 
+  if (argv.verbose) {
+    debug.enable('tps');
+  }
+
   const tps = new Template({
-    verbose: argv.verbose,
     default: argv.default,
     newFolder: !argv.noNewFolder,
     force: argv.force,

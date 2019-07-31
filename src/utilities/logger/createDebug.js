@@ -103,13 +103,31 @@ debug.log = function(string, ...rest) {
   console.log(filteredString, ...rest);
 };
 
+const logFunctions = ['info', 'error', 'debug', 'success', 'warn'];
+
+const enableLogFuntions = logFunctions
+  .map(logName => `tps:${logName}`)
+  .join(',');
+
 class CreateDebug {
   constructor(name) {
     this.logger = debug(name);
 
-    ['info', 'error', 'debug', 'success', 'warn'].reduce((acc, logType) => {
-      acc[logType] = this.logger.extend(logType);
-      acc[logType].color = this.logger.color;
+    if (debug.enabled(name)) {
+      debug.enable(enableLogFuntions);
+    }
+
+    logFunctions.reduce((acc, logType) => {
+      const logger = this.logger.extend(logType);
+
+      logger.color = this.logger.color;
+      acc[logType] = (...args) => {
+        if (this.logger.enabled && !logger.enabled) {
+          logger.enabled = true;
+        }
+        logger(...args);
+      };
+
       return acc;
     }, this);
 
