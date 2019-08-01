@@ -64,6 +64,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
         'storeUtils',
         'db/db.js'
       ]);
+      expect(indexFile).toBeFile();
     });
   });
 

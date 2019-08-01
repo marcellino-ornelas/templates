@@ -11,7 +11,7 @@
     "build:prod": "npm run build:code",
     "build": "npm run build:prod",
     "test": "npm run test:core",
-    "test:core": "npm run build:code && BABEL_ENV=development jest",
+    "test:core": "npm run build:code && BABEL_ENV=development jest --coverage",
     "cli": "node ./cli",
     "ct": "npm run cli -- create --use hey App"
   },
@@ -35,10 +35,8 @@
     "jest": "^24.0.0"
   },
   "dependencies": {
-    "acho": "^4.0.4",
     "ansi-colors": "^4.1.1",
     "debug": "^4.1.1",
-    "debugger-256": "^1.6.37",
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",
     "find-up": "^3.0.0",

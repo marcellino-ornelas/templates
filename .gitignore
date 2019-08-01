@@ -3,3 +3,4 @@ node_modules/
 lib/
 __tests__/testing_playground*/
 docs-1
+coverage

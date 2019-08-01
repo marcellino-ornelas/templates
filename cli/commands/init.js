@@ -3,6 +3,7 @@ const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');
 const { isDir } = require('../../lib/utilities/fileSystem');
 const { cliLog } = require('../../lib/utilities/helpers');
+const debug = require('debug');
 
 exports.command = 'init';
 
@@ -16,6 +17,10 @@ exports.builder = yargs =>
   });
 
 exports.handler = function(argv) {
+  if (argv.verbose) {
+    debug.enable('tps');
+  }
+
   const temp = new Template({
     force: argv.force,
     verbose: argv.verbose
