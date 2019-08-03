@@ -18,6 +18,7 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import colors from 'ansi-colors';
+import Promise from 'bluebird';
 
 /**
  * Default options for Templates
@@ -512,7 +513,11 @@ export default class Templates {
     loggerGroup.info('Rendering directories in %s', buildPath);
 
     this._getPackageArray().forEach(pkg => {
-      pkg.find({ type: 'dir' }).forEach(dirNode => {
+      const dirs = pkg.find({ type: 'dir' });
+
+      // console.log('dirs ', dirs.map(f => f.path));
+
+      const dirsGettingCreated = Promise.each(dirs, dirNode => {
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
@@ -521,9 +526,12 @@ export default class Templates {
           dirPathRelativeFromPkg
         );
 
-        /* mark directory as already made */
         dirTracker[dirNode.path] = true;
-        const dirInProgress = fs
+        if (isDir(dirPathInNewLocation)) {
+          return;
+        }
+        /* mark directory as already made */
+        return fs
           .mkdir(dirPathInNewLocation)
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);
@@ -539,10 +547,12 @@ export default class Templates {
               dirPathRelativeFromPkg,
               err
             );
-          });
 
-        dirsInProgress.push(dirInProgress);
+            return Promsie.reject(err);
+          });
       });
+
+      dirsInProgress.push(dirsGettingCreated);
     });
 
     return dirsInProgress.length && Promise.all(dirsInProgress);

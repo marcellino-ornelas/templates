@@ -1,4 +1,4 @@
-## Create
+## Use
 
 ### Description
 
@@ -6,14 +6,12 @@ Create a template.
 
 > Note: When rendering a template, if a file exists. Tps will throw an error
 
-Aliases: [Use](./use.md)
-
 ---
 
 ### Syntax
 
 ```bash
-tps create --use=<template-name> [flags...] [templates-to-create...]
+tps <template-name> [flags...] [templates-to-create...]
 ```
 
 #### Parameters
@@ -56,7 +54,7 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
 Use the create command to create a template in your current working directory
 
 ```bash
-tps create --use=<template-name> app
+tps <template-name> app
 ```
 
     ./app/
@@ -67,7 +65,7 @@ You can also specify a path to place the template.
 `tps create path/to/folder/<template>`.
 
 ```bash
-tps create --use=<template-name> app/src
+tps <template-name> app/src
 ```
 
 This will create your template inside of `./app/src`
@@ -78,10 +76,10 @@ This will create your template inside of `./app/src`
 
 > Note: directories will be created if they don't exist.
 
-You can also create multiple components name at the same time `tps create --use=<template-name> <template-to-create> <template-to-create> <template-to-create>...`
+You can also create multiple components name at the same time `tps <template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
 ```bash
-tps create --use=<template-name> app app2 webapp/src
+tps <template-name> app app2 webapp/src
 ```
 
 This line will create templates inside `app`, `app2`, and `webapp/src`.
@@ -94,10 +92,10 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
       src/
         <your-template-files> ...
 
-You can also render your template in your cwd `tps create --use=<template-name>`
+You can also render your template in your cwd `tps <template-name>`
 
 ```bash
-tps create --use=<template-name>
+tps <template-name>
 ```
 
     ./
@@ -106,7 +104,7 @@ tps create --use=<template-name>
 By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
 
 ```bash
-tps create --use=<template-name> --force app
+tps <template-name> --force app
 ```
 
     ./app/

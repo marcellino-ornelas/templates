@@ -11,7 +11,8 @@
     "build:prod": "npm run build:code",
     "build": "npm run build:prod",
     "test": "npm run test:core",
-    "test:core": "npm run build:code && BABEL_ENV=development jest --coverage",
+    "test:core": "npm run build:code && BABEL_ENV=development jest",
+    "test:coverage": "npm run test -- --coverage",
     "cli": "node ./cli",
     "ct": "npm run cli -- create --use hey App"
   },
@@ -36,6 +37,7 @@
   },
   "dependencies": {
     "ansi-colors": "^4.1.1",
+    "bluebird": "^3.5.5",
     "debug": "^4.1.1",
     "dot": "^1.1.2",
     "filenamify": "^2.1.0",

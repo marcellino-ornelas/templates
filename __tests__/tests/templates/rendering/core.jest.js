@@ -51,6 +51,22 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
+  it('should be able to render 1000 templates with no problems', () => {
+    const all = [];
+
+    for (let i = 0; i < 1000; i++) {
+      let tps = new Templates('testing');
+      const destPath = playground.pathTo(`app_${i}`);
+      const promise = tps.render(playground.box(), `app_${i}`).then(() => {
+        expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+      });
+
+      all.push(promise);
+    }
+
+    return Promise.all(all);
+  });
+
   it('should be able to render a local template with nested directories', done => {
     let tps = new Templates('testing');
 

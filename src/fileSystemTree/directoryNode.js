@@ -56,6 +56,7 @@ export class DirectoryNode extends FileSystemNode {
 
   find(selectBy = {}) {
     return this.selectChildren(fsNode => {
+      // console.log(fsNode.path);
       return couldMatchObj(selectBy, fsNode);
     });
   }
