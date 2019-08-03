@@ -31,8 +31,7 @@ describe('[Templates] Render Process:', () => {
   afterAll(() => playground.destroy());
 
   beforeEach(() => {
-    tps = new Templates();
-    tps.use('testing');
+    tps = new Templates('testing');
 
     return playground.createBox('create_clean_up');
   });

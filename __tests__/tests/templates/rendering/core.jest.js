@@ -2,7 +2,11 @@ import fs from 'fs-extra';
 import Templates from '@tps/templates';
 import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
-import { TemplateNotFound, DirectoryNotFoundError } from '@tps/errors';
+import {
+  TemplateNotFound,
+  DirectoryNotFoundError,
+  RequiresTemplateError
+} from '@tps/errors';
 
 /**
  * Constants
@@ -17,27 +21,27 @@ describe('[Templates] Render Process:', () => {
 
   beforeEach(() => playground.createBox('render_process'));
 
-  it('should throw TemplateNotFound if no template is available', () => {
-    let tps = new Templates();
+  it('should throw RequiresTemplateError if no template was set', () => {
+    expect(() => new Templates()).toThrowError(RequiresTemplateError);
+  });
 
-    expect(() => tps.use('some-random-template')).toThrowError(
+  it('should throw TemplateNotFound if no template is available', () => {
+    expect(() => new Templates('some-random-template')).toThrowError(
       TemplateNotFound
     );
   });
 
   it('should throw DirectoryNotFoundError if dest does not exist', () => {
     let dest = playground.pathTo('non/existent/path');
-    let tps = new Templates();
-    tps.use('testing');
+    let tps = new Templates('testing');
 
     expect(tps.render(dest, 'app')).rejects.toThrowError(
       DirectoryNotFoundError
     );
   });
 
-  it.only('should be able to render a local template', done => {
-    let tps = new Templates();
-    tps.use('testing');
+  it('should be able to render a local template', done => {
+    let tps = new Templates('testing');
 
     const destPath = playground.pathTo('app');
 
@@ -48,8 +52,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   it('should be able to render a local template with nested directories', done => {
-    let tps = new Templates();
-    tps.use('testing');
+    let tps = new Templates('testing');
 
     const destPath = playground.pathTo('hey/app');
 
@@ -60,8 +63,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   it('should be able to render a local template with multiple build paths', done => {
-    let tps = new Templates();
-    tps.use('testing');
+    let tps = new Templates('testing');
 
     const buildPaths = ['app', 'Box', 'New'];
 
@@ -75,8 +77,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   it("should be able to render a local template and keep all files that don't interfere with the template", done => {
-    let tps = new Templates();
-    tps.use('testing');
+    let tps = new Templates('testing');
 
     const destPath = playground.pathTo('app');
     const randomDest = playground.pathTo('app/some-random-file.js');
@@ -91,8 +92,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   it('should be able to render a template with force, if files exist', done => {
-    let tps = new Templates({ force: true });
-    tps.use('testing');
+    let tps = new Templates('testing', { force: true });
 
     const indexFile = playground.pathTo('app/index.js');
 
@@ -110,8 +110,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('app');
     const randomDest = playground.pathTo('app/some-random-file.js');
 
-    let tps = new Templates({ wipe: true });
-    tps.use('testing');
+    let tps = new Templates('testing', { wipe: true });
 
     fs.outputFileSync(randomDest, 'blah');
 
@@ -123,8 +122,7 @@ describe('[Templates] Render Process:', () => {
   });
 
   it('should be able to render packages', done => {
-    let tps = new Templates({ defaultPackage: false });
-    tps.use('testing');
+    let tps = new Templates('testing', { defaultPackage: false });
     tps.loadPackages(['main', 'store']);
 
     const destPath = playground.pathTo('app');

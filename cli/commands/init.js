@@ -21,16 +21,13 @@ exports.handler = function(argv) {
     debug.enable('tps');
   }
 
-  const temp = new Template({
+  const temp = new Template('init', {
     force: argv.force,
-    verbose: argv.verbose
+    verbose: argv.verbose,
+    tpsPath: TPS.MAIN_TPS
   });
 
   const localDest = process.cwd();
-
-  temp.use('init', {
-    tpsPath: TPS.MAIN_TPS
-  });
 
   const inProcessBuilds = [];
   const initFolder = path.join(TPS.INIT_LOCAL_PATH, TPS.TPS_FOLDER);

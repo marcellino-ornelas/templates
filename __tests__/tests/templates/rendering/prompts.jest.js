@@ -21,8 +21,7 @@ describe('[Templates] Render Process:', () => {
     let tps;
     beforeEach(() => {
       // add no default to this test to only test packages
-      tps = new Templates({ defaultPackage: false });
-      tps.use('testing-prompt');
+      tps = new Templates('testing-prompt', { defaultPackage: false });
 
       return playground.createBox('render_process_prompts');
     });

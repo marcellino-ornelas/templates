@@ -18,8 +18,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
   afterAll(() => playground.destroy());
 
   beforeEach(() => {
-    tps = new Templates();
-    tps.use('testing');
+    tps = new Templates('testing');
 
     return playground.createBox('render_failed');
   });

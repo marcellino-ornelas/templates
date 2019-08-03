@@ -8,13 +8,7 @@ describe('[Templates] Packages:', () => {
   let tps;
 
   beforeEach(() => {
-    tps = new Templates();
-    tps.use('testing');
-  });
-
-  it('should throw error if no template was set', () => {
-    tps = new Templates();
-    expect(() => tps.loadPackage()).toThrowError(RequiresTemplateError);
+    tps = new Templates('testing');
   });
 
   it('should be able to compile default package', () => {
@@ -22,7 +16,7 @@ describe('[Templates] Packages:', () => {
   });
 
   it('should not load default package if turn off', () => {
-    const tpsNoDefault = new Templates({ default: false });
+    const tpsNoDefault = new Templates('testing', { defaultPackage: false });
 
     expect(tpsNoDefault.opts.default).toBeFalsy();
     expect(tpsNoDefault.packages).not.toHaveProperty('default');

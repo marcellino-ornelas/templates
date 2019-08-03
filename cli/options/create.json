@@ -1,7 +1,6 @@
 {
   "use": {
     "alias": "u",
-    "demandOption": true,
     "describe": "Template package to create your with",
     "type": "string"
   },

@@ -36,7 +36,8 @@ const DEFAULT_OPTIONS = {
   default: false,
   force: false,
   newFolder: true,
-  wipe: false
+  wipe: false,
+  tpsPath: null
 };
 
 /**
@@ -47,35 +48,9 @@ export default class Templates {
   /**
    * @param {TemplateOptions} opts - options to pass to templates
    */
-  constructor(opts = {}) {
-    this.opts = defaults(opts, DEFAULT_OPTIONS);
-    this.packages = {};
-    this.packagesUsed = [];
-    this.compiledFiles = [];
-    this._config = new Config();
-    this.src = null;
-    this.templateLocation = null;
-    this._prompts = null;
-    this.successfulBuilds = new SuccessfulBuild();
-    this.buildErrors = [];
-    this.data = {};
-  }
-
-  get config() {
-    return this._config.configurations;
-  }
-
-  /**
-   * Specify what template package you would like to use
-   * @param {String} templateName - location to templating folder or url to Github
-   * @param {object} [opts={}]    - options for use
-   * @param {string} opts.tpsPath - `.tps/` folder you want to load template from
-   */
-  use(templateName, opts = {}) {
+  constructor(templateName, opts = {}) {
     if (!templateName || !is.string(templateName)) {
-      throw new Error(
-        'Use takes one string argument. The string can be a url to a Github repo or a global or local template name'
-      );
+      throw new RequiresTemplateError();
     }
 
     const localPath = opts.tpsPath || TPS.LOCAL_PATH;
@@ -84,32 +59,36 @@ export default class Templates {
 
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
-        this.templateLocation = maybeLocalTemp;
+        this.src = maybeLocalTemp;
         break;
       case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
-        this.templateLocation = maybeGlobalTemp;
+        this.src = maybeGlobalTemp;
         break;
       default:
         throw new TemplateNotFoundError(templateName);
     }
 
     this.template = templateName;
-    logger.tps.info('Rendering template %s', this.template);
+    logger.tps.info('Rendering template %n', {
+      name: this.template,
+      location: this.src
+    });
 
-    // set template location
-    this.src = this.templateLocation;
-    logger.tps.info('Template location %s', this.src);
+    this.opts = defaults(opts, DEFAULT_OPTIONS);
+    this.packages = {};
+    this.packagesUsed = [];
+    this.compiledFiles = [];
+    this._config = new Config();
+    this.successfulBuilds = new SuccessfulBuild();
+    this.buildErrors = [];
+    this.data = {};
 
     this._loadTpsConfig(templateName);
 
     this._handleTpsConfig();
 
-    this.templateSettingsPath = path.join(
-      this.templateLocation,
-      TPS.TEMPLATE_SETTINGS_FILE
-    );
+    this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
-    // load Settings
     if (isFile(this.templateSettingsPath)) {
       logger.tps.info(
         'Loading template settings file %s',
@@ -136,12 +115,16 @@ export default class Templates {
     }
 
     // load default package if applicable
-    const defaultFolder = path.join(this.templateLocation, 'default');
+    const defaultFolder = path.join(this.src, 'default');
     const shouldLoadDefault = this.opts.defaultPackage && isDir(defaultFolder);
     logger.tps.info('Loading default package %o', shouldLoadDefault);
     if (shouldLoadDefault) {
       this.loadPackage('default');
     }
+  }
+
+  get config() {
+    return this._config.configurations;
   }
 
   /**
@@ -165,7 +148,7 @@ export default class Templates {
    * @param {String} newPackage - package from the template you would like to use
    */
   loadPackage(newPackageName) {
-    if (!this.templateLocation) {
+    if (!this.src) {
       throw new RequiresTemplateError();
     }
 
@@ -177,10 +160,7 @@ export default class Templates {
       throw new PackageAlreadyCompiledError(newPackageName);
     }
 
-    this.packages[newPackageName] = new DirNode(
-      newPackageName,
-      this.templateLocation
-    );
+    this.packages[newPackageName] = new DirNode(newPackageName, this.src);
 
     logger.tps.info('Loading package %s', newPackageName);
 

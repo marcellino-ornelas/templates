@@ -1,7 +1,7 @@
 const CREATE_OPTIONS = require('../options/create');
 const { createHandler } = require('../lib/create');
 
-exports.command = 'create [buildPaths...]';
+exports.command = '$0 [use] [buildPaths...]';
 
 exports.description = 'create a new folder with template';
 

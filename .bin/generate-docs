@@ -3,12 +3,10 @@ const Templates = require('../lib/templates');
 const CONSTANTS = require('../lib/utilities/constants');
 const OPTIONS = require('../cli/options');
 
-const tps = new Templates({
+const tps = new Templates('docs', {
   verbose: true,
   wipe: true
 });
-
-tps.use('docs');
 
 console.log(CONSTANTS.MAIN_DIR);
 

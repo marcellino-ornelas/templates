@@ -7,10 +7,9 @@ describe('[Templates] Config: ', () => {
   describe('Using basic features', () => {
     let tps;
     beforeAll(() => {
-      tps = new Templates({
+      tps = new Templates('testing', {
         noGlobalConfig: true
       });
-      tps.use('testing');
     });
 
     it('should load local configurations', () => {
@@ -50,11 +49,9 @@ describe('[Templates] Config: ', () => {
   describe('Using Prompts features', () => {
     let tps;
     beforeEach(() => {
-      tps = new Templates({
+      tps = new Templates('testing-prompt', {
         noGlobalConfig: true
       });
-
-      tps.use('testing-prompt');
     });
 
     it('should answer prompt when config is loaded', () => {
