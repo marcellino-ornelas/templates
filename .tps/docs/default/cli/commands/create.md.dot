@@ -41,8 +41,8 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
     <tbody>
     {{ for(var optionName in create ){ }}{{ var option = create[optionName]; }}<tr>
         <td>--{{= optionName }}, {{= option.alias || '' }}</td>
-        <td>{{= option.default || '' }}</td>
-        <td>{{= option.description || '' }}</td>
+        <td>{{= option.default || 'N/A' }}</td>
+        <td>{{= option.describe || '' }}</td>
       </tr>{{ } }}
     </tbody>
 </table>
