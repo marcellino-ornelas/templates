@@ -35,11 +35,11 @@ export const HAS_GLOBAL = isDir(GLOBAL_PATH);
  * local
  */
 const tpsLocal = findUp(TPS_FOLDER);
-const hasLocal = tpsLocal && tpsLocal !== GLOBAL_PATH;
+export const HAS_LOCAL = tpsLocal && tpsLocal !== GLOBAL_PATH;
 
-export const LOCAL_PATH = hasLocal ? tpsLocal : null;
+export const LOCAL_PATH = HAS_LOCAL ? tpsLocal : null;
 
-export const LOCAL_CONFIG_PATH = hasLocal
+export const LOCAL_CONFIG_PATH = HAS_LOCAL
   ? path.join(LOCAL_PATH, CONFIG_FILE)
   : null;
 

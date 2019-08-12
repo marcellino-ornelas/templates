@@ -1,0 +1,14 @@
+{
+  "global": {
+    "type": "boolean",
+    "description": "List out global files",
+    "alias": "g",
+    "default": true
+  },
+  "local": {
+    "type": "boolean",
+    "description": "List out global files",
+    "alias": "l",
+    "default": true
+  }
+}
