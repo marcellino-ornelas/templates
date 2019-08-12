@@ -1,6 +1,6 @@
 node_modules/
 .DS_Store
-lib/
+/lib/
 __tests__/testing_playground*/
 docs-1
 coverage

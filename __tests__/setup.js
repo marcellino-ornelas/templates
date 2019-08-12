@@ -1,6 +1,8 @@
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
 
+jest.setTimeout(30000);
+
 expect.extend({
   toBeFile(received) {
     const passed = isFile(received);
