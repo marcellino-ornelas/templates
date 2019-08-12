@@ -56,7 +56,19 @@ export function couldMatchObj(matcher, obj) {
   let matched = true;
 
   eachObj(matcher, (val, key) => {
-    matched = val === obj[key];
+    switch (typeof val) {
+      case 'function':
+        matched = val(obj[key]);
+        break;
+      case 'object':
+        if (val.not) {
+          matched = val.not !== obj[key];
+          break;
+        }
+      default:
+        matched = val === obj[key];
+    }
+    // matched = val === obj[key];
     return matched;
   });
 

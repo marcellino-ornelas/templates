@@ -25,7 +25,9 @@ class File {
     this.src = fileNode.path;
     this.fileNode = fileNode;
     const fileData = fs.readFileSync(this.src);
-    this.fileDataTemplate = dot.template(fileData);
+    this.fileDataTemplate = (data, defs) => {
+      return this.isDot ? dot.template(fileData, null, defs)(data) : fileData;
+    };
 
     this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
   }

@@ -19,6 +19,7 @@ import {
 import logger from '@tps/utilities/logger';
 import colors from 'ansi-colors';
 import Promise from 'bluebird';
+import { FileNode } from '../fileSystemTree/fileNode';
 
 /**
  * Default options for Templates
@@ -79,6 +80,7 @@ export default class Templates {
     this.packages = {};
     this.packagesUsed = [];
     this.compiledFiles = [];
+    this._defs = {};
     this._config = new Config();
     this.successfulBuilds = new SuccessfulBuild();
     this.buildErrors = [];
@@ -450,12 +452,16 @@ export default class Templates {
 
     const files = this.compiledFiles.filter(file => !file.isDot);
     const dotFiles = this.compiledFiles.filter(file => file.isDot);
-
+    console.log('defs', this._defs);
     const dotContents = dotFiles.map(file => {
       /**
        * Will throw error if something is wrong with doT
        */
-      return [file, file._dest(buildPath, data), file.fileDataTemplate(data)];
+      return [
+        file,
+        file._dest(buildPath, data),
+        file.fileDataTemplate(data, this._defs)
+      ];
     });
 
     const filesInProgress = [];
@@ -515,8 +521,6 @@ export default class Templates {
     this._getPackageArray().forEach(pkg => {
       const dirs = pkg.find({ type: 'dir' });
 
-      // console.log('dirs ', dirs.map(f => f.path));
-
       const dirsGettingCreated = Promise.each(dirs, dirNode => {
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
@@ -567,11 +571,30 @@ export default class Templates {
     const pkg = this.pkg(packageName);
     const { force } = this.opts;
 
-    logger.tps.log('Compiling files %o', { force });
+    const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
-    pkg.find({ type: 'file' }).forEach(fileNode => {
+    if (!is.array.empty(defFiles)) {
+      logger.tps.log('Compiling def files %o', { force });
+
+      defFiles.forEach(fileNode => {
+        logger.tps.info(
+          `  - %s ${colors.green.italic('compiled')}`,
+          fileNode.name
+        );
+        this._defs[
+          fileNode.name.substring(0, fileNode.name.indexOf('.'))
+        ] = fs.readFileSync(fileNode.path).toString();
+      });
+    }
+
+    logger.tps.log('Compiling files');
+
+    pkg.find({ type: 'file', ext: { not: '.def' } }).forEach(fileNode => {
       const file = new File(fileNode, { force });
-      logger.tps.log(`  - %s ${colors.green.italic('compiled')}`, file._name);
+      logger.tps.info(
+        `  - %s ${colors.green.italic('compiled')}`,
+        fileNode.path
+      );
       this.compiledFiles.push(file);
     });
   }

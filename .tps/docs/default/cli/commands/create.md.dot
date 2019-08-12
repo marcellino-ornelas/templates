@@ -30,7 +30,7 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
 
 {{ var create = tps.options.create; }}
 
-<table id="create-table">
+<!-- <table id="create-table">
     <thead>
       <tr>
         <th>Flag</th>
@@ -45,7 +45,9 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
         <td>{{= option.describe || '' }}</td>
       </tr>{{ } }}
     </tbody>
-</table>
+</table> -->
+
+{{#def.flag_table}}
 
 ---
 
