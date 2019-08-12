@@ -1,4 +1,5 @@
-<table id="create-table">
+{{##def.flagTable:opts:
+<table id="{{=opts.name}}">
     <thead>
       <tr>
         <th>Flag</th>
@@ -7,10 +8,11 @@
       </tr>
     </thead>
     <tbody>
-    {{ for(var optionName in create ){ }}{{ var option = create[optionName]; }}<tr>
+    {{ for(var optionName in opts.data ){ }}{{ var option = opts.data[optionName]; }}<tr>
         <td>--{{= optionName }}, {{= option.alias || '' }}</td>
         <td>{{= option.default || 'N/A' }}</td>
         <td>{{= option.describe || '' }}</td>
       </tr>{{ } }}
     </tbody>
 </table>
+#}}

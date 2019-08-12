@@ -47,7 +47,7 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
     </tbody>
 </table> -->
 
-{{#def.flag_table}}
+{{#def.flag_table:{name: "create-table", data:create }}}
 
 ---
 
