@@ -20,6 +20,7 @@ import logger from '@tps/utilities/logger';
 import colors from 'ansi-colors';
 import Promise from 'bluebird';
 import { FileNode } from '../fileSystemTree/fileNode';
+import dot from '@tps/dot';
 
 /**
  * Default options for Templates
@@ -452,7 +453,6 @@ export default class Templates {
 
     const files = this.compiledFiles.filter(file => !file.isDot);
     const dotFiles = this.compiledFiles.filter(file => file.isDot);
-    console.log('defs', this._defs);
     const dotContents = dotFiles.map(file => {
       /**
        * Will throw error if something is wrong with doT
@@ -581,9 +581,12 @@ export default class Templates {
           `  - %s ${colors.green.italic('compiled')}`,
           fileNode.name
         );
-        this._defs[
-          fileNode.name.substring(0, fileNode.name.indexOf('.'))
-        ] = fs.readFileSync(fileNode.path).toString();
+        const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
+        this._defs[name] = fs.readFileSync(fileNode.path).toString();
+
+        // When def files have more than one def.
+        // this fixes problems when defs are available at render time
+        dot.template(`{{#def.${name}}}`, null, this._defs);
       });
     }
 
@@ -679,3 +682,20 @@ function SuccessfulBuild() {
 }
 
 // module.exports = Templates;
+
+/* <table id="">
+    <thead>
+      <tr>
+        <th>Flag</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ for(var optionName in opts.data ){ }}{{ var option = opts.data[optionName]; }}<tr>
+        <td>--{{= optionName }}, {{= option.alias || '' }}</td>
+        <td>{{= option.default || 'N/A' }}</td>
+        <td>{{= option.describe || '' }}</td>
+      </tr>{{ } }}
+    </tbody>
+</table> */

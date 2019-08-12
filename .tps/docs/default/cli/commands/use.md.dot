@@ -26,26 +26,7 @@ tps <template-name> [flags...] [templates-to-create...]
 
 ### Flags
 
-<table id="create-table">
-    <thead>
-      <tr>
-        <th>Flag</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-    {{ var create = tps.options.create; }}
-    {{ for(var optionName in create ){ }}
-        {{ var option = create[optionName]; }}
-        <tr>
-            <td>--{{= optionName }}, {{= option.alias }}</td>
-            <td>{{= option.default || 'N/A' }}</td>
-            <td>{{= option.describe || '' }}</td>
-        </tr>
-    {{ } }}
-    </tbody>
-</table>
+{{#def.flagTable:{name: "use-table", data: tps.options.create } || "nope"}}
 
 ---
 
