@@ -680,22 +680,3 @@ function SuccessfulBuild() {
   this.files = [];
   this.dirs = [];
 }
-
-// module.exports = Templates;
-
-/* <table id="">
-    <thead>
-      <tr>
-        <th>Flag</th>
-        <th>Default</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{ for(var optionName in opts.data ){ }}{{ var option = opts.data[optionName]; }}<tr>
-        <td>--{{= optionName }}, {{= option.alias || '' }}</td>
-        <td>{{= option.default || 'N/A' }}</td>
-        <td>{{= option.describe || '' }}</td>
-      </tr>{{ } }}
-    </tbody>
-</table> */
