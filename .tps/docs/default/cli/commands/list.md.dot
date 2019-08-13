@@ -1,0 +1,41 @@
+## List
+
+### Description
+
+List all available templates that you can use.
+
+---
+
+### Syntax
+
+```bash
+tps list [flags...]
+```
+
+#### Parameters
+
+`[flags...]` (optional) flags to change the behavior of init.
+
+---
+
+### Setting options
+
+{{#def.flagTable:{name: "list-options", data: tps.options.list } || ""}}
+
+---
+
+### Examples
+
+First navigate into the directory that you wish to initialize local settings.
+
+```bash
+cd some/path/to/repo
+```
+
+Initialize template settings
+
+```bash
+tps init
+```
+
+This will create a `.tps/` folder with `.tpsrc` file inside it.

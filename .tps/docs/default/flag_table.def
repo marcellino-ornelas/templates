@@ -11,7 +11,7 @@
     {{ for(var optionName in opts.data ){ }}{{ var option = opts.data[optionName]; }}<tr>
         <td>--{{= optionName }}, {{= option.alias || '' }}</td>
         <td>{{= option.default || 'N/A' }}</td>
-        <td>{{= option.describe || '' }}</td>
+        <td>{{= option.describe || 'N/A' }}</td>
       </tr>{{ } }}
     </tbody>
 </table>

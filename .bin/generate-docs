@@ -14,7 +14,8 @@ const data = {
   options: {
     create: OPTIONS.CREATE_OPTIONS,
     init: OPTIONS.INIT_OPTIONS,
-    global: OPTIONS.GLOBAL_OPTIONS
+    global: OPTIONS.GLOBAL_OPTIONS,
+    list: OPTIONS.LIST_OPTIONS
   }
 };
 
