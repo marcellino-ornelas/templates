@@ -62,6 +62,6 @@ We should get a new generated template called `tps-template`. Our folder structu
 Notice how the structure of `tps-template` resembles everything that lived in `.tps/hello-world/default`. The only difference is the `world.js` file which was `world.js.dot`. The dot extension only tells TPS to render this file dynamically
 
 [Prev](./index.md)
-[Next](./dynamic-files.md)
+[Next](./creating-files.md)
 
 <!-- Thats it! Easy as that! But wait that cant be all right? why not just create the files in the terminal? -->

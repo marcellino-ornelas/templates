@@ -6,9 +6,9 @@ const is = require('is');
 module.exports.createHandler = function(argv) {
   const dest = process.cwd();
 
-  if (argv.verbose) {
-    debug.enable('tps');
-  }
+  // if (argv.verbose) {
+  //   debug.enable('tps');
+  // }
 
   const tps = new Template(argv.use, {
     default: argv.default,
