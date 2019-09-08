@@ -3,6 +3,11 @@ const Templates = require('../lib/templates');
 const CONSTANTS = require('../lib/utilities/constants');
 const OPTIONS = require('../cli/options');
 
+const docsFile =
+  process.env.NODE_ENV && process.env.NODE_ENV === 'production'
+    ? 'docs'
+    : 'docs-1';
+
 const tps = new Templates('docs', {
   verbose: true,
   wipe: true
@@ -16,11 +21,14 @@ const data = {
     init: OPTIONS.INIT_OPTIONS,
     global: OPTIONS.GLOBAL_OPTIONS,
     list: OPTIONS.LIST_OPTIONS
+  },
+  wrapBrackets: text => {
+    return `{{${text}}}`;
   }
 };
 
 tps
-  .render(CONSTANTS.MAIN_DIR, 'docs-1', data)
+  .render(CONSTANTS.MAIN_DIR, docsFile, data)
   .then(() => {
     console.log('Docs generated');
   })

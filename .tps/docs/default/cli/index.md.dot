@@ -1,3 +1,8 @@
+{{? tps.name }}
+  hey
+{{??}}
+  bad
+{{?}}
 # Welcome to our CLI documentation
 
 ## Commands

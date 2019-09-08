@@ -1,10 +1,11 @@
 {
-  "name": "Templates",
+  "name": "templates",
   "version": "1.0.0",
   "description": "",
   "main": "template.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint ./src",
+    "build:docs:prod": "NODE_ENV=production ./.bin/generate-docs",
     "build:docs": "./.bin/generate-docs",
     "build:code": "./node_modules/.bin/babel src --out-dir lib",
     "build:dev": "BABEL_ENV=development npm run build:code -- -w",

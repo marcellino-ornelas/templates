@@ -1,0 +1,4 @@
+{{##def.dotLink = function(name) {
+		return `[${name || 'doT'}](http://olado.github.io/doT/index.html)\n`;
+	}
+#}}

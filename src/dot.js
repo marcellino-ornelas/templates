@@ -1,6 +1,6 @@
 import dot from 'dot';
 
-dot.templateSettings.strip = false;
+dot.templateSettings.strip = true;
 dot.templateSettings.varname = 'tps';
 
 export default dot;

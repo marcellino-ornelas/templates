@@ -1,26 +1,36 @@
-# Dynamic files
+# Templating
 
-Inside of TPS templates you can take advantage of dynamic files. These file will be processed threw a templating language called doT so you can dynamically add values or lines of code when creating it.
+## Description
 
-Lets take a react component for an example:
+Building dynamic template is the purpose of TPS.
 
-## Example
+> Note: create-components-react uses a templating engine to compile and render the files. More documentation on how to use the templating engine can be found [here](http://olado.github.io/doT/index.html)
 
-    | - .tps/
-        | - react-component/
-            | - default/
+> Note: All features of doT may not be supported. If you wish to use a feature and it doesn't work feel free to make a issue on Github.
+
+> Note: all examples in this guide will generate templates with [use](../cli/commands/use.md)
+
+- [folder structure](./folder-structure.md)
+
+<!--
+lets start off my creating a new folder called `tps-example`.
+
+    cd ~/Desktop
+    mkdir tps-example
+
+
 
 Lets give you some basic info on how templating works. When you initialize templating in create-components-react, every folder that is a direct child of `.ccr/templates/` are called packages. Create-components-react uses the content of these folders to render your component. The default packages for react are `index, component, style`. These will be included everytime you create a component structure unless you specify in the local settings or with command-line flags that you would not like to include some or all these packages.
 
 The next thing that should look weird are the file names.
 
-`{{= it.component.name }}`
+`\{\{= it.component.name \}\}`
 
 This is doT sytax and doT uses this for template interpolation. When generating components create-component-react gives you a bunch of options that can help you create dynamic file name or files.
 
 Example:
 
-`ccr create App` the `{{= it.component.name }}` inside of files or file names gets replaced with `App`. The top level element is always `it`.
+`ccr create App` the `\{\{= it.component.name \}\}` inside of files or file names gets replaced with `App`. The top level element is always `it`.
 
 There are two variables that you can use.
 
@@ -174,3 +184,6 @@ export default App;
 ```
 
 This is the code we have just editted in `.ccr/templates/component/component.dot`. You can edit to file however you want to fit your needs while developing with react.
+
+
+-->
