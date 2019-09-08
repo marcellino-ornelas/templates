@@ -3,6 +3,6 @@
     "name": "testing-config"
   },
   "new-test": {
-    "dest": "__tests__"
+    "dest": "__tests__/tests"
   }
 }

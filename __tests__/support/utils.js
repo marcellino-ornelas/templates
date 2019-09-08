@@ -18,17 +18,28 @@ export function spawn(additionalArgs = [], opts = {}, done) {
     if (is.function(opts)) {
       done = opts;
       opts = {};
-    } else {
-      throw new Error('Callback function is required');
     }
   }
   const args = [cliPath].concat(additionalArgs);
-  child.execFile('node', args, opts, function(err, stdout, stderr) {
-    if (!opts.fail && err) {
-      console.log(`[CMD: ${args.join(' ')}]`, stdout);
-      console.log('Error: ', err);
-      expect(err).not.toBeDefined();
-    }
-    done(err, stdout);
-  });
+  if (done) {
+    child.execFile('node', args, opts, function(err, stdout, stderr) {
+      if (!opts.fail && err) {
+        console.log(`[CMD: ${args.join(' ')}]`, stdout);
+        console.log('Error: ', err);
+        expect(err).not.toBeDefined();
+      }
+      done(err, stdout);
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      child.execFile('node', args, opts, function(err, stdout, stderr) {
+        if (!opts.fail && err) {
+          console.log(`[CMD: ${args.join(' ')}]`, stdout);
+          console.log('Error: ', err);
+          expect(err).not.toBeDefined();
+        }
+        return err ? reject(err) : resolve(stdout);
+      });
+    });
+  }
 }
