@@ -20,7 +20,7 @@ Now typically a react component has 3 main files. A index, css and a js file all
         | - <component-name>.css
         | - index.js
 
-Now in order for us to create a template out of this lets put the following inside of our `react-component/default`.
+Now in order for us to create a template out of this lets put the following inside of our `.tps/react-component/default`.
 
     | - ...
       | - react-component/
@@ -29,7 +29,7 @@ Now in order for us to create a template out of this lets put the following insi
               | - {{= tps.wrapBrackets('=tps.name') }}.js.dot
               | - {{= tps.wrapBrackets('=tps.name') }}.css
 
-Your probably thinking what the hell is this `{{= tps.wrapBrackets('=tps.name') }}.js`. Since all files names get processed with dot, we are going to use the name of the new template we are generating as the file name. Say we create the following component.
+Your probably thinking what the hell is this `{{= tps.wrapBrackets('=tps.name') }}.js`. Since all files names get processed with dot, we are going to use the name of the new template, we are generating, as the file name. Say we create the following component.
 
 ```bash
 tps react-component Nav
@@ -39,7 +39,7 @@ tps react-component Nav
 tps create --use=react-component Nav
 ```
 
-We are generating a template called `Nav`. So when tps renders your template it will take whatever you pass in as a argument as put it as `tps.name`.
+We are generating a template called `Nav`. So when tps renders your template, it will take whatever you pass in as an argument and put it as `tps.name`.
 In this case `tps.name` will be `Nav`. Now since in the file names we are generating them like this `{{= tps.wrapBrackets('=tps.name') }}.js`. In this example when it gets rendered it will be rendered to `Nav.js`. so calling the command from above will generate this folder template:
 
     | - Nav

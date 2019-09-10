@@ -2,6 +2,12 @@
 
 ## Docs
 
+### Installation
+
+```
+npm install -g tps
+```
+
 ### CLI
 
 Visit our cli docs [here](./cli/index.md)

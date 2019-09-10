@@ -12,6 +12,8 @@ Building dynamic template is the purpose of TPS.
 
 - [folder structure](./folder-structure.md)
 
+[Next](./prerequisites.md)
+
 <!--
 lets start off my creating a new folder called `tps-example`.
 
