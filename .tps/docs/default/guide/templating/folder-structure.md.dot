@@ -42,7 +42,7 @@ lets take this `hello-world` template as a example.
                     | - hello.js
                     | - world.js.dot _(this is a dynamic file)_
                     | - utils
-                      | - index.js
+                        | - index.js
 
 Now after generating this template with this command
 
