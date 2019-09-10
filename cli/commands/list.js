@@ -2,6 +2,7 @@ const TPS = require('../../lib/utilities/constants');
 const fs = require('fs-extra');
 const pjson = require('prettyjson-256');
 const { LIST_OPTIONS } = require('../options');
+const is = require('is');
 
 exports.command = ['list', 'ls'];
 
@@ -22,19 +23,22 @@ const removeRcFile = arr => {
 };
 
 exports.handler = function(argv) {
-  let templates = [];
-
   if (TPS.HAS_GLOBAL && argv.global) {
     const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 
-    templates = templates.concat(global);
+    if (!is.array.empty(global)) {
+      console.log('Global: ');
+      console.log(pjson.render(global));
+      console.log('');
+    }
   }
 
   if (TPS.HAS_LOCAL && argv.local) {
     const local = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
 
-    templates = templates.concat(local);
+    if (!is.array.empty(local)) {
+      console.log('Local: ');
+      console.log(pjson.render(local));
+    }
   }
-
-  console.log(pjson.render(templates));
 };

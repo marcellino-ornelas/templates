@@ -3,7 +3,7 @@
  */
 {{? tps.config.playground }}import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';{{?}}
-{{? tps.config.modules.length}}{{~ tps.config.modules :module:index }}import {{= module}} from '@tps/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
+{{? tps.config.modules.length}}{{~ tps.config.modules :module:index }}import {{= module}} from '{{= module === 'templates' ? '@test' : '@tps' }}/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
 
 /*
  * Constants

@@ -1,5 +1,6 @@
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
+import fs from 'fs-extra';
 
 jest.setTimeout(30000);
 
@@ -72,6 +73,42 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 ${_received} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
+`
+      };
+    }
+  },
+  toHaveFileContents(destPath, contents = '') {
+    const fileContents = fs.readFileSync(destPath).toString();
+    const _received = this.utils.printReceived(destPath);
+    const _expected = this.utils.printExpected(contents);
+
+    const passed = contents === fileContents;
+
+    const options = {
+      isNot: this.isNot,
+      promise: this.promise
+    };
+
+    if (passed) {
+      return {
+        pass: true,
+        message: () => `
+${this.utils.matcherHint('not.toHaveFileContents', destPath, contents, options)}
+
+File should not have contents: ${_expected}
+
+Received: ${this.utils.printReceived(fileContents)}
+`
+      };
+    } else {
+      return {
+        pass: false,
+        message: () => `
+${this.utils.matcherHint('toHaveFileContents', destPath, contents, options)}
+
+File should have contents: ${_expected}
+
+Received: ${this.utils.printReceived(fileContents)}
 `
       };
     }

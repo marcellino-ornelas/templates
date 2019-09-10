@@ -102,7 +102,7 @@ Now when you generate a new template with the following command
 tps react-component Nav
 ```
 
-your `./Nav/Nav.js` file will now be this
+your `tps-example/Nav/Nav.js` file will now be this
 
 ```javascript
 import React, { Component } from 'react';
