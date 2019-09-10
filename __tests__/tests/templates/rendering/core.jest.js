@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import Templates from '@tps/templates';
+import Templates from '@test/templates';
 import Playground from '@test/support/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
 import {

@@ -5,12 +5,12 @@
 import path from 'path';
 import fs from 'fs';
 import { DirNode, FileNode } from '@tps/fileSystemTree';
-import * as TPS from '@tps/utilities/constants';
+import { TESTING_TPS } from '@test/support/constants';
 
 /*
  * Constants
  */
-const PATH_TO_TEMPLATES = path.join(TPS.MAIN_TPS, 'testing');
+const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
 const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('[FileSystemTree] FileNode:', () => {

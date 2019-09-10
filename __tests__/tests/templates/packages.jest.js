@@ -1,4 +1,4 @@
-import Templates from '@tps/templates';
+import Templates from '@test/templates';
 import { RequiresTemplateError } from '@tps/errors';
 
 /**

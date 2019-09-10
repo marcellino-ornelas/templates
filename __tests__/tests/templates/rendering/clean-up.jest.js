@@ -3,7 +3,7 @@
  */
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
-import Templates from '@tps/templates';
+import Templates from '@test/templates';
 
 const renderAllDirectoriesMock = jest
   .fn()

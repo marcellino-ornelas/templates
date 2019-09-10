@@ -1,4 +1,7 @@
 import path from 'path';
+import { TPS_FOLDER } from '@tps/utilities/constants';
+
+export const TESTING_TPS = path.join(__dirname, `../${TPS_FOLDER}`);
 
 export const TESTING_PACKAGE_FILES = [
   './index.js',

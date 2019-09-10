@@ -4,7 +4,7 @@
 import fs from 'fs-extra';
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
-import Templates from '@tps/templates';
+import Templates from '@test/templates';
 import { TESTING_PACKAGE_FILES } from '@test/support/constants';
 
 /*

@@ -1,0 +1,11 @@
+{
+  "prompts": [
+    {
+      "name": "cssType",
+      "message": "What css language would you like to use?",
+      "default": "css",
+      "choices": ["less", "css"],
+      "aliases": ["css", "c"]
+    }
+  ]
+}
