@@ -45,7 +45,8 @@ Now inside of each `package` folder. You can add as many files and directories a
 
 ### Dynamic files
 
-Each `package` has the power to use dynamic files. Files are considered dynamic files when they have a `.dot` extension appended to the end of it. These files allow you to use all features of {{#def.dotLink()}} inside of TPS.
+Each `package` has the power to use dynamic files. Files are considered dynamic files when they have a `.dot` extension appended to the end of it. These files allow you to use all features of [doT](http://olado.github.io/doT/index.html)
+ inside of TPS.
 
 Your probably wondering right now. How do I pass data so these files can be dynamic? There are many ways on how to pass data to your templates during generation time. But this is out of the scope of this section. Learn more about passing data into TPS [here](TODO)
 
