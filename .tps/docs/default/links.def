@@ -2,3 +2,8 @@
 		return `[${name || 'doT'}](http://olado.github.io/doT/index.html)\n`;
 	}
 #}}
+
+{{##def.inquirerLink = function(name) {
+		return `[${name || 'inquirer'}](./TODO)\n`;
+	}
+#}}

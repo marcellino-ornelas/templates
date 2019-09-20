@@ -133,5 +133,5 @@ class Nav extends Component {
 export default Nav;
 ```
 
-[Prev](./folder-structure.md)
-[Next](./prompting.md)
+[Prev](./packages.md)
+[Next](./settings/index.md)

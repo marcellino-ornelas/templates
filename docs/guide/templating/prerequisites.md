@@ -2,9 +2,9 @@
 
 Make sure you have tps installed globally.
 
-See installation steps [here](../../../../../readme.md#installation)
+> See installation steps [here](../../../../../readme.md#installation)
 
-Next anywhere on your laptop. Add a new folder called `tps-example`. After creating the folder add the following files and directories inside of `tps-example` so it resembles this folder structure.
+Next anywhere on your laptop. Add a new directory called `tps-example`. After creating the directory add the following files and directories inside of `tps-example` so it resembles this folder structure.
 
     | - tps-example/
         | - src/

@@ -1,7 +1,9 @@
 import is from 'is';
+import logger from '@tps/utilities/logger';
 
 export default class Prompt {
   constructor(prompt = {}) {
+    logger.prompt.info('Prompt %O', prompt);
     this.aliases = prompt.aliases || [];
     this.tpsType = prompt.tpsType || 'package';
 
@@ -16,24 +18,24 @@ export default class Prompt {
     this.type = prompt.type;
     this.message = prompt.message || prompt.question;
 
-    let defaultValue;
-    const isPrompterDefaultIndex = ['list', 'rawlist', 'expand'].includes(
-      prompt.type
-    );
+    // let defaultValue;
+    // const isPrompterDefaultIndex = ['list', 'rawlist', 'expand'].includes(
+    //   prompt.type
+    // );
 
-    if (isPrompterDefaultIndex) {
-      let defaultFromChoices = this.choices[prompt.default];
+    // if (isPrompterDefaultIndex) {
+    //   let defaultFromChoices = this.choices[prompt.default];
 
-      if (is.func(this.filter)) {
-        defaultFromChoices = this.filter(defaultFromChoices);
-      }
+    //   if (is.func(this.filter)) {
+    //     defaultFromChoices = this.filter(defaultFromChoices);
+    //   }
 
-      defaultValue = defaultFromChoices;
-    } else {
-      defaultValue = prompt.default;
-    }
+    //   defaultValue = defaultFromChoices;
+    // } else {
+    //   defaultValue = prompt.default;
+    // }
 
-    this.default = defaultValue;
+    this.default = prompt.default;
     this.choices = prompt.choices || [];
     this.validate = prompt.validate;
     this.filter = prompt.filter;

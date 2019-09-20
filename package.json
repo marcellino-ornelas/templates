@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint ./src",
     "build:docs:prod": "NODE_ENV=production ./.bin/generate-docs",
+    "build:docs:dev": "nodemon --exec \"npm run build:docs\"",
     "build:docs": "./.bin/generate-docs",
     "build:code": "./node_modules/.bin/babel src --out-dir lib",
     "build:dev": "BABEL_ENV=development npm run build:code -- -w",

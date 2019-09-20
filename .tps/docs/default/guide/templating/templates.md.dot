@@ -14,21 +14,45 @@ We will be using the following repo for all examples:
         | - .tps/
             | - .tpsrc
 
+> We will be referring to `<some-name>` in our guide to represent any directory.
+
 ## Template breakdown
 
-All TPS templates need to live in a `.tps` folder. The sub folders inside of `.tps/` are considered `template-folders`. This is where each all the template's files/directories are held. You may have as many `template-folders` as you wish.
+All TPS templates need to live in a `.tps` folder. The child directories inside of `.tps/` are referred to as `template`. You may have as many `template` as you wish.
+
+    | - .tps/
+        | - <template...>/
 
 `.tpsrc` is your settings file for these templates. They allow you to alter the way TPS runs and more. `.tpsrc` will be more described in (rcfile)(TODO)
 
     | - .tps/
         | - .tpsrc
-        | - <template-folders...>/
+
+### Example
+
+In this example I created a directory called `react-component` inside of my `.tps` directory. This now can be referred to a `react component template`.
+
+    | - .tps/
+        | - .tpsrc
+        | - react-componet/
 
 ### Template layout
 
-Now lets break down how and what to put stuff into your template folder. Inside of each `template-folder` you will have directories called `packages` and an optional file called `settings.json`.
+Now lets break down how and what to put stuff into your template folder. Inside of each `template` you can have directories referred to as `packages`.
 
-These `packages` can be named whatever you like expect for one. Each `template-folder` should have a `default` package like the following example:
+    | - <template>/
+        | - <packages...>
+
+A template can also have a optional settings file.
+
+    | - <template>/
+            | - settings.json
+
+The settings file will be talked about more, in detail, later down the line in this guide.
+
+> [Settings file guide](./settings/index.md)
+
+`packages` can be named whatever you like except for one. Each `template` can have a `default` package like the following example:
 
     | - <template-folder>/
         | - settings.json

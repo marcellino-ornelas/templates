@@ -2,6 +2,7 @@ import is from 'is';
 import inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import Prompt from './prompt';
+import logger from '@tps/utilities/logger';
 
 /**
  * Default options for Templates
@@ -20,6 +21,8 @@ export default class Prompter {
    * @param {PrompterOpts} opts - options to pass to templates
    */
   constructor(prompts, opts = {}) {
+    logger.prompter.info('Prompts: %n', prompts);
+
     this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.answers = {};
     this.prompts = prompts.map(p => new Prompt(p));
