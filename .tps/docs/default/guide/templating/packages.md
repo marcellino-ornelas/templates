@@ -18,6 +18,12 @@ We will be using the previous `hello-world` repo for all examples in this sectio
 
 ## Package breakdown
 
+Packages are the meat of a template. But its also, nothing special either. Its only a directory that will hold more files and directories. These files and folders with be used when rendering your template.
+
+that will ato add to your new template.
+You can think of packages sort of like conditions.
+Now `packages` are
+
 Packages are the meat of a template. They decided which folders/files to add to your new template. A package is nothing special either, its only a directory. The `default` package will always be rendered unless told not to. You can read about this [here](TODO).
 
 Each other package you add to your template will need to be added to the render process. Now there are many ways on how to add a package but for the purpose of this intro guide we will keep it simple.
