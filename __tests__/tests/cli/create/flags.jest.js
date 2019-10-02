@@ -37,10 +37,11 @@ describe('[cli] Create:', () => {
     (...command) => {
       it('should be able to use -p flag to all additional packages', done => {
         const destPath = playground.pathTo('app');
-        const cmd = [...command, '-p=extras', '--', 'app'];
+        const cmd = [...command, '-p', 'extras', 'extras2', '--', 'app'];
 
         utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
           expect(destPath).toHaveAllFilesAndDirectories([
+            './extras2.js',
             './extras.js',
             ...TESTING_PACKAGE_FILES
           ]);

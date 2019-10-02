@@ -615,13 +615,16 @@ export default class Templates {
     return !this._prompts
       ? null
       : this._prompts.getAnswers().then(answers => {
+          logger.tps.info('Answers from prompts %n', answers);
           eachObj(answers, (answer, answerName) => {
             if (this._prompts.getPrompt(answerName).isPkg()) {
               switch (true) {
                 case is.undef(answer):
                   break;
                 case is.bool(answer):
-                  this.loadPackage(answerName);
+                  if (answer) {
+                    this.loadPackage(answerName);
+                  }
                   break;
                 case is.string(answer) && !!answer.length:
                   this.loadPackage(answer);

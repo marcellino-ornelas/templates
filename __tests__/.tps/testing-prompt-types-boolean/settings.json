@@ -1,0 +1,10 @@
+{
+  "prompts": [
+    {
+      "name": "ignore",
+      "message": "Would you like to add a ignore file?",
+      "default": false,
+      "aliases": ["i"]
+    }
+  ]
+}

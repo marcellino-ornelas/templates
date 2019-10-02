@@ -45,6 +45,12 @@ describe('[Templates] Packages:', () => {
     });
   });
 
+  it('should throw an error when packages arnt real', () => {
+      expect(() => {
+        tps.loadPackages(['fake-package']);
+      }).toThrow();
+  });
+
   it('should not let you load a package if already loaded', () => {
     tps.loadPackage('main');
 
