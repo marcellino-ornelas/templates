@@ -15,23 +15,23 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_prompt'));
 
-  describe.each([['create', '--use=testing-prompt'], ['testing-prompt', '']])(
-    'command ( %s %s )',
-    (...command) => {
-      it.each([['less'], ['css']])(
-        'should be able answer prompts from command line arguments',
-        (cssType, done) => {
-          const destPath = playground.pathTo('App');
+  describe.each([
+    ['create', '--use=testing-prompt-types-select'],
+    ['testing-prompt-types-select', '']
+  ])('command ( %s %s )', (...command) => {
+    it.each([['less'], ['css']])(
+      'should be able answer prompts from command line arguments',
+      (cssType, done) => {
+        const destPath = playground.pathTo('App');
 
-          const cmd = [...command, `--css=${cssType}`, '-v', 'App'];
+        const cmd = [...command, `--css=${cssType}`, '-v', 'App'];
 
-          utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-            expect(destPath).toHaveAllFilesAndDirectories([`index.${cssType}`]);
+        utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
+          expect(destPath).toHaveAllFilesAndDirectories([`index.${cssType}`]);
 
-            done();
-          });
-        }
-      );
-    }
-  );
+          done();
+        });
+      }
+    );
+  });
 });

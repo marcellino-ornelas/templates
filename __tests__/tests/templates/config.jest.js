@@ -49,7 +49,7 @@ describe('[Templates] Config: ', () => {
   describe('Using Prompts features', () => {
     let tps;
     beforeEach(() => {
-      tps = new Templates('testing-prompt', {
+      tps = new Templates('testing-prompt-types-select', {
         noGlobalConfig: true
       });
     });
