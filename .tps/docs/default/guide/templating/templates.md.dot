@@ -23,7 +23,7 @@ All TPS templates need to live in a `.tps` folder. The child directories inside 
     | - .tps/
         | - <template...>/
 
-`.tpsrc` is your settings file for these templates. They allow you to alter the way TPS runs and more. `.tpsrc` will be more described in (rcfile)(TODO)
+`.tpsrc` is your settings file for these templates. They allow you to alter the way TPS runs and more. `.tpsrc` will be more described in [rcfile](TODO)
 
     | - .tps/
         | - .tpsrc
@@ -170,7 +170,6 @@ tps init
 ```
 
 Now lets add a file to `tps-example/.tps/express-server/default`. -->
-
 
 [Prev](./prerequisites.md)
 [Next](./packages.md)

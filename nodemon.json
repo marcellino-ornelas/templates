@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "watch": [".tps"],
+  "ignore": ["docs-1", "docs"],
+  "ext": "md,md.dot"
+}

@@ -13,7 +13,8 @@ Building dynamic template is the purpose of TPS.
 - [Prerequisites](./prerequisites.md)
 - [Templates](./templates.md)
 - [Packages](./packages.md)
-- [Dynamic Files]/dynamic-files.md)
+- [Dynamic Files](./dynamic-files.md)
+- [Settings](./settings/index.md)
 
 [Next](./prerequisites.md)
 
