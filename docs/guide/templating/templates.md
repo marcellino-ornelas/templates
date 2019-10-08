@@ -23,12 +23,12 @@ All TPS templates need to live in a `.tps` folder. The child directories inside 
     | - .tps/
         | - <template...>/
 
-`.tpsrc` is your settings file for these templates. They allow you to alter the way TPS runs and more. `.tpsrc` will be more described in (rcfile)(TODO)
+`.tpsrc` is your settings file for these templates. They allow you to alter the way TPS runs and more. `.tpsrc` will be more described in [rcfile](TODO)
 
     | - .tps/
         | - .tpsrc
 
-### Example
+#### Example
 
 In this example I created a directory called `react-component` inside of my `.tps` directory. This now can be referred to a `react component template`.
 
@@ -36,12 +36,25 @@ In this example I created a directory called `react-component` inside of my `.tp
         | - .tpsrc
         | - react-componet/
 
-### Template layout
+### Packages
 
 Now lets break down how and what to put stuff into your template folder. Inside of each `template` you can have directories referred to as `packages`.
 
     | - <template>/
-        | - <packages...>
+        | - <packages...>/
+
+Now inside of each `package` directory . You can add as many files and directories as you want and these are what will be used when rendering a template. `packages` can be named whatever you like except for one. Each `template` can have a `default` package like the following example:
+
+    | - <template>/
+        | - default/
+
+Each time you render a template, TPS will automatically use everything inside your default package to build your template, unless told not to. Every other package that you want to be rendered must be specified when generating the template.
+
+Packages will be talked about more, in detail, on the next page of this guide.
+
+> [Packages guide](./packages.md)
+
+### Settings file
 
 A template can also have a optional settings file.
 
@@ -52,27 +65,12 @@ The settings file will be talked about more, in detail, later down the line in t
 
 > [Settings file guide](./settings/index.md)
 
-`packages` can be named whatever you like except for one. Each `template` can have a `default` package like the following example:
-
-    | - <template-folder>/
-        | - settings.json
-        | - default
-        | - <packages...>
-
-Each time you generate a template, TPS will automatically compile everything inside your default package, unless told not to. Every other package that you want to be rendered must be specified when generating the template.
-
-TODO:
-
-The `settings.json` file is your own configurations that will affect the behavior when generating that template. This file is where you can put prompts and etc. More about how this file works will be discussed in the [Settings Guide](./settings.md)
-
-Now inside of each `package` folder. You can add as many files and directories as you want and these are what will be used when generating your template.
-
-### Dynamic files
+<!-- ### Dynamic files
 
 Each `package` has the power to use dynamic files. Files are considered dynamic files when they have a `.dot` extension appended to the end of it. These files allow you to use all features of [doT](http://olado.github.io/doT/index.html)
  inside of TPS.
 
-Your probably wondering right now. How do I pass data so these files can be dynamic? There are many ways on how to pass data to your templates during generation time. But this is out of the scope of this section. Learn more about passing data into TPS [here](TODO)
+Your probably wondering right now. How do I pass data so these files can be dynamic? There are many ways on how to pass data to your templates during generation time. But this is out of the scope of this section. Learn more about passing data into TPS [here](TODO) -->
 
 ## Making a new template
 
@@ -82,45 +80,54 @@ There is nothing special about a template. All it is nothing but files and folde
 
 2. Use our command line tool
 
-For this example we will be creating a `hello-world` template inside of our `tps-example` repo
+> Read our command line docs [here](TODO)
 
-### option one
-
-```bash
-cd path/to/tps-example/
-
-mkdir .tps/hello-world
-
-mkdir .tps/hello-world/default
-```
-
-### option two
+### bash commands
 
 ```bash
-cd path/to/tps-example
+mkdir .tps/<template-name>
 
-tps new template hello-world
+mkdir .tps/<template-name>/default
 ```
 
-Now lets add a file to `tps-example/.tps/default`
+### tps cli
 
 ```bash
-echo 'console.log("hello world")' > .tps/default/index.js
+tps new template <template-name>
 ```
-
-Thats it! You have your first template.
 
 > See how to use our `new` command more [here](../../cli/commands/new.md)
 
-## Creating a new template
+## Rendering a template
 
-Now lets see your new template in use. To create a new template use the following command.
+To render a template use the following command.
 
 ```bash
-tps create --use=hello-world firstTemplate
+tps create --use=<template-to-use> <template-name-to-create>
 
 # or
 
+tps <template-to-use> <template-name-to-create>
+```
+
+### Example
+
+if we are in our `tps-example` and have this template
+
+    | - .tps/
+        | - hello-world/
+            | - default
+                | - index.js
+
+Puts some contents inside of the `index.js` file.
+
+```bash
+echo "console.log('hello world')" > .tps/hello-world/default/index.js
+```
+
+then calling this command:
+
+```bash
 tps hello-world firstTemplate
 ```
 
@@ -133,34 +140,37 @@ This should create a folder called `firstTemplate` inside of `tps-example` like 
         | - firstTemplate/ <-- template you just created
             | - index.js
 
+Now if we:
+
+```bash
+cat firstTemplate/index.js
+```
+
+well get.
+
+```
+console.log('hello world')
+```
+
+<!-- ## Real world Example
+
+Im personally, a node developer. So this example will be about creating an express app template. Now with every express app there is certain files and directories structure that will be common with all express apps. So we will be building a simple express app template.
+
+Now lets say somewhere on your computer you have a directory where you put all of your personal node projects. like a folder called `development`. Create this `development` anywhere on your computer to follow along but all example will be from within the development folder
+
+Now change your directory to development
+
+```bash
+cd path/to/development
+```
+
+Lets init tps in this directory.
+
+```bash
+tps init
+```
+
+Now lets add a file to `tps-example/.tps/express-server/default`. -->
+
 [Prev](./prerequisites.md)
 [Next](./packages.md)
-
-<!--
-#### Examples:
-
-lets take this `hello-world` template as a example.
-
-    | - tps-example
-        | - .tps/
-            | - hello-world/
-                | - default/
-                    | - hello.js
-                    | - world.js.dot _(this is a dynamic file)_
-                    | - utils
-                        | - index.js
-
-Now after generating this template with this command
-
-We should get a new generated template called `tps-template`. Our folder structure should now look like
-
-    | - tps-example
-        | - .tps/
-            | - ...
-        | - tps-template/
-            | - hello.js
-            | - world.js
-            | - utils
-                | - index.js
-
-Notice how the structure of `tps-template` resembles everything that lived in `.tps/hello-world/default`. The only difference is the `world.js` file which was `world.js.dot`. The dot extension only tells TPS to render this file dynamically -->

@@ -17,3 +17,31 @@ In order to use prompting features. We need to add a settings file in our templa
 The setting file needs to be a valid json object or for a js file it needs to return a javascript object.
 
 The object can take the following properties as arguments
+
+## Settings options
+
+- [Prompting](./prompting.md)
+
+### Prompting
+
+**Field:** `prompts`
+**Type:** `Array<Object>`
+
+### json
+
+```json
+{
+  "prompts": []
+}
+```
+
+### Javascript
+
+```javascript
+module.exports = {
+  "prompts: []
+}
+```
+
+[Prev](../dynamic-files.md)
+[Next](./prompting.md)
