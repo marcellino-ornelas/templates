@@ -2,8 +2,18 @@
 
 In this section, We will be covering the following topics:
 
-- What is a settings file?
-- How to use settings?
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is a settings file?](#what-is-a-settings-file)
+- [How to use settings?](#how-to-use-settings)
+- [Settings options](#settings-options)
+  - [Prompting](#prompting)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## What is a settings file?
 
@@ -25,9 +35,10 @@ The object can take the following properties as arguments
 ### Prompting
 
 **Field:** `prompts`
+
 **Type:** `Array<Object>`
 
-### json
+#### json
 
 ```json
 {
@@ -35,7 +46,7 @@ The object can take the following properties as arguments
 }
 ```
 
-### Javascript
+#### Javascript
 
 ```javascript
 module.exports = {

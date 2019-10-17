@@ -8,7 +8,7 @@ Visit our cli docs [here](./cli/index.md)
 
 ### Guides
 
-Visit our guides docs [here](./guide/index.md)
+Visit our guides docs [here](./guide/README.md)
 
 ### Module Usage
 

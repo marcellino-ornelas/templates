@@ -134,4 +134,4 @@ export default Nav;
 ```
 
 [Prev](./packages.md)
-[Next](./settings/index.md)
+[Next](./settings/README.md)

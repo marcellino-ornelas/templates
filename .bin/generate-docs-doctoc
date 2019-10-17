@@ -1,0 +1,23 @@
+
+
+
+# list=<<LIST
+# docs-1/guide/templating/settings/prompting.md
+# LIST
+
+docs_location=$([ $NODE_ENV == 'production' ] && echo "docs" || echo "docs-1")
+
+get_all_files_with_doctoc() {
+  for file in $(find $docs_location -type f)
+  do
+    if cat "$file" | grep -q 'START doctoc' ; then 
+      echo "$file"
+    fi
+  done
+}
+
+list=$(get_all_files_with_doctoc)
+
+doctoc \
+  --maxlevel 3 \
+  $list

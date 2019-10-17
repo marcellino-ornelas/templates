@@ -2,8 +2,7 @@
 
 In this section, We will be covering the following topics:
 
-- What is a settings file?
-- How to use settings?
+{{#def.doctoc}}
 
 ## What is a settings file?
 
@@ -25,9 +24,10 @@ The object can take the following properties as arguments
 ### Prompting
 
 **Field:** `prompts`
+
 **Type:** `Array<Object>`
 
-### json
+#### json
 
 ```json
 {
@@ -35,7 +35,7 @@ The object can take the following properties as arguments
 }
 ```
 
-### Javascript
+#### Javascript
 
 ```javascript
 module.exports = {

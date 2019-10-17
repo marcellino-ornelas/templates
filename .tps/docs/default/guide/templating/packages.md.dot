@@ -2,9 +2,7 @@
 
 In this section, We will be covering the following topics:
 
-- Package breakdown
-- Making a new package
-- Using a new package
+{{#def.doctoc}}
 
 We will be using the previous `hello-world` repo for all examples in this section:
 
@@ -23,6 +21,7 @@ Packages are the meat of a template. But its also, nothing special either. Its o
 Packages are the meat of a template. But its also, nothing special either. Its only a directory that will hold more files and directories. You can add as many files and directories as you want and these are what will be used when rendering a template. `packages` can be named whatever you like except for one. Each `template` can have a `default` package like the following example:
 
 You can think of packages sort of like conditions. This is a way to tell tps that you only want to render a template with certain files or directories in certain occassions.
+
 <!-- Packages are the meat of a template. They decided which folders/files to add to your new template. A package is nothing special either, its only a directory. The `default` package will always be rendered unless told not to. You can read about this [here](TODO).
 
 Each other package you add to your template will need to be added to the render process. Now there are many ways on how to add a package but for the purpose of this intro guide we will keep it simple. -->
@@ -31,6 +30,7 @@ Each other package you add to your template will need to be added to the render 
 
 <!-- Lets add a package to our `hello-world` template. We will create a package named `hello` and add a `world.js` inside. You can do this two ways:
  -->
+
 To make a new package use the bash comands
 
 ```bash
@@ -100,7 +100,6 @@ tps package-demo --packages package1 package2-- app
         | - index.js
         | - package1.js
         | - package2.js
-
 
 [Prev](./templates.md)
 [Next](./dynamic-files.md)

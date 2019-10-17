@@ -2,9 +2,23 @@
 
 In this section, We will be covering the following topics:
 
-- Template breakdown
-- Making a new template
-- Creating a new template
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Template breakdown](#template-breakdown)
+  - [Packages](#packages)
+  - [Settings file](#settings-file)
+- [Making a new template](#making-a-new-template)
+  - [bash commands](#bash-commands)
+  - [tps cli](#tps-cli)
+- [Rendering a template](#rendering-a-template)
+- [Example](#example)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
   <!-- In this guide I will show you how to use the very basics of tps. -->
 
 We will be using the following repo for all examples:
@@ -63,7 +77,7 @@ A template can also have a optional settings file.
 
 The settings file will be talked about more, in detail, later down the line in this guide.
 
-> [Settings file guide](./settings/index.md)
+> [Settings file guide](./settings/README.md)
 
 <!-- ### Dynamic files
 
@@ -110,7 +124,7 @@ tps create --use=<template-to-use> <template-name-to-create>
 tps <template-to-use> <template-name-to-create>
 ```
 
-### Example
+## Example
 
 if we are in our `tps-example` and have this template
 
@@ -172,5 +186,5 @@ tps init
 
 Now lets add a file to `tps-example/.tps/express-server/default`. -->
 
-[Prev](./prerequisites.md)
+[Prev](./README.md)
 [Next](./packages.md)

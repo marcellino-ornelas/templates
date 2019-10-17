@@ -2,9 +2,7 @@
 
 In this section, We will be covering the following topics:
 
-- What is Prompting?
-- How to use Prompting?
-- Prompt breakdown
+{{#def.doctoc}}
 
 ## What is Prompting?
 
@@ -18,7 +16,7 @@ In order to use prompting features. We need to add a settings file in our templa
 
 The setting file needs to be a valid json object or for a js file it needs to return a javascript object.
 
-Next add the prompting property to your settings file like described [here](./index.md#prompting).
+Next add the prompting property to your settings file like described [here](./README.md#prompting).
 
 Now the prompt property takes a array of objects.
 
@@ -316,7 +314,7 @@ then this will be the new template:
         | - App
            | - index.js
 
-### Lists
+### Lists Examples
 
 ```json
 {
@@ -331,3 +329,7 @@ then this will be the new template:
   ]
 }
 ```
+
+[Prev](./README.md)
+
+<!-- [Next](./prompting.md) -->

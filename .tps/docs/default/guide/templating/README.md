@@ -14,9 +14,10 @@ Building dynamic template is the purpose of TPS.
 - [Templates](./templates.md)
 - [Packages](./packages.md)
 - [Dynamic Files](./dynamic-files.md)
-- [Settings](./settings/index.md)
+- [Settings](./settings/README.md)
 
-[Next](./prerequisites.md)
+[Prev](../README.md)
+[Next](./templates.md)
 
 <!--
 lets start off my creating a new folder called `tps-example`.

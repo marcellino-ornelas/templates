@@ -2,9 +2,23 @@
 
 In this section, We will be covering the following topics:
 
-- What is Prompting?
-- How to use Prompting?
-- Prompt breakdown
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [What is Prompting?](#what-is-prompting)
+- [How to use Prompting?](#how-to-use-prompting)
+- [Prompt breakdown](#prompt-breakdown)
+  - [Name](#name)
+  - [Tps Type](#tps-type)
+  - [Aliases](#aliases)
+- [Inquirer](#inquirer)
+  - [booleans Example](#booleans-example)
+  - [Lists Examples](#lists-examples)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## What is Prompting?
 
@@ -19,7 +33,7 @@ In order to use prompting features. We need to add a settings file in our templa
 
 The setting file needs to be a valid json object or for a js file it needs to return a javascript object.
 
-Next add the prompting property to your settings file like described [here](./index.md#prompting).
+Next add the prompting property to your settings file like described [here](./README.md#prompting).
 
 Now the prompt property takes a array of objects.
 
@@ -317,7 +331,7 @@ then this will be the new template:
         | - App
            | - index.js
 
-### Lists
+### Lists Examples
 
 ```json
 {
@@ -332,3 +346,7 @@ then this will be the new template:
   ]
 }
 ```
+
+[Prev](./README.md)
+
+<!-- [Next](./prompting.md) -->
