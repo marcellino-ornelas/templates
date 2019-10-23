@@ -16,11 +16,11 @@ Just getting started with tps? Need to know where to start? Read our getting [st
 
 #### Command line Guides
 
-Want to learn how to leverage tps command line tool better? Check out our [command line guides](./guide/command-line/readme.me)
+Want to learn how to leverage tps command line tool better? Check out our [command line guides](./guide/command-line/readme.md)
 
 #### Module Guides
 
-Want to learn how use tps as a module? Check out our [module guides](./guide/module/readme.me))
+Want to learn how use tps as a module? Check out our [module guides](./guide/module/readme.md))
 
 ## API
 
