@@ -94,7 +94,7 @@ mkdir .tps/<template-name>/default
 tps new template <template-name>
 ```
 
-> See how to use our `new` command more [here](../../cli/commands/new.md)
+> See how to use our `new` command more [here](../../api/cli/commands/new.md)
 
 ## Rendering a template
 

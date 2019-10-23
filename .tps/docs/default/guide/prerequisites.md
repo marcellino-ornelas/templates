@@ -33,4 +33,4 @@ Don't worry about `.tpsrc` for now we will touch on this file a little more down
 > This repo will be used in every example through this guide
 
 [Prev](./README.md)
-[Next](./templating/README.md)
+[Next](./getting-started/README.md)

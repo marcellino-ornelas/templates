@@ -19,17 +19,23 @@ class File {
       this.isDot = true;
       fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
     }
+    this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
     this.opts = opts;
     this._name = fileName;
     this._dotNameCompiled = dot.template(this._name);
     this.src = fileNode.path;
     this.fileNode = fileNode;
     const fileData = fs.readFileSync(this.src);
-    this.fileDataTemplate = (data, defs) => {
-      return this.isDot ? dot.template(fileData, null, defs)(data) : fileData;
+    this.fileDataTemplate = (data, defs, dest) => {
+      const realData = {
+        ...data,
+        file: this.fileName(data),
+        dest: this._dest(dest, data)
+      };
+      return this.isDot
+        ? dot.template(fileData, null, defs)(realData)
+        : fileData;
     };
-
-    this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
   }
 
   fileName(data = {}) {

@@ -10,7 +10,6 @@ Building dynamic template is the purpose of TPS.
 
 > Note: all examples in this guide will generate templates with [use](../cli/commands/use.md)
 
-- [Prerequisites](./prerequisites.md)
 - [Templates](./templates.md)
 - [Packages](./packages.md)
 - [Dynamic Files](./dynamic-files.md)

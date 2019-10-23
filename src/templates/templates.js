@@ -460,7 +460,7 @@ export default class Templates {
       return [
         file,
         file._dest(buildPath, data),
-        file.fileDataTemplate(data, this._defs)
+        file.fileDataTemplate(data, this._defs, buildPath)
       ];
     });
 

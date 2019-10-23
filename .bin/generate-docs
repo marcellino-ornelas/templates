@@ -2,7 +2,10 @@
 const Templates = require('../lib/templates');
 const CONSTANTS = require('../lib/utilities/constants');
 const OPTIONS = require('../cli/options');
+const path = require('path');
 
+const PUBLIC_PATH = path.join(__dirname, '../public');
+console.log('pub', PUBLIC_PATH);
 const docsFile =
   process.env.NODE_ENV && process.env.NODE_ENV === 'production'
     ? 'docs'
@@ -24,6 +27,9 @@ const data = {
   },
   wrapBrackets: text => {
     return `{{${text}}}`;
+  },
+  relPublic: dest => {
+    return path.relative(path.dirname(dest), PUBLIC_PATH);
   }
 };
 

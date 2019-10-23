@@ -2,3 +2,9 @@
 <!-- START doctoc -->
 <!-- END doctoc -->
 #}}
+
+{{##def.comingSoon:
+<p align="center">{{tps.relPublic(tps.dest, tps.file);}}
+  <img src="{{=tps.relPublic(tps.dest, tps.file)}}/images/coming-soon.jpeg">
+</p>
+#}}
