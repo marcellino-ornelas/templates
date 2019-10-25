@@ -1,9 +1,11 @@
+import { TESTING_TPS } from '@test/support/constants';
 import Templates from '@test/templates';
+import path from 'path';
 
 /**
  * Templates testing
  */
-describe('[Templates] Config: ', () => {
+describe.skip('[Templates] Config: ', () => {
   describe('Using basic features', () => {
     let tps;
     beforeAll(() => {
@@ -14,7 +16,7 @@ describe('[Templates] Config: ', () => {
 
     it('should load local configurations', () => {
       const config = tps.config;
-
+      console.log(config);
       expect(config).toEqual(
         expect.objectContaining({
           name: 'testing-config'

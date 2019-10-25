@@ -8,17 +8,15 @@ Wow that sounds confusing right? Don't worry we got you.
   <img src="../../../public/images/duplicate_code.jpeg">
 </p>
 
-Everyone developer has this problem when writing and it is very annoying. Coping and pasting saves endless time when developing a product. But theres one down side, you can only copy and paste the code. How about when you need to change something out of a snippet of code you just copied like a variable name or a function name? How about other things like files and folders? where is the support?
+Coping and pasting is in every developers work flow. It saves countless time rather than re-inventing the wheel every time. But theres one down side, you can only copy and paste the code.
 
-This is where tps comes in. Tps allows you to create a `template` which is a folder filled with files and folders and code or images or whatever you want and allows you to reuse the folder structure where ever you want! Think of tps as a more powerful way to copy files for re-usability.
+How about when you need to copy a folder structure? or copy code from two or more files?
 
-Have you ever built a express app before? or react component? If so you know when you create these items theres a lot of similar files and a certain folder structure that you will use every single time. Do you really want to build this every time you have to make a express app? Hell no, with the power of tps you easily create a template and have express apps created in seconds!!!!
+This is where tps comes in. Tps allows you to create a `template` which is a folder filled with files and folders and code, images, or whatever you want and allows you to reuse the folder structure where ever you want! Think of tps as a more powerful way to copy files for re-usability.
 
-## Description
+Have you ever built a express app before? or react component? If so, you know when you create these items theres a lot of similar files, code, and a certain folder structure that you will use every single time (for the most part). Do you really want to build this every time you have to make a express app? Hell no, with the power of tps you easily create a template and have express apps created in seconds!!!!
 
-What is tps? Building dynamic template is the purpose of TPS.
-
-> Note: create-components-react uses a templating engine to compile and render the files. More documentation on how to use the templating engine can be found [here](http://olado.github.io/doT/index.html)
+> Note: tps uses a templating engine to compile and render the files. More documentation on how to use the templating engine can be found [here](http://olado.github.io/doT/index.html)
 
 > Note: All features of doT may not be supported. If you wish to use a feature and it doesn't work feel free to make a issue on Github.
 

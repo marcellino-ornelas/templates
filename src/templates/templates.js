@@ -659,11 +659,13 @@ export default class Templates {
 
   _loadTpsConfig(templateName) {
     if (!this.opts.noGlobalConfig && TPS.HAS_GLOBAL) {
+      logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
       const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, globalConfig);
     }
 
     if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {
+      logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
       const localConfig = json(TPS.LOCAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, localConfig);
     }

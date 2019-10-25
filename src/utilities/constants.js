@@ -34,7 +34,10 @@ export const HAS_GLOBAL = isDir(GLOBAL_PATH);
 /**
  * local
  */
-const tpsLocal = findUp(TPS_FOLDER);
+
+// Need to override the CWD for find up so we can get the .tpsrc file from the __tests__ tps folder
+const overrideCwd = IS_TESTING ? path.join(CWD, '__tests__') : CWD;
+const tpsLocal = findUp(TPS_FOLDER, overrideCwd);
 export const HAS_LOCAL = tpsLocal && tpsLocal !== GLOBAL_PATH;
 
 export const LOCAL_PATH = HAS_LOCAL ? tpsLocal : null;
