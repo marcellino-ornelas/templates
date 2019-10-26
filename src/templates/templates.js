@@ -74,7 +74,7 @@ export default class Templates {
     }
 
     this.template = templateName;
-    logger.tps.info('Rendering template %n', {
+    logger.tps.info('Template %n', {
       name: this.template,
       location: this.src
     });

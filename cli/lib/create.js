@@ -10,21 +10,33 @@ module.exports.createHandler = function(argv) {
   //   debug.enable('tps');
   // }
 
+  const {
+    noNewFolder,
+    force,
+    wipe,
+    default: _default,
+    packages,
+    buildPaths,
+    ...answers
+  } = argv;
+
   const tps = new Template(argv.use, {
-    default: argv.default,
-    newFolder: !argv.noNewFolder,
-    force: argv.force,
-    wipe: argv.wipe
+    default: _default,
+    newFolder: !noNewFolder,
+    force: force,
+    wipe: wipe
   });
 
-  if (is.array(argv.packages) && !is.array.empty(argv.packages)) {
-    tps.loadPackages(argv.packages);
+  if (is.array(packages) && !is.array.empty(packages)) {
+    tps.loadPackages(packages);
   }
 
-  tps.loadConfig(argv);
+  if (tps.hasPrompts()) {
+    tps.setAnswers(answers);
+  }
 
-  const hasBuildPaths = !is.array.empty(argv.buildPaths);
-  const renderItems = hasBuildPaths ? argv.buildPaths : null;
+  const hasBuildPaths = !is.array.empty(buildPaths);
+  const renderItems = hasBuildPaths ? buildPaths : null;
 
   const renderData = {
     name: argv.name
@@ -34,6 +46,7 @@ module.exports.createHandler = function(argv) {
     .render(dest, renderItems, renderData)
     .then(() => {
       console.log('process done');
+      process.exit(0);
     })
     .catch(e => {
       console.log('tps error', e);

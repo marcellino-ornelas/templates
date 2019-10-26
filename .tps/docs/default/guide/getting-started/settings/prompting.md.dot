@@ -105,7 +105,7 @@ If the value type is an array then you end up with something like this.
 
 ##### Answering prompts threw the module
 
-To answer prompts in javascript using the module. Use the `loadConfig` function.
+To answer prompts in javascript using the module. Use the `setAnswers` function.
 
 ```js
 const Templates = require('tps');
@@ -125,7 +125,7 @@ const tps = new Templates('react-component');
  */
 const data = 23;
 
-tps.loadConfig({ age: data });
+tps.setAnswers({ age: data });
 
 /* ... */
 ```
@@ -243,11 +243,11 @@ const Templates = require('tps');
 
 const tps = new Templates('react-component');
 
-tps.loadConfig({ c: 'less' });
+tps.setAnswers({ c: 'less' });
 
 // is equivalent to
 
-tps.loadConfig({ cssType: 'less' });
+tps.setAnswers({ cssType: 'less' });
 
 // is equivalent to and answering prompt with `less`
 

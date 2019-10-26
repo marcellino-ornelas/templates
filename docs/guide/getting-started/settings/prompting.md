@@ -2,10 +2,8 @@
 
 In this section, We will be covering the following topics:
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [What is Prompting?](#what-is-prompting)
 - [How to use Prompting?](#how-to-use-prompting)
@@ -19,13 +17,12 @@ In this section, We will be covering the following topics:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## What is Prompting?
 
 Prompting is used to get data from the user. Its exactly what you think it is. Threw the command line we will display a message to the user asking for there response. The the prompt can also be answered threw the command line or threw the node module package for cases where users already know what they want. There options can come in all forms.
 
 Templates uses [inquirer](./TODO)
- to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
+to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
 
 ## How to use Prompting?
 
@@ -45,7 +42,7 @@ Each prompt you add to needs to be a object. Well touch on some important fields
 
 ### Name
 
-First the `name` field. Now this field is required for tps to work. This name will be used later on so you can access the values the user enters in from inside of each dynamic file or aka `.dot` file. All prompt answers will be stored on the `tps.config` object property.
+First the `name` field. Now this field is required for tps to work. This name will be used later on so you can access the values the user enters in from inside of each dynamic file or aka `.dot` file. All prompt answers will be stored on the `tps.answers` object property.
 
 Users can also answer the prompt threw the command line or with the module version with whatever value you passed in as name. This is meant for the users that don't want to wait to answer the prompt.
 
@@ -71,7 +68,7 @@ Say I create a prompt thats name field is `age`. This will be accessible in `ind
 `index.js.dot`
 
 ```js
-{{=tps.config.age}}
+{{=tps.answers.age}}
 ```
 
 ##### Answering prompts threw the command line

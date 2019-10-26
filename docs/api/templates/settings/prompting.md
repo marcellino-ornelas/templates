@@ -1,9 +1,7 @@
 # Prompting Object
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Name](#name)
   - [Usage](#usage)
@@ -20,7 +18,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## Name
 
 ### Usage
@@ -31,7 +28,7 @@ Type: `string`
 
 ### Description
 
-Name of the prompt. The name of the prompt you enter will be available inside of your `.dot` files as `tps.config.<name-you-pass-in>`
+Name of the prompt. The name of the prompt you enter will be available inside of your `.dot` files as `tps.answers.<name-you-pass-in>`
 
 ### Example
 

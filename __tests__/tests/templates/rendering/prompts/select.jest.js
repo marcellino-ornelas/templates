@@ -29,15 +29,14 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
 
   it.each([['css', 'index.css'], ['less', 'index.less']])(
     'it should render a template with values passed into prompt',
-    (answer, expected, done) => {
+    (answer, expected) => {
       const destPath = playground.pathTo('App');
       inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
-      tps.render(playground.box(), 'App').then(() => {
-        expect(tps.config.cssType).toBe(answer);
+      return tps.render(playground.box(), 'App').then(() => {
+        expect(tps._prompts.answers.cssType).toBe(answer);
         expect(tps.packages).toHaveProperty(answer);
         expect(destPath).toHaveAllFilesAndDirectories([expected]);
-        done();
       });
     }
   );
