@@ -46,7 +46,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
     tps.verbose = true;
     const destPath = playground.pathTo('App');
 
-    tps.loadConfig({ c: 'less' });
+    tps.setAnswers({ c: 'less' });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 

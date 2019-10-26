@@ -1,0 +1,11 @@
+{
+  "prompts": [
+    {
+      "name": "test",
+      "message": "This is to test tpsrc",
+      "type": "input",
+      "tpsType": "data",
+      "default": null
+    }
+  ]
+}

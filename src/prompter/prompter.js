@@ -3,6 +3,7 @@ import inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import Prompt from './prompt';
 import logger from '@tps/utilities/logger';
+import { PromptNoPromptFoundError } from '@tps/errors';
 
 /**
  * Default options for Templates
@@ -30,7 +31,11 @@ export default class Prompter {
   }
 
   needsAnswers() {
-    return this.prompts.length !== this.answered;
+    return this.hasPrompts() && this.prompts.length !== this.answered;
+  }
+
+  hasPrompts() {
+    return !!this.prompts.length;
   }
 
   getPrompt(name) {
@@ -38,12 +43,16 @@ export default class Prompter {
       return p.name === name;
     });
 
-    if (!prompt) throw new Error(`There is no prompt with name: ${name}`);
+    if (!prompt) throw new PromptNoPromptFoundError(name);
 
     return prompt;
   }
 
   setAnswers(answers) {
+    if (is.object(answers) && is.empty(answers)) {
+      throw new PromptInvalidAnswers(answers);
+    }
+
     this._getPromptsThatNeedAnswers().forEach(prompt => {
       const answer = prompt.answerWith(answers);
       if (is.defined(answer)) {

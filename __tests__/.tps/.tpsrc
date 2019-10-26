@@ -1,1 +1,8 @@
-{}
+{
+  "testing-tpsrc": {
+    "extendedDest": "./new-path",
+    "answers": {
+      "test": "oh-yea"
+    }
+  }
+}

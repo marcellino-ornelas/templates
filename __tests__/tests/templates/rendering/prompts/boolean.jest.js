@@ -44,7 +44,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
   it('should render a template when answering prompt with alias', done => {
     tps.verbose = true;
 
-    tps.loadConfig({ i: true });
+    tps.setAnswers({ i: true });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 
@@ -55,7 +55,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
   });
 
   it('should render a template when answering prompt with a boolean (true)', () => {
-    tps.loadConfig({ ignore: true });
+    tps.setAnswers({ ignore: true });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 
@@ -65,7 +65,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
   });
 
   it('should render a template when answering prompt with a boolean (false)', () => {
-    tps.loadConfig({ ignore: false });
+    tps.setAnswers({ ignore: false });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 

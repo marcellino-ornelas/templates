@@ -14,12 +14,12 @@ import {
   RequiresTemplateError,
   PackageAlreadyCompiledError,
   DirectoryNotFoundError,
-  FileExistError
+  FileExistError,
+  NoPromptsError
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import colors from 'ansi-colors';
 import Promise from 'bluebird';
-import { FileNode } from '../fileSystemTree/fileNode';
 import dot from '@tps/dot';
 
 /**
@@ -40,7 +40,9 @@ const DEFAULT_OPTIONS = {
   force: false,
   newFolder: true,
   wipe: false,
-  tpsPath: null
+  tpsPath: null,
+  // new
+  extendedDest: ''
 };
 
 /**
@@ -82,14 +84,12 @@ export default class Templates {
     this.packagesUsed = [];
     this.compiledFiles = [];
     this._defs = {};
-    this._config = new Config();
+    // this._config = new Config();
     this.successfulBuilds = new SuccessfulBuild();
     this.buildErrors = [];
     this.data = {};
 
-    this._loadTpsConfig(templateName);
-
-    this._handleTpsConfig();
+    // this._handleTpsConfig();
 
     this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
@@ -114,9 +114,11 @@ export default class Templates {
           default: this.opts.default
         });
 
-        this._prompts.setAnswers(this.config);
+        // this._prompts.setAnswers(this.config);
       }
     }
+
+    this._loadTpsrc(templateName);
 
     // load default package if applicable
     const defaultFolder = path.join(this.src, 'default');
@@ -127,9 +129,9 @@ export default class Templates {
     }
   }
 
-  get config() {
-    return this._config.configurations;
-  }
+  // get config() {
+  //   return this._config.configurations;
+  // }
 
   /**
    * Include packages to use in the render process
@@ -184,17 +186,36 @@ export default class Templates {
   }
 
   /**
+   * Set answers for prompts
+   */
+  hasPrompts() {
+    return !!(this._prompts && this._prompts.hasPrompts());
+  }
+
+  /**
+   * Set answers for prompts
+   */
+  setAnswers(answers) {
+    if (!this.hasPrompts()) {
+      throw new NoPromptsError();
+    }
+
+    this._prompts.setAnswers(answers);
+  }
+
+  /**
    * @param {object} config - object to load configs from
    * @returns {Templates} `this`
    */
   loadConfig(config) {
-    if (!is.object(config)) {
-      this._error('config must be a object');
-    }
-    if (this._prompts) {
-      this._prompts.setAnswers(config);
-    }
-    return this._config.load(config);
+    throw new Error('deprecated');
+    //   if (!is.object(config)) {
+    //     this._error('config must be a object');
+    //   }
+    //   if (this._prompts) {
+    //     this._prompts.setAnswers(config);
+    //   }
+    //   return this._config.load(config);
   }
 
   /**
@@ -227,8 +248,8 @@ export default class Templates {
     }
 
     // Append dest config
-    if (this.config.dest) {
-      finalDest = path.join(dest, this.config.dest);
+    if (this.opts.extendedDest) {
+      finalDest = path.join(dest, this.opts.extendedDest);
     }
 
     // Create absolute paths
@@ -251,7 +272,7 @@ export default class Templates {
         dataForTemplating = {
           ...data,
           template: this.template,
-          config: { ...this.config }
+          answers: this.hasPrompts() ? this._prompts.answers : {}
         };
       })
       .then(() => {
@@ -584,8 +605,8 @@ export default class Templates {
         const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
         this._defs[name] = fs.readFileSync(fileNode.path).toString();
 
-        // When def files have more than one def.
-        // this fixes problems when defs are available at render time
+        // When def files have more than one def. In order to use them we need to call the main file def first.
+        // this fixes problems when any def can be available at render time
         dot.template(`{{#def.${name}}}`, null, this._defs);
       });
     }
@@ -638,7 +659,7 @@ export default class Templates {
                   );
               }
             }
-            this._config.set(answerName, answer);
+            // this._config.set(answerName, answer);
           });
         });
   }
@@ -648,35 +669,39 @@ export default class Templates {
    */
 
   _handleTpsConfig() {
-    const { dest } = this.config;
-
-    if (dest) {
-      if (path.isAbsolute(dest)) {
-        this._error(`[tpsrc Config]: dest cannot be a a absolute path`);
-      }
-    }
+    // const { dest } = this.config;
+    // if (dest) {
+    //   if (path.isAbsolute(dest)) {
+    //     this._error(`[tpsrc Config]: dest cannot be a a absolute path`);
+    //   }
+    // }
   }
 
-  _loadTpsConfig(templateName) {
+  _loadTpsrc(templateName) {
     if (!this.opts.noGlobalConfig && TPS.HAS_GLOBAL) {
-      logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
+      //     logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
       const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, globalConfig);
     }
-
     if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {
-      logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
+      //     logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
       const localConfig = json(TPS.LOCAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, localConfig);
     }
   }
 
   _loadTpsSpecificConfig(templateName, config) {
+    const templateConfig = config[templateName];
     const hasConfigObject =
-      hasProp(config, templateName) && is.object(config[templateName]);
+      hasProp(config, templateName) && is.object(templateConfig);
 
     if (hasConfigObject) {
-      this.loadConfig(config[templateName]);
+      const { answers = {}, ...opts } = templateConfig;
+      this.opts = defaults(opts, this.opts);
+
+      if (is.object(answers) && !is.empty(answers)) {
+        this.setAnswers(answers);
+      }
     }
   }
 }
