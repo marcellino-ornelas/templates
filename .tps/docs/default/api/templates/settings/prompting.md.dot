@@ -12,7 +12,7 @@ Type: `string`
 
 ### Description
 
-Name of the prompt. The name of the prompt you enter will be available inside of your `.dot` files as `tps.config.<name-you-pass-in>`
+Name of the prompt. The name of the prompt you enter will be available inside of your `.dot` files as `tps.answers.<name-you-pass-in>`
 
 ### Example
 

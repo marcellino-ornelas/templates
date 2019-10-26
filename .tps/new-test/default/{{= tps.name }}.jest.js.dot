@@ -1,24 +1,24 @@
 /*
  * Modules
  */
-{{? tps.config.playground }}import Playground from '@test/support/playground';
+{{? tps.answers.playground }}import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';{{?}}
-{{? tps.config.modules.length}}{{~ tps.config.modules :module:index }}import {{= module}} from '{{= module === 'templates' ? '@test' : '@tps' }}/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
+{{? tps.answers.modules.length}}{{~ tps.answers.modules :module:index }}import {{= module}} from '{{= module === 'templates' ? '@test' : '@tps' }}/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
 
 /*
  * Constants
  */
-{{? tps.config.playground }}const playground = new Playground(TESTING_DIR){{?}}
+{{? tps.answers.playground }}const playground = new Playground(TESTING_DIR){{?}}
 
 describe('[TPS] _', () => {
-  {{? tps.config.modules.includes('templates')}}let tps;{{?}}
+  {{? tps.answers.modules.includes('templates')}}let tps;{{?}}
 
-  beforeAll(() => {{? tps.config.playground }}playground.create(){{?}} );
-  afterAll(() => {{? tps.config.playground }}playground.destroy(){{?}} );
+  beforeAll(() => {{? tps.answers.playground }}playground.create(){{?}} );
+  afterAll(() => {{? tps.answers.playground }}playground.destroy(){{?}} );
 
   beforeEach(() => {
-    {{? tps.config.modules.includes('templates')}} tps = new Templates();{{?}}
-    {{? tps.config.playground }}return playground.createBox('_'){{?}}
+    {{? tps.answers.modules.includes('templates')}} tps = new Templates();{{?}}
+    {{? tps.answers.playground }}return playground.createBox('_'){{?}}
   });
 
   it('should', () => {});

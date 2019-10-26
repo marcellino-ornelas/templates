@@ -28,7 +28,7 @@ Each prompt you add to needs to be a object. Well touch on some important fields
 
 ### Name
 
-First the `name` field. Now this field is required for tps to work. This name will be used later on so you can access the values the user enters in from inside of each dynamic file or aka `.dot` file. All prompt answers will be stored on the `tps.config` object property.
+First the `name` field. Now this field is required for tps to work. This name will be used later on so you can access the values the user enters in from inside of each dynamic file or aka `.dot` file. All prompt answers will be stored on the `tps.answers` object property.
 
 Users can also answer the prompt threw the command line or with the module version with whatever value you passed in as name. This is meant for the users that don't want to wait to answer the prompt.
 
@@ -54,7 +54,7 @@ Say I create a prompt thats name field is `age`. This will be accessible in `ind
 `index.js.dot`
 
 ```js
-{{= tps.wrapBrackets('=tps.config.age') }}
+{{= tps.wrapBrackets('=tps.answers.age') }}
 ```
 
 ##### Answering prompts threw the command line
