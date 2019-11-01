@@ -26,6 +26,7 @@ Have you ever built a express app before? or react component? If so, you know wh
 - [Packages](./packages.md)
 - [Dynamic Files](./dynamic-files.md)
 - [Settings](./settings/README.md)
+- [Tpsrc](./tpsrc.md)
 
 [Prev](../README.md)
 [Next](./templates.md)

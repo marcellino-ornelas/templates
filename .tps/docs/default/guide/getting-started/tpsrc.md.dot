@@ -1,0 +1,62 @@
+# Tpsrc
+
+{{#def.doctoc}}
+
+## Breakdown
+
+Tps allows you to have a configuration file. The configuration file is for users of your template vs the setting file which is for developing your template. The configuration file name is `tpsrc`. In this file you can store predefined answers to prompts and change the way tps behaves when rendering a template. You can have multiple template configurations in this file.
+
+The format of this file is `json`. Like so:
+
+```json
+{
+  "<template-name>": {}
+}
+```
+
+When adding configurations to a template replace the `<template-name>` to be the name of your template. This property will hold all configurations to your template.
+
+Say we had a template named `react-component`. Now to add configurations to this template I would put the following inside of my tpsrc
+
+```json
+{
+  "react-component": {
+    /* react-component template specific configs */
+  }
+}
+```
+
+Now if I also had a template `express-app-route` and wanted to also add configurations then the tpsrc files would look something like this
+
+```json
+{
+  "react-component": {
+    /* react-component template specific configs */
+  },
+  "express-app-route": {
+    /* express-app-route template specific configs */
+  }
+}
+```
+
+<!-- So in this tpsrc you can set  -->
+
+To see all of the properties you can use see our [tpsrc api guide](../../api/templates/tpsrc.md)
+
+## Answering prompts from tpsrc
+
+You can set predefined answers for a prompt in tpsrc.
+
+```json
+{
+  "<template-name>": {
+    "answers": {
+      "<prompt-answer>": "<prompt-answer>"
+    }
+  }
+}
+```
+
+This is useful when having a global template.
+
+[Prev](./settings/prompting.md)
