@@ -84,12 +84,9 @@ export default class Templates {
     this.packagesUsed = [];
     this.compiledFiles = [];
     this._defs = {};
-    // this._config = new Config();
     this.successfulBuilds = new SuccessfulBuild();
     this.buildErrors = [];
     this.data = {};
-
-    // this._handleTpsConfig();
 
     this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
@@ -113,8 +110,6 @@ export default class Templates {
         this._prompts = new Prompter(this.templateSettings.prompts, {
           default: this.opts.default
         });
-
-        // this._prompts.setAnswers(this.config);
       }
     }
 
@@ -128,10 +123,6 @@ export default class Templates {
       this.loadPackage('default');
     }
   }
-
-  // get config() {
-  //   return this._config.configurations;
-  // }
 
   /**
    * Include packages to use in the render process
@@ -194,6 +185,7 @@ export default class Templates {
 
   /**
    * Set answers for prompts
+   * @param {Object} answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
    */
   setAnswers(answers) {
     if (!this.hasPrompts()) {
@@ -201,21 +193,6 @@ export default class Templates {
     }
 
     this._prompts.setAnswers(answers);
-  }
-
-  /**
-   * @param {object} config - object to load configs from
-   * @returns {Templates} `this`
-   */
-  loadConfig(config) {
-    throw new Error('deprecated');
-    //   if (!is.object(config)) {
-    //     this._error('config must be a object');
-    //   }
-    //   if (this._prompts) {
-    //     this._prompts.setAnswers(config);
-    //   }
-    //   return this._config.load(config);
   }
 
   /**
@@ -659,7 +636,6 @@ export default class Templates {
                   );
               }
             }
-            // this._config.set(answerName, answer);
           });
         });
   }
@@ -668,23 +644,14 @@ export default class Templates {
    * Configurations
    */
 
-  _handleTpsConfig() {
-    // const { dest } = this.config;
-    // if (dest) {
-    //   if (path.isAbsolute(dest)) {
-    //     this._error(`[tpsrc Config]: dest cannot be a a absolute path`);
-    //   }
-    // }
-  }
-
   _loadTpsrc(templateName) {
     if (!this.opts.noGlobalConfig && TPS.HAS_GLOBAL) {
-      //     logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
+      logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
       const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, globalConfig);
     }
     if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {
-      //     logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
+      logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
       const localConfig = json(TPS.LOCAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, localConfig);
     }
@@ -696,6 +663,7 @@ export default class Templates {
       hasProp(config, templateName) && is.object(templateConfig);
 
     if (hasConfigObject) {
+      logger.tps.info('Loading configuration: %n', templateConfig);
       const { answers = {}, ...opts } = templateConfig;
       this.opts = defaults(opts, this.opts);
 
