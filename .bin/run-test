@@ -1,0 +1,20 @@
+#!/bin/bash
+
+tps_dir=$(pwd)
+echo $tps_dir
+
+docker system prune -f
+
+# time with test:core -- 1m 43s
+# time with test:ci band -- 1m 42s
+
+docker run \
+  -t \
+  -w /app/ \
+  --env "TEST_DIR=/app/" \
+  -v "$tps_dir/__tests__/.tps:/app/.tps" \
+  -v "$tps_dir:/root/templates" \
+  -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
+  -w "/root/templates" \
+  node \
+  npm run test:ci

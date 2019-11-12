@@ -13,7 +13,8 @@
     "build:prod": "npm run build:code",
     "build": "npm run build:prod",
     "test": "npm run test:core",
-    "test:core": "npm run build:code && BABEL_ENV=development jest",
+    "test:ci": "npm run test:core -- --maxWorkers=4 ",
+    "test:core": "npm run build:code && echo 'code built' && BABEL_ENV=development jest",
     "test:coverage": "npm run test -- --coverage",
     "cli": "node ./cli",
     "ct": "npm run cli -- create --use hey App"
