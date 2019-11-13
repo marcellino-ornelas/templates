@@ -3,8 +3,7 @@
  */
 import Playground from '@test/support/playground';
 import { TESTING_DIR } from '@test/support/constants';
-import * as utils from '@test/support/helpers';
-import * as path from 'path';
+import { tpsCli } from '@test/support/helpers';
 
 /*
  * Constants
@@ -19,7 +18,7 @@ describe('[TPS][cli] new ', () => {
     return playground
       .createBox('new_package')
       .then(() => {
-        return utils.spawn(['init', '--force'], { cwd: playground.box() });
+        return tpsCli('init --force', { cwd: playground.box() });
       })
       .then(() => {
         const tpsPath = playground.pathTo('.tps');
@@ -30,13 +29,10 @@ describe('[TPS][cli] new ', () => {
   });
 
   it('should create a new template', () => {
-    return utils
-      .spawn(['new', 'template', 'test'], {
-        cwd: playground.box()
-      })
-      .then(() => {
-        const testTemplateDefault = playground.pathTo('.tps/test/default');
-        expect(testTemplateDefault).toBeDirectory();
-      });
+    const testTemplateDefault = playground.pathTo('.tps/test/default');
+    expect(testTemplateDefault).not.toBeDirectory();
+    return tpsCli('new template test', { cwd: playground.box() }).then(() => {
+      expect(testTemplateDefault).toBeDirectory();
+    });
   });
 });
