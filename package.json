@@ -12,12 +12,11 @@
     "build:dev": "BABEL_ENV=development npm run build:code -- -w",
     "build:prod": "npm run build:code",
     "build": "npm run build:prod",
-    "test": "npm run test:core",
-    "test:ci": "npm run test:core -- --runInBand ",
-    "test:core": "npm run build:code && echo 'code built' && BABEL_ENV=development jest",
-    "test:coverage": "npm run test -- --coverage",
-    "cli": "node ./cli",
-    "ct": "npm run cli -- create --use hey App"
+    "test:init": "npm run test:jest -- --runInBand cli/init",
+    "test:core": "npm run test:jest -- --testPathIgnorePatterns cli/init",
+    "test": "npm run build:code && echo 'built' && ./.bin/run-test",
+    "test:jest": "BABEL_ENV=development jest",
+    "cli": "node ./cli"
   },
   "keywords": [],
   "author": "",

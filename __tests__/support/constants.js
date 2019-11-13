@@ -14,8 +14,9 @@ export const TESTING_PACKAGE_FILES = [
 
 export const INIT_PACKAGE_FILES = ['.tpsrc'];
 
-export const TESTING_DIR =
-  path.normalize(process.env.TEST_DIR) || path.join(__dirname, '../');
+export const TESTING_DIR = process.env.TEST_DIR
+  ? path.normalize(process.env.TEST_DIR)
+  : path.join(__dirname, '../');
 
 /**
  * In order to test init we need to use another folder other than this repo.
