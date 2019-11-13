@@ -97,7 +97,8 @@ export function cliLog(str) {
   const string = str
     .split(/\n/)
     .map(s => s.trim())
-    .join('\n');
+    .join('\n')
+    .trim();
   // eslint-disable-next-line
   console.log(string);
 }

@@ -43,3 +43,51 @@ export function spawn(additionalArgs = [], opts = {}, done) {
     });
   }
 }
+
+export function tpsCli(command, opts = {}) {
+  return new Promise((resolve, reject) => {
+    const fullCommand = `node ${cliPath} ${command}`;
+
+    child.exec(fullCommand, opts, (err, stdout, stderr) => {
+      if (err) {
+        if (!opts.fail) {
+          console.log(
+            cliErrorHelper(fullCommand, err, opts.cwd, stdout, stderr)
+          );
+        }
+
+        reject(stderr, err);
+      } else {
+        if (opts.fail) {
+          console.log(
+            cliErrorHelper(fullCommand, err, opts.cwd, stdout, stderr)
+          );
+        }
+        resolve(stdout);
+      }
+    });
+  });
+}
+
+const cliErrorHelper = (command, err, cwd, stdout, stderr) => `\
+Command: ${command}
+Cwd: ${cwd}
+
+-----------------------------
+Error
+-----------------------------
+
+${err}
+
+-----------------------------
+stdout
+-----------------------------
+
+${stdout}
+
+-----------------------------
+stderr
+-----------------------------
+
+${stderr}
+`;

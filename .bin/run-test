@@ -8,13 +8,24 @@ docker system prune -f
 # time with test:core -- 1m 43s
 # time with test:ci band -- 1m 42s
 
+#   # set testing env to be inside of app
+# docker run \
+#   -t \
+#   --env "TEST_DIR=/app/" \
+#   -v "$tps_dir/__tests__/.tps:/app/.tps" \
+#   -v "$tps_dir:/root/templates" \
+#   -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
+#   -w "/root/templates" \
+#   node \
+#   npm run test:ci -- cli/init
+  # set working directory to be this repo to have access to code
+
 docker run \
-  -t \
-  -w /app/ \
-  --env "TEST_DIR=/app/" \
-  -v "$tps_dir/__tests__/.tps:/app/.tps" \
-  -v "$tps_dir:/root/templates" \
-  -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
-  -w "/root/templates" \
-  node \
-  npm run test:ci
+    -t \
+    --env "TEST_DIR=/root/app/" \
+    -v "$tps_dir/__tests__/.tps:/root/app/.tps" \
+    -v "$tps_dir:/root/app/templates" \
+    -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
+    -w "/root/app/templates" \
+    node \
+    npm run test:ci -- cli/init

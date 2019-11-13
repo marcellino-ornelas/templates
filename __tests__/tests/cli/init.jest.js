@@ -1,59 +1,65 @@
 import Playground from '@test/support/playground';
-import * as utils from '@test/support/utils';
-import { INIT_PACKAGE_FILES, TESTING_DIR } from '@test/support/constants';
+import { tpsCli } from '@test/support/utils';
+import { INIT_PACKAGE_FILES, TESTING_INIT_DIR } from '@test/support/constants';
+import fs from 'fs-extra';
 
 /**
  * Constants
  */
 
-const playground = new Playground(TESTING_DIR);
+const playground = new Playground(TESTING_INIT_DIR);
 
-describe('Command Line: ', () => {
+describe('Command Line: Init', () => {
   let cwd;
 
-  beforeAll(() =>
-    playground.create().then(() =>
-      playground.createBox('init').then(() => {
-        cwd = playground.box();
-      })
-    )
-  );
-
+  beforeAll(() => playground.create());
   afterAll(() => playground.destroy());
 
-  it('should not initialize if parents directory is initialized', done => {
-    utils.spawn(['init'], { cwd, fail: true }, function(err, stdout) {
-      expect(err).toBeDefined();
-      expect(stdout).toBeDefined();
-      done();
+  describe('basic', () => {
+    let dist;
+    beforeAll(() =>
+      playground.createBox('init').then(() => {
+        cwd = playground.box();
+        dist = playground.pathTo('dist');
+        return fs.mkdir(dist);
+      })
+    );
 
-      expect(stdout).toContain(
-        'tps is already initialized in a parent directory.'
+    it('should be able initialize .tps/ folder', () => {
+      return tpsCli('init', { cwd }).then(stdout => {
+        expect(stdout).toContain('tps initialized');
+        expect(playground.pathTo('.tps')).toHaveAllFilesAndDirectories(
+          INIT_PACKAGE_FILES
+        );
+      });
+    });
+
+    it('should error out if repo is already initialized', () => {
+      return expect(tpsCli('init', { cwd, fail: true })).rejects.toContain(
+        'InitializedAlready'
       );
     });
-  });
 
-  it('should be able initialize .tps/ folder', done => {
-    const initFolder = playground.pathTo('.tps');
-    // need to add --force because of .tps folder in main templates repo
-    utils.spawn(['init', '--force', '-v'], { cwd }, function(err, stdout) {
-      expect(err).toBeNull();
+    it('should error out if parent directory is already initialized', () => {
+      expect(dist).toBeDirectory();
 
-      expect(initFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+      return expect(
+        tpsCli('init', { cwd: dist, fail: true })
+      ).rejects.toContain('ParentDirectoryInitializedError');
+    });
 
-      done();
+    it('should initialized directory when parent directory is already initialized and force is true', () => {
+      expect(dist).toBeDirectory();
+
+      return tpsCli('init --force', { cwd: dist }).then(stdout => {
+        expect(stdout).toContain('tps initialized');
+        expect(playground.pathTo('.tps')).toHaveAllFilesAndDirectories(
+          INIT_PACKAGE_FILES
+        );
+        expect(playground.pathTo('dist/.tps')).toHaveAllFilesAndDirectories(
+          INIT_PACKAGE_FILES
+        );
+      });
     });
   });
-
-  // it.skip('should not initialize if cwd has .tps/ folder already', done => {
-  //   utils.spawn(['init', '--force'], { cwd, fail: true }, function(
-  //     err,
-  //     stdout
-  //   ) {
-  //     expect(err).toBeDefined();
-  //     expect(stdout).toBeDefined();
-
-  //     done();
-  //   });
-  // });
 });
