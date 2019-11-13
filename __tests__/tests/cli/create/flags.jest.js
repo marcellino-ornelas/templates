@@ -2,7 +2,7 @@
  * Modules
  */
 import Playground from '@test/support/playground';
-import * as utils from '@test/support/utils';
+import * as utils from '@test/support/helpers';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/support/constants';
 import fs from 'fs-extra';
 /*
@@ -32,39 +32,39 @@ describe('[cli] Create:', () => {
     });
   });
 
-  describe.each([['create', '--use=testing'], ['testing', '']])(
-    'command ( %s %s )',
-    (...command) => {
-      it('should be able to use -p flag to all additional packages', done => {
-        const destPath = playground.pathTo('app');
-        const cmd = [...command, '-p', 'extras', 'extras2', '--', 'app'];
+  describe.each([
+    ['create', '--use=testing'],
+    ['testing', '']
+  ])('command ( %s %s )', (...command) => {
+    it('should be able to use -p flag to all additional packages', done => {
+      const destPath = playground.pathTo('app');
+      const cmd = [...command, '-p', 'extras', 'extras2', '--', 'app'];
 
-        utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-          expect(destPath).toHaveAllFilesAndDirectories([
-            './extras2.js',
-            './extras.js',
-            ...TESTING_PACKAGE_FILES
-          ]);
+      utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
+        expect(destPath).toHaveAllFilesAndDirectories([
+          './extras2.js',
+          './extras.js',
+          ...TESTING_PACKAGE_FILES
+        ]);
 
-          done();
-        });
+        done();
       });
+    });
 
-      it('should be able to use --force flag', done => {
-        const destPath = playground.pathTo('app');
-        const indexDest = playground.pathTo('app/index.js');
-        const cmd = [...command, '--force', 'app'];
+    it('should be able to use --force flag', done => {
+      const destPath = playground.pathTo('app');
+      const indexDest = playground.pathTo('app/index.js');
+      const cmd = [...command, '--force', 'app'];
 
-        fs.outputFileSync(indexDest, 'blah');
+      fs.outputFileSync(indexDest, 'blah');
 
-        utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-          expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+      utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
+        expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 
-          done();
-        });
+        done();
       });
-    }
-  );
+    });
+  });
 
   // it('should be able to use -f flag tell tps not to create a new folder', done => {
   //   const destPath = playground.pathTo('App');

@@ -1,5 +1,5 @@
 import Playground from '@test/support/playground';
-import { tpsCli } from '@test/support/utils';
+import { tpsCli } from '@test/support/helpers';
 import { INIT_PACKAGE_FILES, TESTING_INIT_DIR } from '@test/support/constants';
 import fs from 'fs-extra';
 

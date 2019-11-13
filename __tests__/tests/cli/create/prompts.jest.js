@@ -1,5 +1,5 @@
 import Playground from '@test/support/playground';
-import * as utils from '@test/support/utils';
+import * as utils from '@test/support/helpers';
 import { TESTING_DIR } from '@test/support/constants';
 
 /**
