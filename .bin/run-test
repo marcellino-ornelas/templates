@@ -12,13 +12,13 @@ npm run test:core
 # Init tests need to be ran in docker container 
 # this way they can have there own enviroment to mess up
 # TODO: had this before    
-#   -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
 # maybe remove to test init with global?
 docker run \
     -t \
     --env "TEST_DIR=/root/app/" \
     -v "$tps_dir/__tests__/.tps:/root/app/.tps" \
     -v "$tps_dir:/root/app/templates" \
+    -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
     -w "/root/app/templates" \
     node \
     npm run test:init
