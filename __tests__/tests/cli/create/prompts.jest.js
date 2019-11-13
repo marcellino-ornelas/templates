@@ -1,6 +1,6 @@
-import Playground from '@test/support/playground';
-import * as utils from '@test/support/helpers';
-import { TESTING_DIR } from '@test/support/constants';
+import Playground from '@test/utilities/playground';
+import * as utils from '@test/utilities/helpers';
+import { TESTING_DIR } from '@test/utilities/constants';
 
 /**
  * Constants

@@ -1,9 +1,9 @@
 /*
  * Modules
  */
-import Playground from '@test/support/playground';
-import * as utils from '@test/support/helpers';
-import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/support/constants';
+import Playground from '@test/utilities/playground';
+import * as utils from '@test/utilities/helpers';
+import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import fs from 'fs-extra';
 /*
  * Constants

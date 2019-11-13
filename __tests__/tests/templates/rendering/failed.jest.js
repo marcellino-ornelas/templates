@@ -2,10 +2,10 @@
  * Modules
  */
 import fs from 'fs-extra';
-import Playground from '@test/support/playground';
-import { TESTING_DIR } from '@test/support/constants';
+import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
-import { TESTING_PACKAGE_FILES } from '@test/support/constants';
+import { TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 
 /*
  * Constants

@@ -1,5 +1,5 @@
 import Prompter from '@tps/prompter';
-import { PROMPTER_QUESTIONS } from '@test/support/constants';
+import { PROMPTER_QUESTIONS } from '@test/utilities/constants';
 import { array } from 'is';
 
 const prompter = new Prompter(PROMPTER_QUESTIONS);

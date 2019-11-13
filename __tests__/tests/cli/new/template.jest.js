@@ -1,9 +1,9 @@
 /*
  * Modules
  */
-import Playground from '@test/support/playground';
-import { TESTING_DIR } from '@test/support/constants';
-import { tpsCli } from '@test/support/helpers';
+import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';
+import { tpsCli } from '@test/utilities/helpers';
 
 /*
  * Constants

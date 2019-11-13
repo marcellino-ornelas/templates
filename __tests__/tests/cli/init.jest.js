@@ -1,7 +1,11 @@
-import Playground from '@test/support/playground';
-import { tpsCli } from '@test/support/helpers';
-import { INIT_PACKAGE_FILES, TESTING_INIT_DIR } from '@test/support/constants';
+import Playground from '@test/utilities/playground';
+import { tpsCli } from '@test/utilities/helpers';
+import {
+  INIT_PACKAGE_FILES,
+  TESTING_INIT_DIR
+} from '@test/utilities/constants';
 import fs from 'fs-extra';
+import { init } from '@test/support/cli';
 
 /**
  * Constants
@@ -26,16 +30,11 @@ describe('Command Line: Init', () => {
     );
 
     it('should be able initialize .tps/ folder', () => {
-      return tpsCli('init', { cwd }).then(stdout => {
-        expect(stdout).toContain('tps initialized');
-        expect(playground.pathTo('.tps')).toHaveAllFilesAndDirectories(
-          INIT_PACKAGE_FILES
-        );
-      });
+      return init(cwd);
     });
 
     it('should error out if repo is already initialized', () => {
-      return expect(tpsCli('init', { cwd, fail: true })).rejects.toContain(
+      return expect(init(cwd, { fail: true })).rejects.toContain(
         'InitializedAlready'
       );
     });
@@ -43,19 +42,15 @@ describe('Command Line: Init', () => {
     it('should error out if parent directory is already initialized', () => {
       expect(dist).toBeDirectory();
 
-      return expect(
-        tpsCli('init', { cwd: dist, fail: true })
-      ).rejects.toContain('ParentDirectoryInitializedError');
+      return expect(init(dist, { fail: true })).rejects.toContain(
+        'ParentDirectoryInitializedError'
+      );
     });
 
     it('should initialized directory when parent directory is already initialized and force is true', () => {
       expect(dist).toBeDirectory();
 
-      return tpsCli('init --force', { cwd: dist }).then(stdout => {
-        expect(stdout).toContain('tps initialized');
-        expect(playground.pathTo('.tps')).toHaveAllFilesAndDirectories(
-          INIT_PACKAGE_FILES
-        );
+      return init(dist, { force: true }).then(() => {
         expect(playground.pathTo('dist/.tps')).toHaveAllFilesAndDirectories(
           INIT_PACKAGE_FILES
         );

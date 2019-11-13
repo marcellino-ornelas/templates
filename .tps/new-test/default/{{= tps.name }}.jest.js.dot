@@ -1,8 +1,8 @@
 /*
  * Modules
  */
-{{? tps.answers.playground }}import Playground from '@test/support/playground';
-import { TESTING_DIR } from '@test/support/constants';{{?}}
+{{? tps.answers.playground }}import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';{{?}}
 {{? tps.answers.modules.length}}{{~ tps.answers.modules :module:index }}import {{= module}} from '{{= module === 'templates' ? '@test' : '@tps' }}/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
 
 /*

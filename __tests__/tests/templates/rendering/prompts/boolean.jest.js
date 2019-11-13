@@ -1,6 +1,6 @@
 import Templates from '@test/templates';
-import Playground from '@test/support/playground';
-import { TESTING_DIR } from '@test/support/constants';
+import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';
 
 import inquirer from 'inquirer';
 

@@ -2,7 +2,7 @@
  * Modules
  */
 import Prompter from '@tps/prompter';
-import { PROMPTER_QUESTIONS } from '@test/support/constants';
+import { PROMPTER_QUESTIONS } from '@test/utilities/constants';
 
 const DEFAULT_ANSWER_TO_PROMPT = {
   testingPrompt: 'default value'
