@@ -1,5 +1,4 @@
 import Playground from '@test/utilities/playground';
-import { tpsCli } from '@test/utilities/helpers';
 import {
   INIT_PACKAGE_FILES,
   TESTING_INIT_DIR
