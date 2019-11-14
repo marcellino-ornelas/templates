@@ -1,8 +1,8 @@
 const path = require('path');
 const debug = require('debug');
-const Template = require('../../lib/templates');
 const is = require('is');
 const pjson = require('prettyjson-256');
+const Template = require('../../lib/templates');
 
 module.exports.createHandler = function(argv) {
   const dest = process.cwd();
@@ -24,8 +24,8 @@ module.exports.createHandler = function(argv) {
   const tps = new Template(argv.use, {
     default: _default,
     newFolder: !noNewFolder,
-    force: force,
-    wipe: wipe
+    force,
+    wipe
   });
 
   if (is.array(packages) && !is.array.empty(packages)) {

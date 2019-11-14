@@ -5,7 +5,7 @@ import { array } from 'is';
 const prompter = new Prompter(PROMPTER_QUESTIONS);
 
 describe('[Prompter] Prompt:', () => {
-  let prompt = prompter.getPrompt('testingPrompt');
+  const prompt = prompter.getPrompt('testingPrompt');
 
   it('should have all correct properties', () => {
     expect(prompt).toMatchObject({

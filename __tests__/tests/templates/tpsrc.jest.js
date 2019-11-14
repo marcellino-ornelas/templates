@@ -1,7 +1,7 @@
-import { TESTING_TPS } from '@test/utilities/constants';
+import { TESTING_TPS , TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
-import { TESTING_DIR } from '@test/utilities/constants';
+
 import fs from 'fs';
 
 /**
@@ -22,8 +22,8 @@ describe('[Templates] tpsrc: ', () => {
   });
 
   it('should load local tpsrc file', () => {
-    const opts = tps.opts;
-    const answers = tps._prompts.answers;
+    const {opts} = tps;
+    const {answers} = tps._prompts;
 
     expect(opts).toMatchObject({
       extendedDest

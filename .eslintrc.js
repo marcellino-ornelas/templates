@@ -1,7 +1,8 @@
 const path = require('path');
 
 const config = {
-  env: { node: 1 },
+  env: { node: 1, es6: true },
+
   extends: ['airbnb', 'prettier'],
   plugins: ['jest'],
   settings: {
@@ -17,7 +18,17 @@ const config = {
     'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
     'spaced-comment': [2, 'always', { exceptions: ['*'] }],
     'no-underscore-dangle': [2, { allowAfterThis: true }]
-  }
+  },
+  overrides: [
+    Object.assign(
+      {
+        files: ['__tests__/**/*.js'],
+        env: { jest: true },
+        plugins: ['jest']
+      },
+      require('eslint-plugin-jest').configs.recommended
+    )
+  ]
 };
 
 // overrides: [

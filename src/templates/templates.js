@@ -205,7 +205,7 @@ export default class Templates {
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
-    let name = data.name;
+    const {name} = data;
     let finalDest = dest;
     const buildNewFolder = this.opts.newFolder;
 
@@ -282,7 +282,7 @@ export default class Templates {
               if (doesBuildPathExist) {
                 if (wipe) {
                   return fs.remove(realBuildPath);
-                } else if (!force && !wipe) {
+                } if (!force && !wipe) {
                   return this._checkForFiles(realBuildPath, renderData);
                 }
               }
@@ -355,7 +355,7 @@ export default class Templates {
         didBuildPathExist
       });
     this.buildErrors.push({
-      buildPath: buildPath,
+      buildPath,
       error: err,
       didBuildPathExist
     });
@@ -370,7 +370,7 @@ export default class Templates {
     const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
 
     if (!buildPathNeedsSlash) {
-      buildPath = buildPath + path.sep;
+      buildPath += path.sep;
     }
 
     if (buildNewFolder) {

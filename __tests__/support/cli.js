@@ -12,7 +12,7 @@ export const init = (cwd, flags = {}, opts = {}) => {
 
   expect(cwd).toBeDirectory();
 
-  return tpsCli(`init ${flagString}`, { cwd: cwd, ...opts }).then(stdout => {
+  return tpsCli(`init ${flagString}`, { cwd, ...opts }).then(stdout => {
     expect(stdout).toContain('tps initialized');
     expect(tpsFolder).toBeDirectory();
     expect(tpsFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
@@ -88,10 +88,7 @@ export const createTemplate = (cwd, template, builders = null, flags = {}) => {
     );
   }
 
-  return Promise.all(commandPromises).then(([use, create]) => {
-    console.log(use);
-    console.log('\n------------\n');
-    console.log(create);
+  return Promise.all(commandPromises).then(([use]) => {
     if (hasBuilders) {
       const allBuilders = [...builders, ...createBuilders];
 

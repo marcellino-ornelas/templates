@@ -14,12 +14,12 @@ expect.extend({
         pass: true,
         message: () => `${_received} should not be a file.`
       };
-    } else {
+    } 
       return {
         pass: false,
         message: () => `${_received} should be a file.`
       };
-    }
+    
   },
   toBeDirectory(received) {
     const passed = isDir(received);
@@ -30,18 +30,18 @@ expect.extend({
         pass: true,
         message: () => `${_received} should not be a directory.`
       };
-    } else {
+    } 
       return {
         pass: false,
         message: () => `${_received} should be a directory.`
       };
-    }
+    
   },
   toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
     const _received = this.utils.printReceived(dirPath);
     const isReg = !this.isNot;
     let count = 0;
-    let files = [];
+    const files = [];
 
     for (let i = 0; i < filesAndDirs.length; i++) {
       const fileOrDir = filesAndDirs[i];
@@ -59,23 +59,23 @@ expect.extend({
     if (didMatchLen) {
       // passed
       return {
-        pass: this.isNot ? false : true,
+        pass: !this.isNot,
         message: () => `\
 ${_received} had these files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `
       };
-    } else {
+    } 
       return {
-        pass: this.isNot ? true : false,
+        pass: !!this.isNot,
         message: () => `\
 ${_received} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `
       };
-    }
+    
   },
   toHaveFileContents(destPath, contents = '') {
     const fileContents = fs.readFileSync(destPath).toString();
@@ -100,7 +100,7 @@ File should not have contents: ${_expected}
 Received: ${this.utils.printReceived(fileContents)}
 `
       };
-    } else {
+    } 
       return {
         pass: false,
         message: () => `
@@ -111,6 +111,6 @@ File should have contents: ${_expected}
 Received: ${this.utils.printReceived(fileContents)}
 `
       };
-    }
+    
   }
 });

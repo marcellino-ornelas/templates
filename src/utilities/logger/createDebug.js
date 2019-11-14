@@ -1,10 +1,11 @@
-process.env.DEBUG_COLORS = false;
 import debug from 'debug';
 import colors from 'ansi-colors';
 import pjson from 'prettyjson-256';
 import is from 'is';
 import { defaults } from '@tps/utilities/helpers';
 import CreateDebugGroup from './createDebugGroup';
+
+process.env.DEBUG_COLORS = false;
 CreateDebugGroup;
 
 /**
@@ -26,7 +27,7 @@ const TITLES_RE = (function() {
   return new RegExp(regStr, 'g');
 })();
 
-let pattern = [
+const pattern = [
   '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
   '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~]))'
 ].join('|');
@@ -60,7 +61,7 @@ const render = (object, indent = 0, opts = {}) => {
  * Formatters
  */
 debug.formatters.n = v => {
-  return '\n' + render(v, 2);
+  return `\n${  render(v, 2)}`;
 };
 
 /* only used when you want to use inline */
@@ -72,7 +73,7 @@ debug.formatters.o = v => {
       .replace(/\n/g, '')
       .replace(/\s*:\s*/g, '=');
 
-    let matched = output.match(ANSII_RE);
+    const matched = output.match(ANSII_RE);
 
     matched.forEach(match => {
       const index = output.indexOf(match) + match.length;
@@ -80,7 +81,7 @@ debug.formatters.o = v => {
     });
 
     return output.trim();
-  } else if (is.array(v)) {
+  } if (is.array(v)) {
     return v;
   }
   return render(v);
@@ -98,7 +99,7 @@ debug.formatters.O = v => {
 debug.log = function(string, ...rest) {
   const filteredString = string.replace(TITLES_RE, matched => {
     const titleName = matched.slice(1);
-    return '\u001b[0m ' + colors[titleName](titleName);
+    return `\u001b[0m ${  colors[titleName](titleName)}`;
   });
   console.log(filteredString, ...rest);
 };

@@ -1,9 +1,9 @@
 import is from 'is';
 import inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
-import Prompt from './prompt';
 import logger from '@tps/utilities/logger';
 import { PromptNoPromptFoundError } from '@tps/errors';
+import Prompt from './prompt';
 
 /**
  * Default options for Templates

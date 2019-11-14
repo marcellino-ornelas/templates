@@ -1,8 +1,8 @@
-const TPS = require('../../lib/utilities/constants');
 const fs = require('fs-extra');
 const pjson = require('prettyjson-256');
 const { LIST_OPTIONS } = require('../options');
 const is = require('is');
+const TPS = require('../../lib/utilities/constants');
 
 exports.command = ['list', 'ls'];
 
@@ -15,11 +15,11 @@ const removeRcFile = arr => {
 
   if (i === -1) {
     return arr;
-  } else {
+  } 
     const copy = arr.concat();
     copy.splice(i, 1);
     return copy;
-  }
+  
 };
 
 exports.handler = function(argv) {

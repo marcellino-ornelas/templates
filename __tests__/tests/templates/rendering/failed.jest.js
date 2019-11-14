@@ -3,9 +3,9 @@
  */
 import fs from 'fs-extra';
 import Playground from '@test/utilities/playground';
-import { TESTING_DIR } from '@test/utilities/constants';
+import { TESTING_DIR , TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
-import { TESTING_PACKAGE_FILES } from '@test/utilities/constants';
+
 
 /*
  * Constants
