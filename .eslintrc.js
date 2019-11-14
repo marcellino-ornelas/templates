@@ -3,6 +3,7 @@ const path = require('path');
 const config = {
   env: { node: 1 },
   extends: ['airbnb', 'prettier'],
+  plugins: ['jest'],
   settings: {
     'import/resolver': {
       'babel-module': {}

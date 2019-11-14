@@ -550,7 +550,7 @@ export default class Templates {
               err
             );
 
-            return Promsie.reject(err);
+            return Promise.reject(err);
           });
       });
 

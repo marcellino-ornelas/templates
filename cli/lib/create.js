@@ -2,6 +2,7 @@ const path = require('path');
 const debug = require('debug');
 const Template = require('../../lib/templates');
 const is = require('is');
+const pjson = require('prettyjson-256');
 
 module.exports.createHandler = function(argv) {
   const dest = process.cwd();
@@ -49,7 +50,8 @@ module.exports.createHandler = function(argv) {
       process.exit(0);
     })
     .catch(e => {
-      console.log('tps error', e);
+      // console.error('tps error');
+      console.error(pjson.render(e));
       process.exit(1);
     });
 };

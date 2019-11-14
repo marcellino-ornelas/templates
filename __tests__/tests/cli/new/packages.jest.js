@@ -4,7 +4,6 @@
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { tpsCli } from '@test/utilities/helpers';
-import * as path from 'path';
 import { init, newTemplate } from '@test/support/cli';
 
 /*

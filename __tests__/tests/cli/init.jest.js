@@ -33,7 +33,7 @@ describe('Command Line: Init', () => {
     });
 
     it('should error out if repo is already initialized', () => {
-      return expect(init(cwd, { fail: true })).rejects.toContain(
+      return expect(init(cwd, {}, { fail: true })).rejects.toContain(
         'InitializedAlready'
       );
     });
@@ -41,7 +41,7 @@ describe('Command Line: Init', () => {
     it('should error out if parent directory is already initialized', () => {
       expect(dist).toBeDirectory();
 
-      return expect(init(dist, { fail: true })).rejects.toContain(
+      return expect(init(dist, {}, { fail: true })).rejects.toContain(
         'ParentDirectoryInitializedError'
       );
     });

@@ -36,9 +36,9 @@ describe('[cli] Create:', () => {
     ['create', '--use=testing'],
     ['testing', '']
   ])('command ( %s %s )', (...command) => {
-    it('should be able to use -p flag to all additional packages', done => {
+    it.only('should be able to use -p flag to all additional packages', done => {
       const destPath = playground.pathTo('app');
-      const cmd = [...command, '-p', 'extras', 'extras2', '--', 'app'];
+      const cmd = [...command, '-p', 'extras', 'extras2', '--', '-v', 'app'];
 
       utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
         expect(destPath).toHaveAllFilesAndDirectories([
