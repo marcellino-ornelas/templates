@@ -1,6 +1,8 @@
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
 import fs from 'fs-extra';
+import pjson from 'prettyjson-256';
+import { DirectoryNode } from '../src/fileSystemTree/directoryNode';
 
 jest.setTimeout(30000);
 
@@ -14,12 +16,11 @@ expect.extend({
         pass: true,
         message: () => `${_received} should not be a file.`
       };
-    } 
-      return {
-        pass: false,
-        message: () => `${_received} should be a file.`
-      };
-    
+    }
+    return {
+      pass: false,
+      message: () => `${_received} should be a file.`
+    };
   },
   toBeDirectory(received) {
     const passed = isDir(received);
@@ -30,12 +31,11 @@ expect.extend({
         pass: true,
         message: () => `${_received} should not be a directory.`
       };
-    } 
-      return {
-        pass: false,
-        message: () => `${_received} should be a directory.`
-      };
-    
+    }
+    return {
+      pass: false,
+      message: () => `${_received} should be a directory.`
+    };
   },
   toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
     const _received = this.utils.printReceived(dirPath);
@@ -66,16 +66,15 @@ ${_received} had these files/directories
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `
       };
-    } 
-      return {
-        pass: !!this.isNot,
-        message: () => `\
+    }
+    return {
+      pass: !!this.isNot,
+      message: () => `\
 ${_received} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `
-      };
-    
+    };
   },
   toHaveFileContents(destPath, contents = '') {
     const fileContents = fs.readFileSync(destPath).toString();
@@ -100,17 +99,16 @@ File should not have contents: ${_expected}
 Received: ${this.utils.printReceived(fileContents)}
 `
       };
-    } 
-      return {
-        pass: false,
-        message: () => `
+    }
+    return {
+      pass: false,
+      message: () => `
 ${this.utils.matcherHint('toHaveFileContents', destPath, contents, options)}
 
 File should have contents: ${_expected}
 
 Received: ${this.utils.printReceived(fileContents)}
 `
-      };
-    
+    };
   }
 });

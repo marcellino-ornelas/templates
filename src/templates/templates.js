@@ -205,7 +205,7 @@ export default class Templates {
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
-    const {name} = data;
+    const { name } = data;
     let finalDest = dest;
     const buildNewFolder = this.opts.newFolder;
 
@@ -282,7 +282,9 @@ export default class Templates {
               if (doesBuildPathExist) {
                 if (wipe) {
                   return fs.remove(realBuildPath);
-                } if (!force && !wipe) {
+                }
+
+                if (!force && !wipe) {
                   return this._checkForFiles(realBuildPath, renderData);
                 }
               }

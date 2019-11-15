@@ -2,9 +2,13 @@
  * Modules
  */
 import Playground from '@test/utilities/playground';
-import * as utils from '@test/utilities/helpers';
-import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
-import fs from 'fs-extra';
+import { TESTING_DIR } from '@test/utilities/constants';
+import {
+  createTemplate,
+  mockTemplateFileExistsError,
+  checkFilesForTemplate
+} from '@test/support/cli';
+
 /*
  * Constants
  */
@@ -16,54 +20,38 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('cli_create_flags'));
 
-  describe.each([
-    ['create', '--use=testing-prompt-types-select'],
-    ['testing-prompt-types-select', '']
-  ])('command ( %s %s )', (...command) => {
-    it('should be able to use -d flag to use all default prompt answers', done => {
-      const destPath = playground.pathTo('App');
-      const cmd = [...command, '-d', 'App'];
+  it('should be able to use -d flag to use all default prompt answers', () => {
+    return createTemplate(
+      playground.box(),
+      'testing-prompt-types-select',
+      'App',
+      { d: true }
+    );
+  });
 
-      utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-        expect(destPath).toHaveAllFilesAndDirectories(['index.css']);
-
-        done();
-      });
+  it('should be able to use -p flag to all additional packages', () => {
+    return createTemplate(playground.box(), 'testing', 'app', {
+      packages: ['extras', 'extras2']
+    }).then(() => {
+      checkFilesForTemplate(playground.box(), 'app', [
+        './extras2.js',
+        './extras.js'
+      ]);
     });
   });
 
-  describe.each([
-    ['create', '--use=testing'],
-    ['testing', '']
-  ])('command ( %s %s )', (...command) => {
-    it.only('should be able to use -p flag to all additional packages', done => {
-      const destPath = playground.pathTo('app');
-      const cmd = [...command, '-p', 'extras', 'extras2', '--', '-v', 'app'];
+  it('should be able to use --force flag', () => {
+    mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
-      utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-        expect(destPath).toHaveAllFilesAndDirectories([
-          './extras2.js',
-          './extras.js',
-          ...TESTING_PACKAGE_FILES
-        ]);
-
-        done();
+    return expect(
+      createTemplate(playground.box(), 'testing', 'app', null, { fail: true })
+    )
+      .rejects.toContain('FileExistError')
+      .then(() => {
+        return createTemplate(playground.box(), 'testing', 'app', {
+          force: true
+        });
       });
-    });
-
-    it('should be able to use --force flag', done => {
-      const destPath = playground.pathTo('app');
-      const indexDest = playground.pathTo('app/index.js');
-      const cmd = [...command, '--force', 'app'];
-
-      fs.outputFileSync(indexDest, 'blah');
-
-      utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-        expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-
-        done();
-      });
-    });
   });
 
   // it('should be able to use -f flag tell tps not to create a new folder', done => {

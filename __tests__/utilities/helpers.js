@@ -7,7 +7,7 @@ import path from 'path';
 import is from 'is';
 import { DirNode } from '@tps/fileSystemTree';
 import { MAIN_DIR } from '@tps/utilities/constants';
-import { eachObj } from '@tps/utilities/helpers';
+import { eachObj, defaults } from '@tps/utilities/helpers';
 
 /**
  * Constants
@@ -45,24 +45,38 @@ export function spawn(additionalArgs = [], opts = {}, done) {
   }
 }
 
+const TPS_CLI_DEFAULT_OPTIONS = {
+  verbose: false,
+  fail: false
+};
+
 export function tpsCli(command, opts = {}) {
+  const options = defaults(opts, TPS_CLI_DEFAULT_OPTIONS);
   return new Promise((resolve, reject) => {
     const fullCommand = `node ${cliPath} ${command}`.replace(/\s\s/g, ' ');
 
-    child.exec(fullCommand, opts, (err, stdout, stderr) => {
+    if (process.env.DEBUG) {
+      options.verbose = true;
+    }
+
+    child.exec(fullCommand, options, (err, stdout, stderr) => {
       if (err) {
-        if (!opts.fail) {
+        if (!options.fail) {
           console.log(
-            cliErrorHelper(fullCommand, err, opts.cwd, stdout, stderr)
+            cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr)
           );
+          console.log(command);
+          expect(options.fail).toBeTruthy();
         }
 
         reject(stderr, err);
       } else {
-        if (opts.verbose || opts.fail) {
+        if (options.verbose || options.fail) {
           console.log(
-            cliErrorHelper(fullCommand, err, opts.cwd, stdout, stderr)
+            cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr)
           );
+
+          expect(options.fail).toBeFalsy();
         }
         resolve(stdout);
       }
@@ -100,6 +114,10 @@ const getFlagString = flag => {
 export const buildFlags = args => {
   let flags = '';
 
+  if (!is.object(args)) {
+    return flags;
+  }
+
   eachObj(args, (value, flag) => {
     const flagString = getFlagString(flag);
     switch (true) {
@@ -112,6 +130,8 @@ export const buildFlags = args => {
         break;
       case is.array(value):
         flags += `${flagString} ${value.join(' ')} --`;
+        break;
+      default:
         break;
     }
 

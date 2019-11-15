@@ -1,6 +1,6 @@
 import Playground from '@test/utilities/playground';
-import * as utils from '@test/utilities/helpers';
 import { TESTING_DIR } from '@test/utilities/constants';
+import { createTemplate, checkFilesForTemplate } from '@test/support/cli';
 
 /**
  * Constants
@@ -15,23 +15,17 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_prompt'));
 
-  describe.each([
-    ['create', '--use=testing-prompt-types-select'],
-    ['testing-prompt-types-select', '']
-  ])('command ( %s %s )', (...command) => {
-    it.each([['less'], ['css']])(
-      'should be able answer prompts from command line arguments',
-      (cssType, done) => {
-        const destPath = playground.pathTo('App');
-
-        const cmd = [...command, `--css=${cssType}`, '-v', 'App'];
-
-        utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-          expect(destPath).toHaveAllFilesAndDirectories([`index.${cssType}`]);
-
-          done();
-        });
-      }
-    );
-  });
+  it.each([['less'], ['css']])(
+    'should be able answer prompts from command line arguments',
+    cssType => {
+      return createTemplate(
+        playground.box(),
+        'testing-prompt-types-select',
+        'App',
+        { css: cssType }
+      ).then(() => {
+        checkFilesForTemplate(playground.box(), 'App', [`index.${cssType}`]);
+      });
+    }
+  );
 });
