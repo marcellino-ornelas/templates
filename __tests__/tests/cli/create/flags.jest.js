@@ -24,9 +24,11 @@ describe('[cli] Create:', () => {
     return createTemplate(
       playground.box(),
       'testing-prompt-types-select',
-      'App',
+      'app',
       { d: true }
-    );
+    ).then(() => {
+      checkFilesForTemplate(playground.box(), 'app', ['./index.css']);
+    });
   });
 
   it('should be able to use -p flag to all additional packages', () => {
@@ -51,6 +53,9 @@ describe('[cli] Create:', () => {
         return createTemplate(playground.box(), 'testing', 'app', {
           force: true
         });
+      })
+      .then(() => {
+        // we should check the file contents here
       });
   });
 
