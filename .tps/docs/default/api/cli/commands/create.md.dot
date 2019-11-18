@@ -34,6 +34,8 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
 
 ### Examples
 
+#### Create a single template
+
 Use the create command to create a template in your current working directory
 
 ```bash
@@ -42,6 +44,8 @@ tps create --use=<template-name> app
 
     ./app/
       <your-template-files> ...
+
+#### Create a single template with a path
 
 You can also specify a path to place the template.
 
@@ -59,6 +63,8 @@ This will create your template inside of `./app/src`
 
 > Note: directories will be created if they don't exist.
 
+#### Create multiple templates
+
 You can also create multiple components name at the same time `tps create --use=<template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
 ```bash
@@ -74,6 +80,8 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
     webapp/
       src/
         <your-template-files> ...
+
+#### Create a template in your cwd
 
 You can also render your template in your cwd `tps create --use=<template-name>`
 

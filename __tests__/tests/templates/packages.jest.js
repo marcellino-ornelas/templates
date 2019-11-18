@@ -1,5 +1,4 @@
 import Templates from '@test/templates';
-import { RequiresTemplateError } from '@tps/errors';
 
 /**
  * Templates Packages
@@ -35,7 +34,7 @@ describe('[Templates] Packages:', () => {
       expect(tps.packages).toHaveProperty(pkg);
     });
   });
-  it('should throw an error when packages arnt passed in', () => {
+  it("should throw an error when packages aren't passed in", () => {
     const errArgs = ['', {}, null, true, false];
 
     errArgs.forEach(errArg => {
@@ -45,10 +44,10 @@ describe('[Templates] Packages:', () => {
     });
   });
 
-  it('should throw an error when packages arnt real', () => {
-      expect(() => {
-        tps.loadPackages(['fake-package']);
-      }).toThrow();
+  it("should throw an error when packages aren't real", () => {
+    expect(() => {
+      tps.loadPackages(['fake-package']);
+    }).toThrow();
   });
 
   it('should not let you load a package if already loaded', () => {

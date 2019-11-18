@@ -1,15 +1,12 @@
-{{? tps.name }}
-  hey
-{{??}}
-  bad
-{{?}}
 # Welcome to our CLI documentation
 
 ## Commands
 
-- [Create](./commands/create)
-- [Use](./commands/use)
-- [Init](./commands/init)
+- [Create](./commands/create.md)
+- [Use](./commands/use.md)
+- [New](./commands/new.md)
+- [List](./commands/list.md)
+- [Init](./commands/init.md)
 
 ## Flags
 

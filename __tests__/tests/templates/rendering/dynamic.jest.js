@@ -32,6 +32,9 @@ describe('[TPS] Rendering dynamic:', () => {
     });
   });
 
+  it.todo('should be able to use def files with one helper');
+  it.todo('should be able to use def files that has multiple helpers');
+
   it("should set 'tps.name' to the new template being created", () => {
     const destPath = path.join(playground.box(), 'App');
     const indexFile = path.join(destPath, 'index.txt');

@@ -45,18 +45,66 @@ To see all of the properties you can use see our [tpsrc api guide](../../api/tem
 
 ## Answering prompts from tpsrc
 
-You can set predefined answers for a prompt in tpsrc.
+You can set predefined answers for a specific template's prompts. This will prevent the prompt from displaying when you render a new template. When rending a new template it will first read all of the answers in this file and only prompt the user for the ones that still need to be answered. This is useful when you want a template to behave a certain way in a specific directory.
 
 ```json
 {
   "<template-name>": {
     "answers": {
-      "<prompt-answer>": "<prompt-answer>"
+      "<prompt-name>": "<prompt-answer>"
     }
   }
 }
 ```
 
-This is useful when having a global template.
+> This is very useful when having a global templates.
+
+#### Example
+
+Say we had a global template `react-component`.
+
+    | - ~/
+        | - .tps/ <- global tps
+            | - react-component/
+                | - default/
+                    | - index.js.dot
+                    | - {{= tps.wrapBrackets('=tps.name') }}.js.dot
+                    | - {{= tps.wrapBrackets('=tps.name') }}.css
+
+The react component template settings file looks like this:
+
+```json
+{
+  "prompts": [
+    {
+      "name": "css",
+      "type": "confirm",
+      "message": "Would you like to include a css file?",
+      "default": true
+    }
+  ]
+}
+```
+
+Every time you render a new react component template it would prompt you if you would like to use a css file. Since this template is a global template and can be used anywhere. Lets say the repo you are using this in never uses a css file with the react component. After a couple of time this prompt would get really annoying. The solution add a predefined answer inside of your `.tpsrc`. lets say we were working in a repo like this
+
+    | - protfolio
+        | - .tps/
+            | - .tpsrc
+        | - ...
+
+we can add this to our `.tpsrc` file.
+
+```json
+{
+  "react-component": {
+    "answers": {
+      "css": false
+    }
+  }
+}
+```
+
+Done. Now every time you render a new template it will never ask you again if you want to use a css file
 
 [Prev](./settings/prompting.md)

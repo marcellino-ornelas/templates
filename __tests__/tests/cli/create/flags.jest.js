@@ -59,6 +59,10 @@ describe('[cli] Create:', () => {
       });
   });
 
+  it.todo('should be able to use --wipe flag');
+  it.todo('should be able to use --name flag?');
+
+  it.todo('should be able to use --noNewFolder flag?');
   // it('should be able to use -f flag tell tps not to create a new folder', done => {
   //   const destPath = playground.pathTo('App');
   //   const cmd = ['create', '-f', '--use=testing', 'App'];

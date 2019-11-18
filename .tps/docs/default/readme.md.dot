@@ -4,27 +4,29 @@
 
 Just learning how to use tps don't worry we got you covered. Want to learn how to use tps? What is tps checkout out our [guides section](#guides). Checking out to use a part of tps. Want to know all the options you can use with tps? Checkout out our [API docs](#api)
 
-## Guides
+{{#def.doctoc}}
+
+## [Guides](./guide/README.md)
 
 These user guides will help you understand the basics of tps and how to get started. They have walk through examples and help you understand how you can leverage tps in order to speed up your work flow.
 
-### Templates Guide
+### Prerequisites
 
-#### Getting started
+Before you can use tps visit our [prerequisites guide](./guide/prerequisites.md)
+
+### Getting started
 
 Just getting started with tps? Need to know where to start? Read our getting [started guide](./guide/getting-started/README.md)
 
-#### Command line Guides
+### Command line Guides
 
 Want to learn how to leverage tps command line tool better? Check out our [command line guides](./guide/command-line/readme.md)
 
-#### Module Guides
+### Module Guides
 
-Want to learn how use tps as a module? Check out our [module guides](./guide/module/readme.md))
+Want to learn how use tps as a module? Check out our [module guides](./guide/module/readme.md)
 
-## API
-
-### Templates API
+## [API](./api/readme.md)
 
 ### Command line api
 

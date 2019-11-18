@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    ".tpsrc": "json",
+    "*.md.dot": "markdown"
+  }
+}
