@@ -31,6 +31,14 @@ export class FileSystemNode extends Tree {
     }
   }
 
+  toObject() {
+    return {
+      name: this.name,
+      type: this.type,
+      path: this.path
+    };
+  }
+
   is(type) {
     return this.type === type;
   }

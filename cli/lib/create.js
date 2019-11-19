@@ -4,7 +4,7 @@ const is = require('is');
 const pjson = require('prettyjson-256');
 const Template = require('../../lib/templates');
 
-module.exports.createHandler = function(argv) {
+module.exports.createHandler = argv => {
   const dest = process.cwd();
 
   // if (argv.verbose) {
@@ -12,7 +12,7 @@ module.exports.createHandler = function(argv) {
   // }
 
   const {
-    noNewFolder,
+    newFolder,
     force,
     wipe,
     default: _default,
@@ -23,7 +23,7 @@ module.exports.createHandler = function(argv) {
 
   const tps = new Template(argv.use, {
     default: _default,
-    newFolder: !noNewFolder,
+    newFolder,
     force,
     wipe
   });

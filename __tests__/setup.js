@@ -2,7 +2,7 @@ import { isFile, isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
 import fs from 'fs-extra';
 import pjson from 'prettyjson-256';
-import { DirectoryNode } from '../src/fileSystemTree/directoryNode';
+import { DirectoryNode } from '@tps/fileSystemTree';
 
 jest.setTimeout(30000);
 
@@ -55,6 +55,8 @@ expect.extend({
     }
 
     const didMatchLen = count === filesAndDirs.length;
+    console.log(dirPath);
+    const dirPathLayout = new DirectoryNode(dirPath).toObject();
 
     if (didMatchLen) {
       // passed
@@ -73,6 +75,10 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 ${_received} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
+
+
+Directory Layout:
+${pjson.render(dirPathLayout)}
 `
     };
   },
@@ -81,7 +87,7 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
     const _received = this.utils.printReceived(destPath);
     const _expected = this.utils.printExpected(contents);
 
-    const passed = contents === fileContents;
+    const passed = fileContents.includes(contents);
 
     const options = {
       isNot: this.isNot,

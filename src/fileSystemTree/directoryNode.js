@@ -18,6 +18,16 @@ export class DirectoryNode extends FileSystemNode {
     this._renderChildren();
   }
 
+  toObject() {
+    const obj = super.toObject();
+
+    obj.children = this.children.map(fileNode => {
+      return fileNode.toObject();
+    });
+
+    return obj;
+  }
+
   _renderChildren() {
     let dirContents;
 

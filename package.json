@@ -13,7 +13,7 @@
     "build:prod": "npm run build:code",
     "build": "npm run build:prod",
     "test:init": "npm run test:jest -- --runInBand cli/init",
-    "test:core": "npm run test:jest -- --testPathIgnorePatterns cli/init",
+    "test:core": "npm run test:jest -- --testPathIgnorePatterns cli/init -- ",
     "test": "npm run build:code && echo 'built' && ./.bin/run-test",
     "test:jest": "BABEL_ENV=development jest",
     "cli": "node ./cli"

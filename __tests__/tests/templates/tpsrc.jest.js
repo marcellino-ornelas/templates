@@ -78,6 +78,11 @@ describe('[Templates] tpsrc: ', () => {
         renders a template with a buildpath that will go to a directory that has a tpsrc file
   `);
 
+  it.todo(`
+    should be able to override configurations from the root directory when: 
+      we pass in new values. (cli, module)
+  `);
+
   describe('when adding options in tpsrc', () => {
     beforeEach(() => playground.createBox('templates_tpsrc'));
 

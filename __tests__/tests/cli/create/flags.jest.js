@@ -6,7 +6,8 @@ import { TESTING_DIR } from '@test/utilities/constants';
 import {
   createTemplate,
   mockTemplateFileExistsError,
-  checkFilesForTemplate
+  checkFilesForTemplate,
+  checkFilesContentForTemplate
 } from '@test/support/cli';
 
 /*
@@ -56,26 +57,60 @@ describe('[cli] Create:', () => {
       })
       .then(() => {
         // we should check the file contents here
+        checkFilesContentForTemplate(
+          playground.box(),
+          'app',
+          './index.js',
+          "console.log('hey');"
+        );
       });
   });
 
-  it.todo('should be able to use --wipe flag');
+  it('should be able to use --wipe flag', () => {
+    mockTemplateFileExistsError(playground.box(), 'app', './index.js');
+
+    return createTemplate(playground.box(), 'testing', 'app', {
+      wipe: true
+    }).then(() => {
+      // we should check the file contents here
+      checkFilesContentForTemplate(
+        playground.box(),
+        'app',
+        './index.js',
+        "console.log('hey');"
+      );
+    });
+  });
+
+  describe('should be able to use --no-newFolder flag', () => {
+    const flags = {
+      newFolder: false
+    };
+
+    it('with one buildPath', () => {
+      return createTemplate(
+        playground.box(),
+        'testing-opt-new-flag',
+        'app',
+        flags
+      ).then(() => {
+        checkFilesForTemplate(playground.box(), 'app', null, flags);
+      });
+    });
+
+    it('with multiple buildPaths', () => {
+      return createTemplate(
+        playground.box(),
+        'testing-opt-new-flag',
+        ['app', 'nav'],
+        flags
+      ).then(() => {
+        checkFilesForTemplate(playground.box(), ['app', 'nav'], null, flags);
+      });
+    });
+
+    it.todo('should error out if no build Path is specified');
+  });
+
   it.todo('should be able to use --name flag?');
-
-  it.todo('should be able to use --noNewFolder flag?');
-  // it('should be able to use -f flag tell tps not to create a new folder', done => {
-  //   const destPath = playground.pathTo('App');
-  //   const cmd = ['create', '-f', '--use=testing', 'App'];
-
-  //   utils.spawn(cmd, { cwd: playground.box() }, function(err, stdout) {
-  //     expect(
-  //       utils.hasAllFileAndDirs(destPath, [
-  //         'extras.js',
-  //         ...TESTING_PACKAGE_FILES
-  //       ])
-  //     ).toBeTruthy();
-
-  //     done();
-  //   });
-  // });
 });

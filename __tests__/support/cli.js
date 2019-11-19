@@ -90,10 +90,13 @@ const makeBuildersString = builders => {
   return !is.array(builders) ? '' : builders.join(' ');
 };
 
+export const DEFAULT_FILE_CONTENT = 'TPS_FILE_CONTENTS_MOCK';
+
 export const mockTemplateFileExistsError = (
   cwd,
   buildersUnsafe = null,
-  file
+  file,
+  contents = DEFAULT_FILE_CONTENT
 ) => {
   expect(cwd).toBeDirectory();
   const builders = cleanBuilders(buildersUnsafe);
@@ -104,7 +107,7 @@ export const mockTemplateFileExistsError = (
     /**
      * If no builders then template was build in cwd so mock the file in cwd
      */
-    return fs.outputFileSync(path.join(cwd, file), 'TPS_FILE_CONTENTS_MOCK');
+    return fs.outputFileSync(path.join(cwd, file), contents);
   }
 
   const createBuilders = makeCreateBuilders(builders);
@@ -113,12 +116,17 @@ export const mockTemplateFileExistsError = (
   );
 
   return allBuilders.forEach(buldPath => {
-    fs.outputFileSync(buldPath, 'TPS_FILE_CONTENTS_MOCK');
+    fs.outputFileSync(buldPath, contents);
     expect(buldPath).toBeFile();
   });
 };
 
-export const checkFilesForTemplate = (cwd, buildersUnsafe, templateSpec) => {
+export const checkFilesForTemplate = (
+  cwd,
+  buildersUnsafe,
+  templateSpec,
+  flags = {}
+) => {
   const builders = cleanBuilders(buildersUnsafe);
   const hasBuilders = is.array(builders);
 
@@ -134,14 +142,54 @@ export const checkFilesForTemplate = (cwd, buildersUnsafe, templateSpec) => {
 
   allBuilders
     .map(builder => path.join(cwd, builder))
-    .forEach(builder => {
-      expect(builder).toBeDirectory();
+    .forEach(buildPath => {
+      let pathToCheckForTemplateCreated = buildPath;
+      if (flags && flags.newFolder === false) {
+        /**
+         * If the user used no new folder we need to check that
+         * the files are in the parent dir of the buildPath
+         */
+        pathToCheckForTemplateCreated = path.dirname(buildPath);
+      }
+
+      expect(pathToCheckForTemplateCreated).toBeDirectory();
       if (templateSpec) {
-        expect(builder).toHaveAllFilesAndDirectories(templateSpec);
+        expect(pathToCheckForTemplateCreated).toHaveAllFilesAndDirectories(
+          templateSpec
+        );
       }
     });
 };
 
+export const checkFilesContentForTemplate = (
+  cwd,
+  buildersUnsafe,
+  file,
+  content
+) => {
+  const builders = cleanBuilders(buildersUnsafe);
+  const hasBuilders = is.array(builders);
+
+  expect(cwd).toBeDirectory();
+
+  if (!hasBuilders) {
+    return expect(path.join(cwd, file)).toHaveFileContents(content);
+  }
+
+  const allBuilders = [...builders, ...makeCreateBuilders(builders)];
+
+  expect(allBuilders).toHaveLength(builders.length * 2);
+
+  allBuilders
+    .map(builder => path.join(cwd, builder, file))
+    .forEach(builtFile => {
+      expect(builtFile).toHaveFileContents(content);
+    });
+};
+
+/**
+ * Note: Testing newFolder flag requires to use the `testing-opt-new-flag`
+ */
 export const createTemplate = (
   cwd,
   template,
@@ -184,7 +232,7 @@ export const createTemplate = (
   }
 
   return Promise.all(commandPromises).then(([use]) => {
-    checkFilesForTemplate(cwd, builders, templateSpec);
+    checkFilesForTemplate(cwd, builders, templateSpec, flags);
 
     return Promise.resolve(use);
   });

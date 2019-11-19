@@ -5,7 +5,6 @@ import DirNode from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json, isFile } from '@tps/utilities/fileSystem';
-import Config from '@tps/config';
 import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
@@ -80,6 +79,9 @@ export default class Templates {
     });
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);
+
+    logger.tps.info('Template Options: %n', this.opts);
+
     this.packages = {};
     this.packagesUsed = [];
     this.compiledFiles = [];
@@ -205,7 +207,7 @@ export default class Templates {
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
-    const { name } = data;
+    const { name: globalName } = data;
     let finalDest = dest;
     const buildNewFolder = this.opts.newFolder;
 
@@ -269,7 +271,9 @@ export default class Templates {
           loggerGroup.info(`\n${marker}\nBuild Path: ${buildPath}\n${marker}`);
 
           loggerGroup.info('Render config: %n', {
-            buildPath: realBuildPath,
+            name: renderData.name,
+            buildPath,
+            'Final Destination': realBuildPath,
             doesBuildPathExist,
             buildInDest,
             buildNewFolder

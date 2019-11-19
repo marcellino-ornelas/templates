@@ -50,8 +50,8 @@ export const buildFlags = args => {
     const flagString = getFlagString(flag);
     switch (true) {
       case is.boolean(value):
-        // true
-        flags += `${flagString}`;
+        // use getFlagString again here because we need to append the -- to the no option here
+        flags += getFlagString(`${value === false ? 'no-' : ''}${flag}`);
         break;
       case is.string(value) || is.number(value):
         flags += `${flagString} ${value}`;
@@ -76,13 +76,19 @@ const TPS_CLI_DEFAULT_OPTIONS = {
 
 export function tpsCli(command, opts = {}) {
   const options = defaults(opts, TPS_CLI_DEFAULT_OPTIONS);
+  if (process.env.DEBUG) {
+    options.verbose = true;
+  }
+  const debug = opts.verbose ? 'DEBUG=tps:* ' : '';
   return new Promise((resolve, reject) => {
-    const fullCommand = `node ${cliPath} ${command}`.replace(/\s\s/g, ' ');
+    const fullCommand = `${debug}node ${cliPath} ${command}`.replace(
+      /\s\s/g,
+      ' '
+    );
 
-    if (process.env.DEBUG) {
-      options.verbose = true;
+    if (options.verbose) {
+      console.log(fullCommand);
     }
-
     child.exec(fullCommand, options, (err, stdout, stderr) => {
       if (err) {
         if (!options.fail) {
