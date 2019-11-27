@@ -19,12 +19,7 @@ const tps = new Templates('docs', {
 console.log(CONSTANTS.MAIN_DIR);
 
 const data = {
-  options: {
-    create: OPTIONS.CREATE_OPTIONS,
-    init: OPTIONS.INIT_OPTIONS,
-    global: OPTIONS.GLOBAL_OPTIONS,
-    list: OPTIONS.LIST_OPTIONS
-  },
+  options: OPTIONS,
   wrapBrackets: text => {
     return `{{${text}}}`;
   },

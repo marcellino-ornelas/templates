@@ -12,6 +12,9 @@ import { init } from '@test/support/cli';
 
 const playground = new Playground(TESTING_INIT_DIR);
 
+/**
+ * @docs api/cli/commands/init.md
+ */
 describe('Command Line: Init', () => {
   let cwd;
 
@@ -28,6 +31,9 @@ describe('Command Line: Init', () => {
       })
     );
 
+    /**
+     * @docs api/cli/commands/init.md#initializing-a-repo
+     */
     it('should be able initialize .tps/ folder', () => {
       return init(cwd);
     });
@@ -38,6 +44,9 @@ describe('Command Line: Init', () => {
       );
     });
 
+    /**
+     * @docs api/cli/commands/init.md#description
+     */
     it('should error out if parent directory is already initialized', () => {
       expect(dist).toBeDirectory();
 
@@ -46,6 +55,9 @@ describe('Command Line: Init', () => {
       );
     });
 
+    /**
+     * @docs api/cli/commands/init.md#forcing-a-repo
+     */
     it('should initialized directory when parent directory is already initialized and force is true', () => {
       expect(dist).toBeDirectory();
 
@@ -55,5 +67,7 @@ describe('Command Line: Init', () => {
         );
       });
     });
+
+    it.todo('add --global flag so you can create global tps folder ');
   });
 });

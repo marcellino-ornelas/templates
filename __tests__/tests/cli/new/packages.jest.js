@@ -3,7 +3,7 @@
  */
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
-import { tpsCli } from '@test/utilities/helpers';
+import { tpsCli } from '@test/utilities/tps-cli';
 import { init, newTemplate } from '@test/support/cli';
 
 /*
@@ -22,6 +22,9 @@ describe('[TPS][cli] new package', () => {
       .then(() => newTemplate(playground.box(), 'test'));
   });
 
+  /**
+   * @docs api/cli/commands/new_commands/package.md
+   */
   it('should create a new package', () => {
     return tpsCli('new package test test-package', {
       cwd: playground.box()

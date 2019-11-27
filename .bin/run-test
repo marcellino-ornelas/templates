@@ -6,7 +6,7 @@ echo $tps_dir
 docker system prune -f
 
 # Run core tests
-npm run test:core
+npm run --silent test:core
 
 # Run init tests
 # Init tests need to be ran in docker container 

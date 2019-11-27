@@ -3,6 +3,7 @@
     "name": "testing-config"
   },
   "new-test": {
-    "extendedDest": "__tests__/tests"
+    "extendedDest": "__tests__/tests",
+    "newFolder": false
   }
 }

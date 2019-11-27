@@ -1,1 +1,7 @@
-{}
+{
+  "force": {
+    "alias": "f",
+    "describe": "Initialize tps in cwd no matter what",
+    "type": "boolean"
+  }
+}

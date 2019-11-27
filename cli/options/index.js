@@ -1,6 +1,11 @@
+const create = require('./create');
+const init = require('./init');
+const global = require('./global');
+const list = require('./list');
+
 module.exports = {
-  CREATE_OPTIONS: require('./create'),
-  INIT_OPTIONS: require('./init'),
-  GLOBAL_OPTIONS: require('./global'),
-  LIST_OPTIONS: require('./list')
+  create,
+  init,
+  global,
+  list
 };

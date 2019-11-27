@@ -1,6 +1,6 @@
 const fs = require('fs-extra');
 const pjson = require('prettyjson-256');
-const { LIST_OPTIONS } = require('../options');
+const LIST_OPTIONS = require('../options/list');
 const is = require('is');
 const TPS = require('../../lib/utilities/constants');
 
@@ -15,14 +15,13 @@ const removeRcFile = arr => {
 
   if (i === -1) {
     return arr;
-  } 
-    const copy = arr.concat();
-    copy.splice(i, 1);
-    return copy;
-  
+  }
+  const copy = arr.concat();
+  copy.splice(i, 1);
+  return copy;
 };
 
-exports.handler = function(argv) {
+exports.handler = argv => {
   if (TPS.HAS_GLOBAL && argv.global) {
     const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 

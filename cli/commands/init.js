@@ -1,9 +1,10 @@
 const path = require('path');
+const debug = require('debug');
+const INIT_OPTIONS = require('../options/init');
 const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');
 const { isDir } = require('../../lib/utilities/fileSystem');
 const { cliLog } = require('../../lib/utilities/helpers');
-const debug = require('debug');
 const {
   InitializedAlready,
   ParentDirectoryInitializedError
@@ -13,14 +14,9 @@ exports.command = 'init';
 
 exports.description = 'Initialize local settings';
 
-exports.builder = yargs =>
-  yargs.option('force', {
-    alias: 'f',
-    describe: 'Initialize tps in cwd no matter what',
-    type: 'boolean'
-  });
+exports.builder = INIT_OPTIONS;
 
-exports.handler = function(argv) {
+exports.handler = argv => {
   if (argv.verbose) {
     debug.enable('tps');
   }

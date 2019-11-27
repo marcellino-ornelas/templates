@@ -1,39 +1,12 @@
 /**
  * Modules
  */
-import child from 'child_process';
-import path from 'path';
 import is from 'is';
-import { MAIN_DIR } from '@tps/utilities/constants';
-import { eachObj, defaults } from '@tps/utilities/helpers';
+import { eachObj } from '@tps/utilities/helpers';
 
 /**
  * Constants
  */
-const cliPath = path.join(MAIN_DIR, 'cli/index.js');
-
-const cliErrorHelper = (command, err, cwd, stdout, stderr) => `\
-Command: ${command}
-Cwd: ${cwd}
-
------------------------------
-Error
------------------------------
-
-${err}
-
------------------------------
-stdout
------------------------------
-
-${stdout}
-
------------------------------
-stderr
------------------------------
-
-${stderr}
-`;
 
 const getFlagString = flag => {
   return `${flag.length === 1 ? `-` : `--`}${flag}`;
@@ -68,48 +41,3 @@ export const buildFlags = args => {
 
   return flags;
 };
-
-const TPS_CLI_DEFAULT_OPTIONS = {
-  verbose: false,
-  fail: false
-};
-
-export function tpsCli(command, opts = {}) {
-  const options = defaults(opts, TPS_CLI_DEFAULT_OPTIONS);
-  if (process.env.DEBUG) {
-    options.verbose = true;
-  }
-  const debug = opts.verbose ? 'DEBUG=tps:* ' : '';
-  return new Promise((resolve, reject) => {
-    const fullCommand = `${debug}node ${cliPath} ${command}`.replace(
-      /\s\s/g,
-      ' '
-    );
-
-    if (options.verbose) {
-      console.log(fullCommand);
-    }
-    child.exec(fullCommand, options, (err, stdout, stderr) => {
-      if (err) {
-        if (!options.fail) {
-          console.log(
-            cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr)
-          );
-          console.log(command);
-          expect(options.fail).toBeTruthy();
-        }
-
-        reject(stderr, err);
-      } else {
-        if (options.verbose || options.fail) {
-          console.log(
-            cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr)
-          );
-
-          expect(options.fail).toBeFalsy();
-        }
-        resolve(stdout);
-      }
-    });
-  });
-}

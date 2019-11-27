@@ -2,9 +2,9 @@
 
 ### Description
 
-Create a template.
+render a template.
 
-> Note: When rendering a template, if a file exists. Tps will throw an error
+> Note: tps throws an error when a file, that the template needs to create, already exists.
 
 ---
 
@@ -32,6 +32,8 @@ tps <template-name> [flags...] [templates-to-create...]
 
 ### Examples
 
+#### Create a single template
+
 Use the create command to create a template in your current working directory
 
 ```bash
@@ -40,6 +42,8 @@ tps <template-name> app
 
     ./app/
       <your-template-files> ...
+
+#### Create a single template with a path
 
 You can also specify a path to place the template.
 
@@ -57,6 +61,8 @@ This will create your template inside of `./app/src`
 
 > Note: directories will be created if they don't exist.
 
+#### Create multiple templates
+
 You can also create multiple components name at the same time `tps <template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
 ```bash
@@ -73,6 +79,8 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
       src/
         <your-template-files> ...
 
+#### Create a template in your cwd
+
 You can also render your template in your cwd `tps <template-name>`
 
 ```bash
@@ -81,6 +89,8 @@ tps <template-name>
 
     ./
       <your-template-files> ...
+
+#### Force a template creation
 
 By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
 

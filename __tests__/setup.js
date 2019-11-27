@@ -55,7 +55,6 @@ expect.extend({
     }
 
     const didMatchLen = count === filesAndDirs.length;
-    console.log(dirPath);
     const dirPathLayout = new DirectoryNode(dirPath).toObject();
 
     if (didMatchLen) {

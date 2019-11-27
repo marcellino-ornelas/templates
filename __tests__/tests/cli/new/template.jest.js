@@ -3,7 +3,6 @@
  */
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
-import { tpsCli } from '@test/utilities/helpers';
 import { init, newTemplate } from '@test/support/cli';
 
 /*
@@ -21,6 +20,9 @@ describe('[TPS][cli] new ', () => {
       .then(() => init(playground.box(), { force: true }))
   );
 
+  /**
+   * @docs api/cli/commands/new_commands/template.md
+   */
   it('should create a new template', () => {
     return newTemplate(playground.box(), 'test');
   });

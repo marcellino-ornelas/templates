@@ -1,0 +1,63 @@
+## Init
+
+### Description
+
+initialize your repo as a tps repo. This will allow you to set tps template settings and build templates for your repo. All this command does is create a `.tps/` folder with `.tpsrc` file inside it in your `cwd`.
+
+by default, tps will throw an error if you try to initialize a child directory when a parent directory is already initialized. If you would like to do this anyways use the `force` flag.
+
+<!-- Templates allows you to keep all configurations/settings inside a `.tpsrc` file. Use the `init` command in any repo to initialize it as a templates repo. -->
+
+> Note: You should initialize the settings in your repos root directory.
+
+---
+
+### Syntax
+
+```bash
+tps init [flags...]
+```
+
+#### Parameters
+
+`[flags...]` (optional) flags to change the behavior of init.
+
+---
+
+### Flags
+
+{{#def.flagTable:{name: "init-table", data: tps.options.init } || ""}}
+
+<!--
+
+--
+
+### Setting options
+
+-->
+
+---
+
+### Examples
+
+#### Initializing a repo
+
+First navigate into the directory that you wish to initialize local settings.
+
+```bash
+cd some/path/to/repo
+```
+
+Initialize template settings
+
+```bash
+tps init
+```
+
+#### forcing a repo
+
+use the force flag when you want a repo to be initialized but a parent directory is already initialized
+
+```bash
+tps init --force
+```

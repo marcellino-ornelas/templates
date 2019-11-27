@@ -2,11 +2,9 @@
 
 ### Description
 
-Create a template.
+render a template.
 
-> Note: When rendering a template, if a file exists. Tps will throw an error
-
-Aliases: [Use](./use.md)
+> Note: tps throws an error when a file, that the template needs to create, already exists.
 
 ---
 
@@ -23,6 +21,8 @@ tps create --use=<template-name> [flags...] [templates-to-create...]
 `[flags...]` _(optional)_ flags to change the behavior of create.
 
 `[templates-to-create...]` (optional) one or more component names, separated by a space, to generate.
+
+Aliases: [Use](./use.md)
 
 ---
 
@@ -92,7 +92,9 @@ tps create --use=<template-name>
     ./
       <your-template-files> ...
 
-By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
+#### Force a template creation
+
+By default tps will throw a error if a file already exists. If you want to override the file instead of causing an error. Use the `--force` flag.
 
 ```bash
 tps create --use=<template-name> --force app

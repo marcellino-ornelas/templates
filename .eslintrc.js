@@ -1,5 +1,8 @@
 const path = require('path');
 
+const IGNORE = 0;
+const ERROR = 2;
+
 const config = {
   env: { node: 1, es6: true },
 
@@ -11,13 +14,15 @@ const config = {
     }
   },
   rules: {
-    'no-console': 0,
-    'import/no-named-as-default': 0,
-    'class-methods-use-this': 0,
-    'func-names': [2, 'as-needed'],
-    'no-plusplus': [2, { allowForLoopAfterthoughts: true }],
-    'spaced-comment': [2, 'always', { exceptions: ['*'] }],
-    'no-underscore-dangle': [2, { allowAfterThis: true }]
+    'no-console': IGNORE,
+    'import/no-named-as-default': IGNORE,
+    'import/prefer-default-export': IGNORE,
+    'class-methods-use-this': IGNORE,
+    'no-use-before-define': IGNORE,
+    'func-names': [ERROR, 'as-needed'],
+    'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
+    'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
+    'no-underscore-dangle': [ERROR, { allowAfterThis: true }]
   },
   overrides: [
     Object.assign(

@@ -43,6 +43,9 @@ describe('[cli] Create:', () => {
     });
   });
 
+  /**
+   * @docs api/cli/commands/create.md#force-a-template-creation
+   */
   it('should be able to use --force flag', () => {
     mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 

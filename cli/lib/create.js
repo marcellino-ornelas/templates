@@ -5,6 +5,17 @@ const pjson = require('prettyjson-256');
 const Template = require('../../lib/templates');
 
 module.exports.createHandler = argv => {
+  /**
+   * if we ever want to be able to pass a name in then we should add this to the flags.
+   * @example
+   * {
+   *  "name": {
+   *    "alias": "n",
+   *    "describe": "Name for template rendering. defaults to base name of the destination path",
+   *    "type": "string"
+   *  },
+   * }
+   */
   const dest = process.cwd();
 
   // if (argv.verbose) {
