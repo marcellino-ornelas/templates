@@ -44,7 +44,7 @@ export function tpsCli(command, opts = {}) {
     );
 
     if (options.verbose) {
-      console.log(fullCommand);
+      console.log('command: ', fullCommand);
     }
     child.exec(fullCommand, options, (err, stdout, stderr) => {
       if (err) {

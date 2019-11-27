@@ -6,9 +6,13 @@ initialize your repo as a tps repo. This will allow you to set tps template sett
 
 by default, tps will throw an error if you try to initialize a child directory when a parent directory is already initialized. If you would like to do this anyways use the `force` flag.
 
-<!-- Templates allows you to keep all configurations/settings inside a `.tpsrc` file. Use the `init` command in any repo to initialize it as a templates repo. -->
-
 > Note: You should initialize the settings in your repos root directory.
+
+#### Global tps
+
+tps can also be initialized globally with the `--global` flag. When tps is initialized globally there is a `.tps` folder inside of your home directory. It's the same as initializing a repo and it will have all of the same files. This folder is so you have a central place to keep templates that can be used anywhere and also have top level default configurations.
+
+<!-- Templates allows you to keep all configurations/settings inside a `.tpsrc` file. Use the `init` command in any repo to initialize it as a templates repo. -->
 
 ---
 
@@ -52,6 +56,14 @@ Initialize template settings
 
 ```bash
 tps init
+```
+
+#### Initializing tps globally
+
+use the `--global` flag when you want tps to be initialized globally.
+
+```bash
+tps init --global
 ```
 
 #### forcing a repo

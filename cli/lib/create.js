@@ -1,8 +1,8 @@
-const path = require('path');
 const debug = require('debug');
 const is = require('is');
 const pjson = require('prettyjson-256');
 const Template = require('../../lib/templates');
+const errorExit = require('./error-exit');
 
 module.exports.createHandler = argv => {
   /**
@@ -18,9 +18,9 @@ module.exports.createHandler = argv => {
    */
   const dest = process.cwd();
 
-  // if (argv.verbose) {
-  //   debug.enable('tps');
-  // }
+  if (argv.verbose) {
+    debug.enable('tps');
+  }
 
   const {
     newFolder,
@@ -60,9 +60,5 @@ module.exports.createHandler = argv => {
       console.log('process done');
       process.exit(0);
     })
-    .catch(e => {
-      // console.error('tps error');
-      console.error(pjson.render(e));
-      process.exit(1);
-    });
+    .catch(errorExit);
 };

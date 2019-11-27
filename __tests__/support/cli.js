@@ -4,6 +4,7 @@ import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
 import path from 'path';
 import is from 'is';
 import fs from 'fs-extra';
+import * as TPS from '@tps/utilities/constants';
 
 /**
  * @command init
@@ -14,10 +15,23 @@ export const init = (cwd, flags = {}, opts = {}) => {
 
   expect(cwd).toBeDirectory();
 
+  // if (flags.global) {
+  //   expect(TPS.GLOBAL_PATH).not.toBeDirectory();
+  // }
+  const message = flags.global
+    ? 'tps globally initialized'
+    : 'Repo initialized';
+
   return tpsCli(`init ${flagString}`, { cwd, ...opts }).then(stdout => {
-    expect(stdout).toContain('tps initialized');
-    expect(tpsFolder).toBeDirectory();
-    expect(tpsFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+    expect(stdout).toContain(message);
+
+    if (flags.global) {
+      expect(TPS.GLOBAL_PATH).toBeDirectory();
+      expect(TPS.GLOBAL_PATH).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+    } else {
+      expect(tpsFolder).toBeDirectory();
+      expect(tpsFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+    }
   });
 };
 

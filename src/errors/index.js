@@ -7,5 +7,6 @@ export { default as FileExistError } from './file-exists-error';
 export { default as NoPromptsError } from './no-prompts';
 export { default as PromptInvalidAnswers } from './prompt-invalid-answers';
 export { default as PromptNoPromptFoundError } from './prompt-no-prompt-found';
-export { default as InitializedAlready } from './initialized-already';
+export { default as InitializedAlreadyError } from './initialized-already';
 export { default as ParentDirectoryInitializedError } from './parent-directory-initialized';
+export { default as GlobalInitializedAlreadyError } from './global-initialized-already';

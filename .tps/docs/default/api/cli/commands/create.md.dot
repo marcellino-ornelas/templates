@@ -104,3 +104,21 @@ tps create --use=<template-name> --force app
       <your-template-files> ...
 
 Any files that your template will build, will override any files already living in `./app/`.
+
+#### Add additional packages
+
+use the `--packages` flag when you want to render more packages with your template.
+
+```bash
+tps create --use=<template-name> --packages css -- app
+```
+
+    ./app/
+      <css-packages-files>
+      <your-template-files>
+
+You also can pass in many additional packages.
+
+```bash
+tps create --use=<template-name> --packages css storybook -- app
+```

@@ -241,6 +241,9 @@ export default class Templates {
     return Promise.resolve()
       .then(() => {
         if (!isDir(finalDest)) {
+          logger.tps.error('final destination was not a directory %n', {
+            finalDest
+          });
           throw new DirectoryNotFoundError(finalDest);
         }
       })

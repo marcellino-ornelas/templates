@@ -40,11 +40,34 @@ const overrideCwd = IS_TESTING ? path.join(CWD, '__tests__') : CWD;
 const tpsLocal = findUp(TPS_FOLDER, overrideCwd);
 export const HAS_LOCAL = tpsLocal && tpsLocal !== GLOBAL_PATH;
 
+/**
+ * LOCAL_PATH is any tps folder found in the parent directories
+ */
 export const LOCAL_PATH = HAS_LOCAL ? tpsLocal : null;
 
 export const LOCAL_CONFIG_PATH = HAS_LOCAL
   ? path.join(LOCAL_PATH, CONFIG_FILE)
   : null;
 
-export const INIT_LOCAL_PATH = path.join(process.cwd());
-export const MAIN_TPS = `${MAIN_DIR}/${TPS_FOLDER}`;
+/***************************
+ * init
+ ****************************/
+
+/**
+ * path to initialize when calling `tps init`. its always is current working directory
+ */
+export const INIT_LOCAL_PATH = path.normalize(CWD);
+
+/**
+ * path to initialize when calling `tps init --global`. always home dir
+ */
+export const INIT_GLOBAL_PATH = path.normalize(USER_HOME);
+
+/**
+ * path of tps folder if tps is initialized in repo
+ */
+export const INIT_LOCAL_TPS_PATH = path.join(INIT_LOCAL_PATH, TPS_FOLDER);
+
+export const IS_TPS_INITIALIZED = isDir(INIT_LOCAL_TPS_PATH);
+
+export const MAIN_TPS = `${MAIN_DIR}/${TPS_FOLDER}`; // ????????? where does this go
