@@ -1,20 +1,20 @@
-## Use
+# Use
 
-### Description
+## Description
 
 render a template.
 
-> Note: tps throws an error when a file, that the template needs to create, already exists.
+> Note: tps throws an error when a file, that the template needs to create, already exists. See [Force a template creation](#force-a-template-to-be-created) to get around this.
 
 ---
 
-### Syntax
+## Syntax
 
 ```bash
 tps <template-name> [flags...] [templates-to-create...]
 ```
 
-#### Parameters
+## Parameters
 
 `<template-name>` _(required)_ tps template you want to render with
 
@@ -24,17 +24,19 @@ tps <template-name> [flags...] [templates-to-create...]
 
 ---
 
-### Flags
+## Flags
 
 {{#def.flagTable:{name: "use-table", data: tps.options.create } || "nope"}}
 
 ---
 
-### Examples
+## Examples
 
-#### Create a single template
+{{#def.doctoc}}
 
-Use the create command to create a template in your current working directory
+<!-- ### Create a single template
+
+Use the `use` syntax to create a template in your current working directory
 
 ```bash
 tps <template-name> app
@@ -43,7 +45,7 @@ tps <template-name> app
     ./app/
       <your-template-files> ...
 
-#### Create a single template with a path
+### Create a single template with a path
 
 You can also specify a path to place the template.
 
@@ -61,7 +63,7 @@ This will create your template inside of `./app/src`
 
 > Note: directories will be created if they don't exist.
 
-#### Create multiple templates
+### Create multiple templates
 
 You can also create multiple components name at the same time `tps <template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
@@ -79,7 +81,7 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
       src/
         <your-template-files> ...
 
-#### Create a template in your cwd
+### Create a template in your cwd
 
 You can also render your template in your cwd `tps <template-name>`
 
@@ -88,9 +90,9 @@ tps <template-name>
 ```
 
     ./
-      <your-template-files> ...
+      <your-template-files> ... -->
 
-#### Force a template creation
+<!-- ### Force a template creation
 
 By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
 
@@ -101,9 +103,9 @@ tps <template-name> --force app
     ./app/
       <your-template-files> ...
 
-Any files that your template will build, will override any files already living in `./app/`.
-
-#### Add additional packages
+Any files that your template will build, will override any files already living in `./app/`. -->
+<!--
+### Add additional packages
 
 use the `--packages` flag when you want to add additional packages to the new template your creating.
 
@@ -124,9 +126,9 @@ tps <template-name> --packages css storybook -- app
     ./app/
       <css-packages-files>
       <storybook-packages-files>
-      <your-template-files>
-
-#### Use default answers to prompts
+      <your-template-files> -->
+<!--
+### Use default answers to prompts
 
 use the `--default` flag to tell tps to use all default answers to a templates prompts.
 
@@ -134,9 +136,9 @@ use the `--default` flag to tell tps to use all default answers to a templates p
 
 ```bash
 tps <template-name> --default app
-```
-
-#### Wipe a template
+``` -->
+<!--
+### Wipe a template
 
 Use the `--wipe` to delete any folders/files that existed where the template should be created.
 
@@ -154,11 +156,11 @@ _after:_
 `some-random.js` no longer exists
 
     ./app/
-      <your-template-files>
+      <your-template-files> -->
 
-#### force a template
+<!-- ### force a template
 
-Use the `--=force` flag to let tps override any existing files that already existed before rendering your template. This will only override files needed and not delete/override anything extra
+Use the `--force` flag to let tps override any existing files that already existed before rendering your template. This will only override files needed and not delete/override anything extra
 
 _before:_
 
@@ -171,8 +173,207 @@ tps <template-name> --force app
 
 _after:_
 
-`index.js` will now have contents from your template creation and not from the old file
+`index.js` will now have contents from your `index.js` inside of your template and not the contents of the old `index.js`
 
     ./app/
       <other-template-files>
       index.js
+
+--- -->
+<!--
+### Create a template without a new folder
+
+by default,
+
+```bash
+tps <template-name> app
+```
+
+    ./app/
+      <your-template-files> ... -->
+
+### Create a single template
+
+Use the `create` command to create a template in your current working directory
+
+```bash
+tps <template-name> app
+```
+
+    ./app/
+      | - <your-template-files>
+
+---
+
+### Create a single template with a path
+
+You can also specify a path to place the template.
+
+`tps create path/to/folder/<template>`.
+
+```bash
+tps <template-name> app/src
+```
+
+This will create your template inside of `./app/src`
+
+    ./app/
+      | - src/
+          | - <your-template-files>
+
+> Note: directories will be created if they don't exist.
+
+---
+
+### Create multiple templates
+
+You can also create multiple components name at the same time `tps <template-name> <template-to-create> <template-to-create> <template-to-create>...`
+
+```bash
+tps <template-name> app app2 webapp/src
+```
+
+This line will create templates inside `app`, `app2`, and `webapp/src`.
+
+    ./app/
+      | - <your-template-files>
+    ./app2/
+      | - <your-template-files>
+    ./webapp/
+      | - src/
+          | - <your-template-files>
+
+---
+
+### Create a template in your cwd
+
+You can also render your template in your cwd `tps <template-name>`
+
+```bash
+tps <template-name>
+```
+
+    ./
+      | - <your-template-files>
+
+---
+
+### force a template to be created
+
+Use the `--force` flag to override any existing files that already existed before rendering your template. This will only override files needed and not delete/override anything extra
+
+_before:_
+
+    ./app/
+      | - noop.js <-- some file not in your template
+      | - index.js <-- file in your template
+
+```bash
+tps <template-name> --force app
+```
+
+_after:_
+
+`index.js` will now have contents from your `index.js` inside of your template and not the contents of the old `index.js`. The `noop.js` however, stays the same since the file is not in your template so theres no reason to get rid of it.
+
+    ./app/
+      | - noop.js <-- file from before not changed
+      | - <template-files>
+      | - index.js
+
+---
+
+### Add additional packages
+
+use the `--packages` flag when you want to add additional packages to the new template your creating.
+
+```bash
+tps <template-name> --packages <package1> -- app
+```
+
+    ./app/
+      | - <package1-files>
+      | - <default-package-files>
+
+You also can pass in more than one
+
+```bash
+tps <template-name> --packages <package1> <packages2> -- app
+```
+
+    ./app/
+      | - <package1-files>
+      | - <package2-files>
+      | - <default-package-files>
+
+---
+
+### Use default answers for a templates prompts
+
+use the `--default` flag when you would like to use all default answers to a templates prompts. No prompts will be asked to the user.
+
+```bash
+tps <template-name> --default app
+```
+
+---
+
+### Wipe a template
+
+Use the `--wipe` flag to delete any folders/files that exists where the template should be created.
+
+_before:_
+
+    ./app/
+      | - some-random.js
+
+```bash
+tps <template-name> --wipe app
+```
+
+_after:_
+
+`some-random.js` no longer exists
+
+    ./app/
+      | - <your-template-files>
+
+first tps deletes the entire directory `app`. Then it will create your template `app`
+
+---
+
+### Create a template without a new folder
+
+tps creates a new folder of the template name you pass in by default. In order to turn this off, use the `--no-newFolder` flag.
+
+if we are in a empty directory call `webapp` like this:
+
+    ./webapp  <-- cwd
+      | - <empty-directory>
+
+by default calling
+
+```bash
+tps <template-name> app
+```
+
+this will create
+
+    ./webapp
+      | - app <-- this was the template name you passed in
+          | - <your-template-files>
+
+now if you pass the `--no-newFolder` flag
+
+```bash
+tps <template-name> --no-newFolder app
+```
+
+this will create
+
+    ./webapp
+      | - <your-template-files>
+
+See some common examples on why you would want to do this [here](TODO)
+
+---

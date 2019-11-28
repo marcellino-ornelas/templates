@@ -25,7 +25,7 @@ describe('[cli] Create:', () => {
   beforeEach(() => playground.createBox('cli_create_flags'));
 
   /**
-   * @docs api/cli/commands/create.md#force-a-template-creation
+   * @docs api/cli/commands/create.md#force-a-template-to-be-created
    */
   it('should be able to use --force flag', () => {
     mockTemplateFileExistsError(playground.box(), 'app', './index.js');
@@ -97,6 +97,9 @@ describe('[cli] Create:', () => {
     });
   });
 
+  /**
+   * @docs api/cli/commands/create.md#create-a-template-without-a-new-folder
+   */
   describe('should be able to use --no-newFolder flag', () => {
     const flags = {
       newFolder: false
