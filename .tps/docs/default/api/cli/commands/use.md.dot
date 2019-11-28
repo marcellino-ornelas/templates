@@ -102,3 +102,77 @@ tps <template-name> --force app
       <your-template-files> ...
 
 Any files that your template will build, will override any files already living in `./app/`.
+
+#### Add additional packages
+
+use the `--packages` flag when you want to add additional packages to the new template your creating.
+
+```bash
+tps <template-name> --packages css -- app
+```
+
+    ./app/
+      <css-packages-files>
+      <your-template-files>
+
+You also can pass in more than one
+
+```bash
+tps <template-name> --packages css storybook -- app
+```
+
+    ./app/
+      <css-packages-files>
+      <storybook-packages-files>
+      <your-template-files>
+
+#### Use default answers to prompts
+
+use the `--default` flag to tell tps to use all default answers to a templates prompts.
+
+> No prompts will be asked
+
+```bash
+tps <template-name> --default app
+```
+
+#### Wipe a template
+
+Use the `--wipe` to delete any folders/files that existed where the template should be created.
+
+_before:_
+
+    ./app/
+      some-random.js
+
+```bash
+tps <template-name> --wipe app
+```
+
+_after:_
+
+`some-random.js` no longer exists
+
+    ./app/
+      <your-template-files>
+
+#### force a template
+
+Use the `--=force` flag to let tps override any existing files that already existed before rendering your template. This will only override files needed and not delete/override anything extra
+
+_before:_
+
+    ./app/
+      index.js
+
+```bash
+tps <template-name> --force app
+```
+
+_after:_
+
+`index.js` will now have contents from your template creation and not from the old file
+
+    ./app/
+      <other-template-files>
+      index.js

@@ -15,33 +15,14 @@ import {
  */
 const playground = new Playground(TESTING_DIR);
 
+/**
+ * @docs api/cli/commands/create.md#flags
+ */
 describe('[cli] Create:', () => {
   beforeAll(() => playground.create());
   afterAll(() => playground.destroy());
 
   beforeEach(() => playground.createBox('cli_create_flags'));
-
-  it('should be able to use -d flag to use all default prompt answers', () => {
-    return createTemplate(
-      playground.box(),
-      'testing-prompt-types-select',
-      'app',
-      { d: true }
-    ).then(() => {
-      checkFilesForTemplate(playground.box(), 'app', ['./index.css']);
-    });
-  });
-
-  it('should be able to use -p flag to all additional packages', () => {
-    return createTemplate(playground.box(), 'testing', 'app', {
-      packages: ['extras', 'extras2']
-    }).then(() => {
-      checkFilesForTemplate(playground.box(), 'app', [
-        './extras2.js',
-        './extras.js'
-      ]);
-    });
-  });
 
   /**
    * @docs api/cli/commands/create.md#force-a-template-creation
@@ -69,6 +50,37 @@ describe('[cli] Create:', () => {
       });
   });
 
+  /**
+   * @docs api/cli/commands/create.md#add-additional-packages
+   */
+  it('should be able to use -p flag to all additional packages', () => {
+    return createTemplate(playground.box(), 'testing', 'app', {
+      packages: ['extras', 'extras2']
+    }).then(() => {
+      checkFilesForTemplate(playground.box(), 'app', [
+        './extras2.js',
+        './extras.js'
+      ]);
+    });
+  });
+
+  /**
+   * @docs api/cli/commands/create.md#default
+   */
+  it('should be able to use -d flag to use all default prompt answers', () => {
+    return createTemplate(
+      playground.box(),
+      'testing-prompt-types-select',
+      'app',
+      { d: true }
+    ).then(() => {
+      checkFilesForTemplate(playground.box(), 'app', ['./index.css']);
+    });
+  });
+
+  /**
+   * @docs api/cli/commands/create.md#wipe-a-template
+   */
   it('should be able to use --wipe flag', () => {
     mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 

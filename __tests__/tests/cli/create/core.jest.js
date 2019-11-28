@@ -8,6 +8,9 @@ import { createTemplate } from '@test/support/cli';
 
 const playground = new Playground(TESTING_DIR);
 
+/**
+ * @docs api/cli/commands/create.md
+ */
 describe('[cli] Create:', () => {
   beforeAll(() => playground.create());
 
