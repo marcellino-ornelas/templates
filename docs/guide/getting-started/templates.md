@@ -88,13 +88,13 @@ Your probably wondering right now. How do I pass data so these files can be dyna
 
 ## Making a new template
 
-There is nothing special about a template. All it is nothing but files and folders. We could create a template two ways:
+There is nothing special about a template. Its nothing other than a directory holding a collection of files and folders. We could create a template two ways:
 
-1. just create the files and directories with `mkdir/touch` or use Finder etc.
+1. Create the directories and files with `mkdir/touch` or use Finder etc.
 
 2. Use our command line tool
 
-> Read our command line docs [here](TODO)
+> Read our command line docs [here](../command-line/readme.md)
 
 ### bash commands
 
@@ -126,20 +126,42 @@ tps <template-to-use> <template-name-to-create>
 
 ## Example
 
-if we are in our `tps-example` and have this template
+Lets create our first template together. For an example this template will create a js file for use and when run it will console log "hello world". Easy right? Lets do this...
 
-    | - .tps/
-        | - hello-world/
-            | - default
-                | - index.js
+First change your cwd into our `tps-example` folder.
 
-Puts some contents inside of the `index.js` file.
+```bash
+cd path/to/tps-example
+```
+
+Next create a template called `hello-world`.
+
+```bash
+tps new template hello-world
+```
+
+This will create a `hello-world` directory inside of the `tps-example/.tps` directory.
+
+    | - tps-example/
+        | - .tps/
+            | - hello-world/
+                | - default
+
+Next add a `index.js` file into `tps-example/.tps/hello-world/default`.
 
 ```bash
 echo "console.log('hello world')" > .tps/hello-world/default/index.js
 ```
 
-then calling this command:
+Our `tps-example` should now resemble this folder structure
+
+    | - tps-example/
+        | - .tps/
+            | - hello-world/
+                | - default
+                    | - index.js
+
+Now to create this template call this command.
 
 ```bash
 tps hello-world firstTemplate
@@ -148,7 +170,6 @@ tps hello-world firstTemplate
 This should create a folder called `firstTemplate` inside of `tps-example` like so:
 
     | - tps-example/
-        | - src/
         | - .tps/
             | - ...
         | - firstTemplate/ <-- template you just created

@@ -16,6 +16,8 @@ tps list [flags...]
 
 `[flags...]` (optional) flags to change the behavior of init.
 
+Aliases: `ls`
+
 ---
 
 ### Setting options
@@ -47,16 +49,18 @@ tps list [flags...]
 
 ### Examples
 
-First navigate into the directory that you wish to initialize local settings.
+#### list all templates
 
 ```bash
-cd some/path/to/repo
+tps ls
 ```
 
-Initialize template settings
+should produce something like:
 
-```bash
-tps init
 ```
+Global:
+- <your-global-templates>
 
-This will create a `.tps/` folder with `.tpsrc` file inside it.
+Local:
+- <your-local-templates>
+```

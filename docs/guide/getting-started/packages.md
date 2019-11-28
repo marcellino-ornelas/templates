@@ -14,15 +14,10 @@ In this section, We will be covering the following topics:
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-We will be using the previous `hello-world` repo for all examples in this section:
-
 > All commands examples assume your cwd is our `tps-example` repo
 
     | - tps-example/
         | - .tps/
-            | - hello-world
-                | - default
-                    | - index.js
 
 ## Package breakdown
 

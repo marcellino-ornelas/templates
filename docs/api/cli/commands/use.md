@@ -2,9 +2,9 @@
 
 ### Description
 
-Create a template.
+render a template.
 
-> Note: When rendering a template, if a file exists. Tps will throw an error
+> Note: tps throws an error when a file, that the template needs to create, already exists.
 
 ---
 
@@ -49,13 +49,9 @@ tps <template-name> [flags...] [templates-to-create...]
         <td>N/A</td>
         <td>Use all default answers to all prompts</td>
       </tr><tr>
-        <td>--name, n</td>
-        <td>N/A</td>
-        <td>Name for template rendering. defaults to base name of the destination path</td>
-      </tr><tr>
-        <td>--noNewFolder, f</td>
-        <td>N/A</td>
-        <td>Don"t create a new folder</td>
+        <td>--newFolder, f</td>
+        <td>true</td>
+        <td>Create a new folder</td>
       </tr><tr>
         <td>--force, </td>
         <td>N/A</td>
@@ -73,6 +69,8 @@ tps <template-name> [flags...] [templates-to-create...]
 
 ### Examples
 
+#### Create a single template
+
 Use the create command to create a template in your current working directory
 
 ```bash
@@ -81,6 +79,8 @@ tps <template-name> app
 
     ./app/
       <your-template-files> ...
+
+#### Create a single template with a path
 
 You can also specify a path to place the template.
 
@@ -98,6 +98,8 @@ This will create your template inside of `./app/src`
 
 > Note: directories will be created if they don't exist.
 
+#### Create multiple templates
+
 You can also create multiple components name at the same time `tps <template-name> <template-to-create> <template-to-create> <template-to-create>...`
 
 ```bash
@@ -114,6 +116,8 @@ This line will create templates inside `app`, `app2`, and `webapp/src`.
       src/
         <your-template-files> ...
 
+#### Create a template in your cwd
+
 You can also render your template in your cwd `tps <template-name>`
 
 ```bash
@@ -122,6 +126,8 @@ tps <template-name>
 
     ./
       <your-template-files> ...
+
+#### Force a template creation
 
 By default tps will throw a error if a file already exists. If you want to override the file instead and not cause a error. Use the `--force` flag.
 
@@ -133,3 +139,77 @@ tps <template-name> --force app
       <your-template-files> ...
 
 Any files that your template will build, will override any files already living in `./app/`.
+
+#### Add additional packages
+
+use the `--packages` flag when you want to add additional packages to the new template your creating.
+
+```bash
+tps <template-name> --packages css -- app
+```
+
+    ./app/
+      <css-packages-files>
+      <your-template-files>
+
+You also can pass in more than one
+
+```bash
+tps <template-name> --packages css storybook -- app
+```
+
+    ./app/
+      <css-packages-files>
+      <storybook-packages-files>
+      <your-template-files>
+
+#### Use default answers to prompts
+
+use the `--default` flag to tell tps to use all default answers to a templates prompts.
+
+> No prompts will be asked
+
+```bash
+tps <template-name> --default app
+```
+
+#### Wipe a template
+
+Use the `--wipe` to delete any folders/files that existed where the template should be created.
+
+_before:_
+
+    ./app/
+      some-random.js
+
+```bash
+tps <template-name> --wipe app
+```
+
+_after:_
+
+`some-random.js` no longer exists
+
+    ./app/
+      <your-template-files>
+
+#### force a template
+
+Use the `--=force` flag to let tps override any existing files that already existed before rendering your template. This will only override files needed and not delete/override anything extra
+
+_before:_
+
+    ./app/
+      index.js
+
+```bash
+tps <template-name> --force app
+```
+
+_after:_
+
+`index.js` will now have contents from your template creation and not from the old file
+
+    ./app/
+      <other-template-files>
+      index.js

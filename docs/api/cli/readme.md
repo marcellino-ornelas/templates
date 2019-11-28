@@ -1,15 +1,6 @@
-
-  hey
-
 # Welcome to our CLI documentation
 
-## Commands
-
-- [Create](./commands/create)
-- [Use](./commands/use)
-- [Init](./commands/init)
-
-## Flags
+## Global Flags
 
 
 <table id="global-table">
@@ -29,3 +20,13 @@
     </tbody>
 </table>
 
+
+## Commands
+
+- [create](./commands/create.md)
+- [use](./commands/use.md)
+- [new](./commands/new.md)
+  - [template](./commands/new_commands/template.md)
+  - [package](./commands/new_commands/package.md)
+- [list](./commands/list.md)
+- [init](./commands/init.md)

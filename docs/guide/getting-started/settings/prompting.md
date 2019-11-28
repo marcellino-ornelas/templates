@@ -2,8 +2,10 @@
 
 In this section, We will be covering the following topics:
 
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [What is Prompting?](#what-is-prompting)
 - [How to use Prompting?](#how-to-use-prompting)
@@ -17,12 +19,13 @@ In this section, We will be covering the following topics:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
 ## What is Prompting?
 
 Prompting is used to get data from the user. Its exactly what you think it is. Threw the command line we will display a message to the user asking for there response. The the prompt can also be answered threw the command line or threw the node module package for cases where users already know what they want. There options can come in all forms.
 
 Templates uses [inquirer](./TODO)
-to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
+ to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
 
 ## How to use Prompting?
 
@@ -119,7 +122,7 @@ If the value type is an array then you end up with something like this.
 
 ##### Answering prompts threw the module
 
-To answer prompts in javascript using the module. Use the `loadConfig` function.
+To answer prompts in javascript using the module. Use the `setAnswers` function.
 
 ```js
 const Templates = require('tps');
@@ -139,7 +142,7 @@ const tps = new Templates('react-component');
  */
 const data = 23;
 
-tps.loadConfig({ age: data });
+tps.setAnswers({ age: data });
 
 /* ... */
 ```
@@ -257,11 +260,11 @@ const Templates = require('tps');
 
 const tps = new Templates('react-component');
 
-tps.loadConfig({ c: 'less' });
+tps.setAnswers({ c: 'less' });
 
 // is equivalent to
 
-tps.loadConfig({ cssType: 'less' });
+tps.setAnswers({ cssType: 'less' });
 
 // is equivalent to and answering prompt with `less`
 
@@ -346,4 +349,4 @@ then this will be the new template:
 
 [Prev](./README.md)
 
-<!-- [Next](./prompting.md) -->
+[Next](../tpsrc.md)
