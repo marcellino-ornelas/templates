@@ -9,5 +9,5 @@ In this sections, we'll be covering some basics of tps and how to use it. This w
 
 Have troubles? Something not making sense or have some feedback? Please feel free to make a github issue. All feedback is highly appreciated
 
-[Prev](../readme.md)
+[Back](../readme.md)
 [Next](./getting-started/README.md)

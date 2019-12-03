@@ -25,11 +25,12 @@ Have you ever built a express app before? or react component? If so, you know wh
 - [Templates](./templates.md)
 - [Packages](./packages.md)
 - [Dynamic Files](./dynamic-files.md)
-- [Settings](./settings/README.md)
 - [Tpsrc](./tpsrc.md)
+- [Settings](./settings/README.md)
 
-[Prev](../README.md)
-[Next](./templates.md)
+[Next: Templates](./templates.md)
+
+[Back](./prerequisites.md)
 
 <!--
 lets start off my creating a new folder called `tps-example`.

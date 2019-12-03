@@ -2,39 +2,14 @@
 
 **Welcome to the Templates!**
 
-Just learning how to use tps don't worry we got you covered. Want to learn how to use tps? What is tps checkout out our [guides section](#guides). Checking out to use a part of tps. Want to know all the options you can use with tps? Checkout out our [API docs](#api)
-
-{{#def.doctoc}}
+> Note: templates is also referred to as tps. Just our short version of saying templates
 
 ## [Guides](./guide/README.md)
 
-These user guides will help you understand the basics of tps and how to get started. They have walk through examples and help you understand how you can leverage tps in order to speed up your work flow.
-
-### Prerequisites
-
-Before you can use tps visit our [prerequisites guide](./guide/prerequisites.md)
-
-### Getting started
-
-Just getting started with tps? Need to know where to start? Read our getting [started guide](./guide/getting-started/README.md)
-
-### Command line Guides
-
-Want to learn how to leverage tps command line tool better? Check out our [command line guides](./guide/command-line/readme.md)
-
-### Module Guides
-
-Want to learn how use tps as a module? Check out our [module guides](./guide/module/readme.md)
+Our [user guides](./guide/README.md) will help you understand the basics of tps and how to get started. They have walk through examples and help you understand how you can leverage tps in order to speed up your work flow. They will have advance topics/usage, introduce you to how to use the tps cli tools, and show you how to use the templates module version.
 
 ## [API](./api/readme.md)
 
-### Command line api
+Our [api guides](./api/readme.md) will show you all of the configurations options that you can use. They will break downs of each one and show you the type they accept.
 
-[command line api](./api/cli/readme.md)
-
-### Module Usage
-
-Visit our node module docs [here](./api/module/readme.md)
-
-[Prev](../readme.md)
-[Next](./guide/README.md)
+[back](../readme.md)

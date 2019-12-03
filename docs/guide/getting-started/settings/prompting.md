@@ -347,6 +347,6 @@ then this will be the new template:
 }
 ```
 
-[Prev](./README.md)
+[Back](./README.md)
 
 [Next](../tpsrc.md)

@@ -51,5 +51,5 @@ Want to learn how use tps as a module? Check out our [module guides](./guide/mod
 
 Visit our node module docs [here](./api/module/readme.md)
 
-[Prev](../readme.md)
+[Back](../readme.md)
 [Next](./guide/README.md)

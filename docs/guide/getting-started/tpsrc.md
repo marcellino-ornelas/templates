@@ -116,4 +116,4 @@ we can add this to our `.tpsrc` file.
 
 Done. Now every time you render a new template it will never ask you again if you want to use a css file
 
-[Prev](./settings/prompting.md)
+[Back](./settings/prompting.md)

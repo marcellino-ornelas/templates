@@ -207,5 +207,5 @@ tps init
 
 Now lets add a file to `tps-example/.tps/express-server/default`. -->
 
-[Prev](./README.md)
+[Back](./README.md)
 [Next](./packages.md)

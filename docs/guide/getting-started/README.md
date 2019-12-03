@@ -28,7 +28,7 @@ Have you ever built a express app before? or react component? If so, you know wh
 - [Settings](./settings/README.md)
 - [Tpsrc](./tpsrc.md)
 
-[Prev](../README.md)
+[Back](../README.md)
 [Next](./templates.md)
 
 <!--

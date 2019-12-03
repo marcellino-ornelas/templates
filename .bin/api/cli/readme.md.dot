@@ -1,0 +1,15 @@
+# Welcome to our CLI documentation
+
+## Global Flags
+
+{{#def.flagTable:{name: "global-table", data: tps.options.global } || ""}}
+
+## Commands
+
+- [create](./commands/create.md)
+- [use](./commands/use.md)
+- [new](./commands/new.md)
+  - [template](./commands/new_commands/template.md)
+  - [package](./commands/new_commands/package.md)
+- [list](./commands/list.md)
+- [init](./commands/init.md)

@@ -54,5 +54,5 @@ module.exports = {
 }
 ```
 
-[Prev](../dynamic-files.md)
+[Back](../dynamic-files.md)
 [Next](./prompting.md)

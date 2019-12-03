@@ -1,0 +1,45 @@
+## List
+
+### Description
+
+List all available templates that you can use.
+
+---
+
+### Syntax
+
+```bash
+tps list [flags...]
+```
+
+#### Parameters
+
+`[flags...]` (optional) flags to change the behavior of init.
+
+Aliases: `ls`
+
+---
+
+### Setting options
+
+{{#def.flagTable:{name: "list-options", data: tps.options.list } || ""}}
+
+---
+
+### Examples
+
+#### list all templates
+
+```bash
+tps ls
+```
+
+should produce something like:
+
+```
+Global:
+- <your-global-templates>
+
+Local:
+- <your-local-templates>
+```
