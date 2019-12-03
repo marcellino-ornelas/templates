@@ -10,7 +10,7 @@
     "build:docs": "./.bin/generate-docs && ./.bin/generate-docs-doctoc",
     "build:code": "./node_modules/.bin/babel src --out-dir lib",
     "build:dev": "BABEL_ENV=development npm run build:code -- -w",
-    "build:prod": "npm run build:code",
+    "build:prod": "npm run build:code && git add . && git commit -m 'New prod docs' && git push origin master",
     "build": "npm run build:prod",
     "test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init -- ",
     "test:core": "npm run build:code && npm run test:jest -- --testPathIgnorePatterns cli/init -- ",
