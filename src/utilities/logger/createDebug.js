@@ -3,38 +3,54 @@ import is from 'is';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
 
-const logFunctions = ['info', 'error', 'debug', 'success', 'warn'];
+const logFunctions = ['info', 'error', 'debug', 'success', 'warn', 'log'];
 
-const enableLogFuntions = logFunctions
-  .map(logName => `tps:${logName}`)
-  .join(',');
+function createLogFunctionsNames(name) {
+  return logFunctions.map(logName => `${name}:${logName}`).join(',');
+}
 
 class CreateDebug {
   constructor(name) {
+    this.name = name;
     this.logger = debug(name);
 
     if (debug.enabled(name)) {
-      debug.enable(enableLogFuntions);
+      debug.enable(createLogFunctionsNames(name));
     }
 
-    /* I think this should be name????? */
-    logFunctions.reduce((acc, logType) => {
-      const logger = this.logger.extend(logType);
+    // always enable log
+    debug.enable(`${name}:log`);
 
-      logger.color = this.logger.color;
+    logFunctions.reduce((acc, logType) => {
+      const loggerFunction = this.logger.extend(logType);
+
+      // inherit parent logger color
+      loggerFunction.color = this.logger.color;
+
+      // wrapper around the log functions
+      // This is because we want to check to see if the parent
+      // logger is enabled. if it is then enable the child logger
       acc[logType] = (...args) => {
-        if (this.logger.enabled && !logger.enabled) {
-          logger.enabled = true;
+        if (this.logger.enabled && !loggerFunction.enabled) {
+          loggerFunction.enabled = true;
         }
-        logger(...args);
+        loggerFunction(...args);
       };
 
       return acc;
     }, this);
 
-    // alias
-    this.log = this.info;
     this._groups = {};
+  }
+
+  enable() {
+    debug.enable(this.name);
+    return this;
+  }
+
+  disable() {
+    debug.disable(this.name);
+    return this;
   }
 
   group(name, { clear = false } = {}) {

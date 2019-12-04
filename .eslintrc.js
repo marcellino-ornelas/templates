@@ -17,6 +17,7 @@ const config = {
     'no-console': IGNORE,
     'import/no-named-as-default': IGNORE,
     'import/prefer-default-export': IGNORE,
+    'consistent-return': IGNORE,
     'class-methods-use-this': IGNORE,
     'no-use-before-define': IGNORE,
     'func-names': [ERROR, 'as-needed'],

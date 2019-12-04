@@ -1,8 +1,8 @@
 const debug = require('debug');
 const is = require('is');
-const pjson = require('prettyjson-256');
 const Template = require('../../lib/templates');
 const errorExit = require('./error-exit');
+const logger = require('../../lib/utilities/logger');
 
 module.exports.createHandler = argv => {
   /**
@@ -32,18 +32,23 @@ module.exports.createHandler = argv => {
     ...answers
   } = argv;
 
-  const tps = new Template(argv.use, {
-    default: _default,
+  const tpsConfig = {
     newFolder,
     force,
-    wipe
-  });
+    wipe,
+    default: _default
+  };
+
+  logger.cli.info('Tps Config: %n', tpsConfig);
+  const tps = new Template(argv.use, tpsConfig);
 
   if (is.array(packages) && !is.array.empty(packages)) {
+    logger.cli.info('Loading packages:', packages);
     tps.loadPackages(packages);
   }
 
   if (tps.hasPrompts()) {
+    logger.cli.info('Answers to prompts: %n', answers);
     tps.setAnswers(answers);
   }
 
@@ -54,10 +59,12 @@ module.exports.createHandler = argv => {
     name: argv.name
   };
 
+  logger.cli.info('Build paths: %n', tpsConfig);
+
   tps
     .render(dest, renderItems, renderData)
     .then(() => {
-      console.log('process done');
+      logger.cli.info('process done');
       process.exit(0);
     })
     .catch(errorExit);
