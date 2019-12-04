@@ -20,6 +20,7 @@ module.exports.createHandler = argv => {
 
   if (argv.verbose) {
     debug.enable('tps');
+    debug.enable('tps:cli');
   }
 
   const {
@@ -64,7 +65,7 @@ module.exports.createHandler = argv => {
   tps
     .render(dest, renderItems, renderData)
     .then(() => {
-      logger.cli.info('process done');
+      logger.cli.log('process done');
       process.exit(0);
     })
     .catch(errorExit);
