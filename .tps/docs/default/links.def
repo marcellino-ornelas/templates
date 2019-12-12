@@ -7,3 +7,8 @@
 		return `[${name || 'inquirer'}](./TODO)\n`;
 	}
 #}}
+
+{{##def.yargs = function(name) {
+		return `[${name || 'yargs'}](http://yargs.js.org/)\n`;
+	}
+#}}

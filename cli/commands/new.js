@@ -7,7 +7,8 @@ exports.command = 'new <command>';
 exports.description = 'create a new template | package';
 
 exports.builder = yargs =>
-  yargs.commandDir('new_commands').positional('command', {
-    type: 'string',
-    choices: ['package', 'template']
-  });
+  yargs.commandDir('new_commands')
+  // .positional('command', {
+  //   type: 'string',
+  //   choices: ['package', 'template']
+  // });

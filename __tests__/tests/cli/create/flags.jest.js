@@ -51,7 +51,10 @@ describe('[cli] Create:', () => {
   });
 
   /**
-   * @docs api/cli/commands/create.md#add-additional-packages
+   * @docs
+   *  api/cli/commands/create.md#add-additional-packages
+   *  guide/getting-started/packages.md#including-more-packages
+   *
    */
   it('should be able to use -p flag to all additional packages', () => {
     return createTemplate(playground.box(), 'testing', 'app', {

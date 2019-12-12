@@ -56,6 +56,7 @@ describe('[Templates] Render Process:', () => {
     for (let i = 0; i < 1000; i++) {
       const tps = new Templates('testing');
       const destPath = playground.pathTo(`app_${i}`);
+      // eslint-disable-next-line jest/valid-expect-in-promise
       const promise = tps.render(playground.box(), `app_${i}`).then(() => {
         expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       });
@@ -131,14 +132,21 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
+  /**
+   * @docs guide/getting-started/packages.md#including-more-packages
+   */
   it('should be able to render packages', () => {
-    const tps = new Templates('testing', { defaultPackage: false });
-    tps.loadPackages(['main', 'store']);
+    const tps = new Templates('testing');
+    tps.loadPackages(['extras', 'extras2']);
 
     const destPath = playground.pathTo('app');
 
     return tps.render(playground.box(), 'app').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+      expect(destPath).toHaveAllFilesAndDirectories([
+        ...TESTING_PACKAGE_FILES,
+        'extras.js',
+        'extras2.js'
+      ]);
     });
   });
 });
