@@ -1,1 +1,2 @@
-{{= tps.name }}
+name: {{= tps.name }}
+template: {{= tps.template }}

@@ -60,19 +60,9 @@ Data type in tps. Can either be `"data"` or `"package"`. If not property is spec
 
 #### package
 
-When tps type is package. The answer of the question will be used to try and get a package from your template.
+When you have `package` as the `tpsType`, tps will try to use the users value and see if there is a corresponding package to it. If there is it will include that package into the template.
 
-###### Boolean
-
-when an boolean answer is passed in and the value is true. tps will try to find a package using the value you passed in as the `name` field. If the boolean is false tps doesn't wont render any addition packages.
-
-###### string
-
-when an string answer is passed in. tps will try to find a package with the value of the string
-
-###### array
-
-when an array answer is passed in. tps will try to use find packages with all values that were passed in.
+> see [prompting guide](guide/getting-started/settings/prompting.md#tps-type) for more information
 
 ### Example
 
@@ -94,7 +84,7 @@ when an array answer is passed in. tps will try to use find packages with all va
 module.exports = {
   "prompts: [
     {
-      "tpsType": "data
+      "tpsType": "data"
     }
   ]
 }
@@ -139,44 +129,3 @@ module.exports = {
   ]
 }
 ```
-
-<!--
-### Field: _*_
-
-#### Usage
-
-Field: `_`
-
-Type: `_`
-
-#### Description
-
-_
-
-#### Example
-
-##### json
-
-```json
-{
-  "prompts": [
-    {
-      "_": _
-    }
-  ]
-}
-```
-
-##### Javascript
-
-```javascript
-module.exports = {
-  "prompts: [
-    {
-      "_": _
-    }
-  ]
-}
-```
-
--->

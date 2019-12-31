@@ -113,7 +113,7 @@ Say we have a template `package-demo` like this:
 
 ### Including more packages
 
-Now say you wanted a render a template named `app` with only `index.js` and `package1.js`. Then you would create app like this:
+Now say you wanted a render a template named `app` with only `index.js` and `package1.js`. Then you would create `app` like this:
 
 ```bash
 tps package-demo --packages package1 -- app
@@ -127,7 +127,7 @@ this will generate.
         | - index.js
         | - package1.js
 
-Now say you wanted a render a template named `app` with only `index.js` and `package2.js`. Then you would create app like this:
+Now say you wanted a render a template named `app` with only `index.js` and `package2.js`. Then you would create `app` like this:
 
 ```bash
 tps package-demo --packages package2 -- app
@@ -137,7 +137,7 @@ tps package-demo --packages package2 -- app
         | - index.js
         | - package2.js
 
-Now say you wanted a render a template named `app` with all three. Then you would create app like this:
+Now say you wanted a render a template named `app` with all three. Then you would create `app` like this:
 
 ```bash
 tps package-demo --packages package1 package2 -- app

@@ -3,8 +3,8 @@
 	}
 #}}
 
-{{##def.inquirerLink = function(name) {
-		return `[${name || 'inquirer'}](./TODO)\n`;
+{{##def.inquirerLink = function(name, extra='#inquirerjs') {
+		return `[${name || 'inquirer'}](https://github.com/SBoudrias/Inquirer.js${extra})\n`;
 	}
 #}}
 

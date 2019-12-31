@@ -1,7 +1,7 @@
 import dot from '@tps/dot';
 import path from 'path';
-import fs, { promises } from 'fs-extra';
-import { DirNode } from '@tps/fileSystemTree';
+import fs from 'fs-extra';
+import DotError from '@tps/errors/dot-error';
 
 /*
  * File
@@ -15,7 +15,7 @@ class File {
     let fileName = fileNode.name;
 
     if (DOT_EXTENTION_MATCH.test(fileName)) {
-      // strip dot extention
+      // strip dot extension
       this.isDot = true;
       fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
     }
@@ -32,9 +32,14 @@ class File {
         file: this.fileName(data),
         dest: this._dest(dest, data)
       };
-      return this.isDot
-        ? dot.template(fileData, null, defs)(realData)
-        : fileData;
+
+      try {
+        return this.isDot
+          ? dot.template(fileData, null, defs)(realData)
+          : fileData;
+      } catch (e) {
+        throw new DotError(realData.file, realData.dest, e.message);
+      }
     };
   }
 
@@ -60,9 +65,6 @@ class File {
       .catch(error => {
         console.log('Error in dot config');
         console.log('dest', dest);
-        new DirNode(
-          '/Users/lornelas/Desktop/development/Templates/docs-1/'
-        ).logTree(['type', 'path']);
 
         return Promise.reject(error);
       });

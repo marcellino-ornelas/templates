@@ -253,6 +253,7 @@ export default class Templates {
 
         dataForTemplating = {
           ...data,
+          packages: this.packagesUsed,
           template: this.template,
           answers: this.hasPrompts() ? this._prompts.answers : {}
         };

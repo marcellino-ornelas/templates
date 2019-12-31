@@ -4,39 +4,37 @@ In this section, We will be covering the following topics:
 
 {{#def.doctoc}}
 
-## What is Prompting?
+## Prompt breakdown
 
-Prompting is used to get data from the user. Its exactly what you think it is. Threw the command line we will display a message to the user asking for there response. The the prompt can also be answered threw the command line or threw the node module package for cases where users already know what they want. There options can come in all forms.
+Prompting is exactly what you think it is. Its used to get data from the user. through the command line we will display a message to the user asking for there response. The prompt can also be answered by supplying a flag through the command line or through the node module package for cases where users already know what they want. There options can come in all forms.
 
-Templates uses {{#def.inquirerLink()}} to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
+Templates uses {{#def.inquirerLink()}} to prompt for user responses. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties {{#def.inquirerLink('here', '#question')}}
 
 ## How to use Prompting?
 
-In order to use prompting features. We need to add a settings file in our template folder. This settings file can be either an `settings.json` or `settings.js` file. This file needs to be placed in your template folder at the same level as your packages.
+In order to use prompting features. We need to add a settings file in our template folder. Don't remember what the setting file is? See the [settings files guide](./README.md)
 
-The setting file needs to be a valid json object or for a js file it needs to return a javascript object.
+Inside of the file add a `prompts` field. The value of this field will be an array of objects.
 
-Next add the prompting property to your settings file like described [here](./README.md#prompting).
+```
+{
+  "prompts": []
+}
+```
 
-Now the prompt property takes a array of objects.
-
-Review our api docs for prompting [here](../../../api/templates/settings/prompting.md) to see what values you can pass in.
-
-## Prompt breakdown
+Review our [api docs](../../../api/templates/settings/prompting.md) for all fields.
 
 Each prompt you add to needs to be a object. Well touch on some important fields that are required.
 
 ### Name
 
-First the `name` field. Now this field is required for tps to work. This name will be used later on so you can access the values the user enters in from inside of each dynamic file or aka `.dot` file. All prompt answers will be stored on the `tps.answers` object property.
-
-Users can also answer the prompt threw the command line or with the module version with whatever value you passed in as name. This is meant for the users that don't want to wait to answer the prompt.
+First the `name` field. Now this field is required for prompting to work. This name will be used later on so you can access the values the user entered in, from inside of each dynamic file. All prompt answers will be stored on the `tps.answers` object property.
 
 #### Example
 
 ##### how to use
 
-Say I create a prompt thats name field is `age`. This will be accessible in `index.js.dot` with
+Say I create a prompt thats name field is `age`.
 
 `settings.json`
 
@@ -51,15 +49,15 @@ Say I create a prompt thats name field is `age`. This will be accessible in `ind
 }
 ```
 
-`index.js.dot`
+Then in a dynamic file I can access the age property like so:
 
 ```js
 {{= tps.wrapBrackets('=tps.answers.age') }}
 ```
 
-##### Answering prompts threw the command line
+##### Answering prompts through the command line
 
-Now in order to answer this prompt threw the command line. say we have the following template:
+Now in order to answer this prompt through the command line. say we have the following template:
 
     | - tps-example
         | - .tps/
@@ -75,6 +73,8 @@ tps react-component <template-to-render> --age <value>
 
 `<value>` can be either a array of strings, string, or a boolean.
 
+###### boolean
+
 If the value type is a boolean then you end up with something like this.
 
 ```bash
@@ -84,6 +84,8 @@ If the value type is a boolean then you end up with something like this.
 
 --no-age
 ```
+
+###### string
 
 If the value type is a string then you end up with something like this.
 
@@ -95,15 +97,17 @@ If the value type is a string then you end up with something like this.
 --age less
 ```
 
-If the value type is an array then you end up with something like this.
+###### list
+
+If the value type is an list then you end up with something like this.
 
 ```bash
 --age 23 45 65
 ```
 
-> Note: using array type can be difficult when using multiple flags or etc. Tps uses yargs for its command line parser. You can refer how to pass in array arguments [here](http://yargs.js.org/docs/#api-arraykey)
+> Note: using list types can be difficult when using multiple flags or etc. Tps uses yargs for its command line parser. You can refer how to pass in list of arguments [here](http://yargs.js.org/docs/#api-arraykey)
 
-##### Answering prompts threw the module
+##### Answering prompts through the module
 
 To answer prompts in javascript using the module. Use the `setAnswers` function.
 
@@ -130,30 +134,33 @@ tps.setAnswers({ age: data });
 /* ... */
 ```
 
+---
+
+### Type
+
+---
+
 ### Tps Type
 
-The second field is `tpsType`. Now this field will allow you to tell tps how you want to process the user data. There are two options `package` or `data`.
+The third field is `tpsType`. This field tells tps how it should process the users answer. There are two options `package` or `data`.
 
 > Note: If you don't specify a `tpsType` field. Tps will use `package` by default.
 
-When you have `package` as the `tpsType`, tps will try to use the users value to render a package that is in your template. Different values passed in will have different behaviors. All different types of behaviors can be viewed [here](../../../api/templates/settings/prompting.md#package).
+#### package
 
-#### Example
+```json
+{
+  "type": "package"
+}
+```
 
-As a brief example well be going over what happens when the prompt accepts a string. Say you have this template:
+When you have `package` as the `tpsType`, tps will try to use the users value to render a package that is in your template. Different values passed in will have different behaviors.
 
-    | - tps-example
-        | - .tps/
-            | - react-component/
-                | - settings.json
-                | - default/
-                    | - index.js
-                | - css
-                    | - {{= tps.wrapBrackets('=tps.name') }}.css
-                | - less
-                    | - {{= tps.wrapBrackets('=tps.name') }}.less
+###### boolean
 
-Now if we add this prompt to our template
+When the answer to a prompt is a boolean and the value is true. Tps will use the [name of the prompt](#name) and will try to find a package with same name. If there is a package with the same name as the prompt, then tps will include that package in the rendering process of the new template. When the value is false. tps will just ignore the prompt and will not include any additional packages.
+
+say were rendering a new template and we have a prompt like so
 
 `settings.json`
 
@@ -161,46 +168,129 @@ Now if we add this prompt to our template
 {
   "prompts": [
     {
-      "name": "cssType",
-      "message": "What css language would you like to use",
-      "type": "input" // <- Dont worry about this field for now we will touch more on it in a moment.
+      "name": "some-name",
+      "tpsType": "package",
+      "type": "confirm" // <--- makes prompt accept booleans
     }
   ]
 }
 ```
 
-> Having input as type will prompt the user, in the command line, the string you have as message.
-> See inquirer type input example [here](https://github.com/SBoudrias/Inquirer.js#input---type-input)
+When the user is rendering a new template ^ the prompt will be displayed and they can answer. Now when they answer yes or true, tps will try and find a package in your template.
 
-Having `input` as the type will allow the user to pass in a string. So say the user entered `less` after calling the following command.
+    | - .tps/
+        | - <the-template-being-used>/
+            | - default/
+                | - readme.md
+            | - some-name/        <-- the package that matches name
+                | - random-file.md
 
-```bash
-tps react-component App
+Now if tps finds the package, it will use it in the rendering process. so if you were rendering a new template `app`. then app would look like this
+
+    | - app/
+        | - readme.md
+        | - readom-file.md
+
+> see how to answer through the command line [here](#boolean)
+
+If a package is not found. tps will complain and throw an error.
+
+###### string
+
+when the answer is a string or in other words a word/name. tps will use that answer and will try to find a package that matches the answer.
+
+`settings.json`
+
+```json
+{
+  "prompts": [
+    {
+      "name": "some-name",
+      "tpsType": "package",
+      "type": "input" // <--- makes prompt accept strings
+    }
+  ]
+}
 ```
 
-Tps will take this answer and load the `less` package and render this template.
+now when the user renders a new template. tps will ask for an input. Whatever the user answers, tps will take that value and try to find a package that matches the answer. In this case say the answer was `some-answer`.
 
-    | - tps-example
-        | - .tps/
-            | - ...
-        | - App
-            | - index.js
-            | - App.less
+    | - .tps/
+        | - <the-template-being-used>/
+            | - default/
+                | - readme.md
+            | - some-answer/        <-- the package that matches answer
+                | - answer-file.md
 
-Now if the user answers `css` then it will use the `css` package and render:
+Since tps has the package, the package will be included in the rendering process. so if you were rendering a new template `app`. then app would look like this
 
-    | - tps-example
-        | - .tps/
-            | - ...
-        | - App
-            | - index.js
-            | - App.css
+    | - app/
+        | - readme.md
+        | - answer-file.md
 
-<!-- The object can take the following properties as arguments -->
+> see how to answer through the command line [here](#string)
+
+If a package is not found. tps will complain and throw an error.
+
+###### list
+
+Having an list of strings as the answer is the same as having [one string](#string) but it will try to find packages for each value and will use all the packages in the rendering process.
+
+`settings.json`
+
+```json
+{
+  "prompts": [
+    {
+      "name": "some-name",
+      "tpsType": "package",
+      "type": "list" // <--- one of the ones thast makes prompt accept list of strings
+    }
+  ]
+}
+```
+
+now when the user renders a new template. tps will ask for an list of inputs. Whatever the user answers, tps will take all of the values and try to find a packages that matches the answers. In this case say the answer was `some-answer` and `some-answer-2`.
+
+    | - .tps/
+        | - <the-template-being-used>/
+            | - default/
+                | - readme.md
+            | - some-answer/        <-- the package that matches answer
+                | - answer-file.md
+            | - some-answer-2/        <-- other package that matches answer
+                | - answer-file-2.md
+            | - some-answer-3/        <-- package that doesnt match answer
+                | - answer-file-3.md
+
+Since tps has the package, the package will be included in the rendering process. so if you were rendering a new template `app`. then app would look like this
+
+    | - app/
+        | - readme.md
+        | - answer-file.md
+        | - answer-file-2.md
+
+`answer-file-3.md` is not there becuase answers were only `some-answer` and `some-answer-2`.
+
+> see how to answer through the command line [here](#list)
+
+If any of the packages is not found, tps will complain and throw an error.
+
+#### data
+
+```json
+{
+  "tpsType": "data"
+}
+```
+
+When you have `data` as the `tpsType`. Tps will do nothing to the data. Thats right, nothing. This data type is meant so you can get additional information from the user and you will do something with this infromation
+
+---
 
 ### Aliases
 
-The next field is `aliases`. This allows the user to be able to answer the prompt with any of the aliases you add threw the command line or with the modules version.
+The next field is `aliases`. This allows the user to be able to answer the prompt with any of the aliases you add through the command line or with the modules version.
 
 #### Example
 
@@ -220,7 +310,7 @@ The next field is `aliases`. This allows the user to be able to answer the promp
 
 ##### Command Line
 
-Now threw the command line, if you wanted a less package.
+Now through the command line, if you wanted a less package.
 
 ```bash
 tps react-component App -c less
@@ -236,7 +326,7 @@ tps react-component App
 
 ##### Node module
 
-Now threw the module version, if you wanted a `less` package.
+Now through the module version, if you wanted a `less` package.
 
 ```js
 const Templates = require('tps');
@@ -253,6 +343,8 @@ tps.setAnswers({ cssType: 'less' });
 
 tps.render(/* ... */);
 ```
+
+---
 
 ## Inquirer
 

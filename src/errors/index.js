@@ -10,3 +10,4 @@ export { default as PromptNoPromptFoundError } from './prompt-no-prompt-found';
 export { default as InitializedAlreadyError } from './initialized-already';
 export { default as ParentDirectoryInitializedError } from './parent-directory-initialized';
 export { default as GlobalInitializedAlreadyError } from './global-initialized-already';
+export { default as DotError } from './dot-error';

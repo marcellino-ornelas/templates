@@ -35,29 +35,38 @@ describe('[TPS] Rendering dynamic:', () => {
   it.todo('should be able to use def files with one helper');
   it.todo('should be able to use def files that has multiple helpers');
 
+  /**
+   * @docs guide/getting-started/dynamic-files.md#name
+   */
   it("should set 'tps.name' to the new template being created", () => {
     const destPath = path.join(playground.box(), 'App');
     const indexFile = path.join(destPath, 'index.txt');
     return tps.render(playground.box(), ['App']).then(() => {
       expect(destPath).toBeDirectory();
-      expect(indexFile).toHaveFileContents('App');
+      expect(indexFile).toHaveFileContents('name: App');
     });
   });
 
+  /**
+   * @docs guide/getting-started/dynamic-files.md#name
+   */
   it("should set 'tps.name' to the new template being created when using extended path", () => {
     const destPath = path.join(playground.box(), 'App/Nav');
     const indexFile = path.join(destPath, 'index.txt');
     return tps.render(playground.box(), ['App/Nav']).then(() => {
       expect(destPath).toBeDirectory();
-      expect(indexFile).toHaveFileContents('Nav');
+      expect(indexFile).toHaveFileContents('name: Nav');
     });
   });
 
+  /**
+   * @docs guide/getting-started/dynamic-files.md#name
+   */
   it("should set 'tps.name' to the new template being created when using multiple build paths", () => {
     const destPaths = [
-      [path.join(playground.box(), 'App'), 'App'],
-      [path.join(playground.box(), 'Nav'), 'Nav'],
-      [path.join(playground.box(), 'Nav/NavList'), 'NavList']
+      [path.join(playground.box(), 'App'), 'name: App'],
+      [path.join(playground.box(), 'Nav'), 'name: Nav'],
+      [path.join(playground.box(), 'Nav/NavList'), 'name: NavList']
     ];
 
     return tps
@@ -68,5 +77,19 @@ describe('[TPS] Rendering dynamic:', () => {
           expect(path.join(dest, 'index.txt')).toHaveFileContents(contents);
         });
       });
+  });
+
+  /**
+   * @docs guide/getting-started/dynamic-files.md#templates
+   */
+  it("should set 'tps.template' to the template being used as the blueprint", () => {
+    const dest = path.join(playground.box(), 'App');
+
+    return tps.render(playground.box(), 'App').then(() => {
+      expect(dest).toBeDirectory();
+      expect(path.join(dest, 'index.txt')).toHaveFileContents(
+        'template: testing-dynamic'
+      );
+    });
   });
 });
