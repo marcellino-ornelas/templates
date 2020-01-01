@@ -38,7 +38,7 @@ class File {
           ? dot.template(fileData, null, defs)(realData)
           : fileData;
       } catch (e) {
-        throw new DotError(realData.file, realData.dest, e.message);
+        throw new DotError(realData.file, realData.dest, e.message, this._name);
       }
     };
   }
