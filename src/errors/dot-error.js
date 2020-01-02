@@ -1,16 +1,10 @@
 export default class DotError extends Error {
-  constructor(fileName, dest, originalError, originalFile) {
+  constructor(fileNode, errorMessage) {
     super();
     this.name = 'DotError';
-    this.fileName = fileName;
-    this.dest = dest;
-    this.originalError = originalError;
-    this.message = `\
-Dot File: ${originalFile}
-File Being Created: ${this.fileName} 
-Destination: ${dest}
+    this.fileName = fileNode.name;
+    this.path = fileNode.path;
 
-Problem: ${this.originalError}
-`;
+    this.message = `${errorMessage} ( ${fileNode.path} )`;
   }
 }

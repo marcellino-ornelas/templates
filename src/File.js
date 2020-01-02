@@ -32,13 +32,12 @@ class File {
         file: this.fileName(data),
         dest: this._dest(dest, data)
       };
-
       try {
         return this.isDot
           ? dot.template(fileData, null, defs)(realData)
           : fileData;
       } catch (e) {
-        throw new DotError(realData.file, realData.dest, e.message, this._name);
+        throw new DotError(this.fileNode, e.message);
       }
     };
   }
