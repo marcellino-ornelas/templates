@@ -48,7 +48,7 @@ Now lets break down what to put in your template folder. Inside of each `templat
         | - <template>/
             | - <packages...>/
 
-Now inside of each `package` directory . You can add as many files and directories as you want. These are what will be used when rendering a template. `packages` can be named whatever you like except for one. Each `template` can have a `default` package.
+Now inside of each `package` directory . You can add as many files and directories as you want. These are what will be used when rendering a template. `packages` can be named whatever you like except for one. Each `template` can have a `default` package but its not required.
 
 Each time you render a template, TPS will automatically use everything inside your `default` package to build your template. Every other package that you want to be rendered must be specified when rendering the template.
 
@@ -111,25 +111,169 @@ tps new template <template-name>
 
 > See how to use our `new` command more [here](../../api/cli/commands/new.md)
 
-## Rendering a template
+## Rendering a new template
 
-To render a template use the following command.
+### what is rendering a template
 
-```bash
-tps create --use=<template-to-use> <template-name-to-create>
+Rendering a new template is the term we refer to when someone would like to take the file and folders from your template folder and "copy and paste them" to a different location.
 
-# or
+    + - - - - - - - +    + - - - - - - - - - +    + - - - - - - - - - - +    + - - - - - - - - - - - - -+
+    | Tps gets path |    | loads all files & |    | creates a new       |    | creates each file &      |
+    | to template   | -> | folders for each  | -> | directory from the  | -> | folder from the packages |
+    + - - - - - - - +    | package passed in |    | locations passed in |    | in each new directory    |
+                         + - - - - - - - - - +    + - - - - - - - - - - +    + - - - - - - - - - - - - -+
 
-tps <template-to-use> <template-name-to-create>
-```
+The "location" that you pass in to tell tps where to render the new template to are referred to as a `build path`. You can kind of think of the build path as the name of the new template being created. tps will get this build path and create a directory with that name and copy all of the files & folders from your templates packages into that new directory.
+
+The build path could can either be a single word or a file system like path like so:
+
+    app
+    |__|
+     ^ Build path
+
+or with a path
+
+    some/path/app
+    |____________|
+     ^ Build path
+
+Now when the build path is just a single word then the build path is also the name of the new template being created. This name is used to create the name of the new directory. If I passed in `app` as the build path then a directory app will be created and all of the templates files & folders will be placed into `app`.
+
+        | - app/
+            | - <all-of-the-template-files...>
+
+But when the build path has a long path attached, only the end word is the name of the template.
+
+    some/path/app
+             |___|
+               ^ name of template
+
+The rest of the path is used as an additional location when rendering the template. So if you passed in `some/path/app` then `app` will be created in the `some/path` directory. If the directory doesn't exist it will be created.
+
+        | - some/
+            | - path/
+                | - app/
+                    | - <all-of-the-template-files...>
+
+You can also pass in multiple build paths at the same time. This is going to be the same as passing in one but for each one.
+
+### how to render a template
+
+There are two ways on how to render a template. One is via our command line tool or by our `node_module` package. We wont go deep into this topic right now but here are some basics.
 
 `<template-to-use>` is the name of the template you would like to use.
 
 > Not sure what templates you have? Check out our [list command](../../api/cli/list.md)
 
-`<template-name-to-create>` is the location/name of where you want your new rendered template to go
+`<build-paths...>` is the location/name of where you want your new rendered template to go
+
+#### tps cli tools
+
+```bash
+# create command
+
+tps create --use=<template-to-use> <build-paths...>
+
+# or use command
+
+tps <template-to-use> <build-paths...>
+```
+
+##### Examples
+
+###### one build path
+
+```bash
+# create command
+
+tps create --use=express-template app
+
+# or use command
+
+tps express-template app
+```
+
+###### build path with long path
+
+```bash
+# create command
+
+tps create --use=express-template projects/app
+
+# or use command
+
+tps express-template projects/app
+```
+
+###### multiple build path
+
+```bash
+# create command
+
+tps create --use=express-template app project/app app2
+
+# or use command
+
+tps express-template app project/app app2
+```
 
 > See how to use our `create` command more [here](../../api/cli/commands/create.md)
+
+#### node module
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('<template-to-use>');
+// ^ In js pass in the name to the template here
+
+const buildPaths = ['<build-paths...>'];
+// ^ In js build paths should always be an array
+
+tps.render('<some-directory-path>', buildPaths);
+//          ^ In js we need to add a path to some directory so tps has a
+//            starting directory. tps cli tools uses this node module
+//            underneath the hood and uses the terminals current working
+//            directory as the `<some-directory-path>` path
+```
+
+##### Examples
+
+###### one build path
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['app'];
+
+tps.render(process.cwd(), buildPaths);
+```
+
+###### build path with long path
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['projects/app'];
+
+tps.render(process.cwd(), buildPaths);
+```
+
+###### multiple build path
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['app', 'projects/app', 'app2'];
+
+tps.render(process.cwd(), buildPaths);
+```
 
 ## Example
 

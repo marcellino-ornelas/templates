@@ -123,7 +123,7 @@ tps express-app app
 You can access this name in doT like this.
 
 ```
-{{= tps.wrapBrackets('= tps.name ') }}
+{{= tps.wrapBrackets('= tps.template ') }}
 ```
 
 ---
