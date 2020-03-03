@@ -8,6 +8,7 @@ export const TESTING_PACKAGE_FILES = [
   './db',
   './db/db.js',
   './server',
+  './server/server.js',
   './storeUtils',
   './storeUtils/user.js'
 ];
