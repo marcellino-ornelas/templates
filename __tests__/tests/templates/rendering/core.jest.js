@@ -144,7 +144,7 @@ describe('[Templates] Render Process:', () => {
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories([
         ...TESTING_PACKAGE_FILES,
-        'extras.js3',
+        'extras.js',
         'extras2.js'
       ]);
     });

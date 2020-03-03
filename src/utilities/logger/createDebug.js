@@ -2,6 +2,7 @@ import debug from 'debug';
 import is from 'is';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
+import { defaults } from '@tps/utilities/helpers';
 
 export const logFunctions = [
   'info',
@@ -17,9 +18,12 @@ export const logFunctions = [
 // }
 
 class CreateDebug {
-  constructor(name) {
+  static DEFAULT_OPTS = { disableLog: false };
+
+  constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
     this.name = name;
     this._logger = debug(this.name);
+    this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
     this._groups = {};
 
     logFunctions.forEach(type => {
@@ -36,11 +40,12 @@ class CreateDebug {
   }
 
   _resync() {
+    const { disableLog } = this.opts;
     logFunctions.forEach(type => {
       const instanceKey = `_${type}`;
       if (type === 'log') {
         // Log always is enabled
-        this[instanceKey].enabled = true;
+        this[instanceKey].enabled = !disableLog;
       } else {
         this[instanceKey].enabled = this.isEnabled();
       }
@@ -49,6 +54,12 @@ class CreateDebug {
 
   isEnabled() {
     return this._logger.enabled;
+  }
+
+  enable() {
+    this._logger.enabled = true;
+    this._resync();
+    return this;
   }
 
   group(name, { clear = false } = {}) {

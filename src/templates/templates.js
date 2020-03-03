@@ -44,6 +44,10 @@ const DEFAULT_OPTIONS = {
   extendedDest: ''
 };
 
+if (TPS.IS_TESTING) {
+  logger.tps.opts.disableLog = true;
+}
+
 /**
  * @class
  * @classdesc Create a new instance of a template
