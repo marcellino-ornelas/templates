@@ -48,6 +48,9 @@ if (TPS.IS_TESTING) {
   logger.tps.opts.disableLog = true;
 }
 
+console.error("DEBUG=" + process.env.DEBUG); 
+console.error("DEBUG ENABLED=", logger.tps.isEnabled()); 
+
 /**
  * @class
  * @classdesc Create a new instance of a template
