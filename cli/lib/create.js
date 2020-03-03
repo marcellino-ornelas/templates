@@ -19,8 +19,7 @@ module.exports.createHandler = argv => {
   const dest = process.cwd();
 
   if (argv.verbose) {
-    debug.enable('tps');
-    debug.enable('tps:cli');
+    debug.enable('tps,tps:cli');
   }
 
   const {

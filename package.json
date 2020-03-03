@@ -13,7 +13,7 @@
     "code:prod": "npm run code:build",
     "test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init -- ",
     "test:core": "npm run code:build && npm run test:jest -- --testPathIgnorePatterns cli/init -- ",
-    "test:jest": "BABEL_ENV=development DEBUG=tps:* jest --bail 2",
+    "test:jest": "BABEL_ENV=development jest --bail 2",
     "test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
     "lint": "./node_modules/.bin/eslint .",
     "build": "npm run code:prod && npm run docs:prod",
