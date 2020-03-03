@@ -79,7 +79,9 @@ export default class Templates {
         logger.tps.error('Template not found! %O', {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
-          'search for global template': maybeGlobalTemp
+          'search for global template': maybeGlobalTemp,
+          [maybeLocalTemp]: fs.readdirSync(maybeLocalTemp),
+          [maybeGlobalTemp]: fs.readdirSync(maybeGlobalTemp)
         });
         throw new TemplateNotFoundError(templateName);
     }
