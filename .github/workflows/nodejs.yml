@@ -22,6 +22,7 @@ jobs:
       run: |
         npm ci
         npm run code:build --if-present
-        DEBUG=tps npm test -- rendering/core
+        npm test -- rendering/core
       env:
         CI: true
+        DEBUG: tps
