@@ -45,6 +45,7 @@ export const newTemplate = (cwd, template) => {
 
   return tpsCli(`new template ${template}`, { cwd }).then(() => {
     expect(testTemplateDefault).toBeDirectory();
+    expect(`${testTemplateDefault}/settings.json`).toBeFile();
   });
 };
 
