@@ -40,8 +40,11 @@
     "jest": "^24.0.0"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-private-methods": "^7.8.3",
     "acorn": "^7.1.0",
     "ansi-colors": "^4.1.1",
+    "babel-eslint": "^10.0.3",
     "bluebird": "^3.5.5",
     "debug": "^4.1.1",
     "dot": "^1.1.2",
@@ -51,6 +54,7 @@
     "inquirer": "^6.2.2",
     "is": "^3.3.0",
     "prettyjson-256": "^1.5.18",
+    "strip-ansi": "^6.0.0",
     "valid-filename": "^2.0.1",
     "yargs": "^13.2.1"
   }

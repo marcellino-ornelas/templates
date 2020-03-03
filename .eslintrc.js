@@ -4,6 +4,7 @@ const IGNORE = 0;
 const ERROR = 2;
 
 const config = {
+  parser: 'babel-eslint',
   env: { node: 1, es6: true },
 
   extends: ['airbnb', 'prettier'],
