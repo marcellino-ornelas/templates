@@ -4,6 +4,25 @@ on:
   pull_request:
 
 jobs:
+  test-debug:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Npm Install
+      run: npm ci
+      env:
+        CI: true
+    - name: Build Assests
+      run: npm run code:build --if-present
+    - name: Test Code
+      run: npm run test:core -- new/packages
   test-core:
     runs-on: ubuntu-latest
     strategy:
