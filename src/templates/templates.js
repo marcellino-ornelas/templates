@@ -73,6 +73,11 @@ export default class Templates {
         this.src = maybeGlobalTemp;
         break;
       default:
+        logger.tps.error('Template not found! %O', {
+          'local path': localPath,
+          'Seached for local template': maybeLocalTemp,
+          'search for global template': maybeGlobalTemp
+        });
         throw new TemplateNotFoundError(templateName);
     }
 
