@@ -10,7 +10,7 @@ Just bearly getting started? Check out our [prerequisites guide](./prerequisites
 
 ### Getting started
 
-what is tps? how do I use tps? Need to know where to start? Read our getting [started guide](./getting-started/README.md)
+what is tps? how do I use tps? Need to know where to start? Read our [getting started guide](./getting-started/README.md)
 
 ### Command line Guides
 

@@ -4,6 +4,10 @@
 
 In these docs, we'll be breaking down all the different configurations that you can use in tps in detail. They'll have what data type they accept what the configuration does and some brief examples on how to use.
 
+### [Templates](./templates/readme.md)
+
+Templates? Check out our [Templates](./templates/readme.md)
+
 ### [Cli](./cli/readme.md)
 
 Want to learn how to use our command line tool better? Check out our [command line tool API docs](./cli/readme.md)
