@@ -39,13 +39,14 @@ export const init = (cwd, flags = {}, opts = {}) => {
  * @command new
  */
 export const newTemplate = (cwd, template) => {
-  const testTemplateDefault = path.join(cwd, '.tps/test/default');
+  const testTemplatePath = path.join(cwd, '.tps/test');
+  const testTemplateDefault = path.join(testTemplatePath, 'default');
 
   expect(testTemplateDefault).not.toBeDirectory();
 
   return tpsCli(`new template ${template}`, { cwd }).then(() => {
     expect(testTemplateDefault).toBeDirectory();
-    expect(`${testTemplateDefault}/settings.json`).toBeFile();
+    expect(`${testTemplatePath}/settings.json`).toBeFile();
   });
 };
 

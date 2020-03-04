@@ -100,30 +100,32 @@ export default class Templates {
     this.successfulBuilds = new SuccessfulBuild();
     this.buildErrors = [];
     this.data = {};
+    this.templateSettings = {};
 
     this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
-    if (isFile(this.templateSettingsPath)) {
-      logger.tps.info(
-        'Loading template settings file %s',
-        this.templateSettingsPath
-      );
+    logger.tps.info('Settings file location: %s', this.templateSettingsPath);
 
-      try {
-        // eslint-disable-next-line
-        this.templateSettings = require(this.templateSettingsPath) || {};
-      } catch (e) {
-        throw new SettingsUnkownFileTypeError(this.templateSettingsPath);
-      }
+    try {
+      // eslint-disable-next-line
+      logger.tps.info('Loading template settings file...');
+      this.templateSettings = require(this.templateSettingsPath) || {};
+    } catch (e) {
+      logger.tps.info('Template has no Settings file');
+      // throw new SettingsUnkownFileTypeError(this.templateSettingsPath);
+    }
 
-      if (this.templateSettings.prompts) {
-        logger.tps.info('Loading prompts... %o', {
-          defaultValues: this.opts.default
-        });
-        this._prompts = new Prompter(this.templateSettings.prompts, {
-          default: this.opts.default
-        });
-      }
+    logger.tps.info('Template settings: %n', this.templateSettings);
+
+    if (this.templateSettings.prompts) {
+      logger.tps.info('Loading prompts... %o', {
+        defaultValues: this.opts.default
+      });
+      this._prompts = new Prompter(this.templateSettings.prompts, {
+        default: this.opts.default
+      });
+    } else {
+      logger.tps.info('No prompts to load!', this.templateSettings);
     }
 
     this._loadTpsrc(templateName);

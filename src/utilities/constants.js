@@ -16,7 +16,7 @@ export const MAIN_DIR = path.resolve(__dirname, '../../');
 
 export const CONFIG_FILE = '.tpsrc';
 export const TPS_FOLDER = '.tps';
-export const TEMPLATE_SETTINGS_FILE = 'settings.json';
+export const TEMPLATE_SETTINGS_FILE = 'settings';
 
 /***************************
  * Setting and development

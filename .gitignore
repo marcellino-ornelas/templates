@@ -4,3 +4,4 @@ node_modules/
 __tests__/testing_playground*/
 docs-1
 coverage
+test.js

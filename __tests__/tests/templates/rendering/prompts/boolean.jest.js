@@ -42,8 +42,6 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
   });
 
   it('should render a template when answering prompt with alias', done => {
-    tps.verbose = true;
-
     tps.setAnswers({ i: true });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
