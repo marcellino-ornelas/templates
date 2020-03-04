@@ -112,7 +112,6 @@ export default class Templates {
       this.templateSettings = require(this.templateSettingsPath) || {};
     } catch (e) {
       logger.tps.info('Template has no Settings file');
-      // throw new SettingsUnkownFileTypeError(this.templateSettingsPath);
     }
 
     logger.tps.info('Template settings: %n', this.templateSettings);
