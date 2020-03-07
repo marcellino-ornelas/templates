@@ -1,6 +1,8 @@
 import is from 'is';
 import logger from '@tps/utilities/logger';
 
+const noop = arg => arg;
+
 export default class Prompt {
   constructor(prompt = {}) {
     logger.prompt.info('Prompt %O', prompt);
@@ -37,8 +39,8 @@ export default class Prompt {
 
     this.default = prompt.default;
     this.choices = prompt.choices || [];
-    this.validate = prompt.validate;
-    this.filter = prompt.filter;
+    this.validate = prompt.validate || noop;
+    this.filter = prompt.filter || noop;
     this.transformer = prompt.transformer;
     this.when = prompt.when;
     this.pageSize = prompt.pageSize;
