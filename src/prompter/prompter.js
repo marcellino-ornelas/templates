@@ -2,7 +2,7 @@ import is from 'is';
 import inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
-import { PromptNoPromptFoundError } from '@tps/errors';
+import { PromptNoPromptFoundError, PromptInvalidAnswers } from '@tps/errors';
 import Prompt from './prompt';
 
 /**
@@ -61,11 +61,34 @@ export default class Prompter {
     });
   }
 
-  setAnswer(name, answer) {
+  _setAnswers(answers) {
+    if (is.object(answers) && is.empty(answers)) {
+      throw new PromptInvalidAnswers(answers);
+    }
+
+    this._getPromptsThatNeedAnswers().forEach(prompt => {
+      const answer = prompt.answerWith(answers);
+      if (is.defined(answer)) {
+        this._setAnswer(prompt.name, answer);
+      }
+    });
+  }
+
+  _setAnswer(name, answer) {
     if (!hasProp(this.answers, name)) {
       this.answered += 1;
     }
     this.answers[name] = answer;
+  }
+
+  setAnswer(name, answer) {
+    const prompt = this.getPrompt(name);
+
+    prompt.validate(answer, { ...this.answers });
+
+    const filteredAnswer = prompt.filter(answer);
+
+    this._setAnswer(name, filteredAnswer);
   }
 
   _getPromptsThatNeedAnswers() {
@@ -94,7 +117,7 @@ export default class Prompter {
           this.setAnswers(allDefaults);
         } else {
           return inquirer.prompt(promptsLeft).then(newAnswers => {
-            this.setAnswers(newAnswers);
+            this._setAnswers(newAnswers);
           });
         }
       })

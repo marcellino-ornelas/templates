@@ -22,8 +22,6 @@ describe('[Templates] Prompts Process:', () => {
   });
 
   it('should be able to use inquirers filter with setAnswers', () => {
-    console.dir(tps);
-
     tps.setAnswers({ test_filter: 'hey' });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
@@ -31,7 +29,7 @@ describe('[Templates] Prompts Process:', () => {
     return tps.render(playground.box(), 'app').then(() => {
       expect(playground.pathTo('app/index.js')).toBeFile();
       expect(playground.pathTo('app/index.js')).toHaveFileContents(
-        'Answer: hey__filtered'
+        'Answer: hey__filtered END'
       );
     });
   });

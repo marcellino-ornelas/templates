@@ -9,7 +9,6 @@ import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
   TemplateNotFoundError,
-  SettingsUnkownFileTypeError,
   RequiresTemplateError,
   PackageAlreadyCompiledError,
   DirectoryNotFoundError,
