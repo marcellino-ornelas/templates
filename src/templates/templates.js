@@ -301,10 +301,12 @@ export default class Templates {
 
               if (doesBuildPathExist) {
                 if (wipe) {
+                  loggerGroup.info('Wiping %s', realBuildPath);
                   return fs.remove(realBuildPath);
                 }
 
                 if (!force && !wipe) {
+                  loggerGroup.info('Checking for files in', realBuildPath);
                   return this._checkForFiles(realBuildPath, renderData);
                 }
               }

@@ -36,7 +36,7 @@ export function tpsCli(command, opts = {}) {
   if (process.env.DEBUG) {
     options.verbose = true;
   }
-  const debug = opts.verbose ? 'DEBUG=tps:* ' : '';
+  const debug = opts.verbose ? 'DEBUG=tps ' : '';
   return new Promise((resolve, reject) => {
     const fullCommand = `${debug}node ${cliPath} ${command}`.replace(
       /\s\s/g,
@@ -53,7 +53,8 @@ export function tpsCli(command, opts = {}) {
             cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr)
           );
           console.log(command);
-          expect(options.fail).toBeTruthy();
+          // TODO: when this fails no console logs get displayed
+          // expect(options.fail).toBeTruthy();
         }
 
         reject(stdout, err);

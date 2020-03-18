@@ -2,14 +2,18 @@
  * Modules
  */
 import Playground from '@test/utilities/playground';
+import path from 'path';
+import fs from 'fs-extra';
 import { TESTING_DIR } from '@test/utilities/constants';
 import {
   createTemplate,
   mockTemplateFileExistsError,
   checkFilesForTemplate,
-  checkFilesContentForTemplate
+  checkFilesContentForTemplate,
+  forEachBuilder
 } from '@test/support/cli';
 
+import { DirectoryNode } from '@tps/fileSystemTree';
 /*
  * Constants
  */
@@ -84,19 +88,60 @@ describe('[cli] Create:', () => {
   /**
    * @docs api/cli/commands/create.md#wipe-a-template
    */
-  it('should be able to use --wipe flag', () => {
-    mockTemplateFileExistsError(playground.box(), 'app', './index.js');
+  describe('wipe', () => {
+    it('should be able to override a file', () => {
+      mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
-    return createTemplate(playground.box(), 'testing', 'app', {
-      wipe: true
-    }).then(() => {
-      // we should check the file contents here
-      checkFilesContentForTemplate(
+      return createTemplate(playground.box(), 'testing', 'app', {
+        wipe: true
+      }).then(() => {
+        // we should check the file contents here
+        checkFilesContentForTemplate(
+          playground.box(),
+          'app',
+          './index.js',
+          "console.log('hey');"
+        );
+      });
+    });
+
+    /**
+     * This test was added because when using newFolder=false and using wipe and using a long build path.
+     * 
+     */
+    it.only("should not throw error when files doesn't exist when using newFolder=false", () => {
+      
+      forEachBuilder('my/personal/app', buildPath => {
+        expect(buildPath).not.toBeDirectory();
+        const parentBuildPath = path.dirname(buildPath);
+        const directoryToIndexFile = path.join(
+          playground.box(),
+          parentBuildPath
+        );
+        const indexFile = path.join(directoryToIndexFile, 'index.js');
+        fs.ensureDirSync(directoryToIndexFile);
+        fs.writeFileSync(indexFile, 'hey');
+        expect(indexFile).toBeFile();
+      });
+
+      return createTemplate(
         playground.box(),
-        'app',
-        './index.js',
-        "console.log('hey');"
-      );
+        'testing-clean-up-wipe',
+        'my/personal/app',
+        {
+          wipe: true,
+          verbose: true,
+          newFolder: false
+        }
+      ).then(() => {
+        // we should check the file contents here
+        checkFilesContentForTemplate(
+          playground.box(),
+          'my/personal/app',
+          './index.js',
+          'clean up worked'
+        );
+      });
     });
   });
 
