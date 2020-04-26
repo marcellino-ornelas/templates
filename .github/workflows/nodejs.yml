@@ -47,7 +47,7 @@ jobs:
     - name: ls
       run: ls
     - name: babel
-      run: npx babel -v
+      run: npx babel --version
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
