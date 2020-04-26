@@ -28,7 +28,6 @@ describe('[TPS][cli] new package', () => {
   it('should create a new package', () => {
     return tpsCli('new package test test-package', {
       cwd: playground.box(),
-      verbose: true
     }).then(() => {
       const testTemplatePackage = playground.pathTo('.tps/test/test-package');
       expect(testTemplatePackage).toBeDirectory();
