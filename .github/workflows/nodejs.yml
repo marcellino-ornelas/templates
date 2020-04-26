@@ -40,6 +40,8 @@ jobs:
       run: npm ci
       env:
         CI: true
+    - name: ENV
+      run: env
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
@@ -60,6 +62,6 @@ jobs:
       env:
         CI: true
     - name: Build Assests
-      run: npm run code:build --if-present
+      run: npm run code:build
     - name: Test Code
       run: npm run test:init
