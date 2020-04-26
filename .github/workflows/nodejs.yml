@@ -46,6 +46,8 @@ jobs:
       run: pwd
     - name: ls
       run: ls
+    - name: babel
+      run: babel -v
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
