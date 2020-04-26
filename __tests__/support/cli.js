@@ -46,8 +46,6 @@ export const newTemplate = (cwd, template) => {
   expect(testTemplateDefault).not.toBeDirectory();
 
   return tpsCli(`new template ${template}`, { cwd }).then(() => {
-    console.log(fs.readdirSync(testTemplatePath));
-    console.log(testTemplatePath);
     expect(testTemplateDefault).toBeDirectory();
     expect(`${testTemplatePath}/settings.json`).toBeFile();
     expect(gitKeepFile).not.toBeFile();
