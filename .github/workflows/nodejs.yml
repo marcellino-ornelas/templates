@@ -47,7 +47,7 @@ jobs:
     - name: ls
       run: ls
     - name: babel
-      run: babel -v
+      run: npx babel -v
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
@@ -68,6 +68,6 @@ jobs:
       env:
         CI: true
     - name: Build Assests
-      run: babel src --out-dir lib
+      run: npx babel src --out-dir lib
     - name: Test Code
       run: npm run test:init
