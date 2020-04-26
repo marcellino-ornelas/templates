@@ -7,7 +7,7 @@ const cliPath = path.join(MAIN_DIR, 'cli/index.js');
 
 const TPS_CLI_DEFAULT_OPTIONS = {
   verbose: false,
-  fail: false
+  fail: false,
 };
 
 /**
@@ -36,7 +36,7 @@ export function tpsCli(command, opts = {}) {
   if (process.env.DEBUG) {
     options.verbose = true;
   }
-  const debug = opts.verbose ? 'DEBUG=tps:* ' : '';
+  const debug = opts.verbose ? 'DEBUG=tps ' : '';
   return new Promise((resolve, reject) => {
     const fullCommand = `${debug}node ${cliPath} ${command}`.replace(
       /\s\s/g,

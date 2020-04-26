@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import is from 'is';
-import DirNode from '@tps/fileSystemTree';
+import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json, isFile } from '@tps/utilities/fileSystem';
@@ -14,7 +14,7 @@ import {
   PackageAlreadyCompiledError,
   DirectoryNotFoundError,
   FileExistError,
-  NoPromptsError
+  NoPromptsError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import colors from 'ansi-colors';
@@ -41,12 +41,14 @@ const DEFAULT_OPTIONS = {
   wipe: false,
   tpsPath: null,
   // new
-  extendedDest: ''
+  extendedDest: '',
 };
 
 if (TPS.IS_TESTING) {
   logger.tps.opts.disableLog = true;
 }
+
+FileSystemNode.ignoreFiles = '**/.gitkeep';
 
 /**
  * @class
@@ -78,7 +80,7 @@ export default class Templates {
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
           [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
-          [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH)
+          [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
         });
         throw new TemplateNotFoundError(templateName);
     }
@@ -86,7 +88,7 @@ export default class Templates {
     this.template = templateName;
     logger.tps.info('Template %n', {
       name: this.template,
-      location: this.src
+      location: this.src,
     });
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);
@@ -107,8 +109,8 @@ export default class Templates {
     logger.tps.info('Settings file location: %s', this.templateSettingsPath);
 
     try {
-      // eslint-disable-next-line
       logger.tps.info('Loading template settings file...');
+      // eslint-disable-next-line
       this.templateSettings = require(this.templateSettingsPath) || {};
     } catch (e) {
       logger.tps.info('Template has no Settings file');
@@ -118,10 +120,10 @@ export default class Templates {
 
     if (this.templateSettings.prompts) {
       logger.tps.info('Loading prompts... %o', {
-        defaultValues: this.opts.default
+        defaultValues: this.opts.default,
       });
       this._prompts = new Prompter(this.templateSettings.prompts, {
-        default: this.opts.default
+        default: this.opts.default,
       });
     } else {
       logger.tps.info('No prompts to load!', this.templateSettings);
@@ -152,7 +154,7 @@ export default class Templates {
       }
     }
 
-    packages.forEach(p => this.loadPackage(p));
+    packages.forEach((p) => this.loadPackage(p));
   }
 
   /**
@@ -244,7 +246,7 @@ export default class Templates {
     }
 
     // Create absolute paths
-    pathsToCreate = pathsToCreate.map(buildPath =>
+    pathsToCreate = pathsToCreate.map((buildPath) =>
       path.join(finalDest, buildPath)
     );
 
@@ -254,7 +256,7 @@ export default class Templates {
       .then(() => {
         if (!isDir(finalDest)) {
           logger.tps.error('final destination was not a directory %n', {
-            finalDest
+            finalDest,
           });
           throw new DirectoryNotFoundError(finalDest);
         }
@@ -267,11 +269,11 @@ export default class Templates {
           ...data,
           packages: this.packagesUsed,
           template: this.template,
-          answers: this.hasPrompts() ? this._prompts.answers : {}
+          answers: this.hasPrompts() ? this._prompts.answers : {},
         };
       })
       .then(() => {
-        const builders = pathsToCreate.map(buildPath => {
+        const builders = pathsToCreate.map((buildPath) => {
           const { name, dir } = path.parse(buildPath);
           const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
@@ -279,7 +281,7 @@ export default class Templates {
 
           const groupName = `render_${buildPath}`;
           const loggerGroup = logger.tps.group(groupName, {
-            clear: true
+            clear: true,
           });
 
           const marker = colors.magenta('*'.repeat(buildPath.length + 12));
@@ -292,7 +294,7 @@ export default class Templates {
             'Final Destination': realBuildPath,
             doesBuildPathExist,
             buildInDest,
-            buildNewFolder
+            buildNewFolder,
           });
 
           return Promise.resolve()
@@ -317,7 +319,7 @@ export default class Templates {
                   fs
                     // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
                     .ensureDir(realBuildPath)
-                    .catch(err => {
+                    .catch((err) => {
                       loggerGroup.warn(
                         'Building build path folder had a issue %n',
                         err
@@ -334,7 +336,7 @@ export default class Templates {
                 buildPath
               );
             })
-            .catch(err => {
+            .catch((err) => {
               loggerGroup.error('Build Path: %s %n', buildPath, err);
               this._scheduleCleanUpForBuild(
                 realBuildPath,
@@ -374,18 +376,18 @@ export default class Templates {
     logger.tps
       .group(`render_${buildPath}`)
       .info('Build Path schedule for cleaning %s %o', buildPath, {
-        didBuildPathExist
+        didBuildPathExist,
       });
     this.buildErrors.push({
       buildPath,
       error: err,
-      didBuildPathExist
+      didBuildPathExist,
     });
   }
 
   _cleanUpFailBuild(buildError, buildNewFolder) {
     logger.tps.info('Processing build cleanup %s %o', buildError, {
-      buildNewFolder
+      buildNewFolder,
     });
 
     let buildPath = buildError;
@@ -410,13 +412,13 @@ export default class Templates {
     }
 
     if (!dirsIsEmpty) {
-      const dirsThatMatch = dirs.filter(dir => dir.includes(buildPath));
+      const dirsThatMatch = dirs.filter((dir) => dir.includes(buildPath));
 
       if (!is.array.empty(dirsThatMatch)) {
         logger.tps.info('Cleaning directories %n', dirsThatMatch);
       }
 
-      dirsThatMatch.forEach(dir => {
+      dirsThatMatch.forEach((dir) => {
         try {
           fs.removeSync(dir);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
@@ -426,19 +428,19 @@ export default class Templates {
 
         // if directory is removed then we can remove all child files
         if (!filesIsEmpty) {
-          files = files.filter(file => !file.includes(dir));
+          files = files.filter((file) => !file.includes(dir));
         }
       });
     }
 
     if (!filesIsEmpty) {
-      const filesThatMatch = files.filter(file => file.includes(buildPath));
+      const filesThatMatch = files.filter((file) => file.includes(buildPath));
 
       if (!is.array.empty(filesThatMatch)) {
         logger.tps.info('Cleaning files %n', filesThatMatch);
       }
 
-      files.forEach(file => {
+      files.forEach((file) => {
         try {
           fs.removeSync(file);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
@@ -471,16 +473,16 @@ export default class Templates {
     const loggerGroup = logger.tps.group(`render_${buildPath}`);
     loggerGroup.info('Rendering files');
 
-    const files = this.compiledFiles.filter(file => !file.isDot);
-    const dotFiles = this.compiledFiles.filter(file => file.isDot);
-    const dotContents = dotFiles.map(file => {
+    const files = this.compiledFiles.filter((file) => !file.isDot);
+    const dotFiles = this.compiledFiles.filter((file) => file.isDot);
+    const dotContents = dotFiles.map((file) => {
       /**
        * Will throw error if something is wrong with doT
        */
       return [
         file,
         file._dest(buildPath, data),
-        file.fileDataTemplate(data, this._defs, buildPath)
+        file.fileDataTemplate(data, this._defs, buildPath),
       ];
     });
 
@@ -501,17 +503,17 @@ export default class Templates {
       filesInProgress.push(
         file
           .renderDotFile(finalDest, dotContentsForFile)
-          .catch(err => handleFileErrorCatch(finalDest, err))
+          .catch((err) => handleFileErrorCatch(finalDest, err))
       );
     });
 
-    files.forEach(file => {
+    files.forEach((file) => {
       const finalDest = file._dest(buildPath, data);
       loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
       filesInProgress.push(
         file
           .renderFile(finalDest)
-          .catch(err => handleFileErrorCatch(finalDest, err))
+          .catch((err) => handleFileErrorCatch(finalDest, err))
       );
     });
 
@@ -538,10 +540,10 @@ export default class Templates {
     const loggerGroup = logger.tps.group(`render_${buildPath}`);
     loggerGroup.info('Rendering directories in %s', buildPath);
 
-    this._getPackageArray().forEach(pkg => {
+    this._getPackageArray().forEach((pkg) => {
       const dirs = pkg.find({ type: 'dir' });
 
-      const dirsGettingCreated = Promise.each(dirs, dirNode => {
+      const dirsGettingCreated = Promise.each(dirs, (dirNode) => {
         /* skip if directory has already been made */
         if (hasProp(dirTracker, dirNode.path)) return;
         const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
@@ -564,7 +566,7 @@ export default class Templates {
               dirPathRelativeFromPkg
             );
           })
-          .catch(err => {
+          .catch((err) => {
             /* do nothing if dir already exist */
             loggerGroup.warn(
               `   - %s ${colors.red.italic('failed')} %n`,
@@ -596,7 +598,7 @@ export default class Templates {
     if (!is.array.empty(defFiles)) {
       logger.tps.log('Compiling def files %o', { force });
 
-      defFiles.forEach(fileNode => {
+      defFiles.forEach((fileNode) => {
         logger.tps.info(
           `  - %s ${colors.green.italic('compiled')}`,
           fileNode.name
@@ -612,7 +614,7 @@ export default class Templates {
 
     logger.tps.log('Compiling files');
 
-    pkg.find({ type: 'file', ext: { not: '.def' } }).forEach(fileNode => {
+    pkg.find({ type: 'file', ext: { not: '.def' } }).forEach((fileNode) => {
       const file = new File(fileNode, { force });
       logger.tps.info(
         `  - %s ${colors.green.italic('compiled')}`,
@@ -628,13 +630,13 @@ export default class Templates {
    * @returns {DirNode[]} - array of all the packages
    */
   _getPackageArray() {
-    return this.packagesUsed.map(pkgName => this.pkg(pkgName));
+    return this.packagesUsed.map((pkgName) => this.pkg(pkgName));
   }
 
   _answerRestOfPrompts() {
     return !this._prompts
       ? null
-      : this._prompts.getAnswers().then(answers => {
+      : this._prompts.getAnswers().then((answers) => {
           logger.tps.info('Answers from prompts %n', answers);
           eachObj(answers, (answer, answerName) => {
             if (this._prompts.getPrompt(answerName).isPkg()) {
