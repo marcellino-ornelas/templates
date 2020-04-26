@@ -37,7 +37,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Npm Install
-      run: npm ci
+      run: npm install
       env:
         CI: true
     - name: ENV
@@ -64,7 +64,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Npm Install
-      run: npm ci
+      run: npm install
       env:
         CI: true
     - name: Build Assests
