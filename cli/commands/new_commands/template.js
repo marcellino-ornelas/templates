@@ -1,8 +1,8 @@
+const path = require('path');
+const fs = require('fs-extra');
 const Template = require('../../../lib/templates');
 const TPS = require('../../../lib/utilities/constants');
 const { isDir } = require('../../../lib/utilities/fileSystem');
-const path = require('path');
-const fs = require('fs-extra');
 
 exports.command = 'template <template>';
 
@@ -10,9 +10,9 @@ exports.description = 'create a new template';
 
 exports.builder = {};
 
-exports.handler = function(argv) {
+exports.handler = (argv) => {
   const tps = new Template('new-template', {
-    tpsPath: TPS.MAIN_TPS
+    tpsPath: TPS.MAIN_TPS,
   });
 
   const dest = path.join(process.cwd(), TPS.TPS_FOLDER);
@@ -26,7 +26,7 @@ exports.handler = function(argv) {
     .then(() => {
       console.log(`Template created: ${argv.template}`);
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       process.exit(1);
     });

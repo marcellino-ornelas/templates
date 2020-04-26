@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
 import FileSystemNode from './fileSystemNode';
@@ -21,7 +22,7 @@ export class DirectoryNode extends FileSystemNode {
   toObject() {
     const obj = super.toObject();
 
-    obj.children = this.children.map(fileNode => {
+    obj.children = this.children.map((fileNode) => {
       return fileNode.toObject();
     });
 
@@ -37,17 +38,21 @@ export class DirectoryNode extends FileSystemNode {
       throw new Error(`[TPS ERROR] Path is not a directory (${this.path})`);
     }
 
-    dirContents.forEach(name => {
-      const dirContentPath = path.join(this.path, name);
-      const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;
-      const newFSNode = new ContentType(name, this, this.verbose);
+    dirContents
+      .filter(
+        (...args) => !minimatch.filter(FileSystemNode.ignoreFiles)(...args)
+      )
+      .forEach((name) => {
+        const dirContentPath = path.join(this.path, name);
+        const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;
+        const newFSNode = new ContentType(name, this, this.verbose);
 
-      this.addChild(newFSNode);
-    });
+        this.addChild(newFSNode);
+      });
   }
 
   eachChild(cb) {
-    this.breathFirstEach(fsNode => {
+    this.breathFirstEach((fsNode) => {
       if (this !== fsNode) {
         cb(fsNode);
       }
@@ -56,7 +61,7 @@ export class DirectoryNode extends FileSystemNode {
 
   selectChildren(cb) {
     const found = [];
-    this.eachChild(fsNode => {
+    this.eachChild((fsNode) => {
       if (cb(fsNode)) {
         found.push(fsNode);
       }
@@ -65,7 +70,7 @@ export class DirectoryNode extends FileSystemNode {
   }
 
   find(selectBy = {}) {
-    return this.selectChildren(fsNode => {
+    return this.selectChildren((fsNode) => {
       // console.log(fsNode.path);
       return couldMatchObj(selectBy, fsNode);
     });

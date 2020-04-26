@@ -4,6 +4,8 @@ import Stack from '../data-structures/stack';
 import Tree from '../data-structures/tree';
 
 export class FileSystemNode extends Tree {
+  static ignoreFiles = '';
+
   constructor(name, type, parentDirectory, verbose) {
     super();
 
@@ -35,7 +37,7 @@ export class FileSystemNode extends Tree {
     return {
       name: this.name,
       type: this.type,
-      path: this.path
+      path: this.path,
     };
   }
 
@@ -44,7 +46,7 @@ export class FileSystemNode extends Tree {
   }
 
   get(name) {
-    return this.children.find(tree => tree.name === name);
+    return this.children.find((tree) => tree.name === name);
   }
 
   addChild(value) {
@@ -85,9 +87,9 @@ export class FileSystemNode extends Tree {
   }
 
   logTree(names = []) {
-    this.depthFirstEach(tree => {
+    this.depthFirstEach((tree) => {
       console.log(`${'  '.repeat(tree.depth * 2)}${tree.name}: `);
-      names.forEach(name => {
+      names.forEach((name) => {
         console.log(
           `${'  '.repeat(tree.depth * 3)} -> ${name}: ${tree[name]} `
         );
