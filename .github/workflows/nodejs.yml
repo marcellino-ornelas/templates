@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 10.x]
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
@@ -37,9 +37,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Npm Install
-      run: npm ci
-      env:
-        CI: true
+      run: npm install
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
@@ -48,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [12.x, 10.x]
     steps:
     - uses: actions/checkout@v1
     - name: Use Node.js ${{ matrix.node-version }}
@@ -56,7 +54,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Npm Install
-      run: npm ci
+      run: npm install
       env:
         CI: true
     - name: Build Assests
