@@ -68,4 +68,4 @@ Have you ever built a express app before? or react component? If so, you know wh
 
 [Next: Templates](./templates.md)
 
-[Back](./prerequisites.md)
+[Back](../prerequisites.md)

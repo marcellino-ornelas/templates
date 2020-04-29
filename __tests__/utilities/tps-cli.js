@@ -7,7 +7,7 @@ const cliPath = path.join(MAIN_DIR, 'cli/index.js');
 
 const TPS_CLI_DEFAULT_OPTIONS = {
   verbose: false,
-  fail: false
+  fail: false,
 };
 
 /**

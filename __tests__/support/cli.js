@@ -22,7 +22,7 @@ export const init = (cwd, flags = {}, opts = {}) => {
     ? 'tps globally initialized'
     : 'Repo initialized';
 
-  return tpsCli(`init ${flagString}`, { cwd, ...opts }).then(stdout => {
+  return tpsCli(`init ${flagString}`, { cwd, ...opts }).then((stdout) => {
     expect(stdout).toContain(message);
 
     if (flags.global) {
@@ -39,14 +39,16 @@ export const init = (cwd, flags = {}, opts = {}) => {
  * @command new
  */
 export const newTemplate = (cwd, template) => {
-  const testTemplatePath = path.join(cwd, '.tps/test');
+  const testTemplatePath = path.join(cwd, `.tps/${template}`);
   const testTemplateDefault = path.join(testTemplatePath, 'default');
+  const gitKeepFile = path.join(testTemplateDefault, '.gitkeep');
 
   expect(testTemplateDefault).not.toBeDirectory();
 
   return tpsCli(`new template ${template}`, { cwd }).then(() => {
     expect(testTemplateDefault).toBeDirectory();
     expect(`${testTemplatePath}/settings.json`).toBeFile();
+    expect(gitKeepFile).not.toBeFile();
   });
 };
 
@@ -57,8 +59,8 @@ const templateSpecs = {
     './db/db.js',
     './server',
     './storeUtils',
-    './storeUtils/user.js'
-  ]
+    './storeUtils/user.js',
+  ],
 };
 
 /**
@@ -74,7 +76,7 @@ const templateSpecs = {
  * @param {string | string[]} buildersUnsafe - builder you are going to create
  * @returns {string[]} - array of builders
  */
-const cleanBuilders = buildersUnsafe => {
+const cleanBuilders = (buildersUnsafe) => {
   if (is.string(buildersUnsafe)) {
     return [buildersUnsafe];
   }
@@ -93,8 +95,10 @@ const cleanBuilders = buildersUnsafe => {
  * @param {string[]} - builders
  * @returns {string[]} - array of builders with `-create` appended to the end of it
  */
-const makeCreateBuilders = builders => {
-  return !is.array(builders) ? null : builders.map(build => `${build}-create`);
+const makeCreateBuilders = (builders) => {
+  return !is.array(builders)
+    ? null
+    : builders.map((build) => `${build}-create`);
 };
 
 /**
@@ -103,7 +107,7 @@ const makeCreateBuilders = builders => {
  * @param {string[]} - builders
  * @returns {string} - string of all builders
  */
-const makeBuildersString = builders => {
+const makeBuildersString = (builders) => {
   return !is.array(builders) ? '' : builders.join(' ');
 };
 
@@ -145,11 +149,11 @@ export const mockTemplateFileExistsError = (
   }
 
   const createBuilders = makeCreateBuilders(builders);
-  const allBuilders = [...builders, ...createBuilders].map(builder =>
+  const allBuilders = [...builders, ...createBuilders].map((builder) =>
     path.join(cwd, builder, file)
   );
 
-  return allBuilders.forEach(buldPath => {
+  return allBuilders.forEach((buldPath) => {
     fs.outputFileSync(buldPath, contents);
     expect(buldPath).toBeFile();
   });
@@ -175,8 +179,8 @@ export const checkFilesForTemplate = (
   expect(allBuilders).toHaveLength(builders.length * 2);
 
   allBuilders
-    .map(builder => path.join(cwd, builder))
-    .forEach(buildPath => {
+    .map((builder) => path.join(cwd, builder))
+    .forEach((buildPath) => {
       let pathToCheckForTemplateCreated = buildPath;
       if (flags && flags.newFolder === false) {
         /**
@@ -215,8 +219,8 @@ export const checkFilesContentForTemplate = (
   expect(allBuilders).toHaveLength(builders.length * 2);
 
   allBuilders
-    .map(builder => path.join(cwd, builder, file))
-    .forEach(builtFile => {
+    .map((builder) => path.join(cwd, builder, file))
+    .forEach((builtFile) => {
       expect(builtFile).toHaveFileContents(content);
     });
 };
@@ -246,8 +250,8 @@ export const createTemplate = (
     /* use */
     tpsCli(`${template} ${useFlags} ${builderString}`, {
       ...opts,
-      cwd
-    })
+      cwd,
+    }),
   ];
 
   if (hasBuilders) {
@@ -260,7 +264,7 @@ export const createTemplate = (
       /* create */
       tpsCli(`create ${createFlags} ${createBuildersString}`, {
         ...opts,
-        cwd
+        cwd,
       })
     );
   }

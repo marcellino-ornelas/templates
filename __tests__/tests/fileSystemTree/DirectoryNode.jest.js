@@ -3,7 +3,7 @@
  */
 import path from 'path';
 import fs from 'fs';
-import { DirNode, FileNode } from '@tps/fileSystemTree';
+import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
 /*
@@ -41,7 +41,7 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 
     const dirs = mainDir.find({ type: 'dir' });
     expect(dirs).toHaveLength(2);
-    expect(dirs.map(f => f.name)).toEqual(
+    expect(dirs.map((f) => f.name)).toEqual(
       expect.arrayContaining(['server', 'db'])
     );
   });
@@ -51,5 +51,13 @@ describe('[FileSystemTree] DirectoryNode:', () => {
     const dbFile = mainDir.find({ name: fileName })[0];
     expect(dbFile.name).toEqual(fileName);
     expect(dbFile.pathFromRoot).toEqual('db/db.js');
+  });
+
+  it('should exclude files that match ignore files', () => {
+    const filename = 'extras2.js';
+    FileSystemNode.ignoreFiles = `**/${filename}.js`;
+    mainDir = new DirNode('main', PATH_TO_TEMPLATES);
+    const files = mainDir.find({ name: filename });
+    expect(files).toHaveLength(0);
   });
 });
