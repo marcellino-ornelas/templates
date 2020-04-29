@@ -38,16 +38,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Npm Install
       run: npm install
-      env:
-        CI: true
-    - name: ENV
-      run: env
-    - name: pwd
-      run: pwd
-    - name: ls
-      run: ls
-    - name: babel
-      run: npx babel --version
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
@@ -68,6 +58,6 @@ jobs:
       env:
         CI: true
     - name: Build Assests
-      run: npx babel src --out-dir lib
+      run: npm run code:build --if-present
     - name: Test Code
       run: npm run test:init
