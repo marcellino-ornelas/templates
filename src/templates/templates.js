@@ -558,7 +558,7 @@ export default class Templates {
       filesInProgress.push(
         file
           .renderDotFile(finalDest, dotContentsForFile)
-          .catch((err) => handleFileErrorCatch(finalDest, 'dot file' err))
+          .catch((err) => handleFileErrorCatch(finalDest, 'dot file', err))
       );
     });
 
