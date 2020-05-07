@@ -77,12 +77,24 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
-  it.only('should be able to render a local template with long build path with no new folder', () => {
+  it('should be able to render a local template with short build path with no new folder', () => {
     const tps = new Templates('testing', {
       newFolder: false,
     });
 
-    const destPath = playground.pathTo('hey/app');
+    const destPath = playground.box();
+
+    return tps.render(destPath, 'app').then(() => {
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+    });
+  });
+
+  it('should be able to render a local template with long build path with no new folder', () => {
+    const tps = new Templates('testing', {
+      newFolder: false,
+    });
+
+    const destPath = playground.pathTo('hey');
 
     return tps.render(playground.box(), 'hey/app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);

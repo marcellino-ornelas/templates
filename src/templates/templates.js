@@ -275,6 +275,53 @@ export default class Templates {
       .then(() => {
         const builders = pathsToCreate.map((buildPath) => {
           const { name, dir } = path.parse(buildPath);
+          /**
+           * @example
+           *  if
+           *    cwd: '/User/home/app'
+           *    build path: 'test' // short build path
+           *    new folder: true
+           *  then
+           *    realBuildPath: '/User/home/app/test'
+           *    - A new directory named `test` needs to be created
+           *
+           * @example
+           *  if
+           *    cwd: '/User/home/app'
+           *    build path: 'test/test2' // long build path
+           *    new folder: true
+           *  then
+           *    realBuildPath: '/User/home/app/test/test2'
+           *    - A new directory named `test` needs to be created if doesn't exist already, `test2` should be created regardless
+           *
+           * @example
+           *  if
+           *    cwd: '/User/home/app'
+           *    build path: '' // build in dest
+           *    new folder: true??
+           *  then
+           *    realBuildPath: '/User/home/app'
+           *    - this directory should not be created or overridden since it should exist.
+           *
+           * @example
+           *  if
+           *    cwd: '/User/home/app'
+           *    build path: 'test' // short build path
+           *    new folder: false
+           *  then
+           *    realBuildPath: '/User/home/app'
+           *    - this directory should not be created or overridden since it should exist.
+           *
+           * @example
+           *  if
+           *    cwd: '/User/home/app'
+           *    build path: 'test/test2' // short build path
+           *    new folder: false
+           *  then
+           *    realBuildPath: '/User/home/app'
+           *    - A directory named `test` needs to be created if not already exists
+           *
+           */
           const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
           const doesBuildPathExist = isDir(realBuildPath);
@@ -303,18 +350,22 @@ export default class Templates {
 
               if (doesBuildPathExist) {
                 if (wipe) {
+                  loggerGroup.info('Wiping destination %s', realBuildPath);
                   return fs.remove(realBuildPath);
                 }
 
                 if (!force && !wipe) {
+                  loggerGroup.info('Checking see if there are duplicate files');
                   return this._checkForFiles(realBuildPath, renderData);
                 }
+              } else {
+                loggerGroup.info('Build path does not exist continuing on...');
               }
             })
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
-              if (!buildInDest && buildNewFolder) {
+              if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
                 return (
                   fs
                     // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
@@ -490,8 +541,12 @@ export default class Templates {
     let hasErroredOut = false;
     let error;
 
-    const handleFileErrorCatch = (dest, err) => {
-      loggerGroup.error('Error happened when rendering %s %n', dest, err);
+    const handleFileErrorCatch = (dest, type, err) => {
+      loggerGroup.error(
+        `Error happened when rendering a ${type} %s %n`,
+        dest,
+        err
+      );
       if (!hasErroredOut) {
         hasErroredOut = true;
         error = err;
@@ -503,7 +558,7 @@ export default class Templates {
       filesInProgress.push(
         file
           .renderDotFile(finalDest, dotContentsForFile)
-          .catch((err) => handleFileErrorCatch(finalDest, err))
+          .catch((err) => handleFileErrorCatch(finalDest, 'dot file' err))
       );
     });
 
@@ -513,7 +568,7 @@ export default class Templates {
       filesInProgress.push(
         file
           .renderFile(finalDest)
-          .catch((err) => handleFileErrorCatch(finalDest, err))
+          .catch((err) => handleFileErrorCatch(finalDest, 'file', err))
       );
     });
 

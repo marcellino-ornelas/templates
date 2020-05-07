@@ -63,10 +63,6 @@ class File {
       .then(() => fs.writeFile(dest, fileData, { flags: 'w' }))
       .then(() => Promise.resolve(dest))
       .catch((error) => {
-        logger.tps.error('Error while rendering dot file %s', dest);
-        // console.log('Error in dot config');
-        // console.log('dest', dest);
-
         return Promise.reject(error);
       });
   }
