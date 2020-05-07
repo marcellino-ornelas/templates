@@ -6,7 +6,7 @@ import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/utilities/constants';
 import {
   TemplateNotFoundError,
   DirectoryNotFoundError,
-  RequiresTemplateError
+  RequiresTemplateError,
 } from '@tps/errors';
 
 /**
@@ -68,10 +68,34 @@ describe('[Templates] Render Process:', () => {
     return Promise.all(all);
   });
 
-  it('should be able to render a local template with nested directories', () => {
+  it('should be able to render a local template with long build path', () => {
     const tps = new Templates('testing');
 
     const destPath = playground.pathTo('hey/app');
+
+    return tps.render(playground.box(), 'hey/app').then(() => {
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+    });
+  });
+
+  it('should be able to render a local template with short build path with no new folder', () => {
+    const tps = new Templates('testing', {
+      newFolder: false,
+    });
+
+    const destPath = playground.box();
+
+    return tps.render(destPath, 'app').then(() => {
+      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+    });
+  });
+
+  it('should be able to render a local template with long build path with no new folder', () => {
+    const tps = new Templates('testing', {
+      newFolder: false,
+    });
+
+    const destPath = playground.pathTo('hey');
 
     return tps.render(playground.box(), 'hey/app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
@@ -84,7 +108,7 @@ describe('[Templates] Render Process:', () => {
     const buildPaths = ['app', 'Box', 'New'];
 
     return tps.render(playground.box(), buildPaths).then(() => {
-      buildPaths.forEach(buildPath => {
+      buildPaths.forEach((buildPath) => {
         const destPath = playground.pathTo(buildPath);
         expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       });
@@ -267,7 +291,7 @@ describe('[Templates] Render Process:', () => {
       expect(destPath).toHaveAllFilesAndDirectories([
         ...TESTING_PACKAGE_FILES,
         'extras.js',
-        'extras2.js'
+        'extras2.js',
       ]);
     });
   });

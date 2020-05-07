@@ -2,6 +2,7 @@ import dot from '@tps/dot';
 import path from 'path';
 import fs from 'fs-extra';
 import DotError from '@tps/errors/dot-error';
+import logger from '@tps/utilities/logger';
 
 /*
  * File
@@ -30,7 +31,7 @@ class File {
       const realData = {
         ...data,
         file: this.fileName(data),
-        dest: this._dest(dest, data)
+        dest: this._dest(dest, data),
       };
       try {
         return this.isDot
@@ -55,16 +56,13 @@ class File {
   renderDotFile(dest, fileData) {
     return Promise.resolve()
       .then(() => this.opts.force && fs.remove(dest))
-      .catch(e => {
+      .catch((e) => {
         console.log('this should be force', e);
       })
       .then(() => {})
       .then(() => fs.writeFile(dest, fileData, { flags: 'w' }))
       .then(() => Promise.resolve(dest))
-      .catch(error => {
-        console.log('Error in dot config');
-        console.log('dest', dest);
-
+      .catch((error) => {
         return Promise.reject(error);
       });
   }
@@ -75,17 +73,17 @@ class File {
       .then(() => {
         return new Promise((resolve, reject) => {
           const srcFile = fs.createReadStream(this.src, {
-            flags: 'r'
+            flags: 'r',
           });
 
-          srcFile.on('error', error => {
+          srcFile.on('error', (error) => {
             console.log('Read Stream error', error);
             reject(error);
           });
 
           const destFile = fs.createWriteStream(dest, { flags: 'wx' });
 
-          destFile.on('error', err => {
+          destFile.on('error', (err) => {
             console.log('dest', dest);
             console.log('write stream error', err);
             reject(err);
