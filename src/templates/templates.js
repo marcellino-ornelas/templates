@@ -368,6 +368,7 @@ export default class Templates {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
               if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
+                loggerGroup.info('Creating real build path %s', realBuildPath);
                 return (
                   fs
                     // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0

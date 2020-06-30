@@ -6,6 +6,7 @@ import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import fs from 'fs-extra';
 import Templates from '@test/templates';
 import path from 'path';
+import logger from '@tps/utilities/logger';
 // import errors from '@tps/errors';
 
 /*
@@ -54,7 +55,7 @@ describe('[TPS] Render with Wipe:', () => {
      * {cwd}/
      *    |- dest/
      *       | - random-file.js
-     *       | - app/
+     *       | - app/ <-- app will get wiped
      *           | - random-file-2.js
      *           | - index.js
      */
@@ -83,7 +84,7 @@ describe('[TPS] Render with Wipe:', () => {
   /**
    * @docs api/cli/commands/use.md#when-using-no-build-path
    */
-  it('should be able to render a template with wipe when there is no buildPath', () => {
+  it.only('should be able to render a template with wipe when there is no buildPath', () => {
     /**
      * directory structure before:
      *
@@ -93,6 +94,7 @@ describe('[TPS] Render with Wipe:', () => {
      *        | - some-random-file.js
      *
      */
+    logger.tps.enable();
     const cwd = playground.pathTo('app');
     const randomDest = path.join(cwd, 'some-random-file.js');
     const randomFileNotInBuildPath = playground.pathTo(
@@ -105,7 +107,7 @@ describe('[TPS] Render with Wipe:', () => {
     fs.outputFileSync(randomFileNotInBuildPath);
 
     return tps.render(cwd, '').then(() => {
-      expect(randomDest).toBeFile();
+      expect(randomDest).not.toBeFile();
       expect(cwd).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       expect(randomFileNotInBuildPath).toBeFile();
     });
