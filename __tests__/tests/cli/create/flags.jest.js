@@ -10,7 +10,7 @@ import {
   mockTemplateFileExistsError,
   checkFilesForTemplate,
   checkFilesContentForTemplate,
-  forEachBuilder
+  forEachBuilder,
 } from '@test/support/cli';
 
 import { DirectoryNode } from '@tps/fileSystemTree';
@@ -40,7 +40,7 @@ describe('[cli] Create:', () => {
       .rejects.toContain('FileExistError')
       .then(() => {
         return createTemplate(playground.box(), 'testing', 'app', {
-          force: true
+          force: true,
         });
       })
       .then(() => {
@@ -62,11 +62,11 @@ describe('[cli] Create:', () => {
    */
   it('should be able to use -p flag to all additional packages', () => {
     return createTemplate(playground.box(), 'testing', 'app', {
-      packages: ['extras', 'extras2']
+      packages: ['extras', 'extras2'],
     }).then(() => {
       checkFilesForTemplate(playground.box(), 'app', [
         './extras2.js',
-        './extras.js'
+        './extras.js',
       ]);
     });
   });
@@ -93,7 +93,7 @@ describe('[cli] Create:', () => {
       mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
       return createTemplate(playground.box(), 'testing', 'app', {
-        wipe: true
+        wipe: true,
       }).then(() => {
         // we should check the file contents here
         checkFilesContentForTemplate(
@@ -107,11 +107,11 @@ describe('[cli] Create:', () => {
 
     /**
      * This test was added because when using newFolder=false and using wipe and using a long build path.
-     * 
+     *
      */
-    it.only("should not throw error when files doesn't exist when using newFolder=false", () => {
-      
-      forEachBuilder('my/personal/app', buildPath => {
+    it("should not throw error when files doesn't exist when using newFolder=false", () => {
+      forEachBuilder('my/personal/app', (buildPath) => {
+        console.log('build path', buildPath);
         expect(buildPath).not.toBeDirectory();
         const parentBuildPath = path.dirname(buildPath);
         const directoryToIndexFile = path.join(
@@ -126,12 +126,12 @@ describe('[cli] Create:', () => {
 
       return createTemplate(
         playground.box(),
-        'testing-clean-up-wipe',
+        'testing-basic',
         'my/personal/app',
         {
           wipe: true,
           verbose: true,
-          newFolder: false
+          newFolder: false,
         }
       ).then(() => {
         // we should check the file contents here
@@ -150,7 +150,7 @@ describe('[cli] Create:', () => {
    */
   describe('should be able to use --no-newFolder flag', () => {
     const flags = {
-      newFolder: false
+      newFolder: false,
     };
 
     it('with one buildPath', () => {

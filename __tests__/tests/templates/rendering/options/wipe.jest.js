@@ -18,9 +18,10 @@ describe('[TPS] Render with Wipe:', () => {
   beforeAll(() => playground.create());
   afterAll(() => playground.destroy());
 
-  beforeEach(() => playground.createBox('_'));
+  beforeEach(() => playground.createBox('rendering_wipe'));
 
   it('should be able to render a template with wipe.', () => {
+    // logger.tps.enable();
     /**
      * directory structure before:
      *
@@ -28,9 +29,17 @@ describe('[TPS] Render with Wipe:', () => {
      *    | - app/
      *        | - some-random-file.js
      *        | - index.js
+     *
+     * directory structure after:
+     *
+     * {cwd}/
+     *    | - app/
+     *        | - index.js
+     *        | - <rest of templates files...>
      */
     const destPath = playground.pathTo('app');
     const randomDest = playground.pathTo('app/some-random-file.js');
+    // this index file comes from the template. old one gets deleted from wipe
     const indexFile = playground.pathTo('app/index.js');
 
     const tps = new Templates('testing', { wipe: true });
@@ -84,7 +93,7 @@ describe('[TPS] Render with Wipe:', () => {
   /**
    * @docs api/cli/commands/use.md#when-using-no-build-path
    */
-  it.only('should be able to render a template with wipe when there is no buildPath', () => {
+  it('should be able to render a template with wipe when there is no buildPath', () => {
     /**
      * directory structure before:
      *
@@ -93,8 +102,16 @@ describe('[TPS] Render with Wipe:', () => {
      *    | - app/ <--- this will be the acting CWD for tps
      *        | - some-random-file.js
      *
+     *  directory structure after:
+     *
+     * {cwd}/
+     *    | - /should-not-be-deleted.js
+     *    | - app/ <--- this will be the acting CWD for tps
+     *        | - some-random-file.js <-- should not be deleted
+     *        | - <templates files...>
      */
-    logger.tps.enable();
+
+    const wipeMock = jest.fn(() => {});
     const cwd = playground.pathTo('app');
     const randomDest = path.join(cwd, 'some-random-file.js');
     const randomFileNotInBuildPath = playground.pathTo(
@@ -103,11 +120,15 @@ describe('[TPS] Render with Wipe:', () => {
 
     const tps = new Templates('testing', { wipe: true });
 
+    // eslint-disable-next-line no-underscore-dangle
+    tps._wipe = wipeMock;
+
     fs.outputFileSync(randomDest, 'blah');
     fs.outputFileSync(randomFileNotInBuildPath);
 
     return tps.render(cwd, '').then(() => {
-      expect(randomDest).not.toBeFile();
+      expect(wipeMock).not.toHaveBeenCalled();
+      expect(randomDest).toBeFile();
       expect(cwd).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
       expect(randomFileNotInBuildPath).toBeFile();
     });
@@ -118,8 +139,14 @@ describe('[TPS] Render with Wipe:', () => {
      * directory structure before:
      *
      * {cwd}/
-     *    | - app/
-     *        | - some-random-file.js
+     *    | - some-random-file.js
+     *
+     *
+     * directory structure after:
+     *
+     * {cwd}/
+     *    | - some-random-file.js
+     *    | - <templates files...>
      */
     const destPath = playground.pathTo('app');
     const randomDest = playground.pathTo('app/some-random-file.js');
@@ -132,8 +159,46 @@ describe('[TPS] Render with Wipe:', () => {
     fs.outputFileSync(randomDest, 'blah');
 
     return tps.render(playground.box(), 'app').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-      expect(randomDest).not.toBeFile();
+      expect(destPath).toHaveAllFilesAndDirectories(['index.js', 'app.js']);
+      expect(randomDest).toBeFile();
+    });
+  });
+
+  /**
+   * This test was added because when using newFolder=false and using wipe and using a long build path.
+   *
+   */
+  it('should new', () => {
+    /**
+     * directory structure before:
+     *
+     * {cwd}/
+     *    | - some-random-file.js
+     *
+     *
+     * directory structure after:
+     *
+     * {cwd}/
+     *    | - some-random-file.js
+     *    | - <templates files...>
+     */
+    const destPath = playground.pathTo('my/personal/app');
+    const indexFileInDest = playground.pathTo('my/personal/app/index.js');
+    const indexFileInParentPath = playground.pathTo('my/personal/index.js');
+
+    fs.outputFileSync(indexFileInParentPath, 'blah');
+
+    expect(destPath).not.toBeDirectory();
+    expect(indexFileInParentPath).toBeFile();
+
+    const tps = new Templates('testing-basic', {
+      wipe: true,
+      newFolder: false,
+    });
+
+    return tps.render(playground.box(), 'my/personal/app').then(() => {
+      expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
+      expect(indexFileInDest).toHaveFileContents('clean up worked');
     });
   });
 

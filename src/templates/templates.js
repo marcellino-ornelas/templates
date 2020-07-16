@@ -223,7 +223,6 @@ export default class Templates {
     let pathsToCreate = buildPaths;
     const { name: globalName } = data;
     let finalDest = dest;
-    const buildNewFolder = this.opts.newFolder;
 
     if (!buildPaths) {
       buildInDest = true;
@@ -232,6 +231,12 @@ export default class Templates {
       pathsToCreate = [buildPaths];
     }
 
+    // if (!this.opts.newFolder) {
+    //   buildInDest = true;
+    // }
+
+    // if were building in the destination. then we aren't creating any new folders
+    const buildNewFolder = buildInDest ? false : this.opts.newFolder;
     logger.tps.info('Build paths: %n', pathsToCreate);
 
     if (is.array.empty(buildPaths)) {
@@ -324,7 +329,7 @@ export default class Templates {
            */
           const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
-          const doesBuildPathExist = isDir(realBuildPath);
+          let doesBuildPathExist = isDir(realBuildPath);
 
           const groupName = `render_${buildPath}`;
           const loggerGroup = logger.tps.group(groupName, {
@@ -349,9 +354,10 @@ export default class Templates {
               const { wipe, force } = this.opts;
 
               if (doesBuildPathExist) {
-                if (wipe) {
+                if (wipe && !buildInDest) {
                   loggerGroup.info('Wiping destination %s', realBuildPath);
-                  return fs.remove(realBuildPath);
+                  doesBuildPathExist = false;
+                  return this._wipe(realBuildPath);
                 }
 
                 if (!force && !wipe) {
@@ -361,7 +367,7 @@ export default class Templates {
                   return this._checkForFiles(realBuildPath, renderData);
                 }
               } else {
-                loggerGroup.info('Build path does not exist continuing on...');
+                loggerGroup.info('Build path does not exist...');
               }
             })
             .then(() => {
@@ -381,6 +387,11 @@ export default class Templates {
                     })
                 );
               }
+
+              loggerGroup.info(
+                'Not creating real build path %s',
+                realBuildPath
+              );
             })
             .then(() => this._renderAllDirectories(realBuildPath))
             .then(() => this._renderAllFiles(realBuildPath, renderData))
@@ -424,6 +435,10 @@ export default class Templates {
           return Promise.reject(errors.length === 1 ? errors[0] : errors);
         });
       });
+  }
+
+  _wipe(realBuildPath) {
+    return fs.remove(realBuildPath);
   }
 
   _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
