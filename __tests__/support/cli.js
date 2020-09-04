@@ -113,23 +113,6 @@ const makeBuildersString = (builders) => {
 
 export const DEFAULT_FILE_CONTENT = 'TPS_FILE_CONTENTS_MOCK';
 
-export const forEachBuilder = (buildersUnsafe, cb) => {
-  const builders = cleanBuilders(buildersUnsafe);
-
-  const hasBuilders = is.array(builders);
-
-  let realBuilders;
-
-  if (!hasBuilders) {
-    realBuilders = [cwd];
-  } else {
-    const createBuilders = makeCreateBuilders(builders);
-    realBuilders = [...builders, ...createBuilders];
-  }
-
-  return realBuilders.forEach(buildPath => cb(buildPath));
-};
-
 export const mockTemplateFileExistsError = (
   cwd,
   buildersUnsafe = null,

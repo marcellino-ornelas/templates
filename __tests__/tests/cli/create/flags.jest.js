@@ -2,18 +2,13 @@
  * Modules
  */
 import Playground from '@test/utilities/playground';
-import path from 'path';
-import fs from 'fs-extra';
 import { TESTING_DIR } from '@test/utilities/constants';
 import {
   createTemplate,
   mockTemplateFileExistsError,
   checkFilesForTemplate,
   checkFilesContentForTemplate,
-  forEachBuilder,
 } from '@test/support/cli';
-
-import { DirectoryNode } from '@tps/fileSystemTree';
 /*
  * Constants
  */
@@ -104,45 +99,6 @@ describe('[cli] Create:', () => {
         );
       });
     });
-
-    /**
-     * This test was added because when using newFolder=false and using wipe and using a long build path.
-     *
-     */
-    // it("should not throw error when files doesn't exist when using newFolder=false", () => {
-    //   forEachBuilder('my/personal/app', (buildPath) => {
-    //     console.log('build path', buildPath);
-    //     expect(buildPath).not.toBeDirectory();
-    //     const parentBuildPath = path.dirname(buildPath);
-    //     const directoryToIndexFile = path.join(
-    //       playground.box(),
-    //       parentBuildPath
-    //     );
-    //     const indexFile = path.join(directoryToIndexFile, 'index.js');
-    //     fs.ensureDirSync(directoryToIndexFile);
-    //     fs.writeFileSync(indexFile, 'hey');
-    //     expect(indexFile).toBeFile();
-    //   });
-
-    //   return createTemplate(
-    //     playground.box(),
-    //     'testing-basic',
-    //     'my/personal/app',
-    //     {
-    //       wipe: true,
-    //       verbose: true,
-    //       newFolder: false,
-    //     }
-    //   ).then(() => {
-    //     // we should check the file contents here
-    //     checkFilesContentForTemplate(
-    //       playground.box(),
-    //       'my/personal/app',
-    //       './index.js',
-    //       'clean up worked'
-    //     );
-    //   });
-    // });
   });
 
   /**
