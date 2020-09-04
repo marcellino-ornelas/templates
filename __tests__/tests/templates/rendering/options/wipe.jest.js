@@ -134,7 +134,7 @@ describe('[TPS] Render with Wipe:', () => {
     });
   });
 
-  it('should be able to render a template with wipe and no new folder', () => {
+  it('should be able to use wipe=true and newFolder=false', () => {
     /**
      * directory structure before:
      *
@@ -174,8 +174,7 @@ describe('[TPS] Render with Wipe:', () => {
    * This test was added because when using newFolder=false and using wipe and using a long build path.
    *
    */
-  it('should new', () => {
-    logger.tps.enable();
+  it('should be able to use wipe=true and newFolder=false with a long build path', () => {
     /**
      * directory structure before:
      *
