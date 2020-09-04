@@ -167,7 +167,7 @@ describe('[TPS] Render with Wipe:', () => {
         'app.js',
         'some-random-file.js',
       ]);
-      // expect(randomDest).toBeFile();
+      expect(randomDest).toBeFile();
       expect(indexFileInDest).toHaveFileContents('clean up worked');
     });
   });
@@ -183,12 +183,14 @@ describe('[TPS] Render with Wipe:', () => {
      * {cwd}/
      *    | - my/personal/
      *        | - index.js
+     *        | - some-random-file.js
      *
      *
      * directory structure after:
      *
      * {cwd}/
      *    | - my/personal/
+     *        | - some-random-file.js
      *        | - index.js // from template not old index
      *        | - app.js
      */
