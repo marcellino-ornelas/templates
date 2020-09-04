@@ -140,13 +140,15 @@ describe('[TPS] Render with Wipe:', () => {
      *
      * {cwd}/
      *    | - some-random-file.js
+     *    | - index.js
      *
      *
      * directory structure after:
      *
      * {cwd}/
      *    | - some-random-file.js
-     *    | - <templates files...>
+     *    | - index.js // from template
+     *    | - app.js // from template
      */
     const randomDest = playground.pathTo('some-random-file.js');
     const indexFileInDest = playground.pathTo('index.js');
@@ -191,12 +193,14 @@ describe('[TPS] Render with Wipe:', () => {
      *        | - app.js
      */
     const destPath = playground.pathTo('my/personal');
-    // const indexFileInDest = playground.pathTo('my/personal/app/index.js');
+    const randomDest = playground.pathTo('my/personal/some-random-file.js');
     const indexFileInParentPath = playground.pathTo('my/personal/index.js');
 
     fs.outputFileSync(indexFileInParentPath, 'blah');
+    fs.outputFileSync(randomDest, 'blah');
 
     expect(indexFileInParentPath).toBeFile();
+    expect(randomDest).toBeFile();
 
     const tps = new Templates('testing-clean-up-wipe', {
       wipe: true,
@@ -207,6 +211,7 @@ describe('[TPS] Render with Wipe:', () => {
       expect(destPath).toHaveAllFilesAndDirectories(['index.js', 'app.js']);
       expect(indexFileInParentPath).toHaveFileContents('clean up worked');
       expect(playground.pathTo('my/personal/app')).not.toBeDirectory();
+      expect(randomDest).toBeFile();
     });
   });
 
