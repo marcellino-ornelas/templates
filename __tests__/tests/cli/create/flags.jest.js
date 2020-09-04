@@ -7,9 +7,8 @@ import {
   createTemplate,
   mockTemplateFileExistsError,
   checkFilesForTemplate,
-  checkFilesContentForTemplate
+  checkFilesContentForTemplate,
 } from '@test/support/cli';
-
 /*
  * Constants
  */
@@ -36,7 +35,7 @@ describe('[cli] Create:', () => {
       .rejects.toContain('FileExistError')
       .then(() => {
         return createTemplate(playground.box(), 'testing', 'app', {
-          force: true
+          force: true,
         });
       })
       .then(() => {
@@ -58,11 +57,11 @@ describe('[cli] Create:', () => {
    */
   it('should be able to use -p flag to all additional packages', () => {
     return createTemplate(playground.box(), 'testing', 'app', {
-      packages: ['extras', 'extras2']
+      packages: ['extras', 'extras2'],
     }).then(() => {
       checkFilesForTemplate(playground.box(), 'app', [
         './extras2.js',
-        './extras.js'
+        './extras.js',
       ]);
     });
   });
@@ -84,19 +83,21 @@ describe('[cli] Create:', () => {
   /**
    * @docs api/cli/commands/create.md#wipe-a-template
    */
-  it('should be able to use --wipe flag', () => {
-    mockTemplateFileExistsError(playground.box(), 'app', './index.js');
+  describe('wipe', () => {
+    it('should be able to override a file', () => {
+      mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
-    return createTemplate(playground.box(), 'testing', 'app', {
-      wipe: true
-    }).then(() => {
-      // we should check the file contents here
-      checkFilesContentForTemplate(
-        playground.box(),
-        'app',
-        './index.js',
-        "console.log('hey');"
-      );
+      return createTemplate(playground.box(), 'testing', 'app', {
+        wipe: true,
+      }).then(() => {
+        // we should check the file contents here
+        checkFilesContentForTemplate(
+          playground.box(),
+          'app',
+          './index.js',
+          "console.log('hey');"
+        );
+      });
     });
   });
 
@@ -105,7 +106,7 @@ describe('[cli] Create:', () => {
    */
   describe('should be able to use --no-newFolder flag', () => {
     const flags = {
-      newFolder: false
+      newFolder: false,
     };
 
     it('with one buildPath', () => {

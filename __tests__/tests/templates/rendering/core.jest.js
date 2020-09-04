@@ -7,6 +7,7 @@ import {
   DirectoryNotFoundError,
   RequiresTemplateError,
 } from '@tps/errors';
+import logger from '@tps/utilities/logger';
 
 /**
  * Constants
@@ -139,20 +140,6 @@ describe('[Templates] Render Process:', () => {
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-    });
-  });
-
-  it('should be able to render a template with wipe.', () => {
-    const destPath = playground.pathTo('app');
-    const randomDest = playground.pathTo('app/some-random-file.js');
-
-    const tps = new Templates('testing', { wipe: true });
-
-    fs.outputFileSync(randomDest, 'blah');
-
-    return tps.render(playground.box(), 'app').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-      expect(randomDest).not.toBeFile();
     });
   });
 

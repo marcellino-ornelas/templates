@@ -223,7 +223,6 @@ export default class Templates {
     let pathsToCreate = buildPaths;
     const { name: globalName } = data;
     let finalDest = dest;
-    const buildNewFolder = this.opts.newFolder;
 
     if (!buildPaths) {
       buildInDest = true;
@@ -232,6 +231,8 @@ export default class Templates {
       pathsToCreate = [buildPaths];
     }
 
+    // if were building in the destination. then we aren't creating any new folders
+    const buildNewFolder = buildInDest ? false : this.opts.newFolder;
     logger.tps.info('Build paths: %n', pathsToCreate);
 
     if (is.array.empty(buildPaths)) {
@@ -324,7 +325,7 @@ export default class Templates {
            */
           const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
           const renderData = defaults({ name }, dataForTemplating);
-          const doesBuildPathExist = isDir(realBuildPath);
+          let doesBuildPathExist = isDir(realBuildPath);
 
           const groupName = `render_${buildPath}`;
           const loggerGroup = logger.tps.group(groupName, {
@@ -349,23 +350,43 @@ export default class Templates {
               const { wipe, force } = this.opts;
 
               if (doesBuildPathExist) {
-                if (wipe) {
+                /**
+                 * If `wipe=true` then we need to delete the directory that we will be overriding.
+                 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
+                 */
+                if (wipe && !buildInDest) {
+                  if (!buildNewFolder) {
+                    loggerGroup.info(
+                      'Skipping wipe because we are not building a new folder'
+                    );
+                    // super hacky yes i know. The reason this needs to happen is because
+                    // when were using wipe but were not building a new folder we need to make sure all
+                    // files that already exist get overridden
+                    this.compiledFiles.forEach((file) => {
+                      file.opts.force = true;
+                    });
+                    return;
+                  }
                   loggerGroup.info('Wiping destination %s', realBuildPath);
-                  return fs.remove(realBuildPath);
+                  doesBuildPathExist = false;
+                  return this._wipe(realBuildPath);
                 }
 
                 if (!force && !wipe) {
-                  loggerGroup.info('Checking see if there are duplicate files');
+                  loggerGroup.info(
+                    'Checking to see if there are duplicate files'
+                  );
                   return this._checkForFiles(realBuildPath, renderData);
                 }
               } else {
-                loggerGroup.info('Build path does not exist continuing on...');
+                loggerGroup.info('Build path does not exist...');
               }
             })
             .then(() => {
               // Create a new folder unless told not to
               // if we are building the template in dest folder don't create new folder
               if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
+                loggerGroup.info('Creating real build path %s', realBuildPath);
                 return (
                   fs
                     // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
@@ -378,6 +399,11 @@ export default class Templates {
                     })
                 );
               }
+
+              loggerGroup.info(
+                'Not creating real build path %s',
+                realBuildPath
+              );
             })
             .then(() => this._renderAllDirectories(realBuildPath))
             .then(() => this._renderAllFiles(realBuildPath, renderData))
@@ -421,6 +447,10 @@ export default class Templates {
           return Promise.reject(errors.length === 1 ? errors[0] : errors);
         });
       });
+  }
+
+  _wipe(realBuildPath) {
+    return fs.remove(realBuildPath);
   }
 
   _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
