@@ -231,10 +231,6 @@ export default class Templates {
       pathsToCreate = [buildPaths];
     }
 
-    // if (!this.opts.newFolder) {
-    //   buildInDest = true;
-    // }
-
     // if were building in the destination. then we aren't creating any new folders
     const buildNewFolder = buildInDest ? false : this.opts.newFolder;
     logger.tps.info('Build paths: %n', pathsToCreate);
@@ -354,7 +350,24 @@ export default class Templates {
               const { wipe, force } = this.opts;
 
               if (doesBuildPathExist) {
+                /**
+                 * If `wipe=true` then we need to delete the directory that we will be overriding.
+                 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
+                 */
                 if (wipe && !buildInDest) {
+                  if (!buildNewFolder) {
+                    loggerGroup.info(
+                      'Skipping wipe because we are not building a new folder'
+                    );
+                    // super hacky yes i know. The reason this needs to happen is because
+                    // when were using wipe but were not building a new folder we need to make sure all
+                    // files that already exist get overridden
+                    this.compiledFiles.forEach((file) => {
+                      file.opts.force = true;
+                    });
+                    return;
+                  }
+                  // && (!buildInDest || !this.opts.newFolder)
                   loggerGroup.info('Wiping destination %s', realBuildPath);
                   doesBuildPathExist = false;
                   return this._wipe(realBuildPath);

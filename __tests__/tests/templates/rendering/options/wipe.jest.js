@@ -148,19 +148,25 @@ describe('[TPS] Render with Wipe:', () => {
      *    | - some-random-file.js
      *    | - <templates files...>
      */
-    const destPath = playground.pathTo('app');
-    const randomDest = playground.pathTo('app/some-random-file.js');
+    const randomDest = playground.pathTo('some-random-file.js');
+    const indexFileInDest = playground.pathTo('index.js');
 
     const tps = new Templates('testing-clean-up-wipe', {
       wipe: true,
       newFolder: false,
     });
 
+    fs.outputFileSync(indexFileInDest, 'blah');
     fs.outputFileSync(randomDest, 'blah');
 
     return tps.render(playground.box(), 'app').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(['index.js', 'app.js']);
-      expect(randomDest).toBeFile();
+      expect(playground.box()).toHaveAllFilesAndDirectories([
+        'index.js',
+        'app.js',
+        'some-random-file.js',
+      ]);
+      // expect(randomDest).toBeFile();
+      expect(indexFileInDest).toHaveFileContents('clean up worked');
     });
   });
 
@@ -169,36 +175,39 @@ describe('[TPS] Render with Wipe:', () => {
    *
    */
   it('should new', () => {
+    logger.tps.enable();
     /**
      * directory structure before:
      *
      * {cwd}/
-     *    | - some-random-file.js
+     *    | - my/personal/
+     *        | - index.js
      *
      *
      * directory structure after:
      *
      * {cwd}/
-     *    | - some-random-file.js
-     *    | - <templates files...>
+     *    | - my/personal/
+     *        | - index.js // from template not old index
+     *        | - app.js
      */
-    const destPath = playground.pathTo('my/personal/app');
-    const indexFileInDest = playground.pathTo('my/personal/app/index.js');
+    const destPath = playground.pathTo('my/personal');
+    // const indexFileInDest = playground.pathTo('my/personal/app/index.js');
     const indexFileInParentPath = playground.pathTo('my/personal/index.js');
 
     fs.outputFileSync(indexFileInParentPath, 'blah');
 
-    expect(destPath).not.toBeDirectory();
     expect(indexFileInParentPath).toBeFile();
 
-    const tps = new Templates('testing-basic', {
+    const tps = new Templates('testing-clean-up-wipe', {
       wipe: true,
       newFolder: false,
     });
 
     return tps.render(playground.box(), 'my/personal/app').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
-      expect(indexFileInDest).toHaveFileContents('clean up worked');
+      expect(destPath).toHaveAllFilesAndDirectories(['index.js', 'app.js']);
+      expect(indexFileInParentPath).toHaveFileContents('clean up worked');
+      expect(playground.pathTo('my/personal/app')).not.toBeDirectory();
     });
   });
 

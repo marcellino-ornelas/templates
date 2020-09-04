@@ -7,6 +7,7 @@ import {
   DirectoryNotFoundError,
   RequiresTemplateError,
 } from '@tps/errors';
+import logger from '@tps/utilities/logger';
 
 /**
  * Constants
