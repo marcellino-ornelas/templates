@@ -367,7 +367,6 @@ export default class Templates {
                     });
                     return;
                   }
-                  // && (!buildInDest || !this.opts.newFolder)
                   loggerGroup.info('Wiping destination %s', realBuildPath);
                   doesBuildPathExist = false;
                   return this._wipe(realBuildPath);
