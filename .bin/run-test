@@ -20,7 +20,7 @@ Running core tests
 ##############################
 """
 
-    npm run --silent test:core -- $@ || exit 1
+    sudo npm run --silent test:core -- $@ || exit 1
 fi
 
 echo """
