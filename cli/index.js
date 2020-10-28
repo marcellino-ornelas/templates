@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const debug = require('debug');
 const logger = require('../lib/utilities/logger/index');
 const { IS_TESTING } = require('../lib/utilities/constants');
@@ -9,7 +11,4 @@ const GLOBAL_OPTIONS = require('./options/global');
 // }
 
 // eslint-disable-next-line no-unused-expressions
-yargs
-  .options(GLOBAL_OPTIONS)
-  .commandDir('commands')
-  .help().argv;
+yargs.options(GLOBAL_OPTIONS).commandDir('commands').help().argv;
