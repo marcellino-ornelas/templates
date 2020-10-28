@@ -1,9 +1,9 @@
 # Tps
 
-## Installation (coming soon...)
+## Installation
 
 ```
-npm install -g tps
+npm install -g templates-mo
 ```
 
 ## Docs

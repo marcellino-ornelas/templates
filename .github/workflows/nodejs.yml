@@ -42,22 +42,22 @@ jobs:
       run: npm run code:build --if-present
     - name: Test Code
       run: npm run test:core
-  test-init:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 10.x]
-    steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Npm Install
-      run: npm install
-      env:
-        CI: true
-    - name: Build Assests
-      run: npm run code:build --if-present
-    - name: Test Code
-      run: npm run test:init
+  # test-init:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [12.x, 10.x]
+  #   steps:
+  #   - uses: actions/checkout@v1
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #   - name: Npm Install
+  #     run: npm install
+  #     env:
+  #       CI: true
+  #   - name: Build Assests
+  #     run: npm run code:build --if-present
+  #   - name: Test Code
+  #     run: sudo npm run test:init
