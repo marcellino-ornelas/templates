@@ -1,8 +1,15 @@
 {
-  "name": "templates",
+  "name": "templates-mo",
   "version": "1.0.0",
   "description": "",
-  "main": "template.js",
+  "main": "lib/templates/index.js",
+  "engines": {
+    "node": ">=6.13.1"
+  },
+  "homepage": "https://github.com/marcellino-ornelas/templates",
+  "bin": {
+    "tps": "./index.js"
+  },
   "scripts": {
     "docs:build": "./.bin/generate-docs && ./.bin/generate-docs-doctoc",
     "docs:dev": "open -a 'Google Chrome' docs-1/readme.md && nodemon --exec 'npm run docs:build'",
