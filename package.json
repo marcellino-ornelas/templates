@@ -8,7 +8,7 @@
   },
   "homepage": "https://github.com/marcellino-ornelas/templates",
   "bin": {
-    "tps": "./index.js"
+    "tps": "./cli/index.js"
   },
   "scripts": {
     "docs:build": "./.bin/generate-docs && ./.bin/generate-docs-doctoc",
