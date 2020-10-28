@@ -60,4 +60,4 @@ jobs:
     - name: Build Assests
       run: npm run code:build --if-present
     - name: Test Code
-      run: npm run test:init
+      run: sudo npm run test:init
