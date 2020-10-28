@@ -40,5 +40,5 @@ docker run \
     -v "$tps_dir:/root/app/templates" \
     -w "/root/app/templates" \
     node \
-    npm run test:run:init -- $@
+    sudo npm run test:run:init -- $@
     # -v "$tps_dir/__tests__/.tps-global:/root/.tps" \
