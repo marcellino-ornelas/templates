@@ -81,8 +81,8 @@ tps <template-name> [flags...] [templates-to-create...]
 - [force a template to be created](#force-a-template-to-be-created)
 - [Add additional packages](#add-additional-packages)
 - [Use default answers for a templates prompts](#use-default-answers-for-a-templates-prompts)
-- [Wipe a template](#wipe-a-template)
 - [Create a template without a new folder](#create-a-template-without-a-new-folder)
+- [Wipe a template](#wipe-a-template)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -371,30 +371,6 @@ tps <template-name> --default app
 
 ---
 
-### Wipe a template
-
-Use the `--wipe` flag to delete any folders/files that exists where the template should be created.
-
-_before:_
-
-    ./app/
-      | - some-random.js
-
-```bash
-tps <template-name> --wipe app
-```
-
-_after:_
-
-`some-random.js` no longer exists
-
-    ./app/
-      | - <your-template-files>
-
-first tps deletes the entire directory `app`. Then it will create your template `app`
-
----
-
 ### Create a template without a new folder
 
 tps creates a new folder of the template name you pass in by default. In order to turn this off, use the `--no-newFolder` flag.
@@ -430,3 +406,129 @@ this will create
 See some common examples on why you would want to do this [here](TODO)
 
 ---
+
+### Wipe a template
+
+#### one build path
+
+Use the `--wipe` flag to delete any folders/files that exists where the template should be created.
+
+_before:_
+
+    ./app/
+      | - some-random.js
+
+```bash
+tps <template-name> --wipe app
+```
+
+_after:_
+
+`some-random.js` no longer exists
+
+    ./app/
+      | - <your-template-files>
+
+first tps deletes the entire directory `app`. Then it will create your template `app`
+
+#### when using a long build path
+
+Use the `--wipe` flag with a long build path will produce the following:
+
+_before:_
+
+    dest/
+      | - app/
+        | - some-random-2.js
+      | - some-random.js
+
+```bash
+tps <template-name> --wipe dest/app
+```
+
+_after:_
+
+`some-random.js` no longer exists
+
+    dest/
+      | - app/
+        | - <your-template-files>
+      | - some-random.js
+
+first tps deletes the entire directory `app`. Then it will create your template `app`
+
+#### when using no build path
+
+Using `--wipe` with no build paths is a little different. Since no new folder will be created there should be no main folder to get rid of.
+
+if my current working directory is in folder `app`:
+
+_before:_
+
+    ./app/
+      | - some-random.js
+
+Running this command
+
+```bash
+tps <template-name> --wipe
+```
+
+will produce
+
+_after:_
+
+    ./app/
+      | - some-random.js
+      | - <your-template-files>
+
+Since the folder `app` was already created templates will not delete any folders/files inside of `app` unless the template needs to override a file or folder.
+
+**Example:**
+
+lets just say the template Im rendering will create a `public` folder and inside that public folder it will create a `index.js` file. If the current working directory is `app`, like the example before, and `app` looked like this:
+
+_before:_
+
+    ./app/
+      | - public
+          | - random.js
+      | - some-random.js
+
+```bash
+tps <template-name> --wipe
+```
+
+_after:_
+
+    ./app/
+      | - public
+          | - <...any-other-template-files-you-have-in-public>
+          | - index.js
+      | - some-random.js
+      | - <...your-template-files>
+
+^ In this example `app` folder was already created so templates does not delete any files in this folder. This is why `some-random.js` did not get deleted. Now if we look inside the `public` folder its a different story. Notice the `random.js` did get deleted. This is because the template being used for rendering needed to create the `public` folder and `index.js` file inside it. Since were using wipe the folder `public` gets completely wiped out before creating the stuff inside.
+
+#### when using no new folder
+
+When you use `--wipe` and `--no-newFolder` there is no main folder getting created
+
+_before:_
+
+    ./app/
+      | - some-random.js
+
+Running this command
+
+```bash
+tps <template-name> --wipe
+```
+
+will produce
+
+_after:_
+
+    ./app/
+      | - some-random.js
+      | - <your-template-files>
