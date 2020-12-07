@@ -164,5 +164,5 @@ tps package-demo --packages package1 package2 -- app
         | - package1.js
         | - package2.js
 
-[Back](./templates.md)
+[Back](./README.md)
 [Next](./dynamic-files.md)
