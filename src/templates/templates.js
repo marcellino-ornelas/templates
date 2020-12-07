@@ -4,7 +4,7 @@ import is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
-import { isDir, json, isFile } from '@tps/utilities/fileSystem';
+import { isDir, json, isFile, shouldNotExist } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
@@ -535,14 +535,21 @@ export default class Templates {
   }
 
   _checkForFiles(dest, data) {
-    for (let i = 0; i < this.compiledFiles.length; i++) {
-      const file = this.compiledFiles[i];
-      const finalDest = file._dest(dest, data);
+    // shouldNotExist
 
-      if (isFile(finalDest)) {
-        throw new FileExistError(finalDest);
-      }
-    }
+    const files = this.compiledFiles.map((file) => {
+      return file._dest(dest, data);
+    });
+
+    shouldNotExist(files);
+
+    // for (let i = 0; i < this.compiledFiles.length; i++) {
+    //   const file = this.compiledFiles[i];
+    //   const finalDest = file._dest(dest, data);
+    //   if (isFile(finalDest)) {
+    //     throw new FileExistError(finalDest);
+    //   }
+    // }
   }
 
   /**

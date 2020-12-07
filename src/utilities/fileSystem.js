@@ -1,5 +1,6 @@
 import fs from 'fs';
 import findFileUp from 'find-up';
+import { FileExistError } from '@tps/errors';
 
 /**
  * Check to see if the `path` is a valid directory
@@ -37,6 +38,14 @@ export function json(jsonFile) {
 
 export function findUp(folder, cwd = process.cwd()) {
   return findFileUp.sync(folder, {
-    cwd
+    cwd,
   });
 }
+
+export const shouldNotExist = (files) => {
+  files.forEach((file) => {
+    if (isFile(file)) {
+      throw new FileExistError(file);
+    }
+  });
+};
