@@ -2,7 +2,7 @@
  * Modules
  */
 import fs from 'fs-extra';
-import path from 'path';
+import * as path from 'path';
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import { hasProp } from '@tps/utilities/helpers';
 import crypto from 'crypto';
@@ -25,9 +25,7 @@ class Playground {
     do {
       if (this.name) {
         console.log(
-          `[PLAYGROUND INFO] playground name was already selected (${
-            this.name
-          })`
+          `[PLAYGROUND INFO] playground name was already selected (${this.name})`
         );
       }
       this.stamp = stamp();

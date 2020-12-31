@@ -1,5 +1,5 @@
 import os from 'os';
-import path from 'path';
+import * as path from 'path';
 import { isDir, findUp } from './fileSystem';
 
 /**

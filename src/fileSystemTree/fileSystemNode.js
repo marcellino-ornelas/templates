@@ -1,11 +1,9 @@
 import is from 'is';
-import path from 'path';
+import * as path from 'path';
 import Stack from '../data-structures/stack';
 import Tree from '../data-structures/tree';
 
 export class FileSystemNode extends Tree {
-  static ignoreFiles = '';
-
   constructor(name, type, parentDirectory, verbose) {
     super();
 
