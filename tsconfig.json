@@ -5,6 +5,7 @@
     "target": "es5",
     "moduleResolution": "node",
     "baseUrl": "./",
+    "rootDir": "./",
     "paths": {
       "@tps": ["./src"],
       "@test": ["./__tests__"]
