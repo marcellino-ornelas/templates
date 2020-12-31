@@ -2,7 +2,7 @@
  * Modules
  */
 
-import path from 'path';
+import * as path from 'path';
 import { DirNode, FileNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
@@ -13,7 +13,10 @@ const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
 const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('[FileSystemTree] FileSystemNode:', () => {
-  let indexFile; let dbDir; let dbFile; let mainDir;
+  let indexFile;
+  let dbDir;
+  let dbFile;
+  let mainDir;
 
   beforeAll(() => {
     mainDir = new DirNode('main', PATH_TO_TEMPLATES);

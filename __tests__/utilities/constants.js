@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { TPS_FOLDER } from '@tps/utilities/constants';
 
 export const TESTING_TPS = path.join(__dirname, `../${TPS_FOLDER}`);
@@ -10,7 +10,7 @@ export const TESTING_PACKAGE_FILES = [
   './server',
   './server/server.js',
   './storeUtils',
-  './storeUtils/user.js'
+  './storeUtils/user.js',
 ];
 
 export const INIT_PACKAGE_FILES = ['.tpsrc'];
@@ -34,6 +34,6 @@ export const PROMPTER_QUESTIONS = [
     name: 'testingPrompt',
     aliases: ['test1', 't'],
     message: 'This is a testing testing prompt',
-    default: 'default value'
-  }
+    default: 'default value',
+  },
 ];
