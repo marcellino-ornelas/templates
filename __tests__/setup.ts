@@ -1,8 +1,8 @@
-import { isFile, isDir } from '@tps/utilities/fileSystem';
+import { isFile, isDir } from '../src/utilities/fileSystem';
 import * as path from 'path';
 import fs from 'fs-extra';
 import pjson from 'prettyjson-256';
-import { DirectoryNode } from '@tps/fileSystemTree';
+import { DirectoryNode } from '../src/fileSystemTree';
 
 jest.setTimeout(30000);
 
