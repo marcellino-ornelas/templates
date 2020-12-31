@@ -1,5 +1,5 @@
 import { isFile, isDir } from '@tps/utilities/fileSystem';
-import path from 'path';
+import * as path from 'path';
 import fs from 'fs-extra';
 import pjson from 'prettyjson-256';
 import { DirectoryNode } from '@tps/fileSystemTree';
