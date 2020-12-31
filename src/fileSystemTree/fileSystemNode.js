@@ -4,9 +4,6 @@ import Stack from '../data-structures/stack';
 import Tree from '../data-structures/tree';
 
 export class FileSystemNode extends Tree {
-  // @ts-ignore
-  // ignoreFiles = '';
-
   constructor(name, type, parentDirectory, verbose) {
     super();
 
