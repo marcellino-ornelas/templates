@@ -2,7 +2,7 @@
  * Modules
  */
 import fs from 'fs-extra';
-import path from 'path';
+import * as path from 'path';
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import { hasProp } from '@tps/utilities/helpers';
 import crypto from 'crypto';

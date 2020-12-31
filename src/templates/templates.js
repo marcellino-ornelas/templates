@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import fs from 'fs-extra';
 import is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';

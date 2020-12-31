@@ -1,7 +1,7 @@
 import { buildFlags } from '@test/utilities/helpers';
 import { tpsCli } from '@test/utilities/tps-cli';
 import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
-import path from 'path';
+import * as path from 'path';
 import is from 'is';
 import fs from 'fs-extra';
 import * as TPS from '@tps/utilities/constants';
