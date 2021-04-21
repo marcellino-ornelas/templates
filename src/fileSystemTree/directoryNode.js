@@ -35,6 +35,7 @@ export class DirectoryNode extends FileSystemNode {
     try {
       dirContents = super.fs.readdirSync(this.path);
     } catch (e) {
+      console.log(e);
       throw new Error(`[TPS ERROR] Path is not a directory (${this.path})`);
     }
 
