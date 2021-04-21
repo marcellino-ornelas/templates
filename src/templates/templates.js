@@ -79,8 +79,9 @@ export default class Templates {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
-          [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
-          [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
+          [localPath]: TPS.HAS_LOCAL && this.fs.readdirSync(localPath),
+          [TPS.GLOBAL_PATH]:
+            TPS.HAS_GLOBAL && this.fs.readdirSync(TPS.GLOBAL_PATH),
         });
         throw new TemplateNotFoundError(templateName);
     }
@@ -138,6 +139,9 @@ export default class Templates {
     if (shouldLoadDefault) {
       this.loadPackage('default');
     }
+
+    // file system adapter
+    this.fs = fs;
   }
 
   /**
@@ -450,7 +454,7 @@ export default class Templates {
   }
 
   _wipe(realBuildPath) {
-    return fs.remove(realBuildPath);
+    return this.fs.remove(realBuildPath);
   }
 
   _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
@@ -479,7 +483,7 @@ export default class Templates {
     }
 
     if (buildNewFolder) {
-      fs.removeSync(buildPath);
+      this.fs.removeSync(buildPath);
     }
 
     let { files, dirs } = this.successfulBuilds;
@@ -501,7 +505,7 @@ export default class Templates {
 
       dirsThatMatch.forEach((dir) => {
         try {
-          fs.removeSync(dir);
+          this.fs.removeSync(dir);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
         } catch (e) {
           logger.tps.error('Clean up failed when deleting directories %n', err);
@@ -523,7 +527,7 @@ export default class Templates {
 
       files.forEach((file) => {
         try {
-          fs.removeSync(file);
+          this.fs.removeSync(file);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
         } catch (e) {
           logger.tps.error('Clean up failed when deleting files %n', err);
@@ -689,7 +693,7 @@ export default class Templates {
           fileNode.name
         );
         const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
-        this._defs[name] = fs.readFileSync(fileNode.path).toString();
+        this._defs[name] = this.fs.readFileSync(fileNode.path).toString();
 
         // When def files have more than one def. In order to use them we need to call the main file def first.
         // this fixes problems when any def can be available at render time
