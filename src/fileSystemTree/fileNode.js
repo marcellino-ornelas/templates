@@ -17,7 +17,7 @@ export class FileNode extends FileSystemNode {
   }
 
   _getFileData() {
-    return fs.readFileSync(this.path);
+    return this.fs.readFileSync(this.path);
   }
 
   addChild() {

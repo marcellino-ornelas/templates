@@ -2,9 +2,11 @@ import is from 'is';
 import path from 'path';
 import Stack from '../data-structures/stack';
 import Tree from '../data-structures/tree';
+import fs from 'fs-extra';
 
 export class FileSystemNode extends Tree {
   static ignoreFiles = '';
+  static fs = fs;
 
   constructor(name, type, parentDirectory, verbose) {
     super();
