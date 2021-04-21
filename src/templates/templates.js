@@ -67,6 +67,9 @@ export default class Templates {
     const maybeLocalTemp = `${localPath}/${templateName}`;
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
 
+    // file system adapter
+    this.fs = fs;
+
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
         this.src = maybeLocalTemp;
@@ -139,9 +142,6 @@ export default class Templates {
     if (shouldLoadDefault) {
       this.loadPackage('default');
     }
-
-    // file system adapter
-    this.fs = fs;
   }
 
   /**
