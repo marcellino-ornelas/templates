@@ -33,7 +33,7 @@ export class DirectoryNode extends FileSystemNode {
     let dirContents;
 
     try {
-      dirContents = super.fs.readdirSync(this.path);
+      dirContents = FileSystemNode.fs.readdirSync(this.path);
     } catch (e) {
       console.log(e);
       throw new Error(`[TPS ERROR] Path is not a directory (${this.path})`);
