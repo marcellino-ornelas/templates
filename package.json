@@ -60,6 +60,7 @@
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
     "is": "^3.3.0",
+    "memory-fs-extra": "^1.0.3",
     "minimatch": "^3.0.4",
     "prettyjson-256": "^1.5.18",
     "strip-ansi": "^6.0.0",

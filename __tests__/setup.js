@@ -1,6 +1,7 @@
-import { isFile, isDir } from '@tps/utilities/fileSystem';
+import { isFile, isDir } from './utilities/fileSystem';
+import './templates';
 import path from 'path';
-import fs from 'fs-extra';
+import fs from './utilities/fs';
 import pjson from 'prettyjson-256';
 import { DirectoryNode } from '@tps/fileSystemTree';
 
@@ -14,12 +15,12 @@ expect.extend({
     if (passed) {
       return {
         pass: true,
-        message: () => `${_received} should not be a file.`
+        message: () => `${_received} should not be a file.`,
       };
     }
     return {
       pass: false,
-      message: () => `${_received} should be a file.`
+      message: () => `${_received} should be a file.`,
     };
   },
   toBeDirectory(received) {
@@ -29,12 +30,12 @@ expect.extend({
     if (passed) {
       return {
         pass: true,
-        message: () => `${_received} should not be a directory.`
+        message: () => `${_received} should not be a directory.`,
       };
     }
     return {
       pass: false,
-      message: () => `${_received} should be a directory.`
+      message: () => `${_received} should be a directory.`,
     };
   },
   toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
@@ -65,7 +66,7 @@ expect.extend({
 ${_received} had these files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
-`
+`,
       };
     }
     return {
@@ -78,7 +79,7 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 
 Directory Layout:
 ${pjson.render(dirPathLayout)}
-`
+`,
     };
   },
   toHaveFileContents(destPath, contents = '') {
@@ -90,7 +91,7 @@ ${pjson.render(dirPathLayout)}
 
     const options = {
       isNot: this.isNot,
-      promise: this.promise
+      promise: this.promise,
     };
 
     if (passed) {
@@ -102,7 +103,7 @@ ${this.utils.matcherHint('not.toHaveFileContents', destPath, contents, options)}
 File should not have contents: ${_expected}
 
 Received: ${this.utils.printReceived(fileContents)}
-`
+`,
       };
     }
     return {
@@ -113,7 +114,7 @@ ${this.utils.matcherHint('toHaveFileContents', destPath, contents, options)}
 File should have contents: ${_expected}
 
 Received: ${this.utils.printReceived(fileContents)}
-`
+`,
     };
-  }
+  },
 });

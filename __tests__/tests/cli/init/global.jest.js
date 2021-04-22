@@ -1,6 +1,6 @@
 import Playground from '@test/utilities/playground';
 import { TESTING_INIT_DIR } from '@test/utilities/constants';
-import fs from 'fs-extra';
+import fs from '@test/utilities/fs';
 import { init } from '@test/support/cli';
 import * as TPS from '@tps/utilities/constants';
 import { isDir } from '@tps/utilities/fileSystem';
