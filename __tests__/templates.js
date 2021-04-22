@@ -2,11 +2,9 @@ import Templates from '@tps/templates';
 import path from 'path';
 import FileSystemNode from '../src/fileSystemTree/fileSystemNode';
 import { TPS_FOLDER } from '@tps/utilities/constants';
-import MemoryFileSystem from 'memory-fs-extra';
+import fs from './utilities/fs';
 
-const fs = new MemoryFileSystem();
-
-// FileSystemNode.fs = fs;
+FileSystemNode.fs = fs;
 
 export default class TemplateOverride extends Templates {
   constructor(use, opts) {
@@ -15,6 +13,6 @@ export default class TemplateOverride extends Templates {
       ...opts,
     });
 
-    // this.fs = fs;
+    this.fs = fs;
   }
 }
