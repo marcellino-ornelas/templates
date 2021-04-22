@@ -14,6 +14,7 @@ fakefs.ensureDir(PATH);
 const tpsDirectoryContents = fs.readdirSync(TESTING_TPS);
 
 tpsDirectoryContents.forEach((dirname) => {
+  console.log(`${TESTING_TPS}/${dirname}`);
   if (fs.statSync(`${TESTING_TPS}/${dirname}`).isDirectory()) {
     const dir = new DirectoryNode(dirname, TESTING_TPS);
     dir.eachChild((child) => {
