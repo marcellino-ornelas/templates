@@ -22,14 +22,14 @@ tpsDirectoryContents.forEach((dirname) => {
       if (child.is('dir')) {
         fakefs.ensureDirSync(path);
       } else {
-        fakefs.outputFileSync(path, child._getFileData());
+        fakefs.outputFileSync(path, fs.readFileSync(path));
       }
     });
   } else {
     const file = new FileNode(dirname, TESTING_TPS);
     const path = realPath.join(PATH, file.pathFromRoot);
 
-    fakefs.outputFileSync(path, file._getFileData());
+    fakefs.outputFileSync(path, fs.readFileSync(path));
   }
 });
 
