@@ -1,11 +1,10 @@
 /*
  * Modules
  */
-import fs from 'fs-extra';
+import fs from '@test/utilities/fs';
 import Playground from '@test/utilities/playground';
-import { TESTING_DIR , TESTING_PACKAGE_FILES } from '@test/utilities/constants';
+import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
-
 
 /*
  * Constants
@@ -34,7 +33,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     jest.setTimeout(100000);
 
-    return tps.render(playground.box(), 'App').catch(error => {
+    return tps.render(playground.box(), 'App').catch((error) => {
       expect(error).toBeDefined();
 
       expect(appFolder).toBeDirectory();
@@ -43,7 +42,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
         'db',
         'server',
         'storeUtils',
-        'db/db.js'
+        'db/db.js',
       ]);
     });
   });
@@ -55,13 +54,13 @@ describe('[TPS] Rendered Failed Cases:', () => {
     fs.outputFileSync(indexFile, 'blah');
     expect(indexFile).toBeFile();
 
-    return tps.render(box).catch(error => {
+    return tps.render(box).catch((error) => {
       expect(error).toBeDefined();
       expect(box).not.toHaveAllFilesAndDirectories([
         'db',
         'server',
         'storeUtils',
-        'db/db.js'
+        'db/db.js',
       ]);
       expect(indexFile).toBeFile();
     });
@@ -75,14 +74,14 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     expect(file).toBeFile();
 
-    return tps.render(playground.box(), 'App').catch(error => {
+    return tps.render(playground.box(), 'App').catch((error) => {
       expect(error).toBeDefined();
       expect(file).toBeFile();
       expect(appFolder).not.toHaveAllFilesAndDirectories([
         'db',
         'server',
         'db/db.js',
-        'index.js'
+        'index.js',
       ]);
     });
   });
@@ -96,7 +95,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
     expect(fileInApp).toBeFile();
 
-    return tps.render(playground.box(), ['App', 'App2']).catch(error => {
+    return tps.render(playground.box(), ['App', 'App2']).catch((error) => {
       expect(error).toBeDefined();
 
       expect(fileInApp).toBeFile();
@@ -104,7 +103,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
         'db',
         'server',
         'db/db.js',
-        'index.js'
+        'index.js',
       ]);
 
       expect(app2Folder).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);

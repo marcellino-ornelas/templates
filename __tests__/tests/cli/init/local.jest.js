@@ -1,9 +1,9 @@
 import Playground from '@test/utilities/playground';
 import {
   INIT_PACKAGE_FILES,
-  TESTING_INIT_DIR
+  TESTING_INIT_DIR,
 } from '@test/utilities/constants';
-import fs from 'fs-extra';
+import fs from '@test/utilities/fs';
 import { init } from '@test/support/cli';
 
 /**
