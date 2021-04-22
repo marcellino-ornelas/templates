@@ -39,6 +39,6 @@ tpsDirectoryContents.forEach((dirname) => {
 fakefs.outputFileSync('/hey/bad.txt', 'blah');
 fakefs.outputFileSync('/hey/god.txt', 'blah');
 
-console.dir(fakefs.data.home.runner.work.templates.templates.__tests__);
+// console.dir(fakefs.data.home.runner.work.templates.templates.__tests__);
 
 export default fs;
