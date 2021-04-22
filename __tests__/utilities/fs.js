@@ -1,5 +1,5 @@
 import MemoryFileSystem from 'memory-fs-extra';
-import path from 'path';
+import realPath from 'path';
 import { TESTING_TPS } from '@test/utilities/constants';
 import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
 
@@ -18,7 +18,7 @@ tpsDirectoryContents.forEach((dirname) => {
     const dir = new DirectoryNode(dirname, TESTING_TPS);
     dir.eachChild((child) => {
       child;
-      const path = pasth.join(PATH, child.pathFromRoot);
+      const path = realPath.join(PATH, child.pathFromRoot);
       if (child.is('dir')) {
         fakefs.ensureDirSync(path);
       } else {
@@ -27,7 +27,7 @@ tpsDirectoryContents.forEach((dirname) => {
     });
   } else {
     const file = new FileNode(dirname, TESTING_TPS);
-    const path = path.join(PATH, file.pathFromRoot);
+    const path = realPath.join(PATH, file.pathFromRoot);
 
     fakefs.outputFileSync(path, file._getFileData());
   }
