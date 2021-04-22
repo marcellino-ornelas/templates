@@ -27,7 +27,7 @@ tpsDirectoryContents.forEach((dirname) => {
     });
   } else {
     const file = new FileNode(dirname, TESTING_TPS);
-    const path = pasth.join(PATH, file.pathFromRoot);
+    const path = path.join(PATH, file.pathFromRoot);
 
     fakefs.outputFileSync(path, file._getFileData());
   }
