@@ -17,7 +17,7 @@ describe('[cli] Create:', () => {
 
   it.each([['less'], ['css']])(
     'should be able answer prompts from command line arguments',
-    cssType => {
+    (cssType) => {
       return createTemplate(
         playground.box(),
         'testing-prompt-types-select',

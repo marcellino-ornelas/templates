@@ -39,7 +39,7 @@ describe('[cli] Create:', () => {
     return createTemplate(playground.box(), 'testing', [
       'app',
       'bee',
-      'webapp/src/components'
+      'webapp/src/components',
     ]);
   });
 

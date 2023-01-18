@@ -9,7 +9,7 @@ import inquirer from 'inquirer';
 jest.mock('inquirer');
 
 const defaultAnswers = {
-  test1: 'package1'
+  test1: 'package1',
 };
 
 /*
@@ -60,7 +60,7 @@ describe('[Templates] Prompts Process:', () => {
     tps.setAnswers({
       ...restOfAnswers,
       // Answer with alias instead of real name
-      t: test1
+      t: test1,
     });
 
     return tps.render(playground.box(), 'App').then(() => {

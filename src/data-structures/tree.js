@@ -45,7 +45,7 @@ class Tree {
       }
 
       if (currentTree.hasChildren()) {
-        currentTree.children.forEach(childTree => {
+        currentTree.children.forEach((childTree) => {
           queue.enqueue(childTree);
         });
       }
@@ -55,7 +55,7 @@ class Tree {
   breathFirstSelect(cb) {
     const filtered = [];
 
-    this.breathFirstEach(tree => {
+    this.breathFirstEach((tree) => {
       if (cb(tree)) {
         filtered.push(tree);
       }
@@ -80,7 +80,7 @@ class Tree {
   depthFirstSelect(cb) {
     const filtered = [];
 
-    this.depthFirstEach(tree => {
+    this.depthFirstEach((tree) => {
       if (cb(tree)) {
         filtered.push(tree);
       }

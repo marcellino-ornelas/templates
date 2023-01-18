@@ -1,9 +1,7 @@
 # Templates
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Intro](#intro)
 - [Template breakdown](#template-breakdown)
@@ -20,7 +18,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 > We will be referring to `<some-name>` in our guide to represent any directory.
 
 ## Intro
@@ -33,8 +30,6 @@ Templates is a filesystem generator aimed at making it easier to getting started
 - The possibilities are endless with templates.
 
 You can sort of think of templates as a function but for your filesystem. When your coding you can easily copy and paste code all over the place but that would be messy and unmaintainable right? Instead you can put all your logic/code into a function so its defined in one spot but can be used over and over again with different arguments. Thats nice for code but what about when you create a new react component in your web application, or a new controller for your api? Well you'll probably start off by manually creating a file, opening up a similar file to copy and paste the parts you need because chances are your not gonna remember how to build it from scratch right away or without looking it up. What about if you need to do this for 2? 3? files for one piece of your app to work? or add some unit tests? Wouldn't it be nice just to press a button, plug some info in then BAM! you now have a working component or controller ready plug in and use? This is where templates comes into play!
-
-
 
 ## Template breakdown
 

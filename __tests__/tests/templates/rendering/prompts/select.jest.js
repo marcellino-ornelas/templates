@@ -21,13 +21,16 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
   beforeEach(() => {
     // add no default to this test to only test packages
     tps = new Templates('testing-prompt-types-select', {
-      defaultPackage: false
+      defaultPackage: false,
     });
 
     return playground.createBox('render_process_prompts');
   });
 
-  it.each([['css', 'index.css'], ['less', 'index.less']])(
+  it.each([
+    ['css', 'index.css'],
+    ['less', 'index.less'],
+  ])(
     'it should render a template with values passed into prompt',
     (answer, expected) => {
       const destPath = playground.pathTo('App');
@@ -41,7 +44,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
     }
   );
 
-  it('should render a template when answering prompt with alias', done => {
+  it('should render a template when answering prompt with alias', (done) => {
     tps.verbose = true;
     const destPath = playground.pathTo('App');
 

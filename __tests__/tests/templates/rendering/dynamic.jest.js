@@ -66,7 +66,7 @@ describe('[TPS] Rendering dynamic:', () => {
     const destPaths = [
       [path.join(playground.box(), 'App'), 'name: App'],
       [path.join(playground.box(), 'Nav'), 'name: Nav'],
-      [path.join(playground.box(), 'Nav/NavList'), 'name: NavList']
+      [path.join(playground.box(), 'Nav/NavList'), 'name: NavList'],
     ];
 
     return tps

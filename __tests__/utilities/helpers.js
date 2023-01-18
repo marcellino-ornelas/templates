@@ -8,11 +8,11 @@ import { eachObj } from '@tps/utilities/helpers';
  * Constants
  */
 
-const getFlagString = flag => {
+const getFlagString = (flag) => {
   return `${flag.length === 1 ? `-` : `--`}${flag}`;
 };
 
-export const buildFlags = args => {
+export const buildFlags = (args) => {
   let flags = '';
 
   if (!is.object(args)) {

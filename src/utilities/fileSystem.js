@@ -37,6 +37,6 @@ export function json(jsonFile) {
 
 export function findUp(folder, cwd = process.cwd()) {
   return findFileUp.sync(folder, {
-    cwd
+    cwd,
   });
 }

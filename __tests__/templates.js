@@ -6,7 +6,7 @@ export default class TemplateOverride extends Templates {
   constructor(use, opts) {
     super(use, {
       tpsPath: path.join(__dirname, TPS_FOLDER),
-      ...opts
+      ...opts,
     });
   }
 }

@@ -28,7 +28,6 @@ Aliases: [Use](./use.md)
 
 ## Flags
 
-
 <table id="create-table">
     <thead>
       <tr>
@@ -66,15 +65,12 @@ Aliases: [Use](./use.md)
     </tbody>
 </table>
 
-
 ---
 
 ## Examples
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Create a single template](#create-a-single-template)
 - [Create a single template with a path](#create-a-single-template-with-a-path)
@@ -87,7 +83,6 @@ Aliases: [Use](./use.md)
 - [Create a template without a new folder](#create-a-template-without-a-new-folder)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ### Create a single template
 

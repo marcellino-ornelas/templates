@@ -4,10 +4,10 @@ module.exports = {
       name: 'test_filter',
       type: 'input',
       tpsType: 'data',
-      filter: answer => {
+      filter: (answer) => {
         return answer + '__filtered';
       },
-      default: 'EMPTY'
-    }
-  ]
+      default: 'EMPTY',
+    },
+  ],
 };

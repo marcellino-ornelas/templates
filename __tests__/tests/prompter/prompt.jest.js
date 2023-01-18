@@ -13,17 +13,17 @@ describe('[Prompter] Prompt:', () => {
       aliases: ['test1', 't'],
       message: 'This is a testing testing prompt',
       default: 'default value',
-      choices: expect.any(Array)
+      choices: expect.any(Array),
     });
   });
 
-  it.each([['name', 'testingPrompt'], ['alias', 't']])(
-    'should answer prompt by %s',
-    (name, testingPrompt) => {
-      const answers = { [testingPrompt]: 'data' };
-      expect(prompt.answerWith(answers)).toEqual('data');
-    }
-  );
+  it.each([
+    ['name', 'testingPrompt'],
+    ['alias', 't'],
+  ])('should answer prompt by %s', (name, testingPrompt) => {
+    const answers = { [testingPrompt]: 'data' };
+    expect(prompt.answerWith(answers)).toEqual('data');
+  });
 
   it('should return undefined if not correct answers', () => {
     const answers = { randomKey: 'data' };

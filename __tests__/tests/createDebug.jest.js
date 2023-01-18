@@ -138,7 +138,7 @@ describe('CreateDebug', () => {
 
       expect(_debug.isEnabled()).toBeTruthy();
 
-      logFunctions.forEach(type => {
+      logFunctions.forEach((type) => {
         const instanceKey = `_${type}`;
         expect(_debug[instanceKey].enabled).toBeTruthy();
       });
@@ -153,7 +153,7 @@ describe('CreateDebug', () => {
       // eslint-disable-next-line no-underscore-dangle
       _debug._resync();
 
-      logFunctions.forEach(type => {
+      logFunctions.forEach((type) => {
         const instanceKey = `_${type}`;
         expect(_debug[instanceKey].enabled).toBeTruthy();
       });
@@ -171,7 +171,7 @@ describe('CreateDebug', () => {
 
       expect(_debug.isEnabled()).toBeTruthy();
 
-      logFunctions.forEach(type => {
+      logFunctions.forEach((type) => {
         const instanceKey = `_${type}`;
         expect(_debug[instanceKey].enabled).toBeFalsy();
       });
@@ -184,7 +184,7 @@ describe('CreateDebug', () => {
       expect(resyncMock).toHaveBeenCalled();
       expect(mockChildLogger).toHaveBeenCalled();
 
-      logFunctions.forEach(type => {
+      logFunctions.forEach((type) => {
         const instanceKey = `_${type}`;
         expect(_debug[instanceKey].enabled).toBeTruthy();
       });
@@ -235,8 +235,8 @@ describe('CreateDebug', () => {
       expect(_debug.isEnabled()).toBeFalsy();
 
       logFunctions
-        .filter(type => type !== 'log')
-        .forEach(type => {
+        .filter((type) => type !== 'log')
+        .forEach((type) => {
           expect(_debug[`_${type}`].enabled).toBeFalsy();
           _debug[type]('hello');
         });

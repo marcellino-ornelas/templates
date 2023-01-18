@@ -24,7 +24,6 @@ tps <command> --help
 
 These flags can be used on any tps command
 
-
 <table id="global-table">
     <thead>
       <tr>
@@ -41,6 +40,5 @@ These flags can be used on any tps command
       </tr>
     </tbody>
 </table>
-
 
 [Back to API docs](../readme.md)

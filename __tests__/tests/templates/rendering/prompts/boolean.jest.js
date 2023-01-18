@@ -22,7 +22,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
   beforeEach(() => {
     // add no default to this test to only test packages
     tps = new Templates('testing-prompt-types-boolean', {
-      defaultPackage: false
+      defaultPackage: false,
     });
 
     return playground.createBox('render_process_prompts').then(() => {
@@ -41,7 +41,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
     });
   });
 
-  it('should render a template when answering prompt with alias', done => {
+  it('should render a template when answering prompt with alias', (done) => {
     tps.setAnswers({ i: true });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();

@@ -4,9 +4,9 @@ const presetsProduction = [
   [
     '@babel/env',
     {
-      node: 'current'
-    }
-  ]
+      node: 'current',
+    },
+  ],
 ];
 
 const plugins = [
@@ -16,12 +16,12 @@ const plugins = [
       root: ['./'],
       alias: {
         '@tps': './src',
-        '@test': './__tests__'
-      }
-    }
+        '@test': './__tests__',
+      },
+    },
   ],
   '@babel/plugin-proposal-class-properties',
-  '@babel/plugin-proposal-private-methods'
+  '@babel/plugin-proposal-private-methods',
 ];
 
 module.exports = { presets, plugins };

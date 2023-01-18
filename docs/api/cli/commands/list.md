@@ -22,7 +22,6 @@ Aliases: `ls`
 
 ### Setting options
 
-
 <table id="list-options">
     <thead>
       <tr>
@@ -43,7 +42,6 @@ Aliases: `ls`
       </tr>
     </tbody>
 </table>
-
 
 ---
 

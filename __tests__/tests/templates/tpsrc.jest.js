@@ -16,7 +16,7 @@ describe('[Templates] tpsrc: ', () => {
   let tps;
   beforeAll(() => {
     tps = new Templates('testing-tpsrc', {
-      noGlobalConfig: true
+      noGlobalConfig: true,
     });
   });
 
@@ -40,7 +40,7 @@ describe('[Templates] tpsrc: ', () => {
     const { opts } = tps;
 
     expect(opts).toMatchObject({
-      extendedDest
+      extendedDest,
     });
   });
 
@@ -49,7 +49,7 @@ describe('[Templates] tpsrc: ', () => {
 
     expect(answers).toEqual(
       expect.objectContaining({
-        test: 'oh-yea'
+        test: 'oh-yea',
       })
     );
   });

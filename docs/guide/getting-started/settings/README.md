@@ -2,17 +2,14 @@
 
 In this section, We will be covering the following topics:
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [What is a settings file?](#what-is-a-settings-file)
 - [How to use settings?](#how-to-use-settings)
 - [Settings options](#settings-options)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ## What is a settings file?
 

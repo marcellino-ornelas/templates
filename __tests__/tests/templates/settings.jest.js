@@ -15,7 +15,7 @@ describe('[Templates] Settings:', () => {
     tps = new Templates('testing-settings-json');
 
     expect(tps.templateSettings).toEqual({
-      name: 'lino'
+      name: 'lino',
     });
   });
 
@@ -23,7 +23,7 @@ describe('[Templates] Settings:', () => {
     tps = new Templates('testing-settings-js');
 
     expect(tps.templateSettings).toEqual({
-      name: 'lino'
+      name: 'lino',
     });
   });
 
