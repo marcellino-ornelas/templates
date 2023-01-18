@@ -96,7 +96,7 @@ export function defaults(options = {}, defaultObj) {
 export function cliLog(str) {
   const string = str
     .split(/\n/)
-    .map(s => s.trim())
+    .map((s) => s.trim())
     .join('\n')
     .trim();
   // eslint-disable-next-line

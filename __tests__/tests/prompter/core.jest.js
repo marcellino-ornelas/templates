@@ -5,7 +5,7 @@ import Prompter from '@tps/prompter';
 import { PROMPTER_QUESTIONS } from '@test/utilities/constants';
 
 const ANSWER_TO_PROMPTS = {
-  testingPrompt: 'data'
+  testingPrompt: 'data',
 };
 
 describe('[Prompter] Core:', () => {
@@ -17,24 +17,24 @@ describe('[Prompter] Core:', () => {
   it('should have all prompt answers', () => {
     prompter.setAnswers(ANSWER_TO_PROMPTS);
 
-    prompter.getAnswers().then(promptAnswers => {
+    prompter.getAnswers().then((promptAnswers) => {
       expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
     });
   });
 
   it('should have all prompt answer when answered with alias', () => {
     prompter.setAnswers({
-      t: 'data'
+      t: 'data',
     });
 
-    prompter.getAnswers().then(promptAnswers => {
+    prompter.getAnswers().then((promptAnswers) => {
       expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
     });
   });
 
   it('should tell you if it has answer to a prompt', () => {
     prompter.setAnswers({
-      t: 'oh ya!'
+      t: 'oh ya!',
     });
 
     expect(prompter.hasAnswerToPrompt('testingPrompt')).toBeTruthy();

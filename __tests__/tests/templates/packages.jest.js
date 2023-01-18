@@ -30,14 +30,14 @@ describe('[Templates] Packages:', () => {
     const pkgs = ['store', 'main'];
     tps.loadPackages(pkgs);
 
-    pkgs.forEach(pkg => {
+    pkgs.forEach((pkg) => {
       expect(tps.packages).toHaveProperty(pkg);
     });
   });
   it("should throw an error when packages aren't passed in", () => {
     const errArgs = ['', {}, null, true, false];
 
-    errArgs.forEach(errArg => {
+    errArgs.forEach((errArg) => {
       expect(() => {
         tps.loadPackages(errArg);
       }).toThrow();

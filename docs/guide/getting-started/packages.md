@@ -2,10 +2,8 @@
 
 In this section, We will be covering the following topics:
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Package breakdown](#package-breakdown)
   - [Default package](#default-package)
@@ -17,7 +15,6 @@ In this section, We will be covering the following topics:
   - [Including more packages](#including-more-packages)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 > All commands examples assume your cwd is our `tps-example` repo
 
@@ -106,7 +103,7 @@ touch ./.tps/<template>/<package-name>/<package-files...>
 ## Using a new package
 
 Add the `--packages` flag to your tps create command to add more packages. This flag takes an array of options. You must add `--` right before you start to put the template you want to create so [yargs](http://yargs.js.org/)
- can parse correctly
+can parse correctly
 
 ```bash
 tps <template> --packages <package> [packages...] -- <template-name-to-create>

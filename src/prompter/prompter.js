@@ -11,7 +11,7 @@ import Prompt from './prompt';
  * @property {boolean} default - Use all default answers
  */
 const DEFAULT_OPTIONS = {
-  default: false
+  default: false,
 };
 
 /**
@@ -26,7 +26,7 @@ export default class Prompter {
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.answers = {};
-    this.prompts = prompts.map(p => new Prompt(p));
+    this.prompts = prompts.map((p) => new Prompt(p));
     this.answered = 0;
   }
 
@@ -39,7 +39,7 @@ export default class Prompter {
   }
 
   getPrompt(name) {
-    const prompt = this.prompts.find(p => {
+    const prompt = this.prompts.find((p) => {
       return p.name === name;
     });
 
@@ -53,7 +53,7 @@ export default class Prompter {
       throw new PromptInvalidAnswers(answers);
     }
 
-    this._getPromptsThatNeedAnswers().forEach(prompt => {
+    this._getPromptsThatNeedAnswers().forEach((prompt) => {
       const answer = prompt.answerWith(answers);
       if (is.defined(answer)) {
         this.setAnswer(prompt.name, answer);
@@ -69,7 +69,7 @@ export default class Prompter {
   }
 
   _getPromptsThatNeedAnswers() {
-    return this.prompts.filter(p => !this.hasAnswerToPrompt(p));
+    return this.prompts.filter((p) => !this.hasAnswerToPrompt(p));
   }
 
   hasAnswerToPrompt(promptOrName, answers = this.answers) {
@@ -87,13 +87,13 @@ export default class Prompter {
         if (this.opts.default) {
           const allDefaults = {};
 
-          promptsLeft.forEach(prompt => {
+          promptsLeft.forEach((prompt) => {
             allDefaults[prompt.name] = prompt.default;
           });
 
           this.setAnswers(allDefaults);
         } else {
-          return inquirer.prompt(promptsLeft).then(newAnswers => {
+          return inquirer.prompt(promptsLeft).then((newAnswers) => {
             this.setAnswers(newAnswers);
           });
         }
@@ -101,7 +101,7 @@ export default class Prompter {
       .then(() => {
         const answers = {};
 
-        this.prompts.forEach(prompt => {
+        this.prompts.forEach((prompt) => {
           const { name } = prompt;
           const answer = this.answers[name];
 

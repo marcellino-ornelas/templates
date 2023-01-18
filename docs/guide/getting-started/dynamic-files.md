@@ -1,9 +1,7 @@
 # Dynamic files
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Dynamic files breakdown](#dynamic-files-breakdown)
 - [How to use doT](#how-to-use-dot)
@@ -17,7 +15,6 @@
   - [Packages](#packages)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 ## Dynamic files breakdown
 
@@ -42,7 +39,7 @@ Dynamic files live inside of your template's package folders just like any other
 ## How to use doT
 
 You can visit doTs docs [here](http://olado.github.io/doT/index.html)
- but well introduce you to the basics. doT is just like any other templating language like handlebars, ejs, or jade.
+but well introduce you to the basics. doT is just like any other templating language like handlebars, ejs, or jade.
 
 doT is javascript based language and uses `{{}}` brackets for interpolation. doT has many different kinds of interpolation like loops, conditionals, and more. Any valid javascript code will work inside of those brackets. Do be mindful that all es6+ features might not be supported on the users version of node.
 

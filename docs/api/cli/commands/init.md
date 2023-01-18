@@ -30,7 +30,6 @@ tps init [flags...]
 
 ### Flags
 
-
 <table id="init-table">
     <thead>
       <tr>
@@ -51,7 +50,6 @@ tps init [flags...]
       </tr>
     </tbody>
 </table>
-
 
 <!--
 

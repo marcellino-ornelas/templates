@@ -6,7 +6,7 @@ const TPS = require('../../lib/utilities/constants');
 const {
   InitializedAlreadyError,
   ParentDirectoryInitializedError,
-  GlobalInitializedAlreadyError
+  GlobalInitializedAlreadyError,
 } = require('../../lib/errors');
 const logger = require('../../lib/utilities/logger');
 
@@ -16,7 +16,7 @@ exports.description = 'Initialize local settings';
 
 exports.builder = INIT_OPTIONS;
 
-exports.handler = argv => {
+exports.handler = (argv) => {
   if (argv.verbose) {
     debug.enable('tps:cli');
   }
@@ -24,7 +24,7 @@ exports.handler = argv => {
   const tpsConfig = {
     force: argv.force,
     verbose: argv.verbose,
-    tpsPath: TPS.MAIN_TPS
+    tpsPath: TPS.MAIN_TPS,
   };
 
   logger.cli.info('Cli options: %n', tpsConfig);

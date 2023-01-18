@@ -11,8 +11,8 @@ const config = {
   plugins: ['jest'],
   settings: {
     'import/resolver': {
-      'babel-module': {}
-    }
+      'babel-module': {},
+    },
   },
   rules: {
     'no-console': IGNORE,
@@ -24,18 +24,18 @@ const config = {
     'func-names': [ERROR, 'as-needed'],
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
     'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
-    'no-underscore-dangle': [ERROR, { allowAfterThis: true }]
+    'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
   },
   overrides: [
     Object.assign(
       {
         files: ['__tests__/**/*.js'],
         env: { jest: true },
-        plugins: ['jest']
+        plugins: ['jest'],
       },
       require('eslint-plugin-jest').configs.recommended
-    )
-  ]
+    ),
+  ],
 };
 
 // overrides: [

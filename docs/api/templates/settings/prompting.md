@@ -1,9 +1,7 @@
 # Prompting Object
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Name](#name)
   - [Usage](#usage)
@@ -19,7 +17,6 @@
   - [Example](#example-2)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 
 Review our getting started [prompting guide](../../../guide/getting-started/settings/prompting.md) for examples and more
 

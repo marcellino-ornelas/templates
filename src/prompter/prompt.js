@@ -57,7 +57,7 @@ export default class Prompt {
   answerWith(answers) {
     const canAnswerBy = [this.name, ...this.aliases];
 
-    const didAnswerBy = canAnswerBy.find(by => {
+    const didAnswerBy = canAnswerBy.find((by) => {
       return is.defined(answers[by]);
     });
 

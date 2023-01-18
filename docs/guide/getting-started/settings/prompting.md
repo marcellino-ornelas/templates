@@ -2,10 +2,8 @@
 
 In this section, We will be covering the following topics:
 
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Prompt breakdown](#prompt-breakdown)
 - [How to use Prompting?](#how-to-use-prompting)
@@ -19,14 +17,12 @@ In this section, We will be covering the following topics:
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-
 ## Prompt breakdown
 
 Prompting is exactly what you think it is. Its used to get data from the user. through the command line we will display a message to the user asking for there response. The prompt can also be answered by supplying a flag through the command line or through the node module package for cases where users already know what they want. There options can come in all forms.
 
 Templates uses [inquirer](https://github.com/SBoudrias/Inquirer.js#inquirerjs)
- for prompting. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
-
+for prompting. Any property that you can use in inquirer can be used when creating prompts. See more about inquirer properties [here](https://github.com/SBoudrias/Inquirer.js#question)
 
 ## How to use Prompting?
 

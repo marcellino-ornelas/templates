@@ -25,9 +25,7 @@ class Playground {
     do {
       if (this.name) {
         console.log(
-          `[PLAYGROUND INFO] playground name was already selected (${
-            this.name
-          })`
+          `[PLAYGROUND INFO] playground name was already selected (${this.name})`
         );
       }
       this.stamp = stamp();

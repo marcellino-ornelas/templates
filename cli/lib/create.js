@@ -4,7 +4,7 @@ const Template = require('../../lib/templates');
 const errorExit = require('./error-exit');
 const logger = require('../../lib/utilities/logger');
 
-module.exports.createHandler = argv => {
+module.exports.createHandler = (argv) => {
   /**
    * if we ever want to be able to pass a name in then we should add this to the flags.
    * @example
@@ -36,7 +36,7 @@ module.exports.createHandler = argv => {
     newFolder,
     force,
     wipe,
-    default: _default
+    default: _default,
   };
 
   logger.cli.info('Tps Config: %n', tpsConfig);
@@ -56,7 +56,7 @@ module.exports.createHandler = argv => {
   const renderItems = hasBuildPaths ? buildPaths : null;
 
   const renderData = {
-    name: argv.name
+    name: argv.name,
   };
 
   logger.cli.info('Build paths: %n', tpsConfig);

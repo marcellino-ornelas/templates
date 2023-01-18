@@ -10,7 +10,7 @@ exports.description = 'create a new folder with template';
 
 exports.builder = LIST_OPTIONS;
 
-const removeRcFile = arr => {
+const removeRcFile = (arr) => {
   const i = arr.indexOf('.tpsrc');
 
   if (i === -1) {
@@ -21,7 +21,7 @@ const removeRcFile = arr => {
   return copy;
 };
 
-exports.handler = argv => {
+exports.handler = (argv) => {
   if (TPS.HAS_GLOBAL && argv.global) {
     const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 

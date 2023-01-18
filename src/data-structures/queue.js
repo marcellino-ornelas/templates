@@ -7,7 +7,7 @@ export default class Queue {
   }
 
   enqueue(...args) {
-    args.forEach(item => {
+    args.forEach((item) => {
       this.inbox.push(item);
     });
   }
@@ -30,7 +30,7 @@ export default class Queue {
   }
 
   log(filter) {
-    const cb = filter || (c => c);
+    const cb = filter || ((c) => c);
     const queue = this.inbox
       .stack()
       .reverse()
