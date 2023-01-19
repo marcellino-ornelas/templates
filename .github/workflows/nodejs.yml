@@ -59,6 +59,22 @@ jobs:
         run: npm install
       - name: Test Code
         run: npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Npm Install
+        run: npm install
+      - name: Test Code
+        run: npm run typecheck
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:
