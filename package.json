@@ -19,7 +19,7 @@
     "code:dev": "npm run code:build -- -w",
     "code:prod": "npm run code:build",
     "test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init -- ",
-    "test:core": "npm run test:jest -- --testPathIgnorePatterns cli/init --",
+    "test:core": "npm run test:jest -- --testPathIgnorePatterns=cli/init --",
     "test:jest": "jest",
     "test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
     "typecheck": "tsc --noEmit",
