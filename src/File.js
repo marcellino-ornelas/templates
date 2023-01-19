@@ -118,4 +118,4 @@ class File {
 
 File.prototype.isDot = false;
 
-module.exports = File;
+export default File;
