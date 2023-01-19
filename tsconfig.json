@@ -4,10 +4,8 @@
 		"allowJs": true,
 		"target": "ES6",
 		"moduleResolution": "node",
-		"baseUrl": "./",
-		"rootDir": "./src",
 		"paths": {
-			"@tps": ["./src"],
+			"@tps/*": ["./src/*"],
 			"@test": ["./__tests__"]
 		}
 	},
