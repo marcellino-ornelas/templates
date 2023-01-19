@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"allowJs": true,
+		"resolveJsonModule": true,
 		"target": "ES6",
 		"moduleResolution": "node",
 		"paths": {
