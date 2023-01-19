@@ -124,7 +124,7 @@ describe('[TPS] Render with Wipe:', () => {
     tps._wipe = wipeMock;
 
     fs.outputFileSync(randomDest, 'blah');
-    fs.outputFileSync(randomFileNotInBuildPath);
+    fs.outputFileSync(randomFileNotInBuildPath, '');
 
     return tps.render(cwd, '').then(() => {
       expect(wipeMock).not.toHaveBeenCalled();
