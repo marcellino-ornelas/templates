@@ -20,6 +20,7 @@ import logger from '@tps/utilities/logger';
 import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
 import dot from '@tps/dot';
+import { cosmiconfigSync } from 'cosmiconfig';
 
 /**
  * Default options for Templates
@@ -45,10 +46,14 @@ const DEFAULT_OPTIONS = {
 };
 
 if (TPS.IS_TESTING) {
-    logger.tps.opts.disableLog = true;
+  logger.tps.opts.disableLog = true;
 }
 
 FileSystemNode.ignoreFiles = '**/.gitkeep';
+
+const settingsConfig = cosmiconfigSync('settings', {
+  searchPlaces: ['settings.json', 'settings.js'],
+});
 
 /**
  * @class
@@ -111,9 +116,10 @@ export default class Templates {
     try {
       logger.tps.info('Loading template settings file...');
       // eslint-disable-next-line
-      this.templateSettings = require(this.templateSettingsPath) || {};
+      //   this.templateSettings = require(this.templateSettingsPath) || {};
+      this.templateSettings = settingsConfig.search(this.src).config;
     } catch (e) {
-      logger.tps.info('Template has no Settings file');
+      logger.tps.info(`Template has no Settings file`, e);
     }
 
     logger.tps.info('Template settings: %n', this.templateSettings);

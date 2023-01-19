@@ -4,7 +4,7 @@
 
 import CreateDebug, { logFunctions } from '@tps/utilities/logger/createDebug';
 import { debug } from 'debug';
-import stripAnsi from 'strip-ansi';
+import * as stripAnsi from 'strip-ansi';
 
 /*
  * Constants

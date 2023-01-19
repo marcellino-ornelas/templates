@@ -31,6 +31,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/inquirer": "^9.0.3",
     "@types/jest": "^29.2.6",
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
@@ -51,6 +52,7 @@
     "ansi-colors": "4.1.1",
     "babel-eslint": "10.0.3",
     "bluebird": "3.5.5",
+    "cosmiconfig": "^8.0.0",
     "debug": "4.1.1",
     "dot": "1.1.2",
     "filenamify": "2.1.0",

@@ -4,7 +4,7 @@
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
-import inquirer from 'inquirer';
+import * as inquirer from 'inquirer';
 
 jest.mock('inquirer');
 
@@ -31,7 +31,7 @@ describe('[Templates] Prompts Process:', () => {
   it('should prompt user when needed', () => {
     expect(tps._prompts.needsAnswers()).toBeTruthy();
     inquirer.prompt = jest.fn().mockResolvedValue(defaultAnswers);
-    // inquirer.prompt.mockResolvedValue(defaultAnswers);
+
     return tps.render(playground.box(), 'App').then(() => {
       expect(playground.pathTo('App/readme.md')).toBeFile();
       expect(playground.pathTo('App/package1.js')).toBeFile();
