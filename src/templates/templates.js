@@ -18,7 +18,7 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import * as colors from 'ansi-colors';
-import Promise from 'bluebird';
+import * as Promise from 'bluebird';
 import dot from '@tps/dot';
 
 /**
@@ -45,7 +45,7 @@ const DEFAULT_OPTIONS = {
 };
 
 if (TPS.IS_TESTING) {
-  //   logger.tps.opts.disableLog = true;
+    logger.tps.opts.disableLog = true;
 }
 
 FileSystemNode.ignoreFiles = '**/.gitkeep';

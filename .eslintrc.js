@@ -1,19 +1,18 @@
-const path = require('path');
-
 const IGNORE = 0;
 const ERROR = 2;
 
 const config = {
-  parser: 'babel-eslint',
+  parser: '@typescript-eslint/parser',
   env: { node: 1, es6: true },
+  root: true,
 
-  extends: ['airbnb', 'prettier'],
+  extends: [
+    'airbnb',
+    'prettier',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   plugins: ['jest'],
-  settings: {
-    'import/resolver': {
-      'babel-module': {},
-    },
-  },
   rules: {
     'no-console': IGNORE,
     'import/no-named-as-default': IGNORE,
@@ -27,14 +26,12 @@ const config = {
     'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
   },
   overrides: [
-    Object.assign(
-      {
-        files: ['__tests__/**/*.js'],
-        env: { jest: true },
-        plugins: ['jest'],
-      },
-      require('eslint-plugin-jest').configs.recommended
-    ),
+    {
+      files: ['__tests__/**/*.js'],
+      env: { jest: true },
+      plugins: ['jest'],
+      ...require('eslint-plugin-jest').configs.recommended,
+    },
   ],
 };
 
