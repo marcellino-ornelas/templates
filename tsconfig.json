@@ -2,10 +2,10 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"allowJs": true,
-		"target": "es5",
+		"target": "ES6",
 		"moduleResolution": "node",
 		"baseUrl": "./",
-		"rootDir": "./",
+		"rootDir": "./src",
 		"paths": {
 			"@tps": ["./src"],
 			"@test": ["./__tests__"]
