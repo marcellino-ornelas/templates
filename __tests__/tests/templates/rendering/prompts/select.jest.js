@@ -44,7 +44,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
     }
   );
 
-  it.only('should render a template when answering prompt with alias', (done) => {
+  it('should render a template when answering prompt with alias', (done) => {
     tps.verbose = true;
     const destPath = playground.pathTo('App');
 
