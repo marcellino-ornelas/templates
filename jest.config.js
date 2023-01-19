@@ -13,7 +13,12 @@ const path = require('path');
 module.exports = {
   moduleFileExtensions: ['ts', 'js'],
   transform: {
-    '^.+\\.(ts|js)?$': 'ts-jest',
+    '^.+\\.(ts|js)?$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.json',
+      },
+    ],
   },
   testMatch: ['**/__tests__/tests/**/*jest.(js|ts)'],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
@@ -21,10 +26,5 @@ module.exports = {
   moduleNameMapper: {
     '^@tps/(.+)$': path.join(__dirname, 'src/$1'),
     '^@test/(.+)$': path.join(__dirname, '__tests__/$1'),
-  },
-  globals: {
-    'ts-jest': {
-      tsconfig: 'tsconfig.json',
-    },
   },
 };
