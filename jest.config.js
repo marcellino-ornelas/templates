@@ -1,9 +1,3 @@
-// module.exports = {
-//   testMatch: ['**/__tests__/tests/**/*jest.js'],
-//   setupFilesAfterEnv: ['./__tests__/setup'],
-//   testEnvironment: 'node',
-// };
-
 const { pathsToModuleNameMapper } = require('ts-jest');
 // In the following statement, replace `./tsconfig` with the path to your `tsconfig` file
 // which contains the path mapping (ie the `compilerOptions.paths` option):
@@ -20,7 +14,7 @@ module.exports = {
       },
     ],
   },
-  testPathIgnorePatterns: ['<rootDir>/lib'],
+  testPathIgnorePatterns: ['<rootDir>/lib/'],
   testMatch: ['**/__tests__/tests/**/*jest.(js|ts)'],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
   testEnvironment: 'node',
