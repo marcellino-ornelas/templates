@@ -1,11 +1,11 @@
 /**
  * Modules
  */
-import fs from 'fs-extra';
-import path from 'path';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { isFile, isDir } from '@tps/utilities/fileSystem';
 import { hasProp } from '@tps/utilities/helpers';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 /**
  * Constants
@@ -74,4 +74,4 @@ class Playground {
   }
 }
 
-module.exports = Playground;
+export default Playground;

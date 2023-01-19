@@ -1,6 +1,6 @@
 import dot from '@tps/dot';
-import path from 'path';
-import fs from 'fs-extra';
+import * as path from 'path';
+import * as fs from 'fs-extra';
 import DotError from '@tps/errors/dot-error';
 import logger from '@tps/utilities/logger';
 

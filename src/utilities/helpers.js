@@ -1,4 +1,4 @@
-import is from 'is';
+import * as is from 'is';
 
 /**
  * Turn a regular node style callback function into a promise

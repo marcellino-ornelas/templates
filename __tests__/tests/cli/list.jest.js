@@ -2,7 +2,7 @@
  * Modules
  */
 
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 import { TESTING_TPS } from '@test/utilities/constants';
 import { tpsCli } from '@test/utilities/tps-cli';
 

@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import { TPS_FOLDER } from '@tps/utilities/constants';
 
 export const TESTING_TPS = path.join(__dirname, `../${TPS_FOLDER}`);

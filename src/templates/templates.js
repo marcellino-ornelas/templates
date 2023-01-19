@@ -1,6 +1,6 @@
-import path from 'path';
-import fs from 'fs-extra';
-import is from 'is';
+import * as path from 'path';
+import * as fs from 'fs-extra';
+import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';

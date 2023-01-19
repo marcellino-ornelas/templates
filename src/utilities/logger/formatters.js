@@ -1,8 +1,8 @@
 import debug from 'debug';
 import pjson from 'prettyjson-256';
 import { defaults } from '@tps/utilities/helpers';
-import is from 'is';
-import colors from 'ansi-colors';
+import * as is from 'is';
+import * as colors from 'ansi-colors';
 
 process.env.DEBUG_COLORS = false;
 

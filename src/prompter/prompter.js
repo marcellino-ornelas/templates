@@ -1,4 +1,4 @@
-import is from 'is';
+import * as is from 'is';
 import inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';

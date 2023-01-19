@@ -1,7 +1,7 @@
 /**
  * Modules
  */
-import is from 'is';
+import * as is from 'is';
 import { eachObj } from '@tps/utilities/helpers';
 
 /**

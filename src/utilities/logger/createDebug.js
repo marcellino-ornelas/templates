@@ -1,5 +1,5 @@
 import debug from 'debug';
-import is from 'is';
+import * as is from 'is';
 import { defaults } from '@tps/utilities/helpers';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
