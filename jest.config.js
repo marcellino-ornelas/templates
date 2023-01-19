@@ -12,7 +12,7 @@ module.exports = {
     '^.+\\.(ts|js)?$': 'ts-jest',
   },
   testMatch: ['**/__tests__/tests/**/*jest.(js|ts)'],
-  setupFilesAfterEnv: ['./__tests__/setup.ts'],
+  setupFilesAfterEnv: ['./__tests__/setup.js'],
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@tps/(.+)$': path.join(__dirname, 'src/$1'),
