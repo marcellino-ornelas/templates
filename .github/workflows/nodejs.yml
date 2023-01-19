@@ -39,10 +39,12 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Npm Install
         run: npm install
-      - name: Build Assests
-        run: npm run code:build
+      # - name: Build Assests
+      #   run: npm run code:build
       - name: Test Code
-        run: npm run test:core
+        run: |
+          npm run code:build
+          npm run test:core
 
   lint:
     runs-on: ubuntu-latest
