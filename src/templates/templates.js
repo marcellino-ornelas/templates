@@ -17,7 +17,7 @@ import {
   NoPromptsError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
-import colors from 'ansi-colors';
+import * as colors from 'ansi-colors';
 import Promise from 'bluebird';
 import dot from '@tps/dot';
 
@@ -45,7 +45,7 @@ const DEFAULT_OPTIONS = {
 };
 
 if (TPS.IS_TESTING) {
-  logger.tps.opts.disableLog = true;
+  //   logger.tps.opts.disableLog = true;
 }
 
 FileSystemNode.ignoreFiles = '**/.gitkeep';
@@ -75,7 +75,7 @@ export default class Templates {
         this.src = maybeGlobalTemp;
         break;
       default:
-        logger.tps.error('Template not found! %O', {
+        logger.tps.error('Template not found! \n%O', {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,

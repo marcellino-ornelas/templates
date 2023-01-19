@@ -1,6 +1,6 @@
 import * as path from 'path';
-import fs from 'fs';
-import minimatch from 'minimatch';
+import * as fs from 'fs';
+import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
 import FileSystemNode from './fileSystemNode';

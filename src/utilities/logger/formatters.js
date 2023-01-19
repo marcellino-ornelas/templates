@@ -1,5 +1,5 @@
 import debug from 'debug';
-import pjson from 'prettyjson-256';
+import * as pjson from 'prettyjson-256';
 import { defaults } from '@tps/utilities/helpers';
 import * as is from 'is';
 import * as colors from 'ansi-colors';
