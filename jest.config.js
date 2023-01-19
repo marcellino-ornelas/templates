@@ -15,7 +15,7 @@ module.exports = {
     ],
   },
   testPathIgnorePatterns: ['<rootDir>/lib/'],
-  testMatch: ['./__tests__/tests/**/*jest.(js|ts)'],
+  testMatch: ['**/__tests__/tests/**/*jest.(js|ts)'],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
   testEnvironment: 'node',
   moduleNameMapper: {
