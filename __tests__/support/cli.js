@@ -95,11 +95,8 @@ const cleanBuilders = (buildersUnsafe) => {
  * @param {string[]} - builders
  * @returns {string[]} - array of builders with `-create` appended to the end of it
  */
-const makeCreateBuilders = (builders) => {
-  return !is.array(builders)
-    ? null
-    : builders.map((build) => `${build}-create`);
-};
+const makeCreateBuilders = (builders) =>
+  !is.array(builders) ? null : builders.map((build) => `${build}-create`);
 
 /**
  * Convert builders into a string.
@@ -107,14 +104,14 @@ const makeCreateBuilders = (builders) => {
  * @param {string[]} - builders
  * @returns {string} - string of all builders
  */
-const makeBuildersString = (builders) => {
-  return !is.array(builders) ? '' : builders.join(' ');
-};
+const makeBuildersString = (builders) =>
+  !is.array(builders) ? '' : builders.join(' ');
 
 export const DEFAULT_FILE_CONTENT = 'TPS_FILE_CONTENTS_MOCK';
 
 export const mockTemplateFileExistsError = (
   cwd,
+  // eslint-disable-next-line
   buildersUnsafe = null,
   file,
   contents = DEFAULT_FILE_CONTENT

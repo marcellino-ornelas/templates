@@ -1,3 +1,5 @@
+const eslintPlugin = require('eslint-plugin-jest');
+
 const IGNORE = 0;
 const ERROR = 2;
 
@@ -12,7 +14,7 @@ const config = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  plugins: ['jest'],
+  plugins: ['jest', 'import'],
   rules: {
     'no-console': IGNORE,
     'import/no-named-as-default': IGNORE,
@@ -27,20 +29,30 @@ const config = {
   },
   overrides: [
     {
+      files: ['**/*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': IGNORE,
+      },
+    },
+    {
       files: ['__tests__/**/*.js'],
       env: { jest: true },
       plugins: ['jest'],
-      ...require('eslint-plugin-jest').configs.recommended,
+      ...eslintPlugin.configs.recommended,
     },
   ],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx', '.js'],
+    },
+    'import/resolver': {
+      typescript: {
+        // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        alwaysTryTypes: true,
+        project: __dirname,
+      },
+    },
+  },
 };
 
-// overrides: [
-//   Object.assign(
-//     {
-//       files: ['**/*.jest.js']
-//     },
-//     require('eslint-plugin-jest').configs.recommended
-//   )
-// ]
 module.exports = config;

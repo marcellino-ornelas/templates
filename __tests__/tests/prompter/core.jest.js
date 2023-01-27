@@ -17,7 +17,7 @@ describe('[Prompter] Core:', () => {
   it('should have all prompt answers', () => {
     prompter.setAnswers(ANSWER_TO_PROMPTS);
 
-    prompter.getAnswers().then((promptAnswers) => {
+    return prompter.getAnswers().then((promptAnswers) => {
       expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
     });
   });
@@ -27,7 +27,7 @@ describe('[Prompter] Core:', () => {
       t: 'data',
     });
 
-    prompter.getAnswers().then((promptAnswers) => {
+    return prompter.getAnswers().then((promptAnswers) => {
       expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
     });
   });

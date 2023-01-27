@@ -59,6 +59,7 @@ export class FileSystemNode extends Tree {
   }
 
   getRelativePathFrom(parentDirNode, includeParentNode = true) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let child = this;
     const pathStack = new Stack();
 

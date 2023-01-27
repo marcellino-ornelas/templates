@@ -1,3 +1,5 @@
+/* eslint-disable no-import-assign */
+/* eslint-disable no-underscore-dangle */
 /*
  * Modules
  */
@@ -71,5 +73,5 @@ describe('[Templates] Prompts Process:', () => {
   });
 
   it.todo('should add the prompt answer to tps.answers');
-  // describe('should be able to use tpsType');
+  describe.todo('should be able to use tpsType');
 });

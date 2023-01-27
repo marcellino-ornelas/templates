@@ -1,8 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
-
-import inquirer from 'inquirer';
 
 jest.mock('inquirer');
 
@@ -41,14 +40,13 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
     });
   });
 
-  it('should render a template when answering prompt with alias', (done) => {
+  it('should render a template when answering prompt with alias', () => {
     tps.setAnswers({ i: true });
 
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 
-    tps.render(playground.box(), 'App').then(() => {
+    return tps.render(playground.box(), 'App').then(() => {
       expect(ignoreFile).toBeFile();
-      done();
     });
   });
 

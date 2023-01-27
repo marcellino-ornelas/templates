@@ -8,8 +8,8 @@ import * as is from 'is';
  */
 export function promisify(func, _this = null) {
   const fn = func.bind(_this);
-  return (...args) => {
-    return new Promise((resolve, reject) => {
+  return (...args) =>
+    new Promise((resolve, reject) => {
       args.push((err, data) => {
         if (err) {
           reject(err);
@@ -20,7 +20,6 @@ export function promisify(func, _this = null) {
 
       fn(...args);
     });
-  };
 }
 
 export function hasProp(obj, prop) {
@@ -65,6 +64,7 @@ export function couldMatchObj(matcher, obj) {
           matched = val.not !== obj[key];
           break;
         }
+      // eslint-disable-next-line no-fallthrough
       default:
         matched = val === obj[key];
     }
@@ -81,6 +81,7 @@ export function couldMatchObj(matcher, obj) {
  * @param {Object} defaultObj - default properties that you want `options` to have
  * @returns {Object} - options with all default properties
  */
+// eslint-disable-next-line default-param-last
 export function defaults(options = {}, defaultObj) {
   const newObj = { ...options };
 

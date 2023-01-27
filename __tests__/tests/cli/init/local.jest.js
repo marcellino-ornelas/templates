@@ -40,11 +40,9 @@ describe('Command Line: Init Local', () => {
     return init(cwd);
   });
 
-  it('should error out if repo is already initialized', () => {
-    return expect(init(cwd, {}, { fail: true })).rejects.toContain(
+  it('should error out if repo is already initialized', () => expect(init(cwd, {}, { fail: true })).rejects.toContain(
       'InitializedAlreadyError'
-    );
-  });
+    ));
 
   /**
    * @docs api/cli/commands/init.md#description

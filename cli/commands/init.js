@@ -1,5 +1,5 @@
 const debug = require('debug');
-const INIT_OPTIONS = require('../options/init');
+const INIT_OPTIONS = require('../options/init.json');
 const errorExit = require('../lib/error-exit');
 const Template = require('../../lib/templates');
 const TPS = require('../../lib/utilities/constants');

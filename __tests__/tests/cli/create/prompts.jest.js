@@ -15,17 +15,14 @@ describe('[cli] Create:', () => {
 
   beforeEach(() => playground.createBox('create_prompt'));
 
+  // eslint-disable-next-line jest/expect-expect
   it.each([['less'], ['css']])(
     'should be able answer prompts from command line arguments',
-    (cssType) => {
-      return createTemplate(
-        playground.box(),
-        'testing-prompt-types-select',
-        'App',
-        { css: cssType }
-      ).then(() => {
+    (cssType) =>
+      createTemplate(playground.box(), 'testing-prompt-types-select', 'App', {
+        css: cssType,
+      }).then(() => {
         checkFilesForTemplate(playground.box(), 'App', [`index.${cssType}`]);
-      });
-    }
+      })
   );
 });

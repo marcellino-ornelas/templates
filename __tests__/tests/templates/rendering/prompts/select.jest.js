@@ -31,12 +31,14 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
     ['css', 'index.css'],
     ['less', 'index.less'],
   ])(
-    'it should render a template with values passed into prompt',
+    'should render a template with values passed into prompt',
     (answer, expected) => {
       const destPath = playground.pathTo('App');
+      // eslint-disable-next-line no-import-assign
       inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
       return tps.render(playground.box(), 'App').then(() => {
+        // eslint-disable-next-line no-underscore-dangle
         expect(tps._prompts.answers.cssType).toBe(answer);
         expect(tps.packages).toHaveProperty(answer);
         expect(destPath).toHaveAllFilesAndDirectories([expected]);
@@ -44,18 +46,18 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
     }
   );
 
-  it('should render a template when answering prompt with alias', (done) => {
+  it('should render a template when answering prompt with alias', () => {
     tps.verbose = true;
     const destPath = playground.pathTo('App');
 
     tps.setAnswers({ c: 'less' });
 
+    // eslint-disable-next-line no-underscore-dangle
     expect(tps._prompts.needsAnswers()).toBeFalsy();
 
-    tps.render(playground.box(), 'App').then(() => {
+    return tps.render(playground.box(), 'App').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(['index.less']);
       expect(tps.packages).toHaveProperty('less');
-      done();
     });
   });
 });

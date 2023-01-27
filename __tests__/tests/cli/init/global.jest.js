@@ -3,7 +3,6 @@ import { TESTING_INIT_DIR } from '@test/utilities/constants';
 import * as fs from 'fs-extra';
 import { init } from '@test/support/cli';
 import * as TPS from '@tps/utilities/constants';
-import { isDir } from '@tps/utilities/fileSystem';
 
 /**
  * Constants
@@ -16,7 +15,6 @@ const playground = new Playground(TESTING_INIT_DIR);
  */
 describe('Command Line: Init Global', () => {
   let cwd;
-  let tpsPath;
 
   beforeAll(() => playground.create());
   afterAll(() => playground.destroy());
@@ -25,7 +23,6 @@ describe('Command Line: Init Global', () => {
   beforeAll(() =>
     playground.createBox('init').then(() => {
       cwd = playground.box();
-      tpsPath = playground.pathTo('.tps');
       dist = playground.pathTo('dist');
 
       return fs.mkdir(dist);

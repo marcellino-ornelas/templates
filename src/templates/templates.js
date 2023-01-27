@@ -9,7 +9,6 @@ import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
   TemplateNotFoundError,
-  SettingsUnkownFileTypeError,
   RequiresTemplateError,
   PackageAlreadyCompiledError,
   DirectoryNotFoundError,
@@ -230,7 +229,7 @@ export default class Templates {
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
-    const { name: globalName } = data;
+    // const { name: globalName } = data;
     let finalDest = dest;
 
     if (!buildPaths) {
@@ -372,6 +371,7 @@ export default class Templates {
                     // when were using wipe but were not building a new folder we need to make sure all
                     // files that already exist get overridden
                     this.compiledFiles.forEach((file) => {
+                      // eslint-disable-next-line no-param-reassign
                       file.opts.force = true;
                     });
                     return;
@@ -491,6 +491,7 @@ export default class Templates {
       fs.removeSync(buildPath);
     }
 
+    // eslint-disable-next-line prefer-const
     let { files, dirs } = this.successfulBuilds;
 
     const filesIsEmpty = is.array.empty(files);
@@ -512,7 +513,7 @@ export default class Templates {
         try {
           fs.removeSync(dir);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
-        } catch (e) {
+        } catch (err) {
           logger.tps.error('Clean up failed when deleting directories %n', err);
         }
 
@@ -534,7 +535,7 @@ export default class Templates {
         try {
           fs.removeSync(file);
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
-        } catch (e) {
+        } catch (err) {
           logger.tps.error('Clean up failed when deleting files %n', err);
         }
       });
@@ -546,7 +547,7 @@ export default class Templates {
   _checkForFiles(dest, data) {
     for (let i = 0; i < this.compiledFiles.length; i++) {
       const file = this.compiledFiles[i];
-      const finalDest = file._dest(dest, data);
+      const finalDest = file.dest(dest, data);
 
       if (isFile(finalDest)) {
         throw new FileExistError(finalDest);
@@ -565,16 +566,16 @@ export default class Templates {
 
     const files = this.compiledFiles.filter((file) => !file.isDot);
     const dotFiles = this.compiledFiles.filter((file) => file.isDot);
-    const dotContents = dotFiles.map((file) => {
+    const dotContents = dotFiles.map((file) =>
       /**
        * Will throw error if something is wrong with doT
        */
-      return [
+      [
         file,
-        file._dest(buildPath, data),
+        file.dest(buildPath, data),
         file.fileDataTemplate(data, this._defs, buildPath),
-      ];
-    });
+      ]
+    );
 
     const filesInProgress = [];
     let hasErroredOut = false;
@@ -602,7 +603,7 @@ export default class Templates {
     });
 
     files.forEach((file) => {
-      const finalDest = file._dest(buildPath, data);
+      const finalDest = file.dest(buildPath, data);
       loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
       filesInProgress.push(
         file

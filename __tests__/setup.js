@@ -9,36 +9,36 @@ jest.setTimeout(30000);
 expect.extend({
   toBeFile(received) {
     const passed = isFile(received);
-    const _received = this.utils.printReceived(received);
+    const receivedAfterPrint = this.utils.printReceived(received);
 
     if (passed) {
       return {
         pass: true,
-        message: () => `${_received} should not be a file.`,
+        message: () => `${receivedAfterPrint} should not be a file.`,
       };
     }
     return {
       pass: false,
-      message: () => `${_received} should be a file.`,
+      message: () => `${receivedAfterPrint} should be a file.`,
     };
   },
   toBeDirectory(received) {
     const passed = isDir(received);
-    const _received = this.utils.printReceived(received);
+    const receivedAfterPrint = this.utils.printReceived(received);
 
     if (passed) {
       return {
         pass: true,
-        message: () => `${_received} should not be a directory.`,
+        message: () => `${receivedAfterPrint} should not be a directory.`,
       };
     }
     return {
       pass: false,
-      message: () => `${_received} should be a directory.`,
+      message: () => `${receivedAfterPrint} should be a directory.`,
     };
   },
   toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
-    const _received = this.utils.printReceived(dirPath);
+    const receivedAfterPrint = this.utils.printReceived(dirPath);
     const isReg = !this.isNot;
     let count = 0;
     const files = [];
@@ -48,7 +48,7 @@ expect.extend({
       const pathToFile = path.join(dirPath, fileOrDir);
       const isFileLike = isDir(pathToFile) || isFile(pathToFile);
       if (isFileLike === isReg) {
-        count++;
+        count += 1;
       } else {
         files.push(fileOrDir);
       }
@@ -62,7 +62,7 @@ expect.extend({
       return {
         pass: !this.isNot,
         message: () => `\
-${_received} had these files/directories
+${receivedAfterPrint} had these files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `,
@@ -71,7 +71,7 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
     return {
       pass: !!this.isNot,
       message: () => `\
-${_received} did not have files/directories
+${receivedAfterPrint} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 
@@ -83,8 +83,8 @@ ${pjson.render(dirPathLayout)}
   },
   toHaveFileContents(destPath, contents = '') {
     const fileContents = fs.readFileSync(destPath).toString();
-    const _received = this.utils.printReceived(destPath);
-    const _expected = this.utils.printExpected(contents);
+    const receivedAfterPrint = this.utils.printReceived(destPath);
+    const expected = this.utils.printExpected(contents);
 
     const passed = fileContents.includes(contents);
 
@@ -97,9 +97,14 @@ ${pjson.render(dirPathLayout)}
       return {
         pass: true,
         message: () => `
-${this.utils.matcherHint('not.toHaveFileContents', destPath, contents, options)}
+${this.utils.matcherHint(
+  'not.toHaveFileContents',
+  receivedAfterPrint,
+  contents,
+  options
+)}
 
-File should not have contents: ${_expected}
+File should not have contents: ${expected}
 
 Received: ${this.utils.printReceived(fileContents)}
 `,
@@ -108,9 +113,14 @@ Received: ${this.utils.printReceived(fileContents)}
     return {
       pass: false,
       message: () => `
-${this.utils.matcherHint('toHaveFileContents', destPath, contents, options)}
+${this.utils.matcherHint(
+  'toHaveFileContents',
+  receivedAfterPrint,
+  contents,
+  options
+)}
 
-File should have contents: ${_expected}
+File should have contents: ${expected}
 
 Received: ${this.utils.printReceived(fileContents)}
 `,

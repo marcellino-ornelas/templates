@@ -55,6 +55,7 @@
     "cosmiconfig": "^8.0.0",
     "debug": "4.1.1",
     "dot": "1.1.2",
+    "eslint-import-resolver-typescript": "^3.5.3",
     "filenamify": "2.1.0",
     "find-up": "3.0.0",
     "fs-extra": "7.0.1",

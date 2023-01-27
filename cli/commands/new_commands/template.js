@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs-extra');
 const Template = require('../../../lib/templates');
 const TPS = require('../../../lib/utilities/constants');
 const { isDir } = require('../../../lib/utilities/fileSystem');

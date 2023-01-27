@@ -3,8 +3,7 @@
  */
 
 import * as path from 'path';
-import * as fs from 'fs';
-import { DirNode, FileNode } from '@tps/fileSystemTree';
+import { FileNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
 /*

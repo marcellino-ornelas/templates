@@ -1,8 +1,8 @@
 export default class FileWriteError extends Error {
-  constructor(dest, error) {
+  constructor(dest) {
     super();
     this.name = 'FileWriteError';
-    this.path = filePath;
+    this.path = dest;
     this.message = `File already exists (${this.path})`;
   }
 }

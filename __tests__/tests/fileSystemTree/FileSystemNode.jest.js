@@ -3,14 +3,13 @@
  */
 
 import * as path from 'path';
-import { DirNode, FileNode } from '@tps/fileSystemTree';
+import { DirNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
 /*
  * Constants
  */
 const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
-const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('[FileSystemTree] FileSystemNode:', () => {
   let indexFile;
@@ -20,8 +19,11 @@ describe('[FileSystemTree] FileSystemNode:', () => {
 
   beforeAll(() => {
     mainDir = new DirNode('main', PATH_TO_TEMPLATES);
+    // eslint-disable-next-line prefer-destructuring
     indexFile = mainDir.find({ name: 'index.js.dot' })[0];
+    // eslint-disable-next-line prefer-destructuring
     dbDir = mainDir.find({ name: 'db' })[0];
+    // eslint-disable-next-line prefer-destructuring
     dbFile = mainDir.find({ name: 'db.js' })[0];
   });
 

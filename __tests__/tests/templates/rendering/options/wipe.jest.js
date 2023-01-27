@@ -6,8 +6,6 @@ import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import * as fs from 'fs-extra';
 import Templates from '@test/templates';
 import * as path from 'path';
-import logger from '@tps/utilities/logger';
-// import errors from '@tps/errors';
 
 /*
  * Constants
@@ -111,6 +109,7 @@ describe('[TPS] Render with Wipe:', () => {
      *        | - <templates files...>
      */
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     const wipeMock = jest.fn(() => {});
     const cwd = playground.pathTo('app');
     const randomDest = path.join(cwd, 'some-random-file.js');
@@ -217,8 +216,9 @@ describe('[TPS] Render with Wipe:', () => {
     });
   });
 
-  // it('should not delete a parent directory contents');
+  it.todo('should not delete a parent directory contents');
 
+  // eslint-disable-next-line jest/no-commented-out-tests
   // it.only('should be able to render a template with wipe and no new folder', () => {
   //   const destPath = playground.pathTo('app');
   //   const randomDest = playground.pathTo('app/some-random-file.js');

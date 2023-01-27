@@ -1,12 +1,7 @@
 /*
  * Modules
  */
-
 import Templates from '@test/templates';
-
-/*
- * Constants
- */
 
 describe('[Templates] Settings:', () => {
   let tps;

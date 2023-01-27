@@ -57,14 +57,10 @@ const render = (object, indent = 0, opts = {}) => {
 /**
  * Formatters
  */
-debug.formatters.n = (v) => {
-  return `\n${render(v, 2)}`;
-};
+debug.formatters.n = (v) => `\n${render(v, 2)}`;
 
 /* All objects, arrays */
-debug.formatters.O = (v) => {
-  return render(v, 2);
-};
+debug.formatters.O = (v) => render(v, 2);
 
 /* only used when you want to use inline */
 debug.formatters.o = (v) => {
@@ -90,9 +86,7 @@ debug.formatters.o = (v) => {
   return render(v);
 };
 
-debug.formatters.s = (v) => {
-  return colors.white(v);
-};
+debug.formatters.s = (v) => colors.white(v);
 
 /**
  * Override log
