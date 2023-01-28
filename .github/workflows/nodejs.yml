@@ -60,7 +60,8 @@ jobs:
       - name: Npm Install
         run: npm install
       - name: Test Code
-        run: npm run lint
+        run: |
+          npm run lint
 
   typecheck:
     runs-on: ubuntu-latest

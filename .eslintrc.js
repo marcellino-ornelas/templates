@@ -40,6 +40,13 @@ const config = {
       plugins: ['jest'],
       ...eslintPlugin.configs.recommended,
     },
+    {
+      files: ['cli/**/*.js'],
+      rules: {
+        'import/no-unresolved': IGNORE,
+        'import/extensions': IGNORE,
+      },
+    },
   ],
   settings: {
     'import/parsers': {
