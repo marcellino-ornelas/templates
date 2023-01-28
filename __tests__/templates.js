@@ -1,5 +1,5 @@
 import Templates from '@tps/templates';
-import path from 'path';
+import * as path from 'path';
 import { TPS_FOLDER } from '@tps/utilities/constants';
 
 export default class TemplateOverride extends Templates {

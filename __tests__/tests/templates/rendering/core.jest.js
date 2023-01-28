@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import * as fs from 'fs-extra';
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/utilities/constants';
@@ -7,7 +7,6 @@ import {
   DirectoryNotFoundError,
   RequiresTemplateError,
 } from '@tps/errors';
-import logger from '@tps/utilities/logger';
 
 /**
  * Constants

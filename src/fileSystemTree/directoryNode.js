@@ -1,6 +1,6 @@
-import path from 'path';
-import fs from 'fs';
-import minimatch from 'minimatch';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
 import FileSystemNode from './fileSystemNode';
@@ -11,6 +11,7 @@ export class DirectoryNode extends FileSystemNode {
     let parentDir = parentDirNode;
     if (name && !parentDirNode) {
       parentDir = path.dirname(name);
+      // eslint-disable-next-line no-param-reassign
       name = path.basename(name);
     }
     // this.verbose = verbose || false;
@@ -22,9 +23,7 @@ export class DirectoryNode extends FileSystemNode {
   toObject() {
     const obj = super.toObject();
 
-    obj.children = this.children.map((fileNode) => {
-      return fileNode.toObject();
-    });
+    obj.children = this.children.map((fileNode) => fileNode.toObject());
 
     return obj;
   }
@@ -70,10 +69,10 @@ export class DirectoryNode extends FileSystemNode {
   }
 
   find(selectBy = {}) {
-    return this.selectChildren((fsNode) => {
+    return this.selectChildren((fsNode) =>
       // console.log(fsNode.path);
-      return couldMatchObj(selectBy, fsNode);
-    });
+      couldMatchObj(selectBy, fsNode)
+    );
   }
 }
 

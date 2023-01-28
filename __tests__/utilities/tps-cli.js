@@ -1,6 +1,6 @@
-import child from 'child_process';
+import * as child from 'child_process';
 import { defaults } from '@tps/utilities/helpers';
-import path from 'path';
+import * as path from 'path';
 import { MAIN_DIR } from '@tps/utilities/constants';
 
 const cliPath = path.join(MAIN_DIR, 'cli/index.js');

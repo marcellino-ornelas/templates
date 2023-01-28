@@ -1,7 +1,7 @@
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
-import fs from 'fs';
+import * as fs from 'fs';
 
 /**
  * Templates testing tpsrc
@@ -9,7 +9,7 @@ import fs from 'fs';
 const playground = new Playground(TESTING_DIR);
 const extendedDest = './new-path';
 
-describe('[Templates] tpsrc: ', () => {
+describe('[Templates] tpsrc:', () => {
   beforeAll(() => playground.create());
   afterAll(() => playground.destroy());
 
@@ -21,6 +21,7 @@ describe('[Templates] tpsrc: ', () => {
   });
 
   /* Should separate opts from answers */
+  // eslint-disable-next-line jest/no-commented-out-tests
   // it('should load local tpsrc file', () => {
   //   const { opts } = tps;
   //   const { answers } = tps._prompts;
@@ -45,6 +46,7 @@ describe('[Templates] tpsrc: ', () => {
   });
 
   it('should be able to set answers in tpsrc', () => {
+    // eslint-disable-next-line no-underscore-dangle
     const { answers } = tps._prompts;
 
     expect(answers).toEqual(
@@ -54,34 +56,25 @@ describe('[Templates] tpsrc: ', () => {
     );
   });
 
-  it.todo(`
-    should be able to set configurations for a global template
-  `);
+  it.todo('should be able to set configurations for a global template');
 
-  it.todo(`
-    should be able to set configurations for a local template
-  `);
+  it.todo('should be able to set configurations for a local template');
 
-  it.todo(`
-    should be able to override configurations from global tpsrc when a user has tpsrc in tps project
-  `);
+  it.todo(
+    'should be able to override configurations from global tpsrc when a user has tpsrc in tps project'
+  );
 
-  it.todo(`
-    should be able to override configurations from the root directory when: 
-      A subdirectory has a tpsrc file and 
-        A user cwd is inside of the subdirectory that has the tpsrcs
-  `);
+  it.todo(
+    'should be able to override configurations from the root directory when: A subdirectory has a tpsrc file and A user cwd is inside of the subdirectory that has the tpsrcs'
+  );
 
-  it.todo(`
-    should be able to override configurations from the root directory when: 
-      A subdirectory has a tpsrc file and:
-        renders a template with a buildpath that will go to a directory that has a tpsrc file
-  `);
+  it.todo(
+    'should be able to override configurations from the root directory when: A subdirectory has a tpsrc file and: renders a template with a buildpath that will go to a directory that has a tpsrc file'
+  );
 
-  it.todo(`
-    should be able to override configurations from the root directory when: 
-      we pass in new values. (cli, module)
-  `);
+  it.todo(
+    'should be able to override configurations from the root directory when: we pass in new values. (cli, module)'
+  );
 
   describe('when adding options in tpsrc', () => {
     beforeEach(() => playground.createBox('templates_tpsrc'));

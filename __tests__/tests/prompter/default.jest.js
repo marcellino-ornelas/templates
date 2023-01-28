@@ -12,7 +12,7 @@ const DEFAULT_ANSWER_TO_PROMPT = {
  * Constants
  */
 
-describe('[Prompter] Default: ', () => {
+describe('[Prompter] Default:', () => {
   let prompter;
 
   beforeEach(() => {
@@ -21,9 +21,8 @@ describe('[Prompter] Default: ', () => {
     });
   });
 
-  it('should be able to use defaults option', () => {
+  it('should be able to use defaults option', () =>
     prompter.getAnswers().then((promptAnswers) => {
       expect(promptAnswers).toMatchObject(DEFAULT_ANSWER_TO_PROMPT);
-    });
-  });
+    }));
 });

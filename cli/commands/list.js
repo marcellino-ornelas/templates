@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const pjson = require('prettyjson-256');
-const LIST_OPTIONS = require('../options/list');
 const is = require('is');
+const LIST_OPTIONS = require('../options/list.json');
 const TPS = require('../../lib/utilities/constants');
 
 exports.command = ['list', 'ls'];

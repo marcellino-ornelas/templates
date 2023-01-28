@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-conditional-expect */
 /*
  * Modules
  */
@@ -36,31 +37,32 @@ describe('[Templates] Render Process:', () => {
     return playground.createBox('create_clean_up');
   });
 
-  it('should clean up directory if encounters a error in _renderAllDirectories', (done) => {
+  it('should clean up directory if encounters a error in _renderAllDirectories', () => {
     tps.verbose = true;
     const dest = playground.box();
     const appDest = playground.pathTo('app');
-    const _renderAllDirectories = (tps._renderAllDirectories =
-      renderAllDirectoriesMock);
+    const renderAllDirectories = renderAllDirectoriesMock;
+    // eslint-disable-next-line no-underscore-dangle
+    tps._renderAllDirectories = renderAllDirectoriesMock;
 
-    tps.render(dest, 'app').catch((error) => {
-      expect(_renderAllDirectories).toHaveBeenCalledTimes(1);
+    return tps.render(dest, 'app').catch(() => {
+      expect(renderAllDirectories).toHaveBeenCalledTimes(1);
       expect(appDest).not.toBeDirectory();
-      done();
     });
   });
 
-  it('should clean up directory if encounters a error in _renderAllFiles', (done) => {
+  it('should clean up directory if encounters a error in _renderAllFiles', () => {
     const dest = playground.box();
     const appDest = playground.pathTo('app');
 
-    const _renderAllFiles = (tps._renderAllFiles = renderAllFilesMock);
+    const renderAllFiles = renderAllFilesMock;
+    // eslint-disable-next-line no-underscore-dangle
+    tps._renderAllFiles = renderAllFilesMock;
 
-    tps.render(dest, 'app').catch((err) => {
-      expect(_renderAllFiles.mock.calls.length).toBe(1);
-      expect(_renderAllFiles).toHaveBeenCalledTimes(1);
+    return tps.render(dest, 'app').catch(() => {
+      expect(renderAllFiles.mock.calls.length).toBe(1);
+      expect(renderAllFiles).toHaveBeenCalledTimes(1);
       expect(appDest).not.toBeDirectory();
-      done();
     });
   });
 });

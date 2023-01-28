@@ -1,5 +1,5 @@
-import is from 'is';
-import path from 'path';
+import * as is from 'is';
+import * as path from 'path';
 import Stack from '../data-structures/stack';
 import Tree from '../data-structures/tree';
 
@@ -59,6 +59,7 @@ export class FileSystemNode extends Tree {
   }
 
   getRelativePathFrom(parentDirNode, includeParentNode = true) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     let child = this;
     const pathStack = new Stack();
 

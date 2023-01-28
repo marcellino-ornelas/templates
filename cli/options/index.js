@@ -1,7 +1,7 @@
-const create = require('./create');
-const init = require('./init');
-const global = require('./global');
-const list = require('./list');
+const create = require('./create.json');
+const init = require('./init.json');
+const global = require('./global.json');
+const list = require('./list.json');
 
 module.exports = {
   create,

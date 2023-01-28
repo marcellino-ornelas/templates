@@ -1,9 +1,9 @@
 import { buildFlags } from '@test/utilities/helpers';
 import { tpsCli } from '@test/utilities/tps-cli';
 import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
-import path from 'path';
-import is from 'is';
-import fs from 'fs-extra';
+import * as path from 'path';
+import * as is from 'is';
+import * as fs from 'fs-extra';
 import * as TPS from '@tps/utilities/constants';
 
 /**
@@ -95,11 +95,8 @@ const cleanBuilders = (buildersUnsafe) => {
  * @param {string[]} - builders
  * @returns {string[]} - array of builders with `-create` appended to the end of it
  */
-const makeCreateBuilders = (builders) => {
-  return !is.array(builders)
-    ? null
-    : builders.map((build) => `${build}-create`);
-};
+const makeCreateBuilders = (builders) =>
+  !is.array(builders) ? null : builders.map((build) => `${build}-create`);
 
 /**
  * Convert builders into a string.
@@ -107,14 +104,14 @@ const makeCreateBuilders = (builders) => {
  * @param {string[]} - builders
  * @returns {string} - string of all builders
  */
-const makeBuildersString = (builders) => {
-  return !is.array(builders) ? '' : builders.join(' ');
-};
+const makeBuildersString = (builders) =>
+  !is.array(builders) ? '' : builders.join(' ');
 
 export const DEFAULT_FILE_CONTENT = 'TPS_FILE_CONTENTS_MOCK';
 
 export const mockTemplateFileExistsError = (
   cwd,
+  // eslint-disable-next-line
   buildersUnsafe = null,
   file,
   contents = DEFAULT_FILE_CONTENT

@@ -1,4 +1,4 @@
-const CREATE_OPTIONS = require('../options/create');
+const CREATE_OPTIONS = require('../options/create.json');
 const { createHandler } = require('../lib/create');
 
 exports.command = '$0 [use] [buildPaths...]';

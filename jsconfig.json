@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@test/*": ["./__tests__/*"],
-      "@tps/*": ["./src/*"]
-    }
-  }
-}

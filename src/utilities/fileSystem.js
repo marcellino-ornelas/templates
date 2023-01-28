@@ -1,5 +1,5 @@
-import fs from 'fs';
-import findFileUp from 'find-up';
+import * as fs from 'fs';
+import * as findFileUp from 'find-up';
 
 /**
  * Check to see if the `path` is a valid directory

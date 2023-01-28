@@ -1,5 +1,3 @@
-const logger = require('../../lib/utilities/logger');
-
 exports.command = 'new <command>';
 
 // exports.command = ['new <command>', 'n <command>']; ???

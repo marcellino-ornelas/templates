@@ -1,8 +1,7 @@
 import dot from '@tps/dot';
-import path from 'path';
-import fs from 'fs-extra';
+import * as path from 'path';
+import * as fs from 'fs-extra';
 import DotError from '@tps/errors/dot-error';
-import logger from '@tps/utilities/logger';
 
 /*
  * File
@@ -31,7 +30,7 @@ class File {
       const realData = {
         ...data,
         file: this.fileName(data),
-        dest: this._dest(dest, data),
+        dest: this.dest(dest, data),
       };
       try {
         return this.isDot
@@ -59,41 +58,39 @@ class File {
       .catch((e) => {
         console.log('this should be force', e);
       })
-      .then(() => {})
       .then(() => fs.writeFile(dest, fileData, { flags: 'w' }))
       .then(() => Promise.resolve(dest))
-      .catch((error) => {
-        return Promise.reject(error);
-      });
+      .catch((error) => Promise.reject(error));
   }
 
   renderFile(dest) {
     return Promise.resolve()
       .then(() => this.opts.force && fs.remove(dest))
-      .then(() => {
-        return new Promise((resolve, reject) => {
-          const srcFile = fs.createReadStream(this.src, {
-            flags: 'r',
-          });
+      .then(
+        () =>
+          new Promise((resolve, reject) => {
+            const srcFile = fs.createReadStream(this.src, {
+              flags: 'r',
+            });
 
-          srcFile.on('error', (error) => {
-            console.log('Read Stream error', error);
-            reject(error);
-          });
+            srcFile.on('error', (error) => {
+              console.log('Read Stream error', error);
+              reject(error);
+            });
 
-          const destFile = fs.createWriteStream(dest, { flags: 'wx' });
+            const destFile = fs.createWriteStream(dest, { flags: 'wx' });
 
-          destFile.on('error', (err) => {
-            console.log('dest', dest);
-            console.log('write stream error', err);
-            reject(err);
-          });
+            destFile.on('error', (err) => {
+              console.log('dest', dest);
+              console.log('write stream error', err);
+              reject(err);
+            });
 
-          destFile.on('finish', () => resolve(dest));
+            destFile.on('finish', () => resolve(dest));
 
-          srcFile.pipe(destFile);
-        });
-      });
+            srcFile.pipe(destFile);
+          })
+      );
   }
 
   _addDefaultExtention(name) {
@@ -111,11 +108,11 @@ class File {
     return path.join(newDest, this.relDirectoryFromPkg);
   }
 
-  _dest(dest, data) {
+  dest(dest, data) {
     return path.join(this._buildParentDir(dest), this.fileName(data));
   }
 }
 
 File.prototype.isDot = false;
 
-module.exports = File;
+export default File;

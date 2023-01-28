@@ -8,5 +8,5 @@ const logger = {
 };
 
 /* legacy support */
-module.exports = logger;
+export default logger;
 // export default logger;

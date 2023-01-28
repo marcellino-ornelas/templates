@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -39,16 +39,32 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Npm Install
         run: npm install
-      - name: Build Assests
-        run: npm run code:build --if-present
+      # - name: Build Assests
+      #   run: npm run code:build
       - name: Test Code
-        run: npm run test:core
+        run: |
+          npm run code:build
+          npm run test:core
 
   lint:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Npm Install
+        run: npm install
+      - name: Test Code
+        run: |
+          npm run lint
+
+  typecheck:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
@@ -58,7 +74,7 @@ jobs:
       - name: Npm Install
         run: npm install
       - name: Test Code
-        run: npm run lint
+        run: npm run typecheck
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:

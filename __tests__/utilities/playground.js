@@ -1,11 +1,10 @@
 /**
  * Modules
  */
-import fs from 'fs-extra';
-import path from 'path';
-import { isFile, isDir } from '@tps/utilities/fileSystem';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { hasProp } from '@tps/utilities/helpers';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 /**
  * Constants
@@ -15,7 +14,7 @@ const TESTING_PLAYGROUND_NAME = 'testing_playground';
 const stamp = (len = 10) =>
   crypto.randomBytes(Math.ceil(len / 2)).toString('hex', 0, len);
 
-const box_tracker = {};
+const boxTracker = {};
 
 class Playground {
   constructor(dirPath, name = TESTING_PLAYGROUND_NAME) {
@@ -30,10 +29,10 @@ class Playground {
       }
       this.stamp = stamp();
       this.name = `${name}_${this.stamp}`;
-    } while (hasProp(box_tracker, this.name));
+    } while (hasProp(boxTracker, this.name));
 
     // track box name so it will never have duplicates
-    box_tracker[this.name] = true;
+    boxTracker[this.name] = true;
 
     this.boxes = {};
     this.current = null;
@@ -54,7 +53,7 @@ class Playground {
   createBox(name) {
     const box = new Playground(this.path, name);
 
-    if (this.boxes.hasOwnProperty(box.name)) {
+    if (this.boxes[box.name]) {
       throw new Error('two boxes are the same');
     }
 
@@ -74,4 +73,4 @@ class Playground {
   }
 }
 
-module.exports = Playground;
+export default Playground;

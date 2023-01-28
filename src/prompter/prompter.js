@@ -1,8 +1,8 @@
-import is from 'is';
-import inquirer from 'inquirer';
+import * as is from 'is';
+import * as inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
-import { PromptNoPromptFoundError } from '@tps/errors';
+import { PromptNoPromptFoundError, PromptInvalidAnswers } from '@tps/errors';
 import Prompt from './prompt';
 
 /**
@@ -39,9 +39,7 @@ export default class Prompter {
   }
 
   getPrompt(name) {
-    const prompt = this.prompts.find((p) => {
-      return p.name === name;
-    });
+    const prompt = this.prompts.find((p) => p.name === name);
 
     if (!prompt) throw new PromptNoPromptFoundError(name);
 

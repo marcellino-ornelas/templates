@@ -1,16 +1,14 @@
 /**
  * Modules
  */
-import is from 'is';
+import * as is from 'is';
 import { eachObj } from '@tps/utilities/helpers';
 
 /**
  * Constants
  */
 
-const getFlagString = (flag) => {
-  return `${flag.length === 1 ? `-` : `--`}${flag}`;
-};
+const getFlagString = (flag) => `${flag.length === 1 ? `-` : `--`}${flag}`;
 
 export const buildFlags = (args) => {
   let flags = '';

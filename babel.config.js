@@ -1,14 +1,5 @@
 const presets = [['@babel/env']];
 
-const presetsProduction = [
-  [
-    '@babel/env',
-    {
-      node: 'current',
-    },
-  ],
-];
-
 const plugins = [
   [
     require.resolve('babel-plugin-module-resolver'),

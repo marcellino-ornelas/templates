@@ -15,3 +15,9 @@ Want to learn how to use `templates`? Visit out docs [Here](./docs/readme.md).
 ```
 npm install -g templates-mo
 ```
+
+## Debug tests
+
+```
+❯ DEBUG=tps npx jest
+```
