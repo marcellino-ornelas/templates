@@ -15,7 +15,7 @@ module.exports = {
   },
   testMatch: [
     '!**/lib/**',
-    '!**/__tests__/tests/cli/**/*jest.(js|ts)',
+    '!**/__tests__/tests/cli/**',
     '**/__tests__/tests/**/*jest.(js|ts)',
   ],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
