@@ -73,5 +73,5 @@ describe('[Templates] Prompts Process:', () => {
   });
 
   it.todo('should add the prompt answer to tps.answers');
-  describe.todo('should be able to use tpsType');
+  it.todo('should be able to use tpsType');
 });
