@@ -2,14 +2,16 @@
  * Modules
  */
 
-import * as fs from 'fs-extra';
 import { TESTING_TPS } from '@test/utilities/constants';
 import { tpsCli } from '@test/utilities/tps-cli';
+import * as fs from 'fs-extra';
 
 /*
  * Constants
  */
-const ALL_LOCAL_TEMPLATES = fs.readdirSync(TESTING_TPS).filter((file) => file !== '.tpsrc');
+const ALL_LOCAL_TEMPLATES = fs
+  .readdirSync(TESTING_TPS)
+  .filter((file) => file !== '.tpsrc');
 
 /**
  * @docs api/cli/commands/list.md
@@ -18,7 +20,8 @@ describe('Command Line: List', () => {
   /**
    * @docs api/cli/commands/list.md#list-all-templates
    */
-  it('should be able to list out all templates', () => tpsCli('list').then((stdout) => {
+  it('should be able to list out all templates', () =>
+    tpsCli('list').then((stdout) => {
       ALL_LOCAL_TEMPLATES.forEach((template) => {
         expect(stdout).toContain(template);
       });
