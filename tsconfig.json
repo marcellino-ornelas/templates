@@ -7,6 +7,7 @@
 		"moduleResolution": "node",
 		"paths": {
 			"@tps/*": ["./src/*"],
+			"@test/*": ["./__tests__/*"]
 		}
 	},
 	"include": [
