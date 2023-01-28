@@ -13,11 +13,8 @@ module.exports = {
       },
     ],
   },
-  testMatch: [
-    '!**/lib/**',
-    '!**/__tests__/tests/cli/**',
-    '**/__tests__/tests/**/*jest.(js|ts)',
-  ],
+  testMatch: ['!**/lib/**', '**/__tests__/tests/**/*jest.(js|ts)'],
+  testPathIgnorePatterns: ['<rootDir>/__tests__/tests/cli'],
   setupFilesAfterEnv: ['./__tests__/setup.js'],
   testEnvironment: 'node',
   moduleNameMapper: {
