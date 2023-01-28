@@ -1,16 +1,14 @@
 {
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"outDir": "./lib",
-		"allowJs": true,
-		"resolveJsonModule": true,
-		"target": "ES6",
-		"moduleResolution": "node",
 		"paths": {
 			"@tps/*": ["./src/*"],
+			"@test/*": ["./__tests__/*"]
 		}
 	},
 	"include": [
 		"./src/**/*",
+		"./__tests__/**/*"
 	],
 	"exclude": ["node_modules"]
 }
