@@ -1,6 +1,6 @@
 import * as is from 'is';
 import * as path from 'path';
-import Stack from '../data-structures/stack';
+import { Stack } from '../data-structures/stack';
 import Tree from '../data-structures/tree';
 
 export class FileSystemNode extends Tree {
