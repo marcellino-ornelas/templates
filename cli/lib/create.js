@@ -4,8 +4,6 @@ const Template = require('../../lib/templates');
 const errorExit = require('./error-exit');
 const logger = require('../../lib/utilities/logger');
 
-console.log(Template);
-
 module.exports.createHandler = (argv) => {
   /**
    * if we ever want to be able to pass a name in then we should add this to the flags.
