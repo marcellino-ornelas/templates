@@ -69,8 +69,6 @@ class CreateDebug {
 
     const newGroup = new CreateDebugGroup(name);
 
-    console.log(newGroup);
-
     this._groups[name] = newGroup;
 
     return newGroup;
