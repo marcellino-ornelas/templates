@@ -10,9 +10,9 @@ export class Tree<TData> {
 
   public depth: number;
 
-  ['constructor']: typeof Tree<TData>;
+  ['constructor']: new (value: TData) => this;
 
-  constructor(value) {
+  constructor(value: TData) {
     if (value) {
       this.value = value;
     }
@@ -20,9 +20,12 @@ export class Tree<TData> {
     this.depth = 0;
   }
 
-  addChild(value) {
-    const tree =
-      value instanceof this.constructor ? value : new this.constructor(value);
+  addChild(value: TData | this): this {
+    const tree: this =
+      value instanceof this.constructor
+        ? value
+        : new this.constructor(value as TData);
+
     tree.depth = this.depth + 1;
 
     this.children.push(tree);
@@ -62,7 +65,7 @@ export class Tree<TData> {
     }
   }
 
-  breathFirstSelect(cb: (tree: this) => boolean) {
+  breathFirstSelect(cb: (tree: this) => boolean): this[] {
     const filtered: this[] = [];
 
     this.breathFirstEach((tree) => {
@@ -87,7 +90,7 @@ export class Tree<TData> {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb: (tree: this) => boolean) {
+  depthFirstSelect(cb: (tree: this) => boolean): this[] {
     const filtered: this[] = [];
 
     this.depthFirstEach((tree) => {
