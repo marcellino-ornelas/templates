@@ -3,5 +3,6 @@ export default class TemplateNotFoundError extends Error {
     super(`Template (${templateName}) was not found.`);
     this.name = 'TemplateNotFoundError';
     this.template = templateName;
+    Object.setPrototypeOf(this, RequiresTemplateError.prototype);
   }
 }

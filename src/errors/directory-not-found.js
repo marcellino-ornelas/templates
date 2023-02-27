@@ -4,5 +4,6 @@ export default class DirectoryNotFoundError extends Error {
     this.name = 'DirectoryNotFoundError';
     this.path = directory;
     this.message = `Directory does not exist (${this.path})`;
+    Object.setPrototypeOf(this, DirectoryNotFoundError.prototype);
   }
 }
