@@ -1,8 +1,7 @@
 export default class TemplateNotFoundError extends Error {
   constructor(templateName) {
-    super();
+    super(`Template (${templateName}) was not found.`);
     this.name = 'TemplateNotFoundError';
     this.template = templateName;
-    this.message = `Template (${this.template}) was not found.`;
   }
 }
