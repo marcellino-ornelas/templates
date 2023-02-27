@@ -3,15 +3,21 @@
 		"outDir": "./lib",
 		"allowJs": true,
 		"resolveJsonModule": true,
-		"target": "ES6",
-		"moduleResolution": "node",
+		"module": "CommonJS",
+		"target": "es5",
+		"baseUrl": "./",
+		// "moduleResolution": "node",
 		"paths": {
 			"@tps/*": ["./src/*"],
 			"@test/*": ["./__tests__/*"]
-		}
+		},
+		"plugins": [
+			{ "transform": "typescript-transform-paths" },
+			{ "transform": "typescript-transform-paths", "afterDeclarations": true }
+		]
 	},
 	"include": [
 		"./src/**/*",
 	],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules"],
 }
