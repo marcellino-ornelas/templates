@@ -1,30 +1,30 @@
-export default class CreateDebugGroup extends Array {
+export default class CreateDebugGroup {
   constructor(name) {
-    super();
+    this.queue = [];
     this.name = name;
   }
 
   info(...message) {
-    this.push(['info', ...message]);
+    this.queue.push(['info', ...message]);
   }
 
   error(...message) {
-    this.push(['error', ...message]);
+    this.queue.push(['error', ...message]);
   }
 
   debug(...message) {
-    this.push(['debug', ...message]);
+    this.queue.push(['debug', ...message]);
   }
 
   success(...message) {
-    this.push(['success', ...message]);
+    this.queue.push(['success', ...message]);
   }
 
   warn(...message) {
-    this.push(['warn', ...message]);
+    this.queue.push(['warn', ...message]);
   }
 
   log(...message) {
-    this.push(['log', ...message]);
+    this.queue.push(['log', ...message]);
   }
 }

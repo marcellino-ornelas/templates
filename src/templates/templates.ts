@@ -23,6 +23,8 @@ import * as Promise from 'bluebird';
 import dot from '@tps/dot';
 import { cosmiconfigSync } from 'cosmiconfig';
 
+// console.log(logger);
+
 /**
  * Default options for Templates
  * @typedef  {Object} TemplateOptions
