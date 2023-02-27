@@ -56,16 +56,9 @@ const config = {
     },
   ],
   settings: {
-    // 'import/extensions': ['.ts', '.js'],
-    // 'import/extensions': [
-    //   ERROR,
-    //   {
-    //     ts: 'never',
-    //   },
-    // ],
-    // 'import/parsers': {
-    //   '@typescript-eslint/parser': ['.ts', '.js'],
-    // },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.js'],
+    },
     'import/resolver': {
       typescript: {
         // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
