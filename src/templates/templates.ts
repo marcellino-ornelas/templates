@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as is from 'is';
@@ -61,11 +63,11 @@ const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
  * @class
  * @classdesc Create a new instance of a template
  */
-export default class Templates {
+export class Templates {
   /**
    * @param {TemplateOptions} opts - options to pass to templates
    */
-  constructor(templateName, opts = {}) {
+  constructor(templateName, opts: any = {}) {
     if (!templateName || !is.string(templateName)) {
       throw new RequiresTemplateError();
     }
