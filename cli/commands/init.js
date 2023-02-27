@@ -8,7 +8,7 @@ const {
   ParentDirectoryInitializedError,
   GlobalInitializedAlreadyError,
 } = require('../../lib/errors');
-const logger = require('../../lib/utilities/logger');
+const logger = require('../../lib/utilities/logger').default;
 
 exports.command = 'init';
 

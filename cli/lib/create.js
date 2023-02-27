@@ -2,7 +2,7 @@ const debug = require('debug');
 const is = require('is');
 const Template = require('../../lib/templates');
 const errorExit = require('./error-exit');
-const logger = require('../../lib/utilities/logger');
+const logger = require('../../lib/utilities/logger').default;
 
 module.exports.createHandler = (argv) => {
   /**
