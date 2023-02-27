@@ -21,7 +21,7 @@ describe('[Templates] Render Process:', () => {
 
   beforeEach(() => playground.createBox('render_process'));
 
-  it.only('should throw RequiresTemplateError if no template was set', () => {
+  it('should throw RequiresTemplateError if no template was set', () => {
     console.log(RequiresTemplateError);
     expect(() => new Templates()).toThrow(RequiresTemplateError);
   });
