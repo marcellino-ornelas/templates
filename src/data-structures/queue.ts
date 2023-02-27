@@ -1,35 +1,40 @@
 import { Stack } from './stack';
 
-export default class Queue {
+export class Queue<TData> {
+  public inbox: Stack<TData>;
+
+  public outbox: Stack<TData>;
+
   constructor() {
     this.inbox = new Stack();
     this.outbox = new Stack();
   }
 
-  enqueue(...args) {
+  enqueue(...args: TData[]) {
     args.forEach((item) => {
       this.inbox.push(item);
     });
   }
 
-  dequeue() {
+  dequeue(): TData | null {
     if (this.outbox.size() === 0) {
       while (this.inbox.size() !== 0) {
-        this.outbox.push(this.inbox.pop());
+        // cannot be null because size is not zero
+        this.outbox.push(this.inbox.pop() as TData);
       }
     }
     return this.outbox.pop();
   }
 
-  size() {
+  size(): number {
     return this.inbox.size() + this.outbox.size();
   }
 
-  peek() {
+  peek(): TData | null {
     return this.outbox.next() || this.inbox.next();
   }
 
-  log(filter) {
+  log(filter): void {
     const cb = filter || ((c) => c);
     const queue = this.inbox
       .stack()

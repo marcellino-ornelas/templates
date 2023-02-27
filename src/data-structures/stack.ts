@@ -1,4 +1,4 @@
-export class Stack<TData> {
+export class Stack<TData = any> {
   public _stack: TData[] = [];
 
   constructor() {
