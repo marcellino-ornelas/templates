@@ -13,8 +13,9 @@ const config = {
     'prettier',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript',
   ],
-  plugins: ['jest', 'import'],
+  plugins: ['@typescript-eslint', 'jest', 'import'],
   rules: {
     'no-console': IGNORE,
     'import/no-named-as-default': IGNORE,
@@ -26,6 +27,12 @@ const config = {
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
     'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
     'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
+    'import/extensions': [
+      ERROR,
+      {
+        ts: 'never',
+      },
+    ],
   },
   overrides: [
     {
@@ -49,15 +56,23 @@ const config = {
     },
   ],
   settings: {
-    'import/parsers': {
-      '@typescript-eslint/parser': ['.ts', '.tsx', '.js'],
-    },
+    // 'import/extensions': ['.ts', '.js'],
+    // 'import/extensions': [
+    //   ERROR,
+    //   {
+    //     ts: 'never',
+    //   },
+    // ],
+    // 'import/parsers': {
+    //   '@typescript-eslint/parser': ['.ts', '.js'],
+    // },
     'import/resolver': {
       typescript: {
         // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
         alwaysTryTypes: true,
         project: __dirname,
       },
+      node: true,
     },
   },
 };

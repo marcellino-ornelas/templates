@@ -3,10 +3,10 @@
 		"outDir": "./lib",
 		"allowJs": true,
 		"resolveJsonModule": true,
+		"moduleResolution": "node",
 		"module": "CommonJS",
 		"target": "es5",
 		"baseUrl": "./",
-		// "moduleResolution": "node",
 		"paths": {
 			"@tps/*": ["./src/*"],
 			"@test/*": ["./__tests__/*"]

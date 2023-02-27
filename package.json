@@ -67,7 +67,6 @@
     "prettyjson-256": "1.5.18",
     "strip-ansi": "6.0.0",
     "ts-jest": "^29.0.5",
-    "ts-patch": "^2.1.0",
     "typescript": "^4.9.4",
     "valid-filename": "2.0.1",
     "yargs": "13.2.1"

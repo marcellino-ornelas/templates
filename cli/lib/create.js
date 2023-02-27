@@ -4,6 +4,8 @@ const Template = require('../../lib/templates');
 const errorExit = require('./error-exit');
 const logger = require('../../lib/utilities/logger');
 
+console.log(Template);
+
 module.exports.createHandler = (argv) => {
   /**
    * if we ever want to be able to pass a name in then we should add this to the flags.
@@ -39,16 +41,16 @@ module.exports.createHandler = (argv) => {
     default: _default,
   };
 
-  logger.cli.info('Tps Config: %n', tpsConfig);
+  //   logger.cli.info('Tps Config: %n', tpsConfig);
   const tps = new Template(argv.use, tpsConfig);
 
   if (is.array(packages) && !is.array.empty(packages)) {
-    logger.cli.info('Loading packages:', packages);
+    // logger.cli.info('Loading packages:', packages);
     tps.loadPackages(packages);
   }
 
   if (tps.hasPrompts()) {
-    logger.cli.info('Answers to prompts: %n', answers);
+    // logger.cli.info('Answers to prompts: %n', answers);
     tps.setAnswers(answers);
   }
 
@@ -59,7 +61,7 @@ module.exports.createHandler = (argv) => {
     name: argv.name,
   };
 
-  logger.cli.info('Build paths: %n', tpsConfig);
+  //   logger.cli.info('Build paths: %n', tpsConfig);
 
   tps
     .render(dest, renderItems, renderData)
