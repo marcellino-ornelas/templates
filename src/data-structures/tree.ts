@@ -6,13 +6,13 @@ import { Queue } from './queue';
 export class Tree<TData> {
   public value: TData;
 
-  public children: this[];
+  public children: Tree<TData>[];
 
   public depth: number;
 
   ['constructor']: new (value: TData) => this;
 
-  constructor(value: TData) {
+  constructor(value?: TData) {
     if (value) {
       this.value = value;
     }
