@@ -1,9 +1,18 @@
-import Queue from './queue';
+import { Queue } from './queue';
+
 /**
  * Tree
  */
-class Tree {
-  constructor(value) {
+export class Tree<TData> {
+  public value: TData;
+
+  public children: this[];
+
+  public depth: number;
+
+  ['constructor']: new (value: TData) => this;
+
+  constructor(value: TData) {
     if (value) {
       this.value = value;
     }
@@ -11,9 +20,12 @@ class Tree {
     this.depth = 0;
   }
 
-  addChild(value) {
-    const tree =
-      value instanceof this.constructor ? value : new this.constructor(value);
+  addChild(value: TData | this): this {
+    const tree: this =
+      value instanceof this.constructor
+        ? value
+        : new this.constructor(value as TData);
+
     tree.depth = this.depth + 1;
 
     this.children.push(tree);
@@ -21,11 +33,11 @@ class Tree {
     return tree;
   }
 
-  isRoot() {
+  isRoot(): boolean {
     return this.depth === 0;
   }
 
-  hasChildren() {
+  hasChildren(): boolean {
     return !!this.children.length;
   }
 
@@ -33,12 +45,13 @@ class Tree {
    * Breath Methods
    */
 
-  breathFirstEach(cb) {
-    const queue = new Queue();
+  breathFirstEach(cb: (tree: this) => boolean | void): void {
+    const queue = new Queue<this>();
     queue.enqueue(this);
 
     while (queue.size() > 0) {
-      const currentTree = queue.dequeue();
+      // if size is not zero then were good
+      const currentTree = queue.dequeue() as this;
 
       if (cb(currentTree) === false) {
         break;
@@ -52,8 +65,8 @@ class Tree {
     }
   }
 
-  breathFirstSelect(cb) {
-    const filtered = [];
+  breathFirstSelect(cb: (tree: this) => boolean): this[] {
+    const filtered: this[] = [];
 
     this.breathFirstEach((tree) => {
       if (cb(tree)) {
@@ -68,7 +81,7 @@ class Tree {
    * Depth Methods
    */
 
-  depthFirstEach(cb) {
+  depthFirstEach(cb: (tree: this) => void) {
     // change to stack
     function recurseChildren(tree) {
       cb(tree);
@@ -77,8 +90,8 @@ class Tree {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb) {
-    const filtered = [];
+  depthFirstSelect(cb: (tree: this) => boolean): this[] {
+    const filtered: this[] = [];
 
     this.depthFirstEach((tree) => {
       if (cb(tree)) {
@@ -90,4 +103,4 @@ class Tree {
   }
 }
 
-export default Tree;
+// export default Tree;
