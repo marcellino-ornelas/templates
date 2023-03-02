@@ -1,12 +1,16 @@
 import { Queue } from './queue';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface AnyTree extends Tree {}
+
 /**
  * Tree
  */
-export class Tree<TData> {
-  public value: TData;
+// export class Tree<TData = any, TChildren extends AnyTree = AnyTree> {
+export class Tree<TData = any> {
+  public value: TData | null = null;
 
-  public children: Tree<TData>[];
+  public children: Tree[];
 
   public depth: number;
 
@@ -16,12 +20,12 @@ export class Tree<TData> {
     if (value) {
       this.value = value;
     }
-    this.children = [];
+    this.children = [] as unknown as Tree[];
     this.depth = 0;
   }
 
-  addChild(value: TData | this): this {
-    const tree: this =
+  addChild(value: TData | Tree): Tree {
+    const tree: Tree =
       value instanceof this.constructor
         ? value
         : new this.constructor(value as TData);
@@ -45,8 +49,8 @@ export class Tree<TData> {
    * Breath Methods
    */
 
-  breathFirstEach(cb: (tree: this) => boolean | void): void {
-    const queue = new Queue<this>();
+  breathFirstEach(cb: (tree: Tree) => boolean | void): void {
+    const queue = new Queue<Tree>();
     queue.enqueue(this);
 
     while (queue.size() > 0) {
@@ -65,8 +69,8 @@ export class Tree<TData> {
     }
   }
 
-  breathFirstSelect(cb: (tree: this) => boolean): this[] {
-    const filtered: this[] = [];
+  breathFirstSelect(cb: (tree: Tree) => boolean): Tree[] {
+    const filtered: Tree[] = [];
 
     this.breathFirstEach((tree) => {
       if (cb(tree)) {
@@ -90,8 +94,8 @@ export class Tree<TData> {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb: (tree: this) => boolean): this[] {
-    const filtered: this[] = [];
+  depthFirstSelect(cb: (tree: this) => boolean): Tree[] {
+    const filtered: Tree[] = [];
 
     this.depthFirstEach((tree) => {
       if (cb(tree)) {
@@ -104,3 +108,10 @@ export class Tree<TData> {
 }
 
 // export default Tree;
+
+// const tree = new Tree<string>();
+
+// tree.addChild('hey');
+// tree.addChild(3);
+
+// const children = tree.children;

@@ -3,10 +3,15 @@ import * as path from 'path';
 import { Stack } from '../data-structures/stack';
 import { Tree } from '../data-structures/tree';
 
-export abstract class FileSystemNode<TData> extends Tree<TData> {
+// interface AnyFileSystemNode extends FileSystemNode {}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class FileSystemNode<TData = any> extends Tree<TData> {
   static ignoreFiles = '';
 
   //   public parentDirectory: this | string;
+
+  //   public name: string;
 
   public depth: number;
 
@@ -20,6 +25,7 @@ export abstract class FileSystemNode<TData> extends Tree<TData> {
 
   public pathFromRoot: string;
 
+  public children: FileSystemNode<TData>[];
   //   ['constructor']: new (
   // 	name: string,
   //     type: string,
@@ -82,7 +88,7 @@ export abstract class FileSystemNode<TData> extends Tree<TData> {
     return this.children.find((tree) => tree.name === name);
   }
 
-  addChild<Value extends FileSystemNode<TData>>(value: Value): Value {
+  addChild<TValue extends FileSystemNode<TData>>(value: TValue): TValue {
     // if (!is.instance(value, FileSystemNode)) {
     if (!this.isFileSystemNode(value)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);
@@ -94,7 +100,7 @@ export abstract class FileSystemNode<TData> extends Tree<TData> {
 
   getRelativePathFrom(parentDirNode, includeParentNode = true) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let child = this;
+    let child: FileSystemNode = this;
     const pathStack = new Stack();
 
     do {
