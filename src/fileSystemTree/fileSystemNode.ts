@@ -3,15 +3,20 @@ import * as path from 'path';
 import { Stack } from '../data-structures/stack';
 import { Tree } from '../data-structures/tree';
 
-// interface AnyFileSystemNode extends FileSystemNode {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface SimpleFileSystemInfo<TData = any> {
+  name: string;
+  type: string;
+  path: string;
+  children?: SimpleFileSystemInfo<TData>[];
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class FileSystemNode<TData = any> extends Tree<TData> {
+export abstract class FileSystemNode<TData = any> extends Tree<
+  TData,
+  FileSystemNode
+> {
   static ignoreFiles = '';
-
-  //   public parentDirectory: this | string;
-
-  //   public name: string;
 
   public depth: number;
 
@@ -66,7 +71,7 @@ export abstract class FileSystemNode<TData = any> extends Tree<TData> {
     return node instanceof FileSystemNode;
   }
 
-  toObject() {
+  toObject(): SimpleFileSystemInfo<TData> {
     return {
       name: this.name,
       type: this.type,
@@ -82,7 +87,7 @@ export abstract class FileSystemNode<TData = any> extends Tree<TData> {
     return this.children.find((tree) => tree.name === name);
   }
 
-  addChild<TValue extends FileSystemNode<TData>>(value: TValue): TValue {
+  addChild<TValue extends FileSystemNode>(value: TValue): TValue {
     // if (!is.instance(value, FileSystemNode)) {
     if (!this.isFileSystemNode(value)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);

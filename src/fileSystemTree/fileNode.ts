@@ -3,6 +3,10 @@ import * as fs from 'fs';
 import FileSystemNode from './fileSystemNode';
 
 export class FileNode extends FileSystemNode {
+  public fileName: string;
+
+  public ext: string;
+
   constructor(name, parentDirectory, verbose) {
     super(name, 'file', parentDirectory, verbose);
 
@@ -12,7 +16,7 @@ export class FileNode extends FileSystemNode {
     this.fileName = fileName;
     this.ext = ext;
 
-    this.children = undefined;
+    this.children = [];
     // this.data = this._getFileData();
   }
 
@@ -20,11 +24,12 @@ export class FileNode extends FileSystemNode {
     return fs.readFileSync(this.path);
   }
 
-  addChild() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+  addChild<TValue extends FileSystemNode>(_: TValue): TValue {
     throw Error('Cannot add children to FileNodes');
   }
 
-  hasChildren() {
+  hasChildren(): boolean {
     return false;
   }
 }

@@ -3,10 +3,10 @@ import * as fs from 'fs';
 import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
-import FileSystemNode from './fileSystemNode';
+import { FileSystemNode, SimpleFileSystemInfo } from './fileSystemNode';
 import FileNode from './fileNode';
 
-export class DirectoryNode extends FileSystemNode {
+export class DirectoryNode<TData> extends FileSystemNode<TData> {
   constructor(name, parentDirNode, verbose) {
     let parentDir = parentDirNode;
     if (name && !parentDirNode) {
@@ -20,7 +20,7 @@ export class DirectoryNode extends FileSystemNode {
     this._renderChildren();
   }
 
-  toObject() {
+  toObject(): SimpleFileSystemInfo<TData> {
     const obj = super.toObject();
 
     obj.children = this.children.map((fileNode) => fileNode.toObject());
@@ -50,7 +50,7 @@ export class DirectoryNode extends FileSystemNode {
       });
   }
 
-  eachChild(cb) {
+  eachChild(cb: (tree: FileSystemNode) => void): void {
     this.breathFirstEach((fsNode) => {
       if (this !== fsNode) {
         cb(fsNode);
@@ -59,7 +59,7 @@ export class DirectoryNode extends FileSystemNode {
   }
 
   selectChildren(cb) {
-    const found = [];
+    const found: FileSystemNode[] = [];
     this.eachChild((fsNode) => {
       if (cb(fsNode)) {
         found.push(fsNode);

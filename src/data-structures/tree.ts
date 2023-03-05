@@ -6,11 +6,11 @@ interface AnyTree extends Tree {}
 /**
  * Tree
  */
-// export class Tree<TData = any, TChildren extends AnyTree = AnyTree> {
-export class Tree<TData = any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Tree<TData = any, TType extends Tree = AnyTree> {
   public value: TData | null = null;
 
-  public children: Tree[];
+  public children: TType[];
 
   public depth: number;
 
@@ -20,15 +20,12 @@ export class Tree<TData = any> {
     if (value) {
       this.value = value;
     }
-    this.children = [] as unknown as Tree[];
+    this.children = [] as unknown as TType[];
     this.depth = 0;
   }
 
-  addChild(value: TData | Tree): Tree {
-    const tree: Tree =
-      value instanceof this.constructor
-        ? value
-        : new this.constructor(value as TData);
+  addChild(value: TType): TType {
+    const tree: TType = value;
 
     tree.depth = this.depth + 1;
 
@@ -48,14 +45,13 @@ export class Tree<TData = any> {
   /**
    * Breath Methods
    */
-
-  breathFirstEach(cb: (tree: Tree) => boolean | void): void {
+  breathFirstEach(cb: (tree: TType) => boolean | void): void {
     const queue = new Queue<Tree>();
     queue.enqueue(this);
 
     while (queue.size() > 0) {
       // if size is not zero then were good
-      const currentTree = queue.dequeue() as this;
+      const currentTree = queue.dequeue() as TType;
 
       if (cb(currentTree) === false) {
         break;
@@ -69,8 +65,8 @@ export class Tree<TData = any> {
     }
   }
 
-  breathFirstSelect(cb: (tree: Tree) => boolean): Tree[] {
-    const filtered: Tree[] = [];
+  breathFirstSelect(cb: (tree: TType) => boolean): TType[] {
+    const filtered: TType[] = [];
 
     this.breathFirstEach((tree) => {
       if (cb(tree)) {
@@ -85,7 +81,7 @@ export class Tree<TData = any> {
    * Depth Methods
    */
 
-  depthFirstEach(cb: (tree: this) => void) {
+  depthFirstEach(cb: (tree: TType) => void) {
     // change to stack
     function recurseChildren(tree) {
       cb(tree);
@@ -94,8 +90,8 @@ export class Tree<TData = any> {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb: (tree: this) => boolean): Tree[] {
-    const filtered: Tree[] = [];
+  depthFirstSelect(cb: (tree: TType) => boolean): TType[] {
+    const filtered: TType[] = [];
 
     this.depthFirstEach((tree) => {
       if (cb(tree)) {
