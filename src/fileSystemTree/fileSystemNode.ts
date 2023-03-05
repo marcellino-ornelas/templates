@@ -26,12 +26,6 @@ export abstract class FileSystemNode<TData = any> extends Tree<TData> {
   public pathFromRoot: string;
 
   public children: FileSystemNode<TData>[];
-  //   ['constructor']: new (
-  // 	name: string,
-  //     type: string,
-  //     parentDirectory: FileSystemNode<TData> | string,
-  //     verbose: boolean
-  //   ) => this;
 
   constructor(
     public name: string,
