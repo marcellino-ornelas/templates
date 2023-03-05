@@ -102,12 +102,3 @@ export class Tree<TData = any, TType extends Tree = AnyTree> {
     return filtered;
   }
 }
-
-// export default Tree;
-
-// const tree = new Tree<string>();
-
-// tree.addChild('hey');
-// tree.addChild(3);
-
-// const children = tree.children;

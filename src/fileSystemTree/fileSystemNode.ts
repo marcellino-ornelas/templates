@@ -41,18 +41,15 @@ export abstract class FileSystemNode<TData = any> extends Tree<
     super();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // const isFSNode = (is as any).instanceof(parentDirectory, FileSystemNode);
     const isFSNode = this.isFileSystemNode(parentDirectory);
     // parse file path to get name and path/to/file
     if (!isFSNode && !is.string(parentDirectory)) {
       throw new TypeError(`Argument must be a String`);
     }
 
-    // this.name = name;
     this.depth = isFSNode ? parentDirectory.depth + 1 : 0;
     this.verbose = verbose || false;
     this.parent = isFSNode ? parentDirectory : null;
-    // this.parentPath = isFSNode ? this.parent.path : parentDirectory;
     this.parentPath = isFSNode ? parentDirectory.path : parentDirectory;
     this.path = path.join(this.parentPath, this.name);
     this.pathFromRoot = isFSNode
@@ -88,7 +85,6 @@ export abstract class FileSystemNode<TData = any> extends Tree<
   }
 
   addChild<TValue extends FileSystemNode>(value: TValue): TValue {
-    // if (!is.instance(value, FileSystemNode)) {
     if (!this.isFileSystemNode(value)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);
     }
