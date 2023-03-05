@@ -3,10 +3,19 @@ import * as fs from 'fs';
 import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
-import { FileSystemNode, SimpleFileSystemInfo } from './fileSystemNode';
+import {
+  FileSystemNode,
+  SimpleFileSystemInfo,
+  FileSystemNodeCallback,
+} from './fileSystemNode';
 import FileNode from './fileNode';
 
-export class DirectoryNode<TData> extends FileSystemNode<TData> {
+type FindKeyPattern = Partial<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [Property in keyof FileSystemNode]: any;
+}>;
+
+export class DirectoryNode extends FileSystemNode {
   constructor(name, parentDirNode, verbose) {
     let parentDir = parentDirNode;
     if (name && !parentDirNode) {
@@ -20,7 +29,7 @@ export class DirectoryNode<TData> extends FileSystemNode<TData> {
     this._renderChildren();
   }
 
-  toObject(): SimpleFileSystemInfo<TData> {
+  toObject(): SimpleFileSystemInfo {
     const obj = super.toObject();
 
     obj.children = this.children.map((fileNode) => fileNode.toObject());
@@ -28,7 +37,7 @@ export class DirectoryNode<TData> extends FileSystemNode<TData> {
     return obj;
   }
 
-  _renderChildren() {
+  _renderChildren(): void {
     let dirContents;
 
     try {
@@ -50,7 +59,7 @@ export class DirectoryNode<TData> extends FileSystemNode<TData> {
       });
   }
 
-  eachChild(cb: (tree: FileSystemNode) => void): void {
+  eachChild(cb: FileSystemNodeCallback): void {
     this.breathFirstEach((fsNode) => {
       if (this !== fsNode) {
         cb(fsNode);
@@ -58,7 +67,7 @@ export class DirectoryNode<TData> extends FileSystemNode<TData> {
     });
   }
 
-  selectChildren(cb) {
+  selectChildren(cb: FileSystemNodeCallback<boolean>): FileSystemNode[] {
     const found: FileSystemNode[] = [];
     this.eachChild((fsNode) => {
       if (cb(fsNode)) {
@@ -68,7 +77,7 @@ export class DirectoryNode<TData> extends FileSystemNode<TData> {
     return found;
   }
 
-  find(selectBy = {}) {
+  find(selectBy: FindKeyPattern = {}): FileSystemNode[] {
     return this.selectChildren((fsNode) =>
       // console.log(fsNode.path);
       couldMatchObj(selectBy, fsNode)

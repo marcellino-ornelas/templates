@@ -20,7 +20,7 @@ export class FileNode extends FileSystemNode {
     // this.data = this._getFileData();
   }
 
-  _getFileData() {
+  _getFileData(): Buffer {
     return fs.readFileSync(this.path);
   }
 

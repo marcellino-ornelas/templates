@@ -3,6 +3,10 @@ import { Queue } from './queue';
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface AnyTree extends Tree {}
 
+export interface TreeCallBack<TType, TReturn = void> {
+  (tree: TType): TReturn;
+}
+
 /**
  * Tree
  */
@@ -45,7 +49,7 @@ export class Tree<TData = any, TType extends Tree = AnyTree> {
   /**
    * Breath Methods
    */
-  breathFirstEach(cb: (tree: TType) => boolean | void): void {
+  breathFirstEach(cb: TreeCallBack<TType, boolean | void>): void {
     const queue = new Queue<Tree>();
     queue.enqueue(this);
 
@@ -65,7 +69,7 @@ export class Tree<TData = any, TType extends Tree = AnyTree> {
     }
   }
 
-  breathFirstSelect(cb: (tree: TType) => boolean): TType[] {
+  breathFirstSelect(cb: TreeCallBack<TType, boolean>): TType[] {
     const filtered: TType[] = [];
 
     this.breathFirstEach((tree) => {
@@ -81,7 +85,7 @@ export class Tree<TData = any, TType extends Tree = AnyTree> {
    * Depth Methods
    */
 
-  depthFirstEach(cb: (tree: TType) => void) {
+  depthFirstEach(cb: TreeCallBack<TType>): void {
     // change to stack
     function recurseChildren(tree) {
       cb(tree);
@@ -90,7 +94,7 @@ export class Tree<TData = any, TType extends Tree = AnyTree> {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb: (tree: TType) => boolean): TType[] {
+  depthFirstSelect(cb: TreeCallBack<TType, boolean>): TType[] {
     const filtered: TType[] = [];
 
     this.depthFirstEach((tree) => {

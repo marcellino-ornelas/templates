@@ -1,28 +1,29 @@
 import * as is from 'is';
 import * as path from 'path';
 import { Stack } from '../data-structures/stack';
-import { Tree } from '../data-structures/tree';
+import { Tree, TreeCallBack } from '../data-structures/tree';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface SimpleFileSystemInfo<TData = any> {
+export interface SimpleFileSystemInfo {
   name: string;
   type: string;
   path: string;
-  children?: SimpleFileSystemInfo<TData>[];
+  children?: SimpleFileSystemInfo[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface FileSystemNodeCallback<TReturn = void>
+  extends TreeCallBack<FileSystemNode, TReturn> {}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export abstract class FileSystemNode<TData = any> extends Tree<
-  TData,
-  FileSystemNode
-> {
+export abstract class FileSystemNode extends Tree<null, FileSystemNode> {
   static ignoreFiles = '';
 
   public depth: number;
 
   public verbose: boolean;
 
-  public parent: FileSystemNode<TData> | null;
+  public parent: FileSystemNode | null;
 
   public parentPath: string;
 
@@ -30,17 +31,16 @@ export abstract class FileSystemNode<TData = any> extends Tree<
 
   public pathFromRoot: string;
 
-  public children: FileSystemNode<TData>[];
+  public children: FileSystemNode[];
 
   constructor(
     public name: string,
     public type: string,
-    parentDirectory: FileSystemNode<TData> | string,
+    parentDirectory: FileSystemNode | string,
     verbose: boolean
   ) {
     super();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const isFSNode = this.isFileSystemNode(parentDirectory);
     // parse file path to get name and path/to/file
     if (!isFSNode && !is.string(parentDirectory)) {
@@ -64,11 +64,11 @@ export abstract class FileSystemNode<TData = any> extends Tree<
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private isFileSystemNode(node: any): node is FileSystemNode<TData> {
+  private isFileSystemNode(node: any): node is FileSystemNode {
     return node instanceof FileSystemNode;
   }
 
-  toObject(): SimpleFileSystemInfo<TData> {
+  toObject(): SimpleFileSystemInfo {
     return {
       name: this.name,
       type: this.type,
