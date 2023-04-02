@@ -1,30 +1,35 @@
 import { Queue } from './queue';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface AnyTree extends Tree {}
+
+export interface TreeCallBack<TType, TReturn = void> {
+  (tree: TType): TReturn;
+}
+
 /**
  * Tree
  */
-export class Tree<TData> {
-  public value: TData;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Tree<TData = any, TType extends Tree = AnyTree> {
+  public value: TData | null = null;
 
-  public children: this[];
+  public children: TType[];
 
   public depth: number;
 
   ['constructor']: new (value: TData) => this;
 
-  constructor(value: TData) {
+  constructor(value?: TData) {
     if (value) {
       this.value = value;
     }
-    this.children = [];
+    this.children = [] as unknown as TType[];
     this.depth = 0;
   }
 
-  addChild(value: TData | this): this {
-    const tree: this =
-      value instanceof this.constructor
-        ? value
-        : new this.constructor(value as TData);
+  addChild(value: TType): TType {
+    const tree: TType = value;
 
     tree.depth = this.depth + 1;
 
@@ -44,14 +49,13 @@ export class Tree<TData> {
   /**
    * Breath Methods
    */
-
-  breathFirstEach(cb: (tree: this) => boolean | void): void {
-    const queue = new Queue<this>();
+  breathFirstEach(cb: TreeCallBack<TType, boolean | void>): void {
+    const queue = new Queue<Tree>();
     queue.enqueue(this);
 
     while (queue.size() > 0) {
       // if size is not zero then were good
-      const currentTree = queue.dequeue() as this;
+      const currentTree = queue.dequeue() as TType;
 
       if (cb(currentTree) === false) {
         break;
@@ -65,8 +69,8 @@ export class Tree<TData> {
     }
   }
 
-  breathFirstSelect(cb: (tree: this) => boolean): this[] {
-    const filtered: this[] = [];
+  breathFirstSelect(cb: TreeCallBack<TType, boolean>): TType[] {
+    const filtered: TType[] = [];
 
     this.breathFirstEach((tree) => {
       if (cb(tree)) {
@@ -81,7 +85,7 @@ export class Tree<TData> {
    * Depth Methods
    */
 
-  depthFirstEach(cb: (tree: this) => void) {
+  depthFirstEach(cb: TreeCallBack<TType>): void {
     // change to stack
     function recurseChildren(tree) {
       cb(tree);
@@ -90,8 +94,8 @@ export class Tree<TData> {
     recurseChildren(this);
   }
 
-  depthFirstSelect(cb: (tree: this) => boolean): this[] {
-    const filtered: this[] = [];
+  depthFirstSelect(cb: TreeCallBack<TType, boolean>): TType[] {
+    const filtered: TType[] = [];
 
     this.depthFirstEach((tree) => {
       if (cb(tree)) {
@@ -102,5 +106,3 @@ export class Tree<TData> {
     return filtered;
   }
 }
-
-// export default Tree;

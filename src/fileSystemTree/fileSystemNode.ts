@@ -1,26 +1,56 @@
 import * as is from 'is';
 import * as path from 'path';
 import { Stack } from '../data-structures/stack';
-import { Tree } from '../data-structures/tree';
+import { Tree, TreeCallBack } from '../data-structures/tree';
 
-export class FileSystemNode extends Tree {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export interface SimpleFileSystemInfo {
+  name: string;
+  type: string;
+  path: string;
+  children?: SimpleFileSystemInfo[];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface FileSystemNodeCallback<TReturn = void>
+  extends TreeCallBack<FileSystemNode, TReturn> {}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export abstract class FileSystemNode extends Tree<null, FileSystemNode> {
   static ignoreFiles = '';
 
-  constructor(name, type, parentDirectory, verbose) {
+  public depth: number;
+
+  public verbose: boolean;
+
+  public parent: FileSystemNode | null;
+
+  public parentPath: string;
+
+  public path: string;
+
+  public pathFromRoot: string;
+
+  public children: FileSystemNode[];
+
+  constructor(
+    public name: string,
+    public type: string,
+    parentDirectory: FileSystemNode | string,
+    verbose: boolean
+  ) {
     super();
 
-    const isFSNode = is.instance(parentDirectory, FileSystemNode);
+    const isFSNode = this.isFileSystemNode(parentDirectory);
     // parse file path to get name and path/to/file
     if (!isFSNode && !is.string(parentDirectory)) {
       throw new TypeError(`Argument must be a String`);
     }
 
-    this.name = name;
-    this.type = type;
     this.depth = isFSNode ? parentDirectory.depth + 1 : 0;
     this.verbose = verbose || false;
     this.parent = isFSNode ? parentDirectory : null;
-    this.parentPath = isFSNode ? this.parent.path : parentDirectory;
+    this.parentPath = isFSNode ? parentDirectory.path : parentDirectory;
     this.path = path.join(this.parentPath, this.name);
     this.pathFromRoot = isFSNode
       ? path.join(parentDirectory.pathFromRoot, this.name)
@@ -33,7 +63,12 @@ export class FileSystemNode extends Tree {
     }
   }
 
-  toObject() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private isFileSystemNode(node: any): node is FileSystemNode {
+    return node instanceof FileSystemNode;
+  }
+
+  toObject(): SimpleFileSystemInfo {
     return {
       name: this.name,
       type: this.type,
@@ -41,16 +76,16 @@ export class FileSystemNode extends Tree {
     };
   }
 
-  is(type) {
+  is(type: string): boolean {
     return this.type === type;
   }
 
-  get(name) {
+  get(name: string) {
     return this.children.find((tree) => tree.name === name);
   }
 
-  addChild(value) {
-    if (!is.instance(value, FileSystemNode)) {
+  addChild<TValue extends FileSystemNode>(value: TValue): TValue {
+    if (!this.isFileSystemNode(value)) {
       throw new TypeError(`Argument must be type FileNode or DirNode`);
     }
     const tree = value;
@@ -60,7 +95,7 @@ export class FileSystemNode extends Tree {
 
   getRelativePathFrom(parentDirNode, includeParentNode = true) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let child = this;
+    let child: FileSystemNode = this;
     const pathStack = new Stack();
 
     do {

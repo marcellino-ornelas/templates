@@ -3,8 +3,17 @@ import * as fs from 'fs';
 import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
-import FileSystemNode from './fileSystemNode';
+import {
+  FileSystemNode,
+  SimpleFileSystemInfo,
+  FileSystemNodeCallback,
+} from './fileSystemNode';
 import FileNode from './fileNode';
+
+type FindKeyPattern = Partial<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [Property in keyof FileSystemNode]: any;
+}>;
 
 export class DirectoryNode extends FileSystemNode {
   constructor(name, parentDirNode, verbose) {
@@ -20,7 +29,7 @@ export class DirectoryNode extends FileSystemNode {
     this._renderChildren();
   }
 
-  toObject() {
+  toObject(): SimpleFileSystemInfo {
     const obj = super.toObject();
 
     obj.children = this.children.map((fileNode) => fileNode.toObject());
@@ -28,7 +37,7 @@ export class DirectoryNode extends FileSystemNode {
     return obj;
   }
 
-  _renderChildren() {
+  _renderChildren(): void {
     let dirContents;
 
     try {
@@ -50,7 +59,7 @@ export class DirectoryNode extends FileSystemNode {
       });
   }
 
-  eachChild(cb) {
+  eachChild(cb: FileSystemNodeCallback): void {
     this.breathFirstEach((fsNode) => {
       if (this !== fsNode) {
         cb(fsNode);
@@ -58,8 +67,8 @@ export class DirectoryNode extends FileSystemNode {
     });
   }
 
-  selectChildren(cb) {
-    const found = [];
+  selectChildren(cb: FileSystemNodeCallback<boolean>): FileSystemNode[] {
+    const found: FileSystemNode[] = [];
     this.eachChild((fsNode) => {
       if (cb(fsNode)) {
         found.push(fsNode);
@@ -68,7 +77,7 @@ export class DirectoryNode extends FileSystemNode {
     return found;
   }
 
-  find(selectBy = {}) {
+  find(selectBy: FindKeyPattern = {}): FileSystemNode[] {
     return this.selectChildren((fsNode) =>
       // console.log(fsNode.path);
       couldMatchObj(selectBy, fsNode)
