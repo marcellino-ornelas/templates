@@ -1,0 +1,69 @@
+import { Example } from '@site/docs/components/example';
+
+# Templates CLI
+
+## new
+
+### new template
+
+```bash
+tps new template <template>
+
+create a new template
+
+Options:
+  --version      Show version number                                   [boolean]
+  --verbose, -v  More in-depth logging                [boolean] [default: false]
+  --help         Show help                                             [boolean]
+```
+
+<Example>
+
+```bash
+tps new template react-component
+```
+
+Produces:
+
+```text
+| - .tps
+	// highlight-start
+	| - react-component/
+		| - default/
+		| - settings.json
+	// highlight-end
+```
+
+</Example>
+
+### new package
+
+```bash
+tps new package <template> <package>
+
+create a new package in a template
+
+Options:
+  --version      Show version number                                   [boolean]
+  --verbose, -v  More in-depth logging                [boolean] [default: false]
+  --help         Show help                                             [boolean]
+```
+
+<Example>
+
+```bash
+tps new package react-component css
+```
+
+Produces:
+
+```text
+| - .tps
+	| - react-component/
+		// highlight-next-line
+		| - css/
+		| - default/
+		| - <other files or directories...>
+```
+
+</Example>

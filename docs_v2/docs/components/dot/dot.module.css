@@ -1,0 +1,23 @@
+.template {
+	margin-bottom: 0px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.template [class*='codeBlockTitle'] {
+	background-color: #8d949e;
+	color: #fff;
+}
+
+.result {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.result [class*='codeBlockTitle']{
+	background-color: #ebedf0;
+}
+
+.header {
+	
+}

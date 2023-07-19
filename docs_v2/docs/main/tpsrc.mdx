@@ -1,0 +1,206 @@
+---
+sidebar_label: Configure
+---
+
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Configure Templates
+
+Tps offers a json configuration file that caters specifically to users of your
+template, as opposed to the settings file which is intended for template
+development. The configuration file is named `.tpsrc` and it allows you to
+define predefined configurations for each template, altering tps behavior during
+rendering. With the ability to have multiple template configurations within this
+file, users gain greater control and flexibility when utilizing your template.
+This file needs to be in a `.tps` folder in the root of your repo.
+
+## Make a configuration file
+
+To generate a configuration file in the current directory, which should be the
+root of the repository you are working in, simply run the following command:
+
+```bash
+tps init
+```
+
+## Configuring a Template
+
+```json title=".tpsrc"
+{
+  "<template-name>": {}
+}
+```
+
+When adding configurations for template replace the `<template-name>` to be the
+name of your template. This property will hold all configurations for that
+template.
+
+<Example>
+
+Say we had a template named `react-component`. Now to add configurations to this
+template I would put the following inside of my tpsrc file
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    /* react-component template specific configs */
+  }
+}
+```
+
+</Example>
+
+Like mentioned before, you can add multiple template configurations
+
+```json title=".tpsrc"
+{
+  "<template-name-1>": {},
+  "<template-name-2>": {}
+}
+```
+
+<Example>
+
+Say we had two templates `react-component` and `express-app-route` and wanted to
+also add configurations then the tpsrc files would look something like this:
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    /* react-component template specific configs */
+  },
+  "express-app-route": {
+    /* express-app-route template specific configs */
+  }
+}
+```
+
+</Example>
+
+:::note
+
+To find all the available properties you can use in the configuration file,
+check out the [tpsrc API](/docs/api/tpsrc)
+
+:::
+
+### Answering Templates Prompts
+
+You have the option to define pre-existing answers for specific template prompts
+by using the `answers` property. This feature prevents the prompt from being
+displayed every time you render a new template. When rendering, the system will
+first read all the answers from this file and only prompt the user for the ones
+that remain unanswered. This functionality proves to be beneficial when you want
+a template to behave in a particular manner within a specific directory.
+
+```json title=".tpsrc"
+{
+  "<template-name>": {
+    "answers": {
+      "<prompt-name>": "<prompt-answer>"
+    }
+  }
+}
+```
+
+<Example>
+
+If I had a template named `hello-world` and a prompt named `age`:
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "age"
+      // ...
+    }
+  ]
+}
+```
+
+The I can set the answer to the prompt in our `.tpsrc` file with
+
+```json title=".tpsrc"
+{
+  "hello-world": {
+    "answers": {
+      "age": 23
+    }
+  }
+}
+```
+
+</Example>
+
+### Configuring Templates
+
+Additionally, you can define pre-existing options that modify the behavior of
+templates consistently for a given template. This provides a convenient way for
+users to have templates function in a desired manner each time they use them
+within the repository. You can configure templates behavior with the `opts`
+property
+
+```json title=".tpsrc"
+{
+  "<template-name>": {
+    "opts": {
+      "<opt-name>": "<opt-answer>"
+    }
+  }
+}
+```
+
+:::note
+
+To find all the available options for configuring templates, check out the
+[Template Options API](/docs/api/template#options)
+
+:::
+
+<Example>
+
+If I had a template named `react-component` and I wanted to always force the
+creation of my new instance even if one already exists then I can add a `force`
+option to my templates configuration.
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      "force": true
+    }
+  }
+}
+```
+
+This would be equivilent to passing a `--force` flag to the create command
+
+```bash
+tps react-component Nav --force
+```
+
+</Example>
+
+## Make a Global Configuration File
+
+Templates also allows you to have global settings. In order to initialize global
+settings or templates run the following command
+
+```bash
+tps init --global
+```
+
+This will create a `.tps` and `.tpsrc` folder in your home directory.
+
+:::note
+
+Note sure what a home directory is? Check out this
+[wiki](https://en.wikipedia.org/wiki/Home_directory)
+
+For mac uses your home directory is usually refered to as `~` on the command
+line
+
+:::

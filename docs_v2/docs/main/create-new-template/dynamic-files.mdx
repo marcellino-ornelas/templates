@@ -1,0 +1,747 @@
+---
+pagination_next: main/create-new-template/settings
+pagination_prev: main/create-new-template/packages
+sidebar_position: 3
+---
+
+import { Text } from '@site/docs/components/text';
+import { Example } from '@site/docs/components/example';
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+# Dynamic Files
+
+## Dynamic files breakdown
+
+### What is a dynamic file
+
+Tps goes beyond simple copy and paste functionality; it enables the existence of
+a more versatile and powerful system. When working with reusable concepts, the
+ability to incorporate additional information becomes essential. This is where
+dynamic files come into play.
+
+Dynamic files reside within your template's package folders, much like any other
+file. However, dynamic files undergo a different processing procedure. Tps reads
+the contents of dynamic files, which are then processed by a templating language
+called [doT](http://olado.github.io/doT/index.html).
+
+```mermaid
+graph LR;
+	step1("User renders
+		template")
+	step2("Tps loads all files and
+		folders from each
+		required package")
+	step3("Dymanic files")
+	step4("All other files/folders")
+	step5("Copy/paste")
+	step6("DoT template engine")
+	step7("New instance
+		of template created")
+    step1-->step2;
+    step2-->step3;
+    step2-->step4;
+    step4-->step5;
+    step5-->step7;
+	step3-->step6;
+	step6-->step7;
+```
+
+### What is doT
+
+DoT is based on JavaScript and uses `{{}}` brackets for interpolation. doT is a
+templating language similar to popular options like Handlebars, EJS, or Jade. It
+provides various types of interpolation, including loops, conditionals, and
+more. You can use any valid JavaScript code inside these brackets.
+
+To learn more about doT, you can visit its documentation. However, let's
+introduce you to the basics here.
+
+:::danger
+
+It's important to consider that not all JavaScript features may be supported
+across different computers or versions of Node when running these templates. As
+a result, certain JavaScript functionality may not work as expected or behave
+differently.
+
+:::
+
+## How to use doT
+
+Like mentioned before doT uses `{{}}` brackets. Here are some common ways on how
+you can use doT
+
+:::caution
+
+when it comes to creating complex templates, you may encounter a need to indent
+the dot syntax to improve readability. However, be aware that this can cause
+unexpected issues with the appearance of the rendered template. While the
+indented structure may look good in the template itself, when the dot processes
+these files, it doesn't recognize or handle the indentation properly. This has
+been my experience with using it, and you can find more detailed information
+about this issue in the following link:
+https://github.com/marcellino-ornelas/templates/issues/7
+
+:::
+
+### Evaluation
+
+In doT, evaluation is achieved using `{{ <expression>}}`. The expression can be
+any valid JavaScript code, enabling the creation of variables, functions, and
+various other possibilities. **The semi-colon at the end of the expression is
+mandatory!**
+
+<Dot>
+
+```text
+{{const name = "Marcellino Ornelas";}}
+```
+
+</Dot>
+
+One limitation of evaluations are that it leaves a empty space where it was
+placed at. We recommend avoid using as much as possible but could be useful in
+some cases
+
+<Example title="Evaluations leaves new line">
+
+<Dot>
+
+```text
+// highlight-next-line
+{{const name = "john doe";}}
+hey
+```
+
+</Dot>
+
+</Example>
+
+### Interpolation
+
+In doT, interpolation is achieved using `{{= <expression>}}`. This syntax allows
+the result of the specified expression to replace the brackets in the template.
+
+<Dot>
+
+```text
+{{= 2 + 2}}
+```
+
+</Dot>
+
+### Conditionals
+
+In doT, interpolation is achieved using `{{? <expression>}} ... {{?}}`. The
+result of the provided expression will be displayed if the expression returns
+truthy value
+
+<Dot>
+
+```text
+Are you there?
+{{? 1 === 1}}
+I am here
+{{?}}
+```
+
+</Dot>
+
+If you dont want the extra new lines, move all the conditional statements to one
+line
+
+<Dot>
+
+```text
+Are you there?
+{{? 1 === 1}}I am here{{?}}
+```
+
+</Dot>
+
+If you want everthing to flow on one line then just put the condition on the
+same line
+
+<Dot>
+
+```text
+Are you there? {{? 1 === 1}}I am here{{?}}
+```
+
+</Dot>
+
+doT also supports else statements.
+
+<Dot>
+
+```text
+Are you here? {{? 1 === 2}}I am here {{??}}I am not home {{?}}
+```
+
+</Dot>
+
+doT also supports else if statements.
+
+<Dot>
+
+```text
+Are you here? {{? 1===2}}I am here {{?? 1 ===1}}I might be home{{??}}I am not home {{?}}
+```
+
+</Dot>
+
+One limitation of conditionals is that it leaves a white space behind when the
+condition is not met
+
+<Dot resultMeta="{2}">
+
+```text
+Are you there?
+{{? 1 === 2}}I am here{{?}}
+how about now?
+```
+
+</Dot>
+
+The only way around this right now is placing the condition on the same line but
+adding a new line to the begining of the value
+
+<Dot>
+
+```text
+Are you there?{{? 1 === 1}}{{="\n"}}I am here{{?}}
+how about now?{{? 1 === 2}}{{="\n"}}I am here{{?}}
+```
+
+</Dot>
+
+Notice how the first condition value still showed up on a new line but the
+second condition didnt leave a new line
+
+### Loops
+
+In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
+
+<Dot>
+
+```text
+{{~[1, 2, 3, 4] :value:index}}
+{{= value}}
+{{~}}
+```
+
+</Dot>
+
+Unfortunately we need to keep all tags on the same line to get a cleaner output.
+By indenting `{{= value}}` to get a cleaner look will result in indent in the
+rendered output
+
+<Example title="Indent Issues">
+
+<Dot>
+
+```text
+{{~[1, 2, 3, 4] :value:index}}
+	{{= value}}
+{{~}}
+```
+
+</Dot>
+
+</Example>
+
+If you dont want the extra spacing between each line then you need to move
+`{{= value}}` on the same line as your loop.
+
+<Dot>
+
+```text
+{{~[1,2,3,4] :value:index}}{{= value}}
+{{~}}
+```
+
+</Dot>
+
+To remove the extra space at the bottom of the output, you can move the end of
+the loop to the same line. However, this will cause all your items to be
+displayed on a single line. To address this, you can add a `\n` character after
+each value. To avoid displaying a new line after the last item, you can use a
+ternary operator to check if it is the last item.
+
+<Dot>
+
+```text
+{{~[1,2,3,4] :value:index}}{{= value + (index !== [1,2,3,4].length - 1 ? "\n" : "")}}{{~}}
+```
+
+</Dot>
+
+:::tip
+
+If you dont need anything to complex, then use `join`!
+
+<Dot>
+
+```text
+{{= [1,2,3,4].join("\n")}}
+```
+
+</Dot>
+
+:::
+
+If you would like to keep output on one line then put all doT brackets on one
+line
+
+<Dot>
+
+```text
+{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
+```
+
+</Dot>
+
+## How to use doT with Templates
+
+Templates make it easy to use the doT template engine inside files. This helps
+you add dynamic content to your files. To use templates with doT, you just need
+to add the `.dot` extension to your file. The `.dot` extension can be added to
+any file, regardless of its original extension. Once added, the contents of the
+file will be processed by doT. The resulting output will then be incorporated
+into the rendered file. Your rendered file will no longer have the `.dot`
+extention
+
+<Example>
+
+To use doT in a file named `server.js`, Rename the file to `server.js.dot`. Once
+processed and rendered, the resulting file will retain its original name, which
+is `server.js`.
+
+</Example>
+
+### File names
+
+File names can also take advantage of using dot. By putting the
+`{{=<some-value>}}` in the filename you can get dynamic filenames.
+
+<Example>
+
+```text
+{{= tps.name}}.js.dot
+```
+
+If `name` was `Nav` then the result would be:
+
+```text
+Nav.js
+```
+
+</Example>
+
+## Templates Context
+
+After converting a file to use doT, you gain access to the templates context
+object, which contains information about the template and rendering metadata. To
+utilize the context object, you can refer to the tps object within doT tags.
+Here's an example:
+
+```text
+{{ tps }}
+```
+
+Now, let's explore some of the most commonly used properties available in this
+object. For a full list, you can refer to the
+[tps context API](/api/template-context).
+
+### Name
+
+```text
+{{= tps.name }}
+```
+
+Name of new instance you are rendering. When rendering two or more instances at
+the same time. The same concept as above apply's but for each path you pass in.
+
+If you render a template with no build path. Then `tps.name` will be null.
+
+<Example>
+
+```bash title="cli"
+tps react-component Nav
+```
+
+<Dot tps={{ name: "Nav" }}>
+
+```text
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+```
+
+</Dot>
+
+</Example>
+
+:::tip
+
+Dont remember what the template name is? Refresh your mind
+[here](./templates#single-build-path)
+
+:::
+
+---
+
+### Packages
+
+```text
+{{= tps.packages }}
+```
+
+List of packages that were used when rendering your template.
+
+:::tip
+
+Remember `default` package is include by default
+
+:::
+
+When no additional packages are used:
+
+```json
+["default"]
+```
+
+when additional packages are used:
+
+```json
+["default", "css", "unit-tests"]
+```
+
+<Example>
+
+<Tabs>
+<TabItem value="Additional packages">
+
+```bash title="cli"
+tps react-component App --packages css
+```
+
+<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js">
+
+```text
+import React from react;
+{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
+{{?}}
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="No additional packages">
+
+```bash title="cli"
+tps react-component App
+```
+
+<Dot tps={{name: "Nav", packages: ['default']}} lang="js">
+
+```text
+import React from react;
+{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
+{{?}}
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+</Example>
+
+:::tip
+
+Don't remember how to use packages? Refresh your mind [here](./packages.md)
+
+:::
+
+## Example
+
+As a demonstration, lets build a react component template.
+
+```text
+| - tps-example/
+	| - .tps/
+		| - react-component/
+			| - default/
+```
+
+Now typically a react component has 3 main files. A index, css and a js file all
+inside of a folder like the following folder structure:
+
+```text
+| - .<component-name>/
+	| - <component-name>.js
+	| - <component-name>.css
+	| - index.js
+```
+
+Now in order for us to create a template out of this lets put the following
+inside of our `.tps/react-component/default`.
+
+```text
+| - .tps/
+	| - react-component/
+		| - default/
+			| - index.js.dot
+			| - {{=tps.name}}.js.dot
+			| - {{=tps.name}}.css
+```
+
+### File names
+
+Since all files names get processed with dot, we are going to use the name of
+the new template, we are generating, as the file name. Say we create the
+following component.
+
+```bash
+tps react-component Nav
+
+# or
+
+tps create --use=react-component Nav
+```
+
+We are rendering a new template called `Nav` so `tps.name` will be `Nav`. That
+means `{{=tps.name}}.js.dot` gets rendered to `Nav.js`. so calling the command
+from above will generate this folder template:
+
+```text
+| - tps-example
+	| - Nav
+		| - index.js
+		| - Nav.js
+		| - Nav.css
+```
+
+Now if you have a extended path like `List/ListItem`. Then `tps.name` would be
+`ListItem`
+
+```bash
+tps react-component List/ListItem
+
+# or
+
+tps create --use=react-component List/ListItem
+```
+
+After calling the above you should get a new template like this
+
+```text
+    | - tps-example
+        | - List
+            | - ListItem
+                | - index.js
+                | - ListItem.js
+                | - ListItem.css
+```
+
+### File contents
+
+Now lets get a little deeper. Since we added the dot extension to our js file
+lets add some contents inside.
+
+```javascript
+    import React, { Component } from 'react';
+    import './{{=tps.name}}.css';
+
+    class {{=tps.name}} extends Component {
+      constructor(props){
+        super(props);
+        this.state = {};
+      }
+
+      // componentWillMount(){}
+      // componentDidMount(){}
+      // componentWillUnmount(){}
+
+      // componentWillReceiveProps(){}
+      // shouldComponentUpdate(){}
+      // componentWillUpdate(){}
+      // componentDidUpdate(){}
+
+      render() {
+        return (
+          <div></div>
+        );
+      }
+    }
+
+    export default {{=tps.name}};
+```
+
+Now when you generate a new template with the following command
+
+```bash
+tps react-component Nav
+```
+
+After calling the line from above you should end up with a
+`tps-example/Nav/Nav.js` that look like this:
+
+```javascript
+import React, { Component } from 'react';
+import './Nav.css';
+
+class Nav extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  // componentWillMount(){}
+  // componentDidMount(){}
+  // componentWillUnmount(){}
+
+  // componentWillReceiveProps(){}
+  // shouldComponentUpdate(){}
+  // componentWillUpdate(){}
+  // componentDidUpdate(){}
+
+  render() {
+    return <div></div>;
+  }
+}
+
+export default Nav;
+```
+
+### Packages
+
+Just for fun lets see how we can get packages involved. Let move the css file
+out of the `default` package and put it into a css package.
+
+```text
+    | - .tps/
+        | - react-component/
+            | - default/
+                | - index.js.dot
+                | - {{=tps.name}}.js.dot
+            | - css
+                | - {{=tps.name}}.css
+```
+
+Now every time you render this template. You will only get the css file if you
+add the additional `css` package. Now to make this more useful, we need to
+change `import './{{=tps.name}}.css';` in the `{{=tps.name}}.js.dot` now since
+it might not be there. Let change this to
+
+```text
+{{~tps.packages.includes("css")}}import './{{=tps.name}}.css';{{~}}
+```
+
+DoT's `{{~}}` is a conditional. So here we check to see if the `css` package was
+include when rendering this template. if it is lets add the import. If not, then
+do nothing. Calling:
+
+```text
+tps react-component --packages css -- Nav
+```
+
+will produce
+
+```text
+    | - tps-example
+        | - Nav
+            | - index.js
+            | - Nav.js
+            | - Nav.css
+```
+
+and
+
+```js
+import React, { Component } from 'react';
+import './Nav.css';
+
+class Nav extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  // componentWillMount(){}
+  // componentDidMount(){}
+  // componentWillUnmount(){}
+
+  // componentWillReceiveProps(){}
+  // shouldComponentUpdate(){}
+  // componentWillUpdate(){}
+  // componentDidUpdate(){}
+
+  render() {
+    return <div></div>;
+  }
+}
+
+export default Nav;
+```
+
+but calling
+
+```bash
+tps react-component Nav
+```
+
+will produce
+
+```text
+    | - tps-example
+        | - Nav
+            | - index.js
+            | - Nav.js
+```
+
+with no `import`
+
+```js
+import React, { Component } from 'react';
+
+class Nav extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  // componentWillMount(){}
+  // componentDidMount(){}
+  // componentWillUnmount(){}
+
+  // componentWillReceiveProps(){}
+  // shouldComponentUpdate(){}
+  // componentWillUpdate(){}
+  // componentDidUpdate(){}
+
+  render() {
+    return <div></div>;
+  }
+}
+
+export default Nav;
+```

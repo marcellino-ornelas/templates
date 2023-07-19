@@ -1,0 +1,296 @@
+---
+sidebar_position: 2
+pagination_next: main/create-new-template/dynamic-files
+pagination_prev: main/create-new-template/templates
+---
+
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Packages
+
+## What is a package?
+
+Packages are the building blocks of a template. But its also, nothing special
+either. Its only a directory that will hold more files and directories. The
+package's files and folders are used when rendering your template.
+
+All packages live inside of a tps `template` folder
+
+```text
+    | - .tps/
+        | - some-template/
+			// highlight-next-line
+            | - <packages...>/
+```
+
+`packages` can be named whatever you like except for one. Each `template` can
+optionally have a `default` package. Each time you render a template, TPS will
+automatically use everything inside your `default` package to build your
+template. Every other package that you want to be rendered must be specified
+when rendering the template.
+
+Packages are used to enhance a template or add extra features when a user wants
+them. Its kind of like a conditional.
+
+If that doesn't make sense then think of it this way. Imaging rendering a
+template was like ordering a cheeseburger. Now a basic cheeseburger will
+probably come with meat, lettuce, and cheese. But! if you wanted to make the
+cheeseburger more tasty and awesome. You can "add" more ingredients like bacon,
+mushrooms, and etc _("our packages")_.
+
+### Default package
+
+As mentioned before, when you render a template, all contents from the `default`
+package are automatically included. Think of this package as a central storage
+space for important things needed every time you use a template. It keeps all
+the essential elements in one place.
+
+```text title="Template"
+    | - .tps/
+        | - some-template/
+            | - default/
+				// highlight-next-line
+                | - <all of the default package files/folders...>
+```
+
+```text title="Result"
+    | - app/
+		// highlight-next-line
+        | - <all of the default package files/folders...>
+```
+
+<Example open>
+
+Lets say we have a template called `node-server`. This template is responsible
+for setting up a brand new webserver with all the bells and whistles included.
+
+```text title="Template"
+| - .tps/
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+```
+
+let's say today we had a new idea for a trash removal company called
+`trash-removal`. If we wanted to generate this app with our template then it
+would create a new directory called `trash-removal` and render all files inside
+the templates `default` package and place them into the new `trash-removal`
+directory it just created
+
+```bash title="Command"
+tps node-server trash-removal
+```
+
+```text title="Result"
+| - trash-removal/
+	// highlight-start
+	| - server.js
+	| - package.json
+	// highlight-end
+```
+
+</Example>
+
+### Using additional packages
+
+If your rendering a template thats going to use additional packages. All of the
+files and folders, from the packages you use, will be included when rendering
+that template. If we were to render a new template called `app` and also use an
+additional package `package2`. then both `default` and `package2` files and
+folders will be copied over to `app`. You can have and include as many packages
+as you wish.
+
+```text
+    | - .tps/
+        | - <template>/
+			// highlight-start
+            | - default/
+                | - <default files/folders...>
+            | - package2/
+                | - <package2 files/folders...>
+			// highlight-end
+
+    | - app/
+		// highlight-start
+        | - <default files/folder...>
+        | - <package2 files/folders...>
+		// highlight-end
+```
+
+If you have more than one package but don't specific that you want to use any
+additional ones. Your app folder will only be the files and folders from
+`default`.
+
+```text
+    | - .tps/
+        | - <template>/
+            | - default/
+                | - <default files/folders...>
+            | - package2/
+                | - <package2 files/folders...>
+
+    | - app/
+		// highlight-next-line
+        | - <default files/folders...>
+```
+
+<Example open title="Using additional packages">
+
+Lets say we have a template called `node-server`. This template is responsible
+for setting up a brand new webserver with all the bells and whistles included
+and optionally can set up unit tests for us
+
+```text title="Template"
+| - .tps/
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+		| - unit-tests/
+			| - server.test.js
+```
+
+Now if we wanted to create a new app but have unit tests set up for us alrealy
+then we can run
+
+```bash title="Command"
+tps node-server trash-removal --packages unit-tests
+```
+
+```text title="Result"
+| - trash-removal/
+	// highlight-start
+	| - server.js
+	| - server.test.js
+	| - package.json
+	// highlight-end
+```
+
+</Example>
+
+<Example open title="Having additional packages but not using them">
+
+Lets say we have a template called `node-server`. This template is responsible
+for setting up a brand new webserver with all the bells and whistles included
+and optionally can set up unit tests for us
+
+```text title="Template"
+| - .tps/
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+		| - unit-tests/
+			| - server.test.js
+```
+
+Now if we wanted to create a new app but we didnt want unit tests for this app
+then you could run.
+
+```bash title="Command"
+tps node-server trash-removal
+```
+
+```text title="Result"
+| - trash-removal/
+	// highlight-start
+	| - server.js
+	| - package.json
+	// highlight-end
+```
+
+:::tip
+
+Remember additional packages must be explicily included
+
+:::
+
+</Example>
+
+### Prompts
+
+Tps also has the abilities to prompt users for there input. As a template
+creator, you can define prompts in a settings.json file. When users attempt to
+render the template, TPS will prompt them questions and dynamically adjusts its
+behavior based on the users response
+
+```bash
+❯ tps node-server new-app
+# highlight-next-line
+? Would you like to include unit tests? (true)
+```
+
+In this case, if the user answers "yes" to the question, tps will include an
+extra package during the rendering process. This package will have the necessary
+materials for conducting unit tests. however if they chose against this then tps
+would not include anything from the unit test package
+
+Dont worry well go over this more in depth in our
+[prompts guide](./settings/prompts.md)
+
+## Making a new package
+
+To make a new package use the bash commands
+
+<Tabs> 
+<TabItem value="tps" label="tps cli" default>
+
+```bash
+tps new package <template> <package-name>
+```
+
+:::note
+
+Read more about our `new` command more [here](../../api/cli/commands/new.md)
+
+:::
+
+</TabItem>
+<TabItem value="bash" label="bash">
+
+```bash
+mkdir ./.tps/<template>/<package-name>
+```
+
+  </TabItem>
+</Tabs>
+
+### Using a new package
+
+Add the `--packages` flag to your tps create command to add more packages. This
+flag takes an array of options.
+
+```bash
+tps <template> <template-name-to-create> --packages <package> [packages...]
+```
+
+:::note
+
+If you add the flag before the template or template name your creating, you must
+add `--` right before you start to put the template you want to create so
+[yargs](http://yargs.js.org/) can parse correctly
+
+```bash
+tps <template> --packages <package> [packages...] -- <template-name-to-create>
+```
+
+:::
+
+<Example open>
+
+one package
+
+```bash
+tps node-server app --packages unit-tests
+```
+
+multiple packages
+
+```bash
+tps node-server app --packages unit-tests sql redis
+```
+
+</Example>
