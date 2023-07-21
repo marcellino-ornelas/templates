@@ -20,7 +20,6 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'marcellino-ornelas', // Usually your GitHub org/user name.
   projectName: 'templates', // Usually your repo name.
-  deploymentBranch: 'docs_website',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
