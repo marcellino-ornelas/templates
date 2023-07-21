@@ -11,7 +11,7 @@ const config = {
     'Supercharge Your Development with Templates: Code Faster, Build Better!',
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://marcellino-ornelas.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -20,6 +20,8 @@ const config = {
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'marcellino-ornelas', // Usually your GitHub org/user name.
   projectName: 'templates', // Usually your repo name.
+  deploymentBranch: 'docs_v2',
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -102,7 +104,7 @@ const config = {
             items: [
               {
                 label: 'Tutorial',
-                to: '/docs/intro',
+                to: '/docs/main/intro',
               },
             ],
           },
