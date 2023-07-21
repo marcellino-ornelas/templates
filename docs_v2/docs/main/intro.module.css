@@ -1,0 +1,49 @@
+.templateOptions {
+	display: flex;
+	justify-content: space-between;
+}
+
+.templateOption {
+	display: flex;
+	flex-direction: column;
+	width: 49%;
+	padding: 20px;
+	border: 1px solid grey;
+	border-radius: 10px;
+	box-shadow: 2px 2px 4px #c6c3c3;
+}
+
+.templateOption p {
+	flex-grow: 1;
+}
+
+.templateOption:first-child {
+	margin-right: 15px;
+}
+
+.btn {
+	/* border: 1px solid green;
+	*/
+	cursor: pointer;
+	background-color: green;
+	border-radius: 5px;
+	color: white;
+	padding: 5px 15px;
+	font-size: 18px;
+}
+
+.btn:hover {
+	background-color: #017001;
+	color: white;
+}
+
+@media screen and (max-width: 996px) {
+	.templateOptions {
+		display: block;
+	}
+
+	.templateOption {
+		width: 100%;
+		margin-bottom: 15px;
+	}
+  }

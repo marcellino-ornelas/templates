@@ -7,7 +7,7 @@ import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
 
-function HomepageHeader() {
+const HomepageHeader = () => {
   const { siteConfig } = useDocusaurusContext();
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
@@ -17,17 +17,17 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/docs/intro"
+            to="/docs/main/intro"
           >
-            Docusaurus Tutorial - 5min ⏱️
+            View Template docs
           </Link>
         </div>
       </div>
     </header>
   );
-}
+};
 
-export default function Home(): JSX.Element {
+const Home = (): JSX.Element => {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
@@ -37,8 +37,8 @@ export default function Home(): JSX.Element {
       <HomepageHeader />
 
       <main>
-        <div>
-          <p>
+        <div className={styles.introduction}>
+          <p className="container">
             Templates is a powerful filesystem generator that aims to simplify
             the process of getting started with and maintaining code
             applications. Its purpose is to provide developers with a friendly
@@ -49,8 +49,11 @@ export default function Home(): JSX.Element {
             tests or React components integrated with Redux and TypeScript.
           </p>
         </div>
+
         {/* <HomepageFeatures /> */}
       </main>
     </Layout>
   );
-}
+};
+
+export default Home;

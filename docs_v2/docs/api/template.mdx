@@ -1,0 +1,455 @@
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Template
+
+```ts title="Type"
+interface Template {
+  constructor(templateName: string, opts: TemplateOptions): Template;
+}
+```
+
+```ts
+new Templates('<template-name>', {
+  /* template options ... */
+});
+```
+
+<Example>
+
+```ts
+new Templates('react-component', {
+  wipe: true,
+});
+```
+
+</Example>
+
+## Options
+
+```ts title="Type"
+interface TemplateOptions {
+  extendDest?: string;
+  wipe?: boolean;
+  force?: boolean;
+  NewFolder?: boolean;
+}
+```
+
+---
+
+### Extend Destination
+
+```ts title="Type"
+string;
+```
+
+Optional path to add prepend to each
+[build path](/docs/main/create-new-template/templates#what-is-rendering-a-template).
+
+<Tabs>
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      // highlight-next-line
+      "extendDest": "./path/to/some/directory"
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+  extendDest: './path/to/some/directory',
+});
+```
+
+</TabItem>
+
+<TabItem value="cli" label="CLI">
+
+Not suppported at the moment
+
+</TabItem>
+</Tabs>
+
+<Example>
+
+Imagine being in a directory named `app` and having a template named
+`react-component`. In this case, your directory structure might look like this:
+
+```text
+| - app
+	| - .tps/
+		| - react-component/
+		| - .tpsrc
+	| - src/
+		| - <frontend-code...>
+```
+
+Lets say all of our react components live inside the `./src/` folder. So if I
+wanted to render a new instance with the react component template, I would need
+to use a long build path.
+
+```bash
+tps react-component src/Home
+```
+
+Produces
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-next-line
+		| - Home/
+		| - ...
+```
+
+However since you know all components will live in the `src` folder you can
+instead, add a `extendDest` option to your `.tpsrc` file and add `src` as the
+value.
+
+<Tabs>
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      // highlight-next-line
+      "extendDest": "./src"
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+  // highlight-next-line
+  extendDest: './src',
+});
+```
+
+</TabItem>
+</Tabs>
+
+Tps will now prepend the `src` path to your build paths so well get the same
+result as before but without adding `src` to our build paths:
+
+```bash
+tps react-component Home
+```
+
+still produces
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-next-line
+		| - Home/
+		| - ...
+```
+
+</Example>
+
+---
+
+### Wipe
+
+```ts title="Type"
+boolean;
+```
+
+```ts title="Default"
+false;
+```
+
+The `wipe` option acts by deleting any existing build path directory before
+rendering your new template instance. This ensures a fresh start and avoids any
+potential conflicts during the rendering process.
+
+<Tabs>
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      // highlight-next-line
+      "wipe": true
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+  // highlight-next-line
+  wipe: true,
+});
+```
+
+</TabItem>
+
+<TabItem value="cli" label="CLI">
+
+```bash
+tps some-template app --wipe
+```
+
+</TabItem>
+</Tabs>
+
+<Example>
+
+Lets say you have the following directory structure
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-start
+		| - Home/
+			| - ...
+		// highlight-end
+```
+
+If I was trying to rendering a new instance of `react-component` template and
+called this `Home`, tps would error out because a `Home` directory already
+exists. However if you add the `--wipe` flag, tps will delete this directory
+first, then render your new instance in its place.
+
+```bash
+tps react-component src/Home --wipe
+```
+
+Will produce:
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-start
+		| - Home/
+			| - <react-component template files ...>
+		// highlight-end
+```
+
+</Example>
+
+### Force
+
+```ts title="Type"
+boolean;
+```
+
+```ts title="Default"
+false;
+```
+
+The `force` option makes sure that your new instance is created no matter what,
+similar to the [wipe](#wipe) option. However, instead of deleting the whole
+directory, it only replaces the conflicting files, so you don't lose any extra
+work you may have added
+
+By default, templates will raise an error if there are any file or directory
+conflicts.
+
+<Tabs>
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      // highlight-next-line
+      "force": true
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+  // highlight-next-line
+  force: true,
+});
+```
+
+</TabItem>
+
+<TabItem value="cli" label="CLI">
+
+```bash
+tps some-template app --force
+```
+
+</TabItem>
+</Tabs>
+
+<Example>
+
+Lets say you have the following directory structure
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-start
+		| - Home/
+			| - ...
+		// highlight-end
+```
+
+If I was trying to rendering a new instance of `react-component` template and
+called this `Home`, tps would error out because a `Home` directory already
+exists. However if you add the `--wipe` flag, tps will delete this directory
+first, then render your new instance in its place.
+
+```bash
+tps react-component src/Home --wipe
+```
+
+Will produce:
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		// highlight-start
+		| - Home/
+			| - <react-component template files ...>
+		// highlight-end
+```
+
+</Example>
+
+### New Folder
+
+```ts title="Type"
+boolean;
+```
+
+```ts title="Default"
+true;
+```
+
+The `newFolder` option will create a new folder and put all the template
+contents inside it. This new folder will share the same name as your new
+template instance, providing a neatly organized structure for your project. This
+is how templates behaves by default
+
+:::tip
+
+This feature becomes particularly useful when you already have a directory set
+up and prefer not to create a brand new one from scratch. By using the
+`newFolder` option, you can seamlessly integrate the template contents into your
+existing directory, making it a convenient choice for projects that are already
+in progress.
+
+:::
+
+<Tabs>
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      // highlight-next-line
+      "newFolder": false
+    }
+  }
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+  // highlight-next-line
+  newFolder: false,
+});
+```
+
+</TabItem>
+
+<TabItem value="cli" label="CLI">
+
+```bash
+tps react-component Nav --no-newFolder
+```
+
+</TabItem>
+</Tabs>
+
+<Example title="New folder">
+
+If I was trying to rendering a new instance of `express-app` template and called
+this `app`, tps would create a new directory for me named `app` and place all
+contents inside of it
+
+```bash
+tps express-app app
+```
+
+```text
+| - coding <---cwd
+	// highlight-start
+	| - app
+		| - <express-app contents ...>
+	// highlight-end
+```
+
+</Example>
+
+<Example title="No New folder">
+
+If I was trying to rendering a new instance of `express-app` template and called
+this `app` however I didnt want a new folder then it would produce the
+following:
+
+```bash
+tps express-app app --no-newFolder
+```
+
+```text
+| - coding <---cwd
+	// highlight-start
+	| - <express-app contents ...>
+	// highlight-end
+```
+
+Notice how this no longer creates a `app` directory.
+
+</Example>

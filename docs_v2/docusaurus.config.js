@@ -8,8 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Templates',
   tagline:
-    'Accelerate Your Development: Unleash the Power of Dynamic Templates',
-  favicon: 'img/favicon.ico',
+    'Supercharge Your Development with Templates: Code Faster, Build Better!',
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-test-site.com',
@@ -67,13 +66,13 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      //   image: 'img/docusaurus-social-card.jpg',
       navbar: {
         title: 'Templates',
-        logo: {
-          alt: 'My Site Logo',
-          src: 'img/logo.svg',
-        },
+        // logo: {
+        //   alt: 'My Site Logo',
+        //   //   src: 'img/logo.svg',
+        // },
         items: [
           {
             type: 'docSidebar',

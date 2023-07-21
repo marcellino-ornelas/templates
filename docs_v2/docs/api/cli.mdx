@@ -2,6 +2,155 @@ import { Example } from '@site/docs/components/example';
 
 # Templates CLI
 
+## Init
+
+```text
+tps init
+
+Initialize local settings
+
+Options:
+  --version      Show version number                                   [boolean]
+  --verbose, -v  More in-depth logging                [boolean] [default: false]
+  --help         Show help                                             [boolean]
+  --force, -f    Initialize tps in cwd no matter what                  [boolean]
+  --global, -g   Initialize tps globally                               [boolean]
+```
+
+Initialize your repo as a tps repo. This will allow you to set tps template
+settings and build templates for your repo. This command will create a `.tps`
+folder and a `.tpsrc` file inside of it.
+
+```text
+| - .tps/
+	| - .tpsrc
+```
+
+:::note
+
+Tps will throw an error if you try to initialize a child directory when a parent
+directory is already initialized. If you would like to do this anyways see
+[forcing a repo](#forcing-a-repo).
+
+:::
+
+#### Initializing a repo
+
+First navigate into the directory that you wish to initialize local settings.
+
+```bash
+cd some/path/to/repo
+```
+
+Initialize template settings
+
+```bash
+tps init
+```
+
+---
+
+#### Initializing tps globally
+
+use the `--global` flag when you want tps to be initialized globally. This will
+place the `.tps` folder and `.tpsrc` file in your home directory
+
+```bash
+tps init --global
+```
+
+---
+
+#### Forcing a repo
+
+use the force flag when you want a repo to be initialized but a parent directory
+is already initialized
+
+```bash
+tps init --force
+```
+
+## List
+
+```text
+tps list
+
+Show all available templates
+
+Options:
+  --version      Show version number                                   [boolean]
+  --verbose, -v  More in-depth logging                [boolean] [default: false]
+  --help         Show help                                             [boolean]
+  --global, -g   List out global files                 [boolean] [default: true]
+  --local, -l    List out global files                 [boolean] [default: true]
+```
+
+List all available templates that you can use. `local` refers to local
+templates, which are templates available in your current working directory
+(cwd). `global` stands for global templates, accessible from anywhere on your
+system.
+
+<Example>
+
+```bash
+> tps list
+Global:
+- react-component
+Local:
+- new-test
+- new-api
+```
+
+</Example>
+
+## Create
+
+```text
+tps [use] [buildPaths...]
+
+render a new instance from a template
+
+Options:
+  --version        Show version number                                 [boolean]
+  --verbose, -v    More in-depth logging              [boolean] [default: false]
+  --help           Show help                                           [boolean]
+  --use, -u        Template package to create your with                 [string]
+  --packages, -p   Additional Packages to use when building your template[array]
+  --default, -d    Use all default answers to all prompts              [boolean]
+  --newFolder, -f  Create a new folder                 [boolean] [default: true]
+  --force          force the template to be made. This will override any files
+                   that tps needs to create                            [boolean]
+  --wipe           force the template to be made. This will delete the directory
+                   if exists                                           [boolean]
+```
+
+Render a new instance of a template.
+
+:::tip
+
+Checkout out the [Template Options API](./template#options) for more information
+about template options
+
+:::
+
+#### Single build path
+
+```bash
+tps react-component Nav
+```
+
+#### Long build path
+
+```bash
+tps react-component components/Nav
+```
+
+#### Multiple build paths
+
+```bash
+tps react-component components/Nav components/Button pages/Home
+```
+
 ## new
 
 ### new template

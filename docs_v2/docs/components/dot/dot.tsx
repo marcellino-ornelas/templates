@@ -9,6 +9,7 @@ doT.templateSettings.strip = false;
 doT.templateSettings.varname = 'tps';
 
 interface Props {
+  templateName?: string;
   children: React.ReactNode;
   templateMeta: string;
   resultMeta: string;
@@ -21,6 +22,7 @@ interface Props {
 type templateFn = (obj: Record<string, any>) => string;
 
 export const Dot = ({
+  templateName = 'Dot Template',
   children,
   tps = {},
   result = true,
@@ -46,7 +48,7 @@ export const Dot = ({
       <CodeBlock
         className={styles.template}
         showLineNumbers
-        title="Dot Template"
+        title={templateName}
         language={lang}
         metastring={templateMeta}
       >

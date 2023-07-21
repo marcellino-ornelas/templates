@@ -142,6 +142,28 @@ const {{= tps.name}} = (props) => {
 {{= tps.answers }}
 ```
 
-The tps.answers object holds the answers to the prompts in your templates. Each
-prompt's value is stored with a property name that corresponds to the name you
-assigned to the prompt in your settings.json file.
+The `tps.answers` object holds the answers to the prompts in your templates.
+Each prompt's value is stored with a property name that corresponds to the name
+you assigned to the prompt in your `settings.json` file.
+
+<Example>
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "age"
+      // ...
+    }
+  ]
+}
+```
+
+you can access the users answer with:
+
+```text
+{{= tps.answers.age }}
+```
+
+</Example>

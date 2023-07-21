@@ -8,24 +8,42 @@ import TabItem from '@theme/TabItem';
 
 # Configure Templates
 
-Tps offers a json configuration file that caters specifically to users of your
-template, as opposed to the settings file which is intended for template
-development. The configuration file is named `.tpsrc` and it allows you to
-define predefined configurations for each template, altering tps behavior during
-rendering. With the ability to have multiple template configurations within this
-file, users gain greater control and flexibility when utilizing your template.
-This file needs to be in a `.tps` folder in the root of your repo.
+## Initializing Repo with Templates
 
-## Make a configuration file
-
-To generate a configuration file in the current directory, which should be the
-root of the repository you are working in, simply run the following command:
+Before delving into custom components or configuring template behavior, the
+initial step is to Initialize your repository with templates. This
+straightforward process will generate a .tps folder containing a .tpsrc file,
+located within your current working directory.
 
 ```bash
 tps init
 ```
 
+Produces:
+
+```text
+| - <cwd>
+	| - .tps/
+		| - .tpsrc
+```
+
+The `.tps` folder also serves as the designated location for your custom
+templates. For further insights into creating custom templates, refer to our
+detailed documentation on [creating a new template](./create-new-template/).
+
+Furthermore, keep on reading these docs to gain in-depth knowledge about the
+`.tpsrc` file.
+
 ## Configuring a Template
+
+Tps offers a json configuration file that caters specifically to users of your
+template, as opposed to the [settings file](./create-new-template/settings)
+which is intended for template development. The configuration file is named
+`.tpsrc` and it allows you to define predefined configurations for each
+template, altering tps behavior during rendering. With the ability to have
+multiple template configurations within this file, users gain greater control
+and flexibility when utilizing your template. This file needs to be in a `.tps`
+folder in the root of your repo.
 
 ```json title=".tpsrc"
 {

@@ -1,0 +1,77 @@
+import { Example } from '@site/docs/components/example';
+
+# Template Configuration
+
+```ts title="Type"
+interface TemplateConfig {
+  answers: TemplateConfigAnswers;
+  opts: TemplateConfigOptions;
+}
+```
+
+## Answers
+
+```ts title="Type"
+interface TemplateConfigAnswers {
+  [name: string]: any;
+}
+```
+
+Object containing answers to prompts.
+
+```json title=".tpsrc"
+{
+  "some-template": {
+    "answers": {
+      "<prompt-name>": "<prompt-value>"
+    }
+  }
+}
+```
+
+<Example>
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "answers": {
+      "css": true
+    }
+  }
+}
+```
+
+</Example>
+
+## Options
+
+```ts title="Type"
+interface TemplateConfigOptions {}
+```
+
+Object containing options for templates. See
+[Template Option API](../template#options) for template options.
+
+```json title=".tpsrc"
+{
+  "some-template": {
+    "opts": {
+      "<option-name>": "<option-value>"
+    }
+  }
+}
+```
+
+<Example>
+
+```json title=".tpsrc"
+{
+  "react-component": {
+    "opts": {
+      "wipe": true
+    }
+  }
+}
+```
+
+</Example>

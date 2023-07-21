@@ -306,12 +306,12 @@ line
 ## How to use doT with Templates
 
 Templates make it easy to use the doT template engine inside files. This helps
-you add dynamic content to your files. To use templates with doT, you just need
-to add the `.dot` extension to your file. The `.dot` extension can be added to
-any file, regardless of its original extension. Once added, the contents of the
-file will be processed by doT. The resulting output will then be incorporated
-into the rendered file. Your rendered file will no longer have the `.dot`
-extention
+you add dynamic content to your files. To use doT inside your templates files,
+you just need to add the `.dot` extension to the file. The `.dot` extension can
+be added to any file, regardless of its original extension. Once added, the
+contents of the file will be processed by doT. The resulting output will then be
+incorporated into the rendered file. Your rendered file will no longer have the
+`.dot` extention
 
 <Example>
 
@@ -326,7 +326,7 @@ is `server.js`.
 File names can also take advantage of using dot. By putting the
 `{{=<some-value>}}` in the filename you can get dynamic filenames.
 
-<Example>
+<Example open>
 
 ```text
 {{= tps.name}}.js.dot
@@ -337,6 +337,31 @@ If `name` was `Nav` then the result would be:
 ```text
 Nav.js
 ```
+
+</Example>
+
+### File contents
+
+Like mentioned above, once you add a `.dot` extention to your file name you are
+now able to use any dot syntax inside the file and tps will process it.
+
+<Example open>
+
+<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
+
+```text
+const express = require("express");
+
+const app = express();
+
+/* node code ... */
+
+{{? tps.answers.security }}app.use(helmet());{{?}}
+
+/* node code ... */
+```
+
+</Dot>
 
 </Example>
 
@@ -480,268 +505,3 @@ const {{= tps.name}} = (props) => {
 Don't remember how to use packages? Refresh your mind [here](./packages.md)
 
 :::
-
-## Example
-
-As a demonstration, lets build a react component template.
-
-```text
-| - tps-example/
-	| - .tps/
-		| - react-component/
-			| - default/
-```
-
-Now typically a react component has 3 main files. A index, css and a js file all
-inside of a folder like the following folder structure:
-
-```text
-| - .<component-name>/
-	| - <component-name>.js
-	| - <component-name>.css
-	| - index.js
-```
-
-Now in order for us to create a template out of this lets put the following
-inside of our `.tps/react-component/default`.
-
-```text
-| - .tps/
-	| - react-component/
-		| - default/
-			| - index.js.dot
-			| - {{=tps.name}}.js.dot
-			| - {{=tps.name}}.css
-```
-
-### File names
-
-Since all files names get processed with dot, we are going to use the name of
-the new template, we are generating, as the file name. Say we create the
-following component.
-
-```bash
-tps react-component Nav
-
-# or
-
-tps create --use=react-component Nav
-```
-
-We are rendering a new template called `Nav` so `tps.name` will be `Nav`. That
-means `{{=tps.name}}.js.dot` gets rendered to `Nav.js`. so calling the command
-from above will generate this folder template:
-
-```text
-| - tps-example
-	| - Nav
-		| - index.js
-		| - Nav.js
-		| - Nav.css
-```
-
-Now if you have a extended path like `List/ListItem`. Then `tps.name` would be
-`ListItem`
-
-```bash
-tps react-component List/ListItem
-
-# or
-
-tps create --use=react-component List/ListItem
-```
-
-After calling the above you should get a new template like this
-
-```text
-    | - tps-example
-        | - List
-            | - ListItem
-                | - index.js
-                | - ListItem.js
-                | - ListItem.css
-```
-
-### File contents
-
-Now lets get a little deeper. Since we added the dot extension to our js file
-lets add some contents inside.
-
-```javascript
-    import React, { Component } from 'react';
-    import './{{=tps.name}}.css';
-
-    class {{=tps.name}} extends Component {
-      constructor(props){
-        super(props);
-        this.state = {};
-      }
-
-      // componentWillMount(){}
-      // componentDidMount(){}
-      // componentWillUnmount(){}
-
-      // componentWillReceiveProps(){}
-      // shouldComponentUpdate(){}
-      // componentWillUpdate(){}
-      // componentDidUpdate(){}
-
-      render() {
-        return (
-          <div></div>
-        );
-      }
-    }
-
-    export default {{=tps.name}};
-```
-
-Now when you generate a new template with the following command
-
-```bash
-tps react-component Nav
-```
-
-After calling the line from above you should end up with a
-`tps-example/Nav/Nav.js` that look like this:
-
-```javascript
-import React, { Component } from 'react';
-import './Nav.css';
-
-class Nav extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  // componentWillMount(){}
-  // componentDidMount(){}
-  // componentWillUnmount(){}
-
-  // componentWillReceiveProps(){}
-  // shouldComponentUpdate(){}
-  // componentWillUpdate(){}
-  // componentDidUpdate(){}
-
-  render() {
-    return <div></div>;
-  }
-}
-
-export default Nav;
-```
-
-### Packages
-
-Just for fun lets see how we can get packages involved. Let move the css file
-out of the `default` package and put it into a css package.
-
-```text
-    | - .tps/
-        | - react-component/
-            | - default/
-                | - index.js.dot
-                | - {{=tps.name}}.js.dot
-            | - css
-                | - {{=tps.name}}.css
-```
-
-Now every time you render this template. You will only get the css file if you
-add the additional `css` package. Now to make this more useful, we need to
-change `import './{{=tps.name}}.css';` in the `{{=tps.name}}.js.dot` now since
-it might not be there. Let change this to
-
-```text
-{{~tps.packages.includes("css")}}import './{{=tps.name}}.css';{{~}}
-```
-
-DoT's `{{~}}` is a conditional. So here we check to see if the `css` package was
-include when rendering this template. if it is lets add the import. If not, then
-do nothing. Calling:
-
-```text
-tps react-component --packages css -- Nav
-```
-
-will produce
-
-```text
-    | - tps-example
-        | - Nav
-            | - index.js
-            | - Nav.js
-            | - Nav.css
-```
-
-and
-
-```js
-import React, { Component } from 'react';
-import './Nav.css';
-
-class Nav extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  // componentWillMount(){}
-  // componentDidMount(){}
-  // componentWillUnmount(){}
-
-  // componentWillReceiveProps(){}
-  // shouldComponentUpdate(){}
-  // componentWillUpdate(){}
-  // componentDidUpdate(){}
-
-  render() {
-    return <div></div>;
-  }
-}
-
-export default Nav;
-```
-
-but calling
-
-```bash
-tps react-component Nav
-```
-
-will produce
-
-```text
-    | - tps-example
-        | - Nav
-            | - index.js
-            | - Nav.js
-```
-
-with no `import`
-
-```js
-import React, { Component } from 'react';
-
-class Nav extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  // componentWillMount(){}
-  // componentDidMount(){}
-  // componentWillUnmount(){}
-
-  // componentWillReceiveProps(){}
-  // shouldComponentUpdate(){}
-  // componentWillUpdate(){}
-  // componentDidUpdate(){}
-
-  render() {
-    return <div></div>;
-  }
-}
-
-export default Nav;
-```
