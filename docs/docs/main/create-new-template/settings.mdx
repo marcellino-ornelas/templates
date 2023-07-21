@@ -1,0 +1,68 @@
+---
+pagination_next: main/create-new-template/prompts
+pagination_prev: main/create-new-template/dynamic-files
+sidebar_position: 4
+---
+
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Settings File
+
+Tps allows you to have a settings file in your template to add certain
+actions/configurations when generating your template. The settings file can be a
+`settings.json` or `settings.js` in your template folder at the same level as
+your packages. The main use for this file is prompting but well be adding more
+features very soon.
+
+```text
+| - .tps
+	| - some-template
+		// highlight-next-line
+		| - settings.json
+		| - default
+			| - <files...>
+```
+
+<Tabs>
+<TabItem value="json">
+
+```json title="settings.json"
+{}
+```
+
+</TabItem>
+
+<TabItem value="js">
+
+```js title="settings.js"
+module.exports = {};
+```
+
+:::warning
+
+Please note that `export default` has not been thoroughly tested and may not
+perform as anticipated. If you encounter any issues or have suggestions for
+improvement, we encourage you to file an issue or submit a pull request (PR). We
+greatly value contributions and welcome any input you may have.
+
+:::
+
+</TabItem>
+</Tabs>
+
+:::tip
+
+Our [`new template`](http://localhost:3000/docs/api/cli#new-template) command
+creates this file for you 😃
+
+:::
+
+## Settings options
+
+You can explore the complete list of available fields for a settings file in the
+comprehensive [Settings File API Documentation](/docs/api/settings). This guide
+will cover the following topics:
+
+- [Prompting](./prompts)

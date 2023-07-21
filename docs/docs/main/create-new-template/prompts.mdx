@@ -1,0 +1,928 @@
+---
+pagination_next: main/tpsrc
+pagination_prev: main/create-new-template/settings
+sidebar_position: 5
+---
+
+import { Example } from '@site/docs/components/example';
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Prompting
+
+## What is a prompt
+
+```bash
+❯ tps react-component Nav
+? Would you like to include unit tests? (true)
+```
+
+Prompting is a useful feature that allows you to obtain data from the user. By
+displaying a message on the command line, we can request a response from the
+user. Additionally, prompts can be answered by providing a flag via the command
+line or through the node module package, which is particularly helpful when
+users already know their desired input. The options for prompts can vary in
+various formats.
+
+In our system, we utilize the
+[inquirer](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0) library for
+prompting. This enables you to use any property available in inquirer when
+creating prompts. For more information on the available properties in inquirer,
+you can refer to the documentation
+[here](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0).
+
+## How to make a Prompt
+
+To add prompts to your template, simply add a `prompts` property to your
+settings file, which should be an array consisting of the prompts you wish to
+present to the user. Each prompt will be represented as an object, with varying
+properties depending on the type of prompt.
+
+```json title="settings.json"
+{
+  "prompts": [
+    /* prompts ... */
+  ]
+}
+```
+
+:::tip
+
+Don't remember what the setting file is? Refresh your memory in the
+[settings files guide](./settings)
+
+:::
+
+Now lets go over some of the basics. To get a full list of properties check out
+the [Prompts API documentation](/docs/api/settings/prompt)
+
+### Name
+
+Let's start with the `name` field. This field is essential for enabling
+prompting functionality. All of your prompt answers will be conveniently stored
+under the [`tps.answers`](/docs/api/template-context#answers) object property.
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "<some-name>"
+      // ...
+    }
+  ]
+}
+```
+
+The name you provide to the prompt will be used in order to access the users
+answer.
+
+```js
+{{= tps.answers["<name-of-prompt>"]}}
+```
+
+<Example>
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "age"
+      // ...
+    }
+  ]
+}
+```
+
+you can access the users answer with:
+
+```text
+{{= tps.answers.age }}
+```
+
+</Example>
+
+---
+
+### Message
+
+The second property is `message`. This property will tell inquirer what to ask
+the user when they are rendering a new instance.
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "message": "<some-message>"
+      // ...
+    }
+  ]
+}
+```
+
+<Example>
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "unit",
+      // highlight-next-line
+      "message": "Would you like to include unit tests?"
+    }
+  ]
+}
+```
+
+When the user renders a new instance they will see the message added in your
+prompt
+
+```bash
+❯ tps react-component Nav
+# highlight-next-line
+? Would you like to include unit tests?
+```
+
+</Example>
+
+---
+
+### Type
+
+The next property is `type`. This property will tell inquirer what type of
+prompting you would like to use. You can see more about this property in the
+[inquirer question docs](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0#question).
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "type": "confirm | input | checkbox | list | rawlist | password"
+      // ...
+    }
+  ]
+}
+```
+
+<Example>
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "over18",
+      // highlight-next-line
+      "type": "confirm",
+      "message": "Are you over the age of 18?"
+    }
+  ]
+}
+```
+
+Produces
+
+```bash
+❯ tps react-component Nav
+? Are you over the age of 18?
+```
+
+</Example>
+
+---
+
+### Tps Type
+
+The next field is `tpsType`. This field tells tps how it should process the
+users answer. There are two options `package` or `data`.
+
+:::note
+
+If you don't specify a `tpsType` field. Tps will use `package` by default.
+
+:::
+
+#### package
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "tpsType": "package"
+      // ...
+    }
+  ]
+}
+```
+
+When you have `package` as the `tpsType`, tps will try to use the users value to
+render a package that is in your template. Different values passed in will have
+different behaviors.
+
+##### boolean
+
+In the case where a prompt's answer is a boolean and its value is `true`, Tps
+will utilize the **name** of the prompt to search for a package with the same
+name. If such a package is found, tps will include it during the rendering
+process of the new instance. When the value is `false`, tps will disregard the
+prompt and do nothing.
+
+:::important
+
+Prompts of type `confirm` will return their answers as booleans.
+
+:::
+
+<Example>
+
+Say were rendering a new `express-app` instance and we have a prompt like so
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "unit",
+      "tpsType": "package",
+      "type": "confirm",
+      "message": "Do you want to include unit tests?"
+    }
+  ]
+}
+```
+
+since this is declared as a package type, this needs a corresponding package in
+the template
+
+```text
+| - .tps/
+	| - express-app/
+		| settings.json
+		| - default/
+			| - server.js
+		// highlight-next-line
+		| - unit/        <-- matches name of prompt
+			| - server.test.js
+```
+
+When the user is rendering a new template, the prompt will be displayed and they
+can answer.
+
+```bash
+❯ tps express-app newApp
+? Would you like to include unit tests?
+```
+
+Depending on what the user answers depends on what will happen:
+
+<Tabs>
+<TabItem value="yes" label="User answers yes">
+
+If user answers `yes`, then the `unit` package will be included in the rendering
+process so a `server.test.js` will be added
+
+```text
+| - newApp/
+	| - server.js
+	// highlight-next-line
+	| - server.test.js
+```
+
+</TabItem>
+
+<TabItem value="no"  label="User answers no">
+
+If user answers `no`, then the `unit` package will not be include in the
+rendering process so no `server.test.js`.
+
+```text
+| - newApp/
+	| - server.js
+```
+
+</TabItem>
+</Tabs>
+</Example>
+
+###### string
+
+When a prompt's answer is a string, word or name, tps will take that answer and
+attempt to find a package that corresponds to it. If one is found then tps will
+include it in the rendering process.
+
+:::important
+
+Prompts of type `list` and `input` will return their answers as strings.
+
+:::
+
+<Example>
+
+Say were rendering a new `express-app` instance and we have a prompt like so
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "framework",
+      "tpsType": "package",
+      "message": "What type of frontend framework would you like to use?",
+      // highlight-start
+      "type": "list", // <--- makes prompt accept strings
+      "choices": ["react", "angular"]
+      // highlight-end
+    }
+  ]
+}
+```
+
+since this is declared as a package type, the choices to the question must match
+a package in our template.
+
+```text
+| - .tps/
+	| - express-app/
+		| settings.json
+		| - default/
+			| - server.js
+		// highlight-start
+		| - react/
+			| - react.js
+		| - angular/
+			| - angular.js
+		// highlight-end
+```
+
+When the user is rendering a new instance, the prompt will be displayed and the
+user can answer.
+
+```bash
+❯ tps express-app newApp
+? What type of framework would you like to use?
+> react
+  angular
+```
+
+With the choice the user selects, tps will then include a package that matches
+the answer
+
+<Tabs>
+<TabItem value="react" label="User answers react">
+
+If user answers `react`, then the `react` package will be included in the
+rendering process so a `react.js` will be added
+
+```text
+| - newApp/
+	| - server.js
+	// highlight-next-line
+	| - react.js
+```
+
+</TabItem>
+
+<TabItem value="angular"  label="User answers angular">
+
+If user answers `angular`, then the `angular` package will be included in the
+rendering process so a `angular.js` will be added
+
+```text
+| - newApp/
+	| - server.js
+	// highlight-next-line
+	| - angular.js
+```
+
+</TabItem>
+</Tabs>
+
+</Example>
+
+###### list
+
+If a prompt's answer consists of a list of strings, tps will consider each
+individual answer and locate the corresponding packages associated with them.
+These packages will then be included during the rendering process.
+
+:::important
+
+Prompts of type `checkbox` will return their answer as list of strings.
+
+:::
+
+<Example>
+
+Say were rendering a new `express-app` instance and we have a prompt like so
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "extras",
+      "message": "Would you like to include any other features?",
+      "tpsType": "package",
+      // highlight-start
+      "type": "checkbox", // <--- makes prompt accept list of strings
+      "choices": ["metrics", "unit", "e2e", "api"]
+      // highlight-end
+    }
+  ]
+}
+```
+
+since this is declared as a package type, the choices to the question must match
+a package in our template.
+
+```text
+| - .tps/
+	| - express-app/
+		| settings.json
+		| - default/
+			| - server.js
+		// highlight-start
+		| - metrics/
+			| - metrics.js
+		| - unit/
+			| - server.test.js
+		| - e2e/
+			| - website.test.js
+		| - api/
+			| - api.js
+		// highlight-end
+```
+
+When the user renders a new template. tps will ask for an list of inputs.
+Whatever the user answers, tps will take all of the values and try to find a
+packages that matches the answers.
+
+If the user answers `metrics` and `unit` then both packages will be included in
+the rendering process
+
+```text
+| - newApp/
+	// highlight-next-line
+	| - metrics.js
+	// highlight-next-line
+	| - server.test.js
+	| - server.js
+```
+
+</Example>
+
+#### data
+
+```json
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "tpsType": "data"
+      // ...
+    }
+  ]
+}
+```
+
+When the `tpsType` is set to `data`, tps will leave the data untouched. This
+data type is designed to allow you to retrieve additional information from the
+user, which you can then process according to your specific needs. One common
+use case for this is to conditionally render specific code within the file based
+on the user's response to a certain question. Any inquirer [type](#type) can be
+used.
+
+<Example>
+
+Say were rendering a new `express-app` instance and we have a prompt like so
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "security",
+      "message": "Would you like to include common express security packages?",
+      "tpsType": "data",
+      // highlight-start
+      "type": "confirm" // <--- makes prompt accept boolean
+      // highlight-end
+    }
+  ]
+}
+```
+
+When the user is rendering a new instance, the prompt will be displayed and the
+user can answer. Whatever the user answers will now be available for use in your
+dynamic files.
+
+<Dot lang="js" tps={{ answers: {security: true}}}>
+
+```text
+const express = require("express");
+
+const app = express();
+
+/* node code ... */
+
+{{? tps.answers.security }}app.use(helmet());{{?}}
+
+/* node code ... */
+```
+
+</Dot>
+</Example>
+
+---
+
+## How to answer prompts
+
+### Interactive
+
+The primary method of answering prompts is through interactive prompts. When you
+generate a new instance of a template, tps will prompt the user to provide
+answers until all the prompts are completed. This interactive mode is also the
+default way to respond to prompts.
+
+### Flags
+
+Tps also supports answering prompt questions through command line flags. This
+feature enables users to obtain their desired results directly without having to
+go through all the prompts interactively. The flag's name will correspond to the
+prompt's name specified in your settings file.
+
+```bash
+tps some-template app --some-flag <some-value>
+```
+
+<Example>
+
+If we were rendering a new instance using the `express-app` template and had
+this settings file
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "unit",
+      "message": "Would you like to include unit tests?",
+      "tpsType": "package",
+      "type": "confirm"
+    }
+  ]
+}
+```
+
+The user can answer this prompts questions by adding a `unit` command line flag
+
+```bash
+tps express-app app --unit
+```
+
+</Example>
+
+Now lets go over how to answer different types of prompts
+
+###### boolean
+
+When dealing with boolean values, such as those from a confirm prompt, you have
+the option to answer the prompt using a flag with the same name as the prompt.
+To answer with `true`, simply use:
+
+```bash
+--unit
+```
+
+On the other hand, if you want to provide a `false` value, add `no-` before the
+flag name:
+
+```bash
+--no-unit
+```
+
+<Example>
+
+If we were rendering a new instance using the `express-app` template and had
+this settings file
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "unit",
+      "message": "Would you like to include unit tests?",
+      "tpsType": "package",
+      "type": "confirm"
+    }
+  ]
+}
+```
+
+The user can answer this prompts questions by adding a `unit` command line flag
+
+```bash
+tps express-app app --unit
+```
+
+</Example>
+
+###### string
+
+When dealing with string values, such as those from a input or list prompts, add
+the value right after your flag
+
+```bash
+--cssType less
+
+# or if you need a number
+
+--age 23
+
+# if your value has spaces then you need to do this
+
+--message "hey there everyone"
+```
+
+<Example>
+
+If we were rendering a new instance using the `express-app` template and had
+this settings file
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "framework",
+      "message": "What frontend package would you like to include",
+      "tpsType": "package",
+      "type": "list",
+      "choices": ["react", "angular", "vue"]
+    }
+  ]
+}
+```
+
+The user can answer this prompts questions by adding a `framework` command line
+flag and adding the value after the flag named
+
+```bash
+tps express-app app --framework react
+```
+
+</Example>
+
+###### list
+
+If the value type is an list then you end up with something like this.
+
+```bash
+--ages 23 45 65
+
+# or strings
+
+--numbers ten nine five
+```
+
+<Example>
+
+If we were rendering a new instance using the `express-app` template and had
+this settings file
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "extras",
+      "message": "Would you like to include any other features?",
+      "tpsType": "package",
+      "type": "checkbox", // <--- makes prompt accept list of strings
+      "choices": ["metrics", "unit", "e2e", "api"]
+    }
+  ]
+}
+```
+
+The user can answer this prompts questions by adding a `extras` flag and putting
+the values after the flag name
+
+```bash
+tps express-app app --extras metrics unit e2e
+```
+
+</Example>
+
+:::note
+
+Using list types can be difficult when using multiple flags etc. yargs is used
+for its command line parser. You can refer how to pass in list of arguments
+[here](http://yargs.js.org/docs/#api-reference-arraykey)
+
+When using lists on the command line it is recommended to add the flag after all
+required fields:
+
+<Tabs>
+<TabItem value="bad" label="Bad">
+
+when using lists on the command line before all required params, you have to add
+a extra `--` after the list flag so yargs can parse the require params correctly
+
+```bash
+tps express-app --extras metrics api unit -- app
+```
+
+</TabItem>
+
+<TabItem value="good" label="Good">
+
+Move the list param to the end of the command in order to prevent this extra
+adition
+
+```bash
+tps express-app app --extras metrics api unit
+
+# Addition flags
+
+tps express-app app --extras metrics api unit --some-other-flag
+```
+
+</TabItem>
+</Tabs>
+
+:::
+
+### node
+
+To answer prompts in javascript using the module. Use the `setAnswers` function.
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('react-component');
+
+/**
+ * Just like the command line passing in data supports strings, numbers, and arrays
+ * @example string
+ *  const data = '23';
+ * @example number
+ *  const data = 23;
+ * @example boolean
+ *  const data = true;
+ * @example array
+ *  const data = [23, 45, 65];
+ */
+const age = 23;
+
+tps.setAnswers({ age });
+```
+
+### Aliases
+
+Aliases are commonly used for command line flags, providing convenient shortcuts
+for better interaction. To enhance usability, tps enables you to assign aliases
+to your prompts. These aliases can be utilized to answer prompts either through
+the command line or via the node module, offering flexible options for prompt
+handling.
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "framework",
+      /* ... */
+      "aliases": ["<alias-name>"]
+    }
+  ]
+}
+```
+
+<Example>
+
+If we were rendering a new instance using the `express-app` template and had
+this settings file
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "framework",
+      "choices": ["react", "vue", "angular"],
+      /* ... */
+      "aliases": ["f"]
+    }
+  ]
+}
+```
+
+Now we can answer the prompt question via the alias
+
+<Tabs>
+<TabItem value="command-line" label="Command line">
+
+```bash
+tps express-app app -f react
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('express-app');
+
+tps.setAnswers({ f: 'react' });
+```
+
+</TabItem>
+</Tabs>
+
+</Example>
+
+---
+
+## Inquirer
+
+Like mentioned before, Tps uses inquirer for prompting. This mean we can use any
+of inquirer properties also. Here are some examples:
+
+### booleans Example
+
+Say you have this react component template:
+
+```text
+| - tps-example
+	| - .tps/
+		| - react-component/
+			| - settings.json
+			| - default/
+				| - index.js
+			| - css
+				| - {{=tps.name}}.css
+```
+
+Adding this prompt will allow you to conditionally render the css package
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "css",
+      "type": "confirm",
+      "message": "Would you like to add a css file?"
+    }
+  ]
+}
+```
+
+Now if the user answers true like so:
+
+```bash
+tps react-component App --css
+```
+
+then this will be the new template:
+
+```text
+    | - tps-example
+        | - .tps/
+            | - ...
+        | - App
+           | - index.js
+           | - App.css
+```
+
+Now if the user answers false like so:
+
+```bash
+tps react-component App --no-css
+```
+
+then this will be the new template:
+
+```text
+    | - tps-example
+        | - .tps/
+            | - ...
+        | - App
+           | - index.js
+```
+
+### Lists Examples
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      "name": "modules",
+      "type": "checkbox",
+      "choices": ["react", "express", "fs", "path"],
+      "tpsType": "data",
+      "message": "What node modules would you like to import into this js file?"
+    }
+  ]
+}
+```

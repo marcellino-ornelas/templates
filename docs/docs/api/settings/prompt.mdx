@@ -1,0 +1,34 @@
+# Prompt configuration
+
+Prompt configuration object
+
+```ts title="Type"
+interface Prompt {
+  /**
+   * Name of prompt
+   */
+  name: string;
+  /**
+   * Message you would like to show user
+   */
+  message: string;
+  /**
+   * Type of prompt you would like to use
+   */
+  type: 'confirm' | 'input' | 'checkbox' | 'list' | 'rawlist' | 'password';
+  /**
+   * How you want templates to process this prompts answer
+   */
+  typeType: 'package' | 'data';
+  /**
+   * choices for your prompt.
+   *
+   * Only needed for prompts of type `list`, `rawlist` or `checkbox`
+   */
+  choices?: string[];
+  /**
+   * Default answer for the prompt
+   */
+  default?: any;
+}
+```

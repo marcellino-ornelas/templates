@@ -1,3 +1,4 @@
 lib/**/*
 public/**/*
 **/.tps/**/*
+docs/build/**/*

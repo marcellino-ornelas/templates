@@ -1,0 +1,169 @@
+import { Text } from '@site/docs/components/text';
+import { Example } from '@site/docs/components/example';
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+# Template Context
+
+## Name
+
+```text
+{{= tps.name }}
+```
+
+Name of new instance you are rendering. When rendering two or more instances at
+the same time. The same concept as above apply's but for each path you pass in.
+
+If you render a template with no build path. Then `tps.name` will be null.
+
+<Example>
+
+```bash title="cli"
+tps react-component Nav
+```
+
+<Dot tps={{ name: "Nav" }}>
+
+```text
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+```
+
+</Dot>
+
+</Example>
+
+## Template
+
+```text
+{{= tps.template }}
+```
+
+Name of the template your rendering with.
+
+<Example>
+
+```bash title="cli"
+tps express-app app
+    |__________|
+    # ^ This is the name of the template
+```
+
+</Example>
+
+## Packages
+
+```text
+{{= tps.packages }}
+```
+
+List of packages that were used when rendering your template.
+
+:::tip
+
+Remember `default` package is include by default
+
+:::
+
+When no additional packages are used:
+
+```json
+["default"]
+```
+
+when additional packages are used:
+
+```json
+["default", "css", "unit-tests"]
+```
+
+<Example>
+
+<Tabs>
+<TabItem value="Additional packages">
+
+```bash title="cli"
+tps react-component App --packages css
+```
+
+<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js">
+
+```text
+import React from react;
+{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
+{{?}}
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="No additional packages">
+
+```bash title="cli"
+tps react-component App
+```
+
+<Dot tps={{name: "Nav", packages: ['default']}} lang="js">
+
+```text
+import React from react;
+{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
+{{?}}
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+</Example>
+
+## Answers
+
+```text
+{{= tps.answers }}
+```
+
+The `tps.answers` object holds the answers to the prompts in your templates.
+Each prompt's value is stored with a property name that corresponds to the name
+you assigned to the prompt in your `settings.json` file.
+
+<Example>
+
+```json title="settings.json"
+{
+  "prompts": [
+    {
+      // highlight-next-line
+      "name": "age"
+      // ...
+    }
+  ]
+}
+```
+
+you can access the users answer with:
+
+```text
+{{= tps.answers.age }}
+```
+
+</Example>

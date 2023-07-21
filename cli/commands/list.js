@@ -6,7 +6,7 @@ const TPS = require('../../lib/utilities/constants');
 
 exports.command = ['list', 'ls'];
 
-exports.description = 'create a new folder with template';
+exports.description = 'Show all available templates';
 
 exports.builder = LIST_OPTIONS;
 
