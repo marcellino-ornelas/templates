@@ -55,27 +55,36 @@ const config = {
       },
     },
     {
-      files: ['docs_v2/**/*.mdx', 'docs_v2/**/*.tsx'],
+      files: ['docs/**/*.mdx'],
       extends: ['plugin:@docusaurus/recommended'],
+      plugins: ['@docusaurus'],
+      parser: 'eslint-mdx',
       rules: {
         'import/no-unresolved': [
           ERROR,
           { ignore: ['^@theme', '^@docusaurus', '^@site'] },
         ],
-        'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
-        'react/require-default-props': [IGNORE],
+        react: IGNORE,
+        // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
+        // 'react/require-default-props': [IGNORE],
       },
     },
     {
-      files: ['docs_v2/**/*.tsx'],
+      files: ['docs/**/*.tsx'],
       plugins: ['react'],
       rules: {
+        'import/no-unresolved': [
+          ERROR,
+          { ignore: ['^@theme', '^@docusaurus', '^@site'] },
+        ],
         'react/function-component-definition': [
           ERROR,
           {
             namedComponents: 'arrow-function',
           },
         ],
+        'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
+        'react/require-default-props': [IGNORE],
       },
     },
   ],

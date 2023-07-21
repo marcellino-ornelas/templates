@@ -1,8 +1,6 @@
-import React, { Children } from 'react';
+import React from 'react';
 import doT from 'doT';
 import CodeBlock from '@theme/CodeBlock';
-import Admonition from '@theme/Admonition';
-import ReactDomServer from 'react-dom/server';
 import styles from './dot.module.css';
 
 doT.templateSettings.strip = false;
