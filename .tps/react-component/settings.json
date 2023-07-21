@@ -1,0 +1,10 @@
+{
+	"prompts": [
+		{
+			"name": "unit",
+			"tpsType": "package",
+			"message": "Would you like to include unit tests?",
+			"default": true
+		}
+	]
+}

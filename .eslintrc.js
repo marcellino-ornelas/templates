@@ -54,6 +54,30 @@ const config = {
         'import/extensions': IGNORE,
       },
     },
+    {
+      files: ['docs_v2/**/*.mdx', 'docs_v2/**/*.tsx'],
+      extends: ['plugin:@docusaurus/recommended'],
+      rules: {
+        'import/no-unresolved': [
+          ERROR,
+          { ignore: ['^@theme', '^@docusaurus', '^@site'] },
+        ],
+        'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
+        'react/require-default-props': [IGNORE],
+      },
+    },
+    {
+      files: ['docs_v2/**/*.tsx'],
+      plugins: ['react'],
+      rules: {
+        'react/function-component-definition': [
+          ERROR,
+          {
+            namedComponents: 'arrow-function',
+          },
+        ],
+      },
+    },
   ],
   settings: {
     'import/parsers': {
