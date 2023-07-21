@@ -14,13 +14,13 @@ const config = {
   url: 'https://marcellino-ornelas.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/templates/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'marcellino-ornelas', // Usually your GitHub org/user name.
   projectName: 'templates', // Usually your repo name.
-  deploymentBranch: 'docs_v2',
+  deploymentBranch: 'master',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
