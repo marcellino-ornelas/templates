@@ -107,7 +107,7 @@ const config = {
               },
               {
                 label: 'Api',
-                to: 'docs/api/cli',
+                to: 'docs/api/',
               },
             ],
           },
