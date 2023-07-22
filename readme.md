@@ -2,8 +2,11 @@
 
 Supercharge Your Development with Templates: Code Faster, Build Better!
 
+<p>
+<a href="https://www.npmjs.com/package/templates-mo"><img src="https://img.shields.io/npm/v/templates-mo.svg?style=flat" alt="npm version"></a>
 <a href="CONTRIBUTING.md#pull-requests"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
 <a href="https://github.com/marcellino-ornelas/templates/actions/workflows/tests.yml"><img src="https://github.com/marcellino-ornelas/templates/actions/workflows/tests.yml/badge.svg" alt="GitHub Actions status"></a>
+</p>
 
 ---
 
