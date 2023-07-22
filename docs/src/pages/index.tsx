@@ -31,8 +31,10 @@ const Home = (): JSX.Element => {
   const { siteConfig } = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />"
+      title={siteConfig.title}
+      description="Templates is a powerful filesystem generator that aims to simplify
+	  the process of getting started with and maintaining code
+	  applications"
     >
       <HomepageHeader />
 
