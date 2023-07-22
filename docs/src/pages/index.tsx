@@ -19,7 +19,7 @@ const HomepageHeader = () => {
             className="button button--secondary button--lg"
             to="/docs/main/intro"
           >
-            View Template docs
+            View docs
           </Link>
         </div>
       </div>
