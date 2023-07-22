@@ -103,11 +103,11 @@ const config = {
             items: [
               {
                 label: 'Docs',
-                to: '/docs/main/intro',
+                to: 'docs/main/intro',
               },
               {
                 label: 'Api',
-                to: '/docs/api/',
+                to: 'docs/api/cli',
               },
             ],
           },
