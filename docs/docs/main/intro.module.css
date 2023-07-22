@@ -10,8 +10,17 @@
 	padding: 20px;
 	border: 1px solid grey;
 	border-radius: 10px;
-	box-shadow: 2px 2px 4px #c6c3c3;
+	/* box-shadow: 2px 2px 4px #c6c3c3; */
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.3)
 }
+
+
+[data-theme='dark'] .templateOption {
+	/* border-color: 1px solid rgba(0,0,0,0.3); */
+	box-shadow: none;
+}
+
+
 
 .templateOption p {
 	flex-grow: 1;
@@ -23,7 +32,7 @@
 
 .btn {
 	cursor: pointer;
-	background-color: green;
+	background-color: var(--ifm-color-primary);
 	border-radius: 5px;
 	color: white;
 	padding: 5px 15px;
@@ -31,9 +40,10 @@
 }
 
 .btn:hover {
-	background-color: #017001;
+	background-color: var(--ifm-color-primary-darker);
 	color: white;
 }
+
 
 @media screen and (max-width: 996px) {
 	.templateOptions {
