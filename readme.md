@@ -1,14 +1,17 @@
 # Templates
 
-Have you ever came across repeating yourself creating certain files over and over again? How about files that look almost similar but with a couple of words different? Ever wish you had `create-react-app` but for all different types of languages/tools/frameworks?
+Supercharge Your Development with Templates: Code Faster, Build Better!
 
-That's where `templates` come into play. Templates is a easy to use filesystem generator aimed to speed up developer workflows, prescribing best practices, and/or spinning up new projects.
+<a href="CONTRIBUTING.md#pull-requests"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
 
-This is what Templates is here to solve. Save endless hours of waisted time and speed up your developer workflow by creating a `template` and using this template to generate new files and folders in your new projects.
+---
 
-Want to learn how to use `templates`? Visit out docs [Here](./docs/readme.md).
+Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications. Its purpose is to provide developers with a friendly tool that streamlines their common day-to-day workflows. The versatility of templates extends to various scenarios, such as creating web applications in any programming language or generating new sections within a project, such as web controllers with unit tests or React components integrated with Redux and TypeScript.
+
+[Check out our docs](https://marcellino-ornelas.github.io/templates/)
 
 > This project was inspired from [create-components-react](https://github.com/marcellino-ornelas/create-components-react)
+
 
 ## Installation
 
@@ -16,7 +19,9 @@ Want to learn how to use `templates`? Visit out docs [Here](./docs/readme.md).
 npm install -g templates-mo
 ```
 
-## Debug tests
+## Development
+
+### Debug
 
 ```
 ❯ DEBUG=tps npx jest
