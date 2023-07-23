@@ -3,8 +3,7 @@ import * as findFileUp from 'find-up';
 
 /**
  * Check to see if the `path` is a valid directory
- * @param   {string} path - path to file or directory
- * @returns {boolean} - `path` is a directory
+ * @param path - path to file or directory
  */
 export function isDir(path: string): boolean {
   let dir;
@@ -16,6 +15,9 @@ export function isDir(path: string): boolean {
   return dir.isDirectory();
 }
 
+/**
+ * Check to see if the `path` is a valid file
+ */
 export function isFile(path: string): boolean {
   let file;
   try {
