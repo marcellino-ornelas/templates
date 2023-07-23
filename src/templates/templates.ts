@@ -23,17 +23,46 @@ import * as Promise from 'bluebird';
 import dot from '@tps/dot';
 import { cosmiconfigSync } from 'cosmiconfig';
 
-/**
- * Default options for Templates
- * @typedef  {Object} TemplateOptions
- * @property {boolean} noLocalConfig - Don't load local `.tps/` config folder
- * @property {boolean} noGlobalConfig - Don't load global `.tps/` config folder
- * @property {boolean} defaultPackage - Don't load the default folder
- * @property {boolean} default - Use all default prompt answers
- * @property {boolean} force - Force creation of template. This will over write files
- * @property {boolean} wipe - Force creation of template. This will delete the directory if exists.
- */
-const DEFAULT_OPTIONS = {
+interface TemplateOptions {
+  /**
+   * Don't load local `.tps/` config folder
+   */
+  noLocalConfig: boolean;
+  /**
+   * Don't load global `.tps/` config folder
+   */
+  noGlobalConfig: boolean;
+  /**
+   * Don't load the default folder
+   */
+  defaultPackage: boolean;
+  /**
+   * Use all default prompt answers
+   */
+  default: boolean;
+  /**
+   * Force creation of template. This will over write files
+   */
+  force: boolean;
+  /**
+   * Force creation of template. This will over write files
+   */
+  newFolder: boolean;
+  /**
+   * Force creation of template. This will delete the directory if exists.
+   */
+  wipe: boolean;
+  /**
+   * Change where templates reads `.tps` folder from
+   */
+  tpsPath: string | null;
+  /**
+   * Directory to prepend to each build paths
+   */
+  extendedDest: string;
+}
+
+const DEFAULT_OPTIONS: TemplateOptions = {
   noLocalConfig: false,
   noGlobalConfig: false,
   defaultPackage: true,
@@ -42,7 +71,6 @@ const DEFAULT_OPTIONS = {
   newFolder: true,
   wipe: false,
   tpsPath: null,
-  // new
   extendedDest: '',
 };
 
@@ -64,10 +92,9 @@ const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
  * @classdesc Create a new instance of a template
  */
 export class Templates {
-  /**
-   * @param {TemplateOptions} opts - options to pass to templates
-   */
-  constructor(templateName, opts: any = {}) {
+  public opts: TemplateOptions;
+
+  constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
     if (!templateName || !is.string(templateName)) {
       throw new RequiresTemplateError();
     }
@@ -152,9 +179,8 @@ export class Templates {
 
   /**
    * Include packages to use in the render process
-   * @param {string|string[]} newPackages - packages from the template package you would like to use
    */
-  loadPackages(newPackages) {
+  loadPackages(newPackages: string | string[]): void {
     let packages = newPackages;
     if (!Array.isArray(packages)) {
       if (is.string(packages) && packages) {
@@ -170,7 +196,7 @@ export class Templates {
   /**
    * @param {String} newPackage - package from the template you would like to use
    */
-  loadPackage(newPackageName) {
+  loadPackage(newPackageName: string): void {
     if (!this.src) {
       throw new RequiresTemplateError();
     }
@@ -195,25 +221,25 @@ export class Templates {
   }
 
   /**
-   * @param {String} packageName - name of a package
-   * @returns {DirNode} - directory tree representation of package
+   * Get directory tree representation of package
    */
-  pkg(packageName) {
+  pkg(packageName: string): DirNode {
     return this.packages[packageName];
   }
 
   /**
    * Set answers for prompts
    */
-  hasPrompts() {
+  hasPrompts(): boolean {
     return !!(this._prompts && this._prompts.hasPrompts());
   }
 
   /**
    * Set answers for prompts
-   * @param {Object} answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
+   * @param answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
    */
-  setAnswers(answers) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setAnswers(answers: Record<string, any>) {
     if (!this.hasPrompts()) {
       throw new NoPromptsError();
     }
@@ -222,12 +248,17 @@ export class Templates {
   }
 
   /**
-   * @param {String} dest - destination to render your new template to
-   * @param {string|string[]} buildPaths - templates you would like to create
-   * @param {Object} [data={}] - data to pass to doT. This will be used when rendering dot files/syntax
+   * @param dest - destination to render your new template to
+   * @param buildPaths - Instances you would like to create
+   * @param data - data to pass to doT. This will be used when rendering dot files/syntax
    * @returns {Promise}
    */
-  render(dest, buildPaths, data = {}) {
+  render(
+    dest: string,
+    buildPaths: string | string[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: Record<string, any> = {}
+  ) {
     let dataForTemplating;
     let buildInDest = false;
     let pathsToCreate = buildPaths;
@@ -686,7 +717,7 @@ export class Templates {
    * @private
    * @param {String} packageName - name of package
    */
-  _compileFilesFromPackage(packageName) {
+  _compileFilesFromPackage(packageName: string): void {
     const pkg = this.pkg(packageName);
     const { force } = this.opts;
 

@@ -1,42 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as is from 'is';
 
-/**
- * Turn a regular node style callback function into a promise
- * @param   {Function} func - Function to turn into promise
- * @param   {Object} [_this=null] - Object to use as this object when calling `func`
- * @returns {Function} - promisified function
- */
-export function promisify(func, _this = null) {
-  const fn = func.bind(_this);
-  return (...args) =>
-    new Promise((resolve, reject) => {
-      args.push((err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-
-      fn(...args);
-    });
-}
-
-export function hasProp(obj, prop) {
+export function hasProp(obj: Record<string, any>, prop: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 /**
  * Loop through a object property. Will break out of loop if `cb` returns false
- * @param {Object} obj - object to loop through
- * @param {function(*, String):(void|boolean)} cb - Function to call on every property
+ * @param obj - object to loop through
+ * @param cb - Function to call on every property
  */
-export function eachObj(obj, cb) {
+export function eachObj(
+  obj: Record<string, any>,
+  cb: (val: any, key: string) => void | boolean
+) {
   const keys = Object.keys(obj);
 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i];
-    if (!is.undef(obj[key])) {
+    if (!(is as any).undef(obj[key])) {
       const val = obj[key];
       if (cb(val, key) === false) {
         break;
@@ -47,11 +29,13 @@ export function eachObj(obj, cb) {
 
 /**
  * Check to see if `obj` matches `matcher`
- * @param   {Object} matcher
- * @param   {Object} obj - object to match against `matcher`
- * @returns {boolean} - did match or not
+ * @param matcher
+ * @param obj - object to match against `matcher`
  */
-export function couldMatchObj(matcher, obj) {
+export function couldMatchObj(
+  matcher: Record<string, any>,
+  obj: Record<string, any>
+): boolean {
   let matched = true;
 
   eachObj(matcher, (val, key) => {
@@ -77,12 +61,11 @@ export function couldMatchObj(matcher, obj) {
 
 /**
  * Makes `options` inherit all properties it doesnt have from `default`
- * @param {Object} [options={}]
- * @param {Object} defaultObj - default properties that you want `options` to have
- * @returns {Object} - options with all default properties
+ * @param options
+ * @param defaultObj - default properties that you want `options` to have
+ * @returns - options with all default properties
  */
-// eslint-disable-next-line default-param-last
-export function defaults(options = {}, defaultObj) {
+export function defaults<T extends object>(options: Partial<T>, defaultObj: T) {
   const newObj = { ...options };
 
   eachObj(defaultObj, (val, key) => {
@@ -94,7 +77,7 @@ export function defaults(options = {}, defaultObj) {
   return newObj;
 }
 
-export function cliLog(str) {
+export function cliLog(str: string): void {
   const string = str
     .split(/\n/)
     .map((s) => s.trim())
