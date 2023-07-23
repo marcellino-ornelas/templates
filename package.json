@@ -11,10 +11,6 @@
     "tps": "./cli/index.js"
   },
   "scripts": {
-    "docs:build": "./.bin/generate-docs && ./.bin/generate-docs-doctoc",
-    "docs:dev": "open -a 'Google Chrome' docs-1/readme.md && nodemon --exec 'npm run docs:build'",
-    "docs:prod": "NODE_ENV=production npm run docs:build",
-    "docs:publish": "npm run docs:prod && git add docs && git commit -m 'new docs' && git push origin master",
     "code:build": "ttsc",
     "code:dev": "npm run code:build -- -w",
     "code:prod": "npm run code:build",
@@ -24,7 +20,7 @@
     "test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
     "typecheck": "tsc --noEmit",
     "lint": "./node_modules/.bin/eslint .",
-    "build": "npm run code:prod && npm run docs:prod",
+    "build": "npm run code:prod",
     "test": "npm run code:build && echo 'built' && ./.bin/run-test"
   },
   "keywords": [],
