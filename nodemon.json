@@ -1,4 +1,0 @@
-{
-  "watch": [".tps/docs", "cli/options"],
-  "ext": "md,md.dot,js,json,def"
-}
