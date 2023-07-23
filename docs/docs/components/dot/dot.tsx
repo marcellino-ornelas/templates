@@ -1,5 +1,5 @@
 import React from 'react';
-import doT from 'doT';
+import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
 import styles from './dot.module.css';
 
