@@ -3,10 +3,8 @@ import * as findFileUp from 'find-up';
 
 /**
  * Check to see if the `path` is a valid directory
- * @param   {string} path - path to file or directory
- * @returns {boolean} - `path` is a directory
  */
-export function isDir(path) {
+export function isDir(path: string): boolean {
   let dir;
   try {
     dir = fs.lstatSync(path);
@@ -16,7 +14,10 @@ export function isDir(path) {
   return dir.isDirectory();
 }
 
-export function isFile(path) {
+/**
+ * Check to see if the `path` is a valid file
+ */
+export function isFile(path: string): boolean {
   let file;
   try {
     file = fs.lstatSync(path);
@@ -26,16 +27,17 @@ export function isFile(path) {
   return file.isFile();
 }
 
-export function json(jsonFile) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function json(jsonFile: string): any {
   try {
-    const jsonContents = fs.readFileSync(jsonFile);
+    const jsonContents = fs.readFileSync(jsonFile).toString();
     return JSON.parse(jsonContents);
   } catch (err) {
     return {};
   }
 }
 
-export function findUp(folder, cwd = process.cwd()) {
+export function findUp(folder: string, cwd: string = process.cwd()) {
   return findFileUp.sync(folder, {
     cwd,
   });
