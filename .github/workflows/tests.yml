@@ -75,6 +75,22 @@ jobs:
         run: npm install
       - name: Test Code
         run: npm run typecheck
+
+  docs-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./docs
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Npm Install
+        run: npm install
+      - name: Test Build
+        run: npm run build
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:

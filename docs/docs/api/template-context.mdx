@@ -28,17 +28,7 @@ If you render a template with no build path. Then `tps.name` will be null.
 tps react-component Nav
 ```
 
-<Dot tps={{ name: "Nav" }}>
-
-```text
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-```
-
-</Dot>
+<Dot tps={{ name: "Nav" }} />
 
 </Example>
 
@@ -50,15 +40,7 @@ const {{= tps.name}} = (props) => {
 
 Name of the template your rendering with.
 
-<Example>
-
-```bash title="cli"
-tps express-app app
-    |__________|
-    # ^ This is the name of the template
-```
-
-</Example>
+<Example />
 
 ## Packages
 
@@ -95,21 +77,7 @@ when additional packages are used:
 tps react-component App --packages css
 ```
 
-<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js">
-
-```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-
-```
-
-</Dot>
+<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js" />
 
 </TabItem>
 
@@ -119,21 +87,7 @@ const {{= tps.name}} = (props) => {
 tps react-component App
 ```
 
-<Dot tps={{name: "Nav", packages: ['default']}} lang="js">
-
-```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-
-```
-
-</Dot>
+<Dot tps={{name: "Nav", packages: ['default']}} lang="js" />
 
 </TabItem>
 </Tabs>
@@ -150,24 +104,4 @@ The `tps.answers` object holds the answers to the prompts in your templates.
 Each prompt's value is stored with a property name that corresponds to the name
 you assigned to the prompt in your `settings.json` file.
 
-<Example>
-
-```json title="settings.json"
-{
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "age"
-      // ...
-    }
-  ]
-}
-```
-
-you can access the users answer with:
-
-```text
-{{= tps.answers.age }}
-```
-
-</Example>
+<Example />

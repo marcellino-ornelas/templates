@@ -93,13 +93,7 @@ any valid JavaScript code, enabling the creation of variables, functions, and
 various other possibilities. **The semi-colon at the end of the expression is
 mandatory!**
 
-<Dot>
-
-```text
-{{const name = "Marcellino Ornelas";}}
-```
-
-</Dot>
+<Dot />
 
 One limitation of evaluations are that it leaves a empty space where it was
 placed at. We recommend avoid using as much as possible but could be useful in
@@ -107,15 +101,7 @@ some cases
 
 <Example title="Evaluations leaves new line">
 
-<Dot>
-
-```text
-// highlight-next-line
-{{const name = "john doe";}}
-hey
-```
-
-</Dot>
+<Dot />
 
 </Example>
 
@@ -124,13 +110,7 @@ hey
 In doT, interpolation is achieved using `{{= <expression>}}`. This syntax allows
 the result of the specified expression to replace the brackets in the template.
 
-<Dot>
-
-```text
-{{= 2 + 2}}
-```
-
-</Dot>
+<Dot />
 
 ### Conditionals
 
@@ -138,84 +118,35 @@ In doT, interpolation is achieved using `{{? <expression>}} ... {{?}}`. The
 result of the provided expression will be displayed if the expression returns
 truthy value
 
-<Dot>
-
-```text
-Are you there?
-{{? 1 === 1}}
-I am here
-{{?}}
-```
-
-</Dot>
+<Dot />
 
 If you dont want the extra new lines, move all the conditional statements to one
 line
 
-<Dot>
-
-```text
-Are you there?
-{{? 1 === 1}}I am here{{?}}
-```
-
-</Dot>
+<Dot />
 
 If you want everthing to flow on one line then just put the condition on the
 same line
 
-<Dot>
-
-```text
-Are you there? {{? 1 === 1}}I am here{{?}}
-```
-
-</Dot>
+<Dot />
 
 doT also supports else statements.
 
-<Dot>
-
-```text
-Are you here? {{? 1 === 2}}I am here {{??}}I am not home {{?}}
-```
-
-</Dot>
+<Dot />
 
 doT also supports else if statements.
 
-<Dot>
-
-```text
-Are you here? {{? 1===2}}I am here {{?? 1 ===1}}I might be home{{??}}I am not home {{?}}
-```
-
-</Dot>
+<Dot />
 
 One limitation of conditionals is that it leaves a white space behind when the
 condition is not met
 
-<Dot resultMeta="{2}">
-
-```text
-Are you there?
-{{? 1 === 2}}I am here{{?}}
-how about now?
-```
-
-</Dot>
+<Dot resultMeta="{2}" />
 
 The only way around this right now is placing the condition on the same line but
 adding a new line to the begining of the value
 
-<Dot>
-
-```text
-Are you there?{{? 1 === 1}}{{="\n"}}I am here{{?}}
-how about now?{{? 1 === 2}}{{="\n"}}I am here{{?}}
-```
-
-</Dot>
+<Dot />
 
 Notice how the first condition value still showed up on a new line but the
 second condition didnt leave a new line
@@ -224,15 +155,7 @@ second condition didnt leave a new line
 
 In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
 
-<Dot>
-
-```text
-{{~[1, 2, 3, 4] :value:index}}
-{{= value}}
-{{~}}
-```
-
-</Dot>
+<Dot />
 
 Unfortunately we need to keep all tags on the same line to get a cleaner output.
 By indenting `{{= value}}` to get a cleaner look will result in indent in the
@@ -240,29 +163,14 @@ rendered output
 
 <Example title="Indent Issues">
 
-<Dot>
-
-```text
-{{~[1, 2, 3, 4] :value:index}}
-	{{= value}}
-{{~}}
-```
-
-</Dot>
+<Dot />
 
 </Example>
 
 If you dont want the extra spacing between each line then you need to move
 `{{= value}}` on the same line as your loop.
 
-<Dot>
-
-```text
-{{~[1,2,3,4] :value:index}}{{= value}}
-{{~}}
-```
-
-</Dot>
+<Dot />
 
 To remove the extra space at the bottom of the output, you can move the end of
 the loop to the same line. However, this will cause all your items to be
@@ -270,38 +178,20 @@ displayed on a single line. To address this, you can add a `\n` character after
 each value. To avoid displaying a new line after the last item, you can use a
 ternary operator to check if it is the last item.
 
-<Dot>
-
-```text
-{{~[1,2,3,4] :value:index}}{{= value + (index !== [1,2,3,4].length - 1 ? "\n" : "")}}{{~}}
-```
-
-</Dot>
+<Dot />
 
 :::tip
 
 If you dont need anything to complex, then use `join`!
 
-<Dot>
-
-```text
-{{= [1,2,3,4].join("\n")}}
-```
-
-</Dot>
+<Dot />
 
 :::
 
 If you would like to keep output on one line then put all doT brackets on one
 line
 
-<Dot>
-
-```text
-{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
-```
-
-</Dot>
+<Dot />
 
 ## How to use doT with Templates
 
@@ -313,32 +203,14 @@ contents of the file will be processed by doT. The resulting output will then be
 incorporated into the rendered file. Your rendered file will no longer have the
 `.dot` extention
 
-<Example>
-
-To use doT in a file named `server.js`, Rename the file to `server.js.dot`. Once
-processed and rendered, the resulting file will retain its original name, which
-is `server.js`.
-
-</Example>
+<Example />
 
 ### File names
 
 File names can also take advantage of using dot. By putting the
 `{{=<some-value>}}` in the filename you can get dynamic filenames.
 
-<Example open>
-
-```text
-{{= tps.name}}.js.dot
-```
-
-If `name` was `Nav` then the result would be:
-
-```text
-Nav.js
-```
-
-</Example>
+<Example open />
 
 ### File contents
 
@@ -347,21 +219,7 @@ now able to use any dot syntax inside the file and tps will process it.
 
 <Example open>
 
-<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
-
-```text
-const express = require("express");
-
-const app = express();
-
-/* node code ... */
-
-{{? tps.answers.security }}app.use(helmet());{{?}}
-
-/* node code ... */
-```
-
-</Dot>
+<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}} />
 
 </Example>
 
@@ -397,17 +255,7 @@ If you render a template with no build path. Then `tps.name` will be null.
 tps react-component Nav
 ```
 
-<Dot tps={{ name: "Nav" }}>
-
-```text
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-```
-
-</Dot>
+<Dot tps={{ name: "Nav" }} />
 
 </Example>
 
@@ -455,21 +303,7 @@ when additional packages are used:
 tps react-component App --packages css
 ```
 
-<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js">
-
-```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-
-```
-
-</Dot>
+<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js" />
 
 </TabItem>
 
@@ -479,21 +313,7 @@ const {{= tps.name}} = (props) => {
 tps react-component App
 ```
 
-<Dot tps={{name: "Nav", packages: ['default']}} lang="js">
-
-```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-
-```
-
-</Dot>
+<Dot tps={{name: "Nav", packages: ['default']}} lang="js" />
 
 </TabItem>
 </Tabs>

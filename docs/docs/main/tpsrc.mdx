@@ -55,20 +55,7 @@ When adding configurations for template replace the `<template-name>` to be the
 name of your template. This property will hold all configurations for that
 template.
 
-<Example>
-
-Say we had a template named `react-component`. Now to add configurations to this
-template I would put the following inside of my tpsrc file
-
-```json title=".tpsrc"
-{
-  "react-component": {
-    /* react-component template specific configs */
-  }
-}
-```
-
-</Example>
+<Example />
 
 Like mentioned before, you can add multiple template configurations
 
@@ -79,23 +66,7 @@ Like mentioned before, you can add multiple template configurations
 }
 ```
 
-<Example>
-
-Say we had two templates `react-component` and `express-app-route` and wanted to
-also add configurations then the tpsrc files would look something like this:
-
-```json title=".tpsrc"
-{
-  "react-component": {
-    /* react-component template specific configs */
-  },
-  "express-app-route": {
-    /* express-app-route template specific configs */
-  }
-}
-```
-
-</Example>
+<Example />
 
 :::note
 
@@ -123,35 +94,7 @@ a template to behave in a particular manner within a specific directory.
 }
 ```
 
-<Example>
-
-If I had a template named `hello-world` and a prompt named `age`:
-
-```json title="settings.json"
-{
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "age"
-      // ...
-    }
-  ]
-}
-```
-
-The I can set the answer to the prompt in our `.tpsrc` file with
-
-```json title=".tpsrc"
-{
-  "hello-world": {
-    "answers": {
-      "age": 23
-    }
-  }
-}
-```
-
-</Example>
+<Example />
 
 ### Configuring Templates
 
@@ -178,29 +121,7 @@ To find all the available options for configuring templates, check out the
 
 :::
 
-<Example>
-
-If I had a template named `react-component` and I wanted to always force the
-creation of my new instance even if one already exists then I can add a `force`
-option to my templates configuration.
-
-```json title=".tpsrc"
-{
-  "react-component": {
-    "opts": {
-      "force": true
-    }
-  }
-}
-```
-
-This would be equivilent to passing a `--force` flag to the create command
-
-```bash
-tps react-component Nav --force
-```
-
-</Example>
+<Example />
 
 ## Make a Global Configuration File
 

@@ -61,38 +61,7 @@ the essential elements in one place.
         | - <all of the default package files/folders...>
 ```
 
-<Example open>
-
-Lets say we have a template called `node-server`. This template is responsible
-for setting up a brand new webserver with all the bells and whistles included.
-
-```text title="Template"
-| - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-```
-
-let's say today we had a new idea for a trash removal company called
-`trash-removal`. If we wanted to generate this app with our template then it
-would create a new directory called `trash-removal` and render all files inside
-the templates `default` package and place them into the new `trash-removal`
-directory it just created
-
-```bash title="Command"
-tps node-server trash-removal
-```
-
-```text title="Result"
-| - trash-removal/
-	// highlight-start
-	| - server.js
-	| - package.json
-	// highlight-end
-```
-
-</Example>
+<Example open />
 
 ### Using additional packages
 
@@ -137,78 +106,9 @@ additional ones. Your app folder will only be the files and folders from
         | - <default files/folders...>
 ```
 
-<Example open title="Using additional packages">
+<Example open title="Using additional packages" />
 
-Lets say we have a template called `node-server`. This template is responsible
-for setting up a brand new webserver with all the bells and whistles included
-and optionally can set up unit tests for us
-
-```text title="Template"
-| - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-		| - unit-tests/
-			| - server.test.js
-```
-
-Now if we wanted to create a new app but have unit tests set up for us alrealy
-then we can run
-
-```bash title="Command"
-tps node-server trash-removal --packages unit-tests
-```
-
-```text title="Result"
-| - trash-removal/
-	// highlight-start
-	| - server.js
-	| - server.test.js
-	| - package.json
-	// highlight-end
-```
-
-</Example>
-
-<Example open title="Having additional packages but not using them">
-
-Lets say we have a template called `node-server`. This template is responsible
-for setting up a brand new webserver with all the bells and whistles included
-and optionally can set up unit tests for us
-
-```text title="Template"
-| - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-		| - unit-tests/
-			| - server.test.js
-```
-
-Now if we wanted to create a new app but we didnt want unit tests for this app
-then you could run.
-
-```bash title="Command"
-tps node-server trash-removal
-```
-
-```text title="Result"
-| - trash-removal/
-	// highlight-start
-	| - server.js
-	| - package.json
-	// highlight-end
-```
-
-:::tip
-
-Remember additional packages must be explicily included
-
-:::
-
-</Example>
+<Example open title="Having additional packages but not using them" />
 
 ### Prompts
 
@@ -235,26 +135,8 @@ Dont worry well go over this more in depth in our [prompts guide](./prompts)
 To make a new package use the bash commands
 
 <Tabs> 
-<TabItem value="tps" label="tps cli" default>
-
-```bash
-tps new package <template> <package-name>
-```
-
-:::note
-
-Read more about our `new` command more [here](../../api/cli#new)
-
-:::
-
-</TabItem>
-<TabItem value="bash" label="bash">
-
-```bash
-mkdir ./.tps/<template>/<package-name>
-```
-
-  </TabItem>
+<TabItem value="tps" label="tps cli" default />
+<TabItem value="bash" label="bash" />
 </Tabs>
 
 ### Using a new package
@@ -278,18 +160,4 @@ tps <template> --packages <package> [packages...] -- <template-name-to-create>
 
 :::
 
-<Example open>
-
-one package
-
-```bash
-tps node-server app --packages unit-tests
-```
-
-multiple packages
-
-```bash
-tps node-server app --packages unit-tests sql redis
-```
-
-</Example>
+<Example open />

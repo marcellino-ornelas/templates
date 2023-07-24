@@ -94,18 +94,7 @@ templates, which are templates available in your current working directory
 (cwd). `global` stands for global templates, accessible from anywhere on your
 system.
 
-<Example>
-
-```bash
-> tps list
-Global:
-- react-component
-Local:
-- new-test
-- new-api
-```
-
-</Example>
+<Example />
 
 ## Create
 
@@ -170,24 +159,7 @@ Options:
   --help         Show help                                             [boolean]
 ```
 
-<Example>
-
-```bash
-tps new template react-component
-```
-
-Produces:
-
-```text
-| - .tps
-	// highlight-start
-	| - react-component/
-		| - default/
-		| - settings.json
-	// highlight-end
-```
-
-</Example>
+<Example />
 
 ### new package
 
@@ -202,21 +174,4 @@ Options:
   --help         Show help                                             [boolean]
 ```
 
-<Example>
-
-```bash
-tps new package react-component css
-```
-
-Produces:
-
-```text
-| - .tps
-	| - react-component/
-		// highlight-next-line
-		| - css/
-		| - default/
-		| - <other files or directories...>
-```
-
-</Example>
+<Example />

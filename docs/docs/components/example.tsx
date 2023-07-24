@@ -1,7 +1,13 @@
 import React from 'react';
 import Details from '@theme/Details';
 
-export const Example = ({ children, open = false, title = '' }) => {
+interface Props {
+  children: React.ReactNode;
+  open: boolean;
+  title: string;
+}
+
+export const Example = ({ children, open = false, title = '' }: Props) => {
   const summary = title ? `Example: ${title}` : 'Example';
 
   return (

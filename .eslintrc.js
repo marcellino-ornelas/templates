@@ -27,6 +27,7 @@ const config = {
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
     'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
     'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
+    'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.mdx'] }],
     'import/extensions': [
       ERROR,
       {
@@ -64,7 +65,8 @@ const config = {
           ERROR,
           { ignore: ['^@theme', '^@docusaurus', '^@site'] },
         ],
-        react: IGNORE,
+        'react/react-in-jsx-scope': [IGNORE],
+
         // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
         // 'react/require-default-props': [IGNORE],
       },
@@ -83,7 +85,7 @@ const config = {
             namedComponents: 'arrow-function',
           },
         ],
-        'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
+        // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
         'react/require-default-props': [IGNORE],
       },
     },

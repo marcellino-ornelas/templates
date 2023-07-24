@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-const Templates = require('templates-mo');
+// const Templates = require('templates-mo');
 
-module.exports = function friendsPlugin(context, options) {
+module.exports = function friendsPlugin(/* context, options */) {
   return {
     name: 'templates-plugin',
     // async loadContent() {
