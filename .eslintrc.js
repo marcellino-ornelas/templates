@@ -67,9 +67,6 @@ const config = {
         ],
         'react/react-in-jsx-scope': [IGNORE],
         'react/self-closing-comp': [IGNORE],
-
-        // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
-        // 'react/require-default-props': [IGNORE],
       },
     },
     {
@@ -86,7 +83,6 @@ const config = {
             namedComponents: 'arrow-function',
           },
         ],
-        // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
         'react/require-default-props': [IGNORE],
       },
     },
