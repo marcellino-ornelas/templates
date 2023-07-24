@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { SettingsFile } from '@site/types/settingsFile';
-import { usePluginData } from '@docusaurus/useGlobalData';
+// import { usePluginData } from '@docusaurus/useGlobalData';
 import styles from './templateOptions.module.css';
 
 interface Props {
@@ -10,11 +10,7 @@ interface Props {
 
 export const TemplateOptions = ({ template, type = 'json' }: Props) => {
   const [settingsFile, setSettingsFile] = useState<SettingsFile>(null);
-  const d = usePluginData('templates-plugin');
-
-  console.log(d);
-
-  //   console.log(Templates);
+  //   const d = usePluginData('templates-plugin');
 
   useEffect(() => {
     (async () => {
