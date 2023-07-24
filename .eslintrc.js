@@ -66,6 +66,7 @@ const config = {
           { ignore: ['^@theme', '^@docusaurus', '^@site'] },
         ],
         'react/react-in-jsx-scope': [IGNORE],
+        'react/self-closing-comp': [IGNORE],
 
         // 'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx'] }],
         // 'react/require-default-props': [IGNORE],
