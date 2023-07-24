@@ -56,6 +56,8 @@ jobs:
           node-version: 18
       - name: Npm Install
         run: npm install
+      - name: Npm Install docs
+        run: npm install --prefix docs
       - name: Test Code
         run: |
           npm run lint
