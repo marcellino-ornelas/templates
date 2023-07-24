@@ -6,6 +6,7 @@ export interface Prompt {
   choices: string[];
   aliases: string[];
   when: () => boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: any;
 }
 

@@ -6,6 +6,9 @@ pagination_next: null
 pagination_prev: null
 ---
 
+{/* eslint-disable react/self-closing-comp */}
+
+import Link from '@docusaurus/Link';
 import styles from './intro.module.css';
 
 # Welcome to Templates
@@ -53,26 +56,33 @@ npm install -g templates-mo
 
 <div className={styles.templateOptions}>
   <div className={styles.templateOption}>
-    <h2>Create a new template</h2>
-    <p>
-      Unlock the power of customization by learning how to create your very own
-      custom templates!
-    </p>
-    <div>
-      <a className={styles.btn} href="./create-new-template/">
-        visit
-      </a>
-    </div>
-  </div>
-  <div className={styles.templateOption}>
-    <h2>Search for exisiting templates</h2>
-    <p>Explore our library of existing templates!</p>
-    <div>
-      <a className={styles.btn} href="./templates/">
-        visit
-      </a>
-    </div>
-  </div>
+
+## Create a new template
+
+Unlock the power of customization by learning how to create your very own custom
+templates!
+
+<div>
+  <Link className={styles.btn} to="./create-new-template/">
+    visit
+  </Link>
+</div>
+</div>
+
+<div className={styles.templateOption}>
+
+## Search for exisiting templates
+
+Explore our library of existing templates!
+
+<div>
+  <Link className={styles.btn} to="./templates/">
+    visit
+  </Link>
+</div>
+
+</div>
+
 </div>
 
 ## Coming from Create-components-react?

@@ -35,7 +35,7 @@ directory are your templates. You may have as many templates as you wish.
 
 ```text
 | - .tps/
-	// highlight-next-line
+    // highlight-next-line
     | - <template...>/
 ```
 
@@ -46,7 +46,7 @@ folder structure would look like this:
 
 ```text
 | - .tps/
-	| - react-component/
+    | - react-component/
 ```
 
 </Example>
@@ -58,9 +58,9 @@ Now lets break down what to put in your template folder. Inside of each
 
 ```text
 | - .tps/
-	| - <template>/
-		// highlight-next-line
-		| - <packages...>/
+    | - <template>/
+        // highlight-next-line
+        | - <packages...>/
 ```
 
 Now, within each package directory, you have the freedom to add an unlimited
@@ -83,12 +83,12 @@ for setting up a brand new webserver with all the bells and whistles included.
 
 ```text
 | - .tps/
-	| - node-server/
-		| - default/
-			// highlight-start
-			| - server.js
-			| - package.json
-			// highlight-end
+    | - node-server/
+        | - default/
+            // highlight-start
+            | - server.js
+            | - package.json
+            // highlight-end
 ```
 
 let's say today we had a new idea for a trash removal company called
@@ -99,10 +99,10 @@ directory it just created
 
 ```text
 | - trash-removal/
-	// highlight-start
-	| - server.js
-	| - package.json
-	// highlight-end
+    // highlight-start
+    | - server.js
+    | - package.json
+    // highlight-end
 ```
 
 </Example>
@@ -117,9 +117,9 @@ You can learn more about packages in our [packages guide](./packages)
 
 ```text
 | - .tps/
-	| - <template>/
-		// highlight-next-line
-		| - settings.json
+    | - <template>/
+        // highlight-next-line
+        | - settings.json
 ```
 
 A template can optionally have a settings file where you can define prompts and
@@ -160,7 +160,7 @@ Read more about our command line docs [here](../../api/cli)
 :::
 
 <Tabs>
-	<TabItem value="tps" label="tps cli" default>
+    <TabItem value="tps" label="tps cli" default>
 
 Our command line tools will create the `default` folder for you.
 
@@ -200,14 +200,14 @@ folders from the template folder and transferring them to the **build path(s)**.
 
 ```mermaid
 graph LR;
-	step1("User renders
-	template")
-	step2("Tps loads all files
-	and folders from packages")
-	step3("Tps creates a directory
-	for the passed build path")
-	step4("Creates all needed files and
-	folders inside each build path")
+    step1("User renders
+    template")
+    step2("Tps loads all files
+    and folders from packages")
+    step3("Tps creates a directory
+    for the passed build path")
+    step4("Creates all needed files and
+    folders inside each build path")
     step1-->step2;
     step2-->step3;
     step3-->step4;
@@ -246,19 +246,19 @@ contents inside of it
 
 ```text title="Template structure"
 | - .tps/
-	// highlight-start
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-	// highlight-end
+    // highlight-start
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
+    // highlight-end
 ```
 
 ```text title="Rendered instance"
 // highlight-start
 | - app/
-	| - server.js
-	| - package.json
+    | - server.js
+    | - package.json
 // highlight-end
 ```
 
@@ -274,9 +274,9 @@ exist, tps will create it.
 ```text
 // highlight-next-line
 some/path/app
-		  |__| <- template name
+          |__| <- template name
 |____________|
-	^ Build path
+    ^ Build path
 ```
 
 <Example>
@@ -287,22 +287,22 @@ inside of `<cwd>/code/projects` and render all contents inside of it.
 
 ```text title="Template structure"
 | - .tps/
-	// highlight-start
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-	// highlight-end
+    // highlight-start
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
+    // highlight-end
 ```
 
 ```text title="Rendered instance"
 |- code
-	|- projects
-		// highlight-start
-		| - app/
-			| - server.js
-			| - package.json
-		// highlight-end
+    |- projects
+        // highlight-start
+        | - app/
+            | - server.js
+            | - package.json
+        // highlight-end
 ```
 
 </Example>
@@ -320,25 +320,25 @@ directories for both and render contents into both of them.
 
 ```text title="Template structure"
 | - .tps/
-	// highlight-start
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-	// highlight-end
+    // highlight-start
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
+    // highlight-end
 ```
 
 ```text title="Rendered instance"
 |- code
-	|- projects
-		// highlight-start
-		| - app/
-			| - server.js
-			| - package.json
-		| - app2/
-			| - server.js
-			| - package.json
-		// highlight-end
+    |- projects
+        // highlight-start
+        | - app/
+            | - server.js
+            | - package.json
+        | - app2/
+            | - server.js
+            | - package.json
+        // highlight-end
 ```
 
 </Example>
