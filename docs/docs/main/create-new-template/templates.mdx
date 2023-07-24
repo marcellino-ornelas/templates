@@ -7,6 +7,7 @@ sidebar_position: 1
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
 
 # Templates
 
@@ -34,11 +35,21 @@ directory are your templates. You may have as many templates as you wish.
 
 ```text
 | - .tps/
-    // highlight-next-line
+	// highlight-next-line
     | - <template...>/
 ```
 
-<Example />
+<Example>
+
+If I were to make a new template called <code>react-component</code> then my
+folder structure would look like this:
+
+```text
+| - .tps/
+	| - react-component/
+```
+
+</Example>
 
 ## Packages
 
@@ -47,9 +58,9 @@ Now lets break down what to put in your template folder. Inside of each
 
 ```text
 | - .tps/
-    | - <template>/
-        // highlight-next-line
-        | - <packages...>/
+	| - <template>/
+		// highlight-next-line
+		| - <packages...>/
 ```
 
 Now, within each package directory, you have the freedom to add an unlimited
@@ -65,7 +76,36 @@ explicitly specify them when rendering the template.
 
 Dont worry more will be covered on this in our next section of this guide
 
-<Example open />
+<Example open>
+
+Lets say we have a template called `node-server`. This template is responsible
+for setting up a brand new webserver with all the bells and whistles included.
+
+```text
+| - .tps/
+	| - node-server/
+		| - default/
+			// highlight-start
+			| - server.js
+			| - package.json
+			// highlight-end
+```
+
+let's say today we had a new idea for a trash removal company called
+`trash-removal`. If we wanted to generate this app with our template then it
+would create a new directory called `trash-removal` and render all files inside
+the templates `default` package and place them into the new `trash-removal`
+directory it just created
+
+```text
+| - trash-removal/
+	// highlight-start
+	| - server.js
+	| - package.json
+	// highlight-end
+```
+
+</Example>
 
 :::note
 
@@ -77,9 +117,9 @@ You can learn more about packages in our [packages guide](./packages)
 
 ```text
 | - .tps/
-    | - <template>/
-        // highlight-next-line
-        | - settings.json
+	| - <template>/
+		// highlight-next-line
+		| - settings.json
 ```
 
 A template can optionally have a settings file where you can define prompts and
@@ -120,8 +160,30 @@ Read more about our command line docs [here](../../api/cli)
 :::
 
 <Tabs>
-  <TabItem value="tps" label="tps cli" default />
-  <TabItem value="bash" label="bash" />
+	<TabItem value="tps" label="tps cli" default>
+
+Our command line tools will create the `default` folder for you.
+
+```bash
+tps new template <template-name>
+```
+
+:::note
+
+Read more about our `new` command more [here](../../api/cli#new)
+
+:::
+
+  </TabItem>
+  <TabItem value="bash" label="bash">
+
+```bash
+mkdir .tps/<template-name>
+
+mkdir .tps/<template-name>/default
+```
+
+  </TabItem>
 </Tabs>
 
 ## Rendering a new template
@@ -138,14 +200,14 @@ folders from the template folder and transferring them to the **build path(s)**.
 
 ```mermaid
 graph LR;
-    step1("User renders
-    template")
-    step2("Tps loads all files
-    and folders from packages")
-    step3("Tps creates a directory
-    for the passed build path")
-    step4("Creates all needed files and
-    folders inside each build path")
+	step1("User renders
+	template")
+	step2("Tps loads all files
+	and folders from packages")
+	step3("Tps creates a directory
+	for the passed build path")
+	step4("Creates all needed files and
+	folders inside each build path")
     step1-->step2;
     step2-->step3;
     step3-->step4;
@@ -176,7 +238,31 @@ app
  ^ Build path & template name
 ```
 
-<Example />
+<Example>
+
+If we were rendering a new instance from a template and we have the build path
+`app` then templates will create a new directory called `app` and render all
+contents inside of it
+
+```text title="Template structure"
+| - .tps/
+	// highlight-start
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+	// highlight-end
+```
+
+```text title="Rendered instance"
+// highlight-start
+| - app/
+	| - server.js
+	| - package.json
+// highlight-end
+```
+
+</Example>
 
 ### Long build path
 
@@ -188,19 +274,74 @@ exist, tps will create it.
 ```text
 // highlight-next-line
 some/path/app
-          |__| <- template name
+		  |__| <- template name
 |____________|
-    ^ Build path
+	^ Build path
 ```
 
-<Example />
+<Example>
+
+If we were rendering a new instance from a template and we have the build path
+`code/projects/app` then templates will create a new directory called `app`
+inside of `<cwd>/code/projects` and render all contents inside of it.
+
+```text title="Template structure"
+| - .tps/
+	// highlight-start
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+	// highlight-end
+```
+
+```text title="Rendered instance"
+|- code
+	|- projects
+		// highlight-start
+		| - app/
+			| - server.js
+			| - package.json
+		// highlight-end
+```
+
+</Example>
 
 ### Multiple build paths
 
 You can also pass in multiple build paths at the same time. This is going to be
 the same as passing in one but for each one.
 
-<Example />
+<Example>
+
+If we were rendering a new instance from a template and we have the build paths
+`code/projects/app` & `code/projects/app2` then templates will create new
+directories for both and render contents into both of them.
+
+```text title="Template structure"
+| - .tps/
+	// highlight-start
+	| - node-server/
+		| - default/
+			| - server.js
+			| - package.json
+	// highlight-end
+```
+
+```text title="Rendered instance"
+|- code
+	|- projects
+		// highlight-start
+		| - app/
+			| - server.js
+			| - package.json
+		| - app2/
+			| - server.js
+			| - package.json
+		// highlight-end
+```
+
+</Example>
 
 ### How to render a template
 
@@ -221,8 +362,38 @@ Not sure what templates you have? Check out our
 template to go
 
 <Tabs groupId="cli-node">
-  <TabItem value="tps" label="tps cli" default />
-  <TabItem value="node" label="Node" />
+  <TabItem value="tps" label="tps cli" default>
+
+```bash
+# create command
+
+tps create --use=<template-to-use> <build-paths...>
+
+# or use command
+
+tps <template-to-use> <build-paths...>
+```
+
+  </TabItem>
+  <TabItem value="node" label="Node">
+
+```js
+const Templates = require('tps');
+
+const tps = new Templates('<template-to-use>');
+// ^ In js pass in the name to the template here
+
+const buildPaths = ['<build-paths...>'];
+// ^ In js build paths should always be an array
+
+tps.render('<some-directory-path>', buildPaths);
+// ^ In js we need to add a path to some directory so tps has a
+// starting directory. tps cli tools uses this node module
+// underneath the hood and uses the terminals current working
+// directory as the `<some-directory-path>` path
+```
+
+  </TabItem>
 </Tabs>
 
 ---
@@ -230,9 +401,34 @@ template to go
 <Example title="One Build Path" open>
 
 <Tabs groupId="cli-node">
-  <TabItem value="tps" label="tps cli" />
+  <TabItem value="tps" label="tps cli">
 
-  <TabItem value="node" label="Node" />
+```bash
+# create command
+
+tps create --use=express-template app
+
+# or use command
+
+tps express-template app
+
+```
+
+  </TabItem>
+
+  <TabItem value="node" label="Node">
+
+```js showLineNumbers
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['app'];
+
+tps.render(process.cwd(), buildPaths);
+```
+
+  </TabItem>
 </Tabs>
 
 </Example>
@@ -240,9 +436,33 @@ template to go
 <Example title="Long Build Path">
 
 <Tabs groupId="cli-node">
-  <TabItem value="tps" label="tps cli" />
+  <TabItem value="tps" label="tps cli">
 
-  <TabItem value="node" label="Node" />
+```bash
+# create command
+
+tps create --use=express-template projects/app
+
+# or use command
+
+tps express-template projects/app
+```
+
+  </TabItem>
+
+  <TabItem value="node" label="Node">
+
+```js showLineNumbers
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['projects/app'];
+
+tps.render(process.cwd(), buildPaths);
+```
+
+  </TabItem>
 </Tabs>
 
 </Example>
@@ -250,9 +470,33 @@ template to go
 <Example title="multiple build path">
 
 <Tabs groupId="cli-node">
-  <TabItem value="tps" label="tps cli" />
+  <TabItem value="tps" label="tps cli">
 
-  <TabItem value="node" label="Node" />
+```bash
+# create command
+
+tps create --use=express-template app project/app app2
+
+# or use command
+
+tps express-template app project/app app2
+```
+
+  </TabItem>
+
+  <TabItem value="node" label="Node">
+
+```js showLineNumbers
+const Templates = require('tps');
+
+const tps = new Templates('express-template');
+
+const buildPaths = ['app', 'projects/app', 'app2'];
+
+tps.render(process.cwd(), buildPaths);
+```
+
+  </TabItem>
 </Tabs>
 
 </Example>
