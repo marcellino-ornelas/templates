@@ -375,7 +375,7 @@ export class Templates {
            *
            */
           const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
-          const renderData = defaults({ name }, dataForTemplating);
+          const renderData = defaults({ name, dir }, dataForTemplating);
           let doesBuildPathExist = isDir(realBuildPath);
 
           const groupName = `render_${buildPath}`;

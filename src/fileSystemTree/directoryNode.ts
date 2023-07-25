@@ -78,10 +78,7 @@ export class DirectoryNode extends FileSystemNode {
   }
 
   find(selectBy: FindKeyPattern = {}): FileSystemNode[] {
-    return this.selectChildren((fsNode) =>
-      // console.log(fsNode.path);
-      couldMatchObj(selectBy, fsNode)
-    );
+    return this.selectChildren((fsNode) => couldMatchObj(selectBy, fsNode));
   }
 }
 

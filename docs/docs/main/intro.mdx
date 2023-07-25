@@ -96,3 +96,31 @@ To get started, head over to the
 you'll find all the valuable information you need to make the most of this
 template. Ready to make a new template? Check out our
 [create a new template docs](./create-new-template/)
+
+### Migrate your react component template
+
+If you would like migrate your old create components react component into a
+templates equivilent, you can do so with the migrate command
+
+By default it will put your template inside a `react-component` template
+
+```bash
+tps migrate
+```
+
+or you can change the name of the new template by adding a name:
+
+```bash
+tps migrate some-name
+```
+
+:::caution
+
+The default `react-component` name will conflict with templates default
+[`react-component`](./templates/react-component) template. This means that you
+will not be able to access templates version of this template . We assume this
+is ok since create components react purpose was for react components. If you
+still would like access to templates default template then we recommend to
+change the name
+
+:::
