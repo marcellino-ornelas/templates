@@ -107,6 +107,48 @@ Local:
 
 </Example>
 
+## Copy
+
+```text
+cli copy <template>
+
+Copy a template
+
+Options:
+  --version      Show version number                                   [boolean]
+  --verbose, -v  More in-depth logging                [boolean] [default: false]
+  --help         Show help                                             [boolean]
+```
+
+Copy a template to your local tps directory. Files can then be changed to fit
+users needs.
+
+:::tip
+
+Useful when you like the template but want to add additional features or make a
+few modifications
+
+:::
+
+<Example>
+
+Copy Templates default [`react-component`](../main/templates/react-component).
+
+```bash
+> tps copy react-component
+```
+
+Produces:
+
+```text
+| - <cwd>
+	| - .tps/
+		| - react-component/
+			| - <all packages and files from react-component template>
+```
+
+</Example>
+
 ## Create
 
 ```text

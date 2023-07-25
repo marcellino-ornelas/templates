@@ -13,6 +13,14 @@ exports.builder = {};
 exports.handler = (argv) => {
   const template = new Template(argv.template);
 
+  if (!TPS.IS_TPS_INITIALIZED) {
+    errorExit(
+      new Error(
+        `Directory must be initialized with templates. Please run 'tps init'`
+      )
+    );
+  }
+
   if (TPS.LOCAL_PATH === template.tpsPath) {
     errorExit(
       new Error(`Template ${argv.template} already exists in your directory`)
