@@ -15,10 +15,10 @@ describe('Command Line: Copy', () => {
 
   beforeEach(() => playground.createBox('copy'));
 
-  it('should be able to copy a template', () => {
+  it('should be able to copy a template', async () => {
     const cwd = playground.box();
 
-    init(cwd, { force: true });
+    await init(cwd, { force: true });
 
     return tpsCli('copy testing', { cwd }).then(() => {
       expect(playground.pathTo('.tps/testing')).toBeDirectory();

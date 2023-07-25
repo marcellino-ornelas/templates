@@ -8,7 +8,7 @@ import {
   RequiresTemplateError,
 } from '@tps/errors';
 import { template } from 'dot';
-import path from 'path';
+import * as path from 'path';
 
 /**
  * Constants
