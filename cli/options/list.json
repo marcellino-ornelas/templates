@@ -10,5 +10,11 @@
     "description": "List out global files",
     "alias": "l",
     "default": true
+  },
+  "default": {
+    "type": "boolean",
+    "description": "List out default templates",
+    "alias": "d",
+    "default": true
   }
 }

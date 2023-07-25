@@ -73,4 +73,4 @@ export const INIT_LOCAL_TPS_PATH: string = path.join(
 
 export const IS_TPS_INITIALIZED: boolean = isDir(INIT_LOCAL_TPS_PATH);
 
-export const MAIN_TPS = `${MAIN_DIR}/${TPS_FOLDER}`; // ????????? where does this go
+export const DEFAULT_TPS = `${MAIN_DIR}/${TPS_FOLDER}`;

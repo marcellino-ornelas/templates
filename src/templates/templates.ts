@@ -94,6 +94,8 @@ const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
 export class Templates {
   public opts: TemplateOptions;
 
+  public tpsPath: string;
+
   constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
     if (!templateName || !is.string(templateName)) {
       throw new RequiresTemplateError();
@@ -102,19 +104,27 @@ export class Templates {
     const localPath = opts.tpsPath || TPS.LOCAL_PATH;
     const maybeLocalTemp = `${localPath}/${templateName}`;
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
+    const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
         this.src = maybeLocalTemp;
+        this.tpsPath = localPath;
         break;
       case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
         this.src = maybeGlobalTemp;
+        this.tpsPath = TPS.GLOBAL_PATH;
+        break;
+      case isDir(maybeDefaultTemp):
+        this.src = maybeDefaultTemp;
+        this.tpsPath = TPS.DEFAULT_TPS;
         break;
       default:
         logger.tps.error('Template not found! \n%O', {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
+          'search for default templates': maybeDefaultTemp,
           [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
           [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
         });
