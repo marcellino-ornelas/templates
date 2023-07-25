@@ -14,13 +14,10 @@
 	box-shadow: 2px 2px 5px rgba(0,0,0,0.3)
 }
 
-
 [data-theme='dark'] .templateOption {
 	/* border-color: 1px solid rgba(0,0,0,0.3); */
 	box-shadow: none;
 }
-
-
 
 .templateOption p {
 	flex-grow: 1;
@@ -49,7 +46,7 @@
 	.templateOptions {
 		display: block;
 	}
-
+	
 	.templateOption {
 		width: 100%;
 		margin-bottom: 15px;
