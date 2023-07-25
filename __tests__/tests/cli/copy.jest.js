@@ -18,11 +18,9 @@ describe('Command Line: Copy', () => {
   it('should be able to copy a template', async () => {
     const cwd = playground.box();
 
-    console.log(cwd);
-
     await init(cwd, { force: true });
 
-    return tpsCli('copy testing', { cwd }).then(() => {
+    return tpsCli('copy react-component', { cwd }).then(() => {
       expect(playground.pathTo('.tps/testing')).toBeDirectory();
     });
   });
