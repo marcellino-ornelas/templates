@@ -21,7 +21,7 @@ describe('Command Line: Copy', () => {
     await init(cwd, { force: true });
 
     return tpsCli('copy react-component', { cwd }).then(() => {
-      expect(playground.pathTo('.tps/testing')).toBeDirectory();
+      expect(playground.pathTo('.tps/react-component')).toBeDirectory();
     });
   });
 
