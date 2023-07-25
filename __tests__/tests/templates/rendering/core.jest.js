@@ -163,9 +163,6 @@ describe('[Templates] Render Process:', () => {
     });
   });
 
-  /**
-   * @docs guide/getting-started/packages.md#including-more-packages
-   */
   it('should have correct tps path', () => {
     const tps = new Templates('testing');
 
