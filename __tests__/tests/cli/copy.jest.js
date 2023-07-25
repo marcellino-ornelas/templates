@@ -3,7 +3,8 @@
  */
 
 import { TESTING_DIR } from '@test/utilities/constants';
-import { tpsCli, init } from '@test/utilities/tps-cli';
+import { tpsCli } from '@test/utilities/tps-cli';
+import { init } from '@test/support/cli';
 import Playground from '@test/utilities/playground';
 
 const playground = new Playground(TESTING_DIR);
