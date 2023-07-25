@@ -170,7 +170,7 @@ describe('[Templates] Render Process:', () => {
     const tps = new Templates('testing');
 
     const cwd = process.cwd();
-    const expectedPath = path.join(cwd, '__test__/.tps');
+    const expectedPath = path.join(cwd, '__tests__/.tps');
 
     expect(tps.tpsPath).toBe(expectedPath);
   });
