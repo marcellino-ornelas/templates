@@ -24,7 +24,7 @@ exports.handler = (argv) => {
   const tpsConfig = {
     force: argv.force,
     verbose: argv.verbose,
-    tpsPath: TPS.MAIN_TPS,
+    tpsPath: TPS.DEFAULT_TPS,
   };
 
   logger.cli.info('Cli options: %n', tpsConfig);

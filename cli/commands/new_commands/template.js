@@ -11,7 +11,7 @@ exports.builder = {};
 
 exports.handler = (argv) => {
   const tps = new Template('new-template', {
-    tpsPath: TPS.MAIN_TPS,
+    tpsPath: TPS.DEFAULT_TPS,
   });
 
   const dest = path.join(process.cwd(), TPS.TPS_FOLDER);

@@ -21,7 +21,22 @@ const removeRcFile = (arr) => {
   return copy;
 };
 
+const BANNED_TEMPLATES = ['init', 'new-template', 'new-test'];
+
 exports.handler = (argv) => {
+  if (argv.default) {
+    const defaultTps = removeRcFile(fs.readdirSync(TPS.DEFAULT_TPS)).filter(
+      // remove irrelevant templates
+      (file) => !BANNED_TEMPLATES.includes(file)
+    );
+
+    if (!is.array.empty(defaultTps)) {
+      console.log('Default: ');
+      console.log(pjson.render(defaultTps));
+      console.log('');
+    }
+  }
+
   if (TPS.HAS_GLOBAL && argv.global) {
     const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 

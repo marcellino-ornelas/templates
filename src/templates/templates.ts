@@ -104,6 +104,7 @@ export class Templates {
     const localPath = opts.tpsPath || TPS.LOCAL_PATH;
     const maybeLocalTemp = `${localPath}/${templateName}`;
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
+    const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
@@ -114,11 +115,16 @@ export class Templates {
         this.src = maybeGlobalTemp;
         this.tpsPath = TPS.GLOBAL_PATH;
         break;
+      case isDir(maybeDefaultTemp):
+        this.src = maybeDefaultTemp;
+        this.tpsPath = TPS.DEFAULT_TPS;
+        break;
       default:
         logger.tps.error('Template not found! \n%O', {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
+          'search for default templates': maybeMainTemp,
           [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
           [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
         });
