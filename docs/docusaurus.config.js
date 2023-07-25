@@ -90,6 +90,11 @@ const config = {
             position: 'left',
             label: 'API',
           },
+          {
+            href: 'https://github.com/marcellino-ornelas/templates/issues',
+            label: 'Feedback',
+            position: 'right',
+          },
           //   { to: '/blog', label: 'Blog', position: 'left' },
           {
             href: 'https://github.com/marcellino-ornelas/templates',
