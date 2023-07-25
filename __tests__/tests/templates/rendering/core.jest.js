@@ -173,13 +173,5 @@ describe('[Templates] Render Process:', () => {
     const expectedPath = path.join(cwd, '__test__/.tps');
 
     expect(tps.tpsPath).toBe(expectedPath);
-
-    // return tps.render(playground.box(), 'app').then(() => {
-    //   expect(destPath).toHaveAllFilesAndDirectories([
-    //     ...TESTING_PACKAGE_FILES,
-    //     'extras.js',
-    //     'extras2.js',
-    //   ]);
-    // });
   });
 });
