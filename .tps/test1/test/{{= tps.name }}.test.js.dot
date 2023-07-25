@@ -1,6 +1,0 @@
-describe('<{{= tps.name}} />', () => {
-  beforeEach(() => {});
-  afterEach(() => {});
-
-  test('should ...', () => {});
-});

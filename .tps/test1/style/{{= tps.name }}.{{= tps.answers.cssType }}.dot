@@ -1,7 +1,0 @@
-/*
- * {{= tps.name }} {{= tps.answers.cssType || 'css'}} File
-*/
-
-.{{= tps.name }} {
-    /* propertys here */
-}

@@ -1,8 +1,0 @@
-import React, { Component } from 'react';
-{{? tps.answers.css }}import './{{= tps.name }}.{{= tps.answers.cssType || 'css'}}';{{?}}
-
-const {{= tps.name}} = (props) => {
-  return (<div></div>);
-}
-
-export default {{= tps.name}};
