@@ -2,7 +2,7 @@
  * Modules
  */
 
-import { TESTING_TPS, TESTING_DIR } from '@test/utilities/constants';
+import { TESTING_DIR } from '@test/utilities/constants';
 import { tpsCli, init } from '@test/utilities/tps-cli';
 import Playground from '@test/utilities/playground';
 
