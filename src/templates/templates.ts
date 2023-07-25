@@ -124,7 +124,7 @@ export class Templates {
           'local path': localPath,
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
-          'search for default templates': maybeMainTemp,
+          'search for default templates': maybeDefaultTemp,
           [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
           [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
         });
