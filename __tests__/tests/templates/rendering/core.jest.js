@@ -7,6 +7,8 @@ import {
   DirectoryNotFoundError,
   RequiresTemplateError,
 } from '@tps/errors';
+import { template } from 'dot';
+import path from 'path';
 
 /**
  * Constants
@@ -159,5 +161,25 @@ describe('[Templates] Render Process:', () => {
         'extras2.js',
       ]);
     });
+  });
+
+  /**
+   * @docs guide/getting-started/packages.md#including-more-packages
+   */
+  it('should have correct tps path', () => {
+    const tps = new Templates('testing');
+
+    const cwd = process.cwd();
+    const expectedPath = path.join(cwd, '__test__/.tps');
+
+    expect(tps.tpsPath).toBe(expectedPath);
+
+    // return tps.render(playground.box(), 'app').then(() => {
+    //   expect(destPath).toHaveAllFilesAndDirectories([
+    //     ...TESTING_PACKAGE_FILES,
+    //     'extras.js',
+    //     'extras2.js',
+    //   ]);
+    // });
   });
 });
