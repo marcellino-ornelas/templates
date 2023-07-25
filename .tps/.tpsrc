@@ -5,5 +5,14 @@
   "new-test": {
     "extendedDest": "__tests__/tests",
     "newFolder": false
+  },
+  "test1": {
+    "opts": {},
+    "answers": {
+      "test": false,
+      "css": true,
+      "index": true,
+      "cssType": "css"
+    }
   }
 }

@@ -85,4 +85,8 @@ export class DirectoryNode extends FileSystemNode {
   }
 }
 
+// const hey = new DirectoryNode('hey', null, false);
+
+// hey.depthFirstEach
+
 export default DirectoryNode;

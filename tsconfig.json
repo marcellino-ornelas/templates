@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"allowJs": true,
+		"declaration": true,
 		"resolveJsonModule": true,
 		"moduleResolution": "node",
 		"module": "CommonJS",
