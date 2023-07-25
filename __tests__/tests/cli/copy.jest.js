@@ -29,7 +29,7 @@ describe('Command Line: Copy', () => {
     const cwd = playground.box();
 
     return expect(
-      tpsCli('copy testing', { cwd, fail: true })
+      tpsCli('copy react-component', { cwd, fail: true })
     ).rejects.toContain('Directory must be initialized with templates');
   });
 });
