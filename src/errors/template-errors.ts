@@ -2,113 +2,115 @@
 import { LOCAL_PATH } from '@tps/utilities/constants';
 
 export class TemplateNotFoundError extends Error {
+  public name = 'TemplateNotFoundError';
+
   public template: string;
 
   constructor(templateName: string) {
     super(`Template (${templateName}) was not found.`);
-    this.name = 'TemplateNotFoundError';
     this.template = templateName;
     Object.setPrototypeOf(this, TemplateNotFoundError.prototype);
   }
 }
 
 export class RequiresTemplateError extends Error {
+  public name = 'RequiresTemplateError';
+
   constructor() {
     super('Must specify a template folder to use!');
-    this.name = 'RequiresTemplateError';
 
     Object.setPrototypeOf(this, RequiresTemplateError.prototype);
   }
 }
 
 export class PackageAlreadyCompiledError extends Error {
+  public name = 'PackageAlreadyCompiledError';
+
   constructor(packageName: string) {
-    super();
-    this.name = 'PackageAlreadyCompiledError';
-    this.message = `Package (${packageName}) was already compiled`;
+    super(`Package (${packageName}) was already compiled`);
   }
 }
 
 export class SettingsUnkownFileTypeError extends Error {
+  public name = 'TpsSettingsUnknownFileTypeError';
+
   public settings: string;
 
   constructor(settingsPath: string) {
-    super();
-    this.name = 'TpsSettingsUnknownFileTypeError';
+    super(`\
+Could not load settings file! Please make sure this file is a json or js file 
+settings path: ${settingsPath}
+`);
     this.settings = settingsPath;
-    this.message = `\
-  Could not load settings file! Please make sure this file is a json or js file 
-  settings path: ${settingsPath}
-  `;
   }
 }
 
 export class NoPromptsError extends Error {
-  constructor() {
-    super();
-    this.name = 'NoPromptsError';
-    this.message = `No prompts set.`;
-  }
+  public name = 'NoPromptsError';
+
+  public message = 'No prompts set';
 }
 
 export class PromptNoPromptFoundError extends Error {
+  public name = 'PromptNoPromptFoundError';
+
   public promptName: string;
 
   constructor(name: string) {
-    super();
-    this.name = 'PromptNoPromptFoundError';
+    super(`There was no prompt found with the name of: ${name}`);
     this.promptName = name;
-    this.message = `There was no prompt found with the name of: ${name}`;
   }
 }
 
 export class PromptInvalidAnswersError extends Error {
+  public name = 'PromptInvalidAnswersError';
+
   public answers: Record<string, any>;
 
   constructor(answers: Record<string, any>) {
-    super();
-    this.name = 'PromptInvalidAnswersError';
+    super(
+      `Invalid answers passed in. Answers needs to be an object. Got ${JSON.stringify(
+        answers
+      )}`
+    );
     this.answers = answers;
-    this.message = `Invalid answers passed in. Answers needs to be an object. Got ${JSON.stringify(
-      answers
-    )}`;
   }
 }
 
 export class ParentDirectoryInitializedError extends Error {
+  public name = 'ParentDirectoryInitializedError';
+
   public tps: string;
 
   constructor(parentTps: string) {
-    super();
-    this.name = 'ParentDirectoryInitializedError';
-    this.tps = parentTps;
-    this.message = `\
+    super(`\
 tps is already initialized in a parent directory.
 tps location: ${LOCAL_PATH}
 
 In order to initialize this folder add the --force flag
-`;
+`);
+    this.tps = parentTps;
   }
 }
 
 export class InitializedAlreadyError extends Error {
+  public name = 'InitializedAlreadyError';
+
   public path: string;
 
   constructor(filePath: string) {
-    super();
-    this.name = 'InitializedAlreadyError';
+    super(`tps is already initialized in this repo. ${filePath}`);
     this.path = filePath;
-    this.message = `tps is already initialized in this repo. ${filePath}`;
   }
 }
 
 export class GlobalInitializedAlreadyError extends Error {
+  public name = 'GlobalInitializedAlreadyError';
+
   public path: string;
 
   constructor(filePath) {
-    super();
-    this.name = 'GlobalInitializedAlreadyError';
+    super('tps is already initialized globally initialized');
     this.path = filePath;
-    this.message = `tps is already initialized globally initialized`;
   }
 }

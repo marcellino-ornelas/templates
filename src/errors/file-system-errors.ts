@@ -1,35 +1,35 @@
 /* eslint-disable max-classes-per-file */
 
 export class DirectoryNotFoundError extends Error {
+  public name = 'DirectoryNotFoundError';
+
   public path: string;
 
   constructor(directory: string) {
     super(`Directory does not exist (${directory})`);
-    this.name = 'DirectoryNotFoundError';
     this.path = directory;
-    this.message = `Directory does not exist (${this.path})`;
     Object.setPrototypeOf(this, DirectoryNotFoundError.prototype);
   }
 }
 
 export class FileExistError extends Error {
+  public name = 'FileExistError';
+
   public path: string;
 
   constructor(filePath: string) {
-    super();
-    this.name = 'FileExistError';
+    super(`File already exists (${filePath})`);
     this.path = filePath;
-    this.message = `File already exists (${this.path})`;
   }
 }
 
 export class FileWriteError extends Error {
+  public name = 'FileWriteError';
+
   public path: string;
 
-  constructor(dest) {
-    super();
-    this.name = 'FileWriteError';
+  constructor(dest: string) {
+    super(`File already exists (${dest})`);
     this.path = dest;
-    this.message = `File already exists (${this.path})`;
   }
 }
