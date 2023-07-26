@@ -3,7 +3,7 @@
  */
 
 import * as path from 'path';
-import { DirNode } from '@tps/fileSystemTree';
+import { DirNode, FileNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
 /*
@@ -12,19 +12,19 @@ import { TESTING_TPS } from '@test/utilities/constants';
 const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
 
 describe('[FileSystemTree] FileSystemNode:', () => {
-  let indexFile;
-  let dbDir;
-  let dbFile;
-  let mainDir;
+  let indexFile: FileNode;
+  let dbDir: DirNode;
+  let dbFile: FileNode;
+  let mainDir: DirNode;
 
   beforeAll(() => {
     mainDir = new DirNode('main', PATH_TO_TEMPLATES);
     // eslint-disable-next-line prefer-destructuring
-    indexFile = mainDir.find({ name: 'index.js.dot' })[0];
+    indexFile = mainDir.find({ name: 'index.js.dot' })[0] as FileNode;
     // eslint-disable-next-line prefer-destructuring
-    dbDir = mainDir.find({ name: 'db' })[0];
+    dbDir = mainDir.find({ name: 'db' })[0] as DirNode;
     // eslint-disable-next-line prefer-destructuring
-    dbFile = mainDir.find({ name: 'db.js' })[0];
+    dbFile = mainDir.find({ name: 'db.js' })[0] as FileNode;
   });
 
   it('should be able to get relative path from a parent node', () => {

@@ -7,7 +7,7 @@ export class FileNode extends FileSystemNode {
 
   public ext: string;
 
-  constructor(name, parentDirectory, verbose) {
+  constructor(name, parentDirectory, verbose = false) {
     super(name, 'file', parentDirectory, verbose);
 
     // Get the extention and real name of the file
