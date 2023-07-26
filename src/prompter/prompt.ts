@@ -1,8 +1,39 @@
 import * as is from 'is';
 import logger from '@tps/utilities/logger';
+import { SettingsFilePrompt } from '@tps/types/settings';
 
 export default class Prompt {
-  constructor(prompt = {}) {
+  public name: SettingsFilePrompt['name'];
+
+  public message: SettingsFilePrompt['message'];
+
+  public aliases: SettingsFilePrompt['aliases'];
+
+  public tpsType: SettingsFilePrompt['tpsType'];
+
+  public type: SettingsFilePrompt['type'];
+
+  public default: SettingsFilePrompt['default'];
+
+  public choices: SettingsFilePrompt['choices'];
+
+  public validate: SettingsFilePrompt['validate'];
+
+  public filter: SettingsFilePrompt['filter'];
+
+  public transformer: SettingsFilePrompt['transformer'];
+
+  public when: SettingsFilePrompt['when'];
+
+  public pageSize: SettingsFilePrompt['pageSize'];
+
+  public prefix: SettingsFilePrompt['prefix'];
+
+  public suffix: SettingsFilePrompt['suffix'];
+
+  constructor(prompt: SettingsFilePrompt) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     logger.prompt.info('Prompt %O', prompt);
     this.aliases = prompt.aliases || [];
     this.tpsType = prompt.tpsType || 'package';
@@ -16,7 +47,7 @@ export default class Prompt {
     // inquire props
     this.name = prompt.name;
     this.type = prompt.type;
-    this.message = prompt.message || prompt.question;
+    this.message = prompt.message;
 
     // let defaultValue;
     // const isPrompterDefaultIndex = ['list', 'rawlist', 'expand'].includes(
@@ -46,15 +77,15 @@ export default class Prompt {
     this.suffix = prompt.suffix;
   }
 
-  isData() {
+  isData(): boolean {
     return this.tpsType === 'data';
   }
 
-  isPkg() {
+  isPkg(): boolean {
     return !this.isData();
   }
 
-  answerWith(answers) {
+  answerWith<T>(answers: Record<string, T>): T {
     const canAnswerBy = [this.name, ...this.aliases];
 
     const didAnswerBy = canAnswerBy.find((by) => is.defined(answers[by]));

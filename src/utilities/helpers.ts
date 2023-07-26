@@ -65,8 +65,11 @@ export function couldMatchObj(
  * @param defaultObj - default properties that you want `options` to have
  * @returns - options with all default properties
  */
-export function defaults<T extends object>(options: Partial<T>, defaultObj: T) {
-  const newObj = { ...options };
+export function defaults<T extends object>(
+  options: Partial<T>,
+  defaultObj: T
+): T {
+  const newObj: T = { ...options } as T;
 
   eachObj(defaultObj, (val, key) => {
     if (!hasProp(options, key) || is.undefined(options[key])) {
