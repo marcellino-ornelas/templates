@@ -28,6 +28,7 @@
   "license": "ISC",
   "devDependencies": {
     "@docusaurus/eslint-plugin": "^2.4.1",
+    "@types/dot": "^1.1.5",
     "@types/inquirer": "^9.0.3",
     "@types/is": "^0.0.21",
     "@types/jest": "^29.2.6",

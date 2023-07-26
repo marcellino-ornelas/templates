@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import dot from '@tps/dot';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import DotError from '@tps/errors/dot-error';
+import { FileNode } from './fileSystemTree';
+
+interface FileOptions {
+  force?: boolean;
+}
 
 /*
  * File
@@ -11,7 +17,32 @@ const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 // const FS_FAIL_IF_EXIST = { flags: 'wx' };
 
 class File {
-  constructor(fileNode, opts = {}) {
+  public _name: string;
+
+  public isDot: boolean;
+
+  public relDirectoryFromPkg: string;
+
+  public opts: FileOptions;
+
+  public _dotNameCompiled: dot.RenderFunction;
+
+  public src: string;
+
+  public fileNode: FileNode;
+
+  public fileData: string;
+
+  public fileDataTemplate: (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: Record<string, any>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    defs: any,
+    dest: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ) => any;
+
+  constructor(fileNode: FileNode, opts: FileOptions = {}) {
     let fileName = fileNode.name;
 
     if (DOT_EXTENTION_MATCH.test(fileName)) {
@@ -34,7 +65,8 @@ class File {
       };
       try {
         return this.isDot
-          ? dot.template(fileData, null, defs)(realData)
+          ? // How could we cache this here :thinking: this is happening for every dot file
+            dot.template(fileData, null, defs)(realData)
           : fileData;
       } catch (e) {
         throw new DotError(this.fileNode, e.message);
@@ -42,7 +74,7 @@ class File {
     };
   }
 
-  fileName(data = {}) {
+  fileName(data: Record<string, any> = {}): string {
     let fileName;
     try {
       fileName = this._dotNameCompiled(data);
@@ -52,7 +84,7 @@ class File {
     return this._addDefaultExtention(fileName);
   }
 
-  renderDotFile(dest, fileData) {
+  renderDotFile(dest: string, fileData: string): Promise<string> {
     return Promise.resolve()
       .then(() => this.opts.force && fs.remove(dest))
       .catch((e) => {
@@ -63,7 +95,7 @@ class File {
       .catch((error) => Promise.reject(error));
   }
 
-  renderFile(dest) {
+  renderFile(dest: string): Promise<string> {
     return Promise.resolve()
       .then(() => this.opts.force && fs.remove(dest))
       .then(
@@ -93,7 +125,7 @@ class File {
       );
   }
 
-  _addDefaultExtention(name) {
+  _addDefaultExtention(name: string): string {
     let fileName = name;
 
     // Might need to change
@@ -104,11 +136,11 @@ class File {
     return fileName;
   }
 
-  _buildParentDir(newDest) {
+  _buildParentDir(newDest: string): string {
     return path.join(newDest, this.relDirectoryFromPkg);
   }
 
-  dest(dest, data) {
+  dest(dest: string, data: Record<string, any>): string {
     return path.join(this._buildParentDir(dest), this.fileName(data));
   }
 }
