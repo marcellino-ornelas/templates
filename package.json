@@ -1,6 +1,6 @@
 {
   "name": "templates-mo",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
   "main": "lib/templates/index.js",
   "keywords": [
@@ -24,7 +24,7 @@
   "engines": {
     "node": ">=6.13.1"
   },
-  "homepage": "http://localhost:3000/templates/",
+  "homepage": "https://marcellino-ornelas.github.io/templates/",
   "bin": {
     "tps": "./cli/index.js"
   },
