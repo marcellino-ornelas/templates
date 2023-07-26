@@ -1,12 +1,30 @@
 {
   "name": "templates-mo",
-  "version": "1.0.8",
-  "description": "",
+  "version": "1.0.9",
+  "description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
   "main": "lib/templates/index.js",
+  "keywords": [
+    "template",
+    "templates",
+    "generator",
+    "generate",
+    "react",
+    "typescript",
+    "cli",
+    "library",
+    "starter",
+    "node"
+  ],
+  "author": "Marcellino Ornelas <marcellino.ornelas@gmail.com> (marcellino-ornelas.herokuapp.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcellino-ornelas/templates/issues",
+    "email": "marcellino.ornelas@gmail.com"
+  },
   "engines": {
     "node": ">=6.13.1"
   },
-  "homepage": "https://github.com/marcellino-ornelas/templates",
+  "homepage": "http://localhost:3000/templates/",
   "bin": {
     "tps": "./cli/index.js"
   },
@@ -23,9 +41,6 @@
     "build": "npm run code:prod",
     "test": "npm run code:build && echo 'built' && ./.bin/run-test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@docusaurus/eslint-plugin": "^2.4.1",
     "@types/dot": "^1.1.5",
