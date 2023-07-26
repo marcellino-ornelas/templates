@@ -2,7 +2,7 @@
 import dot from '@tps/dot';
 import * as path from 'path';
 import * as fs from 'fs-extra';
-import DotError from '@tps/errors/dot-error';
+import { DotError } from '@tps/errors';
 import { FileNode } from './fileSystemTree';
 
 interface FileOptions {

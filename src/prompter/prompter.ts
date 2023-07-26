@@ -2,7 +2,10 @@ import * as is from 'is';
 import * as inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
-import { PromptNoPromptFoundError, PromptInvalidAnswers } from '@tps/errors';
+import {
+  PromptNoPromptFoundError,
+  PromptInvalidAnswersError,
+} from '@tps/errors';
 import type { SettingsFilePrompt } from '@tps/types/settings';
 import Prompt from './prompt';
 
@@ -62,7 +65,7 @@ export default class Prompter<TAnswers = Answers> {
 
   setAnswers(answers: Partial<TAnswers>): void {
     if (is.object(answers) && is.empty(answers)) {
-      throw new PromptInvalidAnswers(answers);
+      throw new PromptInvalidAnswersError(answers);
     }
 
     this._getPromptsThatNeedAnswers().forEach((prompt) => {
