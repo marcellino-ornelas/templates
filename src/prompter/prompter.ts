@@ -3,42 +3,56 @@ import * as inquirer from 'inquirer';
 import { hasProp, defaults } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
 import { PromptNoPromptFoundError, PromptInvalidAnswers } from '@tps/errors';
+import type { SettingsFilePrompt } from '@tps/types/settings';
 import Prompt from './prompt';
 
-/**
- * Default options for Templates
- * @typedef  {Object} PrompterOpts
- * @property {boolean} default - Use all default answers
- */
-const DEFAULT_OPTIONS = {
+interface PrompterOptions {
+  /**
+   * Use all default answers
+   */
+  default: boolean;
+}
+
+const DEFAULT_OPTIONS: PrompterOptions = {
   default: false,
 };
 
-/**
- * @class
- */
-export default class Prompter {
-  /**
-   * @param {PrompterOpts} opts - options to pass to templates
-   */
-  constructor(prompts, opts = {}) {
+interface Answers {
+  [prop: string]: any;
+}
+
+export default class Prompter<TAnswers = Answers> {
+  public opts: PrompterOptions;
+
+  public answers: TAnswers;
+
+  public prompts: Prompt[];
+
+  public answered: number;
+
+  constructor(
+    prompts: SettingsFilePrompt[],
+    opts: Partial<PrompterOptions> = {}
+  ) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     logger.prompter.info('Prompts: %n', prompts);
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);
-    this.answers = {};
+    this.answers = {} as TAnswers;
     this.prompts = prompts.map((p) => new Prompt(p));
     this.answered = 0;
   }
 
-  needsAnswers() {
+  needsAnswers(): boolean {
     return this.hasPrompts() && this.prompts.length !== this.answered;
   }
 
-  hasPrompts() {
+  hasPrompts(): boolean {
     return !!this.prompts.length;
   }
 
-  getPrompt(name) {
+  getPrompt(name: string): Prompt {
     const prompt = this.prompts.find((p) => p.name === name);
 
     if (!prompt) throw new PromptNoPromptFoundError(name);
@@ -46,7 +60,7 @@ export default class Prompter {
     return prompt;
   }
 
-  setAnswers(answers) {
+  setAnswers(answers: Partial<TAnswers>): void {
     if (is.object(answers) && is.empty(answers)) {
       throw new PromptInvalidAnswers(answers);
     }
@@ -59,25 +73,25 @@ export default class Prompter {
     });
   }
 
-  setAnswer(name, answer) {
+  setAnswer(name: string, answer: any): void {
     if (!hasProp(this.answers, name)) {
       this.answered += 1;
     }
     this.answers[name] = answer;
   }
 
-  _getPromptsThatNeedAnswers() {
+  _getPromptsThatNeedAnswers(): Prompt[] {
     return this.prompts.filter((p) => !this.hasAnswerToPrompt(p));
   }
 
-  hasAnswerToPrompt(promptOrName, answers = this.answers) {
+  hasAnswerToPrompt(promptOrName, answers = this.answers): boolean {
     const prompt = is.string(promptOrName)
       ? this.getPrompt(promptOrName)
       : promptOrName;
     return is.defined(answers[prompt.name]);
   }
 
-  getAnswers() {
+  getAnswers(): Promise<TAnswers> {
     return Promise.resolve()
       .then(() => {
         if (!this.needsAnswers()) return;
@@ -91,13 +105,14 @@ export default class Prompter {
 
           this.setAnswers(allDefaults);
         } else {
-          return inquirer.prompt(promptsLeft).then((newAnswers) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          return (inquirer as any).prompt(promptsLeft).then((newAnswers) => {
             this.setAnswers(newAnswers);
           });
         }
       })
       .then(() => {
-        const answers = {};
+        const answers: TAnswers = {} as TAnswers;
 
         this.prompts.forEach((prompt) => {
           const { name } = prompt;
