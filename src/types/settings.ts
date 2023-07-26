@@ -1,11 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnswersHash = Record<string, any>;
-
+// eslint-disable-next-line no-shadow
 export enum SettingsFilePromptTpsType {
   data = 'data',
   package = 'package',
 }
 
+// eslint-disable-next-line no-shadow
 export enum SettingsFilePromptType {
   confirm = 'confirm',
   input = 'input',
@@ -14,6 +13,9 @@ export enum SettingsFilePromptType {
   password = 'password',
   checkbox = 'checkbox',
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnswersHash = Record<string, any>;
 
 export interface SettingsFilePrompt {
   name: string;
