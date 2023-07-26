@@ -7,7 +7,7 @@
 		"moduleResolution": "node",
 		"module": "CommonJS",
 		"target": "es5",
-		"baseUrl": "./",
+		"baseUrl": ".",
 		"paths": {
 			"@tps/*": ["./src/*"],
 			"@test/*": ["./__tests__/*"]

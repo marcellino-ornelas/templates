@@ -26,17 +26,17 @@ export interface SettingsFilePrompt {
 
   type: keyof typeof SettingsFilePromptType;
 
-  choices: string[];
+  choices?: string[];
 
-  aliases: string[];
+  aliases?: string[];
 
-  pageSize: number;
+  pageSize?: number;
 
-  prefix: string;
+  prefix?: string;
 
-  suffix: string;
+  suffix?: string;
 
-  default:
+  default?:
     | string
     | number
     | boolean
@@ -45,16 +45,16 @@ export interface SettingsFilePrompt {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | ((answers: AnswersHash) => any);
 
-  validate: (
+  validate?: (
     input: string,
     answers: AnswersHash
   ) => (boolean | string) | Promise<boolean | string>;
 
-  filter: (input: string) => Promise<string> | string;
+  filter?: (input: string) => Promise<string> | string;
 
-  transformer: (input: string) => string | Promise<string>;
+  transformer?: (input: string) => string | Promise<string>;
 
-  when: boolean | ((answers: AnswersHash) => boolean);
+  when?: boolean | ((answers: AnswersHash) => boolean);
 }
 
 export interface SettingsFile {
