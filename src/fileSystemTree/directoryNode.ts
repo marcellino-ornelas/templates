@@ -16,7 +16,7 @@ type FindKeyPattern = Partial<{
 }>;
 
 export class DirectoryNode extends FileSystemNode {
-  constructor(name, parentDirNode, verbose) {
+  constructor(name: string, parentDirNode = null, verbose = false) {
     let parentDir = parentDirNode;
     if (name && !parentDirNode) {
       parentDir = path.dirname(name);

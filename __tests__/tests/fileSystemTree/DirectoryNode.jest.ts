@@ -13,7 +13,7 @@ const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
 const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('[FileSystemTree] DirectoryNode:', () => {
-  let mainDir;
+  let mainDir: DirNode;
 
   beforeAll(() => {
     mainDir = new DirNode('main', PATH_TO_TEMPLATES);

@@ -13,7 +13,7 @@ const PATH_TO_TEMPLATES = path.join(TESTING_TPS, 'testing');
 const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 
 describe('[FileSystemTree] FileNode:', () => {
-  let indexFile;
+  let indexFile: FileNode;
   const indexFileName = 'index.js.dot';
   const pathToFile = path.join(PATH_TO_MAIN_DIRECORY, indexFileName);
 

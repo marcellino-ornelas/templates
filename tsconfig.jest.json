@@ -3,6 +3,7 @@
 	"compilerOptions": {
 		"module": "ES6",
 		"declaration": false,
+		"baseUrl": ".",
 		"paths": {
 			"@tps/*": ["./src/*"],
 			"@test/*": ["./__tests__/*"]
