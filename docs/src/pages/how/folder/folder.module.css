@@ -1,0 +1,29 @@
+.folderChildren {
+	margin-left: 50px;
+}
+
+
+.folder {
+
+}
+
+.fileRow {
+	display: flex;
+	align-items: center;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.fileSystem * {
+	fill: darkgrey;
+}
+
+.fileName {
+	font-size: 2em;
+	margin-top: -5px;
+	color: darkgrey;
+}
+
+.folderSlash {
+	margin-left: -13px;
+}

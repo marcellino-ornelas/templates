@@ -1,0 +1,20 @@
+.howContainer {
+	/* display: flex; */
+	padding-top: 4rem;
+	padding-bottom: 4rem;
+	font-family: 'Ubuntu Mono', monospace;
+}
+
+.howHeader {
+	font-family: 'Ubuntu Mono', monospace;
+}
+
+
+.howRow {
+	display: flex
+}
+
+.howCol {
+	width: 50%
+}
+

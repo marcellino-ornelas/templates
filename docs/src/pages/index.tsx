@@ -3,6 +3,8 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import { How } from './how';
+
 // import HomepageFeatures from '@site/src/components/HomepageFeatures';
 
 import styles from './index.module.css';
@@ -53,6 +55,8 @@ const Home = (): JSX.Element => {
         </div>
 
         {/* <HomepageFeatures /> */}
+
+        <How />
       </main>
     </Layout>
   );

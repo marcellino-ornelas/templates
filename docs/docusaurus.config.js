@@ -161,6 +161,9 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+  stylesheets: [
+    'https://fonts.googleapis.com/css2?family=Lato&family=Ubuntu+Mono&display=swap',
+  ],
   themes: ['@docusaurus/theme-mermaid'],
 };
 

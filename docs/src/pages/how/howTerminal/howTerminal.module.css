@@ -1,0 +1,48 @@
+
+.terminal {
+	width: 100%;
+	height: 300px;
+	background-color: #efefef;
+	display: flex;
+	flex-direction: column;
+	border-radius: 10px;
+	border: solid #00000042 1px;
+}
+
+.terminalHeader {
+	display: flex;
+	padding: 10px;
+}
+
+.terminalCircle {
+	width: 10px;
+	height: 10px;
+	border-radius: 100%;
+	
+	margin-right: 5px;
+}
+
+.terminalCircle:nth-child(1) {
+	background-color: red;
+}
+.terminalCircle:nth-child(2) {
+	background-color: gold;
+}
+.terminalCircle:nth-child(3) {
+	background-color: green;
+}
+
+.terminalBody {
+	color: lightgrey;
+	flex-grow: 1;
+	background-color: #104654;
+	/* background-color: #072932; */
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	padding: 8px;
+}
+
+.terminalCarrot {
+	color: hotpink;
+	margin-right: 5px;
+}
