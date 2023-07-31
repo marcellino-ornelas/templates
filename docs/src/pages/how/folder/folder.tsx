@@ -29,7 +29,6 @@ export const Folder = ({
       ? {
           from: { opacity: 0, x: -30, y: -30 },
           to: { opacity: startOption, x: 0, y: 0 },
-          //   delay: delay,
           delay: 1250 + (delay || 0),
           config: {
             duration: 1000,
@@ -55,7 +54,6 @@ export const Folder = ({
         start={start}
         animation={animation}
         onEnd={() => {
-          //   if (debug) console.log('debug: ended');
           setEnd(true);
         }}
       />
@@ -64,8 +62,8 @@ export const Folder = ({
           {trails.map((style, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <animated.div key={`${name}_${i}`} style={style}>
-              {React.cloneElement(items[i], {
-                delay: items[i]?.props?.delay || 0,
+              {React.cloneElement(items[i] as any, {
+                delay: (items[i] as any)?.props?.delay || 0,
                 start,
                 animation,
               })}

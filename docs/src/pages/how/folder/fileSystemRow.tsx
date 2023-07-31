@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import FileSystemIcon from '@site/static/img/file-system.svg';
 import FolderSlashIcon from '@site/static/img/folder-slash.svg';
 import { useType } from '@site/src/hooks/useType';
@@ -13,7 +13,6 @@ interface FileSystemRowProps {
   onEnd?: () => void;
 }
 
-// eslint-disable-next-line arrow-body-style
 export const FileSystemRow = ({
   name,
   animation = true,
@@ -25,7 +24,6 @@ export const FileSystemRow = ({
 }: FileSystemRowProps) => {
   const { output, ended, started } = useType(name, {
     animation,
-    // interval,
     start,
     slash,
     delay,
