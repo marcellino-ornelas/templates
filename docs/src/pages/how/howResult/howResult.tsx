@@ -13,10 +13,13 @@ export const HowResult = () => {
         <div className={`${howStyles.howContainer} container`}>
           <div className={styles.resultDescriptionContainer}>
             <h4 className={howStyles.howStep}>Step 3</h4>
-            <h3 className={howStyles.howHeader}>Create a new Instance</h3>
+            <h3 className={howStyles.howHeader}>Watch the Magic Unfold</h3>
             <p>
-              Generate new instances of you template on the fly with a simple
-              command
+              Experience the magic as your customized template generates an
+              out-of-the-box running project effortlessly. Your new template
+              instance will be rendered, setting up an entire file structure,
+              dependencies, and even providing a fully functional project that
+              you can run immediately.
             </p>
           </div>
 

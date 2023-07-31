@@ -19,8 +19,10 @@ export const HowTerminal = () => {
             <h4 className={howStyles.howStep}>Step 2</h4>
             <h3 className={howStyles.howHeader}>Create a new Instance</h3>
             <p>
-              Generate new instances of you template on the fly with a simple
-              command
+              Create a new instance of your template by answering prompts and
+              providing necessary information for customization. Tailor the
+              template to suit your specific project requirements without the
+              need for any external tools.
             </p>
           </div>
           <div className={howStyles.howCol}>
