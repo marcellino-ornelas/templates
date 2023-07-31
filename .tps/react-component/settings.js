@@ -4,11 +4,11 @@
 module.exports = {
   prompts: [
     {
-      name: 'extention',
+      name: 'extension',
       aliases: ['e', 'ext'],
       type: 'input',
       tpsType: 'data',
-      message: 'What type of extention do you want for your component?',
+      message: 'What type of extension do you want for your component?',
       default: 'js',
     },
     {
@@ -24,7 +24,7 @@ module.exports = {
       aliases: ['z'],
       tpsType: 'data',
       type: 'input',
-      message: 'What type of css extention would you like?',
+      message: 'What type of css extension would you like?',
       when: (answers) => {
         return !!answers.css;
       },
@@ -43,7 +43,7 @@ module.exports = {
       aliases: ['y'],
       tpsType: 'data',
       type: 'input',
-      message: 'What type of test extention would you like?',
+      message: 'What type of test extension would you like?',
       when: (answers) => {
         return !!answers.test;
       },
