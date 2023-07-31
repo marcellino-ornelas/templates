@@ -1,11 +1,11 @@
 .howContainer {
 	padding-top: 4rem;
 	padding-bottom: 4rem;
-	font-family: 'Ubuntu Mono', monospace;
+	font-family: monospace;
 }
 
 .howHeader {
-	font-family: 'Ubuntu Mono', monospace;
+	font-family: monospace;
 }
 
 .howRow {
@@ -17,7 +17,7 @@
 }
 
 .howStep {
-	font-family: 'Ubuntu Mono', monospace;
+	font-family: monospace;
 	color: grey;
 	margin-top: 5px;
 	margin-bottom: 5px;
