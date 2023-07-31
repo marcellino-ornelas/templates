@@ -16,6 +16,12 @@
   }
 }
 
+@media screen and (max-width: 400px) {
+	.heroBanner {
+	  padding: 1rem;
+	}
+  }
+
 .buttons {
   display: flex;
   align-items: center;
@@ -23,9 +29,10 @@
 }
 
 .introduction {
-	padding-top: 2rem;
-	padding-bottom: 2rem;
+	padding-top: 4em;
+	padding-bottom: 4em;
 	text-align: justify;
+	font-size: 1.1em;
 }
 
 

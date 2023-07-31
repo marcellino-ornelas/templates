@@ -23,6 +23,7 @@ const config = {
     'consistent-return': IGNORE,
     'class-methods-use-this': IGNORE,
     'no-use-before-define': IGNORE,
+    'arrow-body-style': IGNORE,
     'func-names': [ERROR, 'as-needed'],
     'no-plusplus': [ERROR, { allowForLoopAfterthoughts: true }],
     'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
@@ -32,6 +33,7 @@ const config = {
       ERROR,
       {
         ts: 'never',
+        svg: 'always',
       },
     ],
   },

@@ -1,0 +1,22 @@
+
+.templateContainer {
+	background-color: #f8f8f8;
+	min-height: 500px;
+}
+
+.header {
+	font-family: monospace;
+	position: relative;
+	font-size: 2rem;
+	margin-bottom: 1em;
+}
+
+@media screen and (max-width: 996px) {
+	.templateContainer {
+		min-height: 680px;
+	}
+
+	.reverse {
+		order: 2;
+	}
+}

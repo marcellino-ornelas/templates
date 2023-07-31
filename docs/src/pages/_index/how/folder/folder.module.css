@@ -1,0 +1,48 @@
+.folderChildren {
+	margin-left: 50px;
+}
+
+
+.folder {
+
+}
+
+.fileRow {
+	display: flex;
+	align-items: center;
+	overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+.fileSystem * {
+	fill: darkgrey;
+}
+
+.fileName {
+	font-size: 2em;
+	margin-top: -5px;
+	color: darkgrey;
+}
+
+.folderSlash {
+	margin-left: -13px;
+}
+
+@media screen and (max-width: 500px) {
+	.fileName {
+		font-size: 1.3em;
+	}
+
+	.fileSystem {
+		height: 30px;
+		width: 30px;
+	}
+
+	.folderSlash {
+		margin-left: -5px;
+	}
+
+	.folderChildren {
+		margin-left: 25px;
+	}
+}
