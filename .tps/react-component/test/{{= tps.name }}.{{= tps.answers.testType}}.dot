@@ -5,4 +5,4 @@ describe("{{= tps.name }}", () => {
 	it("first test", () => {
 		<{{= tps.name}} />
 	});
-})
+});
