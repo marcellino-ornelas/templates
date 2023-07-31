@@ -16,6 +16,7 @@ export const HowTerminal = () => {
       <div className={`${howStyles.howContainer} container`}>
         <div className={howStyles.howRow}>
           <div className={howStyles.howCol}>
+            <h4 className={howStyles.howStep}>Step 2</h4>
             <h3 className={howStyles.howHeader}>Create a new Instance</h3>
             <p>
               Generate new instances of you template on the fly with a simple

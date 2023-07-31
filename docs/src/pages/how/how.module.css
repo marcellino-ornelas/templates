@@ -9,12 +9,17 @@
 	font-family: 'Ubuntu Mono', monospace;
 }
 
-
 .howRow {
 	display: flex
 }
 
 .howCol {
-	width: 50%
+	width: 50%;
 }
 
+.howStep {
+	font-family: 'Ubuntu Mono', monospace;
+	color: grey;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

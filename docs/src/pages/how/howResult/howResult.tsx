@@ -11,7 +11,15 @@ export const HowResult = () => {
     <Waypoint bottomOffset={500} onEnter={() => setStart(true)}>
       <div className={styles.resultContainer}>
         <div className={`${howStyles.howContainer} container`}>
-          <h2 className={howStyles.howHeader}>Creating ... </h2>
+          <div className={styles.resultDescriptionContainer}>
+            <h4 className={howStyles.howStep}>Step 3</h4>
+            <h3 className={howStyles.howHeader}>Create a new Instance</h3>
+            <p>
+              Generate new instances of you template on the fly with a simple
+              command
+            </p>
+          </div>
+
           <div className={howStyles.howRow}>
             <div className={howStyles.howCol}>
               <Folder name="express-app" animation={false}>

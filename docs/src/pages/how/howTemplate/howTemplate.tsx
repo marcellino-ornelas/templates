@@ -7,6 +7,7 @@ export const HowTemplate = () => {
   return (
     <div className={styles.templateContainer}>
       <div className={`${howStyles.howContainer} container`}>
+        <h2 className={`${styles.header}`}>How it works</h2>
         <div className={howStyles.howRow}>
           <div className={howStyles.howCol}>
             <Folder name="express-app">
@@ -20,6 +21,7 @@ export const HowTemplate = () => {
             </Folder>
           </div>
           <div className={howStyles.howCol}>
+            <h4 className={howStyles.howStep}>Step 1</h4>
             <h3 className={howStyles.howHeader}>Create a Template</h3>
             <p>
               Create a collection of file and folder and place it into a
