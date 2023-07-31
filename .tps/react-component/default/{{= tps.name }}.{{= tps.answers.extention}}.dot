@@ -6,5 +6,5 @@ export const {{= tps.name }} = ({}) => {
 		<div>
 			{/* ... */}
 		</div>
-	)
-}
+	);
+};
