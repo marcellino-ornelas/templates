@@ -50,11 +50,12 @@
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
-    "doctoc": "1.4.0",
+    "babel-eslint": "10.0.3",
     "eslint": "^8.32.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "8.6.0",
     "eslint-import-resolver-babel-module": "5.3.2",
+    "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "2.27.5",
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-jsx-a11y": "6.7.1",
@@ -65,14 +66,11 @@
     "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
-    "acorn": "7.1.0",
     "ansi-colors": "4.1.1",
-    "babel-eslint": "10.0.3",
     "bluebird": "3.5.5",
     "cosmiconfig": "^8.0.0",
     "debug": "4.1.1",
     "dot": "1.1.2",
-    "eslint-import-resolver-typescript": "^3.5.3",
     "filenamify": "2.1.0",
     "find-up": "3.0.0",
     "fs-extra": "7.0.1",
@@ -83,7 +81,6 @@
     "strip-ansi": "6.0.0",
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.4",
-    "valid-filename": "2.0.1",
     "yargs": "13.2.1"
   }
 }
