@@ -1,4 +1,8 @@
 
+.terminalSpacing {
+	padding-right: 30px;
+}
+
 .terminal {
 	width: 100%;
 	height: 300px;
@@ -63,3 +67,12 @@
 	color: darkgrey;
 	margin-right: 5px;
 }
+
+
+@media screen and (max-width: 996px) {
+	.terminalSpacing {
+		padding-right: 0px;
+	}
+}
+
+

@@ -23,7 +23,7 @@ export const HowTerminal = () => {
     <Waypoint bottomOffset={500} onEnter={() => setStart(true)}>
       <div className={`${howStyles.howContainer} container`}>
         <div className={howStyles.howRow}>
-          <div className={howStyles.howCol}>
+          <div className={`${howStyles.howCol} ${styles.terminalSpacing}`}>
             <h4 className={howStyles.howStep}>Step 2</h4>
             <h3 className={howStyles.howHeader}>Create a new Instance</h3>
             <p>
