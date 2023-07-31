@@ -25,25 +25,29 @@ export const HowResult = () => {
 
           <div className={howStyles.howRow}>
             <div className={`${howStyles.howCol} ${styles.folder1}`}>
-              <Folder name="express-app" animation={false}>
+              <Folder
+                name="express-app"
+                animation={false}
+                key="result_template"
+              >
                 <Folder name="controllers" />
 
-                <FileSystemRow name="server.js" />
+                <FileSystemRow name="eslint.config.js" />
 
                 <FileSystemRow name="package.json" />
 
-                <FileSystemRow name="eslint.config.js" />
+                <FileSystemRow name="server.js.dot" />
               </Folder>
             </div>
             <div className={howStyles.howCol}>
-              <Folder name="food-delivery" start={start}>
+              <Folder name="food-delivery" start={start} key="result_answer">
                 <Folder name="controllers" />
 
-                <FileSystemRow name="server.js" />
+                <FileSystemRow name="eslint.config.js" />
 
                 <FileSystemRow name="package.json" />
 
-                <FileSystemRow name="eslint.config.js" />
+                <FileSystemRow name="server.js" />
               </Folder>
             </div>
           </div>
