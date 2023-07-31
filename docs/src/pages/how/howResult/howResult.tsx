@@ -8,7 +8,7 @@ export const HowResult = () => {
   const [start, setStart] = useState(false);
 
   return (
-    <Waypoint bottomOffset={500} onEnter={() => setStart(true)}>
+    <Waypoint bottomOffset={600} onEnter={() => setStart(true)}>
       <div className={styles.resultContainer}>
         <div className={`${howStyles.howContainer} container`}>
           <div className={styles.resultDescriptionContainer}>
@@ -24,7 +24,7 @@ export const HowResult = () => {
           </div>
 
           <div className={howStyles.howRow}>
-            <div className={howStyles.howCol}>
+            <div className={`${howStyles.howCol} ${styles.folder1}`}>
               <Folder name="express-app" animation={false}>
                 <Folder name="controllers" />
 

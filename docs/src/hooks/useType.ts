@@ -17,6 +17,7 @@ export const useType = (
     interval = 100,
     slash = false,
     delay = null,
+    debug = false,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onEnd = () => {},
   }: useTypeProps = {}
@@ -30,12 +31,12 @@ export const useType = (
   const isWordOverAndOne = index > word.length;
 
   useEffect(() => {
-    if (animation) setStartAnimation(start);
+    if (animation && !delay) setStartAnimation(start);
   }, [start, animation]);
 
   useEffect(() => {
     if (!animation) return;
-    if (start !== null) return;
+    if (!start) return;
 
     const id = setTimeout(() => {
       setStartAnimation(true);

@@ -7,8 +7,16 @@ import styles from './howTerminal.module.css';
 export const HowTerminal = () => {
   const [start, setStart] = useState(false);
 
-  const { output } = useType('tps express-app food-delivery', {
+  const { output, ended } = useType('tps express-app food-delivery', {
     start,
+  });
+
+  const { output: outputPrompt1, ended: prompt1Ended } = useType('3000', {
+    start: ended,
+  });
+
+  const { output: outputPrompt2 } = useType('y', {
+    start: prompt1Ended,
   });
 
   return (
@@ -33,10 +41,34 @@ export const HowTerminal = () => {
                 <div className={styles.terminalCircle} />
               </div>
               <div className={styles.terminalBody}>
-                <p>
+                <p className={styles.terminalLine}>
                   <span className={styles.terminalCarrot}>&gt;</span>
                   <span className={styles.terminalCommand}>{output}</span>
                 </p>
+
+                {ended && (
+                  <p className={styles.terminalLine}>
+                    <span className={styles.terminalPromptSign}>?</span>
+                    <span className={styles.terminalPromptQuestion}>
+                      What port would you like to use?
+                    </span>
+                    <span className={styles.terminalCommand}>
+                      {outputPrompt1}
+                    </span>
+                  </p>
+                )}
+                {prompt1Ended && (
+                  <p className={styles.terminalLine}>
+                    <span className={styles.terminalPromptSign}>?</span>
+                    <span className={styles.terminalPromptQuestion}>
+                      Would you like to add eslint?
+                    </span>
+                    <span className={styles.terminalPromptDefault}>(Y/n)</span>
+                    <span className={styles.terminalCommand}>
+                      {outputPrompt2}
+                    </span>
+                  </p>
+                )}
               </div>
             </div>
           </div>

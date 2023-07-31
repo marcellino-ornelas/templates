@@ -27,3 +27,22 @@
 .folderSlash {
 	margin-left: -13px;
 }
+
+@media screen and (max-width: 500px) {
+	.fileName {
+		font-size: 1.3em;
+	}
+
+	.fileSystem {
+		height: 30px;
+		width: 30px;
+	}
+
+	.folderSlash {
+		margin-left: -5px;
+	}
+
+	.folderChildren {
+		margin-left: 25px;
+	}
+}

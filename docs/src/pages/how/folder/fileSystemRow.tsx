@@ -32,10 +32,6 @@ export const FileSystemRow = ({
     onEnd,
   });
 
-  if (!animation) {
-    console.log('hello', animation, output, ended, started);
-  }
-
   return (
     <div className={styles.fileRow}>
       {started && <FileSystemIcon className={styles.fileSystem} />}

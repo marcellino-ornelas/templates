@@ -10,3 +10,13 @@
 	font-size: 2rem;
 	margin-bottom: 1em;
 }
+
+@media screen and (max-width: 996px) {
+	.templateContainer {
+		min-height: 680px;
+	}
+
+	.reverse {
+		order: 2;
+	}
+}

@@ -23,3 +23,14 @@
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
+
+@media screen and (max-width: 996px) {
+	.howRow {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.howCol {
+		width: 100%;
+	}
+}

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { FileSystemRow, Folder } from '../folder';
+import React, { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
+import { FileSystemRow, Folder } from '../folder';
 import howStyles from '../how.module.css';
 import styles from './howTemplate.module.css';
 
@@ -8,12 +8,12 @@ export const HowTemplate = () => {
   const [start, setStart] = useState(false);
 
   return (
-    <Waypoint bottomOffset={300} onEnter={() => setStart(true)}>
+    <Waypoint bottomOffset={500} onEnter={() => setStart(true)}>
       <div className={styles.templateContainer}>
         <div className={`${howStyles.howContainer} container`}>
           <h2 className={`${styles.header}`}>How it works</h2>
-          <div className={howStyles.howRow}>
-            <div className={howStyles.howCol}>
+          <div className={`${howStyles.howRow}`}>
+            <div className={`${howStyles.howCol} ${styles.reverse}`}>
               <Folder name="express-app" start={start}>
                 <Folder name="controllers" />
 

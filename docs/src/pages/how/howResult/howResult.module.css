@@ -7,3 +7,14 @@
 .resultDescriptionContainer {
 	margin-bottom: 1.5em;
 }
+
+/** In mobile view, reduce the padding */
+@media screen and (max-width: 996px) {
+	.folder1 {
+		margin-bottom: 1em;
+	}
+	
+	.resultContainer {
+		min-height: 820px;
+	}
+}
