@@ -25,3 +25,31 @@ tps copy react-component
 ```bash
 tps react-component Nav
 ```
+
+### Configure your react component
+
+Tired of typing in your same responses every time? Initialize your repo with
+templates and you can configure the template to fit your projects needs without
+having to answer every prompt.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+lets say your project always uses a `tsx` extention for its components. You can
+add `tsx` to the `extension` answer.
+
+```json title=".tps/.tpsrc"
+{
+  "react-component": {
+    "answers": {
+      "extension": "tsx"
+    }
+  }
+}
+```
+
+Now templates will no longer prompt you for this question and always create your
+component with a `tsx` extension.
