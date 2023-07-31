@@ -5,7 +5,7 @@ module.exports = {
   prompts: [
     {
       name: 'extension',
-      aliases: ['e', 'ext'],
+      aliases: ['e', 'ext', 'extention'],
       type: 'input',
       tpsType: 'data',
       message: 'What type of extension do you want for your component?',
