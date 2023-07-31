@@ -1,0 +1,8 @@
+import React from 'react';
+import { {{= tps.name}} } from './{{= tps.name}}';
+
+describe("{{= tps.name }}", () => {
+	it("first test", () => {
+		<{{= tps.name}} />
+	});
+});

@@ -1,5 +1,0 @@
-describe("{{= tps.name }}", () => {
-	it("first test", () => {
-
-	});
-})
