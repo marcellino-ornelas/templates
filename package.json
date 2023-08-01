@@ -15,6 +15,10 @@
     "starter",
     "node"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marcellino-ornelas/templates.git"
+  },
   "author": "Marcellino Ornelas <marcellino.ornelas@gmail.com> (marcellino-ornelas.herokuapp.com)",
   "license": "ISC",
   "bugs": {
