@@ -1,10 +1,8 @@
-/* eslint-disable jest/no-conditional-expect */
 /*
  * Modules
  */
-import * as fs from 'fs-extra';
 import Playground from '@test/utilities/playground';
-import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
+import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 
 /*
