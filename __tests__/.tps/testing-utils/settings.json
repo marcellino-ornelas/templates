@@ -2,12 +2,12 @@
 	"prompts": [
 		{
 			"name": "message",
-			"typeType": "data",
+			"tpsType": "data",
 			"type": "input"
 		},
 		{
 			"name": "fn",
-			"typeType": "data",
+			"tpsType": "data",
 			"type": "input"
 		}
 	]

@@ -7,7 +7,6 @@ import {
   DirectoryNotFoundError,
   RequiresTemplateError,
 } from '@tps/errors';
-import { template } from 'dot';
 import * as path from 'path';
 
 /**
