@@ -1,0 +1,31 @@
+export {
+  camelCase,
+  capitalCase,
+  constantCase,
+  dotCase,
+  headerCase,
+  noCase,
+  paramCase,
+  pascalCase,
+  pathCase,
+  sentenceCase,
+  snakeCase,
+} from 'change-case';
+
+export {
+  pluralize,
+  singularize,
+  inflect,
+  camelize,
+  underscore,
+  humanize,
+  capitalize,
+  dasherize,
+  titleize,
+  demodulize,
+  tableize,
+  classify,
+  foreignKey,
+  ordinalize,
+  transform,
+} from 'inflection';
