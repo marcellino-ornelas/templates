@@ -22,6 +22,7 @@ import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
 import dot from '@tps/dot';
 import { cosmiconfigSync } from 'cosmiconfig';
+import * as utils from './utils';
 
 interface TemplateOptions {
   /**
@@ -322,6 +323,8 @@ export class Templates {
           packages: this.packagesUsed,
           template: this.template,
           answers: this.hasPrompts() ? this._prompts.answers : {},
+          utils,
+          u: utils,
         };
       })
       .then(() => {

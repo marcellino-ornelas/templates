@@ -1,0 +1,14 @@
+{
+	"prompts": [
+		{
+			"name": "message",
+			"tpsType": "data",
+			"type": "input"
+		},
+		{
+			"name": "fn",
+			"tpsType": "data",
+			"type": "input"
+		}
+	]
+}
