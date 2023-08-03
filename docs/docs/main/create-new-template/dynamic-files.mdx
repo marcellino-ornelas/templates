@@ -505,3 +505,41 @@ const {{= tps.name}} = (props) => {
 Don't remember how to use packages? Refresh your mind [here](./packages)
 
 :::
+
+### utils
+
+```text
+{{= tps.utils }}
+```
+
+Object containing utility functions to help your template making more pleasent.
+We incorporate utiliy functions from
+[change-case](https://www.npmjs.com/package/change-case) and
+[inflection](https://www.npmjs.com/package/inflection).
+
+To see a full list of functions check out the
+[tps context utils API](../../api/template-context#utils).
+
+<Example>
+
+```bash title="cli"
+tps react-component nav
+```
+
+<Dot tps={{name: "nav", packages: ['default']}} lang="js">
+
+```text
+import React from react;
+{{? tps.utils.capitalize(tps.name)}}import "{{= tps.name}}.css";
+{{?}}
+const {{= tps.name}} = (props) => {
+	return (
+		<div></div>
+	)
+}
+
+```
+
+</Dot>
+
+</Example>
