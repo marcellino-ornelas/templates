@@ -3,7 +3,7 @@ import { defaults } from '@tps/utilities/helpers';
 import * as path from 'path';
 import { MAIN_DIR } from '@tps/utilities/constants';
 
-const cliPath = path.join(MAIN_DIR, 'cli/index.js');
+const cliPath = path.join(MAIN_DIR, 'lib/cli/index.js');
 
 const TPS_CLI_DEFAULT_OPTIONS = {
   verbose: false,

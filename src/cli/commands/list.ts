@@ -4,15 +4,14 @@ import is from 'is';
 import * as TPS from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 
-const removeRcFile = (arr: string[]) => {
-  const i = arr.indexOf('.tpsrc');
+interface ListArgv {
+  global: boolean;
+  local: boolean;
+  default: boolean;
+}
 
-  if (i === -1) {
-    return arr;
-  }
-  const copy = arr.concat();
-  copy.splice(i, 1);
-  return copy;
+const removeRcFile = (arr: string[]) => {
+  return arr.filter((item) => item !== '.tpsrc');
 };
 
 const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];
@@ -73,4 +72,4 @@ export default {
       }
     }
   },
-} as CommandModule;
+} as CommandModule<object, ListArgv>;

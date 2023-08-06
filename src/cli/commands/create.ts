@@ -1,4 +1,3 @@
-// import CREATE_OPTIONS from '../options/create.json';
 import { CommandModule } from 'yargs';
 import { createHandler, options } from '../utils/create';
 
