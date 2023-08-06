@@ -1,4 +1,4 @@
-import * as Templates from '@tps/templates';
+import Templates from '@tps/templates';
 import * as path from 'path';
 import { TPS_FOLDER } from '@tps/utilities/constants';
 
