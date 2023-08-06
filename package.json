@@ -30,7 +30,7 @@
   },
   "homepage": "https://marcellino-ornelas.github.io/templates/",
   "bin": {
-    "tps": "./cli/index.js"
+    "tps": "./lib/cli/index.js"
   },
   "scripts": {
     "code:build": "ttsc",
