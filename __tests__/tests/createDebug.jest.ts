@@ -4,7 +4,7 @@
 
 import CreateDebug, { logFunctions } from '@tps/utilities/logger/createDebug';
 import { debug } from 'debug';
-import * as stripAnsi from 'strip-ansi';
+import stripAnsi from 'strip-ansi';
 
 /*
  * Constants
@@ -162,7 +162,7 @@ describe('CreateDebug', () => {
         CreateDebug.prototype._resync.call(createDebug)
       );
 
-      createDebug = new CreateDebug('test', true);
+      createDebug = new CreateDebug('test');
       debug.enable('test');
 
       expect(createDebug.isEnabled()).toBeTruthy();
@@ -195,7 +195,7 @@ describe('CreateDebug', () => {
 
     beforeAll(() => {
       // Do not show colors when testing
-      debug.useColors = () => false;
+      (debug as any).useColors = () => false;
 
       // Replace console.log with our mocked version.
       // The point of this is to save all logs to a variable so we can make assertions on it.
@@ -246,7 +246,7 @@ describe('CreateDebug', () => {
     it('should enable child logger `log` by default even when enabled after', () => {
       // disable logging
       debug.enable('test');
-      createDebug = new CreateDebug('test', true);
+      createDebug = new CreateDebug('test');
 
       expect(createDebug.isEnabled()).toBeTruthy();
 

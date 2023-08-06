@@ -2,7 +2,7 @@ import debug from 'debug';
 import * as pjson from 'prettyjson-256';
 import { defaults } from '@tps/utilities/helpers';
 import * as is from 'is';
-import * as colors from 'ansi-colors';
+import colors from 'ansi-colors';
 
 (process.env as any).DEBUG_COLORS = false;
 
@@ -94,7 +94,7 @@ debug.formatters.s = (v) => colors.white(v);
 debug.log = (string, ...rest) => {
   const filteredString = string.replace(TITLES_RE, (matched) => {
     const titleName = matched.slice(1);
-    return `\u001b[0m ${colors[titleName](titleName)}`;
+    return `\u001b[0m ${colors?.[titleName](titleName)}`;
   });
   console.log(filteredString, ...rest);
 };

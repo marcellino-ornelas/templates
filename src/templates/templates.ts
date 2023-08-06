@@ -24,7 +24,7 @@ import dot from '@tps/dot';
 import { cosmiconfigSync } from 'cosmiconfig';
 import * as utils from './utils';
 
-interface TemplateOptions {
+export interface TemplateOptions {
   /**
    * Don't load local `.tps/` config folder
    */
@@ -96,6 +96,8 @@ export class Templates {
   public opts: TemplateOptions;
 
   public tpsPath: string;
+
+  public src: string;
 
   constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
     if (!templateName || !is.string(templateName)) {
@@ -266,9 +268,9 @@ export class Templates {
    */
   render(
     dest: string,
-    buildPaths: string | string[],
+    buildPaths?: string | string[],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: Record<string, any> = {}
+    data?: Record<string, any> = {}
   ) {
     let dataForTemplating;
     let buildInDest = false;
