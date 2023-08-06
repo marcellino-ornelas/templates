@@ -7,6 +7,4 @@ const logger = {
   cli: new CreateDebug('tps:cli'),
 };
 
-/* legacy support */
 export default logger;
-// export default logger;

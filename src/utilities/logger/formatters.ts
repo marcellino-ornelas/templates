@@ -4,7 +4,7 @@ import { defaults } from '@tps/utilities/helpers';
 import * as is from 'is';
 import * as colors from 'ansi-colors';
 
-process.env.DEBUG_COLORS = false;
+(process.env as any).DEBUG_COLORS = false;
 
 /**
  * Constants
@@ -33,7 +33,7 @@ const pattern = [
  * Initialize
  */
 
-colors.theme(newColors);
+(colors as any).theme(newColors);
 
 const ANSII_RE = new RegExp(pattern, 'g');
 
