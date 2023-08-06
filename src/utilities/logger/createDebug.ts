@@ -21,8 +21,6 @@ interface CreateDebugOpts {
   disableLog: boolean;
 }
 
-// type debugFn = (string, ...args: any[]) => void;./
-
 class CreateDebug {
   static DEFAULT_OPTS: CreateDebugOpts = { disableLog: false };
 
