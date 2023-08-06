@@ -18,7 +18,7 @@ const overrideExample = {
     params: ['str', 'count', 'singular', 'plural'],
     example: 'person',
     render: (name, example) => {
-      return `render(tps.utils.${name}("${example}", 2));`;
+      return `tps.utils.${name}("${example}", 2))`;
     },
   },
   camelize: {
@@ -52,7 +52,7 @@ const overrideExample = {
   transform: {
     params: ['str', 'arr'],
     render: (name, example) => {
-      return `render(tps.utils.${name}("${example}", [ 'pluralize', 'capitalize', 'dasherize' ]));`;
+      return `tps.utils.${name}("${example}", [ 'pluralize', 'capitalize', 'dasherize' ])`;
     },
   },
 };
@@ -60,10 +60,13 @@ const overrideExample = {
 const example = (name: string) => {
   const example = overrideExample[name]?.example || 'example text';
 
-  return (
+  const code =
     overrideExample?.[name]?.render?.(name, example) ||
-    `render(tps.utils.${name}("${example}"));`
-  );
+    `tps.utils.${name}("${example}")`;
+
+  return `const result = ${code};
+
+render(result);`;
 };
 
 const infectionLink = (name) => {
