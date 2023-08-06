@@ -3,11 +3,11 @@ sidebar_position: 3
 ---
 
 import { Text } from '@site/docs/components/text';
+import { TemplatesContextUtils } from '@site/docs/components/templatesContextUtils';
 import { Example } from '@site/docs/components/example';
 import { Dot } from '@site/docs/components/dot';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
 
 # Template Context
 
@@ -171,3 +171,15 @@ you can access the users answer with:
 ```
 
 </Example>
+
+## utils
+
+```ts title="Type"
+{ [p: string]: () => any }
+```
+
+```text title="Usage"
+{{= tps.utils }}
+```
+
+<TemplatesContextUtils />

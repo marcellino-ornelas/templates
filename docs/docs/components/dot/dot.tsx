@@ -1,6 +1,7 @@
 import React from 'react';
 import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
+import * as utils from 'templates-mo/lib/templates/utils';
 import styles from './dot.module.css';
 
 doT.templateSettings.strip = false;
@@ -35,7 +36,7 @@ export const Dot = ({
   if (result) {
     try {
       const dotTemplate: templateFn = doT.template(templateString);
-      output = dotTemplate(tps);
+      output = dotTemplate({ ...tps, utils, u: utils });
     } catch (e) {
       output = `Error: ${e.message}`;
     }
