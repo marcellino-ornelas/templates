@@ -17,22 +17,20 @@ interface InitArgv {
   verbose: boolean;
 }
 
-const options = {
-  force: {
-    alias: 'f',
-    describe: 'Initialize tps in cwd no matter what',
-    type: 'boolean',
-  },
-  global: {
-    alias: 'g',
-    describe: 'Initialize tps globally',
-    type: 'boolean',
-  },
-};
-
 export default {
   command: ['init', 'i'],
-  builder: options,
+  builder: {
+    force: {
+      alias: 'f',
+      describe: 'Initialize tps in cwd no matter what',
+      type: 'boolean',
+    },
+    global: {
+      alias: 'g',
+      describe: 'Initialize tps globally',
+      type: 'boolean',
+    },
+  },
   describe: 'Initialize local settings',
   handler(argv) {
     if (argv.verbose) {

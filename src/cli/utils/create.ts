@@ -55,7 +55,6 @@ export const options = {
 export const createHandler: CommandModule<object, UseArgv>['handler'] = (
   argv
 ) => {
-  console.log(argv);
   /**
    * if we ever want to be able to pass a name in then we should add this to the flags.
    * @example
