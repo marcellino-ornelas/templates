@@ -22,9 +22,11 @@ Object containing answers to prompts.
 ```json title=".tpsrc"
 {
   "some-template": {
+    // highlight-start
     "answers": {
       "<prompt-name>": "<prompt-value>"
     }
+    // highlight-end
   }
 }
 ```
@@ -34,9 +36,11 @@ Object containing answers to prompts.
 ```json title=".tpsrc"
 {
   "react-component": {
+    // highlight-start
     "answers": {
       "css": true
     }
+    // highlight-end
   }
 }
 ```
@@ -46,7 +50,9 @@ Object containing answers to prompts.
 ## Options
 
 ```ts title="Type"
-interface TemplateConfigOptions {}
+interface TemplateConfigOptions {
+  [name: string]: any;
+}
 ```
 
 Object containing options for templates. See
@@ -55,9 +61,11 @@ Object containing options for templates. See
 ```json title=".tpsrc"
 {
   "some-template": {
+    // highlight-start
     "opts": {
       "<option-name>": "<option-value>"
     }
+    // highlight-end
   }
 }
 ```
@@ -67,9 +75,11 @@ Object containing options for templates. See
 ```json title=".tpsrc"
 {
   "react-component": {
+    // highlight-start
     "opts": {
       "wipe": true
     }
+    // highlight-end
   }
 }
 ```
