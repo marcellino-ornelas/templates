@@ -228,7 +228,7 @@ export const createTemplate = (
 
   const commandPromises = [
     /* use */
-    tpsCli(`${template} ${useFlags} ${builderString}`, {
+    tpsCli(`${template} ${builderString} ${useFlags}`, {
       ...opts,
       cwd,
     }),
@@ -242,7 +242,7 @@ export const createTemplate = (
      */
     commandPromises.push(
       /* create */
-      tpsCli(`create ${createFlags} ${createBuildersString}`, {
+      tpsCli(`create ${createBuildersString} ${createFlags}`, {
         ...opts,
         cwd,
       })

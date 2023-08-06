@@ -1,5 +1,5 @@
 import { CommandModule } from 'yargs';
-import { createHandler, options } from '../utils/create';
+import { createHandler, options } from '@tps/cli/utils/create';
 
 export default {
   command: '$0 [use] [buildPaths...]',

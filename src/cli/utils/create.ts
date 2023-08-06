@@ -30,6 +30,7 @@ export const options = {
     alias: 'd',
     type: 'boolean',
     describe: 'Use all default answers to all prompts',
+    default: false,
   },
   newFolder: {
     alias: 'f',
@@ -41,17 +42,20 @@ export const options = {
     describe:
       'force the template to be made. This will override any files that tps needs to create',
     type: 'boolean',
+    default: false,
   },
   wipe: {
     describe:
       'force the template to be made. This will delete the directory if exists',
     type: 'boolean',
+    default: false,
   },
 };
 
 export const createHandler: CommandModule<object, UseArgv>['handler'] = (
   argv
 ) => {
+  console.log(argv);
   /**
    * if we ever want to be able to pass a name in then we should add this to the flags.
    * @example
@@ -108,7 +112,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
     name: argv.name,
   };
 
-  logger.cli.info('Build paths: %n', tpsConfig);
+  logger.cli.info('Build paths: %n', buildPaths);
 
   tps
     .render(dest, renderItems, renderData)
