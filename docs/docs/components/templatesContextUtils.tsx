@@ -88,7 +88,7 @@ const isInfection = (name: string) => {
   return name in infection;
 };
 
-export const Utils = () => {
+export const TemplatesContextUtils = () => {
   const names = React.useMemo(() => {
     return Object.keys(utils);
   }, [utils]);
