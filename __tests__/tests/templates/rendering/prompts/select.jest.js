@@ -2,7 +2,7 @@ import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 
-import * as inquirer from 'inquirer';
+import inquirer from 'inquirer';
 
 jest.mock('inquirer');
 
