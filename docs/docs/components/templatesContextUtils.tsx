@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import * as utils from 'templates-mo/lib/templates/utils';
 import CodeBlock from '@docusaurus/theme-live-codeblock/lib/theme/CodeBlock';
 import { Example } from '@site/docs/components/example';
@@ -58,11 +58,11 @@ const overrideExample = {
 };
 
 const example = (name: string) => {
-  const example = overrideExample[name]?.example || 'example text';
+  const exampleText = overrideExample[name]?.example || 'example text';
 
   const code =
-    overrideExample?.[name]?.render?.(name, example) ||
-    `tps.utils.${name}("${example}")`;
+    overrideExample?.[name]?.render?.(name, exampleText) ||
+    `tps.utils.${name}("${exampleText}")`;
 
   return `const result = ${code};
 
@@ -71,7 +71,7 @@ render(result);`;
 
 const infectionLink = (name) => {
   const override = overrideExample[name];
-  let params = override?.params || ['str'];
+  const params = override?.params || ['str'];
 
   const anchor = params.join('-');
 
@@ -94,10 +94,12 @@ export const TemplatesContextUtils = () => {
   }, [utils]);
 
   useEffect(() => {
-    const utils = document.querySelector(".table-of-contents a[href='#utils']");
+    const utilsEl = document.querySelector(
+      ".table-of-contents a[href='#utils']"
+    );
 
-    if (utils) {
-      const li = utils.parentElement;
+    if (utilsEl) {
+      const parentLi = utilsEl.parentElement;
       const ul = document.createElement('ul');
 
       names.forEach((name) => {
@@ -111,7 +113,7 @@ export const TemplatesContextUtils = () => {
         ul.appendChild(li);
       });
 
-      li.appendChild(ul);
+      parentLi.appendChild(ul);
     }
   }, []);
 
@@ -125,6 +127,7 @@ export const TemplatesContextUtils = () => {
           <p>
             <a
               target="_blank"
+              rel="noreferrer"
               className="button button--primary"
               href={
                 isInfection(name) ? infectionLink(name) : changeCaseLink(name)
