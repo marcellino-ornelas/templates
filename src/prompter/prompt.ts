@@ -32,8 +32,6 @@ export default class Prompt {
   public suffix: SettingsFilePrompt['suffix'];
 
   constructor(prompt: SettingsFilePrompt) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     logger.prompt.info('Prompt %O', prompt);
     this.aliases = prompt.aliases || [];
     this.tpsType = prompt.tpsType || 'package';

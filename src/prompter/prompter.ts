@@ -37,8 +37,6 @@ export default class Prompter<TAnswers = Answers> {
     prompts: SettingsFilePrompt[],
     opts: Partial<PrompterOptions> = {}
   ) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     logger.prompter.info('Prompts: %n', prompts);
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);

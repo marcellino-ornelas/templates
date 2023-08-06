@@ -17,8 +17,32 @@ export const logFunctions = [
 //   return logFunctions.map(logName => `${name}:${logName}`).join(',');
 // }
 
+interface CreateDebugOpts {
+  disableLog: boolean;
+}
+
 class CreateDebug {
-  static DEFAULT_OPTS = { disableLog: false };
+  static DEFAULT_OPTS: CreateDebugOpts = { disableLog: false };
+
+  public name: string;
+
+  public _logger: ReturnType<typeof debug>;
+
+  public opts: CreateDebugOpts;
+
+  public _groups: { [p: string]: CreateDebugGroup };
+
+  public info: debug.Debugger;
+
+  public error: debug.Debugger;
+
+  public debug: debug.Debugger;
+
+  public success: debug.Debugger;
+
+  public warn: debug.Debugger;
+
+  public log: debug.Debugger;
 
   constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
     this.name = name;
@@ -39,7 +63,7 @@ class CreateDebug {
     this._resync();
   }
 
-  _resync() {
+  _resync(): void {
     const { disableLog } = this.opts;
     logFunctions.forEach((type) => {
       const instanceKey = `_${type}`;
@@ -52,17 +76,17 @@ class CreateDebug {
     });
   }
 
-  isEnabled() {
+  isEnabled(): boolean {
     return this._logger.enabled;
   }
 
-  enable() {
+  enable(): this {
     this._logger.enabled = true;
     this._resync();
     return this;
   }
 
-  group(name, { clear = false } = {}) {
+  group(name, { clear = false } = {}): CreateDebugGroup {
     if (this._groups[name] && !clear) {
       return this._groups[name];
     }

@@ -1,6 +1,10 @@
 export default class CreateDebugGroup {
+  public queue: [string, ...any[]];
+
+  public name: string;
+
   constructor(name) {
-    this.queue = [];
+    this.queue = [] as any;
     this.name = name;
   }
 
