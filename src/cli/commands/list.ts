@@ -46,7 +46,8 @@ export default {
         (file) => !BANNED_TEMPLATES.includes(file)
       );
 
-      if (!(is.array as any).empty(defaultTps)) {
+      // @ts-expect-error wrong types module (`is`)
+      if (!is.array.empty(defaultTps)) {
         console.log('Default: ');
         console.log(pjson.render(defaultTps));
         console.log('');
@@ -56,7 +57,8 @@ export default {
     if (TPS.HAS_GLOBAL && argv.global) {
       const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 
-      if (!(is.array as any).empty(global)) {
+      // @ts-expect-error wrong types module (`is`)
+      if (!is.array.empty(global)) {
         console.log('Global: ');
         console.log(pjson.render(global));
         console.log('');
@@ -66,7 +68,8 @@ export default {
     if (TPS.HAS_LOCAL && argv.local) {
       const local = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
 
-      if (!(is.array as any).empty(local)) {
+      // @ts-expect-error wrong types module (`is`)
+      if (!is.array.empty(local)) {
         console.log('Local: ');
         console.log(pjson.render(local));
       }
