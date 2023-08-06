@@ -512,12 +512,30 @@ Don't remember how to use packages? Refresh your mind [here](./packages)
 {{= tps.utils }}
 ```
 
-Object containing utility functions to help your template making more pleasent.
-We incorporate utiliy functions from
+Make your template creation journey more enjoyable with our collection of
+utilities. We've integrated powerful tools from
 [change-case](https://www.npmjs.com/package/change-case) and
-[inflection](https://www.npmjs.com/package/inflection).
+[inflection](https://www.npmjs.com/package/inflection) to streamline your
+workflow.
 
-To see a full list of functions check out the
+here are a list of some:
+
+- [camelCase](../../api/template-context#camelCase)
+- [capitalCase](../../api/template-context#capitalCase)
+- [constantCase](../../api/template-context#constantCase)
+- [dotCase](../../api/template-context#dotCase)
+- [headerCase](../../api/template-context#headerCase)
+- [paramCase](../../api/template-context#paramCase)
+- [pascalCase](../../api/template-context#pascalCase)
+- [snakeCase](../../api/template-context#snakeCase)
+- [pluralize](../../api/template-context#pluralize)
+- [singularize](../../api/template-context#singularize)
+- [camelize](../../api/template-context#camelize)
+- [underscore](../../api/template-context#underscore)
+- [humanize](../../api/template-context#humanize)
+- [capitalize](../../api/template-context#capitalize)
+
+To explore all the available functions, check out the
 [tps context utils API](../../api/template-context#utils).
 
 <Example>
@@ -530,14 +548,12 @@ tps react-component nav
 
 ```text
 import React from react;
-{{? tps.utils.capitalize(tps.name)}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
+
+const {{= tps.utils.capitalize(tps.name)}} = (props) => {
 	return (
 		<div></div>
 	)
 }
-
 ```
 
 </Dot>

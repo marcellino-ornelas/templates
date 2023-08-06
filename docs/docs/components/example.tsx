@@ -3,8 +3,8 @@ import Details from '@theme/Details';
 
 interface Props {
   children: React.ReactNode;
-  open: boolean;
-  title: string;
+  open?: boolean;
+  title?: string;
 }
 
 export const Example = ({ children, open = false, title = '' }: Props) => {

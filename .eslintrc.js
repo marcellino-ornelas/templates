@@ -88,6 +88,15 @@ const config = {
         'react/require-default-props': [IGNORE],
       },
     },
+    {
+      files: ['docs/**/*'],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          ERROR,
+          { packageDir: path.join(__dirname, 'docs') },
+        ],
+      },
+    },
   ],
   settings: {
     'import/parsers': {
