@@ -203,6 +203,7 @@ describe('CreateDebug', () => {
       //  `tps log hello there +0ms`
       // when testing we switch to no colors and replace all asciis colors
       console.log = (...consoleArgs) => {
+        oldConsoleLog('args', consoleArgs);
         const str = consoleArgs.join(' ').replace(`${TIME_STRING} `, '');
         data += stripAnsi(str);
       };

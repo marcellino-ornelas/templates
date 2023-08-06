@@ -2,7 +2,8 @@ import debug from 'debug';
 import * as pjson from 'prettyjson-256';
 import { defaults } from '@tps/utilities/helpers';
 import * as is from 'is';
-import * as colors from 'ansi-colors';
+// import * as colors from 'ansi-colors';
+import colors from 'ansi-colors';
 
 (process.env as any).DEBUG_COLORS = false;
 
@@ -18,6 +19,8 @@ const newColors = {
   success: colors.green,
 };
 
+(colors as any).theme(newColors);
+
 const TITLES_RE = (() => {
   const levels = Object.keys(newColors);
   const regStr = levels.map((str) => `:${str}`).join('|');
@@ -32,8 +35,6 @@ const pattern = [
 /**
  * Initialize
  */
-
-(colors as any).theme(newColors);
 
 const ANSII_RE = new RegExp(pattern, 'g');
 
@@ -94,7 +95,7 @@ debug.formatters.s = (v) => colors.white(v);
 debug.log = (string, ...rest) => {
   const filteredString = string.replace(TITLES_RE, (matched) => {
     const titleName = matched.slice(1);
-    return `\u001b[0m ${colors?.[titleName]?.(titleName)}`;
+    return `\u001b[0m ${colors?.[titleName](titleName)}`;
   });
   console.log(filteredString, ...rest);
 };
