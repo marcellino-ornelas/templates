@@ -121,7 +121,7 @@ export const TemplatesContextUtils = () => {
   return (
     <div>
       {names.map((name) => (
-        <div>
+        <div key={name}>
           <Heading id={name} as="h2">
             {name}
           </Heading>
