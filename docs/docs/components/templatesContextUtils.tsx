@@ -3,7 +3,6 @@ import * as utils from 'templates-mo/lib/templates/utils';
 import CodeBlock from '@docusaurus/theme-live-codeblock/lib/theme/CodeBlock';
 import { Example } from '@site/docs/components/example';
 import Heading from '@theme/Heading';
-import Tag from '@theme/Tag';
 import * as infection from 'inflection';
 
 const INFLECTION_URL = 'https://github.com/dreamerslab/node.inflection';
