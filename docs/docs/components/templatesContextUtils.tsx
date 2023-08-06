@@ -3,7 +3,11 @@ import * as utils from 'templates-mo/lib/templates/utils';
 import CodeBlock from '@docusaurus/theme-live-codeblock/lib/theme/CodeBlock';
 import { Example } from '@site/docs/components/example';
 import Heading from '@theme/Heading';
+import Tag from '@theme/Tag';
 import * as infection from 'inflection';
+
+const INFLECTION_URL = 'https://github.com/dreamerslab/node.inflection';
+const CHANGE_CASE_URL = 'https://github.com/blakeembrey/change-case';
 
 const overrideExample = {
   pluralize: {
@@ -75,13 +79,11 @@ const infectionLink = (name) => {
 
   const anchor = params.join('-');
 
-  return `https://github.com/dreamerslab/node.inflection#inflection${infection.underscore(
-    name
-  )}-${anchor}-`;
+  return `${INFLECTION_URL}#inflection${infection.underscore(name)}-${anchor}-`;
 };
 
 const changeCaseLink = (name: string) => {
-  return `https://github.com/blakeembrey/change-case#${name.toLowerCase()}`;
+  return `${CHANGE_CASE_URL}#${name.toLowerCase()}`;
 };
 
 const isInfection = (name: string) => {
@@ -125,16 +127,23 @@ export const TemplatesContextUtils = () => {
             {name}
           </Heading>
           <p>
-            <a
-              target="_blank"
-              rel="noreferrer"
-              className="button button--primary"
-              href={
-                isInfection(name) ? infectionLink(name) : changeCaseLink(name)
-              }
-            >
-              docs
-            </a>
+            <span className="badge badge--primary margin-left--xs">
+              <a
+                href={isInfection(name) ? INFLECTION_URL : CHANGE_CASE_URL}
+                style={{ color: 'inherit' }}
+              >
+                {isInfection(name) ? 'inflection' : 'change-case'}
+              </a>
+            </span>
+            <span className="badge badge--secondary margin-left--xs">
+              <a
+                href={
+                  isInfection(name) ? infectionLink(name) : changeCaseLink(name)
+                }
+              >
+                docs
+              </a>
+            </span>
           </p>
           <CodeBlock language="jsx" metastring="title='Usage'">
             {`{{= tps.utils.${name}(${(
