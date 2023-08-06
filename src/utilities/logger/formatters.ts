@@ -94,7 +94,7 @@ debug.formatters.s = (v) => colors.white(v);
 debug.log = (string, ...rest) => {
   const filteredString = string.replace(TITLES_RE, (matched) => {
     const titleName = matched.slice(1);
-    return `\u001b[0m ${colors[titleName](titleName)}`;
+    return `\u001b[0m ${colors?.[titleName]?.(titleName)}`;
   });
   console.log(filteredString, ...rest);
 };

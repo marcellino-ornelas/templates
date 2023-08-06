@@ -2,6 +2,7 @@ import { CommandModule } from 'yargs';
 import debug from 'debug';
 import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
+import { TemplateOptions } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
   InitializedAlreadyError,
@@ -10,29 +11,37 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 
+interface InitArgv {
+  force: boolean;
+  global: boolean;
+  verbose: boolean;
+}
+
+const options = {
+  force: {
+    alias: 'f',
+    describe: 'Initialize tps in cwd no matter what',
+    type: 'boolean',
+  },
+  global: {
+    alias: 'g',
+    describe: 'Initialize tps globally',
+    type: 'boolean',
+  },
+};
+
 export default {
   command: ['init', 'i'],
-  builder: {
-    force: {
-      alias: 'f',
-      describe: 'Initialize tps in cwd no matter what',
-      type: 'boolean',
-    },
-    global: {
-      alias: 'g',
-      describe: 'Initialize tps globally',
-      type: 'boolean',
-    },
-  },
-  description: 'Initialize local settings',
+  builder: options,
+  describe: 'Initialize local settings',
   handler(argv) {
     if (argv.verbose) {
       debug.enable('tps:cli');
     }
 
-    const tpsConfig = {
+    const tpsConfig: Partial<TemplateOptions> = {
       force: argv.force,
-      verbose: argv.verbose,
+      //   verbose: argv.verbose,
       tpsPath: TPS.DEFAULT_TPS,
     };
 
@@ -46,7 +55,7 @@ export default {
     if (argv.global) {
       logger.cli.log('Initializing Global...');
       if (TPS.HAS_GLOBAL) {
-        errorExit(new GlobalInitializedAlreadyError());
+        errorExit(new GlobalInitializedAlreadyError(TPS.GLOBAL_PATH));
       }
 
       tps
@@ -83,4 +92,4 @@ export default {
         .catch(errorExit);
     }
   },
-} as CommandModule;
+} as CommandModule<object, InitArgv>;
