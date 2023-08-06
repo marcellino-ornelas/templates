@@ -1,4 +1,5 @@
 const eslintPlugin = require('eslint-plugin-jest');
+const path = require('path');
 
 const IGNORE = 0;
 const ERROR = 2;
