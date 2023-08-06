@@ -275,8 +275,8 @@ false;
 
 The `force` option makes sure that your new instance is created no matter what,
 similar to the [wipe](#wipe) option. However, instead of deleting the whole
-directory, it only replaces the conflicting files, so you don't lose any extra
-work you may have added
+directory, it only replaces conflicting files, so you don't lose any extra work
+you may have added
 
 By default, templates will raise an error if there are any file or directory
 conflicts.
@@ -328,31 +328,58 @@ Lets say you have the following directory structure
 	| - src/
 		// highlight-start
 		| - Home/
-			| - ...
+			| - some-file.js
 		// highlight-end
 ```
 
 If I was trying to rendering a new instance of `react-component` template and
 called this `Home`, tps would error out because a `Home` directory already
-exists. However if you add the `--wipe` flag, tps will delete this directory
-first, then render your new instance in its place.
+exists. However if you add the `--force` flag, tps will force the creation of
+your instance but will only overwrite conflicting files.
 
 ```bash
-tps react-component src/Home --wipe
+tps react-component src/Home --force
 ```
 
-Will produce:
+<Tabs>
+<TabItem value="no-conflict" label="No conflicts">
+
+If the `react-component` template doesnt create a `some-file.js` then the
+original file will be left in place and not touched.
 
 ```text
 | - app
 	| - .tps/
 		| - ...
 	| - src/
-		// highlight-start
 		| - Home/
+			// highlight-next-line
+			| - some-file.js
 			| - <react-component template files ...>
-		// highlight-end
 ```
+
+</TabItem>
+
+<TabItem value="conflict" label="Conflicting file">
+
+If the `react-component` template was going to render a `some-file.js`, then the
+file will be overridden by the templates `some-file.js`.
+
+```text
+| - app
+	| - .tps/
+		| - ...
+	| - src/
+		| - Home/
+			// highlight-next-line
+			| - some-file.js <--- from react-component
+			| - <react-component template files ...>
+```
+
+Notice how `some-files.js` was not delete
+
+</TabItem>
+</Tabs>
 
 </Example>
 
