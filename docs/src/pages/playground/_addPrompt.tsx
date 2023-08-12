@@ -1,48 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import Layout from '@theme/Layout';
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Space,
-  Row,
-  Col,
-  Modal,
-  Select,
-  Divider,
-  Switch,
-} from 'antd';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import styles from './playground.module.css';
-import { Editors } from './_editors';
+import React, { useState } from 'react';
+import { Button, Form, Input, Modal, Select, Switch } from 'antd';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { PlusOutlined } from '@ant-design/icons';
+import { PlaygroundPrompt } from '@site/types/playground';
 
 interface Props {
-  onSubmit: (args: any) => void;
+  onSubmit: (values: PlaygroundPrompt) => any;
 }
 
-export const AddPrompt: React.FC = ({ onSubmit }: Props) => {
-  const [form] = Form.useForm();
+export const AddPrompt = ({ onSubmit }: Props) => {
+  const [form] = Form.useForm<PlaygroundPrompt>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const type = Form.useWatch('type', form);
 
-  const showModal = () => {
+  const showModal = React.useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
   const handleOk = React.useCallback(() => {
     form.submit();
   }, [form]);
 
-  const handleCancel = () => {
+  const handleCancel = React.useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
 
   const onFinish = React.useCallback(
-    (values) => {
+    (values: PlaygroundPrompt) => {
       setIsModalOpen(false);
       onSubmit(values);
-      form.setFieldsValue({ type: '', name: '', value: '' });
+      form.setFieldsValue({
+        type: '',
+        name: '',
+        value: '',
+      } as unknown as PlaygroundPrompt);
     },
     [onSubmit]
   );
@@ -59,7 +50,7 @@ export const AddPrompt: React.FC = ({ onSubmit }: Props) => {
         onCancel={handleCancel}
       >
         <Form form={form} onFinish={onFinish} initialValues={{ values: '' }}>
-          <Form.Item
+          <Form.Item<PlaygroundPrompt>
             // eslint-disable-next-line react/jsx-props-no-spreading
             label="Type"
             name="type"
@@ -76,7 +67,7 @@ export const AddPrompt: React.FC = ({ onSubmit }: Props) => {
               ]}
             />
           </Form.Item>
-          <Form.Item
+          <Form.Item<PlaygroundPrompt>
             // eslint-disable-next-line react/jsx-props-no-spreading
             label="name"
             name="name"
@@ -85,7 +76,7 @@ export const AddPrompt: React.FC = ({ onSubmit }: Props) => {
             <Input />
           </Form.Item>
 
-          <Form.Item
+          <Form.Item<PlaygroundPrompt>
             // eslint-disable-next-line react/jsx-props-no-spreading
             label="Value"
             name="value"

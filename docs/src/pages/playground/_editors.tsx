@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Editor, { useMonaco, OnMount } from '@monaco-editor/react';
 import { useDot } from '@site/src/hooks/useDot';
 import { Row, Col, Input, AutoComplete } from 'antd';
@@ -10,7 +10,6 @@ import styles from './playground.module.css';
 const DEFAULT_VALUE = `\
 import React, { useEffect, useState } from 'react';{{? tps.answers.css}}
 import {{? tps.answers.cssType.startsWith("module.")}}styles from {{?}}"./{{= tps.name}}.{{= tps.answers.cssType}}";{{?}}
-import { useColorMode } from '@docusaurus/theme-common';
 
 export const {{= tps.name }} = ({}) => {
 	return (
@@ -21,12 +20,18 @@ export const {{= tps.name }} = ({}) => {
 };
 `;
 
-const EDITOR_OPTS = {
+const EDITOR_OPTS: editor.IStandaloneEditorConstructionOptions = {
   readOnly: false,
   minimap: { enabled: false },
 };
 
-export const Editors = ({ answers, name }) => {
+interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  answers: Record<string, any>;
+  name: string;
+}
+
+export const Editors = ({ answers, name }: Props) => {
   const { isDarkTheme } = useColorMode();
   const [language, setLanguage] = useState('typescript');
   const dotEditor = useRef<editor.IStandaloneCodeEditor>(null);
