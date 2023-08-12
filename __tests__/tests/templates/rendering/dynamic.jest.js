@@ -32,9 +32,6 @@ describe('[TPS] Rendering dynamic:', () => {
     });
   });
 
-  it.todo('should be able to use def files with one helper');
-  it.todo('should be able to use def files that has multiple helpers');
-
   /**
    * @docs guide/getting-started/dynamic-files.md#name
    */
