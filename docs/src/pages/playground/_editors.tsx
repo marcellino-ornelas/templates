@@ -6,6 +6,7 @@ import type { editor } from 'monaco-editor';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useColorMode } from '@docusaurus/theme-common';
 import styles from './playground.module.css';
+import { Tps } from '@site/types/templates';
 
 const DEFAULT_VALUE = `\
 import React, { useEffect, useState } from 'react';{{? tps.answers.css}}
@@ -25,13 +26,9 @@ const EDITOR_OPTS: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 };
 
-interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  answers: Record<string, any>;
-  name: string;
-}
+interface Props extends Partial<Tps> {}
 
-export const Editors = ({ answers, name }: Props) => {
+export const Editors = ({ ...tps }: Props) => {
   const { isDarkTheme } = useColorMode();
   const [language, setLanguage] = useState('typescript');
   const dotEditor = useRef<editor.IStandaloneCodeEditor>(null);
@@ -48,16 +45,15 @@ export const Editors = ({ answers, name }: Props) => {
   const output = useDot({
     templateString: code,
     tps: {
-      name,
-      answers,
+      ...tps,
     },
   });
 
-  const handleEditorChange = React.useCallback((value, event) => {
+  const handleEditorChange = React.useCallback((value) => {
     setCode(value);
   }, []);
 
-  const handleDotEditorDidMount: OnMount = (_editor, m) => {
+  const handleDotEditorDidMount: OnMount = (_editor) => {
     dotEditor.current = _editor;
   };
 
@@ -65,9 +61,9 @@ export const Editors = ({ answers, name }: Props) => {
     renderedEditor.current = _editor;
   };
 
-  const onSelect = (data: string) => {
+  const onSelect = React.useCallback((data: string) => {
     setLanguage(data);
-  };
+  }, []);
 
   const theme = isDarkTheme ? 'vs-dark' : 'light';
 
