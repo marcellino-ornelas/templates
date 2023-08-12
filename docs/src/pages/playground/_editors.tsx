@@ -6,20 +6,11 @@ import type { editor } from 'monaco-editor';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useColorMode } from '@docusaurus/theme-common';
 import { Tps } from '@site/types/templates';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line
+import templateString from '!!raw-loader!./_template.js.dot';
 import styles from './playground.module.css';
-
-const DEFAULT_VALUE = `\
-import React, { useEffect, useState } from 'react';{{? tps.answers.css}}
-import {{? tps.answers.cssType.startsWith("module.")}}styles from {{?}}"./{{= tps.name}}.{{= tps.answers.cssType}}";{{?}}
-
-export const {{= tps.name }} = ({}) => {
-	return (
-		<div>
-			{/* ... */}
-		</div>
-	);
-};
-`;
 
 const EDITOR_OPTS: editor.IStandaloneEditorConstructionOptions = {
   readOnly: false,
@@ -35,7 +26,7 @@ export const Editors = ({ ...tps }: Props) => {
   const dotEditor = useRef<editor.IStandaloneCodeEditor>(null);
   const renderedEditor = useRef<editor.IStandaloneCodeEditor>(null);
   const monaco = useMonaco();
-  const [code, setCode] = useState(DEFAULT_VALUE);
+  const [code, setCode] = useState(templateString);
 
   const lanuagesOptions = React.useMemo(() => {
     return (monaco?.languages?.getLanguages?.() ?? []).map((item) => ({

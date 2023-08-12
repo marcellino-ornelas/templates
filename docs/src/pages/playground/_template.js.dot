@@ -1,0 +1,10 @@
+import React, { useEffect, useState } from 'react';{{? tps.answers.css}}
+import {{? tps.answers.cssType.startsWith("module.")}}styles from {{?}}"./{{= tps.name}}.{{= tps.answers.cssType}}";{{?}}
+
+export const {{= tps.name }} = ({}) => {
+	return (
+		<div>
+			{/* ... */}
+		</div>
+	);
+};
