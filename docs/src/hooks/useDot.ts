@@ -4,6 +4,7 @@ import { Tps } from '@site/types/templates';
 import * as utils from 'templates-mo/lib/templates/utils';
 
 doT.templateSettings.strip = false;
+doT.templateSettings.varname = 'tps';
 
 interface Props {
   templateString?: string;
