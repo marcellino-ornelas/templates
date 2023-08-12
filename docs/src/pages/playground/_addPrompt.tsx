@@ -52,7 +52,6 @@ export const AddPrompt = ({ onSubmit }: Props) => {
       >
         <Form form={form} onFinish={onFinish} initialValues={{ values: '' }}>
           <Form.Item<PlaygroundPrompt>
-            // eslint-disable-next-line react/jsx-props-no-spreading
             label="Type"
             name="type"
             rules={[{ required: true, message: 'Please select a type!' }]}
@@ -69,7 +68,6 @@ export const AddPrompt = ({ onSubmit }: Props) => {
             />
           </Form.Item>
           <Form.Item<PlaygroundPrompt>
-            // eslint-disable-next-line react/jsx-props-no-spreading
             label="name"
             name="name"
             rules={[{ required: true, message: 'Please add a name!' }]}
@@ -78,7 +76,6 @@ export const AddPrompt = ({ onSubmit }: Props) => {
           </Form.Item>
 
           <Form.Item<PlaygroundPrompt>
-            // eslint-disable-next-line react/jsx-props-no-spreading
             label="Value"
             name="value"
             hidden={!type}
