@@ -5,8 +5,8 @@ import { Row, Col, Input, AutoComplete } from 'antd';
 import type { editor } from 'monaco-editor';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useColorMode } from '@docusaurus/theme-common';
-import styles from './playground.module.css';
 import { Tps } from '@site/types/templates';
+import styles from './playground.module.css';
 
 const DEFAULT_VALUE = `\
 import React, { useEffect, useState } from 'react';{{? tps.answers.css}}

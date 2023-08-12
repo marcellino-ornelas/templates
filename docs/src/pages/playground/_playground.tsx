@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { ConfigProvider, Divider, theme, ThemeConfig } from 'antd';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { ConfigProvider, theme } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useColorMode } from '@docusaurus/theme-common';
+import { PlaygroundTps } from '@site/types/playground';
 import { Editors } from './_editors';
 import { Options } from './_options';
-import styles from './playground.module.css';
 
 const { defaultAlgorithm, darkAlgorithm } = theme;
 
@@ -23,7 +22,7 @@ export const Playground = () => {
 
 const PlaygroundContents = () => {
   const isDarkTheme = useColorMode().colorMode === 'dark';
-  const [all, setAll] = useState<any>({
+  const [all, setAll] = useState<PlaygroundTps>({
     name: 'App',
     prompts: [
       {

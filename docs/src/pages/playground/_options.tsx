@@ -35,7 +35,7 @@ export const Options = ({ onChange, initialState }: Props) => {
           name="name"
           required
         >
-          <Input hidden />
+          <Input />
         </Form.Item>
 
         <Divider>Prompts</Divider>

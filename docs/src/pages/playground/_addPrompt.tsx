@@ -5,6 +5,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { PlaygroundPrompt } from '@site/types/playground';
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSubmit: (values: PlaygroundPrompt) => any;
 }
 
