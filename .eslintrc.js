@@ -74,7 +74,7 @@ const config = {
       },
     },
     {
-      files: ['docs/**/*.tsx'],
+      files: ['docs/**/*.tsx', 'docs/**/*.ts'],
       plugins: ['react'],
       rules: {
         'import/no-unresolved': [
