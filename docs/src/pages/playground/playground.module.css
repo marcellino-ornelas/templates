@@ -1,0 +1,14 @@
+.editorContainer {
+	padding: 20px;
+	border-radius: 10px;
+	border: 1px solid;
+}
+
+.editorContainerLight {
+	border-color: #d9d9d9;
+}
+
+.editorContainerDark {
+	border-color: #424242;
+	background-color: #1e1e1e;
+}

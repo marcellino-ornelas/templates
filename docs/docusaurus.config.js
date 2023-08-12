@@ -91,6 +91,11 @@ const config = {
             label: 'API',
           },
           {
+            label: 'Playground',
+            to: '/playground/',
+            position: 'left',
+          },
+          {
             href: 'https://github.com/marcellino-ornelas/templates/issues',
             label: 'Feedback',
             position: 'right',

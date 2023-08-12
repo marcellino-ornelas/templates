@@ -30,6 +30,7 @@ const config = {
     'spaced-comment': [ERROR, 'always', { exceptions: ['*'] }],
     'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
     'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.mdx'] }],
+    'react/jsx-props-no-spreading': IGNORE,
     'import/extensions': [
       ERROR,
       {
@@ -73,7 +74,7 @@ const config = {
       },
     },
     {
-      files: ['docs/**/*.tsx'],
+      files: ['docs/**/*.tsx', 'docs/**/*.ts'],
       plugins: ['react'],
       rules: {
         'import/no-unresolved': [
