@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, FormProps, Input, Space, Row, Col, Divider, Switch } from 'antd';
-// import { SettingsFilePrompt } from 'templates-mo/src/types/settings';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { PlaygroundPrompt, PlaygroundTps } from '@site/types/playground';
