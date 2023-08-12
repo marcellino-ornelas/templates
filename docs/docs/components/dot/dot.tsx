@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
 import * as utils from 'templates-mo/lib/templates/utils';
