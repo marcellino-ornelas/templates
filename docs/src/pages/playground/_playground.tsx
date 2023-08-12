@@ -22,7 +22,7 @@ export const Playground = () => {
 };
 
 const PlaygroundContents = () => {
-  const { isDarkTheme } = useColorMode();
+  const isDarkTheme = useColorMode().colorMode === 'dark';
   const [all, setAll] = useState<any>({
     name: 'App',
     prompts: [

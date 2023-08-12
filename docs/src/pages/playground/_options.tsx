@@ -45,8 +45,8 @@ export const Options = ({ onChange, initialState }: Props) => {
             <>
               <Row>
                 {fields.map(({ key, ...field }) => (
-                  <Col xs={24} md={12}>
-                    <Space key={key} align="baseline">
+                  <Col key={key} xs={24} md={12}>
+                    <Space align="baseline">
                       <Form.Item
                         {...field}
                         hidden

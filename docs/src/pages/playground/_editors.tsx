@@ -26,10 +26,11 @@ const EDITOR_OPTS: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props extends Partial<Tps> {}
 
 export const Editors = ({ ...tps }: Props) => {
-  const { isDarkTheme } = useColorMode();
+  const isDarkTheme = useColorMode().colorMode === 'dark';
   const [language, setLanguage] = useState('typescript');
   const dotEditor = useRef<editor.IStandaloneCodeEditor>(null);
   const renderedEditor = useRef<editor.IStandaloneCodeEditor>(null);
