@@ -28,12 +28,7 @@ export const Options = ({ onChange, initialState }: Props) => {
         initialValues={initialState}
         onValuesChange={onFormChange}
       >
-        <Form.Item
-          // eslint-disable-next-line react/jsx-props-no-spreading
-          label="name"
-          name="name"
-          required
-        >
+        <Form.Item label="name" name="name" required>
           <Input />
         </Form.Item>
 
