@@ -4,12 +4,22 @@
 module.exports = {
   prompts: [
     {
+      name: 'typescript',
+      type: 'confirm',
+      tpsType: 'data',
+      message: 'Would you like to use typescript',
+      default: false,
+    },
+    {
       name: 'extension',
       aliases: ['e', 'ext', 'extention'],
       type: 'input',
       tpsType: 'data',
       message: 'What type of extension do you want for your component?',
-      default: 'js',
+      default: (answers) => {
+        if (answers.typescript) return 'ts';
+        return 'js';
+      },
     },
     {
       name: 'css',
@@ -47,7 +57,10 @@ module.exports = {
       when: (answers) => {
         return !!answers.test;
       },
-      default: 'test.js',
+      default: (answers) => {
+        if (answers.typescript) return 'test.ts';
+        return 'test.js';
+      },
     },
     {
       name: 'index',
