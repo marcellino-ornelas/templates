@@ -3,8 +3,8 @@ import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
 import * as utils from 'templates-mo/lib/templates/utils';
 import { useDot } from '@site/src/hooks/useDot';
-import styles from './dot.module.css';
 import { Tps } from '@site/types/templates';
+import styles from './dot.module.css';
 
 doT.templateSettings.strip = false;
 doT.templateSettings.varname = 'tps';
