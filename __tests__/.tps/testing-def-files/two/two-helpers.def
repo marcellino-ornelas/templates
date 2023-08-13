@@ -1,0 +1,7 @@
+{{##def.twoFnOne:
+twoFnTwo
+#}}
+
+{{##def.twoFnTwo:
+twoFnTwo
+#}}

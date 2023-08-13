@@ -19,7 +19,7 @@ describe('[TPS] Def files', () => {
     return playground.createBox('def_files');
   });
 
-  it('should be able to render def file', () => {
+  it('should be able to use a def when its only a file', () => {
     const tps = new Templates('testing-def-files');
 
     const destPath = path.join(playground.box(), 'app');
@@ -31,8 +31,18 @@ describe('[TPS] Def files', () => {
     });
   });
 
-  it.todo(
-    'should be able to render def file that has multiple defs in it',
-    () => {}
-  );
+  it("should be able to use a def file when multiple def's are defined in the file", () => {
+    const tps = new Templates('testing-def-files');
+
+    tps.loadPackage('two');
+
+    const destPath = path.join(playground.box(), 'app');
+    const twoFile = path.join(destPath, 'two.txt');
+
+    return tps.render(playground.box(), 'app').then(() => {
+      expect(destPath).toBeDirectory();
+      expect(twoFile).toHaveFileContents('twoFnOne');
+      expect(twoFile).toHaveFileContents('twoFnTwo');
+    });
+  });
 });
