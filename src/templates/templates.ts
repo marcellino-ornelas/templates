@@ -754,15 +754,6 @@ export class Templates {
         // this fixes problems when any def can be available at render time
         dot.template(`{{#def.${name}}}`, null, this._defs);
       });
-
-      //   // load def inside def files
-      //   defFiles.forEach((fileNode) => {
-      //     const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
-
-      //     // When def files have more than one def. In order to use them we need to call the main file def first.
-      //     // this fixes problems when any def can be available at render time
-      //     dot.template(`{{#def.${name}}}`, null, this._defs);
-      //   });
     }
 
     logger.tps.log('Compiling files');
