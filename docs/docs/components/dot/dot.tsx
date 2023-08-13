@@ -2,7 +2,9 @@ import React from 'react';
 import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
 import * as utils from 'templates-mo/lib/templates/utils';
+import { useDot } from '@site/src/hooks/useDot';
 import styles from './dot.module.css';
+import { Tps } from '@site/types/templates';
 
 doT.templateSettings.strip = false;
 doT.templateSettings.varname = 'tps';
@@ -15,10 +17,10 @@ interface Props {
   result: boolean;
   lang: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tps?: Record<string, any>;
+  tps?: Partial<Tps>;
 }
 
-type templateFn = (obj: Record<string, any>) => string;
+// type templateFn = (obj: Tps) => string;
 
 export const Dot = ({
   templateName = 'Dot Template',
@@ -31,16 +33,10 @@ export const Dot = ({
 }: Props) => {
   const templateString = (children as any).props.children.props.children;
 
-  let output;
-
-  if (result) {
-    try {
-      const dotTemplate: templateFn = doT.template(templateString);
-      output = dotTemplate({ ...tps, utils, u: utils });
-    } catch (e) {
-      output = `Error: ${e.message}`;
-    }
-  }
+  const output = useDot({
+    templateString,
+    tps,
+  });
 
   return (
     <div>
