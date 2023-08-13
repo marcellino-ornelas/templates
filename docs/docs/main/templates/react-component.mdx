@@ -1,12 +1,44 @@
 import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
 
 # react-component
 
+:::caution
+
+[Install templates](../intro#installation) to use this template
+
+:::
+
 ## Usage
 
-```bash
+```bash title="Usage"
 tps react-component <name>
 ```
+
+```txt title="Creates"
+| - <name>
+	| - index.js (optional)
+	| - <name>.js
+	| - <name>.css (optional)
+	| - <name>.test.js (optional)
+```
+
+<Example>
+
+```bash
+tps react-component Nav
+```
+
+Produces:
+
+```txt
+| - Nav
+	| - index.js
+	| - Nav.js
+	| - Nav.css
+```
+
+</Example>
 
 ## Options
 
@@ -14,7 +46,15 @@ tps react-component <name>
 
 ## Copy
 
+If you like this template but want to change a few things, just use the copy
+command. It lets you duplicate the template into your project and customize it
+as you want.
+
 ```bash
+# if your not initialized run
+tps init
+
+# copy template
 tps copy react-component
 ```
 
@@ -24,6 +64,31 @@ tps copy react-component
 
 ```bash
 tps react-component Nav
+```
+
+Produces:
+
+```txt
+| - Nav
+	| - index.js
+	| - Nav.js
+	| - Nav.css
+```
+
+### options
+
+```bash
+tps react-component Nav --css --cssType=less --test
+```
+
+Produces:
+
+```txt
+| - NaV
+	| - index.js
+	| - Nav.js
+	| - Nav.less
+	| - Nav.test.js
 ```
 
 ### Configure your react component
