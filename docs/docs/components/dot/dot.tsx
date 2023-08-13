@@ -1,7 +1,6 @@
 import React from 'react';
 import doT from 'dot';
 import CodeBlock from '@theme/CodeBlock';
-import * as utils from 'templates-mo/lib/templates/utils';
 import { useDot } from '@site/src/hooks/useDot';
 import { Tps } from '@site/types/templates';
 import styles from './dot.module.css';
@@ -19,8 +18,6 @@ interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tps?: Partial<Tps>;
 }
-
-// type templateFn = (obj: Tps) => string;
 
 export const Dot = ({
   templateName = 'Dot Template',
