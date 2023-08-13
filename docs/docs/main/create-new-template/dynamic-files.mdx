@@ -4,12 +4,10 @@ pagination_prev: main/create-new-template/packages
 sidebar_position: 3
 ---
 
-import { Text } from '@site/docs/components/text';
 import { Example } from '@site/docs/components/example';
 import { Dot } from '@site/docs/components/dot';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
 
 # Dynamic Files
 
@@ -303,6 +301,39 @@ line
 
 </Dot>
 
+### Defs (Partials)
+
+DoT supports defs (partials). Defs allow you to create reusable sections of a
+templates. Think of them as smaller templates that can be defined separately and
+then included within larger templates. This provides modularity and simplifies
+the process of maintaining and updating your templates.
+
+<Dot>
+
+```text
+{{##def.intro:
+This is my intro
+#}}
+
+{{#def.intro}}
+```
+
+</Dot>
+
+You can also define functions as defs
+
+<Dot>
+
+```text
+{{##def.intro = function(name) {
+		return `This is my intro`;
+}#}}
+
+{{#def.intro()}}
+```
+
+</Dot>
+
 ## How to use doT with Templates
 
 Templates make it easy to use the doT template engine inside files. This helps
@@ -362,6 +393,127 @@ const app = express();
 ```
 
 </Dot>
+
+</Example>
+
+### Def files
+
+Templates allows you to define doT defs inside files for easier use. Def files
+gets loaded before any files are rendered so you have access to all defs you
+define inside your template files.
+
+Def files are files inside your packages that have a `.def` extension.
+
+<Example>
+
+```text
+| - .tps/
+	| - react-component
+		| - default/
+			| - helpers.def
+```
+
+</Example>
+
+If you want your def files to be accessable anywhere put them inside your
+`default` package. If your def file is only used inside a specific package then
+place it inside thay package
+
+:::caution
+
+def files placed inside packages may be usable inside template files inside
+other packages, however this is discouraged and may not be supported in other
+versions
+
+:::
+
+Def files can be used in two ways:
+
+#### single def file
+
+If your def file has no dot syntax then the whole file will be converted to a
+`def`. You can access this def inside your template files by using
+`{{#def.<file-name>}}`
+
+<Example>
+
+If you had this template folder structure:
+
+```text
+| - .tps/
+	| - some-template/
+		| - default/
+			| - helpers.def
+			| - index.txt.dot
+```
+
+and inside your `helpers.def` you had:
+
+```text
+This is my def file
+```
+
+and inside `index.txt.dot` you had:
+
+```txt
+hey there
+{{#def.helpers}}
+```
+
+Your rendered `index.txt` file would end up like this:
+
+```txt
+hey there
+This is my def file
+```
+
+</Example>
+
+#### multiple def functions inside a file
+
+You can define multiple def functions inside a def file by using the def syntax
+`{{##def.name: ... #}`. These def files can be accessed by the name you give
+them in the def.
+
+<Example>
+
+If you had this template folder structure:
+
+```text
+| - .tps/
+	| - some-template/
+		| - default/
+			| - helpers.def
+			| - index.txt.dot
+```
+
+and inside your `helpers.def` you had:
+
+```text
+{{##def.helper1:
+helper 1
+#}}
+
+{{##def.helper2:
+helper 2
+#}}
+```
+
+and inside `index.txt.dot` you had:
+
+```txt
+hey there
+{{#def.helper1}}
+{{#def.helper2}}
+```
+
+Your rendered `index.txt` file would end up like this:
+
+```txt
+hey there
+helper 1
+helper 2
+```
 
 </Example>
 
