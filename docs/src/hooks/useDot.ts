@@ -26,7 +26,7 @@ export const useDot = ({ templateString, tps = {} }: Props) => {
   useEffect(() => {
     let result;
     try {
-      const dotTemplate: templateFn = doT.template(templateString, null);
+      const dotTemplate: templateFn = doT.template(templateString);
       result = dotTemplate({ ...DEFAULT_TPS, ...tps });
     } catch (e) {
       result = `Error: ${e.message}`;

@@ -741,7 +741,6 @@ export class Templates {
     if (!is.array.empty(defFiles)) {
       logger.tps.log('Compiling def files %o', { force });
 
-      // Load all def files first
       defFiles.forEach((fileNode) => {
         logger.tps.info(
           `  - %s ${colors.green.italic('compiled')}`,
