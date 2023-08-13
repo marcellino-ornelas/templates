@@ -736,13 +736,12 @@ export class Templates {
     const pkg = this.pkg(packageName);
     const { force } = this.opts;
 
-    console.log(packageName);
-
     const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
     if (!is.array.empty(defFiles)) {
       logger.tps.log('Compiling def files %o', { force });
 
+      // Load all def files first
       defFiles.forEach((fileNode) => {
         logger.tps.info(
           `  - %s ${colors.green.italic('compiled')}`,
@@ -750,24 +749,20 @@ export class Templates {
         );
         const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
         this._defs[name] = fs.readFileSync(fileNode.path).toString();
-      });
-
-      console.log({ ...this._defs });
-
-      defFiles.forEach((fileNode) => {
-        logger.tps.info(
-          `  - %s ${colors.green.italic('compiled')}`,
-          fileNode.name
-        );
-        const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
 
         // When def files have more than one def. In order to use them we need to call the main file def first.
         // this fixes problems when any def can be available at render time
-        console.log('hey', name, { ...this._defs });
         dot.template(`{{#def.${name}}}`, null, this._defs);
       });
 
-      console.log({ ...this._defs });
+      //   // load def inside def files
+      //   defFiles.forEach((fileNode) => {
+      //     const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
+
+      //     // When def files have more than one def. In order to use them we need to call the main file def first.
+      //     // this fixes problems when any def can be available at render time
+      //     dot.template(`{{#def.${name}}}`, null, this._defs);
+      //   });
     }
 
     logger.tps.log('Compiling files');
