@@ -1,8 +1,8 @@
 import React from 'react';
-import { {{= tps.name}} } from './{{= tps.name}}';
+import { {{#def.componentName}} } from './{{= tps.name}}';
 
-describe("{{= tps.name }}", () => {
+describe("{{#def.componentName}}", () => {
 	it("first test", () => {
-		<{{= tps.name}} />
+		<{{#def.componentName}} />
 	});
 });

@@ -1,6 +1,6 @@
 {
   "name": "templates-mo",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
   "main": "lib/templates/index.js",
   "keywords": [
