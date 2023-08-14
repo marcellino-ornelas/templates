@@ -41,15 +41,19 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
             <tr key={prompt.name}>
               <td>{prompt.name}</td>
               <td>{prompt.message}</td>
-              <td>{`--${prompt.name}`}</td>
-              <td>
+              <td style={{ whiteSpace: 'nowrap' }}>{`--${prompt.name}`}</td>
+              <td style={{ whiteSpace: 'nowrap' }}>
                 {prompt?.aliases
                   ?.map((alias) =>
                     alias.length === 1 ? `-${alias}` : `--${alias}`
                   )
                   .join(', ')}
               </td>
-              <td>{prompt?.default?.toString()}</td>
+              <td>
+                {typeof prompt?.default === 'function'
+                  ? prompt?.default({})
+                  : prompt?.default?.toString()}
+              </td>
             </tr>
           ))}
         </tbody>
