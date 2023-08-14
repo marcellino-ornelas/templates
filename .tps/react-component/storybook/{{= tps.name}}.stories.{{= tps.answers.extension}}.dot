@@ -1,7 +1,7 @@
 {{? tps.answers.typescript}}import type { Meta, StoryObj } from '@storybook/react';{{?}}
 import { {{#def.componentName}} } from './{{= tps.name}}';
 
-const meta{{? tps.answers.typescript}}: Meta<typeof Button>{{?}} = {
+const meta{{? tps.answers.typescript}}: Meta<typeof {{#def.componentName}}>{{?}} = {
   component: {{#def.componentName}},
 };
 
