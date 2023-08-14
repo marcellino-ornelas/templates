@@ -1,7 +1,7 @@
 import React from 'react';
 import { {{#def.componentName}} } from './{{= tps.name}}';
 
-describe("{{= tps.name }}", () => {
+describe("{{#def.componentName}}", () => {
 	it("first test", () => {
 		<{{#def.componentName}} />
 	});
