@@ -75,7 +75,7 @@ module.exports = {
       aliases: ['s'],
       type: 'confirm',
       tpsType: 'package',
-      message: 'Would you like to include a index storybook file?',
+      message: 'Would you like to include a storybook file?',
       default: false,
     },
   ],
