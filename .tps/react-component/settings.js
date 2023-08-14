@@ -72,7 +72,7 @@ module.exports = {
     },
     {
       name: 'storybook',
-      aliases: ['s'],
+      aliases: ['s', 'story'],
       type: 'confirm',
       tpsType: 'package',
       message: 'Would you like to include a storybook file?',
