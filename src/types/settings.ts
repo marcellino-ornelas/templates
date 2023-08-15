@@ -15,7 +15,7 @@ export enum SettingsFilePromptType {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnswersHash = Record<string, any>;
+export type AnswersHash = Record<string, any>;
 
 export interface SettingsFilePrompt {
   name: string;
@@ -42,20 +42,26 @@ export interface SettingsFilePrompt {
     | boolean
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | Array<any>
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    | ((answers: AnswersHash) => any);
+    | DefaultFn;
 
-  validate?: (
-    input: string,
-    answers: AnswersHash
-  ) => (boolean | string) | Promise<boolean | string>;
+  validate?: ValidateFn;
 
   filter?: (input: string) => Promise<string> | string;
 
   transformer?: (input: string) => string | Promise<string>;
 
-  when?: boolean | ((answers: AnswersHash) => boolean);
+  when?: boolean | WhenFn;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type DefaultFn = (answers: AnswersHash) => any;
+
+export type WhenFn = (answers: AnswersHash) => boolean;
+
+export type ValidateFn = (
+  input: string,
+  answers: AnswersHash
+) => (boolean | string) | Promise<boolean | string>;
 
 export interface SettingsFile {
   prompts: SettingsFilePrompt[];

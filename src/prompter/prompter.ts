@@ -6,7 +6,7 @@ import {
   PromptNoPromptFoundError,
   PromptInvalidAnswersError,
 } from '@tps/errors';
-import type { SettingsFilePrompt } from '@tps/types/settings';
+import type { SettingsFilePrompt, AnswersHash } from '@tps/types/settings';
 import Prompt from './prompt';
 
 interface PrompterOptions {
@@ -20,11 +20,7 @@ const DEFAULT_OPTIONS: PrompterOptions = {
   default: false,
 };
 
-interface Answers {
-  [prop: string]: any;
-}
-
-export default class Prompter<TAnswers = Answers> {
+export default class Prompter<TAnswers = AnswersHash> {
   public opts: PrompterOptions;
 
   public answers: TAnswers;
@@ -41,7 +37,7 @@ export default class Prompter<TAnswers = Answers> {
 
     this.opts = defaults(opts, DEFAULT_OPTIONS);
     this.answers = {} as TAnswers;
-    this.prompts = prompts.map((p) => new Prompt(p));
+    this.prompts = prompts.map((p) => new Prompt(p, this));
     this.answered = 0;
   }
 
@@ -101,7 +97,10 @@ export default class Prompter<TAnswers = Answers> {
           const allDefaults = {};
 
           promptsLeft.forEach((prompt) => {
-            allDefaults[prompt.name] = prompt.default;
+            allDefaults[prompt.name] =
+              prompt.default instanceof Function
+                ? prompt.default({ ...allDefaults, ...this.answers })
+                : prompt.default;
           });
 
           this.setAnswers(allDefaults);
