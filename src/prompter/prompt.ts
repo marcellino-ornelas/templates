@@ -1,6 +1,13 @@
 import * as is from 'is';
 import logger from '@tps/utilities/logger';
-import { SettingsFilePrompt } from '@tps/types/settings';
+import {
+  SettingsFilePrompt,
+  AnswersHash,
+  ValidateFn,
+  DefaultFn,
+  WhenFn,
+} from '@tps/types/settings';
+import type Prompter from './prompter';
 
 export default class Prompt {
   public name: SettingsFilePrompt['name'];
@@ -31,7 +38,7 @@ export default class Prompt {
 
   public suffix: SettingsFilePrompt['suffix'];
 
-  constructor(prompt: SettingsFilePrompt) {
+  constructor(prompt: SettingsFilePrompt, prompter: Prompter) {
     logger.prompt.info('Prompt %O', prompt);
     this.aliases = prompt.aliases || [];
     this.tpsType = prompt.tpsType || 'package';
@@ -64,15 +71,46 @@ export default class Prompt {
     //   defaultValue = prompt.default;
     // }
 
-    this.default = prompt.default;
     this.choices = prompt.choices || [];
-    this.validate = prompt.validate;
-    this.filter = prompt.filter;
-    this.transformer = prompt.transformer;
-    this.when = prompt.when;
     this.pageSize = prompt.pageSize;
     this.prefix = prompt.prefix;
     this.suffix = prompt.suffix;
+    this.filter = prompt.filter;
+    this.transformer = prompt.transformer;
+
+    this.default = this.wrapFunc(
+      prompt.default,
+      (fn: DefaultFn, inquirerAnswers: AnswersHash) => {
+        return fn({
+          ...prompter.answers,
+          ...inquirerAnswers,
+        });
+      }
+    );
+
+    this.when = this.wrapFunc(
+      prompt.when,
+      (fn: WhenFn, inquirerAnswers: AnswersHash) => {
+        return fn({
+          ...prompter.answers,
+          ...inquirerAnswers,
+        });
+      }
+    );
+
+    this.validate = this.wrapFunc(
+      prompt.validate,
+      (fn: ValidateFn, input: string, inquirerAnswers: AnswersHash) => {
+        return fn(input, {
+          ...prompter.answers,
+          ...inquirerAnswers,
+        });
+      }
+    );
+  }
+
+  private wrapFunc(d, wrapper) {
+    return d instanceof Function ? (...args) => wrapper(d, ...args) : d;
   }
 
   isData(): boolean {
