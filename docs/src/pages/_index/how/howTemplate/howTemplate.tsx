@@ -35,7 +35,7 @@ export const HowTemplate = () => {
                 current project, templates can handle it all.
                 <br />
                 <br />
-                Your template, your rules
+                Your template, your rules!
               </p>
             </div>
           </div>
