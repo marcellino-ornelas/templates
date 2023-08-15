@@ -29,8 +29,8 @@ export const HowTerminal = () => {
             <p>
               Create new instances of your template on the fly! Answer your
               templates prompts to fit your current projects needs. Optionally,
-              create a configuration file to pre-fill template prompts without
-              manually answering each one.
+              create a configuration file for your project to pre-fill template
+              prompts without manually answering each one.
             </p>
           </div>
           <div className={howStyles.howCol}>
