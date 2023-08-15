@@ -30,7 +30,7 @@ export const HowTemplate = () => {
               <p>
                 Build your own blueprint. Set up your directory structure,
                 source files, and configurations. Define prompts to make your
-                template dynamic and adapt to different situations. Whether your
+                template dynamic and adapt to different use cases. Whether your
                 building an entire project scaffold or specific pieces to your
                 current project, templates can handle it all.
                 <br />
