@@ -27,10 +27,10 @@ export const HowTerminal = () => {
             <h4 className={howStyles.howStep}>Step 2</h4>
             <h3 className={howStyles.howHeader}>Create a new Instance</h3>
             <p>
-              Create a new instance of your template by answering prompts and
-              providing necessary information for customization. Tailor the
-              template to suit your specific project requirements without the
-              need for any external tools.
+              Create new instances of your template on the fly! Answer your
+              templates prompts to fit your current projects needs. Optionally,
+              create a configuration file to pre-fill template prompts without
+              manually answering each one.
             </p>
           </div>
           <div className={howStyles.howCol}>
