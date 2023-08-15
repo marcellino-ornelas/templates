@@ -28,10 +28,14 @@ export const HowTemplate = () => {
               <h4 className={howStyles.howStep}>Step 1</h4>
               <h3 className={howStyles.howHeader}>Create a Template</h3>
               <p>
-                Let your creativity flow as you design and create a template
-                that holds all the code, file structure, and configurations you
-                want. Make it truly yours by setting up prompts and
-                customizations, so it easily adjusts to different project needs.
+                Build your own blueprint. Set up your directory structure,
+                source files, and configurations. Define prompts to make your
+                template dynamic and adapt to different use cases. Whether your
+                building an entire project scaffold or specific pieces to your
+                current project, templates can handle it all.
+                <br />
+                <br />
+                Your template, your rules!
               </p>
             </div>
           </div>
