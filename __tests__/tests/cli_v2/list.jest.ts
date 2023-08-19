@@ -41,9 +41,4 @@ describe('Command Line: list', () => {
     // Verify the output is correct
     expect(log.get()).toBe(expect.stringContaining('testing'));
   });
-  // tpsCli('list').then((stdout) => {
-  //   ALL_LOCAL_TEMPLATES.forEach((template) => {
-  //     expect(stdout).toContain(template);
-  //   });
-  // }));
 });

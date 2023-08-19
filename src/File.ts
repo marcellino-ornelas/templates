@@ -56,7 +56,7 @@ class File {
     this._dotNameCompiled = dot.template(this._name);
     this.src = fileNode.path;
     this.fileNode = fileNode;
-    const fileData = fs.readFileSync(this.src);
+    const fileData = fs.readFileSync(this.src)?.toString();
     this.fileDataTemplate = (data, defs, dest) => {
       const realData = {
         ...data,
