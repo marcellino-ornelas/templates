@@ -36,7 +36,8 @@ export const HAS_GLOBAL: boolean = isDir(GLOBAL_PATH);
  */
 
 // Need to override the CWD for find up so we can get the .tpsrc file from the __tests__ tps folder
-const overrideCwd: string = IS_TESTING ? path.join(CWD, '__tests__') : CWD;
+// eslint-disable-next-line no-constant-condition
+const overrideCwd: string = false ? path.join(CWD, '__tests__') : CWD;
 const tpsLocal: string = findUp(TPS_FOLDER, overrideCwd);
 export const HAS_LOCAL: boolean = tpsLocal && tpsLocal !== GLOBAL_PATH;
 

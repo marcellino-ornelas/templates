@@ -70,6 +70,7 @@
     "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
+    "@types/fs-extra": "^11.0.1",
     "@types/yargs": "^17.0.24",
     "ansi-colors": "4.1.1",
     "bluebird": "3.5.5",
@@ -83,6 +84,7 @@
     "inflection": "^2.0.1",
     "inquirer": "6.2.2",
     "is": "3.3.0",
+    "memfs": "^4.2.1",
     "minimatch": "3.0.4",
     "prettyjson-256": "1.5.18",
     "strip-ansi": "6.0.0",
