@@ -10,11 +10,16 @@ import realPath from 'path';
 //   [process.cwd()]: '',
 // });
 
-const dir = new DirectoryNode('.tps', TESTING_DIR);
-
 const DEFAULT_FILES = {
   [`${process.cwd()}/readme.md`]: '',
 };
+
+/**
+ * Inside of constants, we override CWD to point to the __tests__ directory
+ *
+ * We may not have to do this anymore if everything is in memory but to be continued
+ */
+const dir = new DirectoryNode('.tps', TESTING_DIR);
 
 dir.find({ type: 'file' }).forEach((a: FileNode) => {
   const data = fs.readFileSync(a.path);
