@@ -3,6 +3,7 @@ import pjson from 'prettyjson-256';
 import is from 'is';
 import * as TPS from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
+import Templates from '@tps/templates';
 
 interface ListArgv {
   global: boolean;
@@ -39,7 +40,7 @@ export default {
       default: true,
     },
   },
-  handler(argv) {
+  async handler(argv) {
     if (argv.default) {
       const defaultTps = removeRcFile(fs.readdirSync(TPS.DEFAULT_TPS)).filter(
         // remove irrelevant templates
@@ -54,7 +55,7 @@ export default {
       }
     }
 
-    if (TPS.HAS_GLOBAL && argv.global) {
+    if (Templates.hasGloablTps() && argv.global) {
       const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 
       // @ts-expect-error wrong types module (`is`)
@@ -65,7 +66,7 @@ export default {
       }
     }
 
-    if (TPS.HAS_LOCAL && argv.local) {
+    if (Templates.hasLocalTps() && argv.local) {
       const local = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
 
       // @ts-expect-error wrong types module (`is`)

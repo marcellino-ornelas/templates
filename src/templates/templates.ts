@@ -99,6 +99,14 @@ export class Templates {
 
   public src: string;
 
+  public static hasGloablTps(): boolean {
+    return TPS.HAS_GLOBAL;
+  }
+
+  public static hasLocalTps(): boolean {
+    return TPS.HAS_LOCAL;
+  }
+
   constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
     if (!templateName || !is.string(templateName)) {
       throw new RequiresTemplateError();
@@ -128,8 +136,9 @@ export class Templates {
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
           'search for default templates': maybeDefaultTemp,
-          [localPath]: TPS.HAS_LOCAL && fs.readdirSync(localPath),
-          [TPS.GLOBAL_PATH]: TPS.HAS_GLOBAL && fs.readdirSync(TPS.GLOBAL_PATH),
+          [localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
+          [TPS.GLOBAL_PATH]:
+            Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
         });
         throw new TemplateNotFoundError(templateName);
     }
@@ -812,7 +821,7 @@ export class Templates {
    */
 
   _loadTpsrc(templateName) {
-    if (!this.opts.noGlobalConfig && TPS.HAS_GLOBAL) {
+    if (!this.opts.noGlobalConfig && Templates.hasGloablTps()) {
       logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
       const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
       this._loadTpsSpecificConfig(templateName, globalConfig);

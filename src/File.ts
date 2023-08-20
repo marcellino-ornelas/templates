@@ -56,7 +56,7 @@ class File {
     this._dotNameCompiled = dot.template(this._name);
     this.src = fileNode.path;
     this.fileNode = fileNode;
-    const fileData = fs.readFileSync(this.src);
+    const fileData = fs.readFileSync(this.src)?.toString();
     this.fileDataTemplate = (data, defs, dest) => {
       const realData = {
         ...data,
@@ -90,7 +90,7 @@ class File {
       .catch((e) => {
         console.log('this should be force', e);
       })
-      .then(() => fs.writeFile(dest, fileData, { flags: 'w' }))
+      .then(() => fs.writeFile(dest, fileData, { flag: 'w' }))
       .then(() => Promise.resolve(dest))
       .catch((error) => Promise.reject(error));
   }
