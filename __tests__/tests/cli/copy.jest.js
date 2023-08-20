@@ -40,7 +40,7 @@ describe('Command Line: Copy', () => {
 
     await init(cwd, { force: true });
 
-    newTemplate(cwd, 'react-component');
+    await newTemplate(cwd, 'react-component');
 
     await expect(
       tpsCli('copy react-component', { cwd, fail: true })
@@ -54,7 +54,7 @@ describe('Command Line: Copy', () => {
 
     await init(cwd, { force: true });
 
-    newTemplate(cwd, 'new-name');
+    await newTemplate(cwd, 'new-name');
 
     await expect(
       tpsCli('copy react-component new-name', { cwd, fail: true })
