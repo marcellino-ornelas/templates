@@ -1,0 +1,25 @@
+/*
+ * Modules
+ */
+{{? tps.answers.playground }}import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';{{?}}
+{{? tps.answers.modules.length}}{{~ tps.answers.modules :module:index }}import {{= module}} from '{{= module === 'templates' ? '@test' : '@tps' }}/{{= module}}';{{~}}{{?? }}import _ from '@tps/_';{{?}}
+
+/*
+ * Constants
+ */
+{{? tps.answers.playground }}const playground = new Playground(TESTING_DIR){{?}}
+
+describe('[TPS] _', () => {
+  {{? tps.answers.modules.includes('templates')}}let tps;{{?}}
+
+  beforeAll(() => {{? tps.answers.playground }}playground.create(){{?}} );
+  afterAll(() => {{? tps.answers.playground }}playground.destroy(){{?}} );
+
+  beforeEach(() => {
+    {{? tps.answers.modules.includes('templates')}} tps = new Templates();{{?}}
+    {{? tps.answers.playground }}return playground.createBox('_'){{?}}
+  });
+
+  it('should', () => {});
+});

@@ -4,6 +4,7 @@ import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
 import * as TPS from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
+import { isDir } from '@tps/utilities/fileSystem';
 
 interface CopyArgv {
   template: string;
@@ -16,6 +17,8 @@ export default {
   handler(argv) {
     const template = new Template(argv.template);
 
+    const newLocation = path.join(TPS.LOCAL_PATH, argv.name || argv.template);
+
     if (!TPS.IS_TPS_INITIALIZED) {
       errorExit(
         new Error(
@@ -24,13 +27,15 @@ export default {
       );
     }
 
-    if (TPS.LOCAL_PATH === template.tpsPath) {
+    if (isDir(newLocation)) {
       errorExit(
-        new Error(`Template ${argv.template} already exists in your directory`)
+        new Error(
+          `Template ${
+            argv.name || argv.template
+          } already exists in your directory`
+        )
       );
     }
-
-    const newLocation = path.join(TPS.LOCAL_PATH, argv.name || argv.template);
 
     fs.copy(template.src, newLocation)
       .then(() => {
