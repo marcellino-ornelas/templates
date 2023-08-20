@@ -42,7 +42,6 @@ export default {
   },
   async handler(argv) {
     if (argv.default) {
-      //   console.log(fs);
       const defaultTps = removeRcFile(fs.readdirSync(TPS.DEFAULT_TPS)).filter(
         // remove irrelevant templates
         (file) => !BANNED_TEMPLATES.includes(file)
