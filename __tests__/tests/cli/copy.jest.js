@@ -25,6 +25,16 @@ describe('Command Line: Copy', () => {
     });
   });
 
+  it('should be able to copy a template and add new name', async () => {
+    const cwd = playground.box();
+
+    await init(cwd, { force: true });
+
+    return tpsCli('copy react-component new-name', { cwd }).then(() => {
+      expect(playground.pathTo('.tps/new-name')).toBeDirectory();
+    });
+  });
+
   it('should error if not initialized', () => {
     const cwd = playground.box();
 
