@@ -38,6 +38,8 @@ describe('Command Line: Copy', () => {
   it('should error if template already exists', async () => {
     const cwd = playground.box();
 
+    await init(cwd, { force: true });
+
     newTemplate(cwd, 'react-component');
 
     return expect(
@@ -49,6 +51,8 @@ describe('Command Line: Copy', () => {
 
   it('should error if name already exists', async () => {
     const cwd = playground.box();
+
+    await init(cwd, { force: true });
 
     newTemplate(cwd, 'new-name');
 
