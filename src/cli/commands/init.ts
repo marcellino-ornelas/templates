@@ -2,7 +2,7 @@ import { CommandModule } from 'yargs';
 import debug from 'debug';
 import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
-import { TemplateOptions } from '@tps/templates/templates';
+import { TemplateOptions, Templates } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
   InitializedAlreadyError,
@@ -52,7 +52,7 @@ export default {
      */
     if (argv.global) {
       logger.cli.log('Initializing Global...');
-      if (TPS.HAS_GLOBAL) {
+      if (Templates.hasGloablTps()) {
         errorExit(new GlobalInitializedAlreadyError(TPS.GLOBAL_PATH));
       }
 
@@ -73,10 +73,13 @@ export default {
       /**
        * if not force then tps folder can not exist in cwd
        */
-      logger.cli.info('tps found in parent directory?', TPS.HAS_LOCAL);
+      logger.cli.info(
+        'tps found in parent directory?',
+        Templates.hasLocalTps()
+      );
       logger.cli.info('closes tps location', TPS.LOCAL_PATH);
 
-      if (TPS.HAS_LOCAL && !argv.force) {
+      if (Templates.hasLocalTps() && !argv.force) {
         errorExit(new ParentDirectoryInitializedError(TPS.LOCAL_PATH));
       }
 
