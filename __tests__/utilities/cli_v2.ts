@@ -42,7 +42,7 @@ export const init = (vol: _Volume, global = false): Promise<void> => {
   const location = global ? USER_HOME : CWD;
 
   return new Promise((resolve, reject) => {
-    vol.mkdir(`${location}/.tps/`, (err, data) => {
+    vol.mkdir(`${location}/.tps/`, (err) => {
       if (err) return reject(err);
 
       vol.writeFile(`${location}/.tps/.tpsrc`, '{}', (_err) => {
