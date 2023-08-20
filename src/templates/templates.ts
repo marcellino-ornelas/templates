@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
@@ -117,12 +117,15 @@ export class Templates {
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
     const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
+    console.log('debug', TPS.GLOBAL_PATH, isDir(maybeGlobalTemp));
+
     switch (true) {
       case localPath && isDir(maybeLocalTemp):
         this.src = maybeLocalTemp;
         this.tpsPath = localPath;
         break;
       case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
+        console.log('global template');
         this.src = maybeGlobalTemp;
         this.tpsPath = TPS.GLOBAL_PATH;
         break;
@@ -824,6 +827,7 @@ export class Templates {
     if (!this.opts.noGlobalConfig && Templates.hasGloablTps()) {
       logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
       const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
+      console.log('globalConfig', globalConfig);
       this._loadTpsSpecificConfig(templateName, globalConfig);
     }
     if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {

@@ -1,4 +1,5 @@
-import * as fs from 'fs';
+import fs from 'fs-extra';
+import fsOriginal from 'fs';
 import * as findFileUp from 'find-up';
 
 /**

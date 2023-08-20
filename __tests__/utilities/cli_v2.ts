@@ -3,13 +3,15 @@ import { Volume } from 'memfs';
 import { DirectoryJSON, Volume as _Volume } from 'memfs/lib/volume';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
-import fs from 'fs-extra';
+// import fs from 'fs-extra';
 import {
   USER_HOME,
   CWD,
   MAIN_DIR,
   DEFAULT_TPS,
 } from '@tps/utilities/constants';
+
+const fs = jest.requireActual('fs-extra');
 
 const DEFAULT_FILES = {
   [`${CWD}/readme.md`]: '',
