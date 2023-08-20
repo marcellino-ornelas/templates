@@ -30,7 +30,6 @@ describe('Command Line: list', () => {
   it('should be able to list out all templates', async () => {
     jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
     jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-    // jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
     await init(vol);
 
