@@ -1,7 +1,3 @@
-/*
- * Modules
- */
-
 import fs from 'fs-extra';
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';

@@ -7,10 +7,11 @@ import { CommandModule } from 'yargs';
 
 interface CopyArgv {
   template: string;
+  name: string;
 }
 
 export default {
-  command: ['copy <template>', 'cp <template>'],
+  command: ['copy <template> [name]', 'cp <template> [name]'],
   description: 'Copy a template',
   handler(argv) {
     const template = new Template(argv.template);
@@ -29,7 +30,7 @@ export default {
       );
     }
 
-    const newLocation = path.join(TPS.LOCAL_PATH, argv.template);
+    const newLocation = path.join(TPS.LOCAL_PATH, argv.name || argv.template);
 
     fs.copy(template.src, newLocation)
       .then(() => {
