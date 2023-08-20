@@ -4,7 +4,6 @@ import { DirectoryJSON, Volume as _Volume } from 'memfs/lib/volume';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
 import fs from 'fs-extra';
-import realPath from 'path';
 import {
   USER_HOME,
   CWD,
