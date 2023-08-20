@@ -42,7 +42,7 @@ describe('Command Line: Copy', () => {
 
     newTemplate(cwd, 'react-component');
 
-    return expect(
+    await expect(
       tpsCli('copy react-component', { cwd, fail: true })
     ).rejects.toContain(
       `Template react-component already exists in your directory`
@@ -56,7 +56,7 @@ describe('Command Line: Copy', () => {
 
     newTemplate(cwd, 'new-name');
 
-    return expect(
+    await expect(
       tpsCli('copy react-component new-name', { cwd, fail: true })
     ).rejects.toContain(`Template new-name already exists in your directory`);
   });
