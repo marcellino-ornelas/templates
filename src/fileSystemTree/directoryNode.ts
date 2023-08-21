@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import fs from 'fs-extra';
 import * as minimatch from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';

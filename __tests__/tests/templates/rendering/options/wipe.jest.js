@@ -3,7 +3,7 @@
  */
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import Templates from '@test/templates';
 import * as path from 'path';
 

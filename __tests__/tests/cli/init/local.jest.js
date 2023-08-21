@@ -3,7 +3,7 @@ import {
   INIT_PACKAGE_FILES,
   TESTING_INIT_DIR,
 } from '@test/utilities/constants';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { init } from '@test/support/cli';
 
 /**
@@ -40,7 +40,8 @@ describe('Command Line: Init Local', () => {
     return init(cwd);
   });
 
-  it('should error out if repo is already initialized', () => expect(init(cwd, {}, { fail: true })).rejects.toContain(
+  it('should error out if repo is already initialized', () =>
+    expect(init(cwd, {}, { fail: true })).rejects.toContain(
       'InitializedAlreadyError'
     ));
 

@@ -1,9 +1,7 @@
-// import * as fs from 'fs-extra';
 import { Volume } from 'memfs';
 import { DirectoryJSON, Volume as _Volume } from 'memfs/lib/volume';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
-// import fs from 'fs-extra';
 import {
   USER_HOME,
   CWD,

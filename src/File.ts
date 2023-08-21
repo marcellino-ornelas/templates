@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dot from '@tps/dot';
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import { DotError } from '@tps/errors';
 import { FileNode } from './fileSystemTree';
 

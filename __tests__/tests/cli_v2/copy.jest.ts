@@ -10,54 +10,69 @@ import {
   mkTemplate,
   loadDefaultTemplates,
 } from '@test/utilities/cli_v2';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { expect, jest, describe, it } from '@jest/globals';
 
-jest.mock('fs-extra');
 jest.mock('@tps/utilities/fileSystem', () => {
   return {
-    ...jest.requireActual('@tps/utilities/fileSystem'),
+    // ...jest.requireActual<object>('@tps/utilities/fileSystem'),
     isDir: jest.fn(),
     json: jest.fn(),
   };
 });
 
+jest.mock('fs-extra', () => {
+  return {
+    __esModule: true,
+    default: {
+      readdirSync: jest.fn(),
+    },
+    readdirSync: jest.fn(),
+  };
+});
+
 const vol = createFs();
+
+jest
+  .mocked(fs.readdirSync)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  .mockImplementation((path, options) => {
+    console.log('called', path);
+    return vol.readdirSync(path, options);
+  });
+
+// jest.mocked(isDir, { shallow: true }).mockImplementation((path: string) => {
+//   let dir;
+//   try {
+//     dir = vol.lstatSync(path);
+//   } catch (e) {
+//     return false;
+//   }
+//   return dir.isDirectory();
+// });
+
+// jest.mocked(json).mockImplementation((jsonFile) => {
+//   try {
+//     const jsonContents = vol.readFileSync(jsonFile).toString();
+//     return JSON.parse(jsonContents);
+//   } catch (err) {
+//     return {};
+//   }
+// });
 
 describe('Command Line: Copy', () => {
   beforeEach(() => {
     // log.reset();
     reset(vol);
-
-    jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
-    jest.mocked(isDir).mockImplementation((path: string) => {
-      let dir;
-      try {
-        dir = vol.lstatSync(path);
-      } catch (e) {
-        return false;
-      }
-      return dir.isDirectory();
-    });
-
-    jest.mocked(json).mockImplementation((jsonFile) => {
-      try {
-        const jsonContents = fs.readFileSync(jsonFile).toString();
-        return JSON.parse(jsonContents);
-      } catch (err) {
-        return {};
-      }
-    });
   });
 
   it('should be able to copy a template', async () => {
     jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
     jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
-    // jest.mocked(fs.lstatSync).mockImplementation((...args) => {
-    //   console.log('mocked', args);
-    //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //   // @ts-ignore
-    //   return vol.lstatSync(...args);
-    // });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
 
     await init(vol, true);
 
@@ -70,13 +85,13 @@ describe('Command Line: Copy', () => {
      */
     mkTemplate(vol, 'global-template', undefined, true);
 
-    console.log(vol.toJSON());
+    // console.log(vol.toJSON());
 
     const hey = vol.lstatSync(
       '/Users/marcellinoornelas/.tps/global-template/default'
     );
 
-    console.log('isDir', hey.isDirectory());
+    // console.log('isDir', hey.isDirectory());
 
     const parser = yargs().command(copy);
 

@@ -1,7 +1,7 @@
 /**
  * Modules
  */
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as path from 'path';
 import { hasProp } from '@tps/utilities/helpers';
 import * as crypto from 'crypto';
