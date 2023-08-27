@@ -37,9 +37,8 @@ export default {
       );
     }
 
-    // fs.copy(template.src, newLocation)
     fs.promises
-      .cp(template.src, newLocation)
+      .cp(template.src, newLocation, { recursive: true })
       .then(() => {
         process.exit(0);
       })
