@@ -6,6 +6,7 @@ import fs from 'fs';
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
+import { writeFile } from '@test/utilities/helpers';
 
 /*
  * Constants
@@ -27,8 +28,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const indexFile = playground.pathTo('App/index.js');
     const appFolder = playground.pathTo('App');
 
-    fs.mkdirSync(appFolder, { recursive: true });
-    fs.writeFileSync(indexFile, 'blah');
+    writeFile(indexFile, 'blah');
 
     expect(appFolder).toBeDirectory();
     expect(indexFile).toBeFile();
@@ -53,7 +53,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const box = playground.box();
     const indexFile = playground.pathTo('index.js');
 
-    fs.writeFileSync(indexFile, 'blah');
+    writeFile(indexFile, 'blah');
     expect(indexFile).toBeFile();
 
     return tps.render(box).catch((error) => {
@@ -70,11 +70,9 @@ describe('[TPS] Rendered Failed Cases:', () => {
 
   it('should throw error if file is already created in nested folder', () => {
     const file = playground.pathTo('App/storeUtils/user.js');
-    const fileDir = playground.pathTo('App/storeUtils');
     const appFolder = playground.pathTo('App');
 
-    fs.mkdirSync(fileDir, { recursive: true });
-    fs.writeFileSync(file, 'blah');
+    writeFile(file, 'blah');
 
     expect(file).toBeFile();
 
@@ -95,8 +93,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const appFolder = playground.pathTo('App');
     const app2Folder = playground.pathTo('App2');
 
-    fs.mkdir(playground.pathTo('App/storeUtils'), { recursive: true });
-    fs.writeFileSync(fileInApp, 'blah');
+    writeFile(fileInApp, 'blah');
 
     expect(fileInApp).toBeFile();
 
