@@ -37,7 +37,9 @@ export default {
       );
     }
 
-    fs.copy(template.src, newLocation)
+    // fs.copy(template.src, newLocation)
+    fs.promises
+      .cp(template.src, newLocation)
       .then(() => {
         process.exit(0);
       })
