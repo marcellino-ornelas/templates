@@ -1,7 +1,7 @@
 /**
  * Modules
  */
-import * as fs from 'fs-extra';
+import fs from 'fs';
 import * as path from 'path';
 import { hasProp } from '@tps/utilities/helpers';
 import * as crypto from 'crypto';
@@ -43,11 +43,12 @@ class Playground {
   }
 
   create() {
-    return fs.mkdir(this.path);
+    return fs.promises.mkdir(this.path);
   }
 
   destroy() {
-    return fs.remove(this.path);
+    // return fs.remove(this.path);
+    return fs.promises.rm(this.path, { force: true, recursive: true });
   }
 
   createBox(name) {

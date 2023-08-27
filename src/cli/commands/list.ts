@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import pjson from 'prettyjson-256';
 import is from 'is';
 import * as TPS from '@tps/utilities/constants';
