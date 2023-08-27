@@ -47,8 +47,6 @@ Run all unit tests
 
 Run single unit tests
 
-> !WARNING: We dont recommend this. This creates a lot of files and folders. Push your changes up to your branch and let github actions handle running these tests.
-
 ```bash
 > npx jest path/to/file
 ```
