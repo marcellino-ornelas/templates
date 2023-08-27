@@ -27,10 +27,43 @@ npm install -g templates-mo
 
 ## Development
 
+### Accessing dev cli
+
+When making changes to templates, to test changes using tps cli use the `./.bin/cli` file. 
+
+```bash
+./.bin/cli react-component App
+```
+
+### Testing
+
+Run all unit tests
+
+> !WARNING: We dont recommend running all tests. This creates a lot of files and folders. Push your changes up to your branch and let github actions handle running these tests.
+
+```bash
+> npx jest
+```
+
+Run single unit tests
+
+> !WARNING: We dont recommend this. This creates a lot of files and folders. Push your changes up to your branch and let github actions handle running these tests.
+
+```bash
+> npx jest path/to/file
+```
+
 ### Debug
 
-```
-❯ DEBUG=tps npx jest
+you can debug tests or cli commands by using the `DEBUG` env variable. This will force templates to print out valuable information about the build process and the steps it took to get there.
+
+```bash
+DEBUG=tps npx jest path/to/file
 ```
 
+or cli
+
+```bash
+DEBUG=tps ./.bin/cli react-component App
+```
 <!-- (Template Processing System) -->
