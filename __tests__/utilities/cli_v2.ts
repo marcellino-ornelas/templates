@@ -1,4 +1,3 @@
-// import * as fs from 'fs-extra';
 import { Volume } from 'memfs';
 import { DirectoryJSON, Volume as _Volume } from 'memfs/lib/volume';
 import { TESTING_DIR } from '@test/utilities/constants';

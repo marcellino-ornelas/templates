@@ -3,7 +3,7 @@ import { tpsCli } from '@test/utilities/tps-cli';
 import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
 import * as path from 'path';
 import * as is from 'is';
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import * as TPS from '@tps/utilities/constants';
 
 /**
