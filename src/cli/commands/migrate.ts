@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 import { errorExit } from '@tps/cli/utils/error-exit';
 import { DirectoryNode } from '@tps/fileSystemTree/directoryNode';
@@ -67,7 +67,8 @@ export default {
     const ccrTemplates = new DirectoryNode(ccrTemplatesPath, null, false);
     const newTemplatePath = path.join(localTps, name);
 
-    fs.ensureDirSync(newTemplatePath);
+    // fs.ensureDirSync(newTemplatePath);
+    fs.mkdirSync(newTemplatePath, { recursive: true });
 
     ccrTemplates.depthFirstEach((child) => {
       if (ccrTemplates === child) return;
@@ -87,7 +88,7 @@ export default {
           convertText(child.pathFromRoot)
         );
         console.log('Creating Dir: ', newDirPath);
-        fs.ensureDirSync(newDirPath);
+        fs.mkdirSync(newDirPath, { recursive: true });
       }
     });
 
@@ -111,6 +112,7 @@ export default {
       answers,
     };
 
-    fs.writeJSONSync(tpsrcPath, tpsrc, { EOL: '\r\n', spaces: 2 });
+    // fs.writeJSONSync(tpsrcPath, tpsrc, { EOL: '\r\n', spaces: 2 });
+    fs.writeFileSync(tpsrcPath, JSON.stringify(tpsrc, null, '\t'));
   },
 };
