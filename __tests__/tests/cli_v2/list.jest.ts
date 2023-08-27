@@ -11,20 +11,24 @@ import {
 } from '@test/utilities/cli_v2';
 import { mockConsoleLog } from '@test/utilities/mocks';
 
-jest.mock('fs');
-
 const vol = createFs();
 
-const log = mockConsoleLog();
-
 describe('Command Line: list', () => {
+  let log;
+
   beforeEach(() => {
-    log.reset();
+    // log.reset();
+    log = mockConsoleLog();
     reset(vol);
   });
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should be able to list out all templates', async () => {
-    jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    // jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
     jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
     await init(vol);
@@ -37,7 +41,8 @@ describe('Command Line: list', () => {
   });
 
   it('should be able to list out global templates', async () => {
-    jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    // jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
     jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
     // ignore local folder, no need to do extra work
     jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
@@ -55,7 +60,8 @@ describe('Command Line: list', () => {
   });
 
   it('should be able to list out default templates', async () => {
-    jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    // jest.mocked(fs.readdirSync).mockImplementation(vol.readdirSync.bind(vol));
+    jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
     // ignore global folder, no need to do extra work
     jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
