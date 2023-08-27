@@ -568,7 +568,6 @@ export class Templates {
 
       dirsThatMatch.forEach((dir) => {
         try {
-          //   fs.removeSync(dir);
           fs.rmSync(dir, { force: true, recursive: true });
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
         } catch (err) {
