@@ -1,4 +1,3 @@
-import * as fs from 'fs-extra';
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
 import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/utilities/constants';
@@ -8,6 +7,7 @@ import {
   RequiresTemplateError,
 } from '@tps/errors';
 import * as path from 'path';
+import { writeFile } from '@test/utilities/helpers';
 
 /**
  * Constants
@@ -121,7 +121,7 @@ describe('[Templates] Render Process:', () => {
     const destPath = playground.pathTo('app');
     const randomDest = playground.pathTo('app/some-random-file.js');
 
-    fs.outputFileSync(randomDest, 'blah');
+    writeFile(randomDest, 'blah');
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
@@ -134,7 +134,7 @@ describe('[Templates] Render Process:', () => {
 
     const indexFile = playground.pathTo('app/index.js');
 
-    fs.outputFileSync(indexFile, 'blah');
+    writeFile(indexFile, 'blah');
 
     const destPath = playground.pathTo('app');
 
