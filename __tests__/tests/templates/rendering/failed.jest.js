@@ -74,7 +74,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const appFolder = playground.pathTo('App');
 
     fs.mkdirSync(fileDir, { recursive: true });
-    fs.outputFileSync(file, 'blah');
+    fs.writeFileSync(file, 'blah');
 
     expect(file).toBeFile();
 
@@ -96,7 +96,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
     const app2Folder = playground.pathTo('App2');
 
     fs.mkdir(playground.pathTo('App/storeUtils'), { recursive: true });
-    fs.outputFileSync(fileInApp, 'blah');
+    fs.writeFileSync(fileInApp, 'blah');
 
     expect(fileInApp).toBeFile();
 
