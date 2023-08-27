@@ -453,17 +453,14 @@ export class Templates {
               // if we are building the template in dest folder don't create new folder
               if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
                 loggerGroup.info('Creating real build path %s', realBuildPath);
-                return (
-                  fs
-                    // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
-                    .ensureDir(realBuildPath)
-                    .catch((err) => {
-                      loggerGroup.warn(
-                        'Building build path folder had a issue %n',
-                        err
-                      );
-                    })
-                );
+                return fs.promises
+                  .mkdir(realBuildPath, { recursive: true })
+                  .catch((err) => {
+                    loggerGroup.warn(
+                      'Building build path folder had a issue %n',
+                      err
+                    );
+                  });
               }
 
               loggerGroup.info(
@@ -590,7 +587,6 @@ export class Templates {
 
       files.forEach((file) => {
         try {
-          //   fs.removeSync(file);
           fs.rmSync(buildPath, { force: true });
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
         } catch (err) {
@@ -710,7 +706,7 @@ export class Templates {
           return;
         }
         /* mark directory as already made */
-        return fs
+        return fs.promises
           .mkdir(dirPathInNewLocation)
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);
