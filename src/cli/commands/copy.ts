@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import path from 'path';
 import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
@@ -37,9 +37,7 @@ export default {
       );
     }
 
-    // fs.copy(template.src, newLocation)
-    fs.promises
-      .cp(template.src, newLocation)
+    fs.copy(template.src, newLocation)
       .then(() => {
         process.exit(0);
       })

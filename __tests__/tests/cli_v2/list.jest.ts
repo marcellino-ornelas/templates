@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs-extra';
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';
 import list from '@tps/cli/commands/list';
@@ -11,7 +11,7 @@ import {
 } from '@test/utilities/cli_v2';
 import { mockConsoleLog } from '@test/utilities/mocks';
 
-jest.mock('fs');
+jest.mock('fs-extra');
 
 const vol = createFs();
 
