@@ -127,9 +127,6 @@ Received: ${this.utils.printReceived(fileContents)}
   },
 });
 
-/**
- * Check to see if the `path` is a valid directory
- */
 function isDir(dirPath) {
   let dir;
   try {
@@ -140,9 +137,6 @@ function isDir(dirPath) {
   return dir.isDirectory();
 }
 
-/**
- * Check to see if the `path` is a valid file
- */
 function isFile(filePath) {
   let file;
   try {
