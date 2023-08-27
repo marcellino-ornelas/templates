@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
 import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
