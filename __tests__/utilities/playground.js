@@ -47,7 +47,6 @@ class Playground {
   }
 
   destroy() {
-    // return fs.remove(this.path);
     return fs.promises.rm(this.path, { force: true, recursive: true });
   }
 
