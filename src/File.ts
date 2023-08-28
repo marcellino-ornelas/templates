@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dot from '@tps/dot';
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs';
 import { DotError } from '@tps/errors';
 import { FileNode } from './fileSystemTree';
 
@@ -86,18 +86,19 @@ class File {
 
   renderDotFile(dest: string, fileData: string): Promise<string> {
     return Promise.resolve()
-      .then(() => this.opts.force && fs.remove(dest))
+      .then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
       .catch((e) => {
         console.log('this should be force', e);
       })
-      .then(() => fs.writeFile(dest, fileData, { flag: 'w' }))
+      .then(() => fs.promises.writeFile(dest, fileData, { flag: 'w' }))
+
       .then(() => Promise.resolve(dest))
       .catch((error) => Promise.reject(error));
   }
 
   renderFile(dest: string): Promise<string> {
     return Promise.resolve()
-      .then(() => this.opts.force && fs.remove(dest))
+      .then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
       .then(
         () =>
           new Promise((resolve, reject) => {

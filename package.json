@@ -26,7 +26,7 @@
     "email": "marcellino.ornelas@gmail.com"
   },
   "engines": {
-    "node": ">=6.13.1"
+    "node": ">=16.7.0"
   },
   "homepage": "https://marcellino-ornelas.github.io/templates/",
   "bin": {
@@ -70,7 +70,6 @@
     "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
-    "@types/fs-extra": "^11.0.1",
     "@types/yargs": "^17.0.24",
     "ansi-colors": "4.1.1",
     "bluebird": "3.5.5",
@@ -80,7 +79,6 @@
     "dot": "1.1.2",
     "filenamify": "2.1.0",
     "find-up": "3.0.0",
-    "fs-extra": "7.0.1",
     "inflection": "^2.0.1",
     "inquirer": "6.2.2",
     "is": "3.3.0",

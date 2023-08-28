@@ -1,6 +1,5 @@
-import { isFile, isDir } from '@tps/utilities/fileSystem';
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs';
 import * as pjson from 'prettyjson-256';
 import { DirectoryNode } from '@tps/fileSystemTree';
 
@@ -127,3 +126,23 @@ Received: ${this.utils.printReceived(fileContents)}
     };
   },
 });
+
+function isDir(dirPath) {
+  let dir;
+  try {
+    dir = fs.lstatSync(dirPath);
+  } catch (e) {
+    return false;
+  }
+  return dir.isDirectory();
+}
+
+function isFile(filePath) {
+  let file;
+  try {
+    file = fs.lstatSync(filePath);
+  } catch (e) {
+    return false;
+  }
+  return file.isFile();
+}

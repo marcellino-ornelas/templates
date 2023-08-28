@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import * as path from 'path';
-import * as fs from 'fs-extra';
+import fs from 'fs';
 import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
@@ -453,17 +453,14 @@ export class Templates {
               // if we are building the template in dest folder don't create new folder
               if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
                 loggerGroup.info('Creating real build path %s', realBuildPath);
-                return (
-                  fs
-                    // change to mkdir(realBuildPath, { recursive: true }) needs node@^10.12.0
-                    .ensureDir(realBuildPath)
-                    .catch((err) => {
-                      loggerGroup.warn(
-                        'Building build path folder had a issue %n',
-                        err
-                      );
-                    })
-                );
+                return fs.promises
+                  .mkdir(realBuildPath, { recursive: true })
+                  .catch((err) => {
+                    loggerGroup.warn(
+                      'Building build path folder had a issue %n',
+                      err
+                    );
+                  });
               }
 
               loggerGroup.info(
@@ -516,7 +513,7 @@ export class Templates {
   }
 
   _wipe(realBuildPath) {
-    return fs.remove(realBuildPath);
+    return fs.promises.rm(realBuildPath, { force: true, recursive: true });
   }
 
   _scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
@@ -545,7 +542,7 @@ export class Templates {
     }
 
     if (buildNewFolder) {
-      fs.removeSync(buildPath);
+      fs.rmSync(buildPath, { force: true, recursive: true });
     }
 
     // eslint-disable-next-line prefer-const
@@ -568,7 +565,7 @@ export class Templates {
 
       dirsThatMatch.forEach((dir) => {
         try {
-          fs.removeSync(dir);
+          fs.rmSync(dir, { force: true, recursive: true });
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
         } catch (err) {
           logger.tps.error('Clean up failed when deleting directories %n', err);
@@ -590,7 +587,7 @@ export class Templates {
 
       files.forEach((file) => {
         try {
-          fs.removeSync(file);
+          fs.rmSync(buildPath, { force: true });
           logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
         } catch (err) {
           logger.tps.error('Clean up failed when deleting files %n', err);
@@ -709,7 +706,7 @@ export class Templates {
           return;
         }
         /* mark directory as already made */
-        return fs
+        return fs.promises
           .mkdir(dirPathInNewLocation)
           .then(() => {
             this.successfulBuilds.dirs.push(dirPathInNewLocation);

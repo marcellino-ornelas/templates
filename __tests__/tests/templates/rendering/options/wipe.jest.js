@@ -3,9 +3,9 @@
  */
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
-import * as fs from 'fs-extra';
 import Templates from '@test/templates';
 import * as path from 'path';
+import { writeFile } from '@test/utilities/helpers';
 
 /*
  * Constants
@@ -19,7 +19,6 @@ describe('[TPS] Render with Wipe:', () => {
   beforeEach(() => playground.createBox('rendering_wipe'));
 
   it('should be able to render a template with wipe.', () => {
-    // logger.tps.enable();
     /**
      * directory structure before:
      *
@@ -42,8 +41,8 @@ describe('[TPS] Render with Wipe:', () => {
 
     const tps = new Templates('testing', { wipe: true });
 
-    fs.outputFileSync(randomDest, 'blah');
-    fs.outputFileSync(indexFile, 'blah');
+    writeFile(randomDest, 'blah');
+    writeFile(indexFile, 'blah');
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
@@ -74,11 +73,11 @@ describe('[TPS] Render with Wipe:', () => {
     const tps = new Templates('testing', { wipe: true });
 
     // Make file in dest
-    fs.outputFileSync(randomFileInDest, 'blah');
+    writeFile(randomFileInDest, 'blah');
     // Make file in build path
-    fs.outputFileSync(randomFileInApp, 'blah');
+    writeFile(randomFileInApp, 'blah');
     // Make file in build path
-    fs.outputFileSync(indexFileInApp, 'blah');
+    writeFile(indexFileInApp, 'blah');
 
     return tps.render(playground.box(), 'dest/app').then(() => {
       expect(randomFileInDest).toBeFile();
@@ -122,8 +121,8 @@ describe('[TPS] Render with Wipe:', () => {
     // eslint-disable-next-line no-underscore-dangle
     tps._wipe = wipeMock;
 
-    fs.outputFileSync(randomDest, 'blah');
-    fs.outputFileSync(randomFileNotInBuildPath, '');
+    writeFile(randomDest, 'blah');
+    writeFile(randomFileNotInBuildPath, '');
 
     return tps.render(cwd, '').then(() => {
       expect(wipeMock).not.toHaveBeenCalled();
@@ -157,8 +156,8 @@ describe('[TPS] Render with Wipe:', () => {
       newFolder: false,
     });
 
-    fs.outputFileSync(indexFileInDest, 'blah');
-    fs.outputFileSync(randomDest, 'blah');
+    writeFile(indexFileInDest, 'blah');
+    writeFile(randomDest, 'blah');
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(playground.box()).toHaveAllFilesAndDirectories([
@@ -197,8 +196,8 @@ describe('[TPS] Render with Wipe:', () => {
     const randomDest = playground.pathTo('my/personal/some-random-file.js');
     const indexFileInParentPath = playground.pathTo('my/personal/index.js');
 
-    fs.outputFileSync(indexFileInParentPath, 'blah');
-    fs.outputFileSync(randomDest, 'blah');
+    writeFile(indexFileInParentPath, 'blah');
+    writeFile(randomDest, 'blah');
 
     expect(indexFileInParentPath).toBeFile();
     expect(randomDest).toBeFile();
@@ -228,7 +227,7 @@ describe('[TPS] Render with Wipe:', () => {
   //     newFolder: false
   //   });
 
-  //   fs.outputFileSync(randomDest, 'blah');
+  //   writeFile(randomDest, 'blah');
 
   //   return tps.render(playground.box(), 'app').then(() => {
   //     expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);

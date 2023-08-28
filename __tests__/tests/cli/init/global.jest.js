@@ -1,6 +1,6 @@
 import Playground from '@test/utilities/playground';
 import { TESTING_INIT_DIR } from '@test/utilities/constants';
-import * as fs from 'fs-extra';
+import fs from 'fs';
 import { init } from '@test/support/cli';
 import * as TPS from '@tps/utilities/constants';
 
@@ -25,7 +25,7 @@ describe('Command Line: Init Global', () => {
       cwd = playground.box();
       dist = playground.pathTo('dist');
 
-      return fs.mkdir(dist);
+      return fs.promises.mkdir(dist, { recursive: true });
     })
   );
 
