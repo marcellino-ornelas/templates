@@ -1,9 +1,8 @@
-import { buildFlags } from '@test/utilities/helpers';
+import { buildFlags, writeFile } from '@test/utilities/helpers';
 import { tpsCli } from '@test/utilities/tps-cli';
 import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
 import * as path from 'path';
 import * as is from 'is';
-import fs from 'fs-extra';
 import * as TPS from '@tps/utilities/constants';
 
 /**
@@ -125,7 +124,7 @@ export const mockTemplateFileExistsError = (
     /**
      * If no builders then template was build in cwd so mock the file in cwd
      */
-    return fs.outputFileSync(path.join(cwd, file), contents);
+    return writeFile(path.join(cwd, file), contents);
   }
 
   const createBuilders = makeCreateBuilders(builders);
@@ -134,7 +133,7 @@ export const mockTemplateFileExistsError = (
   );
 
   return allBuilders.forEach((buldPath) => {
-    fs.outputFileSync(buldPath, contents);
+    writeFile(buldPath, contents);
     expect(buldPath).toBeFile();
   });
 };
