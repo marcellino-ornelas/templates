@@ -1,5 +1,5 @@
 import path from 'path';
-import fs from 'fs-extra';
+import fs from 'fs';
 import * as TPS from '@tps/utilities/constants';
 import { isDir } from '@tps/utilities/fileSystem';
 import { CommandModule } from 'yargs';

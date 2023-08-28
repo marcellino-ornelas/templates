@@ -70,7 +70,6 @@
     "typescript-transform-paths": "^3.4.6"
   },
   "dependencies": {
-    "@types/fs-extra": "^11.0.1",
     "@types/yargs": "^17.0.24",
     "ansi-colors": "4.1.1",
     "bluebird": "3.5.5",
