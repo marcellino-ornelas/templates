@@ -1,9 +1,9 @@
 /**
  * Modules
  */
-import fs from 'fs';
 import * as path from 'path';
 import { hasProp } from '@tps/utilities/helpers';
+import { vol } from '@test/utilities/vol';
 import * as crypto from 'crypto';
 
 /**
@@ -17,7 +17,7 @@ const stamp = (len = 10) =>
 const boxTracker = {};
 
 class Playground {
-  constructor(dirPath, name = TESTING_PLAYGROUND_NAME) {
+  constructor(dirPath = process.cwd(), name = TESTING_PLAYGROUND_NAME) {
     this.dirPath = dirPath;
     this._name = name;
 
@@ -43,11 +43,11 @@ class Playground {
   }
 
   create() {
-    return fs.promises.mkdir(this.path);
+    return vol.promises.mkdir(this.path, { recursive: true });
   }
 
   destroy() {
-    return fs.promises.rm(this.path, { force: true, recursive: true });
+    return vol.promises.rm(this.path, { force: true, recursive: true });
   }
 
   createBox(name) {

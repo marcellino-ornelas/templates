@@ -1,14 +1,14 @@
-import fs from 'fs';
 import * as findFileUp from 'find-up';
+import { vol } from '@test/utilities/vol';
 
 /**
  * Check to see if the `path` is a valid directory
  */
 export function isDir(path: string): boolean {
-  let dir;
   console.log('hey');
+  let dir;
   try {
-    dir = fs.lstatSync(path);
+    dir = vol.lstatSync(path);
   } catch (e) {
     return false;
   }
@@ -21,7 +21,7 @@ export function isDir(path: string): boolean {
 export function isFile(path: string): boolean {
   let file;
   try {
-    file = fs.lstatSync(path);
+    file = vol.lstatSync(path);
   } catch (e) {
     return false;
   }
@@ -31,7 +31,7 @@ export function isFile(path: string): boolean {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function json(jsonFile: string): any {
   try {
-    const jsonContents = fs.readFileSync(jsonFile).toString();
+    const jsonContents = vol.readFileSync(jsonFile).toString();
     return JSON.parse(jsonContents);
   } catch (err) {
     return {};

@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import fs from 'fs';
 import FileSystemNode from './fileSystemNode';
 
 export class FileNode extends FileSystemNode {

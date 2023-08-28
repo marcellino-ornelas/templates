@@ -1,6 +1,6 @@
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
-import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/utilities/constants';
+import { TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import {
   TemplateNotFoundError,
   DirectoryNotFoundError,
@@ -8,12 +8,15 @@ import {
 } from '@tps/errors';
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
+import { vol } from '@test/utilities/vol';
+
+jest.mock('fs');
 
 /**
  * Constants
  */
 
-const playground = new Playground(TESTING_DIR);
+const playground = new Playground();
 
 describe('[Templates] Render Process:', () => {
   beforeAll(() => playground.create());
@@ -146,11 +149,15 @@ describe('[Templates] Render Process:', () => {
   /**
    * @docs guide/getting-started/packages.md#including-more-packages
    */
-  it('should be able to render packages', () => {
+  it.only('should be able to render packages', () => {
+    console.log(playground.box());
+    // console.log(vol.toTree());
     const tps = new Templates('testing');
     tps.loadPackages(['extras', 'extras2']);
 
     const destPath = playground.pathTo('app');
+
+    console.log('hey', vol.lstatSync(playground.box()).isDirectory());
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories([

@@ -1,7 +1,6 @@
 import * as path from 'path';
-import fs from 'fs';
 import * as pjson from 'prettyjson-256';
-import { DirectoryNode } from '@tps/fileSystemTree';
+import { vol } from '@test/utilities/vol';
 
 jest.setTimeout(30000);
 
@@ -54,7 +53,7 @@ expect.extend({
     }
 
     const didMatchLen = count === filesAndDirs.length;
-    const dirPathLayout = new DirectoryNode(dirPath).toObject();
+    // const dirPathLayout = new DirectoryNode(dirPath).toObject();
 
     if (didMatchLen) {
       // passed
@@ -76,12 +75,12 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 
 
 Directory Layout:
-${pjson.render(dirPathLayout)}
+${pjson.render(vol.toTree({ dir: dirPath }))}
 `,
     };
   },
   toHaveFileContents(destPath, contents = '') {
-    const fileContents = fs.readFileSync(destPath).toString();
+    const fileContents = vol.readFileSync(destPath).toString();
     const receivedAfterPrint = this.utils.printReceived(destPath);
     const expected = this.utils.printExpected(contents);
 
@@ -130,7 +129,7 @@ Received: ${this.utils.printReceived(fileContents)}
 function isDir(dirPath) {
   let dir;
   try {
-    dir = fs.lstatSync(dirPath);
+    dir = vol.lstatSync(dirPath);
   } catch (e) {
     return false;
   }
@@ -140,7 +139,7 @@ function isDir(dirPath) {
 function isFile(filePath) {
   let file;
   try {
-    file = fs.lstatSync(filePath);
+    file = vol.lstatSync(filePath);
   } catch (e) {
     return false;
   }

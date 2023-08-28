@@ -1,7 +1,7 @@
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
-import * as fs from 'fs';
+import fs from 'fs';
 
 /**
  * Templates testing tpsrc
