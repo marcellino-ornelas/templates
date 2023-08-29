@@ -1,4 +1,4 @@
-import Templates from '@test/templates';
+import Templates from '@tps/templates';
 import Playground from '@test/utilities/playground';
 import { TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import {
@@ -9,6 +9,8 @@ import {
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
 import { vol } from '@test/utilities/vol';
+// eslint-disable-next-line import/no-extraneous-dependencies
+// import { jest, expect, describe, it } from '@jest/globals';
 
 jest.mock('fs');
 
@@ -23,7 +25,10 @@ describe('[Templates] Render Process:', () => {
 
   afterAll(() => playground.destroy());
 
-  beforeEach(() => playground.createBox('render_process'));
+  beforeEach(() => {
+    jest.resetAllMocks();
+    return playground.createBox('render_process');
+  });
 
   it('should throw RequiresTemplateError if no template was set', () => {
     expect(() => new Templates()).toThrow(RequiresTemplateError);
@@ -149,15 +154,11 @@ describe('[Templates] Render Process:', () => {
   /**
    * @docs guide/getting-started/packages.md#including-more-packages
    */
-  it.only('should be able to render packages', () => {
-    console.log(playground.box());
-    // console.log(vol.toTree());
+  it('should be able to render packages', () => {
     const tps = new Templates('testing');
     tps.loadPackages(['extras', 'extras2']);
 
     const destPath = playground.pathTo('app');
-
-    console.log('hey', vol.lstatSync(playground.box()).isDirectory());
 
     return tps.render(playground.box(), 'app').then(() => {
       expect(destPath).toHaveAllFilesAndDirectories([

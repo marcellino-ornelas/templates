@@ -318,7 +318,6 @@ export class Templates {
 
     return Promise.resolve()
       .then(() => {
-        console.log('hellooooo', isDir.toString());
         if (!isDir(finalDest)) {
           logger.tps.error('final destination was not a directory %n', {
             finalDest,

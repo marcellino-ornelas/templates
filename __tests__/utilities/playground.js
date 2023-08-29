@@ -2,7 +2,7 @@
  * Modules
  */
 import * as path from 'path';
-import { hasProp } from '@tps/utilities/helpers';
+// import { hasProp } from '@tps/utilities/helpers';
 import { vol } from '@test/utilities/vol';
 import * as crypto from 'crypto';
 
@@ -29,7 +29,9 @@ class Playground {
       }
       this.stamp = stamp();
       this.name = `${name}_${this.stamp}`;
-    } while (hasProp(boxTracker, this.name));
+      // } while (hasProp(boxTracker, this.name));
+      // eslint-disable-next-line no-prototype-builtins
+    } while (boxTracker.hasOwnProperty(this.name));
 
     // track box name so it will never have duplicates
     boxTracker[this.name] = true;

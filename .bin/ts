@@ -1,0 +1,3 @@
+#!/bin/bash
+
+npx ts-node --compiler ttypescript --project tsconfig.json $@
