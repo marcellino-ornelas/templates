@@ -14,7 +14,6 @@ module.exports = {
     ],
   },
   testMatch: ['!**/lib/**', '**/__tests__/tests/**/*jest.(js|ts)'],
-  //   roots: [__dirname],
   testPathIgnorePatterns: [
     // TODO: need to fix cli tests
     '<rootDir>/__tests__/tests/cli/init',
