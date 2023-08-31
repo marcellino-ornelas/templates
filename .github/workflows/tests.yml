@@ -38,6 +38,7 @@ jobs:
       - name: Test Code
         run: |
           npm run code:build
+          ./.bin/ts ./.bin/generate-test-templates
           LEGACY=1 npx jest cli
 
   lint:
