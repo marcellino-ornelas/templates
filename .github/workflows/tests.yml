@@ -7,12 +7,15 @@ on:
 jobs:
   test-core:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: 18
+          node-version: ${{ matrix.node-version }}
       - name: Npm Install
         run: npm install
       - name: Test legacy cli
