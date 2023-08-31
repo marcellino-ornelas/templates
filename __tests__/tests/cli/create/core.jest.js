@@ -1,5 +1,5 @@
 /* eslint-disable jest/expect-expect */
-import Playground from '@test/utilities/playground';
+import Playground from '@test/utilities/playground_legacy';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { createTemplate } from '@test/support/cli';
 
