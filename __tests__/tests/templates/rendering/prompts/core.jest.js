@@ -9,6 +9,7 @@ import Templates from '@test/templates';
 import inquirer from 'inquirer';
 
 jest.mock('inquirer');
+jest.mock('fs');
 
 const defaultAnswers = {
   test1: 'package1',

@@ -3,6 +3,8 @@
  */
 import Templates from '@test/templates';
 
+jest.mock('fs');
+
 describe('[Templates] Settings:', () => {
   let tps;
 

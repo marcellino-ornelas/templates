@@ -3,6 +3,8 @@ import Templates from '@test/templates';
 import Playground from '@test/utilities/playground';
 import fs from 'fs';
 
+jest.mock('fs');
+
 /**
  * Templates testing tpsrc
  */

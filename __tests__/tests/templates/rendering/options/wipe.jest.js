@@ -7,6 +7,8 @@ import Templates from '@test/templates';
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
 
+jest.mock('fs');
+
 /*
  * Constants
  */

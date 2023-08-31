@@ -8,6 +8,8 @@ import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import { writeFile } from '@test/utilities/helpers';
 
+jest.mock('fs');
+
 /*
  * Constants
  */

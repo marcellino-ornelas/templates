@@ -5,7 +5,7 @@
 import { TESTING_DIR } from '@test/utilities/constants';
 import { tpsCli } from '@test/utilities/tps-cli';
 import { init, newTemplate } from '@test/support/cli';
-import Playground from '@test/utilities/playground';
+import Playground from '@test/utilities/playground_legacy';
 
 const playground = new Playground(TESTING_DIR);
 

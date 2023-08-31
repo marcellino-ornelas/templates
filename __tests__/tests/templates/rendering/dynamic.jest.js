@@ -6,6 +6,8 @@ import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import * as path from 'path';
 
+jest.mock('fs');
+
 /*
  * Constants
  */

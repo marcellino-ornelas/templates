@@ -5,6 +5,7 @@ import { TESTING_DIR } from '@test/utilities/constants';
 import inquirer from 'inquirer';
 
 jest.mock('inquirer');
+jest.mock('fs');
 
 /**
  * Constants

@@ -20,7 +20,14 @@
 	},
 	"include": [
 		"./src/**/*",
-		"./.bin/**/*"
+		// "./.bin/**/*"
 	],
 	"exclude": ["node_modules"],
+
+	"ts-node": {
+		"include": [
+			"./src/**/*",
+			"./.bin/**/*"
+		]
+	}
 }
