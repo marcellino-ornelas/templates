@@ -18,7 +18,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Npm Install
         run: npm install
-      - name: Test legacy cli
+      - name: Test Code
         run: |
           npm run code:build
           npm run test:core
@@ -38,7 +38,7 @@ jobs:
         run: npm install
       # - name: Build Assests
       #   run: npm run code:build
-      - name: Test Code
+      - name: Test legacy cli 
         run: |
           npm run code:build
           ./.bin/ts ./.bin/generate-test-templates
