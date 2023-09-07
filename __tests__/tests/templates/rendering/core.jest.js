@@ -8,9 +8,6 @@ import {
 } from '@tps/errors';
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
-import { vol } from '@test/utilities/vol';
-// eslint-disable-next-line import/no-extraneous-dependencies
-// import { jest, expect, describe, it } from '@jest/globals';
 
 jest.mock('fs');
 
