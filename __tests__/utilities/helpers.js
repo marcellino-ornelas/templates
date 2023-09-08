@@ -3,8 +3,8 @@
  */
 import * as is from 'is';
 import { eachObj } from '@tps/utilities/helpers';
-import fs from 'fs';
 import path from 'path';
+import { vol } from './vol';
 
 /**
  * Constants
@@ -45,7 +45,7 @@ export const buildFlags = (args) => {
 export const writeFile = (file, contents) => {
   const { dir } = path.parse(file);
 
-  fs.mkdirSync(dir, { recursive: true });
+  vol.mkdirSync(dir, { recursive: true });
 
-  fs.writeFileSync(file, contents);
+  vol.writeFileSync(file, contents);
 };

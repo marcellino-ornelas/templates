@@ -2,6 +2,7 @@ node_modules/
 .DS_Store
 /lib/
 __tests__/testing_playground*/
+__tests__/templates.json
 docs-1
 coverage
 test.js

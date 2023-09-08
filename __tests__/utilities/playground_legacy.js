@@ -3,8 +3,8 @@
  */
 import * as path from 'path';
 // import { hasProp } from '@tps/utilities/helpers';
-import { vol } from '@test/utilities/vol';
 import * as crypto from 'crypto';
+import fs from 'fs';
 
 /**
  * Constants
@@ -45,11 +45,11 @@ class Playground {
   }
 
   create() {
-    return vol.promises.mkdir(this.path, { recursive: true });
+    return fs.promises.mkdir(this.path, { recursive: true });
   }
 
   destroy() {
-    return vol.promises.rm(this.path, { force: true, recursive: true });
+    return fs.promises.rm(this.path, { force: true, recursive: true });
   }
 
   createBox(name) {

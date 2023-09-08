@@ -1,7 +1,7 @@
 /*
  * Modules
  */
-import Playground from '@test/utilities/playground';
+import Playground from '@test/utilities/playground_legacy';
 import { TESTING_DIR } from '@test/utilities/constants';
 import { init, newTemplate } from '@test/support/cli';
 

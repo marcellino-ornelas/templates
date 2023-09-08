@@ -34,8 +34,7 @@ export const HAS_GLOBAL: boolean = isDir(GLOBAL_PATH);
 /**
  * local
  */
-
-// Need to override the CWD for find up so we can get the .tpsrc file from the __tests__ tps folder
+// TODO: well no longer need to do this when cli tests are changed to not use child process
 const overrideCwd: string = IS_TESTING ? path.join(CWD, '__tests__') : CWD;
 const tpsLocal: string = findUp(TPS_FOLDER, overrideCwd);
 export const HAS_LOCAL: boolean = tpsLocal && tpsLocal !== GLOBAL_PATH;

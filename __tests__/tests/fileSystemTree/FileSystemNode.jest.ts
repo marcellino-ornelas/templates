@@ -6,6 +6,8 @@ import * as path from 'path';
 import { DirNode, FileNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
 
+jest.mock('fs');
+
 /*
  * Constants
  */

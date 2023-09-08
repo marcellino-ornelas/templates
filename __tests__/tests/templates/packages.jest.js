@@ -1,5 +1,7 @@
 import Templates from '@test/templates';
 
+jest.mock('fs');
+
 /**
  * Templates Packages
  */

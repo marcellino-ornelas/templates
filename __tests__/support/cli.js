@@ -1,9 +1,18 @@
-import { buildFlags, writeFile } from '@test/utilities/helpers';
+import { buildFlags } from '@test/utilities/helpers';
 import { tpsCli } from '@test/utilities/tps-cli';
 import { INIT_PACKAGE_FILES } from '@test/utilities/constants';
 import * as path from 'path';
 import * as is from 'is';
 import * as TPS from '@tps/utilities/constants';
+import fs from 'fs';
+
+const writeFile = (file, contents) => {
+  const { dir } = path.parse(file);
+
+  fs.mkdirSync(dir, { recursive: true });
+
+  fs.writeFileSync(file, contents);
+};
 
 /**
  * @command init

@@ -5,6 +5,8 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 
+jest.mock('fs');
+
 /*
  * Constants
  */

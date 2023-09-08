@@ -5,28 +5,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  #   test-debug:
-  #     runs-on: ubuntu-latest
-  #     strategy:
-  #       matrix:
-  #         node-version: [12.x]
-  #     steps:
-  #     - uses: actions/checkout@v1
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - name: Npm Install
-  #       run: npm ci
-  #       env:
-  #         CI: true
-  #     - name: Build Assests
-  #       run: npm run code:build --if-present
-  #     - name: Test Code
-  #       run:  npm run test:core -- new/packages
-  #       env:
-  #         DEBUG: tps
   test-core:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Npm Install
+        run: npm install
+      - name: Test Code
+        run: |
+          npm run code:build
+          npm run test:core
+
+  test-cli-legacy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -41,10 +38,11 @@ jobs:
         run: npm install
       # - name: Build Assests
       #   run: npm run code:build
-      - name: Test Code
+      - name: Test legacy cli 
         run: |
           npm run code:build
-          npm run test:core
+          ./.bin/ts ./.bin/generate-test-templates
+          LEGACY=1 npx jest cli
 
   lint:
     runs-on: ubuntu-latest

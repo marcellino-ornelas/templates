@@ -1,6 +1,6 @@
-import Templates from '@test/templates';
+import Templates from '@tps/templates';
 import Playground from '@test/utilities/playground';
-import { TESTING_PACKAGE_FILES, TESTING_DIR } from '@test/utilities/constants';
+import { TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import {
   TemplateNotFoundError,
   DirectoryNotFoundError,
@@ -9,18 +9,23 @@ import {
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
 
+jest.mock('fs');
+
 /**
  * Constants
  */
 
-const playground = new Playground(TESTING_DIR);
+const playground = new Playground();
 
 describe('[Templates] Render Process:', () => {
   beforeAll(() => playground.create());
 
   afterAll(() => playground.destroy());
 
-  beforeEach(() => playground.createBox('render_process'));
+  beforeEach(() => {
+    jest.resetAllMocks();
+    return playground.createBox('render_process');
+  });
 
   it('should throw RequiresTemplateError if no template was set', () => {
     expect(() => new Templates()).toThrow(RequiresTemplateError);

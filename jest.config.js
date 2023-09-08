@@ -18,7 +18,9 @@ module.exports = {
     // TODO: need to fix cli tests
     '<rootDir>/__tests__/tests/cli/init',
   ],
-  setupFilesAfterEnv: ['./__tests__/setup.js'],
+  setupFilesAfterEnv: [
+    process.env.LEGACY ? './__tests__/setup_legacy.js' : './__tests__/setup.js',
+  ],
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@tps/(.+)$': path.join(__dirname, 'src/$1'),
