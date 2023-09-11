@@ -837,7 +837,7 @@ export class Templates {
 
     if (hasConfigObject) {
       logger.tps.info('Loading configuration: %n', templateConfig);
-      const { answers = {}, ...opts } = templateConfig;
+      const { answers = {}, opts = {} } = templateConfig;
       this.opts = defaults(opts, this.opts);
 
       if (is.object(answers) && !is.empty(answers)) {
