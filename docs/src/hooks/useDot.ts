@@ -19,6 +19,7 @@ const DEFAULT_TPS: Tps = {
   answers: {},
   utils,
   u: utils,
+  a: {},
 };
 
 export const useDot = ({ templateString, tps = {}, defs = {} }: Props) => {
@@ -28,7 +29,8 @@ export const useDot = ({ templateString, tps = {}, defs = {} }: Props) => {
     let result;
     try {
       const dotTemplate: templateFn = doT.template(templateString, null, defs);
-      result = dotTemplate({ ...DEFAULT_TPS, ...tps });
+      console.log({ ...DEFAULT_TPS, a: tps.answers, ...tps });
+      result = dotTemplate({ ...DEFAULT_TPS, a: tps.answers, ...tps });
     } catch (e) {
       result = `Error: ${e.message}`;
     }
