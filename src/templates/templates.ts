@@ -127,8 +127,6 @@ export class Templates {
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
     const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
-    // console.log(require.resolve(templateName + 'hey'));
-
     switch (true) {
       /**
        * local template

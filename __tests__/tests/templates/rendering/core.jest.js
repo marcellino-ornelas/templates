@@ -180,13 +180,13 @@ describe('[Templates] Render Process:', () => {
     const tps = new Templates('tps-test-3rd-party-package');
 
     expect(tps.src).toBe(getNpmPackagePath('tps-test-3rd-party-package'));
-    expect(tps.name).toBe('tps-test-3rd-party-package');
+    expect(tps.template).toBe('tps-test-3rd-party-package');
   });
 
   it('should be able to get npm template without tps prefix', () => {
     const tps = new Templates('test-3rd-party-package');
 
     expect(tps.src).toBe(getNpmPackagePath('tps-test-3rd-party-package'));
-    expect(tps.name).toBe('tps-test-3rd-party-package');
+    expect(tps.template).toBe('tps-test-3rd-party-package');
   });
 });
