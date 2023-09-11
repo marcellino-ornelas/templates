@@ -8,7 +8,13 @@ import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json, isFile } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
-import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
+import {
+  eachObj,
+  defaults,
+  hasProp,
+  getNpmPackagePath,
+  isNpmPackage,
+} from '@tps/utilities/helpers';
 import {
   TemplateNotFoundError,
   RequiresTemplateError,
@@ -93,9 +99,11 @@ const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
  * @classdesc Create a new instance of a template
  */
 export class Templates {
+  public name: string;
+
   public opts: TemplateOptions;
 
-  public tpsPath: string;
+  public tpsPath: string | null;
 
   public src: string;
 
@@ -112,23 +120,51 @@ export class Templates {
       throw new RequiresTemplateError();
     }
 
+    this.template = templateName;
+
     const localPath = opts.tpsPath || TPS.LOCAL_PATH;
     const maybeLocalTemp = `${localPath}/${templateName}`;
     const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
     const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
+    // console.log(require.resolve(templateName + 'hey'));
+
     switch (true) {
+      /**
+       * local template
+       */
       case localPath && isDir(maybeLocalTemp):
         this.src = maybeLocalTemp;
         this.tpsPath = localPath;
         break;
+      /**
+       * Global template
+       */
       case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
         this.src = maybeGlobalTemp;
         this.tpsPath = TPS.GLOBAL_PATH;
         break;
+      /**
+       * Default template
+       */
       case isDir(maybeDefaultTemp):
         this.src = maybeDefaultTemp;
         this.tpsPath = TPS.DEFAULT_TPS;
+        break;
+      /**
+       * npm template
+       */
+      case isNpmPackage(templateName):
+        this.src = getNpmPackagePath(templateName);
+        this.tpsPath = null;
+        break;
+      /**
+       * npm template (try tps prefix)
+       */
+      case isNpmPackage(`tps-${templateName}`):
+        this.template = `tps-${templateName}`;
+        this.src = getNpmPackagePath(`tps-${templateName}`);
+        this.tpsPath = null;
         break;
       default:
         logger.tps.error('Template not found! \n%O', {
@@ -136,6 +172,7 @@ export class Templates {
           'Seached for local template': maybeLocalTemp,
           'search for global template': maybeGlobalTemp,
           'search for default templates': maybeDefaultTemp,
+          // TODO: do i need anything for debugging npm templates?
           [localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
           [TPS.GLOBAL_PATH]:
             Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
@@ -143,7 +180,6 @@ export class Templates {
         throw new TemplateNotFoundError(templateName);
     }
 
-    this.template = templateName;
     logger.tps.info('Template %n', {
       name: this.template,
       location: this.src,
