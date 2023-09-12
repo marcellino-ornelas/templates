@@ -74,6 +74,9 @@ export default class Prompter<TAnswers = AnswersHash> {
     if (!hasProp(this.answers, name)) {
       this.answered += 1;
     }
+    logger.prompter.info('Answer set: %n', {
+      [name]: answer,
+    });
     this.answers[name] = answer;
   }
 
@@ -91,8 +94,18 @@ export default class Prompter<TAnswers = AnswersHash> {
   getAnswers(): Promise<TAnswers> {
     return Promise.resolve()
       .then(() => {
+        logger.prompter.info('Fetching answers...');
+
         if (!this.needsAnswers()) return;
         const promptsLeft = this._getPromptsThatNeedAnswers();
+
+        logger.prompter.info('Current Answers: %n', this.answers);
+
+        logger.prompter.info(
+          'Prompts that need answers: %n',
+          promptsLeft.map((p) => p.name)
+        );
+
         if (this.opts.default) {
           const allDefaults = {};
 
