@@ -6,7 +6,7 @@
     "extendedDest": "__tests__/tests",
     "newFolder": false
   },
-  "yargs-cli": {
+  "yargs-cli-cmd": {
     "opts": {
       "newFolder": false
     }

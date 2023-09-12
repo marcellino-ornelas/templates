@@ -1,5 +1,25 @@
+// @ts-check
+
+/** @type {import('./../../src/types/settings').SettingsFile} */
 module.exports = {
   prompts: [
+    {
+      name: 'type',
+      type: 'list',
+      tpsType: 'package',
+      message: 'What type of file style do you want to use?',
+      choices: [
+        {
+          name: 'Named Export',
+          value: 'namedExport',
+        },
+        {
+          name: 'Default Export',
+          value: 'defaultExport',
+        },
+      ],
+      default: false,
+    },
     {
       name: 'typescript',
       type: 'confirm',

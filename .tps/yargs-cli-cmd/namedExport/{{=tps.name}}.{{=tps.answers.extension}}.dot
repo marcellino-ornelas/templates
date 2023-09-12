@@ -1,0 +1,20 @@
+{{? tps.answers.typescript}}{{# def.typescriptHeader}}
+{{?}}{{? tps.answers.typescript}}type {{#def.moduleName}} = CommandModule<object, {{= tps.utils.pascalCase(tps.name) }}Argv>;
+
+{{?}}export const command{{? tps.answers.typescript}}: {{#def.moduleName}}['command']{{?}} = '{{= tps.name}}';
+
+export const aliases{{? tps.answers.typescript}}: {{#def.moduleName}}['aliases']{{?}} = [];
+
+export const describe{{? tps.answers.typescript}}: {{#def.moduleName}}['describe']{{?}} = "{{= tps.answers.description}}";
+
+export const builder{{? tps.answers.typescript}}: {{#def.moduleName}}['builder']{{?}} = {
+    flag: {
+      alias: '',
+      describe: '...',
+      type: 'boolean',
+    },
+};
+
+export const handler{{? tps.answers.typescript}}: {{#def.moduleName}}['handler']{{?}} = (argv) => {
+	// code ...
+};
