@@ -16,5 +16,5 @@ export const builder{{? tps.answers.typescript}}: {{#def.moduleName}}['builder']
 };
 
 export const handler{{? tps.answers.typescript}}: {{#def.moduleName}}['handler']{{?}} = async (argv) => {
-	// code ...
+    // code ...
 };

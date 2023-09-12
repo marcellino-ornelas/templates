@@ -11,6 +11,6 @@
     },
   },
   async handler(argv) {
-	// code ...
+    // code ...
   },
 }{{? tps.answers.typescript}} as CommandModule<object, {{= tps.utils.capitalize(tps.name) }}Argv>{{?}};
