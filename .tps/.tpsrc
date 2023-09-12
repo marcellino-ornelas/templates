@@ -5,5 +5,10 @@
   "new-test": {
     "extendedDest": "__tests__/tests",
     "newFolder": false
+  },
+  "yargs-cli": {
+    "opts": {
+      "newFolder": false
+    }
   }
 }

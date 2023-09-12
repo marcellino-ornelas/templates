@@ -1,0 +1,20 @@
+{{? tps.answers.typescript}}import { CommandModule } from 'yargs';
+
+interface {{= tps.utils.capitalize(tps.name) }}Argv {
+  flag: boolean;
+}
+
+{{?}}export default {
+  command: ['{{=tps.name}}'],
+  describe: "{{= tps.answers.description}}",
+  builder: {
+    flag: {
+      alias: '',
+      describe: '...',
+      type: 'boolean',
+    },
+  },
+  handler(argv) {
+	// code ...
+  },
+}{{? tps.answers.typescript}} as CommandModule<object, {{= tps.utils.capitalize(tps.name) }}Argv>{{?}};
