@@ -1,5 +1,5 @@
 import { CommandModule } from 'yargs';
 
-interface {{= tps.utils.capitalize(tps.name) }}Argv {
+interface {{= tps.utils.pascalCase(tps.name) }}Argv {
   flag: boolean;
 }
