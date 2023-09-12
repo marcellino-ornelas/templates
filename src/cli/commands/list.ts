@@ -19,7 +19,7 @@ const BANNED_TEMPLATES: string[] = [
   'init',
   'new-template',
   'new-test',
-  'yargs-cli',
+  'yargs-cli-cmd',
 ];
 
 export default {
