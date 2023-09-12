@@ -1,0 +1,1 @@
+{{##def.moduleName:{{= tps.utils.pascalCase(tps.name)}}Module#}}
