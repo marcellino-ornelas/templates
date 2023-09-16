@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import type { SettingsFile } from '@site/types/settingsFile';
+// import type { SettingsFile, Prompt } from '@site/types/settingsFile';
+import type {
+  SettingsFile,
+  SettingsFilePrompt,
+} from 'templates-mo/src/types/settings';
 // import { usePluginData } from '@docusaurus/useGlobalData';
 import styles from './templateOptions.module.css';
 
@@ -24,6 +28,17 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
     })();
   }, []);
 
+  //   const choices = prompt.choices instanceof Function? prompt?.choices.map(() => {
+
+  //   })
+
+  const getChoices = (prompt: SettingsFilePrompt) => {
+    return (prompt?.choices || []).map((choice) => {
+      // @ts-ignore
+      return choice?.value || choice;
+    });
+  };
+
   return (
     <div className={styles.tableContainer}>
       <table>
@@ -40,7 +55,14 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
           {settingsFile?.prompts?.map((prompt, i) => (
             <tr key={prompt.name}>
               <td>{prompt.name}</td>
-              <td>{prompt.message}</td>
+              <td>
+                {prompt.message}
+                <br />
+                <span style={{ color: 'grey' }}>
+                  {!!prompt?.choices?.length &&
+                    `(${getChoices(prompt).join(', ')})`}
+                </span>
+              </td>
               <td style={{ whiteSpace: 'nowrap' }}>{`--${prompt.name}`}</td>
               <td style={{ whiteSpace: 'nowrap' }}>
                 {prompt?.aliases
