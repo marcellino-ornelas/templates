@@ -7,7 +7,7 @@ interface TemplateArgv {
 
 export default {
   //   command: '$0 <template>',
-  command: 'template',
+  command: '<template>',
   //   aliases: ['t],
   describe: '...',
   builder: (yargs) => {
@@ -16,7 +16,7 @@ export default {
       describe: `What this argument is`,
     });
 
-    // yargs.command(commands);
+    yargs.command(commands);
 
     return yargs;
   },
