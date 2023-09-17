@@ -1,3 +1,7 @@
+---
+sidebar_label: yargs-cli-cmd (beta)
+---
+
 import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 
@@ -19,7 +23,7 @@ Create a yargs cli command module using
 
 Templates creates a new folder when creating a yargs cmd file which often is not
 the desired behavior. You can turn this off by taking a look at the
-[dont use a new folder](http://localhost:3000/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
+[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
 example down below
 
 :::
@@ -100,6 +104,71 @@ tps copy yargs-cli-cmd
 
 ## Examples
 
+### How to use
+
+If your using
+[yargs modules](https://github.com/yargs/yargs/blob/main/docs/advanced.md#example-command-hierarchy-using-indexmjs)
+you can use this template to generate command files. Lets say your projects cli
+looks something like this:
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			| - some-command.js
+			| - index.js
+```
+
+If you want to add a new command called `list` you can run the following
+
+```bash
+tps yargs-cli-cmd cli/commands/list --no-new-folder
+```
+
+:::tip
+
+Including the `--no-new-folder` option will prevent templates from creating a
+new folder. You can also explore
+[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
+for more details.
+
+:::
+
+Based on your responses to the prompts, templates will generate a `list.js` file
+within your `./cli/commands/` directory.
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-next-line
+			| - list.js
+			| - some-command.js
+			| - index.js
+```
+
+```js title="list.js"
+export const command = 'list';
+
+export const aliases = [];
+
+export const describe = 'This is my list cli command';
+
+export const builder = {
+  flag: {
+    alias: '',
+    describe: '...',
+    type: 'boolean',
+  },
+};
+
+export const handler = async (argv) => {
+  // code ...
+};
+```
+
 ### Dont use a new folder
 
 If you dont want your yarg cmd file in a new folder you can turn off the new
@@ -115,6 +184,7 @@ tps init
 {
   "yargs-cli-cmd": {
     "opts": {
+      // highlight-next-line
       "newFolder": false
     }
   }
@@ -131,14 +201,15 @@ Produces:
 
 ```txt
 | - <cwd>
+	// highlight-next-line
 	| - publish.js
 ```
 
-### Configure
+### Set a loction for new instances
 
-Tired of typing in your same responses every time? Initialize your repo with
-templates and you can configure the template to fit your projects needs without
-having to answer every prompt.
+You can configure this template to always generate in the same directory by
+adding a [`extendDest`](/templates/docs/api/template#extend-destination) option
+to your `.tps/tpsrc` file.
 
 If you havent already initialize your repo:
 
@@ -146,18 +217,65 @@ If you havent already initialize your repo:
 tps init
 ```
 
-lets say your project always uses a `tsx` extention for its components. You can
-add `tsx` to the `extension` answer.
+lets say you have a directory structure like this
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			| - some-command.js
+			| - index.js
+```
+
+If you wanted all new instances of your template to be generated in the
+`cli/commands` directory then add the following
 
 ```json title=".tps/.tpsrc"
 {
   "yargs-cli-cmd": {
-    "answers": {
-      "type": "namedExport"
+    "opts": {
+      // highlight-next-line
+      "extendDest": "./cli/commands"
     }
   }
 }
 ```
 
-Now templates will no longer prompt you for this question and always create your
-yargs cli file using named export
+Now you can generate a new instance without passing in a path and it will be
+created in the `cli/commands` folder.
+
+```bash
+tps yargs-cli-cmd list --no-new-folder
+```
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-next-line
+			| - list.js
+			| - some-command.js
+			| - index.js
+```
+
+Want to create sub commands? Add a build path and let the magic unfold
+
+```bash
+tps yargs-cli-cmd list_commands/template --no-new-folder
+```
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-start
+			| - list_commands/
+				| - template.js
+			// highlight-end
+			| - list.js
+			| - some-command.js
+			| - index.js
+```
