@@ -5,7 +5,7 @@ interface PublishArgv {
 }
 
 export default {
-  command: '$0 <template> publish',
+  command: 'publish',
   aliases: [],
   describe: '...',
   builder: {

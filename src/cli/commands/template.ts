@@ -6,7 +6,6 @@ interface TemplateArgv {
 }
 
 export default {
-  //   command: '$0 <template>',
   command: '<template>',
   //   aliases: ['t],
   describe: '...',
@@ -18,6 +17,8 @@ export default {
 
     yargs.command(commands);
 
+    yargs.demandCommand();
+
     return yargs;
   },
   //   builder: {
@@ -27,8 +28,8 @@ export default {
   //       type: 'boolean',
   //     },
   //   },
-  async handler(argv) {
-    // code ...
-    console.log('template');
-  },
+  //   async handler(argv) {
+  //     // code ...
+  //     console.log('template');
+  //   },
 } as CommandModule<object, TemplateArgv>;
