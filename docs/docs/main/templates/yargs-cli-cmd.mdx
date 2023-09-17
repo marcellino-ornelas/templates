@@ -1,0 +1,281 @@
+---
+sidebar_label: yargs-cli-cmd (beta)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+
+# yargs-cli-cmd
+
+<span className="badge badge--primary margin-left--xs">beta</span>
+<span className="badge badge--secondary margin-left--xs">
+  templates@v1.0.19
+</span>
+
+<br />
+
+<br />
+
+Create a yargs cli command module using
+[ESM syntax](https://github.com/yargs/yargs/blob/main/docs/advanced.md#example-command-hierarchy-using-indexmjs).
+
+:::info
+
+Templates creates a new folder when creating a yargs cmd file which often is not
+the desired behavior. You can turn this off by taking a look at the
+[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
+example down below
+
+:::
+
+## Usage
+
+```bash title="Usage"
+tps yargs-cli-cmd <cmd-name>
+```
+
+```txt title="Creates"
+| - <cmd-name>
+	| - <cmd-name>.js
+```
+
+<Example>
+
+```bash
+tps yargs-cli-cmd publish
+```
+
+Produces:
+
+```txt
+| - publish
+	| - publish.js
+```
+
+```js title="publish.js"
+export const command = 'publish';
+
+export const aliases = [];
+
+export const describe = 'This is my publish cli command';
+
+export const builder = {
+  flag: {
+    alias: '',
+    describe: '...',
+    type: 'boolean',
+  },
+};
+
+export const handler = async (argv) => {
+  // code ...
+};
+```
+
+</Example>
+
+## Installation
+
+This templates is a part of Templates library. If you've already installed
+Templates, you'll have instant access to this template, and you can disregard
+this command.
+
+```bash
+npm i -g templates-mo
+```
+
+## Options
+
+<TemplateOptions template="yargs-cli-cmd" type="js" />
+
+## Copy
+
+If you like this template, but want to modify a few things use the copy command.
+It allows you to duplicate the template into your project and tailor it to your
+needs.
+
+```bash
+# if your not initialized run
+tps init
+
+# copy template
+tps copy yargs-cli-cmd
+```
+
+## Examples
+
+### How to use
+
+If your using
+[yargs modules](https://github.com/yargs/yargs/blob/main/docs/advanced.md#example-command-hierarchy-using-indexmjs)
+you can use this template to generate command files. Lets say your projects cli
+looks something like this:
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			| - some-command.js
+			| - index.js
+```
+
+If you want to add a new command called `list` you can run the following
+
+```bash
+tps yargs-cli-cmd cli/commands/list --no-new-folder
+```
+
+:::tip
+
+Including the `--no-new-folder` option will prevent templates from creating a
+new folder. You can also explore
+[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
+for more details.
+
+:::
+
+Based on your responses to the prompts, templates will generate a `list.js` file
+within your `./cli/commands/` directory.
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-next-line
+			| - list.js
+			| - some-command.js
+			| - index.js
+```
+
+```js title="list.js"
+export const command = 'list';
+
+export const aliases = [];
+
+export const describe = 'This is my list cli command';
+
+export const builder = {
+  flag: {
+    alias: '',
+    describe: '...',
+    type: 'boolean',
+  },
+};
+
+export const handler = async (argv) => {
+  // code ...
+};
+```
+
+### Dont use a new folder
+
+If you dont want your yarg cmd file in a new folder you can turn off the new
+folder option in your `.tps/tpsrc`
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+  "yargs-cli-cmd": {
+    "opts": {
+      // highlight-next-line
+      "newFolder": false
+    }
+  }
+}
+```
+
+Now when you run the following it will produce the cmd file with a new folder
+
+```bash
+tps yargs-cli-cmd publish
+```
+
+Produces:
+
+```txt
+| - <cwd>
+	// highlight-next-line
+	| - publish.js
+```
+
+### Set a loction for new instances
+
+You can configure this template to always generate in the same directory by
+adding a [`extendDest`](/templates/docs/api/template#extend-destination) option
+to your `.tps/tpsrc` file.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+lets say you have a directory structure like this
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			| - some-command.js
+			| - index.js
+```
+
+If you wanted all new instances of your template to be generated in the
+`cli/commands` directory then add the following
+
+```json title=".tps/.tpsrc"
+{
+  "yargs-cli-cmd": {
+    "opts": {
+      // highlight-next-line
+      "extendDest": "./cli/commands"
+    }
+  }
+}
+```
+
+Now you can generate a new instance without passing in a path and it will be
+created in the `cli/commands` folder.
+
+```bash
+tps yargs-cli-cmd list --no-new-folder
+```
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-next-line
+			| - list.js
+			| - some-command.js
+			| - index.js
+```
+
+Want to create sub commands? Add a build path and let the magic unfold
+
+```bash
+tps yargs-cli-cmd list_commands/template --no-new-folder
+```
+
+```text
+| - <cwd>/
+	| - cli/
+		| - index.js
+		| - commands/
+			// highlight-start
+			| - list_commands/
+				| - template.js
+			// highlight-end
+			| - list.js
+			| - some-command.js
+			| - index.js
+```

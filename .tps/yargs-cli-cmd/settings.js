@@ -18,7 +18,7 @@ module.exports = {
           value: 'defaultExport',
         },
       ],
-      default: false,
+      default: 'namedExport',
     },
     {
       name: 'typescript',
