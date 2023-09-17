@@ -9,6 +9,11 @@
   "yargs-cli-cmd": {
     "opts": {
       "newFolder": false
+    },
+    "answers": {
+      "type": "defaultExport",
+      "typescript": true,
+      "extension": "ts"
     }
   }
 }

@@ -6,6 +6,7 @@ import migrate from './migrate';
 import newCmd from './new';
 import use from './use';
 import create from './create';
+import template from './template';
 
 export const commands: CommandModule[] = [
   list,
@@ -13,6 +14,7 @@ export const commands: CommandModule[] = [
   copy,
   migrate,
   newCmd,
-  use,
+  //   use,
+  template,
   create,
 ];
