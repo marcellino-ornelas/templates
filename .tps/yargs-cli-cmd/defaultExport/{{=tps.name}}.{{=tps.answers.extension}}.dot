@@ -1,0 +1,16 @@
+{{? tps.answers.typescript}}{{#def.typescriptHeader}}
+{{?}}export default {
+  command: '{{=tps.name}}',
+  aliases: [],
+  describe: "{{= tps.answers.description}}",
+  builder: {
+    flag: {
+      alias: '',
+      describe: '...',
+      type: 'boolean',
+    },
+  },
+  async handler(argv) {
+    // code ...
+  },
+}{{? tps.answers.typescript}} as CommandModule<object, {{= tps.utils.pascalCase(tps.name) }}Argv>{{?}};

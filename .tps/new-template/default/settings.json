@@ -1,1 +1,11 @@
-{}
+{
+	"prompts": [
+		{
+			"name": "...",
+			"message": "...",
+			"tpsType": "package",
+			"type": "confirm",
+			"default": true
+		}
+	]
+}

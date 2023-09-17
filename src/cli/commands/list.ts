@@ -15,7 +15,12 @@ const removeRcFile = (arr: string[]) => {
   return arr.filter((item) => item !== '.tpsrc');
 };
 
-const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];
+const BANNED_TEMPLATES: string[] = [
+  'init',
+  'new-template',
+  'new-test',
+  'yargs-cli-cmd',
+];
 
 export default {
   command: ['list', 'ls'],

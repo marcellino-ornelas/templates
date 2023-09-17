@@ -5,6 +5,7 @@ export interface Tps {
   answers: TpsAnswers;
   utils: typeof utils;
   u: typeof utils;
+  a: TpsAnswers;
 }
 
 export interface TpsAnswers {
