@@ -189,4 +189,14 @@ describe('[Templates] Render Process:', () => {
     expect(tps.src).toBe(getNpmPackagePath('tps-test-3rd-party-package'));
     expect(tps.template).toBe('tps-test-3rd-party-package');
   });
+
+  it('should be able to use a npm template', () => {
+    const tps = new Templates('tps-test-3rd-party-package');
+
+    const appPath = playground.pathTo('app');
+
+    return tps.render(playground.box(), 'app').then(() => {
+      expect(appPath).toHaveAllFilesAndDirectories(['./index.js']);
+    });
+  });
 });
