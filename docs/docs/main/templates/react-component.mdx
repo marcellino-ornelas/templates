@@ -1,5 +1,7 @@
 import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # react-component
 
@@ -72,42 +74,96 @@ tps copy react-component
 
 ## Examples
 
-### Generate component
+### How to use
+
+Lets say you have a basic react folder structure like so:
+
+```text
+| - <cwd>/
+	| - src/
+		| - components/
+			| - ...
+		| - pages/
+			| - ...
+		| - index.js
+		| - app.js
+	| - package.json
+	| - package-lock.json
+```
+
+If you wanted to generate a new component called `Nav` in the components folder,
+you could use the following command:
 
 ```bash
-tps react-component Nav
+> tps react-component src/components/Nav
+```
+
+You will be prompted to answer the following questions:
+
+```
+? Would you like to use typescript?
+? What type of extension do you want for your component?
+? Would you like to include a css file?
+? What type of css extension would you like?
+? Would you like to include unit tests?
+? Would you like to include a index file?
+? Would you like to include a storybook file?
+```
+
+Depending on the answers you provide it will generate something similar to the
+following:
+
+```txt
+| - <cwd>/
+	| - src/
+		| - components/
+			// highlight-start
+			| - Nav/
+				| - index.js
+				| - Nav.js
+				| - Nav.css
+			// highlight-end
+			| - ...
+		| - pages/
+			| - ...
+		| - index.js
+		| - app.js
+	| - package.json
+	| - package-lock.json
+```
+
+### How to use options
+
+The React component template offers various customization options, which are
+listed in the [options](#options) table. These will be prompted to you when you
+create a new instance. However to save time and avoid answering the same
+questions each time, you can set your answers ahead of time. You can do this
+either on the command line or in your `.tps/.tpsrc` file.
+
+<Tabs>
+
+<TabItem value="cli">
+
+Lets say your project always uses a `tsx` extension for its components. You can
+add `tsx` to the `extension` answer when creating a new instance and you will no
+longer be prompted that question
+
+```bash
+tps react-component Nav --extension=tsx
 ```
 
 Produces:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
+	| - index.tsx
+	| - Nav.tsx
 	| - Nav.css
 ```
 
-### options
+</TabItem>
 
-```bash
-tps react-component Nav --css --cssType=less --test
-```
-
-Produces:
-
-```txt
-| - NaV
-	| - index.js
-	| - Nav.js
-	| - Nav.less
-	| - Nav.test.js
-```
-
-### Configure your react component
-
-Tired of typing in your same responses every time? Initialize your repo with
-templates and you can configure the template to fit your projects needs without
-having to answer every prompt.
+<TabItem value=".tps/.tpsrc">
 
 If you havent already initialize your repo:
 
@@ -115,7 +171,7 @@ If you havent already initialize your repo:
 tps init
 ```
 
-lets say your project always uses a `tsx` extention for its components. You can
+Lets say your project always uses a `tsx` extension for its components. You can
 add `tsx` to the `extension` answer.
 
 ```json title=".tps/.tpsrc"
@@ -128,5 +184,131 @@ add `tsx` to the `extension` answer.
 }
 ```
 
-Now templates will no longer prompt you for this question and always create your
-component with a `tsx` extension.
+</TabItem>
+
+</Tabs>
+
+### How to use with typescript
+
+When generating a new instance of this template you will be asked if you want to
+use typescript. However if you know you want to use typescript in your project
+you can do one of the following:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted those questions
+
+```bash
+tps react-component Nav --typescript --extension=tsx
+
+# or
+
+tps react-component Nav --typescript -e tsx
+```
+
+Produces:
+
+```txt
+| - NaV
+	| - index.tsx
+	| - Nav.tsx
+	| - Nav.css
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use typescript
+when generating a react component in your repos directory and all its
+subdirectories.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+  "react-component": {
+    "answers": {
+      "typescript": true,
+      "extension": "tsx"
+    }
+  }
+}
+```
+
+Now when generating a new instance you no longer will be prompted for these two
+questions or have to supply the two flags to the cli command
+
+```bash
+tps react-component Nav
+```
+
+Would produce:
+
+```txt
+| - NaV
+	| - index.tsx
+	| - Nav.tsx
+	| - Nav.css
+```
+
+</TabItem>
+
+</Tabs>
+
+### Use all default answers
+
+To bypass all prompts and use default answers, simply include the `--default`
+flag when generating a new instance.
+
+```bash
+tps react-component --default
+```
+
+You can also combined this with other flags and/or in conjunction with your
+`.tps/.tpsrc`
+
+<Tabs>
+
+<TabItem value="cli">
+
+Use typescript and use defaults for the rest of the questions. This will no
+longer prompt you any questions
+
+```bash
+tps react-component Nav --typescript --default
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+If you have typescript set in your tpsrc file.
+
+```json title=".tps/.tpsrc"
+{
+  "react-component": {
+    "answers": {
+      "typescript": true
+    }
+  }
+}
+```
+
+Now when using defaults it will use the typescript, defaults for the rest of the
+questions, and will no longer prompt any questions.
+
+```bash
+tps react-component Nav --default
+```
+
+</TabItem>
+
+</Tabs>
