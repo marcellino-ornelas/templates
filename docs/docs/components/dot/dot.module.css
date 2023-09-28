@@ -18,6 +18,11 @@
 	background-color: #ebedf0;
 }
 
+[data-theme='dark'] .result [class*='codeBlockTitle']{
+	background-color: #8d949e;
+}
+
 .header {
 	
 }
+

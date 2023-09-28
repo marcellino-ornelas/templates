@@ -19,10 +19,10 @@ package's files and folders are used when rendering your template.
 All packages live inside of a tps `template` folder
 
 ```text
-    | - .tps/
-        | - some-template/
-			// highlight-next-line
-            | - <packages...>/
+| - .tps/
+	| - some-template/
+		// highlight-next-line
+		| - <packages...>/
 ```
 
 `packages` can be named whatever you like except for one. Each `template` can
@@ -48,17 +48,17 @@ space for important things needed every time you use a template. It keeps all
 the essential elements in one place.
 
 ```text title="Template"
-    | - .tps/
-        | - some-template/
-            | - default/
-				// highlight-next-line
-                | - <all of the default package files/folders...>
+| - .tps/
+	| - some-template/
+		| - default/
+			// highlight-next-line
+			| - <all of the default package files/folders...>
 ```
 
 ```text title="Result"
-    | - app/
-		// highlight-next-line
-        | - <all of the default package files/folders...>
+| - app/
+	// highlight-next-line
+	| - <all of the default package files/folders...>
 ```
 
 <Example open>
@@ -104,20 +104,20 @@ folders will be copied over to `app`. You can have and include as many packages
 as you wish.
 
 ```text
-    | - .tps/
-        | - <template>/
-			// highlight-start
-            | - default/
-                | - <default files/folders...>
-            | - package2/
-                | - <package2 files/folders...>
-			// highlight-end
-
-    | - app/
+| - .tps/
+	| - <template>/
 		// highlight-start
-        | - <default files/folder...>
-        | - <package2 files/folders...>
+		| - default/
+			| - <default files/folders...>
+		| - package2/
+			| - <package2 files/folders...>
 		// highlight-end
+
+| - app/
+	// highlight-start
+	| - <default files/folder...>
+	| - <package2 files/folders...>
+	// highlight-end
 ```
 
 If you have more than one package but don't specific that you want to use any
@@ -125,16 +125,16 @@ additional ones. Your app folder will only be the files and folders from
 `default`.
 
 ```text
-    | - .tps/
-        | - <template>/
-            | - default/
-                | - <default files/folders...>
-            | - package2/
-                | - <package2 files/folders...>
+| - .tps/
+	| - <template>/
+		| - default/
+			| - <default files/folders...>
+		| - package2/
+			| - <package2 files/folders...>
 
-    | - app/
-		// highlight-next-line
-        | - <default files/folders...>
+| - app/
+	// highlight-next-line
+	| - <default files/folders...>
 ```
 
 <Example open title="Using additional packages">
