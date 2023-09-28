@@ -36,6 +36,7 @@ example down below
 tps yargs-cli-cmd <cmd-name>
 
 # or long build path
+
 tps yargs-cli-cmd path/to/dir/<cmd-name>
 ```
 
@@ -185,6 +186,15 @@ for more details.
 
 :::
 
+You will be prompted to answer the following questions:
+
+```text
+? What type of file style do you want to use?
+? Would you like to use typescript?
+? What type of extension do you want for your file?
+? Please add a description
+```
+
 Based on your responses to the prompts, templates will generate a `list.js` file
 within your `./cli/commands/` directory.
 
@@ -199,7 +209,7 @@ within your `./cli/commands/` directory.
 			| - index.js
 ```
 
-```js title="list.js"
+```js title="cli/commands/list.js"
 export const command = 'list';
 
 export const aliases = [];
