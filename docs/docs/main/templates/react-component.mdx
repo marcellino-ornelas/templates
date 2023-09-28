@@ -12,22 +12,34 @@ import TabItem from '@theme/TabItem';
   <div className="col col--6">💅 Supports multiple CSS languages</div>
 </div>
 
+<br />
+
+Generate a fully functioning react component (function component).
+
 ## Usage
 
 ```bash title="Usage"
-tps react-component <name>
+tps react-component <component-name>
+
+# or long build path
+
+tps react-component path/to/dir/<component-name>
 ```
 
 ```txt title="Creates"
-| - <name>
+| - <component-name>
 	| - index.js (optional)
-	| - <name>.js
-	| - <name>.css (optional)
-	| - <name>.test.js (optional)
-	| - <name>.stories.js (optional)
+	| - <component-name>.js
+	| - <component-name>.css (optional)
+	| - <component-name>.test.js (optional)
+	| - <component-name>.stories.js (optional)
 ```
 
 <Example>
+
+<Tabs>
+
+<TabItem value="default">
 
 ```bash
 tps react-component Nav
@@ -41,6 +53,30 @@ Produces:
 	| - Nav.js
 	| - Nav.css
 ```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps react-component src/components/Nav
+```
+
+Produces:
+
+```txt
+| - <cwd>
+	| - src/
+		| - components/
+			| - Nav
+				| - index.js
+				| - Nav.js
+				| - Nav.css
+```
+
+</TabItem>
+
+</Tabs>
 
 </Example>
 

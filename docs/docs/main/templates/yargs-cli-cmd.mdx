@@ -4,6 +4,8 @@ sidebar_label: yargs-cli-cmd (beta)
 
 import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # yargs-cli-cmd
 
@@ -32,6 +34,9 @@ example down below
 
 ```bash title="Usage"
 tps yargs-cli-cmd <cmd-name>
+
+# or long build path
+tps yargs-cli-cmd path/to/dir/<cmd-name>
 ```
 
 ```txt title="Creates"
@@ -41,6 +46,10 @@ tps yargs-cli-cmd <cmd-name>
 
 <Example>
 
+<Tabs>
+
+<TabItem value="default">
+
 ```bash
 tps yargs-cli-cmd publish
 ```
@@ -48,7 +57,7 @@ tps yargs-cli-cmd publish
 Produces:
 
 ```txt
-| - publish
+| - publish/
 	| - publish.js
 ```
 
@@ -71,6 +80,47 @@ export const handler = async (argv) => {
   // code ...
 };
 ```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps yargs-cli-cmd cli/commands/publish
+```
+
+Produces:
+
+```txt
+| - cli/
+	| - commands/
+		| - publish/
+			| - publish.js
+```
+
+```js title="cli/commands/publish.js"
+export const command = 'publish';
+
+export const aliases = [];
+
+export const describe = 'This is my publish cli command';
+
+export const builder = {
+  flag: {
+    alias: '',
+    describe: '...',
+    type: 'boolean',
+  },
+};
+
+export const handler = async (argv) => {
+  // code ...
+};
+```
+
+</TabItem>
+
+</Tabs>
 
 </Example>
 
@@ -169,7 +219,7 @@ export const handler = async (argv) => {
 };
 ```
 
-### Dont use a new folder
+### Dont create a new folder
 
 If you dont want your yarg cmd file in a new folder you can turn off the new
 folder option in your `.tps/tpsrc`
