@@ -9,22 +9,32 @@
 
 const _globals: any = {};
 
+// current solution: [^\S\r\n]*\{ ... \}[^\S\r\n]*\n?
+// current solution: {{{  }}}
 const doT: any = {
   name: 'doT',
   version: '1.1.1',
   templateSettings: {
     evaluate: /\{\{([\s\S]+?(\}?)+)\}\}/g,
+    // evaluateEscape: /\{\{\{([\s\S]+?(\}?)+)\}\}\}\s*?\n?/g,
+    evaluateEscape: /\{\{\{([\s\S]+?(\}?)+)\}\}\}\s*?\n?/g,
     interpolate: /\{\{=([\s\S]+?)\}\}/g,
     encode: /\{\{!([\s\S]+?)\}\}/g,
     use: /\{\{#([\s\S]+?)\}\}/g,
     useParams:
       /(^|[^\w$])def(?:\.|\[[\'\"])([\w$\.]+)(?:[\'\"]\])?\s*\:\s*([\w$\.]+|\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})/g,
     define: /\{\{##\s*([\w\.$]+)\s*(\:|=)([\s\S]+?)#\}\}/g,
+    defineEscape:
+      /[^\S\r\n]*\{\{\{##\s*([\w\.$]+)\s*(\:|=)\n?([\s\S]+?)\n?#\}\}\}[^\S\r\n]*\n?/g,
     defineParams: /^\s*([\w$]+):([\s\S]+)/,
     conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
+    conditionalEscape:
+      /[^\S\r\n]*\{\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}\}[^\S\r\n]*\n?/g,
     iterate:
       /\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
-    varname: 'it',
+    iterateEscape:
+      /[^\S\r\n]*\{\{\{~\s*(?:\}\}\}[^\S\r\n]*\n?|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\}\}[^\S\r\n]*\n?)/g,
+    varname: 'tps',
     strip: true,
     append: true,
     selfcontained: false,
@@ -68,6 +78,24 @@ const skip = /$^/;
 
 function resolveDefs(c, block, def) {
   return (typeof block === 'string' ? block : block.toString())
+    .replace(c.defineEscape || skip, (m, code, assign, value) => {
+      if (code.indexOf('def.') === 0) {
+        // eslint-disable-next-line no-param-reassign
+        code = code.substring(4);
+      }
+      if (!(code in def)) {
+        if (assign === ':') {
+          if (c.defineParams)
+            value.replace(c.defineParams, (m, param, v) => {
+              def[code] = { arg: param, text: v };
+            });
+          if (!(code in def)) def[code] = value;
+        } else {
+          new Function('def', "def['" + code + "']=" + value)(def);
+        }
+      }
+      return '';
+    })
     .replace(c.define || skip, (m, code, assign, value) => {
       if (code.indexOf('def.') === 0) {
         // eslint-disable-next-line no-param-reassign
@@ -132,6 +160,15 @@ doT.template = function (tmpl, c, def) {
         needhtmlencode = true;
         return cse.startencode + unescape(code) + cse.end;
       })
+      .replace(c.conditionalEscape || skip, (m, elsecase, code) => {
+        return elsecase
+          ? code
+            ? "';}else if(" + unescape(code) + "){out+='"
+            : "';}else{out+='"
+          : code
+          ? "';if(" + unescape(code) + "){out+='"
+          : "';}out+='";
+      })
       .replace(c.conditional || skip, (m, elsecase, code) => {
         return elsecase
           ? code
@@ -140,6 +177,39 @@ doT.template = function (tmpl, c, def) {
           : code
           ? "';if(" + unescape(code) + "){out+='"
           : "';}out+='";
+      })
+      .replace(c.iterateEscape || skip, (m, iterate, vname, iname) => {
+        if (!iterate) return "';} } out+='";
+        sid += 1;
+        indv = iname || 'i' + sid;
+        iterate = unescape(iterate);
+        return (
+          "';var arr" +
+          sid +
+          '=' +
+          iterate +
+          ';if(arr' +
+          sid +
+          '){var ' +
+          vname +
+          ',' +
+          indv +
+          '=-1,l' +
+          sid +
+          '=arr' +
+          sid +
+          '.length-1;while(' +
+          indv +
+          '<l' +
+          sid +
+          '){' +
+          vname +
+          '=arr' +
+          sid +
+          '[' +
+          indv +
+          "+=1];out+='"
+        );
       })
       .replace(c.iterate || skip, (m, iterate, vname, iname) => {
         if (!iterate) return "';} } out+='";
@@ -173,6 +243,9 @@ doT.template = function (tmpl, c, def) {
           indv +
           "+=1];out+='"
         );
+      })
+      .replace(c.evaluateEscape || skip, (m, code) => {
+        return "';" + unescape(code) + "out+='";
       })
       .replace(c.evaluate || skip, (m, code) => {
         return "';" + unescape(code) + "out+='";
