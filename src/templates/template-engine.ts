@@ -16,8 +16,7 @@ const doT: any = {
   version: '1.1.1',
   templateSettings: {
     evaluate: /\{\{([\s\S]+?(\}?)+)\}\}/g,
-    // evaluateEscape: /\{\{\{([\s\S]+?(\}?)+)\}\}\}\s*?\n?/g,
-    evaluateEscape: /\{\{\{([\s\S]+?(\}?)+)\}\}\}\s*?\n?/g,
+    evaluateEscape: /[^\S\r\n]*\{\{\{([\s\S]+?(\}?)+)\}\}\}\s*?\n?/g,
     interpolate: /\{\{=([\s\S]+?)\}\}/g,
     encode: /\{\{!([\s\S]+?)\}\}/g,
     use: /\{\{#([\s\S]+?)\}\}/g,

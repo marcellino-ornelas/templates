@@ -22,7 +22,7 @@ import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
 import dot from '@tps/dot';
 import { cosmiconfigSync } from 'cosmiconfig';
-import * as utils from './utils';
+import * as utils from './util';
 
 export interface TemplateOptions {
   /**
