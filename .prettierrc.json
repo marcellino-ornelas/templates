@@ -3,6 +3,7 @@
   "semi": true,
   "bracketSpacing": true,
   "arrowParens": "always",
+  "useTabs": true,
   "overrides": [
     {
       "files": "*.mdx",
