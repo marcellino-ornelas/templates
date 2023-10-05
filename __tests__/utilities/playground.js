@@ -12,67 +12,67 @@ import * as crypto from 'crypto';
 const TESTING_PLAYGROUND_NAME = 'testing_playground';
 
 const stamp = (len = 10) =>
-  crypto.randomBytes(Math.ceil(len / 2)).toString('hex', 0, len);
+	crypto.randomBytes(Math.ceil(len / 2)).toString('hex', 0, len);
 
 const boxTracker = {};
 
 class Playground {
-  constructor(dirPath = process.cwd(), name = TESTING_PLAYGROUND_NAME) {
-    this.dirPath = dirPath;
-    this._name = name;
+	constructor(dirPath = process.cwd(), name = TESTING_PLAYGROUND_NAME) {
+		this.dirPath = dirPath;
+		this._name = name;
 
-    do {
-      if (this.name) {
-        console.log(
-          `[PLAYGROUND INFO] playground name was already selected (${this.name})`
-        );
-      }
-      this.stamp = stamp();
-      this.name = `${name}_${this.stamp}`;
-      // } while (hasProp(boxTracker, this.name));
-      // eslint-disable-next-line no-prototype-builtins
-    } while (boxTracker.hasOwnProperty(this.name));
+		do {
+			if (this.name) {
+				console.log(
+					`[PLAYGROUND INFO] playground name was already selected (${this.name})`,
+				);
+			}
+			this.stamp = stamp();
+			this.name = `${name}_${this.stamp}`;
+			// } while (hasProp(boxTracker, this.name));
+			// eslint-disable-next-line no-prototype-builtins
+		} while (boxTracker.hasOwnProperty(this.name));
 
-    // track box name so it will never have duplicates
-    boxTracker[this.name] = true;
+		// track box name so it will never have duplicates
+		boxTracker[this.name] = true;
 
-    this.boxes = {};
-    this.current = null;
-  }
+		this.boxes = {};
+		this.current = null;
+	}
 
-  get path() {
-    return path.join(this.dirPath, this.name);
-  }
+	get path() {
+		return path.join(this.dirPath, this.name);
+	}
 
-  create() {
-    return vol.promises.mkdir(this.path, { recursive: true });
-  }
+	create() {
+		return vol.promises.mkdir(this.path, { recursive: true });
+	}
 
-  destroy() {
-    return vol.promises.rm(this.path, { force: true, recursive: true });
-  }
+	destroy() {
+		return vol.promises.rm(this.path, { force: true, recursive: true });
+	}
 
-  createBox(name) {
-    const box = new Playground(this.path, name);
+	createBox(name) {
+		const box = new Playground(this.path, name);
 
-    if (this.boxes[box.name]) {
-      throw new Error('two boxes are the same');
-    }
+		if (this.boxes[box.name]) {
+			throw new Error('two boxes are the same');
+		}
 
-    this.boxes[box.name] = box;
-    this.current = box;
+		this.boxes[box.name] = box;
+		this.current = box;
 
-    return box.create();
-  }
+		return box.create();
+	}
 
-  box() {
-    return this.current.path;
-  }
+	box() {
+		return this.current.path;
+	}
 
-  pathTo(filePath) {
-    const pathToFile = path.join(this.box(), filePath);
-    return pathToFile;
-  }
+	pathTo(filePath) {
+		const pathToFile = path.join(this.box(), filePath);
+		return pathToFile;
+	}
 }
 
 export default Playground;

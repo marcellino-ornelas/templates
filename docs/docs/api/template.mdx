@@ -10,13 +10,13 @@ import TabItem from '@theme/TabItem';
 
 ```ts title="Type"
 interface Template {
-  constructor(templateName: string, opts: TemplateOptions): Template;
+	constructor(templateName: string, opts: TemplateOptions): Template;
 }
 ```
 
 ```ts title="Usage"
 new Templates('<template-name>', {
-  /* template options ... */
+	/* template options ... */
 });
 ```
 
@@ -24,7 +24,7 @@ new Templates('<template-name>', {
 
 ```ts
 new Templates('react-component', {
-  wipe: true,
+	wipe: true,
 });
 ```
 
@@ -34,10 +34,10 @@ new Templates('react-component', {
 
 ```ts title="Type"
 interface TemplateOptions {
-  extendDest?: string;
-  wipe?: boolean;
-  force?: boolean;
-  NewFolder?: boolean;
+	extendDest?: string;
+	wipe?: boolean;
+	force?: boolean;
+	NewFolder?: boolean;
 }
 ```
 
@@ -57,12 +57,12 @@ Optional path to add prepend to each
 
 ```json title=".tpsrc"
 {
-  "react-component": {
-    "opts": {
-      // highlight-next-line
-      "extendDest": "./path/to/some/directory"
-    }
-  }
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"extendDest": "./path/to/some/directory"
+		}
+	}
 }
 ```
 
@@ -72,7 +72,7 @@ Optional path to add prepend to each
 
 ```ts
 new Templates('react-component', {
-  extendDest: './path/to/some/directory',
+	extendDest: './path/to/some/directory',
 });
 ```
 
@@ -128,12 +128,12 @@ value.
 
 ```json title=".tpsrc"
 {
-  "react-component": {
-    "opts": {
-      // highlight-next-line
-      "extendDest": "./src"
-    }
-  }
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"extendDest": "./src"
+		}
+	}
 }
 ```
 
@@ -143,8 +143,8 @@ value.
 
 ```ts
 new Templates('react-component', {
-  // highlight-next-line
-  extendDest: './src',
+	// highlight-next-line
+	extendDest: './src',
 });
 ```
 
@@ -193,12 +193,12 @@ potential conflicts during the rendering process.
 
 ```json title=".tpsrc"
 {
-  "react-component": {
-    "opts": {
-      // highlight-next-line
-      "wipe": true
-    }
-  }
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"wipe": true
+		}
+	}
 }
 ```
 
@@ -208,8 +208,8 @@ potential conflicts during the rendering process.
 
 ```ts
 new Templates('react-component', {
-  // highlight-next-line
-  wipe: true,
+	// highlight-next-line
+	wipe: true,
 });
 ```
 
@@ -286,12 +286,12 @@ conflicts.
 
 ```json title=".tpsrc"
 {
-  "react-component": {
-    "opts": {
-      // highlight-next-line
-      "force": true
-    }
-  }
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"force": true
+		}
+	}
 }
 ```
 
@@ -301,8 +301,8 @@ conflicts.
 
 ```ts
 new Templates('react-component', {
-  // highlight-next-line
-  force: true,
+	// highlight-next-line
+	force: true,
 });
 ```
 
@@ -413,12 +413,12 @@ in progress.
 
 ```json title=".tpsrc"
 {
-  "react-component": {
-    "opts": {
-      // highlight-next-line
-      "newFolder": false
-    }
-  }
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"newFolder": false
+		}
+	}
 }
 ```
 
@@ -428,8 +428,8 @@ in progress.
 
 ```ts
 new Templates('react-component', {
-  // highlight-next-line
-  newFolder: false,
+	// highlight-next-line
+	newFolder: false,
 });
 ```
 

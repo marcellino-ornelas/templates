@@ -8,11 +8,11 @@ import use from './use';
 import create from './create';
 
 export const commands: CommandModule[] = [
-  list,
-  init,
-  copy,
-  migrate,
-  newCmd,
-  use,
-  create,
+	list,
+	init,
+	copy,
+	migrate,
+	newCmd,
+	use,
+	create,
 ];

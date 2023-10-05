@@ -4,13 +4,13 @@ import { HowTemplate } from './howTemplate';
 import { HowTerminal } from './howTerminal';
 
 export const How = () => {
-  return (
-    <div>
-      <HowTemplate />
+	return (
+		<div>
+			<HowTemplate />
 
-      <HowTerminal />
+			<HowTerminal />
 
-      <HowResult />
-    </div>
-  );
+			<HowResult />
+		</div>
+	);
 };

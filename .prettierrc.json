@@ -1,15 +1,16 @@
 {
-  "singleQuote": true,
-  "semi": true,
-  "bracketSpacing": true,
-  "arrowParens": "always",
-  "overrides": [
-    {
-      "files": "*.mdx",
-      "options": {
-        "parser": "mdx",
-        "proseWrap": "always"
-      }
-    }
-  ]
+	"singleQuote": true,
+	"semi": true,
+	"bracketSpacing": true,
+	"arrowParens": "always",
+	"useTabs": true,
+	"overrides": [
+		{
+			"files": "*.mdx",
+			"options": {
+				"parser": "mdx",
+				"proseWrap": "always"
+			}
+		}
+	]
 }

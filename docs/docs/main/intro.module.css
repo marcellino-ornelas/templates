@@ -11,7 +11,7 @@
 	border: 1px solid grey;
 	border-radius: 10px;
 	/* box-shadow: 2px 2px 4px #c6c3c3; */
-	box-shadow: 2px 2px 5px rgba(0,0,0,0.3)
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 [data-theme='dark'] .templateOption {
@@ -41,14 +41,13 @@
 	color: white;
 }
 
-
 @media screen and (max-width: 996px) {
 	.templateOptions {
 		display: block;
 	}
-	
+
 	.templateOption {
 		width: 100%;
 		margin-bottom: 15px;
 	}
-  }
+}

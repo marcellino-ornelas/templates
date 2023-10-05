@@ -45,8 +45,8 @@ export const HAS_LOCAL: boolean = tpsLocal && tpsLocal !== GLOBAL_PATH;
 export const LOCAL_PATH: string | null = HAS_LOCAL ? tpsLocal : null;
 
 export const LOCAL_CONFIG_PATH: string | null = HAS_LOCAL
-  ? path.join(LOCAL_PATH, CONFIG_FILE)
-  : null;
+	? path.join(LOCAL_PATH, CONFIG_FILE)
+	: null;
 
 /***************************
  * init
@@ -66,8 +66,8 @@ export const INIT_GLOBAL_PATH: string = path.normalize(USER_HOME);
  * path of tps folder if tps is initialized in repo
  */
 export const INIT_LOCAL_TPS_PATH: string = path.join(
-  INIT_LOCAL_PATH,
-  TPS_FOLDER
+	INIT_LOCAL_PATH,
+	TPS_FOLDER,
 );
 
 export const IS_TPS_INITIALIZED: boolean = isDir(INIT_LOCAL_TPS_PATH);
