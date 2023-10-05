@@ -5,12 +5,12 @@ import './formatters';
 import CreateDebugGroup from './createDebugGroup';
 
 export const logFunctions = [
-  'info',
-  'error',
-  'debug',
-  'success',
-  'warn',
-  'log',
+	'info',
+	'error',
+	'debug',
+	'success',
+	'warn',
+	'log',
 ];
 
 // function createLogFunctionsNames(name) {
@@ -18,101 +18,101 @@ export const logFunctions = [
 // }
 
 interface CreateDebugOpts {
-  disableLog: boolean;
+	disableLog: boolean;
 }
 
 class CreateDebug {
-  static DEFAULT_OPTS: CreateDebugOpts = { disableLog: false };
+	static DEFAULT_OPTS: CreateDebugOpts = { disableLog: false };
 
-  public name: string;
+	public name: string;
 
-  public _logger: ReturnType<typeof debug>;
+	public _logger: ReturnType<typeof debug>;
 
-  public opts: CreateDebugOpts;
+	public opts: CreateDebugOpts;
 
-  public _groups: { [p: string]: CreateDebugGroup };
+	public _groups: { [p: string]: CreateDebugGroup };
 
-  public info: debug.Debugger;
+	public info: debug.Debugger;
 
-  public error: debug.Debugger;
+	public error: debug.Debugger;
 
-  public debug: debug.Debugger;
+	public debug: debug.Debugger;
 
-  public success: debug.Debugger;
+	public success: debug.Debugger;
 
-  public warn: debug.Debugger;
+	public warn: debug.Debugger;
 
-  public log: debug.Debugger;
+	public log: debug.Debugger;
 
-  constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
-    this.name = name;
-    this._logger = debug(this.name);
-    this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
-    this._groups = {};
+	constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
+		this.name = name;
+		this._logger = debug(this.name);
+		this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
+		this._groups = {};
 
-    logFunctions.forEach((type) => {
-      const instanceKey = `_${type}`;
-      this[instanceKey] = this._logger.extend(type);
-      this[instanceKey].color = this._logger.color;
-      this[type] = (...args) => {
-        this._resync();
-        this[instanceKey](...args);
-      };
-    });
+		logFunctions.forEach((type) => {
+			const instanceKey = `_${type}`;
+			this[instanceKey] = this._logger.extend(type);
+			this[instanceKey].color = this._logger.color;
+			this[type] = (...args) => {
+				this._resync();
+				this[instanceKey](...args);
+			};
+		});
 
-    this._resync();
-  }
+		this._resync();
+	}
 
-  _resync(): void {
-    const { disableLog } = this.opts;
-    logFunctions.forEach((type) => {
-      const instanceKey = `_${type}`;
-      if (type === 'log') {
-        // Log always is enabled
-        this[instanceKey].enabled = !disableLog;
-      } else {
-        this[instanceKey].enabled = this.isEnabled();
-      }
-    });
-  }
+	_resync(): void {
+		const { disableLog } = this.opts;
+		logFunctions.forEach((type) => {
+			const instanceKey = `_${type}`;
+			if (type === 'log') {
+				// Log always is enabled
+				this[instanceKey].enabled = !disableLog;
+			} else {
+				this[instanceKey].enabled = this.isEnabled();
+			}
+		});
+	}
 
-  isEnabled(): boolean {
-    return this._logger.enabled;
-  }
+	isEnabled(): boolean {
+		return this._logger.enabled;
+	}
 
-  enable(): this {
-    this._logger.enabled = true;
-    this._resync();
-    return this;
-  }
+	enable(): this {
+		this._logger.enabled = true;
+		this._resync();
+		return this;
+	}
 
-  group(name, { clear = false } = {}): CreateDebugGroup {
-    if (this._groups[name] && !clear) {
-      return this._groups[name];
-    }
+	group(name, { clear = false } = {}): CreateDebugGroup {
+		if (this._groups[name] && !clear) {
+			return this._groups[name];
+		}
 
-    const newGroup = new CreateDebugGroup(name);
+		const newGroup = new CreateDebugGroup(name);
 
-    this._groups[name] = newGroup;
+		this._groups[name] = newGroup;
 
-    return newGroup;
-  }
+		return newGroup;
+	}
 
-  printGroup(group) {
-    let groupArray = group;
+	printGroup(group) {
+		let groupArray = group;
 
-    if (is.string(group)) {
-      groupArray = this._groups[group];
-    }
+		if (is.string(group)) {
+			groupArray = this._groups[group];
+		}
 
-    for (let i = 0; i < groupArray.length; i++) {
-      const [level, ...args] = groupArray[i];
+		for (let i = 0; i < groupArray.length; i++) {
+			const [level, ...args] = groupArray[i];
 
-      this[level](...args);
-    }
+			this[level](...args);
+		}
 
-    this._groups[groupArray.name] = undefined;
-  }
+		this._groups[groupArray.name] = undefined;
+	}
 }
 
 // class CreateDebug {

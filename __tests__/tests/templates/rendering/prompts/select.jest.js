@@ -14,51 +14,51 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[Templates] Prompts Process: when using select prompts', () => {
-  beforeAll(() => playground.create());
+	beforeAll(() => playground.create());
 
-  afterAll(() => playground.destroy());
+	afterAll(() => playground.destroy());
 
-  let tps;
-  beforeEach(() => {
-    // add no default to this test to only test packages
-    tps = new Templates('testing-prompt-types-select', {
-      defaultPackage: false,
-    });
+	let tps;
+	beforeEach(() => {
+		// add no default to this test to only test packages
+		tps = new Templates('testing-prompt-types-select', {
+			defaultPackage: false,
+		});
 
-    return playground.createBox('render_process_prompts');
-  });
+		return playground.createBox('render_process_prompts');
+	});
 
-  it.each([
-    ['css', 'index.css'],
-    ['less', 'index.less'],
-  ])(
-    'should render a template with values passed into prompt',
-    (answer, expected) => {
-      const destPath = playground.pathTo('App');
-      // eslint-disable-next-line no-import-assign
-      inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
+	it.each([
+		['css', 'index.css'],
+		['less', 'index.less'],
+	])(
+		'should render a template with values passed into prompt',
+		(answer, expected) => {
+			const destPath = playground.pathTo('App');
+			// eslint-disable-next-line no-import-assign
+			inquirer.prompt = jest.fn().mockResolvedValue({ cssType: answer });
 
-      return tps.render(playground.box(), 'App').then(() => {
-        // eslint-disable-next-line no-underscore-dangle
-        expect(tps._prompts.answers.cssType).toBe(answer);
-        expect(tps.packages).toHaveProperty(answer);
-        expect(destPath).toHaveAllFilesAndDirectories([expected]);
-      });
-    }
-  );
+			return tps.render(playground.box(), 'App').then(() => {
+				// eslint-disable-next-line no-underscore-dangle
+				expect(tps._prompts.answers.cssType).toBe(answer);
+				expect(tps.packages).toHaveProperty(answer);
+				expect(destPath).toHaveAllFilesAndDirectories([expected]);
+			});
+		},
+	);
 
-  it('should render a template when answering prompt with alias', () => {
-    tps.verbose = true;
-    const destPath = playground.pathTo('App');
+	it('should render a template when answering prompt with alias', () => {
+		tps.verbose = true;
+		const destPath = playground.pathTo('App');
 
-    tps.setAnswers({ c: 'less' });
+		tps.setAnswers({ c: 'less' });
 
-    // eslint-disable-next-line no-underscore-dangle
-    expect(tps._prompts.needsAnswers()).toBeFalsy();
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.needsAnswers()).toBeFalsy();
 
-    return tps.render(playground.box(), 'App').then(() => {
-      expect(destPath).toHaveAllFilesAndDirectories(['index.less']);
-      expect(tps.packages).toHaveProperty('less');
-    });
-  });
+		return tps.render(playground.box(), 'App').then(() => {
+			expect(destPath).toHaveAllFilesAndDirectories(['index.less']);
+			expect(tps.packages).toHaveProperty('less');
+		});
+	});
 });

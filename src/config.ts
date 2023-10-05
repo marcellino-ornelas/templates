@@ -1,23 +1,23 @@
 import { defaults } from '@tps/utilities/helpers';
 
 export default class Config {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private configurations: Record<string, any>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private configurations: Record<string, any>;
 
-  constructor() {
-    this.configurations = {};
-  }
+	constructor() {
+		this.configurations = {};
+	}
 
-  load(configObject) {
-    this.configurations = defaults(configObject, this.configurations);
-    return this;
-  }
+	load(configObject) {
+		this.configurations = defaults(configObject, this.configurations);
+		return this;
+	}
 
-  get(prop) {
-    return this.configurations[prop];
-  }
+	get(prop) {
+		return this.configurations[prop];
+	}
 
-  set(prop, value) {
-    this.configurations[prop] = value;
-  }
+	set(prop, value) {
+		this.configurations[prop] = value;
+	}
 }

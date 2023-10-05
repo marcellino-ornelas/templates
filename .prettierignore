@@ -1,0 +1,14 @@
+**/.git
+**/node_modules
+
+lib/
+__tests__/testing_playground*/
+__tests__/templates.json
+coverage
+
+docs/build
+docs/.docusaurus
+
+## Fix me
+__tests__/.tps/testing-tpsrc/default/index.js
+__tests__/.tps/testing-clean-up-wipe/default/index.js

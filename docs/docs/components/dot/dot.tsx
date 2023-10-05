@@ -9,54 +9,54 @@ doT.templateSettings.strip = false;
 doT.templateSettings.varname = 'tps';
 
 interface Props {
-  templateName?: string;
-  children: React.ReactNode;
-  templateMeta: string;
-  resultMeta: string;
-  result: boolean;
-  lang: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  tps?: Partial<Tps>;
+	templateName?: string;
+	children: React.ReactNode;
+	templateMeta: string;
+	resultMeta: string;
+	result: boolean;
+	lang: string;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	tps?: Partial<Tps>;
 }
 
 export const Dot = ({
-  templateName = 'Dot Template',
-  children,
-  tps = {},
-  result = true,
-  templateMeta = '',
-  resultMeta = '',
-  lang = 'text',
+	templateName = 'Dot Template',
+	children,
+	tps = {},
+	result = true,
+	templateMeta = '',
+	resultMeta = '',
+	lang = 'text',
 }: Props) => {
-  const templateString = (children as any).props.children.props.children;
+	const templateString = (children as any).props.children.props.children;
 
-  const output = useDot({
-    templateString,
-    tps,
-  });
+	const output = useDot({
+		templateString,
+		tps,
+	});
 
-  return (
-    <div>
-      <CodeBlock
-        className={styles.template}
-        showLineNumbers
-        title={templateName}
-        language={lang}
-        metastring={templateMeta}
-      >
-        {templateString}
-      </CodeBlock>
+	return (
+		<div>
+			<CodeBlock
+				className={styles.template}
+				showLineNumbers
+				title={templateName}
+				language={lang}
+				metastring={templateMeta}
+			>
+				{templateString}
+			</CodeBlock>
 
-      {result && (
-        <CodeBlock
-          title="Result"
-          className={styles.result}
-          language={lang}
-          metastring={resultMeta}
-        >
-          {`${output}`}
-        </CodeBlock>
-      )}
-    </div>
-  );
+			{result && (
+				<CodeBlock
+					title="Result"
+					className={styles.result}
+					language={lang}
+					metastring={resultMeta}
+				>
+					{`${output}`}
+				</CodeBlock>
+			)}
+		</div>
+	);
 };

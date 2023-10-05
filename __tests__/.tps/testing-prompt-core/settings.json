@@ -1,10 +1,10 @@
 {
-  "prompts": [
-    {
-      "name": "test1",
-      "type": "input",
-      "message": "test1",
-      "alias": "t"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "test1",
+			"type": "input",
+			"message": "test1",
+			"alias": "t"
+		}
+	]
 }

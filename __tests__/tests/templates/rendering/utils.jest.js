@@ -13,45 +13,45 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Utils:', () => {
-  let tps;
-  beforeAll(() => playground.create());
-  afterAll(() => playground.destroy());
+	let tps;
+	beforeAll(() => playground.create());
+	afterAll(() => playground.destroy());
 
-  beforeEach(() => {
-    tps = new Templates('testing-utils');
+	beforeEach(() => {
+		tps = new Templates('testing-utils');
 
-    return playground.createBox('render_utils');
-  });
+		return playground.createBox('render_utils');
+	});
 
-  it('should be able to use change-case fn', () => {
-    const indexFile = playground.pathTo('App/index.txt');
-    const appFolder = playground.pathTo('App');
+	it('should be able to use change-case fn', () => {
+		const indexFile = playground.pathTo('App/index.txt');
+		const appFolder = playground.pathTo('App');
 
-    tps.setAnswers({
-      message: 'change case',
-      fn: 'camelCase',
-    });
+		tps.setAnswers({
+			message: 'change case',
+			fn: 'camelCase',
+		});
 
-    return tps.render(playground.box(), 'App').then(() => {
-      expect(appFolder).toBeDirectory();
-      expect(indexFile).toBeFile();
-      expect(indexFile).toHaveFileContents('changeCase');
-    });
-  });
+		return tps.render(playground.box(), 'App').then(() => {
+			expect(appFolder).toBeDirectory();
+			expect(indexFile).toBeFile();
+			expect(indexFile).toHaveFileContents('changeCase');
+		});
+	});
 
-  it('should be able to use inflection fn', () => {
-    const indexFile = playground.pathTo('App/index.txt');
-    const appFolder = playground.pathTo('App');
+	it('should be able to use inflection fn', () => {
+		const indexFile = playground.pathTo('App/index.txt');
+		const appFolder = playground.pathTo('App');
 
-    tps.setAnswers({
-      message: 'inflection',
-      fn: 'pluralize',
-    });
+		tps.setAnswers({
+			message: 'inflection',
+			fn: 'pluralize',
+		});
 
-    return tps.render(playground.box(), 'App').then(() => {
-      expect(appFolder).toBeDirectory();
-      expect(indexFile).toBeFile();
-      expect(indexFile).toHaveFileContents('inflections');
-    });
-  });
+		return tps.render(playground.box(), 'App').then(() => {
+			expect(appFolder).toBeDirectory();
+			expect(indexFile).toBeFile();
+			expect(indexFile).toHaveFileContents('inflections');
+		});
+	});
 });

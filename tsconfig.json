@@ -18,15 +18,10 @@
 			{ "transform": "typescript-transform-paths", "afterDeclarations": true }
 		]
 	},
-	"include": [
-		"./src/**/*",
-	],
+	"include": ["./src/**/*"],
 	"exclude": ["node_modules"],
 
 	"ts-node": {
-		"include": [
-			"./src/**/*",
-			"./.bin/**/*"
-		]
+		"include": ["./src/**/*", "./.bin/**/*"]
 	}
 }

@@ -41,9 +41,9 @@ properties depending on the type of prompt.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    /* prompts ... */
-  ]
+	"prompts": [
+		/* prompts ... */
+	]
 }
 ```
 
@@ -65,13 +65,13 @@ under the [`tps.answers`](../../api/template-context#answers) object property.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "<some-name>"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"name": "<some-name>"
+			// ...
+		}
+	]
 }
 ```
 
@@ -86,13 +86,13 @@ answer.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "age"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"name": "age"
+			// ...
+		}
+	]
 }
 ```
 
@@ -113,13 +113,13 @@ the user when they are rendering a new instance.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "message": "<some-message>"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"message": "<some-message>"
+			// ...
+		}
+	]
 }
 ```
 
@@ -127,13 +127,13 @@ the user when they are rendering a new instance.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "unit",
-      // highlight-next-line
-      "message": "Would you like to include unit tests?"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "unit",
+			// highlight-next-line
+			"message": "Would you like to include unit tests?"
+		}
+	]
 }
 ```
 
@@ -158,13 +158,13 @@ prompting you would like to use. You can see more about this property in the
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "type": "confirm | input | checkbox | list | rawlist | password"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"type": "confirm | input | checkbox | list | rawlist | password"
+			// ...
+		}
+	]
 }
 ```
 
@@ -172,14 +172,14 @@ prompting you would like to use. You can see more about this property in the
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "over18",
-      // highlight-next-line
-      "type": "confirm",
-      "message": "Are you over the age of 18?"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "over18",
+			// highlight-next-line
+			"type": "confirm",
+			"message": "Are you over the age of 18?"
+		}
+	]
 }
 ```
 
@@ -209,13 +209,13 @@ If you don't specify a `tpsType` field. Tps will use `package` by default.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "tpsType": "package"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"tpsType": "package"
+			// ...
+		}
+	]
 }
 ```
 
@@ -243,14 +243,14 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "unit",
-      "tpsType": "package",
-      "type": "confirm",
-      "message": "Do you want to include unit tests?"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "unit",
+			"tpsType": "package",
+			"type": "confirm",
+			"message": "Do you want to include unit tests?"
+		}
+	]
 }
 ```
 
@@ -325,17 +325,17 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "framework",
-      "tpsType": "package",
-      "message": "What type of frontend framework would you like to use?",
-      // highlight-start
-      "type": "list", // <--- makes prompt accept strings
-      "choices": ["react", "angular"]
-      // highlight-end
-    }
-  ]
+	"prompts": [
+		{
+			"name": "framework",
+			"tpsType": "package",
+			"message": "What type of frontend framework would you like to use?",
+			// highlight-start
+			"type": "list", // <--- makes prompt accept strings
+			"choices": ["react", "angular"]
+			// highlight-end
+		}
+	]
 }
 ```
 
@@ -419,17 +419,17 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "extras",
-      "message": "Would you like to include any other features?",
-      "tpsType": "package",
-      // highlight-start
-      "type": "checkbox", // <--- makes prompt accept list of strings
-      "choices": ["metrics", "unit", "e2e", "api"]
-      // highlight-end
-    }
-  ]
+	"prompts": [
+		{
+			"name": "extras",
+			"message": "Would you like to include any other features?",
+			"tpsType": "package",
+			// highlight-start
+			"type": "checkbox", // <--- makes prompt accept list of strings
+			"choices": ["metrics", "unit", "e2e", "api"]
+			// highlight-end
+		}
+	]
 }
 ```
 
@@ -476,13 +476,13 @@ the rendering process
 
 ```json
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "tpsType": "data"
-      // ...
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"tpsType": "data"
+			// ...
+		}
+	]
 }
 ```
 
@@ -499,16 +499,16 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "security",
-      "message": "Would you like to include common express security packages?",
-      "tpsType": "data",
-      // highlight-start
-      "type": "confirm" // <--- makes prompt accept boolean
-      // highlight-end
-    }
-  ]
+	"prompts": [
+		{
+			"name": "security",
+			"message": "Would you like to include common express security packages?",
+			"tpsType": "data",
+			// highlight-start
+			"type": "confirm" // <--- makes prompt accept boolean
+			// highlight-end
+		}
+	]
 }
 ```
 
@@ -562,15 +562,15 @@ this settings file
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "unit",
-      "message": "Would you like to include unit tests?",
-      "tpsType": "package",
-      "type": "confirm"
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"name": "unit",
+			"message": "Would you like to include unit tests?",
+			"tpsType": "package",
+			"type": "confirm"
+		}
+	]
 }
 ```
 
@@ -608,15 +608,15 @@ this settings file
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "unit",
-      "message": "Would you like to include unit tests?",
-      "tpsType": "package",
-      "type": "confirm"
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"name": "unit",
+			"message": "Would you like to include unit tests?",
+			"tpsType": "package",
+			"type": "confirm"
+		}
+	]
 }
 ```
 
@@ -652,16 +652,16 @@ this settings file
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      // highlight-next-line
-      "name": "framework",
-      "message": "What frontend package would you like to include",
-      "tpsType": "package",
-      "type": "list",
-      "choices": ["react", "angular", "vue"]
-    }
-  ]
+	"prompts": [
+		{
+			// highlight-next-line
+			"name": "framework",
+			"message": "What frontend package would you like to include",
+			"tpsType": "package",
+			"type": "list",
+			"choices": ["react", "angular", "vue"]
+		}
+	]
 }
 ```
 
@@ -693,15 +693,15 @@ this settings file
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "extras",
-      "message": "Would you like to include any other features?",
-      "tpsType": "package",
-      "type": "checkbox", // <--- makes prompt accept list of strings
-      "choices": ["metrics", "unit", "e2e", "api"]
-    }
-  ]
+	"prompts": [
+		{
+			"name": "extras",
+			"message": "Would you like to include any other features?",
+			"tpsType": "package",
+			"type": "checkbox", // <--- makes prompt accept list of strings
+			"choices": ["metrics", "unit", "e2e", "api"]
+		}
+	]
 }
 ```
 
@@ -788,13 +788,13 @@ handling.
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "framework",
-      /* ... */
-      "aliases": ["<alias-name>"]
-    }
-  ]
+	"prompts": [
+		{
+			"name": "framework",
+			/* ... */
+			"aliases": ["<alias-name>"]
+		}
+	]
 }
 ```
 
@@ -805,14 +805,14 @@ this settings file
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "framework",
-      "choices": ["react", "vue", "angular"],
-      /* ... */
-      "aliases": ["f"]
-    }
-  ]
+	"prompts": [
+		{
+			"name": "framework",
+			"choices": ["react", "vue", "angular"],
+			/* ... */
+			"aliases": ["f"]
+		}
+	]
 }
 ```
 
@@ -868,13 +868,13 @@ Adding this prompt will allow you to conditionally render the css package
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "css",
-      "type": "confirm",
-      "message": "Would you like to add a css file?"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "css",
+			"type": "confirm",
+			"message": "Would you like to add a css file?"
+		}
+	]
 }
 ```
 
@@ -915,14 +915,14 @@ then this will be the new template:
 
 ```json title="settings.json"
 {
-  "prompts": [
-    {
-      "name": "modules",
-      "type": "checkbox",
-      "choices": ["react", "express", "fs", "path"],
-      "tpsType": "data",
-      "message": "What node modules would you like to import into this js file?"
-    }
-  ]
+	"prompts": [
+		{
+			"name": "modules",
+			"type": "checkbox",
+			"choices": ["react", "express", "fs", "path"],
+			"tpsType": "data",
+			"message": "What node modules would you like to import into this js file?"
+		}
+	]
 }
 ```

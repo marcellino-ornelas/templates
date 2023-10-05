@@ -5,70 +5,70 @@ import fs from 'fs';
 jest.setTimeout(30000);
 
 expect.extend({
-  toBeFile(received) {
-    const passed = isFile(received);
-    const receivedAfterPrint = this.utils.printReceived(received);
+	toBeFile(received) {
+		const passed = isFile(received);
+		const receivedAfterPrint = this.utils.printReceived(received);
 
-    if (passed) {
-      return {
-        pass: true,
-        message: () => `${receivedAfterPrint} should not be a file.`,
-      };
-    }
-    return {
-      pass: false,
-      message: () => `${receivedAfterPrint} should be a file.`,
-    };
-  },
-  toBeDirectory(received) {
-    const passed = isDir(received);
-    const receivedAfterPrint = this.utils.printReceived(received);
+		if (passed) {
+			return {
+				pass: true,
+				message: () => `${receivedAfterPrint} should not be a file.`,
+			};
+		}
+		return {
+			pass: false,
+			message: () => `${receivedAfterPrint} should be a file.`,
+		};
+	},
+	toBeDirectory(received) {
+		const passed = isDir(received);
+		const receivedAfterPrint = this.utils.printReceived(received);
 
-    if (passed) {
-      return {
-        pass: true,
-        message: () => `${receivedAfterPrint} should not be a directory.`,
-      };
-    }
-    return {
-      pass: false,
-      message: () => `${receivedAfterPrint} should be a directory.`,
-    };
-  },
-  toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
-    const receivedAfterPrint = this.utils.printReceived(dirPath);
-    const isReg = !this.isNot;
-    let count = 0;
-    const files = [];
+		if (passed) {
+			return {
+				pass: true,
+				message: () => `${receivedAfterPrint} should not be a directory.`,
+			};
+		}
+		return {
+			pass: false,
+			message: () => `${receivedAfterPrint} should be a directory.`,
+		};
+	},
+	toHaveAllFilesAndDirectories(dirPath, filesAndDirs = []) {
+		const receivedAfterPrint = this.utils.printReceived(dirPath);
+		const isReg = !this.isNot;
+		let count = 0;
+		const files = [];
 
-    for (let i = 0; i < filesAndDirs.length; i++) {
-      const fileOrDir = filesAndDirs[i];
-      const pathToFile = path.join(dirPath, fileOrDir);
-      const isFileLike = isDir(pathToFile) || isFile(pathToFile);
-      if (isFileLike === isReg) {
-        count += 1;
-      } else {
-        files.push(fileOrDir);
-      }
-    }
+		for (let i = 0; i < filesAndDirs.length; i++) {
+			const fileOrDir = filesAndDirs[i];
+			const pathToFile = path.join(dirPath, fileOrDir);
+			const isFileLike = isDir(pathToFile) || isFile(pathToFile);
+			if (isFileLike === isReg) {
+				count += 1;
+			} else {
+				files.push(fileOrDir);
+			}
+		}
 
-    const didMatchLen = count === filesAndDirs.length;
-    // const dirPathLayout = new DirectoryNode(dirPath).toObject();
+		const didMatchLen = count === filesAndDirs.length;
+		// const dirPathLayout = new DirectoryNode(dirPath).toObject();
 
-    if (didMatchLen) {
-      // passed
-      return {
-        pass: !this.isNot,
-        message: () => `\
+		if (didMatchLen) {
+			// passed
+			return {
+				pass: !this.isNot,
+				message: () => `\
 ${receivedAfterPrint} had these files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 `,
-      };
-    }
-    return {
-      pass: !!this.isNot,
-      message: () => `\
+			};
+		}
+		return {
+			pass: !!this.isNot,
+			message: () => `\
 ${receivedAfterPrint} did not have files/directories
 
 ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
@@ -77,71 +77,71 @@ ${files.map((file, index) => `${index + 1}.) ${file}\n`)}
 Directory Layout:
 ${pjson.render('hey')}
 `,
-    };
-  },
-  toHaveFileContents(destPath, contents = '') {
-    const fileContents = fs.readFileSync(destPath).toString();
-    const receivedAfterPrint = this.utils.printReceived(destPath);
-    const expected = this.utils.printExpected(contents);
+		};
+	},
+	toHaveFileContents(destPath, contents = '') {
+		const fileContents = fs.readFileSync(destPath).toString();
+		const receivedAfterPrint = this.utils.printReceived(destPath);
+		const expected = this.utils.printExpected(contents);
 
-    const passed = fileContents.includes(contents);
+		const passed = fileContents.includes(contents);
 
-    const options = {
-      isNot: this.isNot,
-      promise: this.promise,
-    };
+		const options = {
+			isNot: this.isNot,
+			promise: this.promise,
+		};
 
-    if (passed) {
-      return {
-        pass: true,
-        message: () => `
+		if (passed) {
+			return {
+				pass: true,
+				message: () => `
 ${this.utils.matcherHint(
-  'not.toHaveFileContents',
-  receivedAfterPrint,
-  contents,
-  options
+	'not.toHaveFileContents',
+	receivedAfterPrint,
+	contents,
+	options,
 )}
 
 File should not have contents: ${expected}
 
 Received: ${this.utils.printReceived(fileContents)}
 `,
-      };
-    }
-    return {
-      pass: false,
-      message: () => `
+			};
+		}
+		return {
+			pass: false,
+			message: () => `
 ${this.utils.matcherHint(
-  'toHaveFileContents',
-  receivedAfterPrint,
-  contents,
-  options
+	'toHaveFileContents',
+	receivedAfterPrint,
+	contents,
+	options,
 )}
 
 File should have contents: ${expected}
 
 Received: ${this.utils.printReceived(fileContents)}
 `,
-    };
-  },
+		};
+	},
 });
 
 function isDir(dirPath) {
-  let dir;
-  try {
-    dir = fs.lstatSync(dirPath);
-  } catch (e) {
-    return false;
-  }
-  return dir.isDirectory();
+	let dir;
+	try {
+		dir = fs.lstatSync(dirPath);
+	} catch (e) {
+		return false;
+	}
+	return dir.isDirectory();
 }
 
 function isFile(filePath) {
-  let file;
-  try {
-    file = fs.lstatSync(filePath);
-  } catch (e) {
-    return false;
-  }
-  return file.isFile();
+	let file;
+	try {
+		file = fs.lstatSync(filePath);
+	} catch (e) {
+		return false;
+	}
+	return file.isFile();
 }

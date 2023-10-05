@@ -4,28 +4,28 @@
  */
 
 .heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+	padding: 4rem 0;
+	text-align: center;
+	position: relative;
+	overflow: hidden;
 }
 
 @media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+	.heroBanner {
+		padding: 2rem;
+	}
 }
 
 @media screen and (max-width: 400px) {
 	.heroBanner {
-	  padding: 1rem;
+		padding: 1rem;
 	}
-  }
+}
 
 .buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .introduction {
@@ -34,5 +34,3 @@
 	text-align: justify;
 	font-size: 1.1em;
 }
-
-

@@ -6,57 +6,57 @@ jest.mock('fs');
  * Templates Packages
  */
 describe('[Templates] Packages:', () => {
-  let tps;
+	let tps;
 
-  beforeEach(() => {
-    tps = new Templates('testing');
-  });
+	beforeEach(() => {
+		tps = new Templates('testing');
+	});
 
-  it('should be able to compile default package', () => {
-    expect(tps.packages).toHaveProperty('default');
-  });
+	it('should be able to compile default package', () => {
+		expect(tps.packages).toHaveProperty('default');
+	});
 
-  it('should not load default package if turn off', () => {
-    const tpsNoDefault = new Templates('testing', { defaultPackage: false });
+	it('should not load default package if turn off', () => {
+		const tpsNoDefault = new Templates('testing', { defaultPackage: false });
 
-    expect(tpsNoDefault.opts.default).toBeFalsy();
-    expect(tpsNoDefault.packages).not.toHaveProperty('default');
-  });
+		expect(tpsNoDefault.opts.default).toBeFalsy();
+		expect(tpsNoDefault.packages).not.toHaveProperty('default');
+	});
 
-  it('should be able to compile a package', () => {
-    tps.loadPackages('main');
-    expect(tps.packages).toHaveProperty('main');
-  });
+	it('should be able to compile a package', () => {
+		tps.loadPackages('main');
+		expect(tps.packages).toHaveProperty('main');
+	});
 
-  it('should be able to compile many packages', () => {
-    const pkgs = ['store', 'main'];
-    tps.loadPackages(pkgs);
+	it('should be able to compile many packages', () => {
+		const pkgs = ['store', 'main'];
+		tps.loadPackages(pkgs);
 
-    pkgs.forEach((pkg) => {
-      expect(tps.packages).toHaveProperty(pkg);
-    });
-  });
-  it("should throw an error when packages aren't passed in", () => {
-    const errArgs = ['', {}, null, true, false];
+		pkgs.forEach((pkg) => {
+			expect(tps.packages).toHaveProperty(pkg);
+		});
+	});
+	it("should throw an error when packages aren't passed in", () => {
+		const errArgs = ['', {}, null, true, false];
 
-    errArgs.forEach((errArg) => {
-      expect(() => {
-        tps.loadPackages(errArg);
-      }).toThrow();
-    });
-  });
+		errArgs.forEach((errArg) => {
+			expect(() => {
+				tps.loadPackages(errArg);
+			}).toThrow();
+		});
+	});
 
-  it("should throw an error when packages aren't real", () => {
-    expect(() => {
-      tps.loadPackages(['fake-package']);
-    }).toThrow();
-  });
+	it("should throw an error when packages aren't real", () => {
+		expect(() => {
+			tps.loadPackages(['fake-package']);
+		}).toThrow();
+	});
 
-  it('should not let you load a package if already loaded', () => {
-    tps.loadPackage('main');
+	it('should not let you load a package if already loaded', () => {
+		tps.loadPackage('main');
 
-    expect(() => {
-      tps.loadPackage('main');
-    }).toThrow();
-  });
+		expect(() => {
+			tps.loadPackage('main');
+		}).toThrow();
+	});
 });
