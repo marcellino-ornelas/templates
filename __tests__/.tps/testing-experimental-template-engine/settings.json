@@ -1,0 +1,8 @@
+{
+	"prompts": [
+		{
+			"name": "one",
+			"tpsType": "data"
+		}
+	]
+}

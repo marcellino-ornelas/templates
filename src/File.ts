@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dot from '@tps/dot';
+import templateEngine from '@tps/templates/template-engine';
+import dot from '@tps/templates/dot';
 import * as path from 'path';
 import fs from 'fs';
 import { DotError } from '@tps/errors';
 import { FileNode } from './fileSystemTree';
 
 interface FileOptions {
-  force?: boolean;
+	force?: boolean;
+	useExperimentalTemplateEngine?: boolean;
 }
+
+const DEFAULT_OPTS: FileOptions = {
+	force: false,
+	useExperimentalTemplateEngine: false,
+};
 
 /*
  * File
@@ -17,133 +24,138 @@ const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
 // const FS_FAIL_IF_EXIST = { flags: 'wx' };
 
 class File {
-  public _name: string;
+	public _name: string;
 
-  public isDot: boolean;
+	public isDot: boolean;
 
-  public relDirectoryFromPkg: string;
+	public engine: any;
 
-  public opts: FileOptions;
+	public relDirectoryFromPkg: string;
 
-  public _dotNameCompiled: dot.RenderFunction;
+	public opts: FileOptions;
 
-  public src: string;
+	public _dotNameCompiled: dot.RenderFunction;
 
-  public fileNode: FileNode;
+	public src: string;
 
-  public fileData: string;
+	public fileNode: FileNode;
 
-  public fileDataTemplate: (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: Record<string, any>,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    defs: any,
-    dest: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) => any;
+	public fileData: string;
 
-  constructor(fileNode: FileNode, opts: FileOptions = {}) {
-    let fileName = fileNode.name;
+	public fileDataTemplate: (
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		data: Record<string, any>,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		defs: any,
+		dest: string
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	) => any;
 
-    if (DOT_EXTENTION_MATCH.test(fileName)) {
-      // strip dot extension
-      this.isDot = true;
-      fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
-    }
-    this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
-    this.opts = opts;
-    this._name = fileName;
-    this._dotNameCompiled = dot.template(this._name);
-    this.src = fileNode.path;
-    this.fileNode = fileNode;
-    const fileData = fs.readFileSync(this.src)?.toString();
-    this.fileDataTemplate = (data, defs, dest) => {
-      const realData = {
-        ...data,
-        file: this.fileName(data),
-        dest: this.dest(dest, data),
-      };
-      try {
-        return this.isDot
-          ? // How could we cache this here :thinking: this is happening for every dot file
-            dot.template(fileData, null, defs)(realData)
-          : fileData;
-      } catch (e) {
-        throw new DotError(this.fileNode, e.message);
-      }
-    };
-  }
+	constructor(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
+		let fileName = fileNode.name;
 
-  fileName(data: Record<string, any> = {}): string {
-    let fileName;
-    try {
-      fileName = this._dotNameCompiled(data);
-    } catch (e) {
-      console.log('file name error', e);
-    }
-    return this._addDefaultExtention(fileName);
-  }
+		if (DOT_EXTENTION_MATCH.test(fileName)) {
+			// strip dot extension
+			this.isDot = true;
+			fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
+		}
+		this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
+		this.opts = opts;
+		this._name = fileName;
+		this.engine = this.opts.useExperimentalTemplateEngine
+			? templateEngine
+			: dot;
+		this._dotNameCompiled = this.engine.template(this._name);
+		this.src = fileNode.path;
+		this.fileNode = fileNode;
+		const fileData = fs.readFileSync(this.src)?.toString();
+		this.fileDataTemplate = (data, defs, dest) => {
+			const realData = {
+				...data,
+				file: this.fileName(data),
+				dest: this.dest(dest, data),
+			};
+			try {
+				return this.isDot
+					? // How could we cache this here :thinking: this is happening for every dot file
+					  this.engine.template(fileData, null, defs)(realData)
+					: fileData;
+			} catch (e) {
+				throw new DotError(this.fileNode, e.message);
+			}
+		};
+	}
 
-  renderDotFile(dest: string, fileData: string): Promise<string> {
-    return Promise.resolve()
-      .then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
-      .catch((e) => {
-        console.log('this should be force', e);
-      })
-      .then(() => fs.promises.writeFile(dest, fileData, { flag: 'w' }))
+	fileName(data: Record<string, any> = {}): string {
+		let fileName;
+		try {
+			fileName = this._dotNameCompiled(data);
+		} catch (e) {
+			console.log('file name error', e);
+		}
+		return this._addDefaultExtention(fileName);
+	}
 
-      .then(() => Promise.resolve(dest))
-      .catch((error) => Promise.reject(error));
-  }
+	renderDotFile(dest: string, fileData: string): Promise<string> {
+		return Promise.resolve()
+			.then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
+			.catch((e) => {
+				console.log('this should be force', e);
+			})
+			.then(() => fs.promises.writeFile(dest, fileData, { flag: 'w' }))
 
-  renderFile(dest: string): Promise<string> {
-    return Promise.resolve()
-      .then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
-      .then(
-        () =>
-          new Promise((resolve, reject) => {
-            const srcFile = fs.createReadStream(this.src, {
-              flags: 'r',
-            });
+			.then(() => Promise.resolve(dest))
+			.catch((error) => Promise.reject(error));
+	}
 
-            srcFile.on('error', (error) => {
-              console.log('Read Stream error', error);
-              reject(error);
-            });
+	renderFile(dest: string): Promise<string> {
+		return Promise.resolve()
+			.then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
+			.then(
+				() =>
+					new Promise((resolve, reject) => {
+						const srcFile = fs.createReadStream(this.src, {
+							flags: 'r',
+						});
 
-            const destFile = fs.createWriteStream(dest, { flags: 'wx' });
+						srcFile.on('error', (error) => {
+							console.log('Read Stream error', error);
+							reject(error);
+						});
 
-            destFile.on('error', (err) => {
-              console.log('dest', dest);
-              console.log('write stream error', err);
-              reject(err);
-            });
+						const destFile = fs.createWriteStream(dest, { flags: 'wx' });
 
-            destFile.on('finish', () => resolve(dest));
+						destFile.on('error', (err) => {
+							console.log('dest', dest);
+							console.log('write stream error', err);
+							reject(err);
+						});
 
-            srcFile.pipe(destFile);
-          })
-      );
-  }
+						destFile.on('finish', () => resolve(dest));
 
-  _addDefaultExtention(name: string): string {
-    let fileName = name;
+						srcFile.pipe(destFile);
+					})
+			);
+	}
 
-    // Might need to change
-    if (!/\./g.test(name)) {
-      fileName += '.js';
-    }
+	_addDefaultExtention(name: string): string {
+		let fileName = name;
 
-    return fileName;
-  }
+		// Might need to change
+		if (!/\./g.test(name)) {
+			fileName += '.js';
+		}
 
-  _buildParentDir(newDest: string): string {
-    return path.join(newDest, this.relDirectoryFromPkg);
-  }
+		return fileName;
+	}
 
-  dest(dest: string, data: Record<string, any>): string {
-    return path.join(this._buildParentDir(dest), this.fileName(data));
-  }
+	_buildParentDir(newDest: string): string {
+		return path.join(newDest, this.relDirectoryFromPkg);
+	}
+
+	dest(dest: string, data: Record<string, any>): string {
+		return path.join(this._buildParentDir(dest), this.fileName(data));
+	}
 }
 
 File.prototype.isDot = false;
