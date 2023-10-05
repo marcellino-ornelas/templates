@@ -31,6 +31,7 @@ const config = {
 		'no-underscore-dangle': [ERROR, { allowAfterThis: true }],
 		'react/jsx-filename-extension': [ERROR, { extensions: ['.tsx', '.mdx'] }],
 		'react/jsx-props-no-spreading': IGNORE,
+		'no-mixed-spaces-and-tabs': IGNORE,
 		'import/extensions': [
 			ERROR,
 			{
