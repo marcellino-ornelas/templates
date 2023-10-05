@@ -285,7 +285,7 @@ export class Templates {
 		dest: string,
 		buildPaths?: string | string[],
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data?: Record<string, any> = {}
+		data?: Record<string, any> = {},
 	) {
 		let dataForTemplating;
 		let buildInDest = false;
@@ -306,7 +306,7 @@ export class Templates {
 
 		if (is.array.empty(buildPaths)) {
 			throw new Error(
-				'Param `buildPaths` need to be a string or array of strings'
+				'Param `buildPaths` need to be a string or array of strings',
 			);
 		}
 
@@ -317,7 +317,7 @@ export class Templates {
 
 		// Create absolute paths
 		pathsToCreate = pathsToCreate.map((buildPath) =>
-			path.join(finalDest, buildPath)
+			path.join(finalDest, buildPath),
 		);
 
 		logger.tps.info('Rendering templates to locations %n', pathsToCreate);
@@ -428,7 +428,7 @@ export class Templates {
 								if (wipe && !buildInDest) {
 									if (!buildNewFolder) {
 										loggerGroup.info(
-											'Skipping wipe because we are not building a new folder'
+											'Skipping wipe because we are not building a new folder',
 										);
 										// super hacky yes i know. The reason this needs to happen is because
 										// when were using wipe but were not building a new folder we need to make sure all
@@ -446,7 +446,7 @@ export class Templates {
 
 								if (!force && !wipe) {
 									loggerGroup.info(
-										'Checking to see if there are duplicate files'
+										'Checking to see if there are duplicate files',
 									);
 									return this._checkForFiles(realBuildPath, renderData);
 								}
@@ -464,14 +464,14 @@ export class Templates {
 									.catch((err) => {
 										loggerGroup.warn(
 											'Building build path folder had a issue %n',
-											err
+											err,
 										);
 									});
 							}
 
 							loggerGroup.info(
 								'Not creating real build path %s',
-								realBuildPath
+								realBuildPath,
 							);
 						})
 						.then(() => this._renderAllDirectories(realBuildPath))
@@ -479,7 +479,7 @@ export class Templates {
 						.then(() => {
 							loggerGroup.success(
 								`Build Path: %s ${colors.green.italic('(created)')}`,
-								buildPath
+								buildPath,
 							);
 						})
 						.catch((err) => {
@@ -487,7 +487,7 @@ export class Templates {
 							this._scheduleCleanUpForBuild(
 								realBuildPath,
 								err,
-								doesBuildPathExist
+								doesBuildPathExist,
 							);
 						})
 						.then(() => logger.tps.printGroup(groupName));
@@ -502,12 +502,12 @@ export class Templates {
 					logger.tps.info('Build Errors: %o', this.buildErrors.length);
 					logger.tps.info(
 						'Build Paths need to be cleaned %n',
-						this.buildErrors.map(({ buildPath }) => buildPath)
+						this.buildErrors.map(({ buildPath }) => buildPath),
 					);
 					this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
 						this._cleanUpFailBuild(
 							buildPath,
-							buildNewFolder && !didBuildPathExist
+							buildNewFolder && !didBuildPathExist,
 						);
 					});
 
@@ -634,7 +634,7 @@ export class Templates {
 				file,
 				file.dest(buildPath, data),
 				file.fileDataTemplate(data, this._defs, buildPath),
-			]
+			],
 		);
 
 		const filesInProgress = [];
@@ -645,7 +645,7 @@ export class Templates {
 			loggerGroup.error(
 				`Error happened when rendering a ${type} %s %n`,
 				dest,
-				err
+				err,
 			);
 			if (!hasErroredOut) {
 				hasErroredOut = true;
@@ -658,7 +658,7 @@ export class Templates {
 			filesInProgress.push(
 				file
 					.renderDotFile(finalDest, dotContentsForFile)
-					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err))
+					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err)),
 			);
 		});
 
@@ -668,7 +668,7 @@ export class Templates {
 			filesInProgress.push(
 				file
 					.renderFile(finalDest)
-					.catch((err) => handleFileErrorCatch(finalDest, 'file', err))
+					.catch((err) => handleFileErrorCatch(finalDest, 'file', err)),
 			);
 		});
 
@@ -676,7 +676,7 @@ export class Templates {
 			if (hasErroredOut) {
 				loggerGroup.error(
 					'There was a error when rendering template to %s',
-					buildPath
+					buildPath,
 				);
 				return Promise.reject(error);
 			}
@@ -704,7 +704,7 @@ export class Templates {
 				const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
 				const dirPathInNewLocation = path.join(
 					buildPath,
-					dirPathRelativeFromPkg
+					dirPathRelativeFromPkg,
 				);
 
 				dirTracker[dirNode.path] = true;
@@ -718,7 +718,7 @@ export class Templates {
 						this.successfulBuilds.dirs.push(dirPathInNewLocation);
 						loggerGroup.info(
 							`   - %s ${colors.green.italic('(created)')}`,
-							dirPathRelativeFromPkg
+							dirPathRelativeFromPkg,
 						);
 					})
 					.catch((err) => {
@@ -726,7 +726,7 @@ export class Templates {
 						loggerGroup.warn(
 							`   - %s ${colors.red.italic('failed')} %n`,
 							dirPathRelativeFromPkg,
-							err
+							err,
 						);
 
 						return Promise.reject(err);
@@ -756,7 +756,7 @@ export class Templates {
 			defFiles.forEach((fileNode) => {
 				logger.tps.info(
 					`  - %s ${colors.green.italic('compiled')}`,
-					fileNode.name
+					fileNode.name,
 				);
 				const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
 				this._defs[name] = fs.readFileSync(fileNode.path).toString();
@@ -776,7 +776,7 @@ export class Templates {
 			});
 			logger.tps.info(
 				`  - %s ${colors.green.italic('compiled')}`,
-				fileNode.path
+				fileNode.path,
 			);
 			this.compiledFiles.push(file);
 		});
@@ -814,7 +814,7 @@ export class Templates {
 									break;
 								default:
 									throw new Error(
-										'Data type is not supported as answer to a tps prompt'
+										'Data type is not supported as answer to a tps prompt',
 									);
 							}
 						}

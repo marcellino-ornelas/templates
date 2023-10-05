@@ -1,93 +1,94 @@
 {
-  "name": "templates-mo",
-  "version": "1.0.20",
-  "description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
-  "main": "lib/templates/index.js",
-  "keywords": [
-    "template",
-    "templates",
-    "generator",
-    "generate",
-    "react",
-    "typescript",
-    "cli",
-    "library",
-    "starter",
-    "node"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/marcellino-ornelas/templates.git"
-  },
-  "author": "Marcellino Ornelas <marcellino.ornelas@gmail.com> (marcellino-ornelas.herokuapp.com)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/marcellino-ornelas/templates/issues",
-    "email": "marcellino.ornelas@gmail.com"
-  },
-  "engines": {
-    "node": ">=16.7.0"
-  },
-  "homepage": "https://marcellino-ornelas.github.io/templates/",
-  "bin": {
-    "tps": "./lib/cli/index.js"
-  },
-  "scripts": {
-    "code:build": "ttsc",
-    "code:dev": "npm run code:build -- -w",
-    "code:prod": "npm run code:build",
-    "test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init",
-    "test:core": "./.bin/ts ./.bin/generate-test-templates && npm run test:jest -- --testPathIgnorePatterns \"/.*/cli/.*\"",
-    "test:jest": "jest",
-    "test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
-    "typecheck": "tsc --noEmit",
-    "lint": "./node_modules/.bin/eslint .",
-    "build": "npm run code:prod",
-    "test": "npm run code:build && echo 'built' && ./.bin/run-test"
-  },
-  "devDependencies": {
-    "@docusaurus/eslint-plugin": "^2.4.1",
-    "@types/dot": "^1.1.5",
-    "@types/inquirer": "^9.0.3",
-    "@types/is": "^0.0.21",
-    "@types/jest": "^29.2.6",
-    "@types/node": "^18.11.18",
-    "@typescript-eslint/eslint-plugin": "^5.48.2",
-    "@typescript-eslint/parser": "^5.48.2",
-    "babel-eslint": "10.0.3",
-    "eslint": "^8.32.0",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-prettier": "8.6.0",
-    "eslint-import-resolver-babel-module": "5.3.2",
-    "eslint-import-resolver-typescript": "^3.5.3",
-    "eslint-plugin-import": "2.27.5",
-    "eslint-plugin-jest": "27.2.1",
-    "eslint-plugin-jsx-a11y": "6.7.1",
-    "eslint-plugin-mdx": "^2.1.0",
-    "eslint-plugin-react": "^7.32.1",
-    "jest": "29.0.0",
-    "ttypescript": "^1.5.15",
-    "typescript-transform-paths": "^3.4.6"
-  },
-  "dependencies": {
-    "@types/yargs": "^17.0.24",
-    "ansi-colors": "4.1.1",
-    "bluebird": "3.5.5",
-    "change-case": "^4.1.2",
-    "cosmiconfig": "^8.0.0",
-    "debug": "4.1.1",
-    "dot": "1.1.2",
-    "filenamify": "2.1.0",
-    "find-up": "3.0.0",
-    "inflection": "^2.0.1",
-    "inquirer": "6.2.2",
-    "is": "3.3.0",
-    "memfs": "^4.2.1",
-    "minimatch": "3.0.4",
-    "prettyjson-256": "1.5.18",
-    "strip-ansi": "6.0.0",
-    "ts-jest": "^29.0.5",
-    "typescript": "^4.9.4",
-    "yargs": "17.7.2"
-  }
+	"name": "templates-mo",
+	"version": "1.0.20",
+	"description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
+	"main": "lib/templates/index.js",
+	"keywords": [
+		"template",
+		"templates",
+		"generator",
+		"generate",
+		"react",
+		"typescript",
+		"cli",
+		"library",
+		"starter",
+		"node"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/marcellino-ornelas/templates.git"
+	},
+	"author": "Marcellino Ornelas <marcellino.ornelas@gmail.com> (marcellino-ornelas.herokuapp.com)",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/marcellino-ornelas/templates/issues",
+		"email": "marcellino.ornelas@gmail.com"
+	},
+	"engines": {
+		"node": ">=16.7.0"
+	},
+	"homepage": "https://marcellino-ornelas.github.io/templates/",
+	"bin": {
+		"tps": "./lib/cli/index.js"
+	},
+	"scripts": {
+		"code:build": "ttsc",
+		"code:dev": "npm run code:build -- -w",
+		"code:prod": "npm run code:build",
+		"test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init",
+		"test:core": "./.bin/ts ./.bin/generate-test-templates && npm run test:jest -- --testPathIgnorePatterns \"/.*/cli/.*\"",
+		"test:jest": "jest",
+		"test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
+		"typecheck": "tsc --noEmit",
+		"lint": "./node_modules/.bin/eslint .",
+		"build": "npm run code:prod",
+		"test": "npm run code:build && echo 'built' && ./.bin/run-test"
+	},
+	"devDependencies": {
+		"@docusaurus/eslint-plugin": "^2.4.1",
+		"@types/dot": "^1.1.5",
+		"@types/inquirer": "^9.0.3",
+		"@types/is": "^0.0.21",
+		"@types/jest": "^29.2.6",
+		"@types/node": "^18.11.18",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
+		"@typescript-eslint/parser": "^5.48.2",
+		"babel-eslint": "10.0.3",
+		"eslint": "^8.32.0",
+		"eslint-config-airbnb": "19.0.4",
+		"eslint-config-prettier": "8.6.0",
+		"eslint-import-resolver-babel-module": "5.3.2",
+		"eslint-import-resolver-typescript": "^3.5.3",
+		"eslint-plugin-import": "2.27.5",
+		"eslint-plugin-jest": "27.2.1",
+		"eslint-plugin-jsx-a11y": "6.7.1",
+		"eslint-plugin-mdx": "^2.1.0",
+		"eslint-plugin-react": "^7.32.1",
+		"jest": "29.0.0",
+		"ttypescript": "^1.5.15",
+		"typescript-transform-paths": "^3.4.6"
+	},
+	"dependencies": {
+		"@types/yargs": "^17.0.24",
+		"ansi-colors": "4.1.1",
+		"bluebird": "3.5.5",
+		"change-case": "^4.1.2",
+		"cosmiconfig": "^8.0.0",
+		"debug": "4.1.1",
+		"dot": "1.1.2",
+		"filenamify": "2.1.0",
+		"find-up": "3.0.0",
+		"inflection": "^2.0.1",
+		"inquirer": "6.2.2",
+		"is": "3.3.0",
+		"memfs": "^4.2.1",
+		"minimatch": "3.0.4",
+		"prettier": "^3.0.3",
+		"prettyjson-256": "1.5.18",
+		"strip-ansi": "6.0.0",
+		"ts-jest": "^29.0.5",
+		"typescript": "^4.9.4",
+		"yargs": "17.7.2"
+	}
 }

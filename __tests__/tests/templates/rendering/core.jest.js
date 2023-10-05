@@ -33,7 +33,7 @@ describe('[Templates] Render Process:', () => {
 
 	it('should throw TemplateNotFound if no template is available', () => {
 		expect(() => new Templates('some-random-template')).toThrow(
-			TemplateNotFoundError
+			TemplateNotFoundError,
 		);
 	});
 
@@ -42,7 +42,7 @@ describe('[Templates] Render Process:', () => {
 		const tps = new Templates('testing');
 
 		return expect(tps.render(dest, 'app')).rejects.toThrow(
-			DirectoryNotFoundError
+			DirectoryNotFoundError,
 		);
 	});
 

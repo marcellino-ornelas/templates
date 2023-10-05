@@ -4,7 +4,6 @@ Supercharge Your Development with Templates: Code Faster, Build Better!
 
 ---
 
-
 <p>
 <a href="https://www.npmjs.com/package/templates-mo"><img src="https://img.shields.io/npm/v/templates-mo.svg?style=flat" alt="npm version"></a>
 <a href="CONTRIBUTING.md#pull-requests"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
@@ -18,7 +17,6 @@ Templates is a powerful filesystem generator that aims to simplify the process o
 
 > This project was inspired from [create-components-react](https://github.com/marcellino-ornelas/create-components-react)
 
-
 ## Installation
 
 ```
@@ -29,7 +27,7 @@ npm install -g templates-mo
 
 ### Accessing dev cli
 
-When making changes to templates, to test changes using tps cli use the `./.bin/cli` file. 
+When making changes to templates, to test changes using tps cli use the `./.bin/cli` file.
 
 ```bash
 ./.bin/cli react-component App
@@ -64,4 +62,5 @@ or cli
 ```bash
 DEBUG=tps ./.bin/cli react-component App
 ```
+
 <!-- (Template Processing System) -->

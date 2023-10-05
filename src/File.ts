@@ -47,7 +47,7 @@ class File {
 		data: Record<string, any>,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		defs: any,
-		dest: string
+		dest: string,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	) => any;
 
@@ -134,7 +134,7 @@ class File {
 						destFile.on('finish', () => resolve(dest));
 
 						srcFile.pipe(destFile);
-					})
+					}),
 			);
 	}
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
 interface Props {
-  text: string;
+	text: string;
 }
 export const Text = ({ text }) => text;

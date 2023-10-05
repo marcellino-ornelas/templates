@@ -115,151 +115,151 @@ console.log(extendLastNumber.namespace, '---', extendLastNumber.enabled); */
  */
 
 describe('CreateDebug', () => {
-  let createDebug;
+	let createDebug;
 
-  describe('basic', () => {
-    beforeEach(() => {
-      createDebug = new CreateDebug('test');
-    });
-    it('should be enabled when debug is same name (DEBUG=test)', () => {
-      debug.enable('test');
-      expect(createDebug.isEnabled()).toBeTruthy();
-    });
+	describe('basic', () => {
+		beforeEach(() => {
+			createDebug = new CreateDebug('test');
+		});
+		it('should be enabled when debug is same name (DEBUG=test)', () => {
+			debug.enable('test');
+			expect(createDebug.isEnabled()).toBeTruthy();
+		});
 
-    it('should enabled child loggers log, error, debug, success, warn, log if debug is already enabled', () => {
-      debug.enable('test');
+		it('should enabled child loggers log, error, debug, success, warn, log if debug is already enabled', () => {
+			debug.enable('test');
 
-      // Needs to have this enabled already before creating debug
-      createDebug = new CreateDebug('test');
+			// Needs to have this enabled already before creating debug
+			createDebug = new CreateDebug('test');
 
-      expect(createDebug.isEnabled()).toBeTruthy();
+			expect(createDebug.isEnabled()).toBeTruthy();
 
-      logFunctions.forEach((type) => {
-        const instanceKey = `_${type}`;
-        expect(createDebug[instanceKey].enabled).toBeTruthy();
-      });
-    });
+			logFunctions.forEach((type) => {
+				const instanceKey = `_${type}`;
+				expect(createDebug[instanceKey].enabled).toBeTruthy();
+			});
+		});
 
-    it('should enabled child loggers log, error, debug, success, warn, log even after enabling after', () => {
-      debug.enable('test');
+		it('should enabled child loggers log, error, debug, success, warn, log even after enabling after', () => {
+			debug.enable('test');
 
-      expect(createDebug.isEnabled()).toBeTruthy();
+			expect(createDebug.isEnabled()).toBeTruthy();
 
-      // Need to manually cause a resync. In prod calling any of the logging functions will cause a resync
-      // eslint-disable-next-line no-underscore-dangle
-      createDebug._resync();
+			// Need to manually cause a resync. In prod calling any of the logging functions will cause a resync
+			// eslint-disable-next-line no-underscore-dangle
+			createDebug._resync();
 
-      logFunctions.forEach((type) => {
-        const instanceKey = `_${type}`;
-        expect(createDebug[instanceKey].enabled).toBeTruthy();
-      });
-    });
+			logFunctions.forEach((type) => {
+				const instanceKey = `_${type}`;
+				expect(createDebug[instanceKey].enabled).toBeTruthy();
+			});
+		});
 
-    it('should enabled child loggers log, error, debug, success, warn, log when a log functions gets called', () => {
-      const mockChildLogger = jest.fn();
-      const resyncMock = jest.fn(() =>
-        // eslint-disable-next-line no-underscore-dangle
-        CreateDebug.prototype._resync.call(createDebug)
-      );
+		it('should enabled child loggers log, error, debug, success, warn, log when a log functions gets called', () => {
+			const mockChildLogger = jest.fn();
+			const resyncMock = jest.fn(() =>
+				// eslint-disable-next-line no-underscore-dangle
+				CreateDebug.prototype._resync.call(createDebug),
+			);
 
-      createDebug = new CreateDebug('test');
-      debug.enable('test');
+			createDebug = new CreateDebug('test');
+			debug.enable('test');
 
-      expect(createDebug.isEnabled()).toBeTruthy();
+			expect(createDebug.isEnabled()).toBeTruthy();
 
-      logFunctions.forEach((type) => {
-        const instanceKey = `_${type}`;
-        expect(createDebug[instanceKey].enabled).toBeFalsy();
-      });
+			logFunctions.forEach((type) => {
+				const instanceKey = `_${type}`;
+				expect(createDebug[instanceKey].enabled).toBeFalsy();
+			});
 
-      // eslint-disable-next-line no-underscore-dangle
-      createDebug._resync = resyncMock;
-      // eslint-disable-next-line no-underscore-dangle
-      createDebug._log = mockChildLogger;
+			// eslint-disable-next-line no-underscore-dangle
+			createDebug._resync = resyncMock;
+			// eslint-disable-next-line no-underscore-dangle
+			createDebug._log = mockChildLogger;
 
-      createDebug.log('blah');
+			createDebug.log('blah');
 
-      expect(resyncMock).toHaveBeenCalled();
-      expect(mockChildLogger).toHaveBeenCalled();
+			expect(resyncMock).toHaveBeenCalled();
+			expect(mockChildLogger).toHaveBeenCalled();
 
-      logFunctions.forEach((type) => {
-        const instanceKey = `_${type}`;
-        expect(createDebug[instanceKey].enabled).toBeTruthy();
-      });
-    });
-  });
+			logFunctions.forEach((type) => {
+				const instanceKey = `_${type}`;
+				expect(createDebug[instanceKey].enabled).toBeTruthy();
+			});
+		});
+	});
 
-  describe('logging', () => {
-    let data = '';
-    const oldConsoleLog = console.log;
+	describe('logging', () => {
+		let data = '';
+		const oldConsoleLog = console.log;
 
-    beforeAll(() => {
-      // Do not show colors when testing
-      (debug as any).useColors = () => false;
+		beforeAll(() => {
+			// Do not show colors when testing
+			(debug as any).useColors = () => false;
 
-      // Replace console.log with our mocked version.
-      // The point of this is to save all logs to a variable so we can make assertions on it.
-      // IN prod the logs that we get will look like:
-      //  `tps log hello there +0ms`
-      // when testing we switch to no colors and replace all asciis colors
-      console.log = (...consoleArgs) => {
-        const str = consoleArgs.join(' ').replace(`${TIME_STRING} `, '');
-        data += stripAnsi(str);
-      };
-    });
+			// Replace console.log with our mocked version.
+			// The point of this is to save all logs to a variable so we can make assertions on it.
+			// IN prod the logs that we get will look like:
+			//  `tps log hello there +0ms`
+			// when testing we switch to no colors and replace all asciis colors
+			console.log = (...consoleArgs) => {
+				const str = consoleArgs.join(' ').replace(`${TIME_STRING} `, '');
+				data += stripAnsi(str);
+			};
+		});
 
-    afterAll(() => {
-      console.log = oldConsoleLog;
-    });
+		afterAll(() => {
+			console.log = oldConsoleLog;
+		});
 
-    beforeEach(() => {
-      data = '';
-      debug.enable('');
-      createDebug = new CreateDebug('test');
-    });
+		beforeEach(() => {
+			data = '';
+			debug.enable('');
+			createDebug = new CreateDebug('test');
+		});
 
-    it('should enable child logger `log` by default', () => {
-      // disable logging
-      expect(createDebug.isEnabled()).toBeFalsy();
+		it('should enable child logger `log` by default', () => {
+			// disable logging
+			expect(createDebug.isEnabled()).toBeFalsy();
 
-      // eslint-disable-next-line no-underscore-dangle
-      expect(createDebug._log.enabled).toBeTruthy();
+			// eslint-disable-next-line no-underscore-dangle
+			expect(createDebug._log.enabled).toBeTruthy();
 
-      createDebug.log('hello');
+			createDebug.log('hello');
 
-      expect(data).toBe('test log hello');
-    });
+			expect(data).toBe('test log hello');
+		});
 
-    it('should not enable child loggers by default', () => {
-      expect(createDebug.isEnabled()).toBeFalsy();
+		it('should not enable child loggers by default', () => {
+			expect(createDebug.isEnabled()).toBeFalsy();
 
-      logFunctions
-        .filter((type) => type !== 'log')
-        .forEach((type) => {
-          expect(createDebug[`_${type}`].enabled).toBeFalsy();
-          createDebug[type]('hello');
-        });
+			logFunctions
+				.filter((type) => type !== 'log')
+				.forEach((type) => {
+					expect(createDebug[`_${type}`].enabled).toBeFalsy();
+					createDebug[type]('hello');
+				});
 
-      expect(data).toBe('');
-    });
+			expect(data).toBe('');
+		});
 
-    it('should enable child logger `log` by default even when enabled after', () => {
-      // disable logging
-      debug.enable('test');
-      createDebug = new CreateDebug('test');
+		it('should enable child logger `log` by default even when enabled after', () => {
+			// disable logging
+			debug.enable('test');
+			createDebug = new CreateDebug('test');
 
-      expect(createDebug.isEnabled()).toBeTruthy();
+			expect(createDebug.isEnabled()).toBeTruthy();
 
-      debug.enable('');
+			debug.enable('');
 
-      expect(createDebug.isEnabled()).toBeFalsy();
+			expect(createDebug.isEnabled()).toBeFalsy();
 
-      createDebug.log('hello'); // will cause resync
+			createDebug.log('hello'); // will cause resync
 
-      // eslint-disable-next-line no-underscore-dangle
-      expect(createDebug._log.enabled).toBeTruthy();
+			// eslint-disable-next-line no-underscore-dangle
+			expect(createDebug._log.enabled).toBeTruthy();
 
-      expect(data).toBe('test log hello');
-    });
-  });
+			expect(data).toBe('test log hello');
+		});
+	});
 });

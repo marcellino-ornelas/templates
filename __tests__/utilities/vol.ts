@@ -6,7 +6,7 @@ import templateFiles from '@test/templates.json';
 export const vol = new Volume();
 
 vol.fromJSON({
-  [`${process.cwd()}/readme.md`]: '',
-  [`${process.cwd()}/__tests__/readme.md`]: '',
-  ...templateFiles,
+	[`${process.cwd()}/readme.md`]: '',
+	[`${process.cwd()}/__tests__/readme.md`]: '',
+	...templateFiles,
 });

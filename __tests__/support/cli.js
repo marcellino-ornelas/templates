@@ -7,68 +7,68 @@ import * as TPS from '@tps/utilities/constants';
 import fs from 'fs';
 
 const writeFile = (file, contents) => {
-  const { dir } = path.parse(file);
+	const { dir } = path.parse(file);
 
-  fs.mkdirSync(dir, { recursive: true });
+	fs.mkdirSync(dir, { recursive: true });
 
-  fs.writeFileSync(file, contents);
+	fs.writeFileSync(file, contents);
 };
 
 /**
  * @command init
  */
 export const init = (cwd, flags = {}, opts = {}) => {
-  const tpsFolder = path.join(cwd, '.tps');
-  const flagString = buildFlags(flags);
+	const tpsFolder = path.join(cwd, '.tps');
+	const flagString = buildFlags(flags);
 
-  expect(cwd).toBeDirectory();
+	expect(cwd).toBeDirectory();
 
-  // if (flags.global) {
-  //   expect(TPS.GLOBAL_PATH).not.toBeDirectory();
-  // }
-  const message = flags.global
-    ? 'tps globally initialized'
-    : 'Repo initialized';
+	// if (flags.global) {
+	//   expect(TPS.GLOBAL_PATH).not.toBeDirectory();
+	// }
+	const message = flags.global
+		? 'tps globally initialized'
+		: 'Repo initialized';
 
-  return tpsCli(`init ${flagString}`, { cwd, ...opts }).then((stdout) => {
-    expect(stdout).toContain(message);
+	return tpsCli(`init ${flagString}`, { cwd, ...opts }).then((stdout) => {
+		expect(stdout).toContain(message);
 
-    if (flags.global) {
-      expect(TPS.GLOBAL_PATH).toBeDirectory();
-      expect(TPS.GLOBAL_PATH).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
-    } else {
-      expect(tpsFolder).toBeDirectory();
-      expect(tpsFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
-    }
-  });
+		if (flags.global) {
+			expect(TPS.GLOBAL_PATH).toBeDirectory();
+			expect(TPS.GLOBAL_PATH).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+		} else {
+			expect(tpsFolder).toBeDirectory();
+			expect(tpsFolder).toHaveAllFilesAndDirectories(INIT_PACKAGE_FILES);
+		}
+	});
 };
 
 /**
  * @command new
  */
 export const newTemplate = (cwd, template) => {
-  const testTemplatePath = path.join(cwd, `.tps/${template}`);
-  const testTemplateDefault = path.join(testTemplatePath, 'default');
-  const gitKeepFile = path.join(testTemplateDefault, '.gitkeep');
+	const testTemplatePath = path.join(cwd, `.tps/${template}`);
+	const testTemplateDefault = path.join(testTemplatePath, 'default');
+	const gitKeepFile = path.join(testTemplateDefault, '.gitkeep');
 
-  expect(testTemplateDefault).not.toBeDirectory();
+	expect(testTemplateDefault).not.toBeDirectory();
 
-  return tpsCli(`new template ${template}`, { cwd }).then(() => {
-    expect(testTemplateDefault).toBeDirectory();
-    expect(`${testTemplatePath}/settings.json`).toBeFile();
-    expect(gitKeepFile).not.toBeFile();
-  });
+	return tpsCli(`new template ${template}`, { cwd }).then(() => {
+		expect(testTemplateDefault).toBeDirectory();
+		expect(`${testTemplatePath}/settings.json`).toBeFile();
+		expect(gitKeepFile).not.toBeFile();
+	});
 };
 
 const templateSpecs = {
-  testing: [
-    './index.js',
-    './db',
-    './db/db.js',
-    './server',
-    './storeUtils',
-    './storeUtils/user.js',
-  ],
+	testing: [
+		'./index.js',
+		'./db',
+		'./db/db.js',
+		'./server',
+		'./storeUtils',
+		'./storeUtils/user.js',
+	],
 };
 
 /**
@@ -85,15 +85,15 @@ const templateSpecs = {
  * @returns {string[]} - array of builders
  */
 const cleanBuilders = (buildersUnsafe) => {
-  if (is.string(buildersUnsafe)) {
-    return [buildersUnsafe];
-  }
+	if (is.string(buildersUnsafe)) {
+		return [buildersUnsafe];
+	}
 
-  if (is.array(buildersUnsafe)) {
-    return buildersUnsafe;
-  }
+	if (is.array(buildersUnsafe)) {
+		return buildersUnsafe;
+	}
 
-  return null;
+	return null;
 };
 
 /**
@@ -104,7 +104,7 @@ const cleanBuilders = (buildersUnsafe) => {
  * @returns {string[]} - array of builders with `-create` appended to the end of it
  */
 const makeCreateBuilders = (builders) =>
-  !is.array(builders) ? null : builders.map((build) => `${build}-create`);
+	!is.array(builders) ? null : builders.map((build) => `${build}-create`);
 
 /**
  * Convert builders into a string.
@@ -113,153 +113,153 @@ const makeCreateBuilders = (builders) =>
  * @returns {string} - string of all builders
  */
 const makeBuildersString = (builders) =>
-  !is.array(builders) ? '' : builders.join(' ');
+	!is.array(builders) ? '' : builders.join(' ');
 
 export const DEFAULT_FILE_CONTENT = 'TPS_FILE_CONTENTS_MOCK';
 
 export const mockTemplateFileExistsError = (
-  cwd,
-  // eslint-disable-next-line
-  buildersUnsafe = null,
-  file,
-  contents = DEFAULT_FILE_CONTENT
+	cwd,
+	// eslint-disable-next-line
+	buildersUnsafe = null,
+	file,
+	contents = DEFAULT_FILE_CONTENT,
 ) => {
-  expect(cwd).toBeDirectory();
-  const builders = cleanBuilders(buildersUnsafe);
+	expect(cwd).toBeDirectory();
+	const builders = cleanBuilders(buildersUnsafe);
 
-  const hasBuilders = is.array(builders);
+	const hasBuilders = is.array(builders);
 
-  if (!hasBuilders) {
-    /**
-     * If no builders then template was build in cwd so mock the file in cwd
-     */
-    return writeFile(path.join(cwd, file), contents);
-  }
+	if (!hasBuilders) {
+		/**
+		 * If no builders then template was build in cwd so mock the file in cwd
+		 */
+		return writeFile(path.join(cwd, file), contents);
+	}
 
-  const createBuilders = makeCreateBuilders(builders);
-  const allBuilders = [...builders, ...createBuilders].map((builder) =>
-    path.join(cwd, builder, file)
-  );
+	const createBuilders = makeCreateBuilders(builders);
+	const allBuilders = [...builders, ...createBuilders].map((builder) =>
+		path.join(cwd, builder, file),
+	);
 
-  return allBuilders.forEach((buldPath) => {
-    writeFile(buldPath, contents);
-    expect(buldPath).toBeFile();
-  });
+	return allBuilders.forEach((buldPath) => {
+		writeFile(buldPath, contents);
+		expect(buldPath).toBeFile();
+	});
 };
 
 export const checkFilesForTemplate = (
-  cwd,
-  buildersUnsafe,
-  templateSpec,
-  flags = {}
+	cwd,
+	buildersUnsafe,
+	templateSpec,
+	flags = {},
 ) => {
-  const builders = cleanBuilders(buildersUnsafe);
-  const hasBuilders = is.array(builders);
+	const builders = cleanBuilders(buildersUnsafe);
+	const hasBuilders = is.array(builders);
 
-  expect(cwd).toBeDirectory();
+	expect(cwd).toBeDirectory();
 
-  if (!hasBuilders && templateSpec) {
-    return expect(cwd).toHaveAllFilesAndDirectories(templateSpec);
-  }
+	if (!hasBuilders && templateSpec) {
+		return expect(cwd).toHaveAllFilesAndDirectories(templateSpec);
+	}
 
-  const allBuilders = [...builders, ...makeCreateBuilders(builders)];
+	const allBuilders = [...builders, ...makeCreateBuilders(builders)];
 
-  expect(allBuilders).toHaveLength(builders.length * 2);
+	expect(allBuilders).toHaveLength(builders.length * 2);
 
-  allBuilders
-    .map((builder) => path.join(cwd, builder))
-    .forEach((buildPath) => {
-      let pathToCheckForTemplateCreated = buildPath;
-      if (flags && flags.newFolder === false) {
-        /**
-         * If the user used no new folder we need to check that
-         * the files are in the parent dir of the buildPath
-         */
-        pathToCheckForTemplateCreated = path.dirname(buildPath);
-      }
+	allBuilders
+		.map((builder) => path.join(cwd, builder))
+		.forEach((buildPath) => {
+			let pathToCheckForTemplateCreated = buildPath;
+			if (flags && flags.newFolder === false) {
+				/**
+				 * If the user used no new folder we need to check that
+				 * the files are in the parent dir of the buildPath
+				 */
+				pathToCheckForTemplateCreated = path.dirname(buildPath);
+			}
 
-      expect(pathToCheckForTemplateCreated).toBeDirectory();
-      if (templateSpec) {
-        expect(pathToCheckForTemplateCreated).toHaveAllFilesAndDirectories(
-          templateSpec
-        );
-      }
-    });
+			expect(pathToCheckForTemplateCreated).toBeDirectory();
+			if (templateSpec) {
+				expect(pathToCheckForTemplateCreated).toHaveAllFilesAndDirectories(
+					templateSpec,
+				);
+			}
+		});
 };
 
 export const checkFilesContentForTemplate = (
-  cwd,
-  buildersUnsafe,
-  file,
-  content
+	cwd,
+	buildersUnsafe,
+	file,
+	content,
 ) => {
-  const builders = cleanBuilders(buildersUnsafe);
-  const hasBuilders = is.array(builders);
+	const builders = cleanBuilders(buildersUnsafe);
+	const hasBuilders = is.array(builders);
 
-  expect(cwd).toBeDirectory();
+	expect(cwd).toBeDirectory();
 
-  if (!hasBuilders) {
-    return expect(path.join(cwd, file)).toHaveFileContents(content);
-  }
+	if (!hasBuilders) {
+		return expect(path.join(cwd, file)).toHaveFileContents(content);
+	}
 
-  const allBuilders = [...builders, ...makeCreateBuilders(builders)];
+	const allBuilders = [...builders, ...makeCreateBuilders(builders)];
 
-  expect(allBuilders).toHaveLength(builders.length * 2);
+	expect(allBuilders).toHaveLength(builders.length * 2);
 
-  allBuilders
-    .map((builder) => path.join(cwd, builder, file))
-    .forEach((builtFile) => {
-      expect(builtFile).toHaveFileContents(content);
-    });
+	allBuilders
+		.map((builder) => path.join(cwd, builder, file))
+		.forEach((builtFile) => {
+			expect(builtFile).toHaveFileContents(content);
+		});
 };
 
 /**
  * Note: Testing newFolder flag requires to use the `testing-opt-new-flag`
  */
 export const createTemplate = (
-  cwd,
-  template,
-  buildersUnsafe = null,
-  flags = {},
-  opts = {}
+	cwd,
+	template,
+	buildersUnsafe = null,
+	flags = {},
+	opts = {},
 ) => {
-  const templateSpec = templateSpecs[template];
-  const useFlags = buildFlags(flags);
-  const createFlags = buildFlags({ use: template, ...flags });
-  const builders = cleanBuilders(buildersUnsafe);
-  const hasBuilders = is.array(builders);
-  const createBuilders = makeCreateBuilders(builders);
-  const createBuildersString = makeBuildersString(createBuilders);
-  const builderString = makeBuildersString(builders);
+	const templateSpec = templateSpecs[template];
+	const useFlags = buildFlags(flags);
+	const createFlags = buildFlags({ use: template, ...flags });
+	const builders = cleanBuilders(buildersUnsafe);
+	const hasBuilders = is.array(builders);
+	const createBuilders = makeCreateBuilders(builders);
+	const createBuildersString = makeBuildersString(createBuilders);
+	const builderString = makeBuildersString(builders);
 
-  expect(cwd).toBeDirectory();
+	expect(cwd).toBeDirectory();
 
-  const commandPromises = [
-    /* use */
-    tpsCli(`${template} ${builderString} ${useFlags}`, {
-      ...opts,
-      cwd,
-    }),
-  ];
+	const commandPromises = [
+		/* use */
+		tpsCli(`${template} ${builderString} ${useFlags}`, {
+			...opts,
+			cwd,
+		}),
+	];
 
-  if (hasBuilders) {
-    /**
-     * If there are no builders then we cannot
-     * create duplicate templates in the same folder
-     * so we only run the use command
-     */
-    commandPromises.push(
-      /* create */
-      tpsCli(`create ${createBuildersString} ${createFlags}`, {
-        ...opts,
-        cwd,
-      })
-    );
-  }
+	if (hasBuilders) {
+		/**
+		 * If there are no builders then we cannot
+		 * create duplicate templates in the same folder
+		 * so we only run the use command
+		 */
+		commandPromises.push(
+			/* create */
+			tpsCli(`create ${createBuildersString} ${createFlags}`, {
+				...opts,
+				cwd,
+			}),
+		);
+	}
 
-  return Promise.all(commandPromises).then(([use]) => {
-    checkFilesForTemplate(cwd, builders, templateSpec, flags);
+	return Promise.all(commandPromises).then(([use]) => {
+		checkFilesForTemplate(cwd, builders, templateSpec, flags);
 
-    return Promise.resolve(use);
-  });
+		return Promise.resolve(use);
+	});
 };

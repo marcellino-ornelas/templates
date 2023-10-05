@@ -13,39 +13,39 @@ import { vol } from './vol';
 const getFlagString = (flag) => `${flag.length === 1 ? `-` : `--`}${flag}`;
 
 export const buildFlags = (args) => {
-  let flags = '';
+	let flags = '';
 
-  if (!is.object(args)) {
-    return flags;
-  }
+	if (!is.object(args)) {
+		return flags;
+	}
 
-  eachObj(args, (value, flag) => {
-    const flagString = getFlagString(flag);
-    switch (true) {
-      case is.boolean(value):
-        // use getFlagString again here because we need to append the -- to the no option here
-        flags += getFlagString(`${value === false ? 'no-' : ''}${flag}`);
-        break;
-      case is.string(value) || is.number(value):
-        flags += `${flagString} ${value}`;
-        break;
-      case is.array(value):
-        flags += `${flagString} ${value.join(' ')} --`;
-        break;
-      default:
-        break;
-    }
+	eachObj(args, (value, flag) => {
+		const flagString = getFlagString(flag);
+		switch (true) {
+			case is.boolean(value):
+				// use getFlagString again here because we need to append the -- to the no option here
+				flags += getFlagString(`${value === false ? 'no-' : ''}${flag}`);
+				break;
+			case is.string(value) || is.number(value):
+				flags += `${flagString} ${value}`;
+				break;
+			case is.array(value):
+				flags += `${flagString} ${value.join(' ')} --`;
+				break;
+			default:
+				break;
+		}
 
-    flags += ' ';
-  });
+		flags += ' ';
+	});
 
-  return flags;
+	return flags;
 };
 
 export const writeFile = (file, contents) => {
-  const { dir } = path.parse(file);
+	const { dir } = path.parse(file);
 
-  vol.mkdirSync(dir, { recursive: true });
+	vol.mkdirSync(dir, { recursive: true });
 
-  vol.writeFileSync(file, contents);
+	vol.writeFileSync(file, contents);
 };

@@ -3,12 +3,12 @@ import { CommandModule } from 'yargs';
 import { commands } from './new_commands';
 
 export default {
-  command: 'new <command>',
+	command: 'new <command>',
 
-  description: 'create a new template | package',
+	description: 'create a new template | package',
 
-  builder: (yargs) => yargs.command(commands),
+	builder: (yargs) => yargs.command(commands),
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  handler(argv) {},
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	handler(argv) {},
 } as CommandModule;
