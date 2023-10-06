@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-new-func */
@@ -7,11 +8,13 @@
 /* eslint-disable func-names */
 // Enspired by [doT](https://github.com/olado/doT)
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const _globals: any = {};
 
 // current solution: ^[^\S\r\n]*\{ ... \}[^\S\r\n]*\n?
 // current solution: {{{  }}}
 // new front solution: (?:(?=.*?\n)[^\S\r\n]|$^) ?????
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const doT: any = {
 	name: 'doT',
 	version: '1.1.1',
@@ -122,7 +125,7 @@ function resolveDefs(c, block, def) {
 						def.__exp = def.__exp || {};
 						def.__exp[rw] = def[d].text.replace(
 							new RegExp('(^|[^\\w$])' + def[d].arg + '([^\\w$])', 'g'),
-							'$1' + param + '$2'
+							'$1' + param + '$2',
 						);
 						return s + "def.__exp['" + rw + "']";
 					}
