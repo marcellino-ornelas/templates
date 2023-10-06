@@ -60,7 +60,10 @@ class File {
 			fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
 		}
 		this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
-		this.opts = { ...opts, ...DEFAULT_OPTS };
+		this.opts = {
+			...DEFAULT_OPTS,
+			...opts,
+		};
 		this._name = fileName;
 		this.engine = this.opts.useExperimentalTemplateEngine
 			? templateEngine

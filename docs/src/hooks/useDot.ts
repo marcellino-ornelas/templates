@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import doT from 'dot';
 import { Tps } from '@site/types/templates';
 import * as utils from 'templates-mo/lib/templates/utils';
 // eslint-disable-next-line import/no-relative-packages
