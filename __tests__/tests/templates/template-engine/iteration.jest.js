@@ -11,7 +11,7 @@ describe('iteration', () => {
 					'{{~ tps.arr :x }}*{{~}}',
 				],
 				{ arr: Array(3) },
-				'***'
+				'***',
 			);
 		});
 
@@ -25,7 +25,7 @@ describe('iteration', () => {
 			test(
 				['{{~tps.arr:x:i}}*{{~}}', '{{~ tps.arr : x : i }}*{{~}}'],
 				{ arr: Array(3) },
-				'***'
+				'***',
 			);
 		});
 
@@ -37,7 +37,7 @@ describe('iteration', () => {
 			test(
 				['{{~tps.arr:x:i}}{{?i}}, {{?}}{{=i}}:{{=x}}{{~}}'],
 				{ arr: [10, 20, 30] },
-				'0:10, 1:20, 2:30'
+				'0:10, 1:20, 2:30',
 			);
 		});
 	});
@@ -77,11 +77,10 @@ describe('iteration', () => {
 		it('should not be able to render block inline and preserve tabs', () => {
 			const result = render(`\
 				{{{~[1,2,3,4] :value:index}}}{{= value}}{{{~}}}
-			`);
+`);
 
 			expect(result).toBe(`\
-1234
-			`);
+1234`);
 		});
 	});
 });
