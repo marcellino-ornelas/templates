@@ -49,8 +49,6 @@ export const Editors = ({ ...tps }: Props) => {
 		const url = new URL(window.location.href);
 		url.searchParams.set('code', code);
 
-		console.log({ code });
-
 		if (code) {
 			window.history.pushState(null, '', url.toString());
 		}

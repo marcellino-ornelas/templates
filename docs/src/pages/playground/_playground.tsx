@@ -3,6 +3,7 @@ import Layout from '@theme/Layout';
 import { ConfigProvider, theme } from 'antd';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useColorMode } from '@docusaurus/theme-common';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import { PlaygroundTps } from '@site/types/playground';
 import { Editors } from './_editors';
 import { Options } from './_options';
@@ -61,7 +62,10 @@ const PlaygroundContents = () => {
 					<span className="badge badge--success margin-left--sm">Beta</span>
 				</h2>
 				<Options onChange={onChange} initialState={all} />
-				<Editors answers={answers} name={all.name} />
+
+				<BrowserOnly>
+					{() => <Editors answers={answers} name={all.name} />}
+				</BrowserOnly>
 			</div>
 		</ConfigProvider>
 	);
