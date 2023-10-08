@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Editor, { useMonaco, OnMount } from '@monaco-editor/react';
 import { useDot } from '@site/src/hooks/useDot';
 import { Row, Col, Input, AutoComplete } from 'antd';
@@ -26,7 +26,11 @@ export const Editors = ({ ...tps }: Props) => {
 	const dotEditor = useRef<editor.IStandaloneCodeEditor>(null);
 	const renderedEditor = useRef<editor.IStandaloneCodeEditor>(null);
 	const monaco = useMonaco();
-	const [code, setCode] = useState(templateString);
+	const [code, setCode] = useState(() => {
+		const url = new URL(window.location.href);
+
+		return url.searchParams.get('code') || templateString;
+	});
 
 	const lanuagesOptions = React.useMemo(() => {
 		return (monaco?.languages?.getLanguages?.() ?? []).map((item) => ({
@@ -40,6 +44,15 @@ export const Editors = ({ ...tps }: Props) => {
 			...tps,
 		},
 	});
+
+	useEffect(() => {
+		const url = new URL(window.location.href);
+		url.searchParams.set('code', code);
+
+		if (code) {
+			window.history.pushState(null, '', url.toString());
+		}
+	}, [code]);
 
 	const handleEditorChange = React.useCallback((value) => {
 		setCode(value);
