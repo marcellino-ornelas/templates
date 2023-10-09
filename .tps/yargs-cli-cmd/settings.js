@@ -2,6 +2,9 @@
 
 /** @type {import('./../../src/types/settings').SettingsFile} */
 module.exports = {
+	opts: {
+		newFolder: false,
+	},
 	prompts: [
 		{
 			name: 'type',

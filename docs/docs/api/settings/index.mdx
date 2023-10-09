@@ -1,4 +1,49 @@
+import { Example } from '@site/docs/components/example';
+
 # Settings File
+
+## Opts
+
+<span className="badge badge--secondary margin-left--xs margin-bottom--lg">
+	templates@v1.0.21
+</span>
+
+```ts title="Type"
+TemplateOptions;
+```
+
+[Template Options](template#options). Useful when you want to change the
+behavior of templates for all users.
+
+:::tip
+
+Users can override template options by passing options to the command line or
+[`.tps/.tpsrc`](./tpsrc) file
+
+:::
+
+```json title="settings.json"
+{
+	"opts": {
+		/* ... template options */
+	}
+}
+```
+
+<Example>
+
+If you want your template to not create a new folder by default then you can add
+the following to your `settings.json` file
+
+```json title="settings.json"
+{
+	"opts": {
+		"newFolder": true
+	}
+}
+```
+
+</Example>
 
 ## Prompts
 
