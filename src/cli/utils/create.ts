@@ -1,6 +1,8 @@
+/* eslint-disable no-prototype-builtins */
 import debug from 'debug';
 import is from 'is';
 import Template from '@tps/templates';
+import type { TemplateOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
 import { errorExit } from './error-exit';
@@ -68,22 +70,16 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
 		debug.enable('tps,tps:cli');
 	}
 
-	const {
-		newFolder,
-		force,
-		wipe,
-		default: _default,
-		packages,
-		buildPaths,
-		...answers
-	} = argv;
+	console.log('argv', argv);
 
-	const tpsConfig = {
-		newFolder,
-		force,
-		wipe,
-		default: _default,
-	};
+	const { packages, buildPaths, ...answers } = argv;
+
+	const tpsConfig: Partial<TemplateOptions> = {};
+
+	if (argv.hasOwnProperty('newFolder')) tpsConfig.newFolder = argv.newFolder;
+	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;
+	if (argv.hasOwnProperty('wipe')) tpsConfig.wipe = argv.wipe;
+	if (argv.hasOwnProperty('default')) tpsConfig.default = argv.default;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
 	const tps = new Template(argv.use, tpsConfig);

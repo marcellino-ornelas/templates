@@ -22,7 +22,7 @@ describe('[cli] Create:', () => {
 	/**
 	 * @docs api/cli/commands/create.md#create-a-single-template
 	 */
-	it.only('should be able to render a template', () =>
+	it('should be able to render a template', () =>
 		createTemplate(playground.box(), 'testing', ['app']));
 
 	/**
