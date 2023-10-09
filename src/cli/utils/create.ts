@@ -1,6 +1,8 @@
+/* eslint-disable no-prototype-builtins */
 import debug from 'debug';
 import is from 'is';
 import Template from '@tps/templates';
+import type { TemplateOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
 import { errorExit } from './error-exit';
@@ -30,25 +32,21 @@ export const options = {
 		alias: 'd',
 		type: 'boolean',
 		describe: 'Use all default answers to all prompts',
-		default: false,
 	},
 	newFolder: {
 		alias: 'f',
 		describe: 'Create a new folder',
 		type: 'boolean',
-		default: true,
 	},
 	force: {
 		describe:
 			'force the template to be made. This will override any files that tps needs to create',
 		type: 'boolean',
-		default: false,
 	},
 	wipe: {
 		describe:
 			'force the template to be made. This will delete the directory if exists',
 		type: 'boolean',
-		default: false,
 	},
 };
 
@@ -72,22 +70,14 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
 		debug.enable('tps,tps:cli');
 	}
 
-	const {
-		newFolder,
-		force,
-		wipe,
-		default: _default,
-		packages,
-		buildPaths,
-		...answers
-	} = argv;
+	const { packages, buildPaths, ...answers } = argv;
 
-	const tpsConfig = {
-		newFolder,
-		force,
-		wipe,
-		default: _default,
-	};
+	const tpsConfig: Partial<TemplateOptions> = {};
+
+	if (argv.hasOwnProperty('newFolder')) tpsConfig.newFolder = argv.newFolder;
+	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;
+	if (argv.hasOwnProperty('wipe')) tpsConfig.wipe = argv.wipe;
+	if (argv.hasOwnProperty('default')) tpsConfig.default = argv.default;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
 	const tps = new Template(argv.use, tpsConfig);
