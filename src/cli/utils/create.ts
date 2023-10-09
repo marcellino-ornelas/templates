@@ -25,6 +25,7 @@ export const options = {
 		alias: 'p',
 		describe: 'Additional Packages to use when building your template',
 		type: 'array',
+		default: [],
 	},
 	default: {
 		alias: 'd',
