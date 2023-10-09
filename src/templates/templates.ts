@@ -166,9 +166,10 @@ export class Templates {
 			logger.tps.info('Loading template settings file...');
 			// eslint-disable-next-line
 			//   this.templateSettings = require(this.templateSettingsPath) || {};
-			this.templateSettings = settingsConfig.search(this.src).config || {};
+			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
+			this.templateSettings = {};
 		}
 		logger.tps.info('Template settings: %n', this.templateSettings);
 
@@ -176,7 +177,7 @@ export class Templates {
 			// default options
 			...DEFAULT_OPTIONS,
 			// template settings options
-			...(this.templateSettings.opts || {}),
+			...(this.templateSettings?.opts || {}),
 			// tpsrc ??
 			// user options
 			...opts,

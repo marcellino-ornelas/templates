@@ -242,20 +242,20 @@ export const createTemplate = (
 		}),
 	];
 
-	if (hasBuilders) {
-		/**
-		 * If there are no builders then we cannot
-		 * create duplicate templates in the same folder
-		 * so we only run the use command
-		 */
-		commandPromises.push(
-			/* create */
-			tpsCli(`create ${createBuildersString} ${createFlags}`, {
-				...opts,
-				cwd,
-			}),
-		);
-	}
+	// if (hasBuilders) {
+	// 	/**
+	// 	 * If there are no builders then we cannot
+	// 	 * create duplicate templates in the same folder
+	// 	 * so we only run the use command
+	// 	 */
+	// 	commandPromises.push(
+	// 		/* create */
+	// 		tpsCli(`create ${createBuildersString} ${createFlags}`, {
+	// 			...opts,
+	// 			cwd,
+	// 		}),
+	// 	);
+	// }
 
 	return Promise.all(commandPromises).then(([use]) => {
 		checkFilesForTemplate(cwd, builders, templateSpec, flags);
