@@ -1,16 +1,19 @@
 {
-	"testing": {
-		"name": "testing-config"
-	},
-	"new-test": {
-		"extendedDest": "__tests__/tests",
-		"newFolder": false
-	},
-	"yargs-cli-cmd": {
-		"answers": {
-			"type": "defaultExport",
-			"typescript": true,
-			"extension": "ts"
-		}
-	}
+  "testing": {
+    "name": "testing-config"
+  },
+  "new-test": {
+    "extendedDest": "__tests__/tests",
+    "newFolder": false
+  },
+  "yargs-cli-cmd": {
+    "opts": {
+      "newFolder": false
+    },
+    "answers": {
+      "type": "defaultExport",
+      "typescript": true,
+      "extension": "ts"
+    }
+  }
 }
