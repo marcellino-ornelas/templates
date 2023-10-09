@@ -30,25 +30,21 @@ export const options = {
 		alias: 'd',
 		type: 'boolean',
 		describe: 'Use all default answers to all prompts',
-		default: false,
 	},
 	newFolder: {
 		alias: 'f',
 		describe: 'Create a new folder',
 		type: 'boolean',
-		default: true,
 	},
 	force: {
 		describe:
 			'force the template to be made. This will override any files that tps needs to create',
 		type: 'boolean',
-		default: false,
 	},
 	wipe: {
 		describe:
 			'force the template to be made. This will delete the directory if exists',
 		type: 'boolean',
-		default: false,
 	},
 };
 

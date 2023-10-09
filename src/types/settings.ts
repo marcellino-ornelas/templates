@@ -1,3 +1,6 @@
+// TODO: why cant I use @tps/templates :thinking:
+import type { TemplateOptions } from '@tps/templates/templates';
+
 // eslint-disable-next-line no-shadow
 export enum SettingsFilePromptTpsType {
 	data = 'data',
@@ -64,5 +67,6 @@ export type ValidateFn = (
 ) => (boolean | string) | Promise<boolean | string>;
 
 export interface SettingsFile {
+	opts: Partial<TemplateOptions>;
 	prompts: SettingsFilePrompt[];
 }
