@@ -155,10 +155,6 @@ export class Templates {
 			location: this.src,
 		});
 
-		this.opts = defaults(opts, DEFAULT_OPTIONS);
-
-		logger.tps.info('Template Options: %n', this.opts);
-
 		this.packages = {};
 		this.packagesUsed = [];
 		this.compiledFiles = [];
@@ -176,12 +172,24 @@ export class Templates {
 			logger.tps.info('Loading template settings file...');
 			// eslint-disable-next-line
 			//   this.templateSettings = require(this.templateSettingsPath) || {};
-			this.templateSettings = settingsConfig.search(this.src).config;
+			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
+			this.templateSettings = {};
 		}
-
 		logger.tps.info('Template settings: %n', this.templateSettings);
+
+		this.opts = {
+			// default options
+			...DEFAULT_OPTIONS,
+			// template settings options
+			...(this.templateSettings?.opts || {}),
+			// tpsrc ??
+			// user options
+			...opts,
+		};
+
+		logger.tps.info('Template Options: %n', this.opts);
 
 		if (this.templateSettings.prompts) {
 			logger.tps.info('Loading prompts... %o', {
