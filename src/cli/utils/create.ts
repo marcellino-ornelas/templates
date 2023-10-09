@@ -70,8 +70,6 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
 		debug.enable('tps,tps:cli');
 	}
 
-	console.log('argv', argv);
-
 	const { packages, buildPaths, ...answers } = argv;
 
 	const tpsConfig: Partial<TemplateOptions> = {};
