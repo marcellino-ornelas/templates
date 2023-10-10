@@ -163,7 +163,6 @@ export class Templates {
 		this.buildErrors = [];
 		this.data = {};
 		this.templateSettings = {};
-		this.engine = this.opts.experimentalTemplateEngine ? templateEngine : dot;
 		this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
 		logger.tps.info('Settings file location: %s', this.templateSettingsPath);
@@ -188,6 +187,8 @@ export class Templates {
 			// user options
 			...opts,
 		};
+
+		this.engine = this.opts.experimentalTemplateEngine ? templateEngine : dot;
 
 		logger.tps.info('Template Options: %n', this.opts);
 
