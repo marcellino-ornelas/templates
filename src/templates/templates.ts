@@ -20,7 +20,8 @@ import {
 import logger from '@tps/utilities/logger';
 import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
-import dot from '@tps/dot';
+import dot from '@tps/templates/dot';
+import templateEngine from '@tps/templates/template-engine';
 import { cosmiconfigSync } from 'cosmiconfig';
 import * as utils from './utils';
 
@@ -61,6 +62,10 @@ export interface TemplateOptions {
 	 * Directory to prepend to each build paths
 	 */
 	extendedDest: string;
+	/**
+	 * Use experimental template engine
+	 */
+	experimentalTemplateEngine: boolean;
 }
 
 const DEFAULT_OPTIONS: TemplateOptions = {
@@ -73,6 +78,7 @@ const DEFAULT_OPTIONS: TemplateOptions = {
 	wipe: false,
 	tpsPath: null,
 	extendedDest: '',
+	experimentalTemplateEngine: false,
 };
 
 if (TPS.IS_TESTING) {
@@ -157,7 +163,6 @@ export class Templates {
 		this.buildErrors = [];
 		this.data = {};
 		this.templateSettings = {};
-
 		this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
 		logger.tps.info('Settings file location: %s', this.templateSettingsPath);
@@ -182,6 +187,8 @@ export class Templates {
 			// user options
 			...opts,
 		};
+
+		this.engine = this.opts.experimentalTemplateEngine ? templateEngine : dot;
 
 		logger.tps.info('Template Options: %n', this.opts);
 
@@ -765,14 +772,17 @@ export class Templates {
 
 				// When def files have more than one def. In order to use them we need to call the main file def first.
 				// this fixes problems when any def can be available at render time
-				dot.template(`{{#def.${name}}}`, null, this._defs);
+				this.engine.template(`{{#def.${name}}}`, null, this._defs);
 			});
 		}
 
 		logger.tps.log('Compiling files');
 
 		pkg.find({ type: 'file', ext: { not: '.def' } }).forEach((fileNode) => {
-			const file = new File(fileNode, { force });
+			const file = new File(fileNode, {
+				force,
+				useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+			});
 			logger.tps.info(
 				`  - %s ${colors.green.italic('compiled')}`,
 				fileNode.path,

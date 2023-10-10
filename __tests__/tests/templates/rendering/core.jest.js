@@ -174,4 +174,30 @@ describe('[Templates] Render Process:', () => {
 
 		expect(tps.tpsPath).toBe(expectedPath);
 	});
+
+	it('should be able to use experimental template engine', async () => {
+		const tps = new Templates('testing-experimental-template-engine', {
+			experimentalTemplateEngine: true,
+		});
+
+		tps.setAnswers({ one: true });
+
+		const indexFile = playground.pathTo('app/index.txt');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(indexFile).toHaveFileContents('hey there\nbye');
+	});
+
+	it('should not use experimental template engine by default', async () => {
+		const tps = new Templates('testing-experimental-template-engine');
+
+		tps.setAnswers({ one: true });
+
+		const indexFile = playground.pathTo('app/index.txt');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(indexFile).toHaveFileContents('{}\nhey there\n{}\nbye');
+	});
 });

@@ -52,6 +52,13 @@ const config = {
 			env: { jest: true },
 			plugins: ['jest'],
 			...eslintPlugin.configs.recommended,
+			rules: {
+				...eslintPlugin.configs.recommended.rules,
+				'jest/expect-expect': [
+					'error',
+					{ assertFunctionNames: ['expect', 'test'] },
+				],
+			},
 		},
 		{
 			files: ['cli/**/*.js'],

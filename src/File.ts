@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import dot from '@tps/dot';
+import templateEngine from '@tps/templates/template-engine';
+import dot from '@tps/templates/dot';
 import * as path from 'path';
 import fs from 'fs';
 import { DotError } from '@tps/errors';
@@ -7,7 +8,13 @@ import { FileNode } from './fileSystemTree';
 
 interface FileOptions {
 	force?: boolean;
+	useExperimentalTemplateEngine?: boolean;
 }
+
+const DEFAULT_OPTS: FileOptions = {
+	force: false,
+	useExperimentalTemplateEngine: false,
+};
 
 /*
  * File
@@ -20,6 +27,8 @@ class File {
 	public _name: string;
 
 	public isDot: boolean;
+
+	public engine: any;
 
 	public relDirectoryFromPkg: string;
 
@@ -42,7 +51,7 @@ class File {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	) => any;
 
-	constructor(fileNode: FileNode, opts: FileOptions = {}) {
+	constructor(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
 		let fileName = fileNode.name;
 
 		if (DOT_EXTENTION_MATCH.test(fileName)) {
@@ -51,9 +60,15 @@ class File {
 			fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
 		}
 		this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
-		this.opts = opts;
+		this.opts = {
+			...DEFAULT_OPTS,
+			...opts,
+		};
 		this._name = fileName;
-		this._dotNameCompiled = dot.template(this._name);
+		this.engine = this.opts.useExperimentalTemplateEngine
+			? templateEngine
+			: dot;
+		this._dotNameCompiled = this.engine.template(this._name);
 		this.src = fileNode.path;
 		this.fileNode = fileNode;
 		const fileData = fs.readFileSync(this.src)?.toString();
@@ -66,7 +81,7 @@ class File {
 			try {
 				return this.isDot
 					? // How could we cache this here :thinking: this is happening for every dot file
-					  dot.template(fileData, null, defs)(realData)
+					  this.engine.template(fileData, null, defs)(realData)
 					: fileData;
 			} catch (e) {
 				throw new DotError(this.fileNode, e.message);
