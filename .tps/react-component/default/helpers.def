@@ -1,1 +1,3 @@
-{{##def.componentName:{{= tps.u.capitalize(tps.name)}}#}}
+{{{##def.componentName:
+{{= tps.u.capitalize(tps.name)}}
+#}}}
