@@ -2,6 +2,9 @@
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
+	opts: {
+		experimentalTemplateEngine: true,
+	},
 	prompts: [
 		{
 			name: 'typescript',
