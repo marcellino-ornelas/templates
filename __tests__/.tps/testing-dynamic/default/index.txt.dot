@@ -2,3 +2,5 @@ name: {{= tps?.name }}
 template: {{= tps?.template }}
 tps.answers.one: {{= tps?.answers?.one }}
 tps.a.one: {{= tps?.a?.one }}
+tps.utils: {{= tps?.utils?.camelCase("hey") }}
+tps.u: {{= tps?.u?.camelCase("hey") }}

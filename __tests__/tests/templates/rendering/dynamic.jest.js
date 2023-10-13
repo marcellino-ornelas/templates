@@ -158,5 +158,29 @@ describe('[TPS] Rendering dynamic:', () => {
 				'tps.a.one: hey',
 			);
 		});
+
+		it("should set 'tps.utils'", async () => {
+			tps.setAnswers({
+				one: 'hey',
+			});
+
+			await tps.render(playground.box(), 'App');
+
+			expect(playground.pathTo('App/index.txt')).toHaveFileContents(
+				'tps.utils: hey',
+			);
+		});
+
+		it("should set 'tps.u'", async () => {
+			tps.setAnswers({
+				one: 'hey',
+			});
+
+			await tps.render(playground.box(), 'App');
+
+			expect(playground.pathTo('App/index.txt')).toHaveFileContents(
+				'tps.u: hey',
+			);
+		});
 	});
 });
