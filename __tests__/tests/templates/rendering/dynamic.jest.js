@@ -34,7 +34,6 @@ describe('[TPS] Rendering dynamic:', () => {
 		});
 
 		it('should allow tps.name in file name', async () => {
-			const destPath = playground.pathTo('App');
 			const dynamicFile = playground.pathTo('App/App.txt');
 
 			// Done need this answer in test but need to answer
@@ -49,7 +48,6 @@ describe('[TPS] Rendering dynamic:', () => {
 
 		it('should allow tps.answers in file names', async () => {
 			const answer = 'hey';
-			const destPath = playground.pathTo('App');
 			const dynamicFile = playground.pathTo(`App/answers-${answer}.txt`);
 
 			tps.setAnswers({
@@ -63,7 +61,6 @@ describe('[TPS] Rendering dynamic:', () => {
 
 		it('should allow tps.a in file names', async () => {
 			const answer = 'hey';
-			const destPath = playground.pathTo('App');
 			const dynamicFile = playground.pathTo(`App/short-answers-${answer}.txt`);
 
 			tps.setAnswers({
