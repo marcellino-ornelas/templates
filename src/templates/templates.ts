@@ -343,12 +343,14 @@ export class Templates {
 			.then(() => this._answerRestOfPrompts())
 			.then(() => {
 				logger.tps.info('Rendering template at %s', finalDest);
+				const answers = this.hasPrompts() ? this._prompts.answers : {};
 
 				dataForTemplating = {
 					...data,
 					packages: this.packagesUsed,
 					template: this.template,
-					answers: this.hasPrompts() ? this._prompts.answers : {},
+					answers,
+					a: answers,
 					utils,
 					u: utils,
 				};

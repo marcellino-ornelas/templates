@@ -62,7 +62,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 			throw new PromptInvalidAnswersError(answers);
 		}
 
-		this._getPromptsThatNeedAnswers().forEach((prompt) => {
+		this.prompts.forEach((prompt) => {
 			const answer = prompt.answerWith(answers);
 			if (is.defined(answer)) {
 				this.setAnswer(prompt.name, answer);
