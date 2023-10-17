@@ -5,6 +5,7 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import * as path from 'path';
+import { vol } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -31,6 +32,10 @@ describe('[TPS] Rendering dynamic:', () => {
 	describe('File names', () => {
 		beforeEach(() => {
 			tps = new Templates('testing-dynamic-file-name');
+
+			tps.setAnswers({
+				one: '',
+			});
 		});
 
 		it('should allow tps.name in file name', async () => {
@@ -68,6 +73,16 @@ describe('[TPS] Rendering dynamic:', () => {
 			});
 
 			await tps.render(playground.box(), ['App']);
+
+			expect(dynamicFile).toBeFile();
+		});
+
+		it('should allow defs file in file names', async () => {
+			const dynamicFile = playground.pathTo(`App/def-somedef.txt`);
+
+			await tps.render(playground.box(), ['App']);
+
+			console.log(vol.toTree({ dir: playground.box() }));
 
 			expect(dynamicFile).toBeFile();
 		});

@@ -68,15 +68,15 @@ class File {
 		this.engine = this.opts.useExperimentalTemplateEngine
 			? templateEngine
 			: dot;
-		this._dotNameCompiled = this.engine.template(this._name);
+		// this._dotNameCompiled = this.engine.template(this._name);
 		this.src = fileNode.path;
 		this.fileNode = fileNode;
 		const fileData = fs.readFileSync(this.src)?.toString();
 		this.fileDataTemplate = (data, defs, dest) => {
 			const realData = {
 				...data,
-				file: this.fileName(data),
-				dest: this.dest(dest, data),
+				file: this.fileName(data, defs),
+				dest: this.dest(dest, data, defs),
 			};
 			try {
 				return this.isDot
@@ -89,10 +89,10 @@ class File {
 		};
 	}
 
-	fileName(data: Record<string, any> = {}): string {
+	fileName(data: Record<string, any> = {}, defs = {}): string {
 		let fileName;
 		try {
-			fileName = this._dotNameCompiled(data);
+			fileName = this.engine.template(this._name, null, defs)(data);
 		} catch (e) {
 			console.log('file name error', e);
 		}
@@ -156,8 +156,8 @@ class File {
 		return path.join(newDest, this.relDirectoryFromPkg);
 	}
 
-	dest(dest: string, data: Record<string, any>): string {
-		return path.join(this._buildParentDir(dest), this.fileName(data));
+	dest(dest: string, data: Record<string, any>, defs: any): string {
+		return path.join(this._buildParentDir(dest), this.fileName(data, defs));
 	}
 }
 
