@@ -352,25 +352,6 @@ is `server.js`.
 
 </Example>
 
-### File names
-
-File names can also take advantage of doT. You can use any valid doT syntax
-inside of file names
-
-<Example open>
-
-```text
-{{= tps.name}}.js.dot
-```
-
-If `name` was `Nav` then the result would be:
-
-```text
-Nav.js
-```
-
-</Example>
-
 ### File contents
 
 Like mentioned above, once you add a `.dot` extention to your file name you are
@@ -393,6 +374,82 @@ const app = express();
 ```
 
 </Dot>
+
+</Example>
+
+### File names
+
+File names can also take advantage of doT. This allows file names to be dynamic.
+You can use any valid doT syntax inside of file names. Unlike file contents, all
+file names get processed with doT so you can use doT syntax in any file name in
+your template even if they dont have a `.doT` extension.
+
+<Example open>
+
+<Tabs>
+
+<TabItem value="interpolation" label="Interpolation">
+
+```text
+{{= tps.name}}.js
+```
+
+If `name` was `Nav` then the result would be:
+
+```text
+Nav.js
+```
+
+</TabItem>
+
+<TabItem value="utils" label="utils">
+
+```text
+{{= tps.utils.camelCase(tps.name)}}.js.dot
+```
+
+If `name` was `my-nav` then the result would be:
+
+```text
+myNav.js
+```
+
+</TabItem>
+
+<TabItem value="defs" label="Defs">
+
+you can utilize a def if your logic gets to complex for your file name
+
+:::caution
+
+Be aware that adding new lines to the def file will also show up in your file
+name
+
+:::
+
+```txt title="name.def"
+{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}
+```
+
+```text
+{{#def.someDef }}.js
+```
+
+If `name` was `nav` and `capitalize` was true then the result would be:
+
+```text
+Nav.js
+```
+
+if `capitalize` was false then the result would be:
+
+```txt
+nav.js
+```
+
+</TabItem>
+
+</Tabs>
 
 </Example>
 

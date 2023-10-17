@@ -82,8 +82,6 @@ describe('[TPS] Rendering dynamic:', () => {
 
 			await tps.render(playground.box(), ['App']);
 
-			console.log(vol.toTree({ dir: playground.box() }));
-
 			expect(dynamicFile).toBeFile();
 		});
 
@@ -100,7 +98,17 @@ describe('[TPS] Rendering dynamic:', () => {
 
 			await tps.render(playground.box(), ['App']);
 
-			console.log(vol.toTree({ dir: playground.box() }));
+			expect(dynamicFile).toBeFile();
+		});
+
+		it('should allow complex defs in file names', async () => {
+			const dynamicFile = playground.pathTo(`app/def-complex-app.txt`);
+
+			tps.setAnswers({
+				one: 'set',
+			});
+
+			await tps.render(playground.box(), ['app']);
 
 			expect(dynamicFile).toBeFile();
 		});
