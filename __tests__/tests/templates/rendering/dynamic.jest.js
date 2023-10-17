@@ -77,6 +77,24 @@ describe('[TPS] Rendering dynamic:', () => {
 			expect(dynamicFile).toBeFile();
 		});
 
+		it('should allow tps.utils in file names', async () => {
+			const dynamicFile = playground.pathTo(`App/utils-someData.txt`);
+
+			await tps.render(playground.box(), ['App']);
+
+			console.log(vol.toTree({ dir: playground.box() }));
+
+			expect(dynamicFile).toBeFile();
+		});
+
+		it('should allow tps.u in file names', async () => {
+			const dynamicFile = playground.pathTo(`App/u-app.txt`);
+
+			await tps.render(playground.box(), ['App']);
+
+			expect(dynamicFile).toBeFile();
+		});
+
 		it('should allow defs file in file names', async () => {
 			const dynamicFile = playground.pathTo(`App/def-somedef.txt`);
 
