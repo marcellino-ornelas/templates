@@ -68,7 +68,6 @@ class File {
 		this.engine = this.opts.useExperimentalTemplateEngine
 			? templateEngine
 			: dot;
-		// this._dotNameCompiled = this.engine.template(this._name);
 		this.src = fileNode.path;
 		this.fileNode = fileNode;
 		const fileData = fs.readFileSync(this.src)?.toString();
