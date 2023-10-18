@@ -2,7 +2,6 @@
 sidebar_position: 3
 ---
 
-import { Text } from '@site/docs/components/text';
 import { TemplatesContextUtils } from '@site/docs/components/templatesContextUtils';
 import { Example } from '@site/docs/components/example';
 import { Dot } from '@site/docs/components/dot';
@@ -142,8 +141,16 @@ const {{= tps.name}} = (props) => {
 
 ## Answers
 
-```text
+```ts title="Type"
+{ [p: string]: any }
+```
+
+```text title="Usage"
 {{= tps.answers }}
+```
+
+```text title="Alias"
+{{= tps.a }}
 ```
 
 The `tps.answers` object holds the answers to the prompts in your templates.
@@ -180,6 +187,10 @@ you can access the users answer with:
 
 ```text title="Usage"
 {{= tps.utils }}
+```
+
+```text title="Alias"
+{{= tps.u }}
 ```
 
 <TemplatesContextUtils />

@@ -343,12 +343,14 @@ export class Templates {
 			.then(() => this._answerRestOfPrompts())
 			.then(() => {
 				logger.tps.info('Rendering template at %s', finalDest);
+				const answers = this.hasPrompts() ? this._prompts.answers : {};
 
 				dataForTemplating = {
 					...data,
 					packages: this.packagesUsed,
 					template: this.template,
-					answers: this.hasPrompts() ? this._prompts.answers : {},
+					answers,
+					a: answers,
 					utils,
 					u: utils,
 				};
@@ -616,7 +618,7 @@ export class Templates {
 	_checkForFiles(dest, data) {
 		for (let i = 0; i < this.compiledFiles.length; i++) {
 			const file = this.compiledFiles[i];
-			const finalDest = file.dest(dest, data);
+			const finalDest = file.dest(dest, data, this._def);
 
 			if (isFile(finalDest)) {
 				throw new FileExistError(finalDest);
@@ -641,7 +643,7 @@ export class Templates {
 			 */
 			[
 				file,
-				file.dest(buildPath, data),
+				file.dest(buildPath, data, this._defs),
 				file.fileDataTemplate(data, this._defs, buildPath),
 			],
 		);
@@ -672,7 +674,7 @@ export class Templates {
 		});
 
 		files.forEach((file) => {
-			const finalDest = file.dest(buildPath, data);
+			const finalDest = file.dest(buildPath, data, this._defs);
 			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
 			filesInProgress.push(
 				file
