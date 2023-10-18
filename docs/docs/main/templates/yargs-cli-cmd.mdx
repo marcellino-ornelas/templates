@@ -239,8 +239,8 @@ lets say you have a directory structure like this
 			| - index.js
 ```
 
-If you wanted all new instances of your template to be generated in the
-`cli/commands` directory then add the following
+If you wanted all your new commands to be generated in the `cli/commands`
+directory then you can add the following to your tpsrc file.
 
 ```json title=".tps/.tpsrc"
 {
@@ -257,7 +257,7 @@ Now you can generate a new instance without passing in a path and it will be
 created in the `cli/commands` folder.
 
 ```bash
-tps yargs-cli-cmd list --no-new-folder
+tps yargs-cli-cmd list
 ```
 
 ```text
@@ -274,7 +274,7 @@ tps yargs-cli-cmd list --no-new-folder
 Want to create sub commands? Add a build path and let the magic unfold
 
 ```bash
-tps yargs-cli-cmd list_commands/template --no-new-folder
+tps yargs-cli-cmd list_commands/template
 ```
 
 ```text
