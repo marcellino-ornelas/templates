@@ -9,9 +9,8 @@ import TabItem from '@theme/TabItem';
 
 # yargs-cli-cmd
 
-<span className="badge badge--primary margin-left--xs">beta</span>
 <span className="badge badge--secondary margin-left--xs">
-	templates@v1.0.19
+	templates@>v1.0.19
 </span>
 
 <br />
@@ -21,12 +20,11 @@ import TabItem from '@theme/TabItem';
 Create a yargs cli command module using
 [ESM syntax](https://github.com/yargs/yargs/blob/main/docs/advanced.md#example-command-hierarchy-using-indexmjs).
 
-:::info
-
-Templates creates a new folder when creating a yargs cmd file which often is not
-the desired behavior. You can turn this off by taking a look at the
-[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
-example down below
+:::info For template versions prior to 1.0.24, a new folder is created when
+generating a new instance of this template. This issue has been resolved in
+version 1.0.24. If you are using an incompatible version and wish to avoid a new
+folder being created, please refer to our guide on
+[preventing new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder).
 
 :::
 
@@ -41,8 +39,7 @@ tps yargs-cli-cmd path/to/dir/<cmd-name>
 ```
 
 ```txt title="Creates"
-| - <cmd-name>
-	| - <cmd-name>.js
+| - <cmd-name>.js
 ```
 
 <Example>
@@ -58,8 +55,7 @@ tps yargs-cli-cmd publish
 Produces:
 
 ```txt
-| - publish/
-	| - publish.js
+|- publish.js
 ```
 
 ```js title="publish.js"
@@ -174,17 +170,8 @@ looks something like this:
 If you want to add a new command called `list` you can run the following
 
 ```bash
-tps yargs-cli-cmd cli/commands/list --no-new-folder
+tps yargs-cli-cmd cli/commands/list
 ```
-
-:::tip
-
-Including the `--no-new-folder` option will prevent templates from creating a
-new folder. You can also explore
-[dont use a new folder](/templates/docs/main/templates/yargs-cli-cmd#dont-use-a-new-folder)
-for more details.
-
-:::
 
 You will be prompted to answer the following questions:
 
@@ -227,42 +214,6 @@ export const builder = {
 export const handler = async (argv) => {
 	// code ...
 };
-```
-
-### Dont create a new folder
-
-If you dont want your yarg cmd file in a new folder you can turn off the new
-folder option in your `.tps/tpsrc`
-
-If you havent already initialize your repo:
-
-```bash
-tps init
-```
-
-```json title=".tps/.tpsrc"
-{
-	"yargs-cli-cmd": {
-		"opts": {
-			// highlight-next-line
-			"newFolder": false
-		}
-	}
-}
-```
-
-Now when you run the following it will produce the cmd file with a new folder
-
-```bash
-tps yargs-cli-cmd publish
-```
-
-Produces:
-
-```txt
-| - <cwd>
-	// highlight-next-line
-	| - publish.js
 ```
 
 ### Set a loction for new instances
@@ -338,4 +289,47 @@ tps yargs-cli-cmd list_commands/template --no-new-folder
 			| - list.js
 			| - some-command.js
 			| - index.js
+```
+
+### Dont create a new folder
+
+:::caution
+
+Versions equal to or higher than `1.0.24` automatically support this behavior,
+requiring no additional action within this section.
+
+:::
+
+If you dont want your yarg cmd file in a new folder you can turn off the new
+folder option in your `.tps/tpsrc`
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"yargs-cli-cmd": {
+		"opts": {
+			// highlight-next-line
+			"newFolder": false
+		}
+	}
+}
+```
+
+Now when you run the following it will produce the cmd file with a new folder
+
+```bash
+tps yargs-cli-cmd publish
+```
+
+Produces:
+
+```txt
+| - <cwd>
+	// highlight-next-line
+	| - publish.js
 ```
