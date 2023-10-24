@@ -1,0 +1,56 @@
+{{{
+	const useTemplates = tps.answers.modules.includes('templates');
+}}}
+/*
+ * Modules
+ */
+{{{? tps.answers.playground }}}
+import Playground from '@test/utilities/playground';
+import { TESTING_DIR } from '@test/utilities/constants';
+{{{?}}}
+{{{? tps.answers.modules.length}}}
+{{{~ tps.answers.modules :module:index }}}
+import {{= module === "templates" ? tps.u.capitalize(module) : module}} from '@tps/{{= module}}';
+{{{~}}}
+{{??}}
+import _ from '@tps/_';
+{{{?}}}
+
+jest.mock('fs');
+
+/*
+ * Constants
+ */
+{{{? tps.answers.playground }}}
+const playground = new Playground(TESTING_DIR)
+{{{?}}}
+
+describe('[TPS] _', () => {
+	{{{? useTemplates}}}
+	let tps: Templates;
+
+	{{{?}}}
+	{{{? tps.answers.playground}}}
+	beforeAll(() => playground.create() );
+	afterAll(() => playground.destroy() );
+
+	{{{?}}}
+	beforeEach(() => {
+		{{{? useTemplates }}}
+		tps = new Templates('testing');
+		{{{?}}}
+		{{{? tps.answers.playground }}}
+		
+		return playground.createBox('_');
+		{{{?}}}
+	});
+
+	it('should ...', async () => {
+		{{{? useTemplates && tps.answers.playground}}}
+		await tps.render(playground.box(), "App");
+
+		// @ts-expect-error no types for extending jest functions
+		expect(playground.pathTo('...')).toBeFile();
+		{{{?}}}
+	});
+});

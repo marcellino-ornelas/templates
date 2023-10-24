@@ -1,4 +1,8 @@
 {
+	"opts": {
+		"experimentalTemplateEngine": true,
+		"newFolder": false
+	},
 	"prompts": [
 		{
 			"name": "playground",
