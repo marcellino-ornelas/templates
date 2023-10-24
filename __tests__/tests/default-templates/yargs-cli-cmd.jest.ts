@@ -35,13 +35,6 @@ describe('yargs-cli-cmd', () => {
 		expect(playground.pathTo('publish.js')).toBeFile();
 	});
 
-	// it('should be able to ', async () => {
-	// 	await tps.render(playground.box(), 'publish');
-
-	// 	// @ts-expect-error no types for extending jest functions
-	// 	expect(playground.pathTo('publish.js')).toBeFile();
-	// });
-
 	describe('Prompt: type', () => {
 		it('should be able to use named export syntax', async () => {
 			tps.setAnswers({
