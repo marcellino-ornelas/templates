@@ -1,4 +1,5 @@
 import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
+import { MAIN_DIR } from '@tps/utilities/constants';
 import fs from 'fs';
 import path from 'path';
 
@@ -10,6 +11,13 @@ import path from 'path';
 	const dir = new DirectoryNode('.tps', TESTING_DIR);
 
 	dir.find({ type: 'file' }).forEach((a: FileNode) => {
+		const data = fs.readFileSync(a.path);
+		DEFAULT_FILES[a.path] = data?.toString() ?? '';
+	});
+
+	const defaultDir = new DirectoryNode('.tps', MAIN_DIR);
+
+	defaultDir.find({ type: 'file' }).forEach((a: FileNode) => {
 		const data = fs.readFileSync(a.path);
 		DEFAULT_FILES[a.path] = data?.toString() ?? '';
 	});
