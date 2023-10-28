@@ -1,7 +1,11 @@
-{{? tps.answers.typescript}}{{#def.typescriptHeader}}
-{{?}}{{? tps.answers.typescript}}type {{#def.moduleName}} = CommandModule<object, {{= tps.utils.pascalCase(tps.name) }}Argv>;
+{{{? tps.answers.typescript}}}
+{{#def.typescriptHeader}}
+{{{?}}}
+{{{? tps.answers.typescript}}}
+type {{#def.moduleName}} = CommandModule<object, {{= tps.utils.pascalCase(tps.name) }}Argv>;
 
-{{?}}export const command{{? tps.answers.typescript}}: {{#def.moduleName}}['command']{{?}} = '{{= tps.name}}';
+{{{?}}}
+export const command{{? tps.answers.typescript}}: {{#def.moduleName}}['command']{{?}} = '{{= tps.name}}';
 
 export const aliases{{? tps.answers.typescript}}: {{#def.moduleName}}['aliases']{{?}} = [];
 
