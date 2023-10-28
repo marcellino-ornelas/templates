@@ -42,7 +42,7 @@ jobs:
         run: |
           npm run code:build
           ./.bin/ts ./.bin/generate-test-templates
-          LEGACY=1 npx jest cli
+          LEGACY=1 npx jest cli --testPathIgnorePatterns "__tests__/tests/default-templates" "__tests__/tests/cli/init"
 
   lint:
     runs-on: ubuntu-latest

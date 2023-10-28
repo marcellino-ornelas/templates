@@ -9,9 +9,9 @@ export const describe{{? tps.answers.typescript}}: {{#def.moduleName}}['describe
 
 export const builder{{? tps.answers.typescript}}: {{#def.moduleName}}['builder']{{?}} = {
     flag: {
-      alias: '',
-      describe: '...',
-      type: 'boolean',
+        alias: '',
+        describe: '...',
+        type: 'boolean',
     },
 };
 
