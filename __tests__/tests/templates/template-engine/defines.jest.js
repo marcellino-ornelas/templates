@@ -16,7 +16,7 @@ describe('defines', () => {
 	describe('with parameters', () => {
 		it('should render define', () => {
 			testDef(
-				'{{##def.tmp:foo:<div>{{!foo}}</div>#}}{{ var bar = tps.foo; }}{{# def.tmp:bar }}'
+				'{{##def.tmp:foo:<div>{{!foo}}</div>#}}{{ var bar = tps.foo; }}{{# def.tmp:bar }}',
 			);
 		});
 	});
@@ -27,11 +27,15 @@ describe('defines', () => {
 {{{##def.name:
 lino
 #}}}
+
 {{#def.name}}
+
 `);
 
 			expect(result).toBe(`\
+
 lino
+
 `);
 		});
 
@@ -92,7 +96,7 @@ lino
 		const fn = doT.compile(tmpl, defines);
 		expect(fn({ foo: 'http' })).toBe('<div>http</div>');
 		expect(fn({ foo: 'http://abc.com' })).toBe(
-			'<div>http:&#47;&#47;abc.com</div>'
+			'<div>http:&#47;&#47;abc.com</div>',
 		);
 		expect(fn({})).toBe('<div></div>');
 	}

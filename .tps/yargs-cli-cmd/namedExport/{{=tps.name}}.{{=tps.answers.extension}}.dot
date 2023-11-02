@@ -1,5 +1,6 @@
 {{{? tps.answers.typescript}}}
 {{#def.typescriptHeader}}
+
 {{{?}}}
 {{{? tps.answers.typescript}}}
 type {{#def.moduleName}} = CommandModule<object, {{= tps.utils.pascalCase(tps.name) }}Argv>;
