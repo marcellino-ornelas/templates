@@ -1,5 +1,8 @@
-{{? tps.answers.typescript}}{{#def.typescriptHeader}}
-{{?}}export default {
+{{{? tps.answers.typescript}}}
+{{#def.typescriptHeader}}
+
+{{{?}}}
+export default {
     command: '{{=tps.name}}',
     aliases: [],
     describe: "{{= tps.answers.description}}",

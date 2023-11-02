@@ -4,6 +4,7 @@
 module.exports = {
 	opts: {
 		newFolder: false,
+		experimentalTemplateEngine: true,
 	},
 	prompts: [
 		{
