@@ -1,5 +1,5 @@
 .resultContainer {
-	background-color: #f8f8f8;
+	background-color: var(--ifm-color-emphasis-200);
 	min-height: 450px;
 }
 

@@ -13,13 +13,13 @@
 }
 
 .fileSystem * {
-	fill: darkgrey;
+	fill: var(--ifm-color-emphasis-600);
 }
 
 .fileName {
 	font-size: 2em;
 	margin-top: -5px;
-	color: darkgrey;
+	color: var(--ifm-color-emphasis-600);
 }
 
 .folderSlash {
