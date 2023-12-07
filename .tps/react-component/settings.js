@@ -20,8 +20,8 @@ module.exports = {
 			tpsType: 'data',
 			message: 'What type of extension do you want for your component?',
 			default: (answers) => {
-				if (answers.typescript) return 'ts';
-				return 'js';
+				if (answers.typescript) return 'tsx';
+				return 'jsx';
 			},
 		},
 		{
