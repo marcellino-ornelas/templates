@@ -26,7 +26,6 @@ import {
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
-	globalConfigSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
 
@@ -93,6 +92,7 @@ if (TPS.IS_TESTING) {
 FileSystemNode.ignoreFiles = '**/.gitkeep';
 
 const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
+	cache: !TPS.IS_TESTING,
 	searchPlaces: [
 		`${TPS.TEMPLATE_SETTINGS_FILE}.json`,
 		`${TPS.TEMPLATE_SETTINGS_FILE}.js`,
@@ -108,6 +108,7 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
 });
 
 const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
+	cache: !TPS.IS_TESTING,
 	searchStrategy: 'global',
 	loaders: defaultLoadersSync,
 	searchPlaces: [...defaultTpsrcSearches, ...nestedTpsrcSearches],
@@ -878,14 +879,15 @@ export class Templates {
 			// this._loadTpsSpecificConfig(templateName, localConfig);
 			logger.tps.info(
 				'Checking for local tpsrc in and up: %s',
-				this.opts.tpsPath || TPS.LOCAL_PATH,
+				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
 			);
 			const localTpsrc = tpsrcConfig.search(
-				this.opts.tpsPath || TPS.LOCAL_PATH,
+				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
 			);
 
 			if (localTpsrc && !localTpsrc.isEmpty) {
 				logger.tps.info('Loading local tpsrc from: %s', localTpsrc.filepath);
+				console.log(localTpsrc.config);
 				this._loadTpsSpecificConfig(templateName, localTpsrc.config);
 			}
 		}

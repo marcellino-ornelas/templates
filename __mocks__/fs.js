@@ -1,6 +1,4 @@
 const { createFsFromVolume } = require('memfs');
-const { vol } = require('../__tests__/utilities/vol');
-
-const fs = createFsFromVolume(vol);
+const { vol, fs } = require('../__tests__/utilities/vol');
 
 module.exports = fs;
