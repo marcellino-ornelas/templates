@@ -1,13 +1,9 @@
 /*
  * Modules
  */
-import Playground from '@test/utilities/playground';
-import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@tps/templates';
 import path from 'path';
 import os from 'os';
-import fs from 'fs';
-import fsP from 'fs/promises';
 import { reset, vol } from '@test/utilities/vol';
 import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 

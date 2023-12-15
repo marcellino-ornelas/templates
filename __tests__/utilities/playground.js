@@ -2,7 +2,6 @@
  * Modules
  */
 import * as path from 'path';
-// import { hasProp } from '@tps/utilities/helpers';
 import { vol } from '@test/utilities/vol';
 import * as crypto from 'crypto';
 
