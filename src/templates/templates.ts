@@ -135,10 +135,6 @@ export class Templates {
 		return TPS.HAS_LOCAL;
 	}
 
-	// public static getLocalTpsPath(): string {
-	// 	return TPS.LOCAL_CONFIG_PATH;
-	// }
-
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
 		if (!templateName || !is.string(templateName)) {
 			throw new RequiresTemplateError();
@@ -865,7 +861,6 @@ export class Templates {
 
 	_loadTpsrc(templateName) {
 		if (!this.opts.noGlobalConfig && Templates.hasGloablTps()) {
-			// const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
 			const globalTpsrc = tpsrcConfig.search(TPS.USER_HOME);
 
 			if (globalTpsrc && !globalTpsrc.isEmpty) {
@@ -875,8 +870,6 @@ export class Templates {
 		}
 
 		if (!this.opts.noLocalConfig) {
-			// const localConfig = json(TPS.LOCAL_CONFIG_PATH);
-			// this._loadTpsSpecificConfig(templateName, localConfig);
 			logger.tps.info(
 				'Checking for local tpsrc in and up: %s',
 				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
