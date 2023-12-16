@@ -22,6 +22,7 @@ import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
+import { TemplateOptions } from '@tps/types/templates';
 import {
 	cosmiconfigSync,
 	defaultLoadersSync,
@@ -29,50 +30,9 @@ import {
 } from 'cosmiconfig';
 import * as utils from './utils';
 
-export interface TemplateOptions {
-	/**
-	 * Don't load local `.tps/` config folder
-	 */
-	noLocalConfig: boolean;
-	/**
-	 * Don't load global `.tps/` config folder
-	 */
-	noGlobalConfig: boolean;
-	/**
-	 * Don't load the default folder
-	 */
-	defaultPackage: boolean;
-	/**
-	 * Use all default prompt answers
-	 */
-	default: boolean;
-	/**
-	 * Force creation of template. This will over write files
-	 */
-	force: boolean;
-	/**
-	 * Force creation of template. This will over write files
-	 */
-	newFolder: boolean;
-	/**
-	 * Force creation of template. This will delete the directory if exists.
-	 */
-	wipe: boolean;
-	/**
-	 * Change where templates reads `.tps` folder from
-	 */
-	tpsPath: string | null;
-	/**
-	 * Directory to prepend to each build paths
-	 */
-	extendedDest: string;
-	/**
-	 * Use experimental template engine
-	 */
-	experimentalTemplateEngine: boolean;
-}
+export { TemplateOptions } from '@tps/types/templates';
 
-const DEFAULT_OPTIONS: TemplateOptions = {
+export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
 	noGlobalConfig: false,
 	defaultPackage: true,
@@ -880,7 +840,6 @@ export class Templates {
 
 			if (localTpsrc && !localTpsrc.isEmpty) {
 				logger.tps.info('Loading local tpsrc from: %s', localTpsrc.filepath);
-				console.log(localTpsrc.config);
 				this._loadTpsSpecificConfig(templateName, localTpsrc.config);
 			}
 		}

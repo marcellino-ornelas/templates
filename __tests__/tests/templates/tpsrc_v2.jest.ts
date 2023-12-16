@@ -3,16 +3,13 @@
  */
 import Templates from '@tps/templates';
 import path from 'path';
-import os from 'os';
 import { reset, vol } from '@test/utilities/vol';
 import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
+import { DEFAULT_OPTIONS } from '@tps/templates/templates';
+import { mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
 
 jest.mock('fs');
 jest.mock('fs/promises');
-
-/*
- * Constants
- */
 
 describe('[TPS] Tpsrc', () => {
 	beforeEach(() => {
@@ -24,6 +21,85 @@ describe('[TPS] Tpsrc', () => {
 		jest.restoreAllMocks();
 	});
 
+	it('should work when there is no tpsrc', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+
+		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
+
+		// Janky but it works for now
+		// ensure answers are empty. user will need to answer all questions via prompts
+		// eslint-disable-next-line no-underscore-dangle
+		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
+	});
+
+	it('should user local values over global files', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
+
+		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkGlobalTpsrc({
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './global-path',
+				},
+				answers: {
+					test1: 'global',
+				},
+			},
+		});
+
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './local-path',
+				},
+				answers: {
+					test1: 'local',
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts.extendedDest).toBe('./local-path');
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('local');
+	});
+
+	it('should not load config for another template', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'testing-prompt-core-2': {
+				opts: {
+					extendedDest: './local-path',
+				},
+				answers: {
+					test1: 'local',
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
+
+		// Janky but it works for now
+		// ensure answers are empty. user will need to answer all questions via prompts
+		// eslint-disable-next-line no-underscore-dangle
+		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
+	});
+
 	describe('local', () => {
 		beforeEach(() => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
@@ -32,7 +108,6 @@ describe('[TPS] Tpsrc', () => {
 
 		it('should be able to load tpsrc (opts)', async () => {
 			const tps: Templates = new Templates('testing-tpsrc');
-			// await tps.render(playground.box(), 'App');
 
 			expect(tps.opts.extendedDest).toBe('./new-path');
 		});
@@ -53,19 +128,16 @@ describe('[TPS] Tpsrc', () => {
 			vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 			vol.rmSync(LOCAL_CONFIG_PATH);
 
-			vol.writeFileSync(
-				path.join(CWD, '.tps/.tpsrc'),
-				JSON.stringify({
-					'testing-prompt-core': {
-						opts: {
-							extendedDest: './parent-path',
-						},
-						answers: {
-							test1: 'parent',
-						},
+			mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+				'testing-prompt-core': {
+					opts: {
+						extendedDest: './parent-path',
 					},
-				}),
-			);
+					answers: {
+						test1: 'parent',
+					},
+				},
+			});
 		});
 
 		it('should be able to load parent directory tpsrc (opts)', async () => {
@@ -83,32 +155,18 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	describe('global', () => {
-		const globalTps: string = path.join(os.homedir(), '.tps');
-		const globalTpsrc: string = path.join(os.homedir(), '.tps/.tpsrc');
-
 		beforeEach(() => {
 			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
 
-			vol.mkdirSync(globalTps);
-
-			vol.writeFileSync(
-				globalTpsrc,
-				JSON.stringify({
-					'testing-prompt-core': {
-						opts: {
-							extendedDest: './global-path',
-						},
-						answers: {
-							test1: 'global',
-						},
+			mkGlobalTpsrc({
+				'testing-prompt-core': {
+					opts: {
+						extendedDest: './global-path',
 					},
-				}),
-			);
-		});
-
-		afterEach(() => {
-			vol.rmdirSync(globalTps, {
-				recursive: true,
+					answers: {
+						test1: 'global',
+					},
+				},
 			});
 		});
 
