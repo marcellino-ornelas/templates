@@ -1,3 +1,5 @@
 #!/bin/bash
 
-npx ts-node --compiler ttypescript ./src/cli $@
+DIR="$( dirname "${BASH_SOURCE[0]}" )"
+
+npx ts-node --compiler ttypescript "$DIR/../src/cli" $@
