@@ -16,7 +16,7 @@ export function reset() {
 		...templateFiles,
 	});
 
-	vol.rmSync(path.join(CWD, '.tps/.tpsrc'), { force: true });
+	// vol.rmSync(path.join(CWD, '.tps/.tpsrc'), { force: true });
 }
 
 /**
