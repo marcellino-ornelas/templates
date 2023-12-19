@@ -829,3 +829,5 @@ function SuccessfulBuild() {
 	this.files = [];
 	this.dirs = [];
 }
+
+export { TemplateOptions } from '@tps/types/templates';
