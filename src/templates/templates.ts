@@ -22,51 +22,9 @@ import * as colors from 'ansi-colors';
 import * as Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
+import { TemplateOptions } from '@tps/types/templates';
 import { cosmiconfigSync } from 'cosmiconfig';
 import * as utils from './utils';
-
-export interface TemplateOptions {
-	/**
-	 * Don't load local `.tps/` config folder
-	 */
-	noLocalConfig: boolean;
-	/**
-	 * Don't load global `.tps/` config folder
-	 */
-	noGlobalConfig: boolean;
-	/**
-	 * Don't load the default folder
-	 */
-	defaultPackage: boolean;
-	/**
-	 * Use all default prompt answers
-	 */
-	default: boolean;
-	/**
-	 * Force creation of template. This will over write files
-	 */
-	force: boolean;
-	/**
-	 * Force creation of template. This will over write files
-	 */
-	newFolder: boolean;
-	/**
-	 * Force creation of template. This will delete the directory if exists.
-	 */
-	wipe: boolean;
-	/**
-	 * Change where templates reads `.tps` folder from
-	 */
-	tpsPath: string | null;
-	/**
-	 * Directory to prepend to each build paths
-	 */
-	extendedDest: string;
-	/**
-	 * Use experimental template engine
-	 */
-	experimentalTemplateEngine: boolean;
-}
 
 const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
