@@ -4,6 +4,7 @@
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -14,10 +15,9 @@ const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Utils:', () => {
 	let tps;
-	beforeAll(() => playground.create());
-	afterAll(() => playground.destroy());
-
 	beforeEach(() => {
+		reset();
+
 		tps = new Templates('testing-utils');
 
 		return playground.createBox('render_utils');
