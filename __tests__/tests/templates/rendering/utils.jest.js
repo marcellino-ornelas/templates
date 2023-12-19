@@ -15,9 +15,6 @@ const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Utils:', () => {
 	let tps;
-	beforeAll(() => playground.create());
-	afterAll(() => playground.destroy());
-
 	beforeEach(() => {
 		reset();
 

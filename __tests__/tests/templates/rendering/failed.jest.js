@@ -18,8 +18,6 @@ const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Rendered Failed Cases:', () => {
 	let tps;
-	beforeAll(() => playground.create());
-	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
 		reset();
