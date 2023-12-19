@@ -30,7 +30,7 @@ import {
 } from 'cosmiconfig';
 import * as utils from './utils';
 
-const DEFAULT_OPTIONS: TemplateOptions = {
+export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
 	noGlobalConfig: false,
 	defaultPackage: true,
