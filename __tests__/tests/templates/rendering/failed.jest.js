@@ -7,6 +7,7 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import { writeFile } from '@test/utilities/helpers';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -21,6 +22,8 @@ describe('[TPS] Rendered Failed Cases:', () => {
 	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
+		reset();
+
 		tps = new Templates('testing');
 
 		return playground.createBox('render_failed');
