@@ -30,9 +30,7 @@ import {
 } from 'cosmiconfig';
 import * as utils from './utils';
 
-export { TemplateOptions } from '@tps/types/templates';
-
-export const DEFAULT_OPTIONS: TemplateOptions = {
+const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
 	noGlobalConfig: false,
 	defaultPackage: true,
@@ -868,3 +866,5 @@ function SuccessfulBuild() {
 	this.files = [];
 	this.dirs = [];
 }
+
+export { TemplateOptions } from '@tps/types/templates';
