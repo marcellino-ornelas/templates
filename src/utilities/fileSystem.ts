@@ -9,7 +9,6 @@ export function isDir(path: string): boolean {
 	try {
 		dir = fs.lstatSync(path);
 	} catch (e) {
-		console.log(e);
 		return false;
 	}
 	return dir.isDirectory();
