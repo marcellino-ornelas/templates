@@ -2,6 +2,7 @@
  * Modules
  */
 import * as path from 'path';
+// import { hasProp } from '@tps/utilities/helpers';
 import { vol } from '@test/utilities/vol';
 import * as crypto from 'crypto';
 
@@ -44,11 +45,11 @@ class Playground {
 	}
 
 	create() {
-		return vol.mkdirSync(this.path, { recursive: true });
+		return vol.promises.mkdir(this.path, { recursive: true });
 	}
 
 	destroy() {
-		return vol.rmdirSync(this.path, { force: true, recursive: true });
+		return vol.promises.rm(this.path, { force: true, recursive: true });
 	}
 
 	createBox(name) {
