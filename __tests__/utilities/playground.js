@@ -44,11 +44,11 @@ class Playground {
 	}
 
 	create() {
-		return vol.promises.mkdir(this.path, { recursive: true });
+		return vol.mkdirSync(this.path, { recursive: true });
 	}
 
 	destroy() {
-		return vol.promises.rm(this.path, { force: true, recursive: true });
+		return vol.rmdirSync(this.path, { force: true, recursive: true });
 	}
 
 	createBox(name) {

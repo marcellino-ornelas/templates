@@ -104,19 +104,30 @@ describe('[TPS] Tpsrc', () => {
 		beforeEach(() => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+
+			mkTpsrc(LOCAL_CONFIG_PATH, {
+				'testing-prompt-core': {
+					opts: {
+						extendedDest: './local-path',
+					},
+					answers: {
+						test1: 'local',
+					},
+				},
+			});
 		});
 
 		it('should be able to load tpsrc (opts)', async () => {
-			const tps: Templates = new Templates('testing-tpsrc');
+			const tps: Templates = new Templates('testing-prompt-core');
 
-			expect(tps.opts.extendedDest).toBe('./new-path');
+			expect(tps.opts.extendedDest).toBe('./local-path');
 		});
 
 		it('should be able to load tpsrc (answers)', async () => {
-			const tps: Templates = new Templates('testing-tpsrc');
+			const tps: Templates = new Templates('testing-prompt-core');
 
 			// eslint-disable-next-line no-underscore-dangle
-			expect(tps._prompts.answers.test).toBe('oh-yea');
+			expect(tps._prompts.answers.test1).toBe('local');
 		});
 	});
 

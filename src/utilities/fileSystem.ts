@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import * as findFileUp from 'find-up';
 
 /**
@@ -9,6 +9,7 @@ export function isDir(path: string): boolean {
 	try {
 		dir = fs.lstatSync(path);
 	} catch (e) {
+		console.log(e);
 		return false;
 	}
 	return dir.isDirectory();

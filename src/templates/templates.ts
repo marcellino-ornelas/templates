@@ -6,7 +6,7 @@ import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
-import { isDir, json, isFile } from '@tps/utilities/fileSystem';
+import { isDir, isFile } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
@@ -318,6 +318,8 @@ export class Templates {
 				if (!isDir(finalDest)) {
 					logger.tps.error('final destination was not a directory %n', {
 						finalDest,
+						dir: fs.readdirSync(finalDest),
+						parentDir: fs.readdirSync(path.dirname(finalDest)),
 					});
 					throw new DirectoryNotFoundError(finalDest);
 				}
