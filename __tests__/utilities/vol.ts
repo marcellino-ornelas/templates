@@ -5,8 +5,19 @@ import templateFiles from '@test/templates.json';
 
 export const vol = new Volume();
 
-vol.fromJSON({
-	[`${process.cwd()}/readme.md`]: '',
-	[`${process.cwd()}/__tests__/readme.md`]: '',
-	...templateFiles,
-});
+export function reset() {
+	vol.reset();
+
+	vol.fromJSON({
+		[`${process.cwd()}/readme.md`]: '',
+		[`${process.cwd()}/__tests__/readme.md`]: '',
+		...templateFiles,
+	});
+
+	// vol.rmSync(path.join(CWD, '.tps/.tpsrc'), { force: true });
+}
+
+/**
+ * Initialize file system
+ */
+reset();
