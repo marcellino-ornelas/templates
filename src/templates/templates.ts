@@ -316,8 +316,6 @@ export class Templates {
 				if (!isDir(finalDest)) {
 					logger.tps.error('final destination was not a directory %n', {
 						finalDest,
-						dir: fs.readdirSync(finalDest),
-						parentDir: fs.readdirSync(path.dirname(finalDest)),
 					});
 					throw new DirectoryNotFoundError(finalDest);
 				}
