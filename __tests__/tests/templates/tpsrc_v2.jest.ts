@@ -121,29 +121,6 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('yaml');
 	});
 
-	it('should be able to load a yaml file', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-
-		vol.rmSync(LOCAL_CONFIG_PATH);
-
-		mkFile(
-			LOCAL_CONFIG_PATH,
-			`\
-testing-prompt-core:
-    opts:
-        extendedDest: ./yaml-path
-    answers:
-        test1: yaml
-`,
-		);
-
-		const tps: Templates = new Templates('testing-prompt-core');
-
-		expect(tps.opts.extendedDest).toBe('./yaml-path');
-		// eslint-disable-next-line no-underscore-dangle
-		expect(tps._prompts.answers.test1).toBe('yaml');
-	});
-
 	describe('local', () => {
 		beforeEach(() => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
