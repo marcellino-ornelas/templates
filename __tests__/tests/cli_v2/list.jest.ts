@@ -1,4 +1,3 @@
-// import fs from 'fs';
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';
 import list from '@tps/cli/commands/list';
@@ -9,8 +8,6 @@ import { CWD } from '@tps/utilities/constants';
 import path from 'path';
 
 jest.mock('fs');
-
-// const vol = createFs();
 
 describe('Command Line: list', () => {
 	let log;
