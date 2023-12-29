@@ -18,11 +18,8 @@ const playground = new Playground(TESTING_DIR);
 describe('yargs-cli-cmd', () => {
 	let tps: Templates;
 
-	// beforeAll(() => playground.create());
-	// afterAll(() => playground.destroy());
-
 	beforeEach(() => {
-		// reset();
+		reset();
 
 		tps = new Templates('yargs-cli-cmd', {
 			tpsPath: path.join(__dirname, '../../../.tps'),
@@ -30,10 +27,6 @@ describe('yargs-cli-cmd', () => {
 		});
 
 		return playground.createBox('yargs-cli-cmd');
-	});
-
-	afterEach(() => {
-		reset();
 	});
 
 	it('should be able to render a new instance', async () => {
