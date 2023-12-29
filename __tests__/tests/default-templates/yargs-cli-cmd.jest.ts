@@ -5,7 +5,6 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@tps/templates';
 import path from 'path';
-import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -17,9 +16,10 @@ const playground = new Playground(TESTING_DIR);
 describe('yargs-cli-cmd', () => {
 	let tps: Templates;
 
-	beforeEach(() => {
-		reset();
+	beforeAll(() => playground.create());
+	afterAll(() => playground.destroy());
 
+	beforeEach(() => {
 		tps = new Templates('yargs-cli-cmd', {
 			tpsPath: path.join(__dirname, '../../../.tps'),
 			default: true,
