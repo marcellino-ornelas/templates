@@ -25,7 +25,7 @@ describe('[TPS] Tpsrc', () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+		// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		const tps: Templates = new Templates('testing-prompt-core');
@@ -42,7 +42,7 @@ describe('[TPS] Tpsrc', () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
 
-		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+		// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkGlobalTpsrc({
@@ -136,7 +136,7 @@ describe('[TPS] Tpsrc', () => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-			vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+			// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 			vol.rmSync(LOCAL_CONFIG_PATH);
 
 			mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {

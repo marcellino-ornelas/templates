@@ -5,8 +5,10 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@tps/templates';
 import path from 'path';
+import { reset, vol } from '@test/utilities/vol';
 
 jest.mock('fs');
+jest.mock('fs/promises');
 
 /*
  * Constants
@@ -16,16 +18,22 @@ const playground = new Playground(TESTING_DIR);
 describe('yargs-cli-cmd', () => {
 	let tps: Templates;
 
-	beforeAll(() => playground.create());
-	afterAll(() => playground.destroy());
+	// beforeAll(() => playground.create());
+	// afterAll(() => playground.destroy());
 
 	beforeEach(() => {
+		// reset();
+
 		tps = new Templates('yargs-cli-cmd', {
 			tpsPath: path.join(__dirname, '../../../.tps'),
 			default: true,
 		});
 
 		return playground.createBox('yargs-cli-cmd');
+	});
+
+	afterEach(() => {
+		reset();
 	});
 
 	it('should be able to render a new instance', async () => {
