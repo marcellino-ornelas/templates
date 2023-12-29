@@ -1,6 +1,6 @@
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';
-import list from '@tps/cli/commands/list';
+import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
 import { mkTemplate, init, globalInit } from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { mockConsoleLog } from '@test/utilities/mocks';
@@ -84,9 +84,23 @@ describe('Command Line: list', () => {
 		await parser.parseAsync(['list']);
 
 		expect(log.get()).toContain('react-component');
+	});
 
-		// should ignore specific template directories
-		expect(log.get()).not.toContain('init');
+	it('should not contain banned default templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
+
+		const logs = log.get();
+
+		BANNED_TEMPLATES.forEach((template) => {
+			expect(logs).not.toContain(template);
+		});
+
+		// // should ignore specific template directories
 	});
 
 	it('should ignore default templates if option provided', async () => {
