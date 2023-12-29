@@ -63,64 +63,6 @@ describe('[TPS] Tpsrc', () => {
 		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
 	});
 
-	it('should user local values over global files', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
-
-		vol.rmSync(LOCAL_CONFIG_PATH);
-
-		mkGlobalTpsrc({
-			'testing-prompt-core': {
-				opts: {
-					extendedDest: './global-path',
-				},
-				answers: {
-					test1: 'global',
-				},
-			},
-		});
-
-		mkTpsrc(LOCAL_CONFIG_PATH, {
-			'testing-prompt-core': {
-				opts: {
-					extendedDest: './local-path',
-				},
-				answers: {
-					test1: 'local',
-				},
-			},
-		});
-
-		const tps: Templates = new Templates('testing-prompt-core');
-
-		expect(tps.opts.extendedDest).toBe('./local-path');
-		// eslint-disable-next-line no-underscore-dangle
-		expect(tps._prompts.answers.test1).toBe('local');
-	});
-
-	it('should be able to load a yaml file', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-
-		vol.rmSync(LOCAL_CONFIG_PATH);
-
-		mkFile(
-			LOCAL_CONFIG_PATH,
-			`\
-testing-prompt-core:
-    opts:
-        extendedDest: ./yaml-path
-    answers:
-        test1: yaml
-`,
-		);
-
-		const tps: Templates = new Templates('testing-prompt-core');
-
-		expect(tps.opts.extendedDest).toBe('./yaml-path');
-		// eslint-disable-next-line no-underscore-dangle
-		expect(tps._prompts.answers.test1).toBe('yaml');
-	});
-
 	it('should load a local tpsrc file', () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
@@ -189,4 +131,113 @@ testing-prompt-core:
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.test1).toBe('global');
 	});
+
+	it('should user local values over global files', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
+
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkGlobalTpsrc({
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './global-path',
+				},
+				answers: {
+					test1: 'global',
+				},
+			},
+		});
+
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './local-path',
+				},
+				answers: {
+					test1: 'local',
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts.extendedDest).toBe('./local-path');
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('local');
+	});
+
+	it('should be able to load a yaml file', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkFile(
+			LOCAL_CONFIG_PATH,
+			`\
+testing-prompt-core:
+    opts:
+        extendedDest: ./yaml-path
+    answers:
+        test1: yaml
+`,
+		);
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts.extendedDest).toBe('./yaml-path');
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('yaml');
+	});
+
+	it('should load a local tpsrc file not in a tps folder', () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+
+		// TODO: should not be in the tests folder
+		const localTpsrc = path.join(process.cwd(), '__tests__', '.tpsrc');
+
+		mkTpsrc(localTpsrc, {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './local-not-in-tps-path',
+				},
+				answers: {
+					test1: 'local-not-in-tps',
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts.extendedDest).toBe('./local-not-in-tps-path');
+
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
+	});
+
+	// it('should be able to override a tpsrc file location', () => {
+	// 	jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+	// 	jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+
+	// 	const randomDir = path.join(process.cwd(), './random/.tps/tpsrc');
+
+	// 	mkTpsrc(LOCAL_CONFIG_PATH, {
+	// 		'testing-prompt-core': {
+	// 			opts: {
+	// 				extendedDest: './local-path',
+	// 			},
+	// 			answers: {
+	// 				test1: 'local',
+	// 			},
+	// 		},
+	// 	});
+
+	// 	const tps: Templates = new Templates('testing-prompt-core');
+
+	// 	expect(tps.opts.extendedDest).toBe('./local-path');
+
+	// 	// eslint-disable-next-line no-underscore-dangle
+	// 	expect(tps._prompts.answers.test1).toBe('local');
+	// });
 });
