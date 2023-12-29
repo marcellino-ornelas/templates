@@ -5,7 +5,7 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@tps/templates';
 import path from 'path';
-import { reset, vol } from '@test/utilities/vol';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 jest.mock('fs/promises');
