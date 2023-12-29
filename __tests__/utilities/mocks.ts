@@ -1,4 +1,4 @@
-interface MockedConsole {
+export interface MockedConsole {
 	original: typeof console.log;
 	log: jest.SpyInstance;
 	get: () => string;
