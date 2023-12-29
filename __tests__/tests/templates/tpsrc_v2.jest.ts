@@ -6,7 +6,7 @@ import path from 'path';
 import { reset, vol } from '@test/utilities/vol';
 import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 import { DEFAULT_OPTIONS } from '@tps/templates/templates';
-import { mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
+import { mkFile, mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
 
 jest.mock('fs');
 jest.mock('fs/promises');
@@ -25,7 +25,6 @@ describe('[TPS] Tpsrc', () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-		// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		const tps: Templates = new Templates('testing-prompt-core');
@@ -42,7 +41,6 @@ describe('[TPS] Tpsrc', () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
 
-		// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkGlobalTpsrc({
@@ -100,6 +98,32 @@ describe('[TPS] Tpsrc', () => {
 		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
 	});
 
+	it('should not load config for another template', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkFile(
+			LOCAL_CONFIG_PATH,
+			`\
+testing-prompt-core:
+	opts:
+		extendedDest: ./yaml-path
+	answers:
+		test1: yaml
+`,
+		);
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
+
+		// Janky but it works for now
+		// ensure answers are empty. user will need to answer all questions via prompts
+		// eslint-disable-next-line no-underscore-dangle
+		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
+	});
+
 	describe('local', () => {
 		beforeEach(() => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
@@ -136,7 +160,6 @@ describe('[TPS] Tpsrc', () => {
 			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-			// vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 			vol.rmSync(LOCAL_CONFIG_PATH);
 
 			mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
