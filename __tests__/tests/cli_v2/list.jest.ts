@@ -1,7 +1,7 @@
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';
 import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
-import { mkTemplate, init, globalInit } from '@test/utilities/templates';
+import { mkTemplate, globalInit } from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { mockConsoleLog } from '@test/utilities/mocks';
 import { CWD } from '@tps/utilities/constants';
@@ -34,7 +34,7 @@ describe('Command Line: list', () => {
 		expect(log.get()).toContain('testing');
 	});
 
-	it('should ignore global templates if option provided', async () => {
+	it('should ignore local templates if option provided', async () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
 		const parser = yargs().command(list);
