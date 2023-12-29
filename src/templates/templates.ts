@@ -46,6 +46,7 @@ if (TPS.IS_TESTING) {
 FileSystemNode.ignoreFiles = '**/.gitkeep';
 
 const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
+	cache: !TPS.IS_TESTING,
 	searchPlaces: [
 		`${TPS.TEMPLATE_SETTINGS_FILE}.json`,
 		`${TPS.TEMPLATE_SETTINGS_FILE}.js`,
