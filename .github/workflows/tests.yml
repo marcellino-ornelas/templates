@@ -45,7 +45,7 @@ jobs:
         run: |
           npm run code:build
           ./.bin/ts ./.bin/generate-test-templates
-          LEGACY=1 NODE_ENV=dev npx jest cli --testPathIgnorePatterns "__tests__/tests/default-templates" "__tests__/tests/cli/init"
+          LEGACY=1 NODE_ENV=dev npx jest cli --testPathIgnorePatterns "__tests__/tests/default-templates" "__tests__/tests/cli/init" "__tests__/tests/cli_v2"
 
   lint:
     runs-on: ubuntu-latest
