@@ -39,8 +39,17 @@ describe('Command Line: list', () => {
 
 		const parser = yargs().command(list);
 
-		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list', '--no-local']);
+
+		expect(log.get()).not.toContain('testing');
+	});
+
+	it('should ignore local templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
+
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list']);
 
 		expect(log.get()).not.toContain('testing');
 	});
@@ -71,6 +80,20 @@ describe('Command Line: list', () => {
 
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list', '--no-global']);
+
+		expect(log.get()).not.toContain('testing-global');
+	});
+
+	it('should ignore global templates if no global templates', async () => {
+		// TODO: should be able to remove once this reads from filesystem
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+
+		globalInit();
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
 
 		expect(log.get()).not.toContain('testing-global');
 	});
