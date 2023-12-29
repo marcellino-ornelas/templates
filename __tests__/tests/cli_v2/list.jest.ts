@@ -24,16 +24,25 @@ describe('Command Line: list', () => {
 		jest.restoreAllMocks();
 	});
 
-	it('should be able to list out all templates', async () => {
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-
-		await init();
+	it('should be able to list out all local templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
 		const parser = yargs().command(list);
 
 		await parser.parseAsync('list');
 
 		expect(log.get()).toContain('testing');
+	});
+
+	it('should ignore global templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-local']);
+
+		expect(log.get()).not.toContain('testing');
 	});
 
 	it('should be able to list out global templates', async () => {
@@ -51,18 +60,23 @@ describe('Command Line: list', () => {
 		expect(log.get()).toContain('testing-global');
 	});
 
-	it('should be able to list out default templates', async () => {
-		/**
-		 * Currently its impossible to test default packages because its
-		 * the same folder as your local packages. This happens because these
-		 * test are ran in the templates main folder
-		 *
-		 * To test default packages we turn off local packages so even tho its
-		 * the same folder as local we wont local packages
-		 */
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+	it('should ignore global templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
 
-		await init();
+		globalInit();
+
+		mkTemplate('testing-global', undefined, true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-global']);
+
+		expect(log.get()).not.toContain('testing-global');
+	});
+
+	it('should be able to list out default templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
 		const parser = yargs().command(list);
 
@@ -71,6 +85,18 @@ describe('Command Line: list', () => {
 
 		expect(log.get()).toContain('react-component');
 
+		// should ignore specific template directories
 		expect(log.get()).not.toContain('init');
+	});
+
+	it('should ignore default templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-default']);
+
+		expect(log.get()).not.toContain('react-component');
 	});
 });
