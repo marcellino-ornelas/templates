@@ -8,7 +8,6 @@ import path from 'path';
 import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
-jest.mock('fs/promises');
 
 /*
  * Constants
