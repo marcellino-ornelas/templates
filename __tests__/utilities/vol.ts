@@ -1,10 +1,9 @@
-import { vol as _vol, fs as _fs } from 'memfs';
+import { vol } from 'memfs';
 // eslint-disable-next-line import/no-unresolved -- Generated file
 import templateFiles from '@test/templates.json';
 import path from 'path';
 
-export const vol = _vol;
-export const fs = _fs;
+export { vol, fs } from 'memfs';
 
 export function reset() {
 	vol.reset();
