@@ -8,6 +8,8 @@ export const mkTpsrc = (
 	pathToTpsrc: string,
 	tpsrc: RecursivePartial<Tpsrc>,
 ) => {
+	vol.mkdirSync(path.dirname(pathToTpsrc), { recursive: true });
+
 	vol.writeFileSync(pathToTpsrc, JSON.stringify(tpsrc));
 };
 
@@ -19,3 +21,9 @@ export const mkGlobalTpsrc = (tpsrc: RecursivePartial<Tpsrc>) => {
 
 	vol.writeFileSync(GLOBAL_TPSRC, JSON.stringify(tpsrc));
 };
+
+// export const mkFile = (file: string, data: string) => {
+// 	vol.mkdirSync(path.dirname(file), { recursive: true });
+
+// 	vol.writeFileSync(file, data);
+// };
