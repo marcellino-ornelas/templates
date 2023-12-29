@@ -9,7 +9,6 @@ import { DEFAULT_OPTIONS } from '@tps/templates/templates';
 import { mkFile, mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
 
 jest.mock('fs');
-jest.mock('fs/promises');
 
 describe('[TPS] Tpsrc', () => {
 	beforeEach(() => {
