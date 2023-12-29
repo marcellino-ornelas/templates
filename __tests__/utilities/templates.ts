@@ -7,23 +7,19 @@ import os from 'os';
 export const mkTpsrc = (
 	pathToTpsrc: string,
 	tpsrc: RecursivePartial<Tpsrc>,
-) => {
-	vol.mkdirSync(path.dirname(pathToTpsrc), { recursive: true });
-
-	vol.writeFileSync(pathToTpsrc, JSON.stringify(tpsrc));
+): void => {
+	mkFile(pathToTpsrc, JSON.stringify(tpsrc));
 };
 
 const GLOBAL_TPS: string = path.join(os.homedir(), '.tps');
 const GLOBAL_TPSRC: string = path.join(GLOBAL_TPS, '.tpsrc');
 
-export const mkGlobalTpsrc = (tpsrc: RecursivePartial<Tpsrc>) => {
-	vol.mkdirSync(GLOBAL_TPS, { recursive: true });
-
-	vol.writeFileSync(GLOBAL_TPSRC, JSON.stringify(tpsrc));
+export const mkGlobalTpsrc = (tpsrc: RecursivePartial<Tpsrc>): void => {
+	mkFile(GLOBAL_TPSRC, JSON.stringify(tpsrc));
 };
 
-// export const mkFile = (file: string, data: string) => {
-// 	vol.mkdirSync(path.dirname(file), { recursive: true });
+export const mkFile = (file: string, data: string): void => {
+	vol.mkdirSync(path.dirname(file), { recursive: true });
 
-// 	vol.writeFileSync(file, data);
-// };
+	vol.writeFileSync(file, data);
+};
