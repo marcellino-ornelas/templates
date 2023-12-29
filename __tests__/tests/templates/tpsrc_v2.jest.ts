@@ -21,8 +21,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should not load config for another template', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkTpsrc(LOCAL_CONFIG_PATH, {
@@ -47,9 +45,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should work when there is no tpsrc', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		const tps: Templates = new Templates('testing-prompt-core');
@@ -62,10 +57,15 @@ describe('[TPS] Tpsrc', () => {
 		expect(JSON.stringify(tps._prompts.answers)).toBe('{}');
 	});
 
-	it('should load a local tpsrc file', () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+	it('should not throw error when there is no tpsrc', async () => {
+		vol.rmSync(LOCAL_CONFIG_PATH);
 
+		expect(() => {
+			return new Templates('testing-prompt-core');
+		}).not.toThrowError();
+	});
+
+	it('should load a local tpsrc file', () => {
 		mkTpsrc(LOCAL_CONFIG_PATH, {
 			'testing-prompt-core': {
 				opts: {
@@ -86,9 +86,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should load a parent tpsrc file', () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
@@ -110,8 +107,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should load a parent tpsrc file', () => {
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
-
 		mkGlobalTpsrc({
 			'testing-prompt-core': {
 				opts: {
@@ -132,9 +127,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should user local values over global files', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
-
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkGlobalTpsrc({
@@ -167,8 +159,6 @@ describe('[TPS] Tpsrc', () => {
 	});
 
 	it('should be able to load a yaml file', async () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkFile(
@@ -190,9 +180,6 @@ testing-prompt-core:
 	});
 
 	it('should load a local tpsrc file not in a tps folder', () => {
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-
 		// TODO: should not be in the tests folder
 		const localTpsrc = path.join(CWD, '.tpsrc');
 
@@ -216,8 +203,6 @@ testing-prompt-core:
 	});
 
 	// it('should be able to override a tpsrc file location', () => {
-	// 	jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-	// 	jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
 	// 	const randomDir = path.join(process.cwd(), './random/.tps/tpsrc');
 

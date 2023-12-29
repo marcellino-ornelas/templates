@@ -24,6 +24,7 @@ import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
 import {
+	CosmiconfigResult,
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
@@ -85,12 +86,22 @@ export class Templates {
 
 	public _prompts: Prompter;
 
+	public static getGlobalTpsrc(): CosmiconfigResult {
+		return tpsrcConfig.search(TPS.USER_HOME);
+	}
+
 	public static hasGloablTps(): boolean {
-		return TPS.HAS_GLOBAL;
+		const global = this.getGlobalTpsrc();
+		return global && !global.isEmpty;
+	}
+
+	public static getLocalTpsrc(): CosmiconfigResult {
+		return tpsrcConfig.search(TPS.CWD);
 	}
 
 	public static hasLocalTps(): boolean {
-		return TPS.HAS_LOCAL;
+		const local = this.getLocalTpsrc();
+		return local && !local.isEmpty;
 	}
 
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
@@ -192,6 +203,32 @@ export class Templates {
 		if (shouldLoadDefault) {
 			this.loadPackage('default');
 		}
+	}
+
+	public getGlobalTpsrc(): CosmiconfigResult {
+		return Templates.getGlobalTpsrc();
+	}
+
+	public hasGloablTps(): boolean {
+		return Templates.hasGloablTps();
+	}
+
+	public getLocalTpsrc(): CosmiconfigResult {
+		if (!this.opts.tpsPath) {
+			return Templates.getLocalTpsrc();
+		}
+
+		return tpsrcConfig.search(TPS.CWD);
+	}
+
+	public hasLocalTps(): boolean {
+		if (!this.opts.tpsPath) {
+			return Templates.hasLocalTps();
+		}
+
+		const local = this.getLocalTpsrc();
+
+		return local && !local.isEmpty;
 	}
 
 	/**
@@ -816,12 +853,12 @@ export class Templates {
 	/**
 	 * Configurations
 	 */
-
 	_loadTpsrc(templateName) {
-		if (!this.opts.noGlobalConfig && Templates.hasGloablTps()) {
-			const globalTpsrc = tpsrcConfig.search(TPS.USER_HOME);
+		if (!this.opts.noGlobalConfig) {
+			logger.tps.info('Checking for global tpsrc in and up: %s', TPS.USER_HOME);
+			if (this.hasGloablTps()) {
+				const globalTpsrc = this.getGlobalTpsrc();
 
-			if (globalTpsrc && !globalTpsrc.isEmpty) {
 				logger.tps.info('Loading global tpsrc from: %s', globalTpsrc.filepath);
 				this._loadTpsSpecificConfig(templateName, globalTpsrc.config);
 			}
@@ -832,13 +869,19 @@ export class Templates {
 				'Checking for local tpsrc in and up: %s',
 				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
 			);
-			const localTpsrc = tpsrcConfig.search(
-				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
-			);
+			// const localTpsrc = tpsrcConfig.search(
+			// 	path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
+			// );
 
-			if (localTpsrc && !localTpsrc.isEmpty) {
-				logger.tps.info('Loading local tpsrc from: %s', localTpsrc.filepath);
-				this._loadTpsSpecificConfig(templateName, localTpsrc.config);
+			// if (localTpsrc && !localTpsrc.isEmpty) {
+			// 	logger.tps.info('Loading local tpsrc from: %s', localTpsrc.filepath);
+			// 	this._loadTpsSpecificConfig(templateName, localTpsrc.config);
+			// }
+
+			if (this.hasLocalTps()) {
+				const local = this.getLocalTpsrc();
+				logger.tps.info('Loading local tpsrc from: %s', local.filepath);
+				this._loadTpsSpecificConfig(templateName, local.config);
 			}
 		}
 	}
