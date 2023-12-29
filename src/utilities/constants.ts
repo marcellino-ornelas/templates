@@ -7,12 +7,12 @@ import { isDir, findUp } from './fileSystem';
  */
 export const IS_TESTING: boolean = process.env.NODE_ENV === 'test';
 export const USER_HOME: string = os.homedir();
-const currentDirectory: string = process.cwd();
+export const ORIGINAL_CWD = process.cwd();
 
 // TODO: well no longer need to do this when cli tests are changed to not use child process
 export const CWD: string = IS_TESTING
-	? path.join(currentDirectory, '__tests__')
-	: currentDirectory;
+	? path.join(ORIGINAL_CWD, '__tests__')
+	: ORIGINAL_CWD;
 export const MAIN_DIR: string = path.resolve(__dirname, '../../');
 
 /***************************
@@ -39,7 +39,6 @@ export const HAS_GLOBAL: boolean = isDir(GLOBAL_PATH);
 /**
  * local
  */
-
 const tpsLocal: string = findUp(TPS_FOLDER, CWD);
 export const HAS_LOCAL: boolean = tpsLocal && tpsLocal !== GLOBAL_PATH;
 

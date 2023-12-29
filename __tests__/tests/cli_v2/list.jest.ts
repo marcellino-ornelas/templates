@@ -1,35 +1,31 @@
-import fs from 'fs';
 import yargs from 'yargs/yargs';
 import Templates from '@tps/templates';
-import list from '@tps/cli/commands/list';
-import {
-	createFs,
-	reset,
-	init,
-	mkTemplate,
-	loadDefaultTemplates,
-} from '@test/utilities/cli_v2';
+import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
+import { mkTemplate, globalInit } from '@test/utilities/templates';
+import { reset, vol } from '@test/utilities/vol';
 import { mockConsoleLog } from '@test/utilities/mocks';
+import { CWD } from '@tps/utilities/constants';
+import path from 'path';
 
-const vol = createFs();
+jest.mock('fs');
 
 describe('Command Line: list', () => {
 	let log;
 
 	beforeEach(() => {
 		log = mockConsoleLog();
-		reset(vol);
+		reset();
+
+		// TODO: remove when we remove legacy tpsrc test
+		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 	});
 
 	afterEach(() => {
 		jest.restoreAllMocks();
 	});
 
-	it('should be able to list out all templates', async () => {
-		jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
-
-		await init(vol);
+	it('should be able to list out all local templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
 		const parser = yargs().command(list);
 
@@ -38,42 +34,72 @@ describe('Command Line: list', () => {
 		expect(log.get()).toContain('testing');
 	});
 
-	it('should be able to list out global templates', async () => {
-		jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
-		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
-		// ignore local folder, no need to do extra work
+	it('should ignore local templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list', '--no-local']);
+
+		expect(log.get()).not.toContain('testing');
+	});
+
+	it('should ignore local templates if option provided', async () => {
 		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
 
-		await init(vol, true);
+		const parser = yargs().command(list);
 
-		mkTemplate(vol, 'testing-global', undefined, true);
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).not.toContain('testing');
+	});
+
+	it('should be able to list out global templates', async () => {
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
+
+		globalInit();
+
+		mkTemplate('testing-global', undefined, true);
 
 		const parser = yargs().command(list);
 
 		// ignore default folder, no need to do extra work
-		await parser.parseAsync(['list', '--no-default']);
+		await parser.parseAsync(['list']);
 
 		expect(log.get()).toContain('testing-global');
 	});
 
-	it('should be able to list out default templates', async () => {
-		jest.spyOn(fs, 'readdirSync').mockImplementation(vol.readdirSync.bind(vol));
-		// ignore global folder, no need to do extra work
+	it('should ignore global templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
+
+		globalInit();
+
+		mkTemplate('testing-global', undefined, true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-global']);
+
+		expect(log.get()).not.toContain('testing-global');
+	});
+
+	it('should ignore global templates if no global templates', async () => {
+		// TODO: should be able to remove once this reads from filesystem
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-		/**
-		 * Currently its impossible to test default packages because its
-		 * the same folder as your local packages. This happens because these
-		 * test are ran in the templates main folder
-		 *
-		 * To test default packages we turn off local packages so even tho its
-		 * the same folder as local we wont local packages
-		 */
-		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(false);
+		globalInit();
 
-		await init(vol);
+		const parser = yargs().command(list);
 
-		loadDefaultTemplates(vol);
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).not.toContain('testing-global');
+	});
+
+	it('should be able to list out default templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
 
 		const parser = yargs().command(list);
 
@@ -81,7 +107,33 @@ describe('Command Line: list', () => {
 		await parser.parseAsync(['list']);
 
 		expect(log.get()).toContain('react-component');
+	});
 
-		expect(log.get()).not.toContain('init');
+	it('should not contain banned default templates', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
+
+		const logs = log.get();
+
+		BANNED_TEMPLATES.forEach((template) => {
+			expect(logs).not.toContain(template);
+		});
+
+		// // should ignore specific template directories
+	});
+
+	it('should ignore default templates if option provided', async () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-default']);
+
+		expect(log.get()).not.toContain('react-component');
 	});
 });
