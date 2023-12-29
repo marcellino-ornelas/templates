@@ -121,97 +121,72 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('yaml');
 	});
 
-	describe('local', () => {
-		beforeEach(() => {
-			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+	it('should load a local tpsrc file', () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-			mkTpsrc(LOCAL_CONFIG_PATH, {
-				'testing-prompt-core': {
-					opts: {
-						extendedDest: './local-path',
-					},
-					answers: {
-						test1: 'local',
-					},
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './local-path',
 				},
-			});
+				answers: {
+					test1: 'local',
+				},
+			},
 		});
 
-		it('should be able to load tpsrc (opts)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = new Templates('testing-prompt-core');
 
-			expect(tps.opts.extendedDest).toBe('./local-path');
-		});
+		expect(tps.opts.extendedDest).toBe('./local-path');
 
-		it('should be able to load tpsrc (answers)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
-
-			// eslint-disable-next-line no-underscore-dangle
-			expect(tps._prompts.answers.test1).toBe('local');
-		});
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
-	describe('parent', () => {
-		beforeEach(() => {
-			jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
-			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
+	it('should load a parent tpsrc file', () => {
+		jest.spyOn(Templates, 'hasLocalTps').mockReturnValue(true);
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
-			vol.rmSync(LOCAL_CONFIG_PATH);
+		vol.rmSync(LOCAL_CONFIG_PATH);
 
-			mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
-				'testing-prompt-core': {
-					opts: {
-						extendedDest: './parent-path',
-					},
-					answers: {
-						test1: 'parent',
-					},
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './parent-path',
 				},
-			});
+				answers: {
+					test1: 'parent',
+				},
+			},
 		});
 
-		it('should be able to load parent directory tpsrc (opts)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = new Templates('testing-prompt-core');
 
-			expect(tps.opts.extendedDest).toBe('./parent-path');
-		});
-
-		it('should be able to load parent directory tpsrc (answers)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
-
-			// eslint-disable-next-line no-underscore-dangle
-			expect(tps._prompts.answers.test1).toBe('parent');
-		});
+		expect(tps.opts.extendedDest).toBe('./parent-path');
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('parent');
 	});
 
-	describe('global', () => {
-		beforeEach(() => {
-			jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
+	it('should load a parent tpsrc file', () => {
+		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(true);
 
-			mkGlobalTpsrc({
-				'testing-prompt-core': {
-					opts: {
-						extendedDest: './global-path',
-					},
-					answers: {
-						test1: 'global',
-					},
+		mkGlobalTpsrc({
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './global-path',
 				},
-			});
+				answers: {
+					test1: 'global',
+				},
+			},
 		});
 
-		it('should be able to load global tpsrc (opts)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = new Templates('testing-prompt-core');
 
-			expect(tps.opts.extendedDest).toBe('./global-path');
-		});
+		expect(tps.opts.extendedDest).toBe('./global-path');
 
-		it('should be able to load global tpsrc (answers)', async () => {
-			const tps: Templates = new Templates('testing-prompt-core');
-
-			// eslint-disable-next-line no-underscore-dangle
-			expect(tps._prompts.answers.test1).toBe('global');
-		});
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('global');
 	});
 });
