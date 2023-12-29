@@ -1,7 +1,5 @@
 // import { Volume } from 'memfs';
-// import { DirectoryJSON, Volume as _Volume } from 'memfs/lib/volume';
-// import { TESTING_DIR } from '@test/utilities/constants';
-import { DirectoryNode, FileNode } from '@tps/fileSystemTree';
+import { DirectoryJSON } from 'memfs/lib/volume';
 import fs from 'fs';
 import {
 	USER_HOME,
@@ -10,6 +8,7 @@ import {
 	DEFAULT_TPS,
 } from '@tps/utilities/constants';
 import { vol } from './vol';
+import { mkTpsrc } from './templates';
 
 // const DEFAULT_FILES = {
 // 	[`${CWD}/readme.md`]: '',
@@ -38,47 +37,30 @@ import { vol } from './vol';
 // 	vol.fromJSON(DEFAULT_FILES);
 // };
 
-export const init = (global = false): Promise<void> => {
-	const location = global ? USER_HOME : CWD;
+// export const mkTemplate = (
+// 	name: string,
+// 	json: DirectoryJSON = { './default/index.js': 'hey' },
+// 	global = false,
+// ) => {
+// 	const location = global ? USER_HOME : CWD;
 
-	return new Promise((resolve, reject) => {
-		vol.mkdir(`${location}/.tps/`, (err) => {
-			if (err) return reject(err);
+// 	vol.fromJSON(json, `${location}/.tps/${name}/`);
 
-			vol.writeFile(`${location}/.tps/.tpsrc`, '{}', (_err) => {
-				if (_err) return reject(_err);
-
-				resolve();
-			});
-		});
-	});
-};
-
-export const mkTemplate = (
-	vol: _Volume,
-	name: string,
-	json: DirectoryJSON = { './default/index.js': 'hey' },
-	global = false,
-) => {
-	const location = global ? USER_HOME : CWD;
-
-	vol.fromJSON(json, `${location}/.tps/${name}/`);
-
-	return vol;
-};
+// 	return vol;
+// };
 
 /**
  * Include default packages
  */
-const defaultTps = new DirectoryNode('.tps', MAIN_DIR);
+// const defaultTps = new DirectoryNode('.tps', MAIN_DIR);
 const DEFAULT_TEMPLATES = {};
 
-defaultTps.find({ type: 'file' }).forEach((a: FileNode) => {
-	const data = fs.readFileSync(a.path);
-	DEFAULT_TEMPLATES[a.path] = data?.toString() ?? '';
-});
+// defaultTps.find({ type: 'file' }).forEach((a: FileNode) => {
+// 	const data = fs.readFileSync(a.path);
+// 	DEFAULT_TEMPLATES[a.path] = data?.toString() ?? '';
+// });
 
-export const loadDefaultTemplates = (vol: _Volume): void => {
+export const loadDefaultTemplates = (): void => {
 	vol.fromJSON(
 		{
 			...DEFAULT_TEMPLATES,
