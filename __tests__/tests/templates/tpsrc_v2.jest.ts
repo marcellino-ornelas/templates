@@ -195,7 +195,7 @@ testing-prompt-core:
 		jest.spyOn(Templates, 'hasGloablTps').mockReturnValue(false);
 
 		// TODO: should not be in the tests folder
-		const localTpsrc = path.join(process.cwd(), '__tests__', '.tpsrc');
+		const localTpsrc = path.join(CWD, '.tpsrc');
 
 		mkTpsrc(localTpsrc, {
 			'testing-prompt-core': {
