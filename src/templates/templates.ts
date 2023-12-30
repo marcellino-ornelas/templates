@@ -154,9 +154,9 @@ export class Templates {
 					'Seached for local template': maybeLocalTemp,
 					'search for global template': maybeGlobalTemp,
 					'search for default templates': maybeDefaultTemp,
-					[localPath]: Templates.hasLocalTpsrc() && fs.readdirSync(localPath),
+					[localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
 					[TPS.GLOBAL_PATH]:
-						Templates.hasGloablTpsrc() && fs.readdirSync(TPS.GLOBAL_PATH),
+						Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
 				});
 				throw new TemplateNotFoundError(templateName);
 		}
