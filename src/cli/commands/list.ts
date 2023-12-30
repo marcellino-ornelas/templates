@@ -74,7 +74,7 @@ export default {
 			logger.cli.info('Global Path: %s', TPS.GLOBAL_PATH);
 
 			logger.cli.info('User has global tps: %o', isDir(TPS.GLOBAL_PATH));
-			if (isDir(TPS.GLOBAL_PATH)) {
+			if (Templates.hasGloablTps()) {
 				const globalTemplates = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 
 				// @ts-expect-error wrong types module (`is`)
@@ -90,7 +90,7 @@ export default {
 			logger.cli.info('Local Path: %s', TPS.LOCAL_PATH);
 
 			logger.cli.info('User has local tps: %o', Templates.hasLocalTpsrc());
-			if (isDir(TPS.LOCAL_PATH)) {
+			if (Templates.hasLocalTps()) {
 				const localTemplates = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
 
 				logger.cli.info('Local templates: %s', localTemplates);

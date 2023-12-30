@@ -34,8 +34,6 @@ export const GLOBAL_PATH: string = path.join(USER_HOME, TPS_FOLDER);
 
 export const GLOBAL_CONFIG_PATH: string = path.join(GLOBAL_PATH, CONFIG_FILE);
 
-export const HAS_GLOBAL: boolean = isDir(GLOBAL_PATH);
-
 /**
  * local
  */

@@ -6,7 +6,7 @@ import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
-import { isDir, isFile } from '@tps/utilities/fileSystem';
+import { findUp, isDir, isFile } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
@@ -86,12 +86,25 @@ export class Templates {
 
 	public _prompts: Prompter;
 
+	public static getGloablTpsPath(): boolean {
+		return TPS.GLOBAL_PATH;
+	}
+
+	public static getLocalTpsPath(): boolean {
+		const tpsLocal: string = findUp(TPS.TPS_FOLDER, TPS.CWD);
+		const hasLocalTpsFolder = tpsLocal && tpsLocal !== TPS.GLOBAL_PATH;
+
+		if (!hasLocalTpsFolder) return null;
+
+		return tpsLocal;
+	}
+
 	public static hasGloablTps(): boolean {
-		return TPS.HAS_GLOBAL;
+		return isDir(TPS.GLOBAL_PATH);
 	}
 
 	public static hasLocalTps(): boolean {
-		return TPS.HAS_LOCAL;
+		return Templates.getLocalTpsPath();
 	}
 
 	public static getGlobalTpsrc(): CosmiconfigResult {
