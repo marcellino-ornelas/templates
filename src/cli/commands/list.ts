@@ -48,24 +48,26 @@ export default {
 		},
 	},
 	async handler(argv) {
-		const { local, default: defaultTemplates, global } = argv;
+		const { local, default: _default, global } = argv;
 
-		logger.cli.info('Args: %O', { local, default: defaultTemplates, global });
+		logger.cli.info('Args: %O', { local, default: _default, global });
 
-		if (defaultTemplates) {
+		if (_default) {
 			logger.cli.info('Default Path: %s', TPS.DEFAULT_TPS);
 
-			const defaultTps = removeRcFile(fs.readdirSync(TPS.DEFAULT_TPS)).filter(
+			const defaultTemplates = removeRcFile(
+				fs.readdirSync(TPS.DEFAULT_TPS),
+			).filter(
 				// remove irrelevant templates
 				(file) => !BANNED_TEMPLATES.includes(file),
 			);
 
-			logger.cli.info('default templates: %s', defaultTps);
+			logger.cli.info('default templates: %s', defaultTemplates);
 
 			// @ts-expect-error wrong types module (`is`)
-			if (!is.array.empty(defaultTps)) {
+			if (!is.array.empty(defaultTemplates)) {
 				console.log('Default: ');
-				console.log(pjson.render(defaultTps));
+				console.log(pjson.render(defaultTemplates));
 				console.log('');
 			}
 		}
@@ -73,8 +75,10 @@ export default {
 		if (global) {
 			logger.cli.info('Global Path: %s', TPS.GLOBAL_PATH);
 
+			const hasGlobalTps = Templates.hasGloablTps();
+
 			logger.cli.info('User has global tps: %o', isDir(TPS.GLOBAL_PATH));
-			if (Templates.hasGloablTps()) {
+			if (hasGlobalTps) {
 				const globalTemplates = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
 
 				// @ts-expect-error wrong types module (`is`)
@@ -89,8 +93,10 @@ export default {
 		if (local) {
 			logger.cli.info('Local Path: %s', TPS.LOCAL_PATH);
 
-			logger.cli.info('User has local tps: %o', Templates.hasLocalTpsrc());
-			if (Templates.hasLocalTps()) {
+			const hasLocalTps = Templates.hasLocalTps();
+
+			logger.cli.info('User has local tps: %o', hasLocalTps);
+			if (hasLocalTps) {
 				const localTemplates = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
 
 				logger.cli.info('Local templates: %s', localTemplates);
