@@ -5,6 +5,7 @@ import { reset, vol } from '@test/utilities/vol';
 import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
 import { CWD } from '@tps/utilities/constants';
 import path from 'path';
+import Templates from '@tps/templates';
 
 jest.mock('fs');
 
@@ -39,6 +40,24 @@ describe('Command Line: list', () => {
 		expect(log.get()).not.toContain('testing');
 	});
 
+	it('should ignore local templates if no local templates', async () => {
+		const localTemplates = vol.readdirSync(Templates.getLocalTpsPath());
+
+		localTemplates.forEach((template) => {
+			vol.rmSync(path.join(Templates.getLocalTpsPath(), template), {
+				force: true,
+				recursive: true,
+			});
+		});
+
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).not.toContain('Local:');
+		expect(log.get()).not.toContain('testing');
+	});
+
 	it('should be able to list out global templates', async () => {
 		globalInit();
 
@@ -63,6 +82,14 @@ describe('Command Line: list', () => {
 		await parser.parseAsync(['list', '--no-global']);
 
 		expect(log.get()).not.toContain('testing-global');
+	});
+
+	it('should ignore global templates if no global templates', async () => {
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).not.toContain('Global:');
 	});
 
 	it('should be able to list out default templates', async () => {

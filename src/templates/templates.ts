@@ -86,11 +86,11 @@ export class Templates {
 
 	public _prompts: Prompter;
 
-	public static getGloablTpsPath(): boolean {
+	public static getGloablTpsPath(): string {
 		return TPS.GLOBAL_PATH;
 	}
 
-	public static getLocalTpsPath(): boolean {
+	public static getLocalTpsPath(): string {
 		const tpsLocal: string = findUp(TPS.TPS_FOLDER, TPS.CWD);
 		const hasLocalTpsFolder = tpsLocal && tpsLocal !== TPS.GLOBAL_PATH;
 
