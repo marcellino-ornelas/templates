@@ -52,7 +52,7 @@ export default {
 		 */
 		if (argv.global) {
 			logger.cli.log('Initializing Global...');
-			if (Templates.hasGloablTpsrc()) {
+			if (Templates.hasGloablTps()) {
 				errorExit(new GlobalInitializedAlreadyError(TPS.GLOBAL_PATH));
 			}
 
@@ -75,11 +75,11 @@ export default {
 			 */
 			logger.cli.info(
 				'tps found in parent directory?',
-				Templates.hasLocalTpsrc(),
+				Templates.hasLocalTps(),
 			);
 			logger.cli.info('closes tps location', TPS.LOCAL_PATH);
 
-			if (Templates.hasLocalTpsrc() && !argv.force) {
+			if (Templates.hasLocalTps() && !argv.force) {
 				errorExit(new ParentDirectoryInitializedError(TPS.LOCAL_PATH));
 			}
 

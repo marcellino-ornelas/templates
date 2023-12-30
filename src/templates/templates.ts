@@ -86,6 +86,14 @@ export class Templates {
 
 	public _prompts: Prompter;
 
+	public static hasGloablTps(): boolean {
+		return TPS.HAS_GLOBAL;
+	}
+
+	public static hasLocalTps(): boolean {
+		return TPS.HAS_LOCAL;
+	}
+
 	public static getGlobalTpsrc(): CosmiconfigResult {
 		return tpsrcConfig.search(TPS.USER_HOME);
 	}
@@ -205,8 +213,19 @@ export class Templates {
 		}
 	}
 
+	public hasGloablTps(): boolean {
+		return Templates.hasGloablTps();
+	}
+
+	public hasLocalTps(): boolean {
+		if (!this.opts.tpsPath) {
+			return Templates.hasLocalTps();
+		}
+
+		return isDir(this.opts.tpsPath);
+	}
+
 	public getGlobalTpsrc(): CosmiconfigResult {
-		// console.log('this.getGlobalTpsrc', Templates.getGlobalTpsrc());
 		return Templates.getGlobalTpsrc();
 	}
 
