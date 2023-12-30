@@ -3,14 +3,14 @@ import Templates from '@tps/templates';
 import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
 import { mkTemplate, globalInit } from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
-import { mockConsoleLog } from '@test/utilities/mocks';
+import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
 import { CWD } from '@tps/utilities/constants';
 import path from 'path';
 
 jest.mock('fs');
 
 describe('Command Line: list', () => {
-	let log;
+	let log: MockedConsole;
 
 	beforeEach(() => {
 		log = mockConsoleLog();
