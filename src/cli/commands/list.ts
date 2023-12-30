@@ -4,6 +4,8 @@ import is from 'is';
 import * as TPS from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 import Templates from '@tps/templates';
+import logger from '@tps/utilities/logger';
+import { isDir } from '@tps/utilities/fileSystem';
 
 interface ListArgv {
 	global: boolean;
@@ -46,11 +48,19 @@ export default {
 		},
 	},
 	async handler(argv) {
-		if (argv.default) {
+		const { local, default: defaultTemplates, global } = argv;
+
+		logger.cli.info('Args: %O', { local, default: defaultTemplates, global });
+
+		if (defaultTemplates) {
+			logger.cli.info('Default Path: %s', TPS.DEFAULT_TPS);
+
 			const defaultTps = removeRcFile(fs.readdirSync(TPS.DEFAULT_TPS)).filter(
 				// remove irrelevant templates
 				(file) => !BANNED_TEMPLATES.includes(file),
 			);
+
+			logger.cli.info('default templates: %s', defaultTps);
 
 			// @ts-expect-error wrong types module (`is`)
 			if (!is.array.empty(defaultTps)) {
@@ -60,24 +70,40 @@ export default {
 			}
 		}
 
-		if (Templates.hasGloablTps() && argv.global) {
-			const global = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
+		if (global) {
+			logger.cli.info('Global Path: %s', TPS.GLOBAL_PATH);
 
-			// @ts-expect-error wrong types module (`is`)
-			if (!is.array.empty(global)) {
-				console.log('Global: ');
-				console.log(pjson.render(global));
-				console.log('');
+			const hasGlobalTps = Templates.hasGloablTps();
+
+			logger.cli.info('User has global tps: %o', isDir(TPS.GLOBAL_PATH));
+			if (hasGlobalTps) {
+				const globalTemplates = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
+
+				// @ts-expect-error wrong types module (`is`)
+				if (!is.array.empty(globalTemplates)) {
+					console.log('Global: ');
+					console.log(pjson.render(globalTemplates));
+					console.log('');
+				}
 			}
 		}
 
-		if (Templates.hasLocalTps() && argv.local) {
-			const local = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
+		if (local) {
+			logger.cli.info('Local Path: %s', TPS.LOCAL_PATH);
 
-			// @ts-expect-error wrong types module (`is`)
-			if (!is.array.empty(local)) {
-				console.log('Local: ');
-				console.log(pjson.render(local));
+			const hasLocalTps = Templates.hasLocalTps();
+
+			logger.cli.info('User has local tps: %o', hasLocalTps);
+			if (hasLocalTps) {
+				const localTemplates = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
+
+				logger.cli.info('Local templates: %s', localTemplates);
+
+				// @ts-expect-error wrong types module (`is`)
+				if (!is.array.empty(localTemplates)) {
+					console.log('Local: ');
+					console.log(pjson.render(localTemplates));
+				}
 			}
 		}
 	},
