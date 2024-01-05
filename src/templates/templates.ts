@@ -902,14 +902,6 @@ export class Templates {
 				'Checking for local tpsrc in and up: %s',
 				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
 			);
-			// const localTpsrc = tpsrcConfig.search(
-			// 	path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
-			// );
-
-			// if (localTpsrc && !localTpsrc.isEmpty) {
-			// 	logger.tps.info('Loading local tpsrc from: %s', localTpsrc.filepath);
-			// 	this._loadTpsSpecificConfig(templateName, localTpsrc.config);
-			// }
 
 			if (this.hasLocalTpsrc()) {
 				const local = this.getLocalTpsrc();
