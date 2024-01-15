@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import doT from 'dot';
+import doT from 'templates-mo/lib/templates/template-engine';
 import { Tps } from '@site/types/templates';
 import * as utils from 'templates-mo/lib/templates/utils';
 
