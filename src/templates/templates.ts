@@ -6,7 +6,7 @@ import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
-import { isDir, json, isFile } from '@tps/utilities/fileSystem';
+import { findUp, isDir, isFile } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
 import {
@@ -23,10 +23,15 @@ import * as Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
-import { cosmiconfigSync } from 'cosmiconfig';
+import {
+	CosmiconfigResult,
+	cosmiconfigSync,
+	defaultLoadersSync,
+	getDefaultSearchPlacesSync,
+} from 'cosmiconfig';
 import * as utils from './utils';
 
-const DEFAULT_OPTIONS: TemplateOptions = {
+export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
 	noGlobalConfig: false,
 	defaultPackage: true,
@@ -53,6 +58,21 @@ const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
 	],
 });
 
+const tpsConfigName = 'tps';
+
+const defaultTpsrcSearches = getDefaultSearchPlacesSync(tpsConfigName);
+
+const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
+	return `.tps/${location}`;
+});
+
+const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
+	cache: !TPS.IS_TESTING,
+	searchStrategy: 'global',
+	loaders: defaultLoadersSync,
+	searchPlaces: [...defaultTpsrcSearches, ...nestedTpsrcSearches],
+});
+
 /**
  * @class
  * @classdesc Create a new instance of a template
@@ -64,12 +84,45 @@ export class Templates {
 
 	public src: string;
 
+	public _prompts: Prompter;
+
+	public static getGloablTpsPath(): string {
+		return TPS.GLOBAL_PATH;
+	}
+
+	public static getLocalTpsPath(): string {
+		const tpsLocal: string = findUp(TPS.TPS_FOLDER, TPS.CWD);
+		const hasLocalTpsFolder = tpsLocal && tpsLocal !== TPS.GLOBAL_PATH;
+
+		if (!hasLocalTpsFolder) return null;
+
+		return tpsLocal;
+	}
+
 	public static hasGloablTps(): boolean {
-		return TPS.HAS_GLOBAL;
+		return isDir(TPS.GLOBAL_PATH);
 	}
 
 	public static hasLocalTps(): boolean {
-		return TPS.HAS_LOCAL;
+		return Templates.getLocalTpsPath();
+	}
+
+	public static getGlobalTpsrc(): CosmiconfigResult {
+		return tpsrcConfig.search(TPS.USER_HOME);
+	}
+
+	public static hasGloablTpsrc(): boolean {
+		const global = this.getGlobalTpsrc();
+		return !!(global && !global.isEmpty);
+	}
+
+	public static getLocalTpsrc(): CosmiconfigResult {
+		return tpsrcConfig.search(TPS.CWD);
+	}
+
+	public static hasLocalTpsrc(): boolean {
+		const local = this.getLocalTpsrc();
+		return !!(local && !local.isEmpty);
 	}
 
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
@@ -171,6 +224,44 @@ export class Templates {
 		if (shouldLoadDefault) {
 			this.loadPackage('default');
 		}
+	}
+
+	public hasGloablTps(): boolean {
+		return Templates.hasGloablTps();
+	}
+
+	public hasLocalTps(): boolean {
+		if (!this.opts.tpsPath) {
+			return Templates.hasLocalTps();
+		}
+
+		return isDir(this.opts.tpsPath);
+	}
+
+	public getGlobalTpsrc(): CosmiconfigResult {
+		return Templates.getGlobalTpsrc();
+	}
+
+	public hasGloablTpsrc(): boolean {
+		return Templates.hasGloablTpsrc();
+	}
+
+	public getLocalTpsrc(): CosmiconfigResult {
+		if (!this.opts.tpsPath) {
+			return Templates.getLocalTpsrc();
+		}
+
+		return tpsrcConfig.search(TPS.CWD);
+	}
+
+	public hasLocalTpsrc(): boolean {
+		if (!this.opts.tpsPath) {
+			return Templates.hasLocalTpsrc();
+		}
+
+		const local = this.getLocalTpsrc();
+
+		return !!(local && !local.isEmpty);
 	}
 
 	/**
@@ -795,17 +886,28 @@ export class Templates {
 	/**
 	 * Configurations
 	 */
-
 	_loadTpsrc(templateName) {
-		if (!this.opts.noGlobalConfig && Templates.hasGloablTps()) {
-			logger.tps.info('Loading global tpsrc from: %s', TPS.GLOBAL_CONFIG_PATH);
-			const globalConfig = json(TPS.GLOBAL_CONFIG_PATH);
-			this._loadTpsSpecificConfig(templateName, globalConfig);
+		if (!this.opts.noGlobalConfig) {
+			logger.tps.info('Checking for global tpsrc in and up: %s', TPS.USER_HOME);
+			if (this.hasGloablTpsrc()) {
+				const globalTpsrc = this.getGlobalTpsrc();
+
+				logger.tps.info('Loading global tpsrc from: %s', globalTpsrc.filepath);
+				this._loadTpsSpecificConfig(templateName, globalTpsrc.config);
+			}
 		}
-		if (!this.opts.noLocalConfig && TPS.LOCAL_CONFIG_PATH) {
-			logger.tps.info('Loading local tpsrc from: %s', TPS.LOCAL_CONFIG_PATH);
-			const localConfig = json(TPS.LOCAL_CONFIG_PATH);
-			this._loadTpsSpecificConfig(templateName, localConfig);
+
+		if (!this.opts.noLocalConfig) {
+			logger.tps.info(
+				'Checking for local tpsrc in and up: %s',
+				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
+			);
+
+			if (this.hasLocalTpsrc()) {
+				const local = this.getLocalTpsrc();
+				logger.tps.info('Loading local tpsrc from: %s', local.filepath);
+				this._loadTpsSpecificConfig(templateName, local.config);
+			}
 		}
 	}
 

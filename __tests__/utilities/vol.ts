@@ -1,6 +1,7 @@
 import { vol } from 'memfs';
 // eslint-disable-next-line import/no-unresolved -- Generated file
 import templateFiles from '@test/templates.json';
+import path from 'path';
 
 export { vol, fs } from 'memfs';
 
@@ -13,7 +14,7 @@ export function reset() {
 		...templateFiles,
 	});
 
-	// vol.rmSync(path.join(CWD, '.tps/.tpsrc'), { force: true });
+	vol.rmSync(path.join(__dirname, '../../.tps/.tpsrc'), { force: true });
 }
 
 /**
