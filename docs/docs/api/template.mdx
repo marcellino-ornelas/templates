@@ -38,6 +38,7 @@ interface TemplateOptions {
 	wipe?: boolean;
 	force?: boolean;
 	newFolder?: boolean;
+	experimentalTemplateEngine?: boolean;
 }
 ```
 
@@ -484,3 +485,24 @@ tps express-app app --no-newFolder
 Notice how this no longer creates a `app` directory.
 
 </Example>
+
+### experimentalTemplateEngine
+
+```ts title="Type"
+boolean;
+```
+
+```ts title="Default"
+false;
+```
+
+The `experimentalTemplateEngine` option activates our experimental template
+engine within Templates. Currently, Templates relies on the
+[doT](http://olado.github.io/doT/index.html) template engine. However, due to
+the complexities of structuring files, we needed a more specialized solution.
+Our experimental template engine, built upon the
+[doT](http://olado.github.io/doT/index.html) framework, is specifically designed
+for file generation tasks. While we plan to eventually replace
+[doT](http://olado.github.io/doT/index.html) as the primary engine with our
+in-house version, this transition will occur only after thorough stability
+testing of our experimental engine.
