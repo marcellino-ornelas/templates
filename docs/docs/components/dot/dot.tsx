@@ -51,6 +51,7 @@ export const Dot = ({
 				<CodeBlock
 					title="Result"
 					className={styles.result}
+					showLineNumbers
 					language={lang}
 					metastring={resultMeta}
 				>

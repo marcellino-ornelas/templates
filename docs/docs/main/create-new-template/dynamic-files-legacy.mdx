@@ -9,47 +9,80 @@ import { Dot } from '@site/docs/components/dot';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Dynamic Files
-
-:::caution
-
-If you not using a version of templates above `1.1.0`, please refer to the
-[legacy docs](./dynamic-files-legacy)
-
-:::
+# Dynamic Files (Legacy)
 
 ## Dynamic files breakdown
 
-Dynamic file are files that can be rendered with dynamic data. You can think of
-these files sort of like how template engines work. You use a special syntax
-than then gets replaced with data you provide. This output then gets saved into
-the file where this instance is being generated.
+### What is a dynamic file
 
-<Example open>
+Tps goes beyond simple copy and paste functionality; it enables the existence of
+a more versatile and powerful system. When working with reusable concepts, the
+ability to incorporate additional information becomes essential. This is where
+dynamic files come into play.
 
-A file with these contents
+Dynamic files reside within your template's package folders, much like any other
+file. However, dynamic files undergo a different processing procedure. Tps reads
+the contents of dynamic files, which are then processed by a templating language
+called [doT](http://olado.github.io/doT/index.html).
 
-```text
-{{{= tps.answers.name }}} wants some more cake
+```mermaid
+graph LR;
+	step1("User renders
+		template")
+	step2("Tps loads all files and
+		folders from each
+		required package")
+	step3("Dymanic files")
+	step4("All other files/folders")
+	step5("Copy/paste")
+	step6("DoT template engine")
+	step7("New instance
+		of template created")
+    step1-->step2;
+    step2-->step3;
+    step2-->step4;
+    step4-->step5;
+    step5-->step7;
+	step3-->step6;
+	step6-->step7;
 ```
 
-will produce:
+### What is doT
 
-```text
-lino wants some more cake
-```
+DoT is based on JavaScript and uses `{{}}` brackets for interpolation. doT is a
+templating language similar to popular options like Handlebars, EJS, or Jade. It
+provides various types of interpolation, including loops, conditionals, and
+more. You can use any valid JavaScript code inside these brackets.
 
-Dont worry about the specifics, well touch more on the syntax later on this page
+To learn more about doT, you can visit its documentation. However, let's
+introduce you to the basics here.
 
-</Example>
+:::danger
 
-## Template engine
+It's important to consider that not all JavaScript features may be supported
+across different computers or versions of Node when running these templates. As
+a result, certain JavaScript functionality may not work as expected or behave
+differently.
 
-Like mentioned before our in house template engine was forked from
-[doT](http://olado.github.io/doT/index.html). However we add some more
-capabilities in order to fit templates needs better.
+:::
 
-Our template engine has two main syntaxes `{{}}` and `{{{}}}`
+## How to use doT
+
+Like mentioned before doT uses `{{}}` brackets. Here are some common ways on how
+you can use doT
+
+:::caution
+
+when it comes to creating complex templates, you may encounter a need to indent
+the dot syntax to improve readability. However, be aware that this can cause
+unexpected issues with the appearance of the rendered template. While the
+indented structure may look good in the template itself, when the dot processes
+these files, it doesn't recognize or handle the indentation properly. This has
+been my experience with using it, and you can find more detailed information
+about this issue in the following link:
+https://github.com/marcellino-ornelas/templates/issues/7
+
+:::
 
 ### Evaluation
 
@@ -58,63 +91,36 @@ any valid JavaScript code, enabling the creation of variables, functions, and
 various other possibilities. **The semi-colon at the end of the expression is
 mandatory!**
 
-<Tabs>
-<TabItem value="block" label="Block">
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-</TabItem>
-</Tabs>
-
----
-
-<Tabs>
-<TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-{{{const name = "Marcellino Ornelas";}}}
-Hey
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-
 <Dot>
 
 ```text
 {{const name = "Marcellino Ornelas";}}
-Hey
 ```
 
 </Dot>
 
-</TabItem>
-</Tabs>
+One limitation of evaluations are that it leaves a empty space where it was
+placed at. We recommend avoid using as much as possible but could be useful in
+some cases
+
+<Example title="Evaluations leaves new line">
+
+<Dot>
+
+```text
+// highlight-next-line
+{{const name = "john doe";}}
+hey
+```
+
+</Dot>
+
+</Example>
 
 ### Interpolation
 
 In doT, interpolation is achieved using `{{= <expression>}}`. This syntax allows
 the result of the specified expression to replace the brackets in the template.
-
-<Tabs>
-<TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-{{{= 2 + 2}}}
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
 
 <Dot>
 
@@ -124,32 +130,37 @@ the result of the specified expression to replace the brackets in the template.
 
 </Dot>
 
-</TabItem>
-</Tabs>
-
 ### Conditionals
 
 In doT, interpolation is achieved using `{{? <expression>}} ... {{?}}`. The
 result of the provided expression will be displayed if the expression returns
 truthy value
 
-<Tabs>
-<TabItem value="block" label="Block">
+<Dot>
+
+```text
+Are you there?
+{{? 1 === 1}}
+I am here
+{{?}}
+```
+
+</Dot>
+
+If you dont want the extra new lines, move all the conditional statements to one
+line
 
 <Dot>
 
 ```text
 Are you there?
-{{{? 1 === 1}}}
-I am here
-{{{?}}}
+{{? 1 === 1}}I am here{{?}}
 ```
 
 </Dot>
 
-</TabItem>
-
-<TabItem value="inline" label="Inline">
+If you want everthing to flow on one line then just put the condition on the
+same line
 
 <Dot>
 
@@ -159,118 +170,67 @@ Are you there? {{? 1 === 1}}I am here{{?}}
 
 </Dot>
 
-</TabItem>
-</Tabs>
-
-#### Else
-
-You can also write else statements
-
-<Tabs>
-<TabItem value="block" label="Block">
+doT also supports else statements.
 
 <Dot>
 
 ```text
-Are you there?
-{{{? 1 !== 1}}}
-I am here
-{{{??}}}
-I am not here
-{{{?}}}
+Are you here? {{? 1 === 2}}I am here {{??}}I am not home {{?}}
 ```
 
 </Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-
-<Dot>
-
-```text
-Are you there? {{? 1 === 1}}I am here{{{??}}}I am not here {{?}}
-```
-
-</Dot>
-
-</TabItem>
-</Tabs>
-
-#### If else
 
 doT also supports else if statements.
 
-<Tabs>
-<TabItem value="block" label="Block">
-
 <Dot>
+
+```text
+Are you here? {{? 1===2}}I am here {{?? 1 ===1}}I might be home{{??}}I am not home {{?}}
+```
+
+</Dot>
+
+One limitation of conditionals is that it leaves a white space behind when the
+condition is not met
+
+<Dot resultMeta="{2}">
 
 ```text
 Are you there?
-{{{? false }}}
-I might be here
-{{{?? true }}}
-I am here
-{{{?}}}
+{{? 1 === 2}}I am here{{?}}
+how about now?
 ```
 
 </Dot>
 
-</TabItem>
-
-<TabItem value="inline" label="Inline">
+The only way around this right now is placing the condition on the same line but
+adding a new line to the begining of the value
 
 <Dot>
 
 ```text
-Are you there? {{? 1 === 1}}I am here{{?}}
+Are you there?{{? 1 === 1}}{{="\n"}}I am here{{?}}
+how about now?{{? 1 === 2}}{{="\n"}}I am here{{?}}
 ```
 
 </Dot>
 
-</TabItem>
-</Tabs>
+Notice how the first condition value still showed up on a new line but the
+second condition didnt leave a new line
 
 ### Loops
 
 In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
 
-<Tabs>
-<TabItem value="block" label="Block">
-
 <Dot>
 
 ```text
-{{{~[1, 2, 3, 4] :value:index}}}
+{{~[1, 2, 3, 4] :value:index}}
 {{= value}}
-{{{~}}}
+{{~}}
 ```
 
 </Dot>
-
-<Dot>
-
-```text
-{{{~[1, 2, 3, 4] :value:index}}}{{= value}}{{{~}}}
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-
-<Dot>
-
-```text
-{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
-```
-
-</Dot>
-
-</TabItem>
-</Tabs>
 
 Unfortunately we need to keep all tags on the same line to get a cleaner output.
 By indenting `{{= value}}` to get a cleaner look will result in indent in the
@@ -290,6 +250,32 @@ rendered output
 
 </Example>
 
+If you dont want the extra spacing between each line then you need to move
+`{{= value}}` on the same line as your loop.
+
+<Dot>
+
+```text
+{{~[1,2,3,4] :value:index}}{{= value}}
+{{~}}
+```
+
+</Dot>
+
+To remove the extra space at the bottom of the output, you can move the end of
+the loop to the same line. However, this will cause all your items to be
+displayed on a single line. To address this, you can add a `\n` character after
+each value. To avoid displaying a new line after the last item, you can use a
+ternary operator to check if it is the last item.
+
+<Dot>
+
+```text
+{{~[1,2,3,4] :value:index}}{{= value + (index !== [1,2,3,4].length - 1 ? "\n" : "")}}{{~}}
+```
+
+</Dot>
+
 :::tip
 
 If you dont need anything to complex, then use `join`!
@@ -304,6 +290,17 @@ If you dont need anything to complex, then use `join`!
 
 :::
 
+If you would like to keep output on one line then put all doT brackets on one
+line
+
+<Dot>
+
+```text
+{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
+```
+
+</Dot>
+
 ### Defs (Partials)
 
 DoT supports defs (partials). Defs allow you to create reusable sections of a
@@ -311,24 +308,6 @@ templates. Think of them as smaller templates that can be defined separately and
 then included within larger templates. This provides modularity and simplifies
 the process of maintaining and updating your templates.
 
-<Tabs>
-<TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-{{{##def.intro:
-This is my intro
-#}}}
-{{#def.intro}}
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-
 <Dot>
 
 ```text
@@ -340,66 +319,8 @@ This is my intro
 ```
 
 </Dot>
-
-</TabItem>
-</Tabs>
-
-#### Args
-
-<Tabs>
-<TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-{{{##def.intro:
-This is my intro
-#}}}
-{{#def.intro}}
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
-
-<Dot>
-
-```text
-{{##def.intro:
-This is my intro
-#}}
-
-{{#def.intro}}
-```
-
-</Dot>
-
-</TabItem>
-</Tabs>
-
-#### Functions
 
 You can also define functions as defs
-
-<Tabs>
-<TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-{{{##def.intro = function(name) {
-		return `This is my intro`;
-}#}}}
-{{#def.intro()}}
-```
-
-</Dot>
-
-</TabItem>
-
-<TabItem value="inline" label="Inline">
 
 <Dot>
 
@@ -407,57 +328,63 @@ You can also define functions as defs
 {{##def.intro = function(name) {
 		return `This is my intro`;
 }#}}
+
 {{#def.intro()}}
 ```
 
 </Dot>
 
-</TabItem>
-</Tabs>
+## How to use doT with Templates
 
----
+Templates make it easy to use the doT template engine inside files. This helps
+you add dynamic content to your files. To use doT inside your templates files,
+you just need to add the `.dot` extension to the file. The `.dot` extension can
+be added to any file, regardless of its original extension. Once added, the
+contents of the file will be processed by doT. The resulting output will then be
+incorporated into the rendered file. Your rendered file will no longer have the
+`.dot` extention
 
-## How to utilize the template engine
+<Example>
 
-There are three main ways to use our template engine to make your template
-dynamic, in [files names](#file-names), [file contents](#file-contents), and
-[def files](#def-files)
-
-### File names
-
-Every file within your template can leverage the capabilities of the template
-engine directly within its file name. This enables dynamic naming of files when
-a new instance of template is being created.
-
-<Example open>
-
-If you had a template named `react-component` and had a file in the template
-named `{{=tps.name}}.js` like the following:
-
-```text
-| - .tps/
-	| - react-component
-		| - default
-			| - {{=tps.name}}.js
-```
-
-Now if you rendered a new instance of this template named `App`:
-
-```bash
-tps react-component App
-```
-
-then youll end up with:
-
-```text
-| - App/
-	| - App.js
-```
+To use doT in a file named `server.js`, Rename the file to `server.js.dot`. Once
+processed and rendered, the resulting file will retain its original name, which
+is `server.js`.
 
 </Example>
 
-Any functionality of our template engine can be used in files names, however
-here are some common use cases that we use when we build templates
+### File contents
+
+Like mentioned above, once you add a `.dot` extention to your file name you are
+now able to use any dot syntax inside the file and tps will process it.
+
+<Example open>
+
+<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
+
+```text
+const express = require("express");
+
+const app = express();
+
+/* node code ... */
+
+{{? tps.answers.security }}app.use(helmet());{{?}}
+
+/* node code ... */
+```
+
+</Dot>
+
+</Example>
+
+### File names
+
+File names can also take advantage of doT. This allows file names to be dynamic.
+You can use any valid doT syntax inside of file names. Unlike file contents, all
+file names get processed with doT so you can use doT syntax in any file name in
+your template even if they dont have a `.doT` extension.
+
+<Example open>
 
 <Tabs>
 
@@ -523,29 +450,6 @@ nav.js
 </TabItem>
 
 </Tabs>
-
-### File contents
-
-Like mentioned above, once you add a `.dot` extention to your file name you are
-now able to use any dot syntax inside the file and tps will process it.
-
-<Example open>
-
-<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
-
-```text
-const express = require("express");
-
-const app = express();
-
-/* node code ... */
-
-{{? tps.answers.security }}app.use(helmet());{{?}}
-
-/* node code ... */
-```
-
-</Dot>
 
 </Example>
 
