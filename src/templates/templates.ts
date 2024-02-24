@@ -86,6 +86,8 @@ export class Templates {
 
 	public _prompts: Prompter;
 
+	public compiledFiles: File[];
+
 	public static getGloablTpsPath(): string {
 		return TPS.GLOBAL_PATH;
 	}
@@ -687,16 +689,16 @@ export class Templates {
 
 		const files = this.compiledFiles.filter((file) => !file.isDot);
 		const dotFiles = this.compiledFiles.filter((file) => file.isDot);
-		const dotContents = dotFiles.map((file) =>
+		const dotContents = dotFiles.map((file) => {
 			/**
 			 * Will throw error if something is wrong with doT
 			 */
-			[
+			return [
 				file,
 				file.dest(buildPath, data, this._defs),
 				file.fileDataTemplate(data, this._defs, buildPath),
-			],
-		);
+			];
+		});
 
 		const filesInProgress = [];
 		let hasErroredOut = false;
@@ -812,7 +814,7 @@ export class Templates {
 		const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
 		if (!is.array.empty(defFiles)) {
-			logger.tps.log('Compiling def files %o', { force });
+			logger.tps.info('Compiling def files %o', { force });
 
 			defFiles.forEach((fileNode) => {
 				logger.tps.info(
@@ -828,7 +830,10 @@ export class Templates {
 			});
 		}
 
-		logger.tps.log('Compiling files');
+		logger.tps.info('Compiling files %n', {
+			force,
+			useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+		});
 
 		pkg.find({ type: 'file', ext: { not: '.def' } }).forEach((fileNode) => {
 			const file = new File(fileNode, {
