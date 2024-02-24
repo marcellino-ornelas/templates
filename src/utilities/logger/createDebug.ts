@@ -98,15 +98,17 @@ class CreateDebug {
 		return newGroup;
 	}
 
-	printGroup(group) {
-		let groupArray = group;
+	printGroup(group: CreateDebugGroup | string) {
+		let groupArray: CreateDebugGroup = null;
 
-		if (is.string(group)) {
+		if (typeof group === 'string') {
 			groupArray = this._groups[group];
+		} else {
+			groupArray = group;
 		}
 
-		for (let i = 0; i < groupArray.length; i++) {
-			const [level, ...args] = groupArray[i];
+		for (let i = 0; i < groupArray.queue.length; i++) {
+			const [level, ...args] = groupArray.queue[i];
 
 			this[level](...args);
 		}
