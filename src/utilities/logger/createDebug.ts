@@ -1,5 +1,4 @@
 import debug from 'debug';
-import * as is from 'is';
 import { defaults } from '@tps/utilities/helpers';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
@@ -86,7 +85,7 @@ class CreateDebug {
 		return this;
 	}
 
-	group(name, { clear = false } = {}): CreateDebugGroup {
+	group(name: string, { clear = false } = {}): CreateDebugGroup {
 		if (this._groups[name] && !clear) {
 			return this._groups[name];
 		}
@@ -98,15 +97,17 @@ class CreateDebug {
 		return newGroup;
 	}
 
-	printGroup(group) {
-		let groupArray = group;
+	printGroup(group: CreateDebugGroup | string): void {
+		let groupArray: CreateDebugGroup = null;
 
-		if (is.string(group)) {
+		if (typeof group === 'string') {
 			groupArray = this._groups[group];
+		} else {
+			groupArray = group;
 		}
 
-		for (let i = 0; i < groupArray.length; i++) {
-			const [level, ...args] = groupArray[i];
+		for (let i = 0; i < groupArray.queue.length; i++) {
+			const [level, ...args] = groupArray.queue[i];
 
 			this[level](...args);
 		}
