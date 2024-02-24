@@ -3,7 +3,7 @@ import { defaults } from '@tps/utilities/helpers';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
 
-export const logFunctions = [
+export const logFunctions: string[] = [
 	'info',
 	'error',
 	'debug',
@@ -43,7 +43,7 @@ class CreateDebug {
 
 	public log: debug.Debugger;
 
-	constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
+	constructor(name: string, opts = CreateDebug.DEFAULT_OPTS) {
 		this.name = name;
 		this._logger = debug(this.name);
 		this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
