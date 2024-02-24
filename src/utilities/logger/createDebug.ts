@@ -43,10 +43,13 @@ class CreateDebug {
 
 	public log: debug.Debugger;
 
-	constructor(name: string, opts = CreateDebug.DEFAULT_OPTS) {
+	constructor(name: string, opts: Partial<CreateDebugOpts> = {}) {
 		this.name = name;
 		this._logger = debug(this.name);
-		this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
+		this.opts = {
+			...CreateDebug.DEFAULT_OPTS,
+			...opts,
+		};
 		this._groups = {};
 
 		logFunctions.forEach((type) => {
