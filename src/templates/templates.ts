@@ -690,13 +690,6 @@ export class Templates {
 		const files = this.compiledFiles.filter((file) => !file.isDot);
 		const dotFiles = this.compiledFiles.filter((file) => file.isDot);
 		const dotContents = dotFiles.map((file) => {
-			const dest = file.dest(buildPath, data, this._defs);
-			const fileContentTemplate = file.fileDataTemplate(
-				data,
-				this._defs,
-				buildPath,
-			);
-
 			/**
 			 * Will throw error if something is wrong with doT
 			 */

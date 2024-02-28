@@ -1,10 +1,9 @@
 import debug from 'debug';
-import * as is from 'is';
 import { defaults } from '@tps/utilities/helpers';
 import './formatters';
 import CreateDebugGroup from './createDebugGroup';
 
-export const logFunctions = [
+export const logFunctions: string[] = [
 	'info',
 	'error',
 	'debug',
@@ -44,10 +43,13 @@ class CreateDebug {
 
 	public log: debug.Debugger;
 
-	constructor(name, opts = CreateDebug.DEFAULT_OPTS) {
+	constructor(name: string, opts: Partial<CreateDebugOpts> = {}) {
 		this.name = name;
 		this._logger = debug(this.name);
-		this.opts = defaults(opts, CreateDebug.DEFAULT_OPTS);
+		this.opts = {
+			...CreateDebug.DEFAULT_OPTS,
+			...opts,
+		};
 		this._groups = {};
 
 		logFunctions.forEach((type) => {
@@ -86,7 +88,7 @@ class CreateDebug {
 		return this;
 	}
 
-	group(name, { clear = false } = {}): CreateDebugGroup {
+	group(name: string, { clear = false } = {}): CreateDebugGroup {
 		if (this._groups[name] && !clear) {
 			return this._groups[name];
 		}
@@ -98,7 +100,7 @@ class CreateDebug {
 		return newGroup;
 	}
 
-	printGroup(group: CreateDebugGroup | string) {
+	printGroup(group: CreateDebugGroup | string): void {
 		let groupArray: CreateDebugGroup = null;
 
 		if (typeof group === 'string') {
