@@ -92,7 +92,6 @@ class File {
 		let fileName;
 		try {
 			fileName = this.engine.template(this._name, null, defs)(data);
-			// console.log('fileName', fileName);
 		} catch (e) {
 			console.log('file name error', e);
 		}
