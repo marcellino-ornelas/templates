@@ -740,8 +740,6 @@ export class Templates {
 		});
 
 		return Promise.all(filesInProgress).then(() => {
-			// console.log(logger.tps._groups);
-			// logger.tps.printGroup(`render_${buildPath}`);
 			if (hasErroredOut) {
 				loggerGroup.error(
 					'There was a error when rendering template to %s',
