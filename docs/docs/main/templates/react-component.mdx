@@ -223,6 +223,98 @@ add `tsx` to the `extension` answer.
 
 </Tabs>
 
+### No new folder
+
+By default templates will generate a new folder for you. If you dont want a new
+folder for your react component you can use
+[`newFolder`](../../api/template#new-folder) option
+
+Lets say you have a basic react folder structure like so:
+
+```text
+| - <cwd>/
+	| - src/
+		// highlight-start
+		| - components/
+			| - Nav.js
+			| - Nav.css
+			// highlight-end
+		| - pages/
+			| - ...
+		| - index.js
+		| - app.js
+	| - package.json
+	| - package-lock.json
+```
+
+If you wanted to generate a new component called `footer` in the components
+folder without a new folder, you can do one of the following:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted those questions
+
+```bash
+tps react-component footer --no-newFolder
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always not use a new
+folder when generating a react component in your repos directory and all its
+subdirectories.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"opts": {
+			"newFolder": false
+		}
+	}
+}
+```
+
+Now when generating a new instance
+
+```bash
+tps react-component footer
+```
+
+</TabItem>
+
+</Tabs>
+
+Depending on your answers, it would produce something to the following:
+
+```text
+| - <cwd>/
+	| - src/
+		| - components/
+			| - nav.js
+			| - nav.css
+			// highlight-start
+			| - footer.js
+			| - footer.css
+			// highlight-end
+		| - pages/
+			| - ...
+		| - index.js
+		| - app.js
+	| - package.json
+	| - package-lock.json
+```
+
 ### How to use with typescript
 
 When generating a new instance of this template you will be asked if you want to
@@ -248,6 +340,79 @@ Produces:
 
 ```txt
 | - NaV
+	| - index.tsx
+	| - Nav.tsx
+	| - Nav.css
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use typescript
+when generating a react component in your repos directory and all its
+subdirectories.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"typescript": true,
+			"extension": "tsx"
+		}
+	}
+}
+```
+
+Now when generating a new instance you no longer will be prompted for these two
+questions or have to supply the two flags to the cli command
+
+```bash
+tps react-component Nav
+```
+
+Would produce:
+
+```txt
+| - Nav
+	| - index.tsx
+	| - Nav.tsx
+	| - Nav.css
+```
+
+</TabItem>
+
+</Tabs>### How to use with typescript
+
+When generating a new instance of this template you will be asked if you want to
+use typescript. However if you know you want to use typescript in your project
+you can do one of the following:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted those questions
+
+```bash
+tps react-component Nav --typescript --extension=tsx
+
+# or
+
+tps react-component Nav --typescript -e tsx
+```
+
+Produces:
+
+```txt
+| - Nav
 	| - index.tsx
 	| - Nav.tsx
 	| - Nav.css
