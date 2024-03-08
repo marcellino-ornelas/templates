@@ -227,7 +227,14 @@ add `tsx` to the `extension` answer.
 
 By default, templates creates a new folder for you. If you don't want a new
 folder for your react component, you can use the
-[`newFolder`](../../api/template#new-folder) option.
+[`newFolder`](../../api/template#new-folder) and
+[`index`](./react-component#options) options. These options both default to true
+
+The [`newFolder`](../../api/template#new-folder) option tells templates whether
+or not to place everything into a new folder.
+
+The [`index`](./react-component#options) option determines whether a `index.js`
+file should be created.
 
 Lets say you have a basic react folder structure like so:
 
@@ -257,16 +264,16 @@ folder without a new folder, you can do one of the following:
 You can pass in the following flags when your generating your new instance
 
 ```bash
-tps react-component footer --no-newFolder
+tps react-component footer --no-newFolder --no-index
 ```
 
 </TabItem>
 
 <TabItem value=".tps/.tpsrc">
 
-You can add the following to your `.tps/.tpsrc` file to always not use a new
-folder when generating a react component in your repos directory and all its
-subdirectories.
+You can add the following to your `.tps/.tpsrc` file to always avoid creating a
+new folder when generating a React component in your repository directory and
+all its subdirectories.
 
 If you havent already initialize your repo:
 
@@ -277,6 +284,9 @@ tps init
 ```json title=".tps/.tpsrc"
 {
 	"react-component": {
+		"answers": {
+			"index": false
+		},
 		"opts": {
 			"newFolder": false
 		}
