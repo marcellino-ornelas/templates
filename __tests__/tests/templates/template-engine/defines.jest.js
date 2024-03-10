@@ -90,6 +90,14 @@ lino
 
 			expect(result).toBe(`lino`);
 		});
+
+		it('should support block syntax in defs', () => {
+			const result = render(`te-{{#def.name }}`, undefined, {
+				name: '{{{? true }}}\nhey\n{{{??}}}\nbad\n{{{?}}}\n',
+			});
+
+			expect(result).toBe(`te-hey\n`);
+		});
 	});
 
 	function testDef(tmpl, defines) {

@@ -112,6 +112,44 @@ describe('[TPS] Rendering dynamic:', () => {
 
 			expect(dynamicFile).toBeFile();
 		});
+
+		it('should be able to a block def in a multi def file in a file name', async () => {
+			tps = new Templates('testing-dynamic-file-name', {
+				experimentalTemplateEngine: true,
+			});
+
+			const dynamicFile = playground.pathTo(`app/def-block-multi-app.txt`);
+
+			tps.setAnswers({
+				one: 'set',
+			});
+
+			await tps.render(playground.box(), ['app']);
+
+			expect(dynamicFile).toBeFile();
+		});
+
+		it.only('should be able to a block def in a single def file in a file name', async () => {
+			tps = new Templates('testing-dynamic-file-name', {
+				experimentalTemplateEngine: true,
+			});
+
+			const dynamicFile = playground.pathTo(`app/def-block-single-app.txt`);
+
+			tps.setAnswers({
+				one: 'set',
+			});
+
+			console.log(tps._defs);
+
+			await tps.render(playground.box(), ['app']);
+
+			console.log(vol.toTree({ dir: playground.box() }));
+
+			console.log(tps);
+
+			expect(dynamicFile).toBeFile();
+		});
 	});
 
 	describe('content', () => {

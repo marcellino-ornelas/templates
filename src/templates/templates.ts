@@ -727,7 +727,11 @@ export class Templates {
 
 		files.forEach((file) => {
 			const finalDest = file.dest(buildPath, data, this._defs);
-			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
+
+			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')} %n`, finalDest, {
+				buildPath,
+			});
+
 			filesInProgress.push(
 				file
 					.renderFile(finalDest)
