@@ -8,6 +8,7 @@ import {
 } from '@tps/errors';
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
+import { getNpmPackagePath } from '@tps/utilities/helpers';
 
 jest.mock('fs');
 
@@ -199,5 +200,29 @@ describe('[Templates] Render Process:', () => {
 		await tps.render(playground.box(), 'app');
 
 		expect(indexFile).toHaveFileContents('{}\nhey there\n{}\nbye');
+	});
+
+	it('should be able to get npm template', () => {
+		const tps = new Templates('tps-test-3rd-party-package');
+
+		expect(tps.src).toBe(getNpmPackagePath('tps-test-3rd-party-package'));
+		expect(tps.template).toBe('tps-test-3rd-party-package');
+	});
+
+	it('should be able to get npm template without tps prefix', () => {
+		const tps = new Templates('test-3rd-party-package');
+
+		expect(tps.src).toBe(getNpmPackagePath('tps-test-3rd-party-package'));
+		expect(tps.template).toBe('tps-test-3rd-party-package');
+	});
+
+	it('should be able to use a npm template', () => {
+		const tps = new Templates('tps-test-3rd-party-package');
+
+		const appPath = playground.pathTo('app');
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(appPath).toHaveAllFilesAndDirectories(['./index.js']);
+		});
 	});
 });

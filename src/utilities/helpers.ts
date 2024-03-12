@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as is from 'is';
+import path from 'path';
 
 export function hasProp(obj: Record<string, any>, prop: string): boolean {
 	return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -118,3 +119,23 @@ export function cliLog(str: string): void {
 //     ? filenamify(fileName, { replacement: '-' })
 //     : fileName;
 // };
+
+export const isNpmPackage = (name): boolean => {
+	try {
+		return !!require.resolve(name);
+	} catch (e) {
+		return false;
+	}
+};
+
+/**
+ * Get path to npm package.
+ *
+ * require.resole is a path to the package.json "main" property. This functions
+ * get the path to the actual module directory
+ */
+export const getNpmPackagePath = (name): string => {
+	const mainDir = require.resolve(name);
+
+	return mainDir.substring(0, mainDir.indexOf(name) + name.length);
+};
