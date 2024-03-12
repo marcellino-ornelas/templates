@@ -202,6 +202,28 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
 	});
 
+	it('should load local tpsrc file for 3rd party template', () => {
+		vol.rmSync(LOCAL_CONFIG_PATH);
+
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'tps-test-3rd-party-package': {
+				opts: {
+					extendedDest: './local-not-in-tps-path',
+				},
+				answers: {
+					prompt1: true,
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('tps-test-3rd-party-package');
+
+		expect(tps.opts.extendedDest).toBe('./local-not-in-tps-path');
+
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.prompt1).toBeTruthy();
+	});
+
 	// it('should be able to override a tpsrc file location', () => {
 
 	// 	const randomDir = path.join(process.cwd(), './random/.tps/tpsrc');

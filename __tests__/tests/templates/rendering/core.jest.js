@@ -217,7 +217,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a npm template', () => {
-		const tps = new Templates('tps-test-3rd-party-package');
+		const tps = new Templates('tps-test-3rd-party-package', { default: true });
 
 		const appPath = playground.pathTo('app');
 
