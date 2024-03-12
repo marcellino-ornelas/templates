@@ -248,7 +248,7 @@ export class Templates {
 		const defaultFolder = path.join(this.src, 'default');
 		const shouldLoadDefault = this.opts.defaultPackage && isDir(defaultFolder);
 		logger.tps.info('Loading default package %n', {
-			shouldLoadDefault: shouldLoadDefault,
+			shouldLoadDefault,
 			defaultLocation: defaultFolder,
 		});
 		if (shouldLoadDefault) {
