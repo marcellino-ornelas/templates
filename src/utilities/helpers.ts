@@ -121,7 +121,7 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
-const getNpmPaths = (name): string[] => {
+const resolve = (name): string[] => {
 	const paths: string[] = [];
 
 	return paths;
