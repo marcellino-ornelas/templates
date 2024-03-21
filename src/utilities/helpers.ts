@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as is from 'is';
 import path from 'path';
+import { CWD } from './constants';
 
 export function hasProp(obj: Record<string, any>, prop: string): boolean {
 	return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -120,10 +121,17 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
+const getNpmPaths = (name): string[] => {
+	const paths: string[] = [];
+
+	return paths;
+};
+
 export const isNpmPackage = (name): boolean => {
 	try {
 		return !!require.resolve(name);
 	} catch (e) {
+		console.log(e);
 		return false;
 	}
 };
