@@ -361,8 +361,6 @@ export class Templates {
 			pathsToCreate = [buildPaths];
 		}
 
-		// LOAD TPSRC files
-
 		// if were building in the destination. then we aren't creating any new folders
 		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
 		logger.tps.info('Build paths: %n', pathsToCreate);
