@@ -361,6 +361,8 @@ export class Templates {
 			pathsToCreate = [buildPaths];
 		}
 
+		// LOAD TPSRC files
+
 		// if were building in the destination. then we aren't creating any new folders
 		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
 		logger.tps.info('Build paths: %n', pathsToCreate);
@@ -903,10 +905,14 @@ export class Templates {
 		}
 
 		if (!this.opts.noLocalConfig) {
-			logger.tps.info(
-				'Checking for local tpsrc in and up: %s',
-				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
-			);
+			const tpsrcPath = this.opts.tpsPath || TPS.LOCAL_PATH;
+
+			if (tpsrcPath) {
+				logger.tps.info(
+					'Checking for local tpsrc in and up: %s',
+					path.dirname(tpsrcPath),
+				);
+			}
 
 			if (this.hasLocalTpsrc()) {
 				const local = this.getLocalTpsrc();
