@@ -2,6 +2,7 @@
 import * as is from 'is';
 import path from 'path';
 import { CWD } from './constants';
+import { findUp } from './fileSystem';
 
 export function hasProp(obj: Record<string, any>, prop: string): boolean {
 	return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -121,29 +122,16 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
-const resolve = (name): string[] => {
-	const paths: string[] = [];
-
-	return paths;
-};
-
-export const isNpmPackage = (name): boolean => {
-	try {
-		return !!require.resolve(name);
-	} catch (e) {
-		console.log(e);
-		return false;
-	}
-};
-
 /**
  * Get path to npm package.
  *
  * require.resole is a path to the package.json "main" property. This functions
  * get the path to the actual module directory
  */
-export const getNpmPackagePath = (name): string => {
-	const mainDir = require.resolve(name);
+export const getNpmPackagePath = (name): string | null => {
+	return findUp(`node_modules/${name}`, CWD) ?? null;
+};
 
-	return mainDir.substring(0, mainDir.indexOf(name) + name.length);
+export const isNpmPackage = (name): boolean => {
+	return !!getNpmPackagePath(name);
 };
