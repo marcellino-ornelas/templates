@@ -931,10 +931,14 @@ export class Templates {
 		}
 
 		if (!this.opts.noLocalConfig) {
-			logger.tps.info(
-				'Checking for local tpsrc in and up: %s',
-				path.dirname(this.opts.tpsPath || TPS.LOCAL_PATH),
-			);
+			const tpsrcPath = this.opts.tpsPath || TPS.LOCAL_PATH;
+
+			if (tpsrcPath) {
+				logger.tps.info(
+					'Checking for local tpsrc in and up: %s',
+					path.dirname(tpsrcPath),
+				);
+			}
 
 			if (this.hasLocalTpsrc()) {
 				const local = this.getLocalTpsrc();
