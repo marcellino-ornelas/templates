@@ -903,7 +903,7 @@ export class Templates {
 			tpsrcSearchPlaces,
 		);
 
-		tpsrcfiles.forEach((tpsrc) => {
+		tpsrcfiles.reverse().forEach((tpsrc) => {
 			if (!tpsrc || tpsrc?.isEmpty) return;
 
 			logger.tps.info('Loading tpsrc from: %s', tpsrc.filepath);
