@@ -6,7 +6,6 @@ import {
 	DirectoryNotFoundError,
 	RequiresTemplateError,
 } from '@tps/errors';
-import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
 
 jest.mock('fs');

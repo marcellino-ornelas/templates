@@ -6,10 +6,10 @@ import { CosmiconfigResult, PublicExplorerSync } from 'cosmiconfig';
 /**
  * Check to see if the `path` is a valid directory
  */
-export function isDir(path: string): boolean {
+export function isDir(filePath: string): boolean {
 	let dir;
 	try {
-		dir = fs.lstatSync(path);
+		dir = fs.lstatSync(filePath);
 	} catch (e) {
 		return false;
 	}
@@ -19,10 +19,10 @@ export function isDir(path: string): boolean {
 /**
  * Check to see if the `path` is a valid file
  */
-export function isFile(path: string): boolean {
+export function isFile(filePath: string): boolean {
 	let file;
 	try {
-		file = fs.lstatSync(path);
+		file = fs.lstatSync(filePath);
 	} catch (e) {
 		return false;
 	}
