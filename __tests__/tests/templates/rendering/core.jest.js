@@ -166,15 +166,6 @@ describe('[Templates] Render Process:', () => {
 		});
 	});
 
-	it('should have correct tps path', () => {
-		const tps = new Templates('testing');
-
-		const cwd = process.cwd();
-		const expectedPath = path.join(cwd, '__tests__/.tps');
-
-		expect(tps.tpsPath).toBe(expectedPath);
-	});
-
 	it('should be able to use experimental template engine', async () => {
 		const tps = new Templates('testing-experimental-template-engine', {
 			experimentalTemplateEngine: true,

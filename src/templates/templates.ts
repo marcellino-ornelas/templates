@@ -906,7 +906,7 @@ export class Templates {
 		tpsrcfiles.reverse().forEach((tpsrc) => {
 			if (!tpsrc || tpsrc?.isEmpty) return;
 
-			logger.tps.info('Loading tpsrc from: %s', tpsrc.filepath);
+			logger.tps.info('Loading tpsrc from: %s %n', tpsrc.filepath, tpsrc);
 
 			this._loadTpsSpecificConfig(templateName, tpsrc.config);
 		});
