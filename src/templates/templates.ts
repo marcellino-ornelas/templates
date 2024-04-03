@@ -96,6 +96,18 @@ export class Templates {
 
 	public compiledFiles: File[];
 
+	/**
+	 * Issues:
+	 *
+	 * Tpsrc
+	 *
+	 * list
+	 *
+	 */
+	public static getTemplateLocations(cwd: string = CWD): string[] {
+		return [Templates.getGloablTpsPath()];
+	}
+
 	public static getGloablTpsPath(): string {
 		return TPS.GLOBAL_PATH;
 	}

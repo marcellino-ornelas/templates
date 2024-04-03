@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as is from 'is';
 import path from 'path';
+import paths from 'npm-paths';
 import { CWD } from './constants';
 import { findUp } from './fileSystem';
 
@@ -122,6 +123,10 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
+export const getNpmPaths = (cwd = CWD): string[] => {
+	return paths(cwd);
+};
+
 /**
  * Get path to npm package.
  *
@@ -129,7 +134,17 @@ export function cliLog(str: string): void {
  * get the path to the actual module directory
  */
 export const getNpmPackagePath = (name): string | null => {
-	return findUp(`node_modules/${name}`, CWD) ?? null;
+	try {
+		// has node_modules suffix
+		// const originalPaths = require.resolve.paths(name);
+		// console.log([...originalPaths, ...allDirectoriesUp(CWD)]);
+		// const cwdAndUp = allDirectoriesUp(CWD).map((dir) => `${dir}/node_modules`);
+		// return require.resolve(name, {
+		// 	paths: [...originalPaths, ...allDirectoriesUp(CWD)],
+		// });
+	} catch (e) {
+		return null;
+	}
 };
 
 export const isNpmPackage = (name): boolean => {
