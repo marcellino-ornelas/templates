@@ -28,6 +28,7 @@ import * as Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
+import { Tpsrc } from '@tps/types/tpsrc';
 import {
 	CosmiconfigResult,
 	cosmiconfigSync,
@@ -35,7 +36,6 @@ import {
 	getDefaultSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
-import { Tpsrc } from '@tps/types/tpsrc';
 
 export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
