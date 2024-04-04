@@ -10,6 +10,8 @@ import {
 	GlobalInitializedAlreadyError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
+import { isDir } from '@tps/utilities/fileSystem';
+import path from 'path';
 
 interface InitArgv {
 	force: boolean;
@@ -32,7 +34,7 @@ export default {
 		},
 	},
 	describe: 'Initialize local settings',
-	handler(argv) {
+	async handler(argv) {
 		if (argv.verbose) {
 			debug.enable('tps:cli');
 		}
@@ -51,46 +53,44 @@ export default {
 		 * tps global init
 		 */
 		if (argv.global) {
-			logger.cli.log('Initializing Global...');
+			logger.cli.info('Initializing Global...');
+
 			if (Templates.hasGloablTps()) {
-				errorExit(new GlobalInitializedAlreadyError(TPS.GLOBAL_PATH));
+				const error = new GlobalInitializedAlreadyError(TPS.USER_HOME);
+
+				logger.cli.error(error);
+
+				throw error;
 			}
 
-			tps
-				.render(TPS.INIT_GLOBAL_PATH)
+			return tps
+				.render(TPS.USER_HOME)
 				.then(() => {
 					logger.cli.log('tps globally initialized');
 				})
 				.catch(errorExit);
-		} else {
-			/**
-			 * tps local init
-			 */
-			if (TPS.IS_TPS_INITIALIZED) {
-				errorExit(new InitializedAlreadyError(TPS.INIT_LOCAL_PATH));
-			}
-
-			/**
-			 * if not force then tps folder can not exist in cwd
-			 */
-			logger.cli.info(
-				'tps found in parent directory?',
-				Templates.hasLocalTps(),
-			);
-			logger.cli.info('closes tps location', TPS.LOCAL_PATH);
-
-			if (Templates.hasLocalTps() && !argv.force) {
-				errorExit(new ParentDirectoryInitializedError(TPS.LOCAL_PATH));
-			}
-
-			logger.cli.log('Initializing repo...');
-
-			tps
-				.render(TPS.INIT_LOCAL_PATH)
-				.then(() => {
-					logger.cli.log('Repo initialized');
-				})
-				.catch(errorExit);
 		}
+
+		/**
+		 * tps local init
+		 */
+		logger.cli.info('Tps local location: %s', TPS.CWD);
+
+		if (Templates.directoryIsTpsInitialized(TPS.CWD)) {
+			const error = new InitializedAlreadyError(TPS.CWD);
+
+			logger.cli.error(error);
+
+			throw error;
+		}
+
+		logger.cli.info('Initializing repo...');
+
+		return tps
+			.render(TPS.CWD)
+			.then(() => {
+				logger.cli.log('Repo initialized');
+			})
+			.catch(errorExit);
 	},
 } as CommandModule<object, InitArgv>;
