@@ -47,8 +47,6 @@ describe('Command Line: init', () => {
 		it('should be able to initialize templates locally', async () => {
 			const parser = yargs().command(init).fail(false);
 
-			vol.rmSync(path.join(CWD, '.tps'), { force: true, recursive: true });
-
 			// @ts-expect-error not typed yet
 			expect(path.join(CWD, '.tps')).not.toBeDirectory();
 
@@ -69,6 +67,24 @@ describe('Command Line: init', () => {
 			await expect(parser.parseAsync('init')).rejects.toThrowError(
 				new InitializedAlreadyError(CWD).message,
 			);
+		});
+
+		it('should be able to initialize templates locally when parent is initialized', async () => {
+			const parser = yargs().command(init).fail(false);
+
+			/**
+			 * Since we are in ~/Desktop/random, we can use the
+			 * parent directory ~/Desktop to place the `.tps` folder
+			 */
+			await vol.promises.mkdir(path.join(CWD, '../.tps'));
+
+			// @ts-expect-error not typed yet
+			expect(path.join(CWD, '.tps')).not.toBeDirectory();
+
+			await parser.parseAsync('init');
+
+			// @ts-expect-error not typed yet
+			expect(path.join(CWD, '.tps')).toBeDirectory();
 		});
 	});
 
@@ -96,6 +112,23 @@ describe('Command Line: init', () => {
 			await expect(parser.parseAsync('init --global')).rejects.toThrowError(
 				new GlobalInitializedAlreadyError(USER_HOME).message,
 			);
+		});
+
+		it('should be able to initialize local repo when already globally initialized', async () => {
+			const parser = yargs().command(init).fail(false);
+
+			// @ts-expect-error not typed yet
+			expect(path.join(USER_HOME, '.tps')).not.toBeDirectory();
+
+			await parser.parseAsync('init --global');
+
+			// @ts-expect-error not typed yet
+			expect(path.join(USER_HOME, '.tps')).toBeDirectory();
+
+			await parser.parseAsync('init');
+
+			// @ts-expect-error not typed yet
+			expect(path.join(CWD, '.tps')).toBeDirectory();
 		});
 	});
 });
