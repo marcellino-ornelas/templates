@@ -117,24 +117,6 @@ export class Templates {
 		return Templates.getLocalTpsPath();
 	}
 
-	public static getGlobalTpsrc(): CosmiconfigResult {
-		return tpsrcConfig.search(TPS.USER_HOME);
-	}
-
-	public static hasGloablTpsrc(): boolean {
-		const global = this.getGlobalTpsrc();
-		return !!(global && !global.isEmpty);
-	}
-
-	public static getLocalTpsrc(): CosmiconfigResult {
-		return tpsrcConfig.search(TPS.CWD);
-	}
-
-	public static hasLocalTpsrc(): boolean {
-		const local = this.getLocalTpsrc();
-		return !!(local && !local.isEmpty);
-	}
-
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
 		if (!templateName || !is.string(templateName)) {
 			throw new RequiresTemplateError();
@@ -243,32 +225,6 @@ export class Templates {
 		}
 
 		return isDir(this.opts.tpsPath);
-	}
-
-	public getGlobalTpsrc(): CosmiconfigResult {
-		return Templates.getGlobalTpsrc();
-	}
-
-	public hasGloablTpsrc(): boolean {
-		return Templates.hasGloablTpsrc();
-	}
-
-	public getLocalTpsrc(): CosmiconfigResult {
-		if (!this.opts.tpsPath) {
-			return Templates.getLocalTpsrc();
-		}
-
-		return tpsrcConfig.search(TPS.CWD);
-	}
-
-	public hasLocalTpsrc(): boolean {
-		if (!this.opts.tpsPath) {
-			return Templates.hasLocalTpsrc();
-		}
-
-		const local = this.getLocalTpsrc();
-
-		return !!(local && !local.isEmpty);
 	}
 
 	/**
