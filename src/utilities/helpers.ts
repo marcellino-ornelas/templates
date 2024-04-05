@@ -127,26 +127,10 @@ export const getNpmPaths = (cwd = CWD): string[] => {
 	return paths(cwd);
 };
 
-/**
- * Get path to npm package.
- *
- * require.resole is a path to the package.json "main" property. This functions
- * get the path to the actual module directory
- */
-export const getNpmPackagePath = (name): string | null => {
-	try {
-		// has node_modules suffix
-		// const originalPaths = require.resolve.paths(name);
-		// console.log([...originalPaths, ...allDirectoriesUp(CWD)]);
-		// const cwdAndUp = allDirectoriesUp(CWD).map((dir) => `${dir}/node_modules`);
-		// return require.resolve(name, {
-		// 	paths: [...originalPaths, ...allDirectoriesUp(CWD)],
-		// });
-	} catch (e) {
-		return null;
-	}
-};
+export const getAllDirectoriesAndUp = (dir): string[] => {
+	const parent = path.dirname(dir);
 
-export const isNpmPackage = (name): boolean => {
-	return !!getNpmPackagePath(name);
+	if (dir === parent) return [dir];
+
+	return [dir, ...getAllDirectoriesAndUp(parent)];
 };

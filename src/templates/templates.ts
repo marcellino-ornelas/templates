@@ -17,8 +17,8 @@ import {
 	eachObj,
 	defaults,
 	hasProp,
-	getNpmPackagePath,
-	isNpmPackage,
+	getNpmPaths,
+	getAllDirectoriesAndUp,
 } from '@tps/utilities/helpers';
 import {
 	TemplateNotFoundError,
@@ -105,15 +105,35 @@ export class Templates {
 	public compiledFiles: File[];
 
 	/**
-	 * Issues:
+	 * Get all locations a template can be
 	 *
-	 * Tpsrc
-	 *
-	 * list
-	 *
+	 * Templates can be in be:
+	 * - any `.tps/` directory from the callers cwd and any directory above it
+	 * - Any `node_module` directory from the callers cwd and any directory above it
 	 */
-	public static getTemplateLocations(cwd: string = CWD): string[] {
-		return [Templates.getGloablTpsPath()];
+	public static getTemplateLocations(cwd: string = TPS.CWD): string[] {
+		const tpsDirectoryLocations = getAllDirectoriesAndUp(cwd).map((dir) => {
+			return path.join(dir, TPS.TPS_FOLDER);
+		});
+
+		// TODO: Sort this by directory
+		return [...tpsDirectoryLocations, ...getNpmPaths(cwd)];
+	}
+
+	/**
+	 * Get the path to a template or null if template doesnt exist
+	 */
+	public static findTemplate(
+		templateName: string,
+		cwd: string = TPS.CWD,
+	): string | null {
+		const homeDirectory = Templates.getTemplateLocations(cwd).find((tpsDir) => {
+			return isDir(path.join(tpsDir, templateName));
+		});
+
+		if (!homeDirectory) return null;
+
+		return path.join(homeDirectory, templateName);
 	}
 
 	public static getGloablTpsPath(): string {
@@ -149,44 +169,65 @@ export class Templates {
 		const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
 		const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
 
-		switch (true) {
-			case localPath && isDir(maybeLocalTemp):
-				this.src = maybeLocalTemp;
-				break;
-			case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
-				this.src = maybeGlobalTemp;
-				break;
-			case isDir(maybeDefaultTemp):
-				this.src = maybeDefaultTemp;
-				break;
-			/**
-			 * npm template
-			 */
-			case isNpmPackage(templateName):
-				this.src = getNpmPackagePath(templateName);
-				this.tpsPath = null;
-				break;
-			/**
-			 * npm template (try tps prefix)
-			 */
-			case isNpmPackage(`tps-${templateName}`):
-				this.template = `tps-${templateName}`;
-				this.src = getNpmPackagePath(`tps-${templateName}`);
-				this.tpsPath = null;
-				break;
-			default:
-				logger.tps.error('Template not found! \n%O', {
-					'local path': localPath,
-					'Seached for local template': maybeLocalTemp,
-					'search for global template': maybeGlobalTemp,
-					'search for default templates': maybeDefaultTemp,
-					// TODO: do i need anything for debugging npm templates?
-					[localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
-					[TPS.GLOBAL_PATH]:
-						Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
-				});
-				throw new TemplateNotFoundError(templateName);
+		const templateLocation =
+			this.constructor.findTemplate(templateName) ||
+			this.constructor.findTemplate(`tps-${templateName}`);
+
+		if (!templateLocation) {
+			logger.tps.error('Template not found! \n%O', {
+				searchedPaths: this.constructor.getTemplateLocations(),
+				// 'local path': localPath,
+				// 'Seached for local template': maybeLocalTemp,
+				// 'search for global template': maybeGlobalTemp,
+				// 'search for default templates': maybeDefaultTemp,
+				// // TODO: do i need anything for debugging npm templates?
+				// [localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
+				// [TPS.GLOBAL_PATH]:
+				// 	Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
+			});
+			throw new TemplateNotFoundError(templateName);
 		}
+
+		// this.constructor.findTemplate
+
+		this.src = templateLocation;
+
+		// switch (true) {
+		// 	case localPath && isDir(maybeLocalTemp):
+		// 		this.src = maybeLocalTemp;
+		// 		break;
+		// 	case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
+		// 		this.src = maybeGlobalTemp;
+		// 		break;
+		// 	case isDir(maybeDefaultTemp):
+		// 		this.src = maybeDefaultTemp;
+		// 		break;
+		// 	/**
+		// 	 * npm template
+		// 	 */
+		// 	case isNpmPackage(templateName):
+		// 		this.src = getNpmPackagePath(templateName);
+		// 		break;
+		// 	/**
+		// 	 * npm template (try tps prefix)
+		// 	 */
+		// 	case isNpmPackage(`tps-${templateName}`):
+		// 		this.template = `tps-${templateName}`;
+		// 		this.src = getNpmPackagePath(`tps-${templateName}`);
+		// 		break;
+		// 	default:
+		// 		logger.tps.error('Template not found! \n%O', {
+		// 			'local path': localPath,
+		// 			'Seached for local template': maybeLocalTemp,
+		// 			'search for global template': maybeGlobalTemp,
+		// 			'search for default templates': maybeDefaultTemp,
+		// 			// TODO: do i need anything for debugging npm templates?
+		// 			[localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
+		// 			[TPS.GLOBAL_PATH]:
+		// 				Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
+		// 		});
+		// 		throw new TemplateNotFoundError(templateName);
+		// }
 
 		logger.tps.info('Template %n', {
 			name: this.template,
@@ -898,6 +939,13 @@ export class Templates {
 			tpsrcConfig,
 			tpsrcSearchPlaces,
 		);
+
+		if (is.empty(tpsrcfiles)) {
+			logger.tps.info('No tps files to find: %n', {
+				cwd: TPS.CWD,
+				tpsrcSearchPlaces,
+			});
+		}
 
 		tpsrcfiles.reverse().forEach((tpsrc) => {
 			if (!tpsrc || tpsrc?.isEmpty) return;

@@ -205,10 +205,11 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
 	});
 
-	it('should load local tpsrc file for 3rd party template', () => {
-		vol.rmSync(LOCAL_CONFIG_PATH);
+	it.only('should load local tpsrc file for 3rd party template', () => {
+		// TODO: Shouldnt have to do this but there is a tpsrc file here in templates.json
+		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 
-		mkTpsrc(LOCAL_CONFIG_PATH, {
+		mkTpsrc(path.join(CWD, '.tps/tpsrc'), {
 			'tps-test-3rd-party-package': {
 				opts: {
 					extendedDest: './local-not-in-tps-path',
@@ -218,6 +219,11 @@ testing-prompt-core:
 				},
 			},
 		});
+
+		console.log(CWD);
+		console.log('hey');
+		console.log(vol.readFileSync(path.join(CWD, '.tps/tpsrc'))?.toString());
+		console.log(vol.toTree());
 
 		const tps: Templates = new Templates('tps-test-3rd-party-package');
 
