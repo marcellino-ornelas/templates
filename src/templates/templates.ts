@@ -6,7 +6,12 @@ import * as is from 'is';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
-import { findUp, isDir, isFile } from '@tps/utilities/fileSystem';
+import {
+	cosmiconfigAllExampleSync,
+	findUp,
+	isDir,
+	isFile,
+} from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import {
 	eachObj,
@@ -29,6 +34,7 @@ import * as Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
+import { Tpsrc } from '@tps/types/tpsrc';
 import {
 	CosmiconfigResult,
 	cosmiconfigSync,
@@ -72,11 +78,13 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
 	return `.tps/${location}`;
 });
 
+const tpsrcSearchPlaces = [...defaultTpsrcSearches, ...nestedTpsrcSearches];
+
 const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
 	cache: !TPS.IS_TESTING,
 	searchStrategy: 'global',
 	loaders: defaultLoadersSync,
-	searchPlaces: [...defaultTpsrcSearches, ...nestedTpsrcSearches],
+	searchPlaces: tpsrcSearchPlaces,
 });
 
 /**
@@ -129,24 +137,6 @@ export class Templates {
 		return Templates.getLocalTpsPath();
 	}
 
-	public static getGlobalTpsrc(): CosmiconfigResult {
-		return tpsrcConfig.search(TPS.USER_HOME);
-	}
-
-	public static hasGloablTpsrc(): boolean {
-		const global = this.getGlobalTpsrc();
-		return !!(global && !global.isEmpty);
-	}
-
-	public static getLocalTpsrc(): CosmiconfigResult {
-		return tpsrcConfig.search(TPS.CWD);
-	}
-
-	public static hasLocalTpsrc(): boolean {
-		const local = this.getLocalTpsrc();
-		return !!(local && !local.isEmpty);
-	}
-
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
 		if (!templateName || !is.string(templateName)) {
 			throw new RequiresTemplateError();
@@ -162,15 +152,12 @@ export class Templates {
 		switch (true) {
 			case localPath && isDir(maybeLocalTemp):
 				this.src = maybeLocalTemp;
-				this.tpsPath = localPath;
 				break;
 			case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
 				this.src = maybeGlobalTemp;
-				this.tpsPath = TPS.GLOBAL_PATH;
 				break;
 			case isDir(maybeDefaultTemp):
 				this.src = maybeDefaultTemp;
-				this.tpsPath = TPS.DEFAULT_TPS;
 				break;
 			/**
 			 * npm template
@@ -278,32 +265,6 @@ export class Templates {
 		}
 
 		return isDir(this.opts.tpsPath);
-	}
-
-	public getGlobalTpsrc(): CosmiconfigResult {
-		return Templates.getGlobalTpsrc();
-	}
-
-	public hasGloablTpsrc(): boolean {
-		return Templates.hasGloablTpsrc();
-	}
-
-	public getLocalTpsrc(): CosmiconfigResult {
-		if (!this.opts.tpsPath) {
-			return Templates.getLocalTpsrc();
-		}
-
-		return tpsrcConfig.search(TPS.CWD);
-	}
-
-	public hasLocalTpsrc(): boolean {
-		if (!this.opts.tpsPath) {
-			return Templates.hasLocalTpsrc();
-		}
-
-		const local = this.getLocalTpsrc();
-
-		return !!(local && !local.isEmpty);
 	}
 
 	/**
@@ -931,44 +892,32 @@ export class Templates {
 	/**
 	 * Configurations
 	 */
-	_loadTpsrc(templateName) {
-		if (!this.opts.noGlobalConfig) {
-			logger.tps.info('Checking for global tpsrc in and up: %s', TPS.USER_HOME);
-			if (this.hasGloablTpsrc()) {
-				const globalTpsrc = this.getGlobalTpsrc();
+	_loadTpsrc(templateName: string): void {
+		const tpsrcfiles = cosmiconfigAllExampleSync(
+			TPS.CWD,
+			tpsrcConfig,
+			tpsrcSearchPlaces,
+		);
 
-				logger.tps.info('Loading global tpsrc from: %s', globalTpsrc.filepath);
-				this._loadTpsSpecificConfig(templateName, globalTpsrc.config);
-			}
-		}
+		tpsrcfiles.reverse().forEach((tpsrc) => {
+			if (!tpsrc || tpsrc?.isEmpty) return;
 
-		if (!this.opts.noLocalConfig) {
-			const tpsrcPath = this.opts.tpsPath || TPS.LOCAL_PATH;
+			logger.tps.info('Loading tpsrc from: %s %n', tpsrc.filepath, tpsrc);
 
-			if (tpsrcPath) {
-				logger.tps.info(
-					'Checking for local tpsrc in and up: %s',
-					path.dirname(tpsrcPath),
-				);
-			}
-
-			if (this.hasLocalTpsrc()) {
-				const local = this.getLocalTpsrc();
-				logger.tps.info('Loading local tpsrc from: %s', local.filepath);
-				this._loadTpsSpecificConfig(templateName, local.config);
-			}
-		}
+			this._loadTpsSpecificConfig(templateName, tpsrc.config);
+		});
 	}
 
-	_loadTpsSpecificConfig(templateName, config) {
-		const templateConfig = config[templateName];
-		const hasConfigObject =
-			hasProp(config, templateName) && is.object(templateConfig);
+	_loadTpsSpecificConfig(templateName: string, config: Tpsrc) {
+		const templateConfig = config[templateName] ?? null;
 
-		if (hasConfigObject) {
+		if (templateConfig && is.object(templateConfig)) {
 			logger.tps.info('Loading configuration: %n', templateConfig);
 			const { answers = {}, opts = {} } = templateConfig;
-			this.opts = defaults(opts, this.opts);
+			this.opts = {
+				...this.opts,
+				...opts,
+			};
 
 			if (is.object(answers) && !is.empty(answers)) {
 				this.setAnswers(answers);

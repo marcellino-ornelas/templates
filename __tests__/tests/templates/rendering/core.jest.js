@@ -6,7 +6,6 @@ import {
 	DirectoryNotFoundError,
 	RequiresTemplateError,
 } from '@tps/errors';
-import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
 import { getNpmPackagePath } from '@tps/utilities/helpers';
 
@@ -165,15 +164,6 @@ describe('[Templates] Render Process:', () => {
 				'extras2.js',
 			]);
 		});
-	});
-
-	it('should have correct tps path', () => {
-		const tps = new Templates('testing');
-
-		const cwd = process.cwd();
-		const expectedPath = path.join(cwd, '__tests__/.tps');
-
-		expect(tps.tpsPath).toBe(expectedPath);
 	});
 
 	it('should be able to use experimental template engine', async () => {

@@ -180,6 +180,9 @@ testing-prompt-core:
 	});
 
 	it('should load a local tpsrc file not in a tps folder', () => {
+		// TODO: Shouldnt have to do this but there is a tpsrc file here in templates.json
+		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+
 		// TODO: should not be in the tests folder
 		const localTpsrc = path.join(CWD, '.tpsrc');
 
