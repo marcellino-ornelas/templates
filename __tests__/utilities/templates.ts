@@ -26,19 +26,31 @@ export const mkFile = (file: string, data: string): void => {
 	vol.writeFileSync(file, data);
 };
 
-const DEFAULT_TEMLATE_FILES: DirectoryJSON = { './default/index.js': 'hey' };
+const DEFAULT_TEMPLATE_FILES: DirectoryJSON = { './default/index.js': 'hey' };
+
+export const mkTemplateBase = (
+	/**
+	 * full path to the template folder including name
+	 *
+	 * @example /User/marcellinoornelas/Desktop/project/.tps/<template-name>
+	 * @example /usr/lib/node_modules/<template-name>
+	 */
+	location: string,
+	json: DirectoryJSON = {},
+): void => {
+	vol.fromJSON({ ...DEFAULT_TEMPLATE_FILES, ...json }, location);
+};
 
 export const mkTemplate = (
 	name: string,
-	location: string = CWD,
+	directory: string = CWD,
 	json: DirectoryJSON = {},
 ) => {
-	vol.fromJSON(
-		{ ...DEFAULT_TEMLATE_FILES, ...json },
-		`${location}/.tps/${name}/`,
-	);
+	mkTemplateBase(path.join(directory, `.tps/${name}/`), json);
+};
 
-	return vol;
+export const mk3rdPartyTemplate = (name: string, json: DirectoryJSON = {}) => {
+	mkTemplateBase(path.join('/usr/lib/node_modules', name), json);
 };
 
 export const mkGlobalTemplate = (

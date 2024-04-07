@@ -7,7 +7,9 @@ import {
 	RequiresTemplateError,
 } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
-import { mkTemplate } from '@test/utilities/templates';
+import { mk3rdPartyTemplate, mkTemplate } from '@test/utilities/templates';
+import paths from 'npm-paths';
+import { reset, vol } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -24,6 +26,8 @@ describe('[Templates] Render Process:', () => {
 
 	beforeEach(() => {
 		jest.resetAllMocks();
+		reset();
+
 		return playground.createBox('render_process');
 	});
 
@@ -193,7 +197,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a npm template', () => {
-		mkTemplate('tps-test-3rd-party-package');
+		mk3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = new Templates('tps-test-3rd-party-package', { default: true });
 
