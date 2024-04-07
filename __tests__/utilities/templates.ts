@@ -45,19 +45,20 @@ export const mkTemplate = (
 	name: string,
 	directory: string = CWD,
 	json: DirectoryJSON = {},
-): string[] => {
+): void => {
 	mkTemplateBase(path.join(directory, `.tps/${name}/`), json);
-
-	return Object.keys(json);
 };
 
-export const mk3rdPartyTemplate = (name: string, json: DirectoryJSON = {}) => {
+export const mk3rdPartyTemplate = (
+	name: string,
+	json: DirectoryJSON = {},
+): void => {
 	mkTemplateBase(path.join('/usr/lib/node_modules', name), json);
 };
 
 export const mkGlobalTemplate = (
 	name: string,
-	json: DirectoryJSON = { './default/index.js': 'hey' },
+	json: DirectoryJSON = {},
 ): void => {
 	mkTemplate(name, USER_HOME, json);
 };

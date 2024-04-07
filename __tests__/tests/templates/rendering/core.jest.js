@@ -60,14 +60,14 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template without tps prefix', () => {
-		mkTemplate('test-templates-tps-prefix');
+		mkTemplate('tps-test-template-prefix');
 
-		const tps = new Templates('testing');
+		const tps = new Templates('test-template-prefix');
 
 		const destPath = playground.pathTo('app');
 
 		return tps.render(playground.box(), 'app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
 		});
 	});
 
@@ -215,7 +215,7 @@ describe('[Templates] Render Process:', () => {
 		const appPath = playground.pathTo('app');
 
 		return tps.render(playground.box(), 'app').then(() => {
-			expect(appPath).toHaveAllFilesAndDirectories(['./index.js']);
+			expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
 		});
 	});
 });
