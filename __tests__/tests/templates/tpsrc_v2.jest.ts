@@ -8,6 +8,7 @@ import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 import { DEFAULT_OPTIONS } from '@tps/templates/templates';
 import {
 	DEFAULT_PROMPT,
+	mk3rdPartyTemplate,
 	mkFile,
 	mkGlobalTpsrc,
 	mkPrompt,
@@ -213,7 +214,7 @@ testing-prompt-core:
 	});
 
 	it('should load local tpsrc file for 3rd party template', () => {
-		mkTemplate('tps-test-3rd-party-package', CWD, {
+		mk3rdPartyTemplate('tps-test-3rd-party-package', {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),
@@ -222,7 +223,7 @@ testing-prompt-core:
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-test-3rd-party-package': {
 				opts: {
-					extendedDest: './local-not-in-tps-path',
+					extendedDest: './3rd-party',
 				},
 				answers: {
 					[DEFAULT_PROMPT.name]: true,
@@ -232,7 +233,7 @@ testing-prompt-core:
 
 		const tps: Templates = new Templates('tps-test-3rd-party-package');
 
-		expect(tps.opts.extendedDest).toBe('./local-not-in-tps-path');
+		expect(tps.opts.extendedDest).toBe('./3rd-party');
 
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.prompt1).toBeTruthy();

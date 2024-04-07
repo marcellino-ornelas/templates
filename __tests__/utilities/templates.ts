@@ -67,7 +67,7 @@ export const DEFAULT_PROMPT: SettingsFilePrompt = {
 	name: 'prompt1',
 	message: 'Prompt1?',
 	tpsType: 'data',
-	type: 'input',
+	type: 'confirm',
 };
 
 export const mkPrompt = (
