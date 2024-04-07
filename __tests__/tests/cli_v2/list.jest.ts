@@ -65,7 +65,7 @@ describe('Command Line: list', () => {
 	it('should be able to list out global templates', async () => {
 		globalInit();
 
-		mkGlobalTemplate('testing-global', undefined);
+		mkGlobalTemplate('testing-global');
 
 		const parser = yargs().command(list);
 
@@ -78,7 +78,7 @@ describe('Command Line: list', () => {
 	it('should ignore global templates if option provided', async () => {
 		globalInit();
 
-		mkGlobalTemplate('testing-global', undefined);
+		mkGlobalTemplate('testing-global');
 
 		const parser = yargs().command(list);
 
