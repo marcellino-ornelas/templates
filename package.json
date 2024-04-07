@@ -79,7 +79,6 @@
 		"dot": "1.1.2",
 		"filenamify": "2.1.0",
 		"find-up": "3.0.0",
-		"global-modules": "^2.0.0",
 		"inflection": "^2.0.1",
 		"inquirer": "6.2.2",
 		"is": "3.3.0",
