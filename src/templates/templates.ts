@@ -36,7 +36,6 @@ import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
 import { Tpsrc } from '@tps/types/tpsrc';
 import {
-	CosmiconfigResult,
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
@@ -164,11 +163,6 @@ export class Templates {
 
 		this.template = templateName;
 
-		const localPath = opts.tpsPath || TPS.LOCAL_PATH;
-		const maybeLocalTemp = `${localPath}/${templateName}`;
-		const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
-		const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
-
 		const templateLocation =
 			this.constructor.findTemplate(templateName) ||
 			this.constructor.findTemplate(`tps-${templateName}`);
@@ -176,58 +170,11 @@ export class Templates {
 		if (!templateLocation) {
 			logger.tps.error('Template not found! \n%O', {
 				searchedPaths: this.constructor.getTemplateLocations(),
-				// 'local path': localPath,
-				// 'Seached for local template': maybeLocalTemp,
-				// 'search for global template': maybeGlobalTemp,
-				// 'search for default templates': maybeDefaultTemp,
-				// // TODO: do i need anything for debugging npm templates?
-				// [localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
-				// [TPS.GLOBAL_PATH]:
-				// 	Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
 			});
 			throw new TemplateNotFoundError(templateName);
 		}
 
-		// this.constructor.findTemplate
-
 		this.src = templateLocation;
-
-		// switch (true) {
-		// 	case localPath && isDir(maybeLocalTemp):
-		// 		this.src = maybeLocalTemp;
-		// 		break;
-		// 	case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
-		// 		this.src = maybeGlobalTemp;
-		// 		break;
-		// 	case isDir(maybeDefaultTemp):
-		// 		this.src = maybeDefaultTemp;
-		// 		break;
-		// 	/**
-		// 	 * npm template
-		// 	 */
-		// 	case isNpmPackage(templateName):
-		// 		this.src = getNpmPackagePath(templateName);
-		// 		break;
-		// 	/**
-		// 	 * npm template (try tps prefix)
-		// 	 */
-		// 	case isNpmPackage(`tps-${templateName}`):
-		// 		this.template = `tps-${templateName}`;
-		// 		this.src = getNpmPackagePath(`tps-${templateName}`);
-		// 		break;
-		// 	default:
-		// 		logger.tps.error('Template not found! \n%O', {
-		// 			'local path': localPath,
-		// 			'Seached for local template': maybeLocalTemp,
-		// 			'search for global template': maybeGlobalTemp,
-		// 			'search for default templates': maybeDefaultTemp,
-		// 			// TODO: do i need anything for debugging npm templates?
-		// 			[localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
-		// 			[TPS.GLOBAL_PATH]:
-		// 				Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
-		// 		});
-		// 		throw new TemplateNotFoundError(templateName);
-		// }
 
 		logger.tps.info('Template %n', {
 			name: this.template,
@@ -249,7 +196,6 @@ export class Templates {
 		try {
 			logger.tps.info('Loading template settings file...');
 			// eslint-disable-next-line
-			//   this.templateSettings = require(this.templateSettingsPath) || {};
 			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
