@@ -207,15 +207,15 @@ describe('[Templates] Render Process:', () => {
 		expect(indexFile).toHaveFileContents('{}\nhey there\n{}\nbye');
 	});
 
-	it('should be able to use a npm template', () => {
+	it('should be able to use a npm template', async () => {
 		mk3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = new Templates('tps-test-3rd-party-package', { default: true });
 
 		const appPath = playground.pathTo('app');
 
-		return tps.render(playground.box(), 'app').then(() => {
-			expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
-		});
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
 });
