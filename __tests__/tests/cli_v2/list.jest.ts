@@ -1,6 +1,10 @@
 import yargs from 'yargs/yargs';
 import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
-import { mkTemplate, globalInit } from '@test/utilities/templates';
+import {
+	mkTemplate,
+	globalInit,
+	mkGlobalTemplate,
+} from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
 import { CWD } from '@tps/utilities/constants';
@@ -61,7 +65,7 @@ describe('Command Line: list', () => {
 	it('should be able to list out global templates', async () => {
 		globalInit();
 
-		mkTemplate('testing-global', undefined, true);
+		mkGlobalTemplate('testing-global', undefined);
 
 		const parser = yargs().command(list);
 
@@ -74,7 +78,7 @@ describe('Command Line: list', () => {
 	it('should ignore global templates if option provided', async () => {
 		globalInit();
 
-		mkTemplate('testing-global', undefined, true);
+		mkGlobalTemplate('testing-global', undefined);
 
 		const parser = yargs().command(list);
 

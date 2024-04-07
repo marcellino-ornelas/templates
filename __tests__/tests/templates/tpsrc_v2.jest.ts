@@ -6,7 +6,15 @@ import path from 'path';
 import { reset, vol } from '@test/utilities/vol';
 import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 import { DEFAULT_OPTIONS } from '@tps/templates/templates';
-import { mkFile, mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
+import paths from 'npm-paths';
+import {
+	DEFAULT_PROMPT,
+	mkFile,
+	mkGlobalTpsrc,
+	mkPrompt,
+	mkTemplate,
+	mkTpsrc,
+} from '@test/utilities/templates';
 
 jest.mock('fs');
 
@@ -205,25 +213,26 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
 	});
 
-	it.only('should load local tpsrc file for 3rd party template', () => {
+	it('should load local tpsrc file for 3rd party template', () => {
 		// TODO: Shouldnt have to do this but there is a tpsrc file here in templates.json
 		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 
-		mkTpsrc(path.join(CWD, '.tps/tpsrc'), {
+		mkTemplate('tps-test-3rd-party-package', CWD, {
+			'./settings.json': JSON.stringify({
+				prompts: [mkPrompt()],
+			}),
+		});
+
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-test-3rd-party-package': {
 				opts: {
 					extendedDest: './local-not-in-tps-path',
 				},
 				answers: {
-					prompt1: true,
+					[DEFAULT_PROMPT.name]: true,
 				},
 			},
 		});
-
-		console.log(CWD);
-		console.log('hey');
-		console.log(vol.readFileSync(path.join(CWD, '.tps/tpsrc'))?.toString());
-		console.log(vol.toTree());
 
 		const tps: Templates = new Templates('tps-test-3rd-party-package');
 

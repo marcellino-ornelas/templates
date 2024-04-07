@@ -123,7 +123,7 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
-export const getNpmPaths = (cwd = CWD): string[] => {
+export const getNpmPaths = (cwd: string = CWD): string[] => {
 	return paths(cwd);
 };
 

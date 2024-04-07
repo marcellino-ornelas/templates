@@ -5,6 +5,7 @@ import path from 'path';
 import os from 'os';
 import { CWD, USER_HOME } from '@tps/utilities/constants';
 import { DirectoryJSON } from 'memfs';
+import { SettingsFilePrompt } from '@tps/types/settings';
 
 export type OptionsTpsrc = RecursivePartial<Tpsrc>;
 
@@ -25,16 +26,42 @@ export const mkFile = (file: string, data: string): void => {
 	vol.writeFileSync(file, data);
 };
 
+const DEFAULT_TEMLATE_FILES: DirectoryJSON = { './default/index.js': 'hey' };
+
 export const mkTemplate = (
 	name: string,
-	json: DirectoryJSON = { './default/index.js': 'hey' },
-	global = false,
+	location: string = CWD,
+	json: DirectoryJSON = {},
 ) => {
-	const location = global ? USER_HOME : CWD;
-
-	vol.fromJSON(json, `${location}/.tps/${name}/`);
+	vol.fromJSON(
+		{ ...DEFAULT_TEMLATE_FILES, ...json },
+		`${location}/.tps/${name}/`,
+	);
 
 	return vol;
+};
+
+export const mkGlobalTemplate = (
+	name: string,
+	json: DirectoryJSON = { './default/index.js': 'hey' },
+): void => {
+	mkTemplate(name, USER_HOME, json);
+};
+
+export const DEFAULT_PROMPT: SettingsFilePrompt = {
+	name: 'prompt1',
+	message: 'Prompt1?',
+	tpsType: 'data',
+	type: 'input',
+};
+
+export const mkPrompt = (
+	prompt: Partial<SettingsFilePrompt> = {},
+): SettingsFilePrompt => {
+	return {
+		...DEFAULT_PROMPT,
+		...prompt,
+	};
 };
 
 export const init = (tpsrc: OptionsTpsrc = {}): void => {
