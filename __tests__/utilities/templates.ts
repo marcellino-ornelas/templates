@@ -45,8 +45,10 @@ export const mkTemplate = (
 	name: string,
 	directory: string = CWD,
 	json: DirectoryJSON = {},
-) => {
+): string[] => {
 	mkTemplateBase(path.join(directory, `.tps/${name}/`), json);
+
+	return Object.keys(json);
 };
 
 export const mk3rdPartyTemplate = (name: string, json: DirectoryJSON = {}) => {

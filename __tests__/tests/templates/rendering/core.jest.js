@@ -8,8 +8,7 @@ import {
 } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
 import { mk3rdPartyTemplate, mkTemplate } from '@test/utilities/templates';
-import paths from 'npm-paths';
-import { reset, vol } from '@test/utilities/vol';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -51,6 +50,18 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template', () => {
+		const tps = new Templates('testing');
+
+		const destPath = playground.pathTo('app');
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+		});
+	});
+
+	it('should be able to render a local template without tps prefix', () => {
+		mkTemplate('test-templates-tps-prefix');
+
 		const tps = new Templates('testing');
 
 		const destPath = playground.pathTo('app');
