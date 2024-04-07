@@ -3,22 +3,23 @@ import { MAIN_DIR } from '@tps/utilities/constants';
 import fs from 'fs';
 import path from 'path';
 
-const TESTING_DIR = path.join(__dirname, '../__tests__');
-
-const directories = [
-	new DirectoryNode('.tps', TESTING_DIR),
-	new DirectoryNode('.tps', MAIN_DIR),
-	// new DirectoryNode('tps-test-3rd-party-package', `${MAIN_DIR}/node_modules`),
-];
-
 (async () => {
 	const DEFAULT_FILES = {};
 
-	directories.forEach((dir) => {
-		dir.find({ type: 'file' }).forEach((a: FileNode) => {
-			const data = fs.readFileSync(a.path);
-			DEFAULT_FILES[a.path] = data?.toString() ?? '';
-		});
+	const TESTING_DIR = path.join(__dirname, '../__tests__');
+
+	const dir = new DirectoryNode('.tps', TESTING_DIR);
+
+	dir.find({ type: 'file' }).forEach((a: FileNode) => {
+		const data = fs.readFileSync(a.path);
+		DEFAULT_FILES[a.path] = data?.toString() ?? '';
+	});
+
+	const defaultDir = new DirectoryNode('.tps', MAIN_DIR);
+
+	defaultDir.find({ type: 'file' }).forEach((a: FileNode) => {
+		const data = fs.readFileSync(a.path);
+		DEFAULT_FILES[a.path] = data?.toString() ?? '';
 	});
 
 	await fs.promises.writeFile(
