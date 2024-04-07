@@ -218,4 +218,16 @@ describe('[Templates] Render Process:', () => {
 
 		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
+
+	it('should be able to render a 3rd party template without tps prefix', () => {
+		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+
+		const tps = new Templates('test-3rd-template-prefix');
+
+		const destPath = playground.pathTo('app');
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
+		});
+	});
 });
