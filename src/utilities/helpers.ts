@@ -123,10 +123,27 @@ export function cliLog(str: string): void {
 //     : fileName;
 // };
 
+/**
+ * Get all npm paths
+ */
 export const getNpmPaths = (cwd: string = CWD): string[] => {
 	return paths(cwd);
 };
 
+/**
+ * Get a list of all parent directories from a directory
+ *
+ * @example
+ * 	getAllDirectoriesAndUp("/User/marcellinoornelas/Desktop/random")
+ * 	// returns
+ * 	[
+ * 		"/User/marcellinoornelas/Desktop/random",
+ * 		"/User/marcellinoornelas/Desktop",
+ * 		"/User/marcellinoornelas",
+ * 		"/User",
+ * 		"/",
+ * 	]
+ */
 export const getAllDirectoriesAndUp = (dir): string[] => {
 	const parent = path.dirname(dir);
 
