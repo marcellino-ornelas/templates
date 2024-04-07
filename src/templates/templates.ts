@@ -116,7 +116,11 @@ export class Templates {
 		});
 
 		// TODO: Sort this by directory
-		return [...tpsDirectoryLocations, ...getNpmPaths(cwd)];
+		return [
+			...tpsDirectoryLocations,
+			path.join(TPS.MAIN_DIR, TPS.TPS_FOLDER),
+			...getNpmPaths(cwd),
+		];
 	}
 
 	/**
