@@ -151,3 +151,30 @@ export const getAllDirectoriesAndUp = (dir): string[] => {
 
 	return [dir, ...getAllDirectoriesAndUp(parent)];
 };
+
+/**
+ * Unflatten an array
+ */
+export const flatten = <T>(arr: T[][]): T[] => {
+	return arr.reduce((unflattened, subArr) => {
+		unflattened.push(...subArr);
+
+		return unflattened;
+	}, []);
+};
+
+export const unique = <T extends string | number>(array: T[]): T[] => {
+	const tracker: Record<string, boolean> = {};
+	const uniqueArray: T[] = [];
+
+	array.forEach((item) => {
+		const string = item.toString();
+
+		if (tracker[string]) return;
+
+		tracker[string] = true;
+		uniqueArray.push(item);
+	});
+
+	return uniqueArray;
+};

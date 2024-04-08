@@ -12,7 +12,6 @@ import {
 	mkFile,
 	mkGlobalTpsrc,
 	mkPrompt,
-	mkTemplate,
 	mkTpsrc,
 } from '@test/utilities/templates';
 

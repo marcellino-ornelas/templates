@@ -1,11 +1,13 @@
 import fs from 'fs';
 import pjson from 'prettyjson-256';
 import is from 'is';
-import * as TPS from '@tps/utilities/constants';
+import { MAIN_DIR, TPS_FOLDER, USER_HOME } from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 import Templates from '@tps/templates';
 import logger from '@tps/utilities/logger';
 import { isDir } from '@tps/utilities/fileSystem';
+import path from 'path';
+import { flatten, unique } from '@tps/utilities/helpers';
 
 interface ListArgv {
 	global: boolean;
@@ -17,12 +19,7 @@ const removeRcFile = (arr: string[]) => {
 	return arr.filter((item) => item !== '.tpsrc');
 };
 
-export const BANNED_TEMPLATES: string[] = [
-	'init',
-	'new-template',
-	'new-test',
-	'yargs-cli-cmd',
-];
+export const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];
 
 export default {
 	command: ['list', 'ls'],
@@ -48,65 +45,68 @@ export default {
 		},
 	},
 	async handler(argv) {
-		const { local, default: _default, global } = argv;
+		const { local, default: defaultTemplates, global } = argv;
 
-		logger.cli.info('Args: %O', { local, default: _default, global });
+		logger.cli.info('Args: %O', { local, default: defaultTemplates, global });
 
-		if (_default) {
-			logger.cli.info('Default Path: %s', TPS.DEFAULT_TPS);
+		const templateLocations = Templates.getTemplateLocations().reverse();
 
-			const defaultTemplates = removeRcFile(
-				fs.readdirSync(TPS.DEFAULT_TPS),
-			).filter(
-				// remove irrelevant templates
-				(file) => !BANNED_TEMPLATES.includes(file),
-			);
+		logger.cli.info('Templte locations: %n', templateLocations);
 
-			logger.cli.info('default templates: %s', defaultTemplates);
+		const filteredTemplates = templateLocations.filter((dir) => {
+			const isDefaultTemplate = dir.startsWith(path.join(MAIN_DIR, TPS_FOLDER));
 
-			// @ts-expect-error wrong types module (`is`)
-			if (!is.array.empty(defaultTemplates)) {
-				console.log('Default: ');
-				console.log(pjson.render(defaultTemplates));
-				console.log('');
-			}
-		}
+			const isGlobalTemplates =
+				dir.startsWith(path.join(USER_HOME, TPS_FOLDER)) ||
+				dir.startsWith(path.join(USER_HOME, 'node_modules'));
 
-		if (global) {
-			logger.cli.info('Global Path: %s', TPS.GLOBAL_PATH);
+			const isLocalTemplate = !isDefaultTemplate && !isGlobalTemplates;
 
-			const hasGlobalTps = Templates.hasGloablTps();
+			logger.cli.info('%s %n', dir, {
+				isDefaultTemplate,
+				isGlobalTemplates,
+				isLocalTemplate,
+			});
 
-			logger.cli.info('User has global tps: %o', isDir(TPS.GLOBAL_PATH));
-			if (hasGlobalTps) {
-				const globalTemplates = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
+			if (!defaultTemplates && isDefaultTemplate) return false;
+			if (!global && isGlobalTemplates) return false;
+			if (!local && isLocalTemplate) return false;
 
-				// @ts-expect-error wrong types module (`is`)
-				if (!is.array.empty(globalTemplates)) {
-					console.log('Global: ');
-					console.log(pjson.render(globalTemplates));
-					console.log('');
+			return true;
+		});
+
+		logger.cli.info('Templates after filter: %n\n', filteredTemplates);
+
+		const templatesNested = await Promise.all(
+			filteredTemplates.map(async (templateDir) => {
+				let directoryTemplates: string[] = [];
+
+				try {
+					directoryTemplates = await fs.promises.readdir(templateDir, {});
+				} catch (e) {
+					return [];
 				}
-			}
-		}
 
-		if (local) {
-			logger.cli.info('Local Path: %s', TPS.LOCAL_PATH);
-
-			const hasLocalTps = Templates.hasLocalTps();
-
-			logger.cli.info('User has local tps: %o', hasLocalTps);
-			if (hasLocalTps) {
-				const localTemplates = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
-
-				logger.cli.info('Local templates: %s', localTemplates);
-
-				// @ts-expect-error wrong types module (`is`)
-				if (!is.array.empty(localTemplates)) {
-					console.log('Local: ');
-					console.log(pjson.render(localTemplates));
+				if (templateDir.includes('node_modules')) {
+					directoryTemplates = directoryTemplates.filter((template) => {
+						return template.startsWith('tps-');
+					});
 				}
-			}
-		}
+
+				if (templateDir.startsWith(path.join(MAIN_DIR))) {
+					directoryTemplates = directoryTemplates.filter((template) => {
+						return !BANNED_TEMPLATES.includes(template);
+					});
+				}
+
+				return removeRcFile(directoryTemplates);
+			}),
+		);
+
+		const templates = unique(flatten(templatesNested));
+
+		templates.forEach((template) => {
+			console.log(template);
+		});
 	},
 } as CommandModule<object, ListArgv>;

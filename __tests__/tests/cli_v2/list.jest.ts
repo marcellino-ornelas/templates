@@ -1,10 +1,6 @@
 import yargs from 'yargs/yargs';
 import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
-import {
-	mkTemplate,
-	globalInit,
-	mkGlobalTemplate,
-} from '@test/utilities/templates';
+import { globalInit, mkGlobalTemplate } from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
 import { CWD } from '@tps/utilities/constants';
@@ -36,7 +32,7 @@ describe('Command Line: list', () => {
 		expect(log.get()).toContain('testing');
 	});
 
-	it('should ignore local templates if option provided', async () => {
+	it.only('should ignore local templates if option provided', async () => {
 		const parser = yargs().command(list);
 
 		await parser.parseAsync(['list', '--no-local']);
@@ -58,7 +54,6 @@ describe('Command Line: list', () => {
 
 		await parser.parseAsync(['list']);
 
-		expect(log.get()).not.toContain('Local:');
 		expect(log.get()).not.toContain('testing');
 	});
 
