@@ -1,11 +1,8 @@
 import fs from 'fs';
-import pjson from 'prettyjson-256';
-import is from 'is';
 import { MAIN_DIR, TPS_FOLDER, USER_HOME } from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 import Templates from '@tps/templates';
 import logger from '@tps/utilities/logger';
-import { isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
 import { flatten, unique } from '@tps/utilities/helpers';
 
@@ -13,6 +10,7 @@ interface ListArgv {
 	global: boolean;
 	local: boolean;
 	default: boolean;
+	nodeModules: boolean;
 }
 
 const removeRcFile = (arr: string[]) => {
@@ -43,11 +41,22 @@ export default {
 			alias: 'd',
 			default: true,
 		},
+		nodeModules: {
+			type: 'boolean',
+			description: 'List out 3rd party templates',
+			alias: 'n',
+			default: true,
+		},
 	},
 	async handler(argv) {
-		const { local, default: defaultTemplates, global } = argv;
+		const { local, default: defaultTemplates, global, nodeModules } = argv;
 
-		logger.cli.info('Args: %O', { local, default: defaultTemplates, global });
+		logger.cli.info('Args: %n', {
+			local,
+			default: defaultTemplates,
+			global,
+			nodeModules,
+		});
 
 		const templateLocations = Templates.getTemplateLocations().reverse();
 
@@ -55,6 +64,8 @@ export default {
 
 		const filteredTemplates = templateLocations.filter((dir) => {
 			const isDefaultTemplate = dir.startsWith(path.join(MAIN_DIR, TPS_FOLDER));
+
+			const isNodeModulesTemplate = path.parse(dir).base === 'node_modules';
 
 			const isGlobalTemplates =
 				dir.startsWith(path.join(USER_HOME, TPS_FOLDER)) ||
@@ -66,10 +77,12 @@ export default {
 				isDefaultTemplate,
 				isGlobalTemplates,
 				isLocalTemplate,
+				isNodeModulesTemplate,
 			});
 
 			if (!defaultTemplates && isDefaultTemplate) return false;
 			if (!global && isGlobalTemplates) return false;
+			if (!nodeModules && isNodeModulesTemplate) return false;
 			if (!local && isLocalTemplate) return false;
 
 			return true;

@@ -8,7 +8,7 @@ import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 import { DEFAULT_OPTIONS } from '@tps/templates/templates';
 import {
 	DEFAULT_PROMPT,
-	mk3rdPartyTemplate,
+	mkGlobal3rdPartyTemplate,
 	mkFile,
 	mkGlobalTpsrc,
 	mkPrompt,
@@ -213,7 +213,7 @@ testing-prompt-core:
 	});
 
 	it('should load local tpsrc file for 3rd party template', () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package', {
+		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),

@@ -7,7 +7,10 @@ import {
 	RequiresTemplateError,
 } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
-import { mk3rdPartyTemplate, mkTemplate } from '@test/utilities/templates';
+import {
+	mkGlobal3rdPartyTemplate,
+	mkTemplate,
+} from '@test/utilities/templates';
 import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
@@ -208,7 +211,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a npm template', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package');
+		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = new Templates('tps-test-3rd-party-package', { default: true });
 
@@ -220,7 +223,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a 3rd party template without tps prefix', () => {
-		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		const tps = new Templates('test-3rd-template-prefix');
 

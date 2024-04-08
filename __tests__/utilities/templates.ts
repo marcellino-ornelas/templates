@@ -51,9 +51,20 @@ export const mkTemplate = (
 
 export const mk3rdPartyTemplate = (
 	name: string,
+	location: string = CWD,
 	json: DirectoryJSON = {},
 ): void => {
-	mkTemplateBase(path.join('/usr/lib/node_modules', name), json);
+	if (!name.startsWith('tps-')) {
+		throw new Error('3rd party tzemplate must with tps- ');
+	}
+	mkTemplateBase(path.join(location, 'node_modules', name), json);
+};
+
+export const mkGlobal3rdPartyTemplate = (
+	name: string,
+	json: DirectoryJSON = {},
+): void => {
+	mk3rdPartyTemplate(name, '/usr/lib', json);
 };
 
 export const mkGlobalTemplate = (
