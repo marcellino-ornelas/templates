@@ -8,6 +8,7 @@ import {
 } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
 import {
+	mk3rdPartyTemplate,
 	mkGlobal3rdPartyTemplate,
 	mkTemplate,
 } from '@test/utilities/templates';
@@ -210,7 +211,31 @@ describe('[Templates] Render Process:', () => {
 		expect(indexFile).toHaveFileContents('{}\nhey there\n{}\nbye');
 	});
 
-	it('should be able to use a npm template', async () => {
+	it('should be able to use a local npm template', async () => {
+		mk3rdPartyTemplate('tps-test-3rd-party-package');
+
+		const tps = new Templates('tps-test-3rd-party-package', { default: true });
+
+		const appPath = playground.pathTo('app');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to render a local 3rd party template without tps prefix', async () => {
+		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+
+		const tps = new Templates('test-3rd-template-prefix');
+
+		const appPath = playground.pathTo('app');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to use a global npm template', async () => {
 		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = new Templates('tps-test-3rd-party-package', { default: true });
@@ -222,7 +247,7 @@ describe('[Templates] Render Process:', () => {
 		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
 
-	it('should be able to render a 3rd party template without tps prefix', () => {
+	it('should be able to render a global 3rd party template without tps prefix', () => {
 		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		const tps = new Templates('test-3rd-template-prefix');
