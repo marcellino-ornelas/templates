@@ -132,7 +132,7 @@ describe('Command Line: list', () => {
 		expect(log.get()).not.toContain('react-component');
 	});
 
-	it('should log default templates if option provided', async () => {
+	it('should not log default templates if option provided', async () => {
 		const parser = yargs().command(list);
 
 		// ignore default folder, no need to do extra work
