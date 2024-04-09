@@ -226,6 +226,7 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to render a local 3rd party template without tps prefix', async () => {
 		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
 
+		// Exclude tps prefix
 		const tps = new Templates('test-3rd-template-prefix');
 
 		const appPath = playground.pathTo('app');
@@ -250,6 +251,7 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to render a global 3rd party template without tps prefix', () => {
 		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
+		// Exclude tps prefix
 		const tps = new Templates('test-3rd-template-prefix');
 
 		const destPath = playground.pathTo('app');
