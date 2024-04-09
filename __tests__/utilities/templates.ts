@@ -55,7 +55,7 @@ export const mk3rdPartyTemplate = (
 	json: DirectoryJSON = {},
 ): void => {
 	if (!name.startsWith('tps-')) {
-		throw new Error('3rd party tzemplate must with tps- ');
+		throw new Error('3rd party template must with tps- ');
 	}
 	mkTemplateBase(path.join(location, 'node_modules', name), json);
 };
