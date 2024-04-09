@@ -58,10 +58,17 @@ export default {
 			nodeModules,
 		});
 
-		const templateLocations = Templates.getTemplateLocations().reverse();
+		/**
+		 * All template locations
+		 */
+		const templateLocations = Templates.getTemplateLocations();
 
-		logger.cli.info('Templte locations: %n', templateLocations);
+		logger.cli.info('Template locations: %n', templateLocations);
 
+		/**
+		 * Filter out local, global, default, 3rd party templates depending
+		 * on what the user supplies
+		 */
 		const filteredTemplates = templateLocations.filter((dir) => {
 			const isDefaultTemplate = dir.startsWith(path.join(MAIN_DIR, TPS_FOLDER));
 
@@ -90,28 +97,46 @@ export default {
 
 		logger.cli.info('Templates after filter: %n\n', filteredTemplates);
 
+		/**
+		 * Fetch templates in each directories still present
+		 */
 		const templatesNested = await Promise.all(
 			filteredTemplates.map(async (templateDir) => {
 				let directoryTemplates: string[] = [];
 
 				try {
+					/**
+					 * readdir throws error when not present. To prevent
+					 * making multiple call (existence, readdir) for each directory
+					 * well just return empty array here.
+					 */
 					directoryTemplates = await fs.promises.readdir(templateDir, {});
 				} catch (e) {
 					return [];
 				}
 
 				if (templateDir.includes('node_modules')) {
+					/**
+					 * Only print out packages that start with `tps`
+					 */
 					directoryTemplates = directoryTemplates.filter((template) => {
 						return template.startsWith('tps-');
 					});
 				}
 
 				if (templateDir.startsWith(path.join(MAIN_DIR))) {
+					/**
+					 * Removed banned templates. Banned templates are
+					 * this repos internal templates
+					 */
 					directoryTemplates = directoryTemplates.filter((template) => {
 						return !BANNED_TEMPLATES.includes(template);
 					});
 				}
 
+				/**
+				 * Remove `.tpsrc` file
+				 */
 				return removeRcFile(directoryTemplates);
 			}),
 		);
