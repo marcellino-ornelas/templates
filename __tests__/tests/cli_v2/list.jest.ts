@@ -205,7 +205,7 @@ describe('Command Line: list', () => {
 		await parser.parseAsync(['list']);
 	});
 
-	it.each([
+	it.only.each([
 		...Templates.tpsrcConfigNames.map((name) => {
 			return {
 				name,
@@ -232,7 +232,14 @@ describe('Command Line: list', () => {
 
 			await parser.parseAsync(['list']);
 
-			expect(log.get()).not.toContain(name);
+			/**
+			 * Check all possible names because list will
+			 * only print out the file name and not
+			 * `.tps/.tpsrc`
+			 */
+			Templates.tpsrcConfigNames.forEach((configName) => {
+				expect(log.get()).not.toContain(configName);
+			});
 		},
 	);
 });

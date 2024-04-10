@@ -13,9 +13,18 @@ interface ListArgv {
 	nodeModules: boolean;
 }
 
-const removeRcFile = (arr: string[]) => {
+const removeConfigFileNames = (arr: string[]) => {
+	const configFilesMap = Templates.tpsrcConfigNames.reduce<
+		Record<string, boolean>
+	>((mapping, name) => {
+		// eslint-disable-next-line no-param-reassign -- adding to object not reassigning
+		mapping[name] = true;
+		return mapping;
+	}, {});
+
 	return arr.filter((item) => {
-		return item !== '.tpsrc';
+		// if item is not a config file
+		return !configFilesMap[item];
 	});
 };
 
@@ -149,7 +158,7 @@ export default {
 				/**
 				 * Remove `.tpsrc` file
 				 */
-				return removeRcFile(directoryTemplates);
+				return removeConfigFileNames(directoryTemplates);
 			}),
 		);
 
