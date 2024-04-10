@@ -23,9 +23,6 @@ jest.mock('@tps/utilities/constants', () => {
 	};
 });
 
-/*
- * Constants
- */
 describe('Command Line: init', () => {
 	beforeEach(() => {
 		reset();

@@ -77,22 +77,6 @@ export class PromptInvalidAnswersError extends Error {
 	}
 }
 
-export class ParentDirectoryInitializedError extends Error {
-	public name = 'ParentDirectoryInitializedError';
-
-	public tps: string;
-
-	constructor(parentTps: string) {
-		super(`\
-tps is already initialized in a parent directory.
-tps location: ${LOCAL_PATH}
-
-In order to initialize this folder add the --force flag
-`);
-		this.tps = parentTps;
-	}
-}
-
 export class InitializedAlreadyError extends Error {
 	public name = 'InitializedAlreadyError';
 

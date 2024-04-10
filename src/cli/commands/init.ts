@@ -1,16 +1,14 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import { errorExit } from '@tps/cli/utils/error-exit';
+import { errorExit, logAndThrow } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
 import { TemplateOptions, Templates } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
 	InitializedAlreadyError,
-	ParentDirectoryInitializedError,
 	GlobalInitializedAlreadyError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
-import { isDir } from '@tps/utilities/fileSystem';
 import path from 'path';
 
 interface InitArgv {
@@ -56,19 +54,18 @@ export default {
 			logger.cli.info('Initializing Global...');
 
 			if (Templates.hasGloablTps()) {
-				const error = new GlobalInitializedAlreadyError(TPS.USER_HOME);
-
-				logger.cli.error(error);
-
-				throw error;
+				logAndThrow(new GlobalInitializedAlreadyError(TPS.USER_HOME));
 			}
 
-			return tps
-				.render(TPS.USER_HOME)
-				.then(() => {
-					logger.cli.log('tps globally initialized');
-				})
-				.catch(errorExit);
+			await tps.render(TPS.USER_HOME);
+
+			const initializedFolder = path.join(TPS.USER_HOME, TPS.TPS_FOLDER);
+
+			logger.cli.info('Globally initialized %s', initializedFolder);
+
+			console.log(initializedFolder);
+
+			return;
 		}
 
 		/**
@@ -77,20 +74,17 @@ export default {
 		logger.cli.info('Tps local location: %s', TPS.CWD);
 
 		if (Templates.directoryIsTpsInitialized(TPS.CWD)) {
-			const error = new InitializedAlreadyError(TPS.CWD);
-
-			logger.cli.error(error);
-
-			throw error;
+			logAndThrow(new InitializedAlreadyError(TPS.CWD));
 		}
 
 		logger.cli.info('Initializing repo...');
 
-		return tps
-			.render(TPS.CWD)
-			.then(() => {
-				logger.cli.log('Repo initialized');
-			})
-			.catch(errorExit);
+		await tps.render(TPS.CWD);
+
+		const initializedFolder = path.join(TPS.CWD, TPS.TPS_FOLDER);
+
+		logger.cli.info('Repo initialized %s', initializedFolder);
+
+		console.log(initializedFolder);
 	},
 } as CommandModule<object, InitArgv>;
