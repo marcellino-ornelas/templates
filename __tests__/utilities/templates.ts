@@ -5,10 +5,14 @@ import path from 'path';
 import os from 'os';
 import { CWD, USER_HOME } from '@tps/utilities/constants';
 import { DirectoryJSON } from 'memfs';
+import { SettingsFilePrompt } from '@tps/types/settings';
 
 export type OptionsTpsrc = RecursivePartial<Tpsrc>;
 
-export const mkTpsrc = (pathToTpsrc: string, tpsrc: OptionsTpsrc): void => {
+export const mkTpsrc = (
+	pathToTpsrc: string,
+	tpsrc: OptionsTpsrc = {},
+): void => {
 	mkFile(pathToTpsrc, JSON.stringify(tpsrc));
 };
 
@@ -25,16 +29,68 @@ export const mkFile = (file: string, data: string): void => {
 	vol.writeFileSync(file, data);
 };
 
+const DEFAULT_TEMPLATE_FILES: DirectoryJSON = { './default/index.js': 'hey' };
+
+export const mkTemplateBase = (
+	/**
+	 * full path to the template folder including name
+	 *
+	 * @example /User/marcellinoornelas/Desktop/project/.tps/<template-name>
+	 * @example /usr/lib/node_modules/<template-name>
+	 */
+	location: string,
+	json: DirectoryJSON = {},
+): void => {
+	vol.fromJSON({ ...DEFAULT_TEMPLATE_FILES, ...json }, location);
+};
+
 export const mkTemplate = (
 	name: string,
-	json: DirectoryJSON = { './default/index.js': 'hey' },
-	global = false,
-) => {
-	const location = global ? USER_HOME : CWD;
+	directory: string = CWD,
+	json: DirectoryJSON = {},
+): void => {
+	mkTemplateBase(path.join(directory, `.tps/${name}/`), json);
+};
 
-	vol.fromJSON(json, `${location}/.tps/${name}/`);
+export const mk3rdPartyTemplate = (
+	name: string,
+	location: string = CWD,
+	json: DirectoryJSON = {},
+): void => {
+	if (!name.startsWith('tps-')) {
+		throw new Error('3rd party template must with tps- ');
+	}
+	mkTemplateBase(path.join(location, 'node_modules', name), json);
+};
 
-	return vol;
+export const mkGlobal3rdPartyTemplate = (
+	name: string,
+	json: DirectoryJSON = {},
+): void => {
+	mk3rdPartyTemplate(name, '/usr/lib', json);
+};
+
+export const mkGlobalTemplate = (
+	name: string,
+	json: DirectoryJSON = {},
+): void => {
+	mkTemplate(name, USER_HOME, json);
+};
+
+export const DEFAULT_PROMPT: SettingsFilePrompt = {
+	name: 'prompt1',
+	message: 'Prompt1?',
+	tpsType: 'data',
+	type: 'confirm',
+};
+
+export const mkPrompt = (
+	prompt: Partial<SettingsFilePrompt> = {},
+): SettingsFilePrompt => {
+	return {
+		...DEFAULT_PROMPT,
+		...prompt,
+	};
 };
 
 export const init = (tpsrc: OptionsTpsrc = {}): void => {

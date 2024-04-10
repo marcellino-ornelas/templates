@@ -1,38 +1,43 @@
 /*
  * Modules
  */
-import Playground from '@test/utilities/playground';
-import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@tps/templates';
 import path from 'path';
+import { reset, vol } from '@test/utilities/vol';
+import { CWD, USER_HOME } from '@tps/utilities/constants';
 
 jest.mock('fs');
 
-/*
- * Constants
- */
-const playground = new Playground(TESTING_DIR);
+jest.mock('@tps/utilities/constants', () => {
+	const original = jest.requireActual('@tps/utilities/constants');
+	return {
+		...original,
+		CWD: jest
+			.requireActual('path')
+			.join(original.USER_HOME, 'Desktop', 'random'),
+	};
+});
 
 describe('yargs-cli-cmd', () => {
 	let tps: Templates;
 
-	beforeAll(() => playground.create());
-	afterAll(() => playground.destroy());
+	beforeEach(async () => {
+		reset();
 
-	beforeEach(() => {
-		tps = new Templates('yargs-cli-cmd', {
-			tpsPath: path.join(__dirname, '../../../.tps'),
-			default: true,
+		await vol.promises.mkdir(path.join(USER_HOME, 'Desktop', 'random'), {
+			recursive: true,
 		});
 
-		return playground.createBox('yargs-cli-cmd');
+		tps = new Templates('yargs-cli-cmd', {
+			default: true,
+		});
 	});
 
 	it('should be able to render a new instance', async () => {
-		await tps.render(playground.box(), 'publish');
+		await tps.render(CWD, 'publish');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(playground.pathTo('publish.js')).toBeFile();
+		expect(path.join(CWD, 'publish.js')).toBeFile();
 	});
 
 	describe('Prompt: type', () => {
@@ -41,10 +46,10 @@ describe('yargs-cli-cmd', () => {
 				type: 'namedExport',
 			});
 
-			await tps.render(playground.box(), 'publish');
+			await tps.render(CWD, 'publish');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(playground.pathTo('publish.js')).toHaveFileContents(`\
+			expect(path.join(CWD, 'publish.js')).toHaveFileContents(`\
 export const command = 'publish';
 
 export const aliases = [];
@@ -70,10 +75,10 @@ export const handler = async (argv) => {
 				type: 'defaultExport',
 			});
 
-			await tps.render(playground.box(), 'publish');
+			await tps.render(CWD, 'publish');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(playground.pathTo('publish.js')).toHaveFileContents(`\
+			expect(path.join(CWD, 'publish.js')).toHaveFileContents(`\
 export default {
     command: 'publish',
     aliases: [],
@@ -100,10 +105,10 @@ export default {
 				typescript: true,
 			});
 
-			await tps.render(playground.box(), 'publish');
+			await tps.render(CWD, 'publish');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(playground.pathTo('publish.ts')).toHaveFileContents(`\
+			expect(path.join(CWD, 'publish.ts')).toHaveFileContents(`\
 import { CommandModule } from 'yargs';
 
 interface PublishArgv {
@@ -134,10 +139,10 @@ export default {
 				typescript: true,
 			});
 
-			await tps.render(playground.box(), 'publish');
+			await tps.render(CWD, 'publish');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(playground.pathTo('publish.ts')).toHaveFileContents(`\
+			expect(path.join(CWD, 'publish.ts')).toHaveFileContents(`\
 import { CommandModule } from 'yargs';
 
 interface PublishArgv {

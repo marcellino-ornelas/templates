@@ -1,28 +1,34 @@
 import fs from 'fs';
-import pjson from 'prettyjson-256';
-import is from 'is';
-import * as TPS from '@tps/utilities/constants';
+import { MAIN_DIR, TPS_FOLDER, USER_HOME } from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 import Templates from '@tps/templates';
 import logger from '@tps/utilities/logger';
-import { isDir } from '@tps/utilities/fileSystem';
+import path from 'path';
+import { flatten, unique } from '@tps/utilities/helpers';
 
 interface ListArgv {
 	global: boolean;
 	local: boolean;
 	default: boolean;
+	nodeModules: boolean;
 }
 
-const removeRcFile = (arr: string[]) => {
-	return arr.filter((item) => item !== '.tpsrc');
+const removeConfigFileNames = (arr: string[]) => {
+	const configFilesMap = Templates.tpsrcConfigNames.reduce<
+		Record<string, boolean>
+	>((mapping, name) => {
+		// eslint-disable-next-line no-param-reassign -- adding to object not reassigning
+		mapping[name] = true;
+		return mapping;
+	}, {});
+
+	return arr.filter((item) => {
+		// if item is not a config file
+		return !configFilesMap[item];
+	});
 };
 
-export const BANNED_TEMPLATES: string[] = [
-	'init',
-	'new-template',
-	'new-test',
-	'yargs-cli-cmd',
-];
+export const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];
 
 export default {
 	command: ['list', 'ls'],
@@ -46,67 +52,120 @@ export default {
 			alias: 'd',
 			default: true,
 		},
+		nodeModules: {
+			type: 'boolean',
+			description: 'List out 3rd party templates',
+			alias: 'n',
+			default: true,
+		},
 	},
 	async handler(argv) {
-		const { local, default: _default, global } = argv;
+		const { local, default: defaultTemplates, global, nodeModules } = argv;
 
-		logger.cli.info('Args: %O', { local, default: _default, global });
+		logger.cli.info('Args: %n', {
+			local,
+			default: defaultTemplates,
+			global,
+			nodeModules,
+		});
 
-		if (_default) {
-			logger.cli.info('Default Path: %s', TPS.DEFAULT_TPS);
+		/**
+		 * All template locations
+		 */
+		const templateLocations = Templates.getTemplateLocations();
 
-			const defaultTemplates = removeRcFile(
-				fs.readdirSync(TPS.DEFAULT_TPS),
-			).filter(
-				// remove irrelevant templates
-				(file) => !BANNED_TEMPLATES.includes(file),
-			);
+		logger.cli.info('Template locations: %n', templateLocations);
 
-			logger.cli.info('default templates: %s', defaultTemplates);
+		/**
+		 * Filter out local, global, default, 3rd party templates depending
+		 * on what the user supplies
+		 */
+		const filteredTemplates = templateLocations.filter((dir) => {
+			const isDefaultTemplate = dir.startsWith(path.join(MAIN_DIR, TPS_FOLDER));
 
-			// @ts-expect-error wrong types module (`is`)
-			if (!is.array.empty(defaultTemplates)) {
-				console.log('Default: ');
-				console.log(pjson.render(defaultTemplates));
-				console.log('');
-			}
-		}
+			const isNodeModulesTemplate = path.parse(dir).base === 'node_modules';
 
-		if (global) {
-			logger.cli.info('Global Path: %s', TPS.GLOBAL_PATH);
+			const isGlobalTemplates =
+				dir.startsWith(path.join(USER_HOME, TPS_FOLDER)) ||
+				dir.startsWith(path.join(USER_HOME, 'node_modules'));
 
-			const hasGlobalTps = Templates.hasGloablTps();
+			const isLocalTemplate = !isDefaultTemplate && !isGlobalTemplates;
 
-			logger.cli.info('User has global tps: %o', isDir(TPS.GLOBAL_PATH));
-			if (hasGlobalTps) {
-				const globalTemplates = removeRcFile(fs.readdirSync(TPS.GLOBAL_PATH));
+			logger.cli.info('%s %n', dir, {
+				isDefaultTemplate,
+				isGlobalTemplates,
+				isLocalTemplate,
+				isNodeModulesTemplate,
+			});
 
-				// @ts-expect-error wrong types module (`is`)
-				if (!is.array.empty(globalTemplates)) {
-					console.log('Global: ');
-					console.log(pjson.render(globalTemplates));
-					console.log('');
+			if (!defaultTemplates && isDefaultTemplate) return false;
+			if (!global && isGlobalTemplates) return false;
+			if (!nodeModules && isNodeModulesTemplate) return false;
+			if (!local && isLocalTemplate) return false;
+
+			return true;
+		});
+
+		logger.cli.info('Templates after filter: %n\n', filteredTemplates);
+
+		/**
+		 * Fetch templates in each directories still present
+		 */
+		const templatesNested = await Promise.all(
+			filteredTemplates.map(async (templateDir) => {
+				let directoryTemplates: string[] = [];
+
+				try {
+					/**
+					 * readdir throws error when not present. To prevent
+					 * making multiple call (existence, readdir) for each directory
+					 * well just return empty array here.
+					 */
+					directoryTemplates = await fs.promises.readdir(templateDir, {});
+				} catch (err) {
+					/**
+					 * log any errors that dont have to do with the directory existing
+					 */
+					if (err?.code !== 'ENOENT') {
+						logger.cli.error('Template readdir error %n', {
+							templateDir,
+							err,
+						});
+					}
+
+					return [];
 				}
-			}
-		}
 
-		if (local) {
-			logger.cli.info('Local Path: %s', TPS.LOCAL_PATH);
-
-			const hasLocalTps = Templates.hasLocalTps();
-
-			logger.cli.info('User has local tps: %o', hasLocalTps);
-			if (hasLocalTps) {
-				const localTemplates = removeRcFile(fs.readdirSync(TPS.LOCAL_PATH));
-
-				logger.cli.info('Local templates: %s', localTemplates);
-
-				// @ts-expect-error wrong types module (`is`)
-				if (!is.array.empty(localTemplates)) {
-					console.log('Local: ');
-					console.log(pjson.render(localTemplates));
+				if (templateDir.includes('node_modules')) {
+					/**
+					 * Only print out packages that start with `tps`
+					 */
+					directoryTemplates = directoryTemplates.filter((template) => {
+						return template.startsWith('tps-');
+					});
 				}
-			}
-		}
+
+				if (templateDir.startsWith(path.join(MAIN_DIR))) {
+					/**
+					 * Removed banned templates. Banned templates are
+					 * this repos internal templates
+					 */
+					directoryTemplates = directoryTemplates.filter((template) => {
+						return !BANNED_TEMPLATES.includes(template);
+					});
+				}
+
+				/**
+				 * Remove `.tpsrc` file
+				 */
+				return removeConfigFileNames(directoryTemplates);
+			}),
+		);
+
+		const templates = unique(flatten(templatesNested));
+
+		templates.forEach((template) => {
+			console.log(template);
+		});
 	},
 } as CommandModule<object, ListArgv>;
