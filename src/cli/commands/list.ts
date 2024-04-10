@@ -14,7 +14,9 @@ interface ListArgv {
 }
 
 const removeRcFile = (arr: string[]) => {
-	return arr.filter((item) => item !== '.tpsrc');
+	return arr.filter((item) => {
+		return item !== '.tpsrc';
+	});
 };
 
 export const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];

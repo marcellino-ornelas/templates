@@ -9,7 +9,10 @@ import { SettingsFilePrompt } from '@tps/types/settings';
 
 export type OptionsTpsrc = RecursivePartial<Tpsrc>;
 
-export const mkTpsrc = (pathToTpsrc: string, tpsrc: OptionsTpsrc): void => {
+export const mkTpsrc = (
+	pathToTpsrc: string,
+	tpsrc: OptionsTpsrc = {},
+): void => {
 	mkFile(pathToTpsrc, JSON.stringify(tpsrc));
 };
 

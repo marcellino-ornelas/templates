@@ -77,6 +77,18 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
 	return `.tps/${location}`;
 });
 
+/**
+ * TODO:
+ *
+ *		.tps/.config/tpsrc.cjs
+ *		.tps/.config/tpsrc.ts
+ *		.tps/.config/tpsrc.js
+ *		.tps/.config/tpsrc.yml
+ *		.tps/.config/tpsrc.yaml
+ *		.tps/.config/tpsrc.json
+ *		.tps/.config/tpsrc
+ *		.tps/package.json
+ */
 const tpsrcSearchPlaces = [...defaultTpsrcSearches, ...nestedTpsrcSearches];
 
 const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
@@ -102,6 +114,44 @@ export class Templates {
 	public _prompts: Prompter;
 
 	public compiledFiles: File[];
+
+	/**
+	 * All tpsrc config file names.
+	 *
+	 * @example
+	 *
+	 *	[
+	 *		'.tps/tps.config.cjs',
+	 *		'.tps/tps.config.ts',
+	 *		'.tps/tps.config.js',
+	 *		'.tps/.tpsrc.cjs',
+	 *		'.tps/.tpsrc.ts',
+	 *		'.tps/.tpsrc.js',
+	 *		'.tps/.tpsrc.yml',
+	 *		'.tps/.tpsrc.yaml',
+	 *		'.tps/.tpsrc.json',
+	 *		'.tps/.tpsrc',
+	 *		'tps.config.cjs',
+	 *		'tps.config.ts',
+	 *		'tps.config.js',
+	 *		'.config/tpsrc.cjs',
+	 *		'.config/tpsrc.ts',
+	 *		'.config/tpsrc.js',
+	 *		'.config/tpsrc.yml',
+	 *		'.config/tpsrc.yaml',
+	 *		'.config/tpsrc.json',
+	 *		'.config/tpsrc',
+	 *		'.tpsrc.cjs',
+	 *		'.tpsrc.ts',
+	 *		'.tpsrc.js',
+	 *		'.tpsrc.yml',
+	 *		'.tpsrc.yaml',
+	 *		'.tpsrc.json',
+	 *		'.tpsrc',
+	 *		'package.json'
+	 *	]
+	 */
+	public static tpsrcConfigNames: string[] = tpsrcSearchPlaces;
 
 	/**
 	 * Get all locations a template can be

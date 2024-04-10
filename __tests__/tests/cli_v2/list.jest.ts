@@ -7,11 +7,13 @@ import {
 	mkGlobal3rdPartyTemplate,
 	mkGlobalTemplate,
 	mkTemplate,
+	mkTpsrc,
 } from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
 import path from 'path';
-import { CWD } from '@tps/utilities/constants';
+import { CWD, USER_HOME } from '@tps/utilities/constants';
+import Templates from '@tps/templates';
 
 jest.mock('fs');
 
@@ -202,4 +204,35 @@ describe('Command Line: list', () => {
 
 		await parser.parseAsync(['list']);
 	});
+
+	it.each([
+		...Templates.tpsrcConfigNames.map((name) => {
+			return {
+				name,
+				location: CWD,
+			};
+		}),
+		...Templates.tpsrcConfigNames.map((name) => {
+			return {
+				name,
+				location: USER_HOME,
+			};
+		}),
+	])(
+		'should not display any config file: $location/$name',
+		async ({ name, location }) => {
+			mkTemplate('local-template');
+			mkGlobalTemplate('global-template');
+			mk3rdPartyTemplate('tps-local-3rd-party-template');
+			mkGlobal3rdPartyTemplate('tps-global-local-template');
+
+			mkTpsrc(path.join(location, name));
+
+			const parser = yargs().command(list);
+
+			await parser.parseAsync(['list']);
+
+			expect(log.get()).not.toContain(name);
+		},
+	);
 });
