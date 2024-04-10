@@ -6,7 +6,15 @@ import path from 'path';
 import { reset, vol } from '@test/utilities/vol';
 import { CWD, LOCAL_CONFIG_PATH } from '@tps/utilities/constants';
 import { DEFAULT_OPTIONS } from '@tps/templates/templates';
-import { mkFile, mkGlobalTpsrc, mkTpsrc } from '@test/utilities/templates';
+import {
+	DEFAULT_PROMPT,
+	mkGlobal3rdPartyTemplate,
+	mkFile,
+	mkGlobalTpsrc,
+	mkPrompt,
+	mkTpsrc,
+	mk3rdPartyTemplate,
+} from '@test/utilities/templates';
 
 jest.mock('fs');
 
@@ -126,7 +134,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('global');
 	});
 
-	it('should user local values over global files', async () => {
+	it('should use local values over global files', async () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkGlobalTpsrc({
@@ -203,6 +211,58 @@ testing-prompt-core:
 
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
+	});
+
+	it('should load local tpsrc file for local 3rd party template', () => {
+		mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
+			'./settings.json': JSON.stringify({
+				prompts: [mkPrompt()],
+			}),
+		});
+
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			'tps-test-3rd-party-package': {
+				opts: {
+					extendedDest: './3rd-party',
+				},
+				answers: {
+					[DEFAULT_PROMPT.name]: true,
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('tps-test-3rd-party-package');
+
+		expect(tps.opts.extendedDest).toBe('./3rd-party');
+
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.prompt1).toBeTruthy();
+	});
+
+	it('should load local tpsrc file for global 3rd party template', () => {
+		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
+			'./settings.json': JSON.stringify({
+				prompts: [mkPrompt()],
+			}),
+		});
+
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			'tps-test-3rd-party-package': {
+				opts: {
+					extendedDest: './3rd-party',
+				},
+				answers: {
+					[DEFAULT_PROMPT.name]: true,
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('tps-test-3rd-party-package');
+
+		expect(tps.opts.extendedDest).toBe('./3rd-party');
+
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.prompt1).toBeTruthy();
 	});
 
 	// it('should be able to override a tpsrc file location', () => {

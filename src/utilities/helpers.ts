@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as is from 'is';
+import path from 'path';
+import paths from 'npm-paths';
+import { CWD } from './constants';
+import { findUp } from './fileSystem';
 
 export function hasProp(obj: Record<string, any>, prop: string): boolean {
 	return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -118,3 +122,59 @@ export function cliLog(str: string): void {
 //     ? filenamify(fileName, { replacement: '-' })
 //     : fileName;
 // };
+
+/**
+ * Get all npm paths
+ */
+export const getNpmPaths = (cwd: string = CWD): string[] => {
+	return paths(cwd);
+};
+
+/**
+ * Get a list of all parent directories from a directory
+ *
+ * @example
+ * 	getAllDirectoriesAndUp("/User/marcellinoornelas/Desktop/random")
+ * 	// returns
+ * 	[
+ * 		"/User/marcellinoornelas/Desktop/random",
+ * 		"/User/marcellinoornelas/Desktop",
+ * 		"/User/marcellinoornelas",
+ * 		"/User",
+ * 		"/",
+ * 	]
+ */
+export const getAllDirectoriesAndUp = (dir): string[] => {
+	const parent = path.dirname(dir);
+
+	if (dir === parent) return [dir];
+
+	return [dir, ...getAllDirectoriesAndUp(parent)];
+};
+
+/**
+ * Unflatten an array
+ */
+export const flatten = <T>(arr: T[][]): T[] => {
+	return arr.reduce((unflattened, subArr) => {
+		unflattened.push(...subArr);
+
+		return unflattened;
+	}, []);
+};
+
+export const unique = <T extends string | number>(array: T[]): T[] => {
+	const tracker: Record<string, boolean> = {};
+	const uniqueArray: T[] = [];
+
+	array.forEach((item) => {
+		const string = item.toString();
+
+		if (tracker[string]) return;
+
+		tracker[string] = true;
+		uniqueArray.push(item);
+	});
+
+	return uniqueArray;
+};

@@ -13,7 +13,13 @@ import {
 	isFile,
 } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
-import { eachObj, defaults, hasProp } from '@tps/utilities/helpers';
+import {
+	eachObj,
+	defaults,
+	hasProp,
+	getNpmPaths,
+	getAllDirectoriesAndUp,
+} from '@tps/utilities/helpers';
 import {
 	TemplateNotFoundError,
 	RequiresTemplateError,
@@ -30,7 +36,6 @@ import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
 import { Tpsrc } from '@tps/types/tpsrc';
 import {
-	CosmiconfigResult,
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
@@ -72,6 +77,17 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
 	return `.tps/${location}`;
 });
 
+/**
+ * TODO: Remove these from the list
+ * - .tps/.config/tpsrc.cjs
+ * - .tps/.config/tpsrc.ts
+ * - .tps/.config/tpsrc.js
+ * - .tps/.config/tpsrc.yml
+ * - .tps/.config/tpsrc.yaml
+ * - .tps/.config/tpsrc.json
+ * - .tps/.config/tpsrc
+ * - .tps/package.json
+ */
 const tpsrcSearchPlaces = [...defaultTpsrcSearches, ...nestedTpsrcSearches];
 
 const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
@@ -86,15 +102,91 @@ const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
  * @classdesc Create a new instance of a template
  */
 export class Templates {
+	public name: string;
+
 	public opts: TemplateOptions;
 
-	public tpsPath: string;
+	public tpsPath: string | null;
 
 	public src: string;
 
 	public _prompts: Prompter;
 
 	public compiledFiles: File[];
+
+	/**
+	 * All tpsrc config file names.
+	 *
+	 * @example
+	 *
+	 *	[
+	 *		'.tps/tps.config.cjs',
+	 *		'.tps/tps.config.ts',
+	 *		'.tps/tps.config.js',
+	 *		'.tps/.tpsrc.cjs',
+	 *		'.tps/.tpsrc.ts',
+	 *		'.tps/.tpsrc.js',
+	 *		'.tps/.tpsrc.yml',
+	 *		'.tps/.tpsrc.yaml',
+	 *		'.tps/.tpsrc.json',
+	 *		'.tps/.tpsrc',
+	 *		'tps.config.cjs',
+	 *		'tps.config.ts',
+	 *		'tps.config.js',
+	 *		'.config/tpsrc.cjs',
+	 *		'.config/tpsrc.ts',
+	 *		'.config/tpsrc.js',
+	 *		'.config/tpsrc.yml',
+	 *		'.config/tpsrc.yaml',
+	 *		'.config/tpsrc.json',
+	 *		'.config/tpsrc',
+	 *		'.tpsrc.cjs',
+	 *		'.tpsrc.ts',
+	 *		'.tpsrc.js',
+	 *		'.tpsrc.yml',
+	 *		'.tpsrc.yaml',
+	 *		'.tpsrc.json',
+	 *		'.tpsrc',
+	 *		'package.json'
+	 *	]
+	 */
+	public static tpsrcConfigNames: string[] = tpsrcSearchPlaces;
+
+	/**
+	 * Get all locations a template can be
+	 *
+	 * Templates can be in be:
+	 * - any `.tps/` directory from the callers cwd and any directory above it
+	 * - Any `node_module` directory from the callers cwd and any directory above it
+	 */
+	public static getTemplateLocations(cwd: string = TPS.CWD): string[] {
+		const tpsDirectoryLocations = getAllDirectoriesAndUp(cwd).map((dir) => {
+			return path.join(dir, TPS.TPS_FOLDER);
+		});
+
+		// TODO: Sort this by directory
+		return [
+			...tpsDirectoryLocations,
+			path.join(TPS.MAIN_DIR, TPS.TPS_FOLDER),
+			...getNpmPaths(cwd),
+		];
+	}
+
+	/**
+	 * Get the path to a template or null if template doesnt exist
+	 */
+	public static findTemplate(
+		templateName: string,
+		cwd: string = TPS.CWD,
+	): string | null {
+		const homeDirectory = Templates.getTemplateLocations(cwd).find((tpsDir) => {
+			return isDir(path.join(tpsDir, templateName));
+		});
+
+		if (!homeDirectory) return null;
+
+		return path.join(homeDirectory, templateName);
+	}
 
 	public static getGloablTpsPath(): string {
 		return TPS.GLOBAL_PATH;
@@ -122,35 +214,21 @@ export class Templates {
 			throw new RequiresTemplateError();
 		}
 
-		const localPath = opts.tpsPath || TPS.LOCAL_PATH;
-		const maybeLocalTemp = `${localPath}/${templateName}`;
-		const maybeGlobalTemp = `${TPS.GLOBAL_PATH}/${templateName}`;
-		const maybeDefaultTemp = path.join(TPS.DEFAULT_TPS, templateName);
+		this.template = templateName;
 
-		switch (true) {
-			case localPath && isDir(maybeLocalTemp):
-				this.src = maybeLocalTemp;
-				break;
-			case TPS.GLOBAL_PATH && isDir(maybeGlobalTemp):
-				this.src = maybeGlobalTemp;
-				break;
-			case isDir(maybeDefaultTemp):
-				this.src = maybeDefaultTemp;
-				break;
-			default:
-				logger.tps.error('Template not found! \n%O', {
-					'local path': localPath,
-					'Seached for local template': maybeLocalTemp,
-					'search for global template': maybeGlobalTemp,
-					'search for default templates': maybeDefaultTemp,
-					[localPath]: Templates.hasLocalTps() && fs.readdirSync(localPath),
-					[TPS.GLOBAL_PATH]:
-						Templates.hasGloablTps() && fs.readdirSync(TPS.GLOBAL_PATH),
-				});
-				throw new TemplateNotFoundError(templateName);
+		const templateLocation =
+			this.constructor.findTemplate(templateName) ||
+			this.constructor.findTemplate(`tps-${templateName}`);
+
+		if (!templateLocation) {
+			logger.tps.error('Template not found! \n%O', {
+				searchedPaths: this.constructor.getTemplateLocations(),
+			});
+			throw new TemplateNotFoundError(templateName);
 		}
 
-		this.template = templateName;
+		this.src = templateLocation;
+
 		logger.tps.info('Template %n', {
 			name: this.template,
 			location: this.src,
@@ -171,7 +249,6 @@ export class Templates {
 		try {
 			logger.tps.info('Loading template settings file...');
 			// eslint-disable-next-line
-			//   this.templateSettings = require(this.templateSettingsPath) || {};
 			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
@@ -209,7 +286,10 @@ export class Templates {
 		// load default package if applicable
 		const defaultFolder = path.join(this.src, 'default');
 		const shouldLoadDefault = this.opts.defaultPackage && isDir(defaultFolder);
-		logger.tps.info('Loading default package %o', shouldLoadDefault);
+		logger.tps.info('Loading default package %n', {
+			shouldLoadDefault,
+			defaultLocation: defaultFolder,
+		});
 		if (shouldLoadDefault) {
 			this.loadPackage('default');
 		}
@@ -858,6 +938,13 @@ export class Templates {
 			tpsrcConfig,
 			tpsrcSearchPlaces,
 		);
+
+		if (is.empty(tpsrcfiles)) {
+			logger.tps.info('No tps files to find: %n', {
+				cwd: TPS.CWD,
+				tpsrcSearchPlaces,
+			});
+		}
 
 		tpsrcfiles.reverse().forEach((tpsrc) => {
 			if (!tpsrc || tpsrc?.isEmpty) return;

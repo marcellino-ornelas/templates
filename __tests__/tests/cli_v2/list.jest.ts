@@ -1,23 +1,40 @@
 import yargs from 'yargs/yargs';
 import list, { BANNED_TEMPLATES } from '@tps/cli/commands/list';
-import { mkTemplate, globalInit } from '@test/utilities/templates';
+import {
+	globalInit,
+	init,
+	mk3rdPartyTemplate,
+	mkGlobal3rdPartyTemplate,
+	mkGlobalTemplate,
+	mkTemplate,
+	mkTpsrc,
+} from '@test/utilities/templates';
 import { reset, vol } from '@test/utilities/vol';
 import { MockedConsole, mockConsoleLog } from '@test/utilities/mocks';
-import { CWD } from '@tps/utilities/constants';
 import path from 'path';
+import { CWD, USER_HOME } from '@tps/utilities/constants';
 import Templates from '@tps/templates';
 
 jest.mock('fs');
 
+jest.mock('@tps/utilities/constants', () => {
+	const original = jest.requireActual('@tps/utilities/constants');
+	return {
+		...original,
+		CWD: jest
+			.requireActual('path')
+			.join(original.USER_HOME, 'Desktop', 'random'),
+	};
+});
+
 describe('Command Line: list', () => {
 	let log: MockedConsole;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		log = mockConsoleLog();
 		reset();
 
-		// TODO: remove when we remove legacy tpsrc test
-		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
+		await vol.promises.mkdir(CWD, { recursive: true });
 	});
 
 	afterEach(() => {
@@ -25,71 +42,65 @@ describe('Command Line: list', () => {
 	});
 
 	it('should be able to list out local templates', async () => {
+		mkTemplate('test-local-template');
+
 		const parser = yargs().command(list);
 
 		await parser.parseAsync('list');
 
-		expect(log.get()).toContain('testing');
+		expect(log.get()).toContain('test-local-template');
 	});
 
 	it('should ignore local templates if option provided', async () => {
+		mkTemplate('test-local-template');
+
 		const parser = yargs().command(list);
 
 		await parser.parseAsync(['list', '--no-local']);
 
-		expect(log.get()).not.toContain('testing');
+		expect(log.get()).not.toContain('test-local-template');
 	});
 
 	it('should ignore local templates if no local templates', async () => {
-		const localTemplates = vol.readdirSync(Templates.getLocalTpsPath());
-
-		localTemplates.forEach((template) => {
-			vol.rmSync(path.join(Templates.getLocalTpsPath(), template), {
-				force: true,
-				recursive: true,
-			});
-		});
+		init();
 
 		const parser = yargs().command(list);
 
 		await parser.parseAsync(['list']);
-
-		expect(log.get()).not.toContain('Local:');
-		expect(log.get()).not.toContain('testing');
 	});
 
 	it('should be able to list out global templates', async () => {
 		globalInit();
 
-		mkTemplate('testing-global', undefined, true);
+		mkGlobalTemplate('testing-global-template');
 
 		const parser = yargs().command(list);
 
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list']);
 
-		expect(log.get()).toContain('testing-global');
+		expect(log.get()).toContain('testing-global-template');
 	});
 
 	it('should ignore global templates if option provided', async () => {
 		globalInit();
 
-		mkTemplate('testing-global', undefined, true);
+		mkGlobalTemplate('testing-global-template');
 
 		const parser = yargs().command(list);
 
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list', '--no-global']);
 
-		expect(log.get()).not.toContain('testing-global');
+		expect(log.get()).not.toContain('testing-global-template');
 	});
 
 	it('should ignore global templates if no global templates', async () => {
+		globalInit();
+
 		const parser = yargs().command(list);
 
 		await parser.parseAsync(['list']);
-
-		expect(log.get()).not.toContain('Global:');
 	});
 
 	it('should be able to list out default templates', async () => {
@@ -122,4 +133,113 @@ describe('Command Line: list', () => {
 
 		expect(log.get()).not.toContain('react-component');
 	});
+
+	it('should not log default templates if option provided', async () => {
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-default']);
+
+		expect(log.get()).not.toContain('react-component');
+	});
+
+	it('should be able to list out local 3rd party templates', async () => {
+		mk3rdPartyTemplate('tps-testing-3rd-party-template');
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).toContain('tps-testing-3rd-party-template');
+	});
+
+	it('should ignore local 3rd party templates if option provided', async () => {
+		mk3rdPartyTemplate('tps-testing-3rd-party-template');
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-node-modules']);
+
+		expect(log.get()).not.toContain('tps-testing-3rd-party-template');
+	});
+
+	it('should ignore local 3rd party templates if no  3rd party templates', async () => {
+		await vol.promises.mkdir(path.join(CWD, 'node_modules'), {
+			recursive: true,
+		});
+
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list']);
+	});
+
+	it('should be able to list out global 3rd party templates', async () => {
+		mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list']);
+
+		expect(log.get()).toContain('tps-testing-3rd-party-template');
+	});
+
+	it('should ignore global 3rd party templates if option provided', async () => {
+		mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
+
+		const parser = yargs().command(list);
+
+		// ignore default folder, no need to do extra work
+		await parser.parseAsync(['list', '--no-node-modules']);
+
+		expect(log.get()).not.toContain('tps-testing-3rd-party-template');
+	});
+
+	it('should ignore global 3rd party templates if no  3rd party templates', async () => {
+		await vol.promises.mkdir('/usr/lib/node_modules', { recursive: true });
+
+		const parser = yargs().command(list);
+
+		await parser.parseAsync(['list']);
+	});
+
+	it.only.each([
+		...Templates.tpsrcConfigNames.map((name) => {
+			return {
+				name,
+				location: CWD,
+			};
+		}),
+		...Templates.tpsrcConfigNames.map((name) => {
+			return {
+				name,
+				location: USER_HOME,
+			};
+		}),
+	])(
+		'should not display any config file: $location/$name',
+		async ({ name, location }) => {
+			mkTemplate('local-template');
+			mkGlobalTemplate('global-template');
+			mk3rdPartyTemplate('tps-local-3rd-party-template');
+			mkGlobal3rdPartyTemplate('tps-global-local-template');
+
+			mkTpsrc(path.join(location, name));
+
+			const parser = yargs().command(list);
+
+			await parser.parseAsync(['list']);
+
+			/**
+			 * Check all possible names because list will
+			 * only print out the file name and not
+			 * `.tps/.tpsrc`
+			 */
+			Templates.tpsrcConfigNames.forEach((configName) => {
+				expect(log.get()).not.toContain(configName);
+			});
+		},
+	);
 });

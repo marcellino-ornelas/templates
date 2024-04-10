@@ -7,6 +7,12 @@ import {
 	RequiresTemplateError,
 } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
+import {
+	mk3rdPartyTemplate,
+	mkGlobal3rdPartyTemplate,
+	mkTemplate,
+} from '@test/utilities/templates';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -23,6 +29,8 @@ describe('[Templates] Render Process:', () => {
 
 	beforeEach(() => {
 		jest.resetAllMocks();
+		reset();
+
 		return playground.createBox('render_process');
 	});
 
@@ -52,6 +60,18 @@ describe('[Templates] Render Process:', () => {
 
 		return tps.render(playground.box(), 'app').then(() => {
 			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+		});
+	});
+
+	it('should be able to render a local template without tps prefix', () => {
+		mkTemplate('tps-test-template-prefix');
+
+		const tps = new Templates('test-template-prefix');
+
+		const destPath = playground.pathTo('app');
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
 		});
 	});
 
@@ -189,5 +209,55 @@ describe('[Templates] Render Process:', () => {
 		await tps.render(playground.box(), 'app');
 
 		expect(indexFile).toHaveFileContents('{}\nhey there\n{}\nbye');
+	});
+
+	it('should be able to use a local npm template', async () => {
+		mk3rdPartyTemplate('tps-test-3rd-party-package');
+
+		const tps = new Templates('tps-test-3rd-party-package', { default: true });
+
+		const appPath = playground.pathTo('app');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to render a local 3rd party template without tps prefix', async () => {
+		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+
+		// Exclude tps prefix
+		const tps = new Templates('test-3rd-template-prefix');
+
+		const appPath = playground.pathTo('app');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to use a global npm template', async () => {
+		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
+
+		const tps = new Templates('tps-test-3rd-party-package', { default: true });
+
+		const appPath = playground.pathTo('app');
+
+		await tps.render(playground.box(), 'app');
+
+		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to render a global 3rd party template without tps prefix', () => {
+		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
+
+		// Exclude tps prefix
+		const tps = new Templates('test-3rd-template-prefix');
+
+		const destPath = playground.pathTo('app');
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
+		});
 	});
 });
