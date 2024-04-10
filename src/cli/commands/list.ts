@@ -113,7 +113,17 @@ export default {
 					 * well just return empty array here.
 					 */
 					directoryTemplates = await fs.promises.readdir(templateDir, {});
-				} catch (e) {
+				} catch (err) {
+					/**
+					 * log any errors that dont have to do with the directory existing
+					 */
+					if (err?.code !== 'ENOENT') {
+						logger.cli.error('Template readdir error %n', {
+							templateDir,
+							err,
+						});
+					}
+
 					return [];
 				}
 
