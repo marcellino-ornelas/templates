@@ -78,16 +78,15 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
 });
 
 /**
- * TODO:
- *
- *		.tps/.config/tpsrc.cjs
- *		.tps/.config/tpsrc.ts
- *		.tps/.config/tpsrc.js
- *		.tps/.config/tpsrc.yml
- *		.tps/.config/tpsrc.yaml
- *		.tps/.config/tpsrc.json
- *		.tps/.config/tpsrc
- *		.tps/package.json
+ * TODO: Remove these from the list
+ * - .tps/.config/tpsrc.cjs
+ * - .tps/.config/tpsrc.ts
+ * - .tps/.config/tpsrc.js
+ * - .tps/.config/tpsrc.yml
+ * - .tps/.config/tpsrc.yaml
+ * - .tps/.config/tpsrc.json
+ * - .tps/.config/tpsrc
+ * - .tps/package.json
  */
 const tpsrcSearchPlaces = [...defaultTpsrcSearches, ...nestedTpsrcSearches];
 
