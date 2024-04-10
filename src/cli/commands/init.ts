@@ -1,6 +1,5 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import { errorExit, logAndThrow } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
 import { TemplateOptions, Templates } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
