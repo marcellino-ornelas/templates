@@ -39,7 +39,6 @@ export default {
 
 		const tpsConfig: Partial<TemplateOptions> = {
 			force: argv.force,
-			//   verbose: argv.verbose,
 			tpsPath: TPS.DEFAULT_TPS,
 		};
 
@@ -54,7 +53,7 @@ export default {
 			logger.cli.info('Initializing Global...');
 
 			if (Templates.hasGloablTps()) {
-				logAndThrow(new GlobalInitializedAlreadyError(TPS.USER_HOME));
+				throw new GlobalInitializedAlreadyError(TPS.USER_HOME);
 			}
 
 			await tps.render(TPS.USER_HOME);
@@ -74,7 +73,7 @@ export default {
 		logger.cli.info('Tps local location: %s', TPS.CWD);
 
 		if (Templates.directoryIsTpsInitialized(TPS.CWD)) {
-			logAndThrow(new InitializedAlreadyError(TPS.CWD));
+			throw new InitializedAlreadyError(TPS.CWD);
 		}
 
 		logger.cli.info('Initializing repo...');
