@@ -59,11 +59,6 @@ export const LOCAL_CONFIG_PATH: string | null = HAS_LOCAL
 export const INIT_LOCAL_PATH: string = path.normalize(CWD);
 
 /**
- * path to initialize when calling `tps init --global`. always home dir
- */
-export const INIT_GLOBAL_PATH: string = path.normalize(USER_HOME);
-
-/**
  * path of tps folder if tps is initialized in repo
  */
 export const INIT_LOCAL_TPS_PATH: string = path.join(

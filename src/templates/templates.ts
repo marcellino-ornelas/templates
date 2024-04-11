@@ -188,8 +188,11 @@ export class Templates {
 		return path.join(homeDirectory, templateName);
 	}
 
-	public static getGloablTpsPath(): string {
-		return TPS.GLOBAL_PATH;
+	/**
+	 * Gets path to the global .tps/ directory
+	 */
+	public static getGloablTpsPath(): string | null {
+		return path.join(TPS.USER_HOME, TPS.TPS_FOLDER);
 	}
 
 	public static getLocalTpsPath(): string {
@@ -201,8 +204,12 @@ export class Templates {
 		return tpsLocal;
 	}
 
+	public static directoryIsTpsInitialized(dir): boolean {
+		return isDir(path.join(dir, TPS.TPS_FOLDER));
+	}
+
 	public static hasGloablTps(): boolean {
-		return isDir(TPS.GLOBAL_PATH);
+		return Templates.directoryIsTpsInitialized(TPS.USER_HOME);
 	}
 
 	public static hasLocalTps(): boolean {

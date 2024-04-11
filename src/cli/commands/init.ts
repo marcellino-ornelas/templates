@@ -1,15 +1,14 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import { errorExit } from '@tps/cli/utils/error-exit';
 import Template from '@tps/templates';
 import { TemplateOptions, Templates } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
 	InitializedAlreadyError,
-	ParentDirectoryInitializedError,
 	GlobalInitializedAlreadyError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
+import path from 'path';
 
 interface InitArgv {
 	force: boolean;
@@ -32,14 +31,13 @@ export default {
 		},
 	},
 	describe: 'Initialize local settings',
-	handler(argv) {
+	async handler(argv) {
 		if (argv.verbose) {
 			debug.enable('tps:cli');
 		}
 
 		const tpsConfig: Partial<TemplateOptions> = {
 			force: argv.force,
-			//   verbose: argv.verbose,
 			tpsPath: TPS.DEFAULT_TPS,
 		};
 
@@ -51,46 +49,40 @@ export default {
 		 * tps global init
 		 */
 		if (argv.global) {
-			logger.cli.log('Initializing Global...');
+			logger.cli.info('Initializing Global...');
+
 			if (Templates.hasGloablTps()) {
-				errorExit(new GlobalInitializedAlreadyError(TPS.GLOBAL_PATH));
+				throw new GlobalInitializedAlreadyError(TPS.USER_HOME);
 			}
 
-			tps
-				.render(TPS.INIT_GLOBAL_PATH)
-				.then(() => {
-					logger.cli.log('tps globally initialized');
-				})
-				.catch(errorExit);
-		} else {
-			/**
-			 * tps local init
-			 */
-			if (TPS.IS_TPS_INITIALIZED) {
-				errorExit(new InitializedAlreadyError(TPS.INIT_LOCAL_PATH));
-			}
+			await tps.render(TPS.USER_HOME);
 
-			/**
-			 * if not force then tps folder can not exist in cwd
-			 */
-			logger.cli.info(
-				'tps found in parent directory?',
-				Templates.hasLocalTps(),
-			);
-			logger.cli.info('closes tps location', TPS.LOCAL_PATH);
+			const initializedFolder = path.join(TPS.USER_HOME, TPS.TPS_FOLDER);
 
-			if (Templates.hasLocalTps() && !argv.force) {
-				errorExit(new ParentDirectoryInitializedError(TPS.LOCAL_PATH));
-			}
+			logger.cli.info('Globally initialized %s', initializedFolder);
 
-			logger.cli.log('Initializing repo...');
+			console.log(initializedFolder);
 
-			tps
-				.render(TPS.INIT_LOCAL_PATH)
-				.then(() => {
-					logger.cli.log('Repo initialized');
-				})
-				.catch(errorExit);
+			return;
 		}
+
+		/**
+		 * tps local init
+		 */
+		logger.cli.info('Tps local location: %s', TPS.CWD);
+
+		if (Templates.directoryIsTpsInitialized(TPS.CWD)) {
+			throw new InitializedAlreadyError(TPS.CWD);
+		}
+
+		logger.cli.info('Initializing repo...');
+
+		await tps.render(TPS.CWD);
+
+		const initializedFolder = path.join(TPS.CWD, TPS.TPS_FOLDER);
+
+		logger.cli.info('Repo initialized %s', initializedFolder);
+
+		console.log(initializedFolder);
 	},
 } as CommandModule<object, InitArgv>;
