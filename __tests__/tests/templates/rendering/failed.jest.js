@@ -2,7 +2,6 @@
 /*
  * Modules
  */
-import fs from 'fs';
 import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';

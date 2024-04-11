@@ -195,7 +195,8 @@ describe('CreateDebug', () => {
 
 		beforeAll(() => {
 			// Do not show colors when testing
-			(debug as any).useColors = () => false;
+			// @ts-expect-error not typed but available in debug
+			debug.useColors = () => false;
 
 			// Replace console.log with our mocked version.
 			// The point of this is to save all logs to a variable so we can make assertions on it.

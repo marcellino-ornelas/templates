@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { LOCAL_PATH } from '@tps/utilities/constants';
+import { AnswersHash } from '@tps/types/settings';
 
 export class TemplateNotFoundError extends Error {
 	public name = 'TemplateNotFoundError';
@@ -65,9 +65,9 @@ export class PromptNoPromptFoundError extends Error {
 export class PromptInvalidAnswersError extends Error {
 	public name = 'PromptInvalidAnswersError';
 
-	public answers: Record<string, any>;
+	public answers: AnswersHash;
 
-	constructor(answers: Record<string, any>) {
+	constructor(answers: AnswersHash) {
 		super(
 			`Invalid answers passed in. Answers needs to be an object. Got ${JSON.stringify(
 				answers,

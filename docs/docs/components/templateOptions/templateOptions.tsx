@@ -46,7 +46,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 					</tr>
 				</thead>
 				<tbody>
-					{settingsFile?.prompts?.map((prompt, i) => (
+					{settingsFile?.prompts?.map((prompt) => (
 						<tr key={prompt.name}>
 							<td>{prompt.name}</td>
 							<td>

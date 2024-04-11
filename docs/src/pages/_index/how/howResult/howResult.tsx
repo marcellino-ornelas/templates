@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
 import { FileSystemRow, Folder } from '../folder';
 import howStyles from '../how.module.css';
