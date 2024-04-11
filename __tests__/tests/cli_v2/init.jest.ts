@@ -29,15 +29,6 @@ describe('Command Line: init', () => {
 
 		// were mocking this out so ensure it exists
 		vol.mkdirSync(CWD, { recursive: true });
-
-		// // TODO: remove when we remove legacy tpsrc test
-		// vol.rmSync(path.join(CWD, '.tps'), { force: true, recursive: true });
-		// vol.rmSync(path.join(CWD, '.tpsrc'), { force: true });
-		// vol.rmSync(path.join(USER_HOME, '.tps'), {
-		// 	force: true,
-		// 	recursive: true,
-		// });
-		// vol.rmSync(path.join(USER_HOME, '.tpsrc'), { force: true });
 	});
 
 	describe('Local', () => {
