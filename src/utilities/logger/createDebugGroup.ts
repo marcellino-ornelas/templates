@@ -2,7 +2,7 @@
 export default class CreateDebugGroup<TData = any> {
 	constructor(
 		public name: string,
-		public queue: [string, ...TData[]][],
+		public queue: [string, ...TData[]][] = [],
 	) {}
 
 	info(...message: TData[]): void {
