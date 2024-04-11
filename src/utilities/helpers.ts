@@ -3,7 +3,6 @@ import * as is from 'is';
 import path from 'path';
 import paths from 'npm-paths';
 import { CWD } from './constants';
-import { findUp } from './fileSystem';
 
 export function hasProp(obj: Record<string, any>, prop: string): boolean {
 	return Object.prototype.hasOwnProperty.call(obj, prop);
@@ -93,35 +92,6 @@ export function cliLog(str: string): void {
 	// eslint-disable-next-line
 	console.log(string);
 }
-
-// /**
-//  * Capitalize the first character in the string
-//  * @param   {string} name - name to capitalize
-//  * @returns {string} - name with a capital first letter
-//  */
-// utils.capitalize = function capitalize(name) {
-//   if (!name) {
-//     throw new Error('Capitalize only accepts a non-empty string as a argument');
-//   }
-
-//   let firstCharCapitalized = name[0].toUpperCase();
-
-//   // check to see if its already a capital letter
-//   return firstCharCapitalized === name[0]
-//     ? name
-//     : firstCharCapitalized + name.slice(1);
-// };
-
-// /**
-//  * Convert a filename into a valid filename. Replaces all bad characters with `-`
-//  * @param   {string} fileName - Name of file
-//  * @returns {string} - valid file name
-//  */
-// utils.normalizeFileName = function normalizeReactComponentName(fileName) {
-//   return !validFilename(fileName)
-//     ? filenamify(fileName, { replacement: '-' })
-//     : fileName;
-// };
 
 /**
  * Get all npm paths

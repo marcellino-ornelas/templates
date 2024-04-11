@@ -6,7 +6,11 @@ import {
 	PromptNoPromptFoundError,
 	PromptInvalidAnswersError,
 } from '@tps/errors';
-import type { SettingsFilePrompt, AnswersHash } from '@tps/types/settings';
+import type {
+	SettingsFilePrompt,
+	AnswersHash,
+	AnswersData,
+} from '@tps/types/settings';
 import Prompt from './prompt';
 
 interface PrompterOptions {
@@ -70,7 +74,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 		});
 	}
 
-	setAnswer(name: string, answer: any): void {
+	setAnswer(name: string, answer: AnswersData): void {
 		if (!hasProp(this.answers, name)) {
 			this.answered += 1;
 		}
