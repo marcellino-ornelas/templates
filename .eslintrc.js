@@ -42,6 +42,8 @@ const config = {
 		'@typescript-eslint/no-explicit-any': 'error',
 		'no-unused-vars': 'off',
 		'@typescript-eslint/no-unused-vars': 'error',
+		'no-useless-constructor': 'off',
+		'@typescript-eslint/no-useless-constructor': 'error',
 	},
 	overrides: [
 		{
