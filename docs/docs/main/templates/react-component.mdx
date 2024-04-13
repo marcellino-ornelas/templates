@@ -2,6 +2,8 @@ import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Link from '@docusaurus/Link';
+import { Button } from '@site/docs/components/button';
 
 # react-component
 
@@ -14,7 +16,31 @@ import TabItem from '@theme/TabItem';
 
 <br />
 
-Generate a fully functioning react component (function component).
+Generate a fully functioning React function component.
+
+:::info Now accepting new feature requests
+
+Want a new langauge/tool/feature that it doesn't today? We now welcome you to
+come and tell us about it. Well be happy to implement your idea as long as it
+makes reasonable sense.
+
+<Button
+	to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests"
+	size="sm"
+	onClick={() => {
+		console.log('hellooo');
+		if (typeof gtag === 'function') {
+			gtag('event', 'feedback_request_click', {
+				event_category: 'Feedback',
+				event_label: 'react-template',
+			});
+		}
+	}}
+>
+	Submit feature request
+</Button>
+
+:::
 
 ## Usage
 
