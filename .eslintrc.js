@@ -90,7 +90,7 @@ const config = {
 			files: ['docs/docs/main/templates/react-component.mdx'],
 			rules: {
 				// gtag is not defined
-				'no-undef': 'ignore',
+				'no-undef': 'off',
 			},
 		},
 		{
