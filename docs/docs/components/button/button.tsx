@@ -1,5 +1,4 @@
-import React, { PropsWithChildren, JSX } from 'react';
-import './button..module.css';
+import React, { PropsWithChildren } from 'react';
 import Link from '@docusaurus/Link';
 
 interface Props extends PropsWithChildren {
