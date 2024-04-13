@@ -1,3 +1,5 @@
+{/* eslint-disable no-undef */}
+
 import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
@@ -20,7 +22,6 @@ using the form below. We hope to hear from you soon!
 	size="sm"
 	onClick={() => {
 		if (typeof gtag === 'function') {
-			// eslint-disable-next-line no-undef
 			gtag('event', 'feedback_request_click', {
 				event_category: 'Feedback',
 				event_label: 'react-template',
