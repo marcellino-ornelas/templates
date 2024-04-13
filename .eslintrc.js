@@ -87,6 +87,13 @@ const config = {
 			},
 		},
 		{
+			files: ['docs/docs/main/templates/react-component.mdx'],
+			rules: {
+				// gtag is not defined
+				'no-undef': 'ignore',
+			},
+		},
+		{
 			files: ['docs/**/*.tsx', 'docs/**/*.ts'],
 			plugins: ['react'],
 			rules: {
