@@ -2,8 +2,35 @@ import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
 
 # react-component
+
+:::info Now accepting new feature requests
+
+If you're using our template and have ideas on how we can make it even better,
+we'd love to hear from you. Your feedback helps us prioritize improvements and
+build a tool that truly meets your needs.
+
+Feel free to submit feature requests, suggestions, or any thoughts you have
+using the form below. We hope to hear from you soon!
+
+<Button
+	to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests"
+	size="sm"
+	onClick={() => {
+		if (typeof gtag === 'function') {
+			gtag('event', 'feedback_request_click', {
+				event_category: 'Feedback',
+				event_label: 'react-template',
+			});
+		}
+	}}
+>
+	Submit feature request
+</Button>
+
+:::
 
 <div className="row" style={{ fontSize: 20 }}>
 	<div className="col col--6">🎉 Supports Typescript</div>
@@ -14,7 +41,7 @@ import TabItem from '@theme/TabItem';
 
 <br />
 
-Generate a fully functioning react component (function component).
+Generate a fully functioning React function component.
 
 ## Usage
 
