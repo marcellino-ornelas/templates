@@ -1,11 +1,9 @@
 /* eslint-disable no-prototype-builtins */
-import debug from 'debug';
 import is from 'is';
 import Template from '@tps/templates';
 import type { TemplateOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
-import { errorExit } from './error-exit';
 
 export interface UseArgv {
 	use: string;
@@ -50,7 +48,7 @@ export const options = {
 	},
 };
 
-export const createHandler: CommandModule<object, UseArgv>['handler'] = (
+export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	argv,
 ) => {
 	/**
@@ -65,10 +63,6 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
 	 * }
 	 */
 	const dest = process.cwd();
-
-	if (argv.verbose) {
-		debug.enable('tps,tps:cli');
-	}
 
 	const { packages, buildPaths, ...answers } = argv;
 
@@ -103,11 +97,9 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = (
 
 	logger.cli.info('Build paths: %n', buildPaths);
 
-	tps
-		.render(dest, renderItems, renderData)
-		.then(() => {
-			logger.cli.log('process done');
-			process.exit(0);
-		})
-		.catch(errorExit);
+	const templatesBuilt = await tps.render(dest, renderItems, renderData);
+
+	templatesBuilt.forEach((template) => {
+		console.log(template);
+	});
 };
