@@ -27,11 +27,13 @@ describe('[cli] Create:', () => {
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created
 	 */
-	it.only('should be able to use --force flag', () => {
+	it('should be able to use --force flag', () => {
 		mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
 		return expect(
-			createTemplate(playground.box(), 'testing', 'app', null, { fail: true }),
+			createTemplate(playground.box(), 'testing', 'app', null, {
+				fail: true,
+			}),
 		)
 			.rejects.toContain('FileExistError')
 			.then(() =>
