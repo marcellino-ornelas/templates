@@ -99,6 +99,8 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 
 	const templatesBuilt = await tps.render(dest, renderItems, renderData);
 
+	console.log(templatesBuilt);
+
 	templatesBuilt.forEach((template) => {
 		console.log(template);
 	});
