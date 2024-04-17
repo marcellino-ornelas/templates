@@ -27,7 +27,7 @@ describe('[cli] Create:', () => {
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created
 	 */
-	it.only('should be able to use --force flag', () => {
+	it('should be able to use --force flag', () => {
 		mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
 		return expect(
