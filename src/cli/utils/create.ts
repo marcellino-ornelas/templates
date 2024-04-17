@@ -66,6 +66,8 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 
 	const { packages, buildPaths, ...answers } = argv;
 
+	console.log(argv);
+
 	const tpsConfig: Partial<TemplateOptions> = {};
 
 	if (argv.hasOwnProperty('newFolder')) tpsConfig.newFolder = argv.newFolder;
@@ -100,6 +102,9 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 
 	const results = await tps.render(dest, renderItems, renderData);
 	const templatesBuilt = Array.isArray(results) ? results : [results];
+
+	console.log('templatesBuilt', templatesBuilt);
+	console.log('renderItems', renderItems);
 
 	templatesBuilt.forEach((template) => {
 		console.log(template);
