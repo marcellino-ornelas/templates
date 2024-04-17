@@ -99,6 +99,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	logger.cli.info('Build paths: %n', buildPaths);
 
 	const results = await tps.render(dest, renderItems, renderData);
+
 	const templatesBuilt = Array.isArray(results) ? results : [results];
 
 	templatesBuilt.forEach((template) => {

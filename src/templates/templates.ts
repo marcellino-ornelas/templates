@@ -390,12 +390,12 @@ export class Templates {
 	 * @param data - data to pass to doT. This will be used when rendering dot files/syntax
 	 * @returns {Promise}
 	 */
-	async render<T>(
+	async render<T extends string | string[]>(
 		dest: string,
 		buildPaths?: T,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data?: Record<string, any> = {},
-	): Promise<T> {
+	): T extends string[] ? Promise<string[]> : string {
 		let dataForTemplating;
 		let buildInDest = false;
 		let pathsToCreate = buildPaths;
