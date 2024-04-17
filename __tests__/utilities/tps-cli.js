@@ -48,7 +48,6 @@ export function tpsCli(command, opts = {}) {
 		}
 		child.exec(fullCommand, options, (err, stdout, stderr) => {
 			if (err) {
-				console.log(err);
 				if (!options.fail) {
 					console.log(
 						cliErrorHelper(fullCommand, err, options.cwd, stdout, stderr),
