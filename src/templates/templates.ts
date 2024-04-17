@@ -395,7 +395,7 @@ export class Templates {
 		buildPaths?: T,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data?: Record<string, any> = {},
-	): T extends string[] ? Promise<string[]> : string {
+	): Promise<T extends string[] ? string[] : string> {
 		let dataForTemplating;
 		let buildInDest = false;
 		let pathsToCreate = buildPaths;
