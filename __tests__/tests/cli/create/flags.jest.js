@@ -31,9 +31,7 @@ describe('[cli] Create:', () => {
 		mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
 		return expect(
-			createTemplate(playground.box(), 'testing', 'app', null, {
-				fail: true,
-			}),
+			createTemplate(playground.box(), 'testing', 'app', null, { fail: true }),
 		)
 			.rejects.toContain('FileExistError')
 			.then(() =>
