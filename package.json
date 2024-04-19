@@ -1,6 +1,6 @@
 {
 	"name": "templates-mo",
-	"version": "1.0.25",
+	"version": "1.0.27",
 	"description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
 	"main": "lib/templates/index.js",
 	"keywords": [
@@ -47,6 +47,7 @@
 	},
 	"devDependencies": {
 		"@docusaurus/eslint-plugin": "^2.4.1",
+		"@types/bluebird": "^3.5.5",
 		"@types/dot": "^1.1.5",
 		"@types/inquirer": "^9.0.3",
 		"@types/is": "^0.0.21",
@@ -84,6 +85,7 @@
 		"is": "3.3.0",
 		"memfs": "^4.2.1",
 		"minimatch": "3.0.4",
+		"npm-paths": "^2.0.0",
 		"prettier": "^3.0.3",
 		"prettyjson-256": "1.5.18",
 		"strip-ansi": "6.0.0",

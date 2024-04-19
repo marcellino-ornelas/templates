@@ -26,10 +26,10 @@ All packages live inside of a tps `template` folder
 ```
 
 `packages` can be named whatever you like except for one. Each `template` can
-optionally have a `default` package. Each time you render a template, TPS will
-automatically use everything inside your `default` package to build your
-template. Every other package that you want to be rendered must be specified
-when rendering the template.
+optionally have a `default` package. Each time you generate a new instance of a
+template, TPS will automatically use everything inside your `default` package to
+build your template. Every other package that you want to be rendered must be
+specified when rendering the template.
 
 Packages are used to enhance a template or add extra features when a user wants
 them. Its kind of like a conditional.
@@ -42,10 +42,10 @@ mushrooms, and etc _("our packages")_.
 
 ### Default package
 
-As mentioned before, when you render a template, all contents from the `default`
-package are automatically included. Think of this package as a central storage
-space for important things needed every time you use a template. It keeps all
-the essential elements in one place.
+As mentioned before, when you generate a new instance of a template, all
+contents from the `default` package are automatically included. Think of this
+package as a central storage space for important things needed every time you
+use a template. It keeps all the essential elements in one place.
 
 ```text title="Template"
 | - .tps/

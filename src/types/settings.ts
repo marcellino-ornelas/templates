@@ -18,7 +18,9 @@ export enum SettingsFilePromptType {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnswersHash = Record<string, any>;
+export type AnswersData = any;
+
+export type AnswersHash = Record<string, AnswersData>;
 
 export interface SettingsFilePrompt {
 	name: string;

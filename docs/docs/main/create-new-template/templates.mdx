@@ -7,7 +7,6 @@ sidebar_position: 1
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import CodeBlock from '@theme/CodeBlock';
 
 # Templates
 
@@ -18,31 +17,30 @@ We will be referring to `<some-name>` in our guide to represent any directory.
 :::
 
 A tps template is a collection of folders and files that acts as a blueprint for
-effortlessly recreating identical file structures in different locations. Think
-of this as a google doc template but for files and folders. When rendering a tps
-template, the tool scans all the files and directories within the template
-folder, and renders them in a directory of your preference. Tps also allows you
-to incorporate additional information during the template rendering process,
-resulting in a more dynamic template.
+recreating identical file structures in different locations. Think of this as a
+google doc template but for files and folders. When generating a new instance of
+this template, all files and directories within the template folder are rendered
+into the your new instance's directory. Tps also supports conditionally rending
+files and folders and dynamiclly rendering files and folders.
 
 Don't worry about all this right now! More will be discussed later on. First,
 let's start with the basics.
 
 ## Where do templates live
 
-All TPS templates need to live in a `.tps` folder. Subdirectories of the `.tps`
+All templates need to live in a `.tps` folder. Subdirectories of the `.tps`
 directory are your templates. You may have as many templates as you wish.
 
 ```text
 | - .tps/
     // highlight-next-line
-    | - <template...>/
+    | - <templates...>/
 ```
 
 <Example>
 
-If I were to make a new template called <code>react-component</code> then my
-folder structure would look like this:
+If I were to make a new template called `react-component` then my folder
+structure would look like this:
 
 ```text
 | - .tps/
@@ -53,8 +51,7 @@ folder structure would look like this:
 
 ## Packages
 
-Now lets break down what to put in your template folder. Inside of each
-`template` you can have directories referred to as `packages`.
+Inside of each `template` you can have directories referred to as `packages`.
 
 ```text
 | - .tps/
@@ -63,23 +60,19 @@ Now lets break down what to put in your template folder. Inside of each
         | - <packages...>/
 ```
 
-Now, within each package directory, you have the freedom to add an unlimited
-number of files and directories. These resources will be utilized during the
-template rendering process. You are free to name the packages as you wish, with
-one exception. While each template can have a `default` package, it is not
-mandatory to specify one.
-
-Every time you render a template, tps will automatically utilize all the
-contents _(files/directories)_ within your `default` package. For any additional
-package contents that you wish to include in the rendering process, you must
-explicitly specify them when rendering the template.
-
-Dont worry more will be covered on this in our next section of this guide
+Within each package directory, you have the freedom to add an unlimited number
+of files and directories. These resources will then be utilized when generating
+a new instance of your template. You can name packages anything you wish, but
+TPS treats the `default` package as special. When rendering a new instance of a
+template, TPS will automatically include all the contents _(files/directories)_
+within your `default` package. All other packages will only be included if
+explicitly specified.
 
 <Example open>
 
 Lets say we have a template called `node-server`. This template is responsible
-for setting up a brand new webserver with all the bells and whistles included.
+for setting up a brand new node webserver with all the bells and whistles
+included.
 
 ```text
 | - .tps/
@@ -91,27 +84,25 @@ for setting up a brand new webserver with all the bells and whistles included.
             // highlight-end
 ```
 
-let's say today we had a new idea for a trash removal company called
-`trash-removal`. If we wanted to generate this app with our template then it
-would create a new directory called `trash-removal` and render all files inside
-the templates `default` package and place them into the new `trash-removal`
-directory it just created
+let's say today we had a new idea for a trash removal company called "Trash
+Removal". If we wanted to build a new website for this company we can generate a
+new instance of `node-server` called `trash-removal`. When templates generates
+this new instance it will create a new directory called `trash-removal` and
+generate copies of all files/directories inside the template's `default`
+directory and place them into the new `trash-removal` directory it just created.
 
 ```text
+// highlight-start
 | - trash-removal/
-    // highlight-start
     | - server.js
     | - package.json
-    // highlight-end
+// highlight-end
 ```
 
 </Example>
 
-:::note
-
-You can learn more about packages in our [packages guide](./packages)
-
-:::
+Dont worry more will be covered on this in our [next section](./packages) of
+this guide:
 
 ## Settings file
 
@@ -186,22 +177,23 @@ mkdir .tps/<template-name>/default
   </TabItem>
 </Tabs>
 
-## Rendering a new template
+## Generating a new instance
 
-### what is rendering a template
+### What is a new instance
 
-Rendering a new template, also known as template instantiation or the template
-instantiation process, refers to the action of utilizing a template as a
-starting point to create a new instance. It involves rendering the files and
-folders from the template folder and transferring them to the **build path(s)**.
+Generating a new instance of a template, also known as template instantiation or
+the template instantiation process, refers to the action of utilizing a template
+as a starting point to create a new instance. It involves rendering the files
+and folders from the template folder and transferring them to the **build
+path(s)**.
 
 <br />
 <br />
 
 ```mermaid
 graph LR;
-    step1("User renders
-    template")
+    step1("User generates a
+	new instance")
     step2("Tps loads all files
     and folders from packages")
     step3("Tps creates a directory
@@ -240,7 +232,7 @@ app
 
 <Example>
 
-If we were rendering a new instance from a template and we have the build path
+If we were generating a new instance from a template and we have the build path
 `app` then templates will create a new directory called `app` and render all
 contents inside of it
 
@@ -281,7 +273,7 @@ some/path/app
 
 <Example>
 
-If we were rendering a new instance from a template and we have the build path
+If we were generating a new instance from a template and we have the build path
 `code/projects/app` then templates will create a new directory called `app`
 inside of `<cwd>/code/projects` and render all contents inside of it.
 
@@ -314,7 +306,7 @@ the same as passing in one but for each one.
 
 <Example>
 
-If we were rendering a new instance from a template and we have the build paths
+If we were generating a new instance from a template and we have the build paths
 `code/projects/app` & `code/projects/app2` then templates will create new
 directories for both and render contents into both of them.
 
@@ -343,18 +335,17 @@ directories for both and render contents into both of them.
 
 </Example>
 
-### How to render a template
+### How to generate a new instance
 
-There are two ways on how to render a template. One is via our command line tool
-or by our `node_module` package. We wont go deep into this topic right now but
-here are some basics.
+There are two ways on how to generate a new instance of a template. One is via
+our command line tool or by our `node_module` package. We wont go deep into this
+topic right now but here are some basics.
 
 `<template-to-use>` is the name of the template you would like to use.
 
 :::tip
 
-Not sure what templates you have? Check out our
-[list command](../../api/cli#list)
+Not sure what templates you have? Check out our [list command](../../api/cli#list)
 
 :::
 

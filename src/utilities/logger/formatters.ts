@@ -4,6 +4,7 @@ import { defaults } from '@tps/utilities/helpers';
 import * as is from 'is';
 import colors from 'ansi-colors';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (process.env as any).DEBUG_COLORS = false;
 
 /**
@@ -33,7 +34,8 @@ const pattern = [
  * Initialize
  */
 
-(colors as any).theme(newColors);
+// @ts-expect-error https://github.com/doowb/ansi-colors/issues/47
+colors.theme(newColors);
 
 const ANSII_RE = new RegExp(pattern, 'g');
 

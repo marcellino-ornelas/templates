@@ -9,6 +9,7 @@ doT.templateSettings.varname = 'tps';
 interface Props {
 	templateString?: string;
 	tps?: Partial<Tps>;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	defs?: Record<string, any>;
 }
 

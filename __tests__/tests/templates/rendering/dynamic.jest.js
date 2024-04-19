@@ -5,7 +5,6 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import * as path from 'path';
-import { vol } from '@test/utilities/vol';
 
 jest.mock('fs');
 

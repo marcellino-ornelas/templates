@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useType } from '@site/src/hooks/useType';
 import { Waypoint } from 'react-waypoint';
 import howStyles from '../how.module.css';

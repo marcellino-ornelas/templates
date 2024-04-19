@@ -26,12 +26,9 @@ export const init = (cwd, flags = {}, opts = {}) => {
 	// if (flags.global) {
 	//   expect(TPS.GLOBAL_PATH).not.toBeDirectory();
 	// }
-	const message = flags.global
-		? 'tps globally initialized'
-		: 'Repo initialized';
 
 	return tpsCli(`init ${flagString}`, { cwd, ...opts }).then((stdout) => {
-		expect(stdout).toContain(message);
+		expect(stdout).toContain(tpsFolder);
 
 		if (flags.global) {
 			expect(TPS.GLOBAL_PATH).toBeDirectory();

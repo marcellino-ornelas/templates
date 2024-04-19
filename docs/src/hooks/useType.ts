@@ -15,9 +15,7 @@ export const useType = (
 		animation = true,
 		start = null,
 		interval = 100,
-		slash = false,
 		delay = null,
-		debug = false,
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		onEnd = () => {},
 	}: useTypeProps = {},

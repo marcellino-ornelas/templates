@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { LOCAL_PATH } from '@tps/utilities/constants';
+import { AnswersHash } from '@tps/types/settings';
 
 export class TemplateNotFoundError extends Error {
 	public name = 'TemplateNotFoundError';
@@ -65,31 +65,15 @@ export class PromptNoPromptFoundError extends Error {
 export class PromptInvalidAnswersError extends Error {
 	public name = 'PromptInvalidAnswersError';
 
-	public answers: Record<string, any>;
+	public answers: AnswersHash;
 
-	constructor(answers: Record<string, any>) {
+	constructor(answers: AnswersHash) {
 		super(
 			`Invalid answers passed in. Answers needs to be an object. Got ${JSON.stringify(
 				answers,
 			)}`,
 		);
 		this.answers = answers;
-	}
-}
-
-export class ParentDirectoryInitializedError extends Error {
-	public name = 'ParentDirectoryInitializedError';
-
-	public tps: string;
-
-	constructor(parentTps: string) {
-		super(`\
-tps is already initialized in a parent directory.
-tps location: ${LOCAL_PATH}
-
-In order to initialize this folder add the --force flag
-`);
-		this.tps = parentTps;
 	}
 }
 

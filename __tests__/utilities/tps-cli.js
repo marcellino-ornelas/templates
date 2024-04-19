@@ -57,7 +57,7 @@ export function tpsCli(command, opts = {}) {
 					// expect(options.fail).toBeTruthy();
 				}
 
-				reject(stdout, err);
+				reject(stdout || stderr, err);
 			} else {
 				if (options.verbose || options.fail) {
 					console.log(
