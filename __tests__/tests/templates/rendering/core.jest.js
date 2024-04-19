@@ -53,26 +53,30 @@ describe('[Templates] Render Process:', () => {
 		);
 	});
 
-	it('should be able to render a local template', () => {
+	it('should be able to render a local template', async () => {
 		const tps = new Templates('testing');
 
 		const destPath = playground.pathTo('app');
 
-		return tps.render(playground.box(), 'app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-		});
+		const results = await tps.render(playground.box(), 'app');
+
+		expect(results).toEqual(destPath);
+
+		expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 	});
 
-	it('should be able to render a local template without tps prefix', () => {
+	it('should be able to render a local template without tps prefix', async () => {
 		mkTemplate('tps-test-template-prefix');
 
 		const tps = new Templates('test-template-prefix');
 
 		const destPath = playground.pathTo('app');
 
-		return tps.render(playground.box(), 'app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
-		});
+		const results = await tps.render(playground.box(), 'app');
+
+		expect(results).toEqual(destPath);
+
+		expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
 
 	it('should be able to render 1000 templates with no problems', () => {
@@ -92,50 +96,60 @@ describe('[Templates] Render Process:', () => {
 		return Promise.all(all);
 	});
 
-	it('should be able to render a local template with long build path', () => {
+	it('should be able to render a local template with long build path', async () => {
 		const tps = new Templates('testing');
 
 		const destPath = playground.pathTo('hey/app');
 
-		return tps.render(playground.box(), 'hey/app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-		});
+		const results = await tps.render(playground.box(), 'hey/app');
+
+		expect(results).toEqual(destPath);
+
+		expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 	});
 
-	it('should be able to render a local template with short build path with no new folder', () => {
+	it('should be able to render a local template with short build path with no new folder', async () => {
 		const tps = new Templates('testing', {
 			newFolder: false,
 		});
 
 		const destPath = playground.box();
 
-		return tps.render(destPath, 'app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-		});
+		const results = await tps.render(destPath, 'app');
+
+		expect(results).toEqual(playground.pathTo('app'));
+
+		expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 	});
 
-	it('should be able to render a local template with long build path with no new folder', () => {
+	it('should be able to render a local template with long build path with no new folder', async () => {
 		const tps = new Templates('testing', {
 			newFolder: false,
 		});
 
 		const destPath = playground.pathTo('hey');
 
-		return tps.render(playground.box(), 'hey/app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-		});
+		const results = await tps.render(playground.box(), 'hey/app');
+
+		expect(results).toEqual(playground.pathTo('hey/app'));
+
+		expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 	});
 
-	it('should be able to render a local template with multiple build paths', () => {
+	it('should be able to render a local template with multiple build paths', async () => {
 		const tps = new Templates('testing');
 
 		const buildPaths = ['app', 'Box', 'New'];
 
-		return tps.render(playground.box(), buildPaths).then(() => {
-			buildPaths.forEach((buildPath) => {
-				const destPath = playground.pathTo(buildPath);
-				expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-			});
+		const results = await tps.render(playground.box(), buildPaths);
+
+		expect(results).toEqual(
+			buildPaths.map((buildPath) => playground.pathTo(buildPath)),
+		);
+
+		buildPaths.forEach((buildPath) => {
+			const destPath = playground.pathTo(buildPath);
+			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 		});
 	});
 

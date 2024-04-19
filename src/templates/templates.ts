@@ -30,7 +30,7 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import * as colors from 'ansi-colors';
-import * as Promise from 'bluebird';
+import Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
@@ -390,12 +390,12 @@ export class Templates {
 	 * @param data - data to pass to doT. This will be used when rendering dot files/syntax
 	 * @returns {Promise}
 	 */
-	render(
+	async render<T extends string | string[]>(
 		dest: string,
-		buildPaths?: string | string[],
+		buildPaths?: T,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data?: Record<string, any> = {},
-	) {
+	): Promise<T extends string[] ? string[] : string> {
 		let dataForTemplating;
 		let buildInDest = false;
 		let pathsToCreate = buildPaths;
@@ -607,7 +607,8 @@ export class Templates {
 				return Promise.all(builders).then(() => {
 					if (is.array.empty(this.buildErrors)) {
 						logger.tps.success('Finished rendering templates');
-						return;
+
+						return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
 					}
 
 					logger.tps.info('Build Errors: %o', this.buildErrors.length);
