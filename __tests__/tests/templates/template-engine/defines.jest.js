@@ -107,7 +107,7 @@ lino
 			const defs = {
 				name: `\
 {{{? true }}}
-lino
+lino-
 {{{??}}}
 unknown
 {{{?}}}
