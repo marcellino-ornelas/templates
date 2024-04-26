@@ -91,12 +91,41 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
-		it('should support block syntax in defs', () => {
-			const result = render(`te-{{#def.name }}`, undefined, {
-				name: '{{{? true }}}\nhey\n{{{??}}}\nbad\n{{{?}}}\n',
-			});
+		it('should be able to use a block if statement that has one line inline', () => {
+			const result = render(`hey there {{#def.name}}, how are you doing?`);
 
-			expect(result).toBe(`te-hey\n`);
+			/**
+			 * The current issue is that in the def file the new line after lino
+			 * is staying in the generated instance
+			 *
+			 * Also the block bracket {{{}}} is causing the space between "there" and "lino" to be removed
+			 */
+			expect(result).toBe(`hey there lino, how are you doing?`);
+		});
+
+		it('should be able to use a block if statement in a def thats passed to compile that has one line inline', () => {
+			const defs = {
+				name: `\
+{{{? true }}}
+lino
+{{{??}}}
+unknown
+{{{?}}}
+`,
+			};
+			const result = render(
+				`hey there {{#def.name}}, how are you doing?`,
+				undefined,
+				defs,
+			);
+
+			/**
+			 * The current issue is that in the def file the new line after lino
+			 * is staying in the generated instance
+			 *
+			 * Also the block bracket {{{}}} is causing the space between "there" and "lino" to be removed
+			 */
+			expect(result).toBe(`hey there lino, how are you doing?`);
 		});
 	});
 
