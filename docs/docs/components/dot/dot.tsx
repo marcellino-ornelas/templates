@@ -14,6 +14,7 @@ interface Props {
 	templateMeta: string;
 	resultMeta: string;
 	result: boolean;
+	displayTemplate: boolean;
 	lang: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	tps?: Partial<Tps>;
@@ -27,6 +28,7 @@ export const Dot = ({
 	templateMeta = '',
 	resultMeta = '',
 	lang = 'text',
+	displayTemplate = true,
 }: Props) => {
 	const templateString = (children as any).props.children.props.children;
 
@@ -37,15 +39,17 @@ export const Dot = ({
 
 	return (
 		<div>
-			<CodeBlock
-				className={styles.template}
-				showLineNumbers
-				title={templateName}
-				language={lang}
-				metastring={templateMeta}
-			>
-				{templateString}
-			</CodeBlock>
+			{displayTemplate && (
+				<CodeBlock
+					className={styles.template}
+					showLineNumbers
+					title={templateName}
+					language={lang}
+					metastring={templateMeta}
+				>
+					{templateString}
+				</CodeBlock>
+			)}
 
 			{result && (
 				<CodeBlock

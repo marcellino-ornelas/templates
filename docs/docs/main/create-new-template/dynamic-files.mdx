@@ -49,11 +49,292 @@ Like mentioned before our in house template engine was forked from
 [doT](http://olado.github.io/doT/index.html). However we add some more
 capabilities in order to fit templates needs better.
 
-Our template engine has two main syntaxes `{{}}` and `{{{}}}`
+Our template engine has two main syntaxes: `inline` and `block`
+
+### Inline syntax
+
+Inline syntax is implemented using two curly brackets at both the start and end
+of your expression `{{ ... }}`. This syntax is more flexable and recommended
+when dealing with different control flows inline.
+
+Take this template that is using a inline if statement to conditionally add a
+typescript type to the variable.
+
+<Dot
+	tps={{ 
+		answers: {
+			typescript: true,
+		},
+	}}
+	lang="typescript"
+>
+
+```
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
+```
+
+</Dot>
+
+### Block syntax
+
+Block syntax is implemented using three curly brackets at both the start and end
+of your expression `{{{ ... }}}`. The main differences is that block syntax
+needs to be placeds on a new line and it will remove all white space in front
+and behind the brackets completely removing the line from output.
+
+Take this example using a block if statement, when `css` is `false` notice how
+there no is trace that anything was there before, no new lines, no spaces,
+nothing it was completely wiped.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false
+		}
+	}}
+	lang="typescript"
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+```
+
+</Dot>
+
+You can also indent block syntax and all tabs and spaces will be removed
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false
+		}
+	}}
+	lang="typescript"
+>
+
+```
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+<Example title='Why is there inline and block?'>
+
+Block syntax plays a special role in file generation. By removing all existence
+of white space, your rendered output looks nice and clean. Templates aims to not
+only make development eaiser but also enforce standards.
+
+Before block syntax there was only inline syntax, however there was a lot of
+issues with the way these tags got parsed that left outputed files with
+unindented whitespace.
+
+**example:**
+
+lets use the example template from above and change block syntax to inline
+syntax. Now when `css` & `state` are `false`, notice how there is extra
+whitespace behind
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false
+		}
+	}}
+	lang="typescript"
+	resultMeta="{2,5}"
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}
+import './component.css';
+{{?}}
+
+const App = () => {
+	{{? tps.answers.state }}
+	const [state, setState] = useState(null);
+	{{?}}
+
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`, you can also see extra lines.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true
+		}
+	}}
+	lang="typescript"
+	resultMeta="{2,7,9}"
+	displayTemplate={false}
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}
+import './component.css';
+{{?}}
+
+const App = () => {
+	{{? tps.answers.state }}
+	const [state, setState] = useState(null);
+	{{?}}
+
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+In order to get the perfect output, you needed to sacrafice the readability of
+the template and do something like the following:
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false
+		}
+	}}
+	lang="typescript"
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}import './component.css';
+{{?}}
+const App = () => {
+	{{? tps.answers.state }}const [state, setState] = useState(null);
+	{{?}}
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`, you can also see extra lines.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true
+		}
+	}}
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}import './component.css';
+{{?}}
+const App = () => {
+	{{? tps.answers.state }}const [state, setState] = useState(null);
+	{{?}}
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+While this might not look the worst for one answer, imagine 3 or 4. Now lets see
+how block syntax improves this:
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false,
+		}
+	}}
+	lang="typescript"
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`,
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true,
+		}
+	}}
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	)
+}
+```
+
+</Dot>
+
+</Example>
+
+## Template Syntaxes
 
 ### Evaluation
 
-In doT, evaluation is achieved using `{{ <expression>}}`. The expression can be
+In doT, evaluation is achieved using `{{ <expression> }}`. The expression can be
 any valid JavaScript code, enabling the creation of variables, functions, and
 various other possibilities. **The semi-colon at the end of the expression is
 mandatory!**
