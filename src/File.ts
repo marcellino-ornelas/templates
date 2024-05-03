@@ -71,6 +71,7 @@ class File {
 		this.src = fileNode.path;
 		this.fileNode = fileNode;
 		const fileData = fs.readFileSync(this.src)?.toString();
+		this.fileData = fileData;
 		this.fileDataTemplate = (data, defs, dest) => {
 			const realData = {
 				...data,
@@ -110,34 +111,14 @@ class File {
 			.catch((error) => Promise.reject(error));
 	}
 
-	renderFile(dest: string): Promise<string> {
-		return Promise.resolve()
-			.then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
-			.then(
-				() =>
-					new Promise((resolve, reject) => {
-						const srcFile = fs.createReadStream(this.src, {
-							flags: 'r',
-						});
+	async renderFile(dest: string): Promise<string> {
+		if (this.opts.force) {
+			await fs.promises.rm(dest, { force: true });
+		}
 
-						srcFile.on('error', (error) => {
-							console.log('Read Stream error', error);
-							reject(error);
-						});
+		await fs.promises.writeFile(dest, this.fileData);
 
-						const destFile = fs.createWriteStream(dest, { flags: 'wx' });
-
-						destFile.on('error', (err) => {
-							console.log('dest', dest);
-							console.log('write stream error', err);
-							reject(err);
-						});
-
-						destFile.on('finish', () => resolve(dest));
-
-						srcFile.pipe(destFile);
-					}),
-			);
+		return dest;
 	}
 
 	_addDefaultExtention(name: string): string {

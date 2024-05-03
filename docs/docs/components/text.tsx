@@ -1,6 +1,4 @@
-import React from 'react';
-
 interface Props {
 	text: string;
 }
-export const Text = ({ text }) => text;
+export const Text = ({ text }: Props) => text;

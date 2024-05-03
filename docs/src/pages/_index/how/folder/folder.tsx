@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { animated, useTrail } from '@react-spring/web';
 import { FileSystemRow } from './fileSystemRow';
 import styles from './folder.module.css';
@@ -67,16 +67,20 @@ export const Folder = ({
 				}}
 			/>
 			<div className={styles.folderChildren}>
-				{trails.map((style, i) => (
-					// eslint-disable-next-line react/no-array-index-key
-					<animated.div key={`${key || name}_${i}`} style={style}>
-						{React.cloneElement(items[i] as any, {
-							delay: (items[i] as any)?.props?.delay || 0,
-							start,
-							animation,
-						})}
-					</animated.div>
-				))}
+				{trails.map((style, i) => {
+					// eslint-disable-next-line @typescript-eslint/no-explicit-any
+					const item: any = items[i];
+					return (
+						// eslint-disable-next-line react/no-array-index-key
+						<animated.div key={`${key || name}_${i}`} style={style}>
+							{React.cloneElement(item, {
+								delay: item?.props?.delay || 0,
+								start,
+								animation,
+							})}
+						</animated.div>
+					);
+				})}
 			</div>
 		</div>
 	);

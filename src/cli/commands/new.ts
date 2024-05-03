@@ -10,5 +10,5 @@ export default {
 	builder: (yargs) => yargs.command(commands),
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	handler(argv) {},
+	handler() {},
 } as CommandModule;

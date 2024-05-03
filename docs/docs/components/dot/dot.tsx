@@ -30,6 +30,7 @@ export const Dot = ({
 	lang = 'text',
 	displayTemplate = true,
 }: Props) => {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const templateString = (children as any).props.children.props.children;
 
 	const output = useDot({
