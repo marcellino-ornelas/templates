@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import * as utils from 'templates-mo/lib/templates/utils';
+
+// '/lib/templates/utils';
 import CodeBlock from '@docusaurus/theme-live-codeblock/lib/theme/CodeBlock';
 import { Example } from '@site/docs/components/example';
 import Heading from '@theme/Heading';
 import * as infection from 'inflection';
+import * as utils from '../../../src/templates/utils';
 
 const INFLECTION_URL = 'https://github.com/dreamerslab/node.inflection';
 const CHANGE_CASE_URL = 'https://github.com/blakeembrey/change-case';

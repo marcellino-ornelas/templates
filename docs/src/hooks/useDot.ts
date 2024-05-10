@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import doT from 'templates-mo/lib/templates/template-engine';
+import doT from '../../../src/templates/template-engine';
+// /templates/template-engine';
 import { Tps } from '@site/types/templates';
-import * as utils from 'templates-mo/lib/templates/utils';
+import * as utils from '../../../src/templates/utils';
+// /templates/utils';
 
 doT.templateSettings.strip = false;
 doT.templateSettings.varname = 'tps';

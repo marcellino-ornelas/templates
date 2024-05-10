@@ -1,4 +1,4 @@
-import type * as utils from 'templates-mo/lib/templates/utils';
+import type * as utils from '@tps/lib/templates/utils';
 
 export interface Tps {
 	name: string;

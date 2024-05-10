@@ -1,4 +1,4 @@
-import { SettingsFilePrompt } from 'templates-mo/src/types/settings';
+import { SettingsFilePrompt } from '@tps/src/types/settings';
 
 export interface PlaygroundPrompt extends Partial<SettingsFilePrompt> {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

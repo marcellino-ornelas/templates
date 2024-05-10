@@ -1,5 +1,7 @@
 import React from 'react';
-import * as utils from 'templates-mo/lib/templates/utils';
+import * as utils from '../../../../src/templates/utils';
+
+// /templates/utils';
 
 const tps = {
 	name: 'App',
