@@ -49,6 +49,8 @@ Like mentioned before our in house template engine was forked from
 [doT](http://olado.github.io/doT/index.html). However we add some more
 capabilities in order to fit templates needs better.
 
+mention: strictness of white space
+
 Our template engine has two main syntaxes: `inline` and `block`
 
 ### Inline syntax
@@ -334,10 +336,11 @@ const App = () => {
 
 ### Evaluation
 
-In doT, evaluation is achieved using `{{ <expression> }}`. The expression can be
-any valid JavaScript code, enabling the creation of variables, functions, and
-various other possibilities. **The semi-colon at the end of the expression is
-mandatory!**
+Evaluation is achieved using `{{ <expression> }}`. The `expression` can be any
+valid JavaScript expression. You can create variables, functions, and etc. **The
+semi-colon at the end of the expression is mandatory!**
+
+While you can use inline experessions, we recommned using block expressions.
 
 <Tabs>
 <TabItem value="block" label="Block">
@@ -355,8 +358,9 @@ mandatory!**
 <Dot>
 
 ```text
-{{{const name = "Marcellino Ornelas";}}}
-Hey
+{{{ const name = "Marcellino Ornelas"; }}}
+
+{{{= name }}}
 ```
 
 </Dot>
