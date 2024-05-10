@@ -5,11 +5,13 @@
 		"baseUrl": ".",
 		"paths": {
 			"@tps/*": ["../src/*"],
-			"@templates/*": ["../.tps/*"],
 		},
 	},
 	"include": [
 		"../src/**/*.ts",
 		"../.tps/**/*",
+	],
+	"exclude": [
+		"node_modules/**/*"
 	]
 }
