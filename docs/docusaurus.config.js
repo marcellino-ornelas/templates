@@ -4,6 +4,7 @@
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const templatesPlugin = require('./templates-plugin');
+const path = require('path');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -17,7 +18,18 @@ const config = {
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: '/templates/',
 
-	plugins: [templatesPlugin, '@docusaurus/theme-live-codeblock'],
+	plugins: [
+		'@docusaurus/theme-live-codeblock',
+		[
+			'docusaurus-plugin-module-alias',
+			{
+				alias: {
+					'@tps': path.resolve(__dirname, '../src/'),
+					'@templates': path.resolve(__dirname, '../.tps/'),
+				},
+			},
+		],
+	],
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.

@@ -7,6 +7,8 @@ import Heading from '@theme/Heading';
 import * as infection from 'inflection';
 import * as utils from '../../../src/templates/utils';
 
+// templates/utils';
+
 const INFLECTION_URL = 'https://github.com/dreamerslab/node.inflection';
 const CHANGE_CASE_URL = 'https://github.com/blakeembrey/change-case';
 
