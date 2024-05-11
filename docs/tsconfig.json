@@ -2,6 +2,17 @@
 	// This file is not used in compilation. It is here just for a nice editor experience.
 	"extends": "@tsconfig/docusaurus/tsconfig.json",
 	"compilerOptions": {
-		"baseUrl": "."
-	}
+		"baseUrl": ".",
+		"module": "Node16",
+		"paths": {
+			"@tps/*": ["../src/*"],
+		},
+	},
+	"include": [
+		"../src/**/*.ts",
+		"../.tps/**/*",
+	],
+	"exclude": [
+		"node_modules/**/*"
+	]
 }

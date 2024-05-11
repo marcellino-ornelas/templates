@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type {
-	SettingsFile,
-	SettingsFilePrompt,
-} from 'templates-mo/src/types/settings';
+import type { SettingsFile, SettingsFilePrompt } from '@tps/types/settings';
 import styles from './templateOptions.module.css';
 
 interface Props {
@@ -11,14 +8,14 @@ interface Props {
 }
 
 export const TemplateOptions = ({ template, type = 'json' }: Props) => {
-	const [settingsFile, setSettingsFile] = useState<SettingsFile>(null);
+	const [settingsFile, setSettingsFile] = useState<SettingsFile | null>(null);
 
 	useEffect(() => {
 		(async () => {
 			// eslint-disable-next-line import/no-extraneous-dependencies
 			const settingsFileRaw: SettingsFile = await import(
 				// eslint-disable-next-line import/extensions
-				`templates-mo/.tps/${template}/settings.${type}`
+				`@templates/${template}/settings.${type}`
 			);
 
 			setSettingsFile(settingsFileRaw);
