@@ -25,6 +25,7 @@ export const Dot = ({
 	children,
 	tps = {},
 	result = true,
+	displayTemplate = true,
 	templateMeta = '',
 	resultMeta = '',
 	lang = 'text',
@@ -37,6 +38,13 @@ export const Dot = ({
 		templateString,
 		tps,
 	});
+
+	const resultClasses = [styles.result];
+
+	// When no template is being displayed, we need to fix top `border-radius`
+	if (!displayTemplate) {
+		resultClasses.push(styles.noTemplate);
+	}
 
 	return (
 		<div>
@@ -55,7 +63,7 @@ export const Dot = ({
 			{result && (
 				<CodeBlock
 					title="Result"
-					className={styles.result}
+					className={resultClasses.join(' ')}
 					showLineNumbers
 					language={lang}
 					metastring={resultMeta}
