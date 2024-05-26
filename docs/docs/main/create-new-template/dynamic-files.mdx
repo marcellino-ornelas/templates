@@ -30,7 +30,7 @@ the file where this instance is being generated.
 A file with these contents
 
 ```text
-{{{= tps.answers.name }}} wants some more cake
+{{= tps.answers.name }} wants some more cake
 ```
 
 will produce:
@@ -77,6 +77,18 @@ const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 
 </Dot>
 
+:::tip
+
+We will be using references to the [templates context](#templates-context)
+object like `tps.`, `tps.answers.`, and `tps.utils.` all thoughout these doc.
+However we dont touch on this object until
+[later on in this guide](#templates-context). Just keep in mind that `utils` is
+a collection of helper functions to make creating dynamic templates easier, and
+`answers` allows users of your template to pass in data to customize their
+instance
+
+:::
+
 ### Block syntax
 
 Block syntax is implemented using three curly brackets at both the start and end
@@ -95,6 +107,7 @@ nothing it was completely wiped.
 		}
 	}}
 	lang="typescript"
+	templateMeta='{2-4}'
 >
 
 ```
@@ -115,6 +128,7 @@ You can also indent block syntax and all tabs and spaces will be removed
 		}
 	}}
 	lang="typescript"
+	templateMeta='{2-4}'
 >
 
 ```
@@ -155,6 +169,7 @@ whitespace behind
 		}
 	}}
 	lang="typescript"
+	templateMeta='{2-4,7-9}'
 	resultMeta="{2,5}"
 >
 
@@ -187,7 +202,7 @@ Now when `css` & `state` are `true`, you can also see extra lines.
 		}
 	}}
 	lang="typescript"
-	resultMeta="{2,7,9}"
+	resultMeta="{2,4,7,9}"
 	displayTemplate={false}
 >
 
@@ -221,6 +236,8 @@ the template and do something like the following:
 		}
 	}}
 	lang="typescript"
+	templateMeta='{2-3,5-6}'
+	resultMeta='{2,4}'
 >
 
 ```
@@ -249,6 +266,7 @@ Now when `css` & `state` are `true`, you can also see extra lines.
 	}}
 	lang="typescript"
 	displayTemplate={false}
+	resultMeta='{3,6}'
 >
 
 ```
@@ -277,6 +295,8 @@ how block syntax improves this:
 		}
 	}}
 	lang="typescript"
+	templateMeta='{2-4,7-9}'
+	resultMeta='{2,4}'
 >
 
 ```
@@ -309,6 +329,7 @@ Now when `css` & `state` are `true`,
 	}}
 	lang="typescript"
 	displayTemplate={false}
+	resultMeta='{3,6}'
 >
 
 ```
@@ -340,7 +361,12 @@ Evaluation is achieved using `{{ <expression> }}`. The `expression` can be any
 valid JavaScript expression. You can create variables, functions, and etc. **The
 semi-colon at the end of the expression is mandatory!**
 
-While you can use inline experessions, we recommned using block expressions.
+:::tip
+
+While you can use inline evaluations, we recommned using block evaluations to
+avoid unintended white space
+
+:::
 
 <Tabs>
 <TabItem value="block" label="Block">
@@ -353,38 +379,46 @@ While you can use inline experessions, we recommned using block expressions.
 ---
 
 <Tabs>
-<TabItem value="block" label="Block">
 
-<Dot>
+<TabItem value="block" label="Block">
+<Dot
+	templateMeta='{1-4}'
+>
 
 ```text
-{{{ const name = "Marcellino Ornelas"; }}}
-
-{{{= name }}}
+{{{
+	const name = "Marcellino Ornelas";
+	const age = 21;
+}}}
+Hello my name is {{= name }} and my age is {{= age }}
 ```
 
 </Dot>
-
 </TabItem>
 
 <TabItem value="inline" label="Inline">
-
-<Dot>
+<Dot
+ 	templateMeta='{1}'
+>
 
 ```text
-{{const name = "Marcellino Ornelas";}}
-Hey
+{{ const name = "Marcellino Ornelas"; }}
+{{= name }}
 ```
 
 </Dot>
-
 </TabItem>
+
 </Tabs>
+
+Checkout our [API docs](../../api/template-engine/evaluation) for more examples
+on how you can take advantage of evaluations
 
 ### Interpolation
 
-In doT, interpolation is achieved using `{{= <expression>}}`. This syntax allows
-the result of the specified expression to replace the brackets in the template.
+Interpolation is achieved using equal sign operator `=` along with the inline or
+block brackets. This opertator allows you to render dynamic output into the file
+contents.
 
 <Tabs>
 <TabItem value="block" label="Block">
@@ -392,7 +426,8 @@ the result of the specified expression to replace the brackets in the template.
 <Dot>
 
 ```text
-{{{= 2 + 2}}}
+// highlight-next-line
+{{= 2 + 2}}
 ```
 
 </Dot>
@@ -404,6 +439,7 @@ the result of the specified expression to replace the brackets in the template.
 <Dot>
 
 ```text
+// highlight-next-line
 {{= 2 + 2}}
 ```
 
@@ -412,21 +448,49 @@ the result of the specified expression to replace the brackets in the template.
 </TabItem>
 </Tabs>
 
+Checkout our [API docs](../../api/template-engine/interpolation) for more
+examples on how you can take advantage of interpolations
+
 ### Conditionals
 
-In doT, interpolation is achieved using `{{? <expression>}} ... {{?}}`. The
-result of the provided expression will be displayed if the expression returns
-truthy value
+Conditionals are achieved using the `?` operator along with inline or block
+brackets. The result of the provided expression will be rendered into the output
+of the file when the expression returns a truthy value
 
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+Take this template below that is using a block if statement to conditionally
+render an css import when the `css` answer is `true`
+
+<Dot
+	tps={{name: "react-component", answers: {css: true}}} 
+	lang="typescript"
+	templateMeta='{2-4}'
+	resultMeta='{2}'
+>
 
 ```text
-Are you there?
-{{{? 1 === 1}}}
-I am here
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
+```
+
+</Dot>
+
+Now when `css` is `false`
+
+<Dot
+	tps={{name: "react-component", answers: {css: false}}} 
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
 {{{?}}}
 ```
 
@@ -436,10 +500,30 @@ I am here
 
 <TabItem value="inline" label="Inline">
 
-<Dot>
+Take this template that is using a inline if statement to conditionally add a
+typescript type to the variable when the `typescript` answer is `true`
+
+<Dot 
+	lang="typescript"
+	tps={{name: "react-component", answers: {typescript: true}}}
+>
 
 ```text
-Are you there? {{? 1 === 1}}I am here{{?}}
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
+```
+
+</Dot>
+
+Now when `typescript` is `false`
+
+<Dot
+	tps={{name: "react-component", answers: {typescript: false}}}
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```text
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 ```
 
 </Dot>
@@ -449,19 +533,49 @@ Are you there? {{? 1 === 1}}I am here{{?}}
 
 #### Else
 
-You can also write else statements
+You can also write else statements by adding an additional inline or block
+brackets that contains the two question mark operators `??`.
 
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+Take this template that is using a block if else statement to conditionally
+render a import statement that would be compatible with css modules when
+`cssLang` is `modules` else will render a normal css import statement.
+
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "modules"}}}
+	templateMeta='{2-6}'
+	resultMeta='{2}'
+>
 
 ```text
-Are you there?
-{{{? 1 !== 1}}}
-I am here
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
 {{{??}}}
-I am not here
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Now when `cssLang` is **not** `modules`
+
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "less"}}}
+	displayTemplate={false}
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{??}}}
+import './{{= tps.name}}.css';
 {{{?}}}
 ```
 
@@ -471,10 +585,23 @@ I am not here
 
 <TabItem value="inline" label="Inline">
 
-<Dot>
+Take this template that is using a inline if else statement to conditionally
+render a dynamic tag name when present else will render a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Page" }}}
+	lang="tsx"
+	templateMeta='{3,5}'
+>
 
 ```text
-Are you there? {{? 1 === 1}}I am here{{{??}}}I am not here {{?}}
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
 ```
 
 </Dot>
@@ -482,21 +609,72 @@ Are you there? {{? 1 === 1}}I am here{{{??}}}I am not here {{?}}
 </TabItem>
 </Tabs>
 
-#### If else
+#### Else if
 
-doT also supports else if statements.
+You can also write else statements by adding an additional inline or block
+brackets that contains the two question mark operators `??` with a expression
+afterwards.
 
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+Take this template using a block if statement to conditonally render a
+compatible css module import when `cssLang` is `modules`.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
+	templateMeta='{4-5}'
+>
 
 ```text
-Are you there?
-{{{? false }}}
-I might be here
-{{{?? true }}}
-I am here
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css'
+{{{?? tps.answers.css }}}
+import from './{{= tps.name}}.css'
+{{{?}}}
+```
+
+</Dot>
+
+Now when `cssLang` is not `modules` and `css` is `true` then you will get the
+following:
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: true}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css'
+{{{?? tps.answers.css }}}
+import from './{{= tps.name}}.css'
+{{{?}}}
+```
+
+</Dot>
+
+Lastly when `cssLang` is not `modules` and `css` is `false` then you will get no
+rendered output
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: false}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css'
+{{{?? tps.answers.css }}}
+import from './{{= tps.name}}.css'
 {{{?}}}
 ```
 
@@ -506,38 +684,98 @@ I am here
 
 <TabItem value="inline" label="Inline">
 
-<Dot>
+Take this template using a inline if statement to conditonally render the
+`PageComponent` with a `block` prop when the `component` answer is `page`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "page" }}}
+	lang="tsx"
+	templateMeta='{3}'
+>
 
 ```text
-Are you there? {{? 1 === 1}}I am here{{?}}
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	)
+};
+```
+
+</Dot>
+
+Now when the `component` answer is not `page`, it will use whatever the user
+passed into it. In this case we passed in `Box`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Box" }}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	)
+};
+```
+
+</Dot>
+
+lastly is no answer was given for `component` then it would default to a `div`
+
+<Dot
+	tps={{name: "react-component"}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	)
+};
 ```
 
 </Dot>
 
 </TabItem>
 </Tabs>
+
+Checkout our [API docs](../../api/template-engine/conditionals) for more
+examples on how you can take advantage of conditionals
 
 ### Loops
 
-In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
+Loops are achieved using the `~` operator along with inline or block brackets.
+The contents of the loop will be rendered into the output of the file for each
+item of the array
 
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+Take this template using a block loop statement to render import statements to
+the react file when `modules` is specified.
+
+<Dot
+	tps={{answers: { modules: ["utils", "pages"] }}}
+	lang='tsx'
+>
 
 ```text
-{{{~[1, 2, 3, 4] :value:index}}}
-{{= value}}
+import React from 'react';
+{{{~tps.answers.modules :value}}}
+import {{= value}} from "@app/{{= value}}";
 {{{~}}}
-```
-
-</Dot>
-
-<Dot>
-
-```text
-{{{~[1, 2, 3, 4] :value:index}}}{{= value}}{{{~}}}
 ```
 
 </Dot>
@@ -557,24 +795,6 @@ In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
 </TabItem>
 </Tabs>
 
-Unfortunately we need to keep all tags on the same line to get a cleaner output.
-By indenting `{{= value}}` to get a cleaner look will result in indent in the
-rendered output
-
-<Example title="Indent Issues">
-
-<Dot>
-
-```text
-{{~[1, 2, 3, 4] :value:index}}
-	{{= value}}
-{{~}}
-```
-
-</Dot>
-
-</Example>
-
 :::tip
 
 If you dont need anything to complex, then use `join`!
@@ -588,6 +808,9 @@ If you dont need anything to complex, then use `join`!
 </Dot>
 
 :::
+
+Checkout our [API docs](../../api/template-engine/loops) for more examples on
+how you can take advantage of loops
 
 ### Defs (Partials)
 
@@ -814,25 +1037,24 @@ nav.js
 Like mentioned above, once you add a `.dot` extention to your file name you are
 now able to use any dot syntax inside the file and tps will process it.
 
-<Example open>
-
 <Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
 
 ```text
 const express = require("express");
+{{{? tps.answers.security }}}
+const helmet = require("helmet");
+{{{?}}}
 
 const app = express();
+{{{? tps.answers.security }}}
 
-/* node code ... */
-
-{{? tps.answers.security }}app.use(helmet());{{?}}
+app.use(helmet());
+{{{?}}}
 
 /* node code ... */
 ```
 
 </Dot>
-
-</Example>
 
 ### Def files
 
