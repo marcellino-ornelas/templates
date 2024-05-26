@@ -14,6 +14,7 @@ interface Props {
 	templateMeta: string;
 	resultMeta: string;
 	result: boolean;
+	displayTemplate: boolean;
 	lang: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	tps?: Partial<Tps>;
@@ -24,6 +25,7 @@ export const Dot = ({
 	children,
 	tps = {},
 	result = true,
+	displayTemplate = true,
 	templateMeta = '',
 	resultMeta = '',
 	lang = 'text',
@@ -36,22 +38,31 @@ export const Dot = ({
 		tps,
 	});
 
+	const resultClasses = [styles.result];
+
+	// When no template is being displayed, we need to fix top `border-radius`
+	if (!displayTemplate) {
+		resultClasses.push(styles.noTemplate);
+	}
+
 	return (
 		<div>
-			<CodeBlock
-				className={styles.template}
-				showLineNumbers
-				title={templateName}
-				language={lang}
-				metastring={templateMeta}
-			>
-				{templateString}
-			</CodeBlock>
+			{displayTemplate && (
+				<CodeBlock
+					className={styles.template}
+					showLineNumbers
+					title={templateName}
+					language={lang}
+					metastring={templateMeta}
+				>
+					{templateString}
+				</CodeBlock>
+			)}
 
 			{result && (
 				<CodeBlock
 					title="Result"
-					className={styles.result}
+					className={resultClasses.join(' ')}
 					language={lang}
 					metastring={resultMeta}
 				>
