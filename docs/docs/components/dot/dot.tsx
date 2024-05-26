@@ -40,6 +40,7 @@ export const Dot = ({
 
 	const resultClasses = [styles.result];
 
+	// When no template is being displayed, we need to fix top `border-radius`
 	if (!displayTemplate) {
 		resultClasses.push(styles.noTemplate);
 	}
