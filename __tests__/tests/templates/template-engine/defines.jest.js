@@ -62,6 +62,16 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
+		it('should be able to use args', () => {
+			const result = render(`\
+{{{##def.name:userName:
+{{= userName }}
+#}}}
+{{#def.name:"lino"}}`);
+
+			expect(result).toBe(`lino`);
+		});
+
 		it('should catch new line right before the end', () => {
 			const result = render(`\
 {{{##def.name:lino
