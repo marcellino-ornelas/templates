@@ -139,8 +139,8 @@ const App = () => {
 
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -186,8 +186,8 @@ const App = () => {
 
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -219,8 +219,8 @@ const App = () => {
 
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -249,8 +249,8 @@ const App = () => {
 	{{?}}
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -278,8 +278,8 @@ const App = () => {
 	{{?}}
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -312,8 +312,8 @@ const App = () => {
 
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -345,8 +345,8 @@ const App = () => {
 
 	return (
 		/* other code ... */
-	)
-}
+	);
+};
 ```
 
 </Dot>
@@ -630,9 +630,9 @@ compatible css module import when `cssLang` is `modules`.
 ```text
 import React from 'react';
 {{{? tps.answers.cssLang === 'modules'}}}
-import styles from './{{= tps.name}}.css'
+import styles from './{{= tps.name}}.css';
 {{{?? tps.answers.css }}}
-import from './{{= tps.name}}.css'
+import from './{{= tps.name}}.css';
 {{{?}}}
 ```
 
@@ -651,9 +651,9 @@ following:
 ```text
 import React from 'react';
 {{{? tps.answers.cssLang === 'modules'}}}
-import styles from './{{= tps.name}}.css'
+import styles from './{{= tps.name}}.css';
 {{{?? tps.answers.css }}}
-import from './{{= tps.name}}.css'
+import from './{{= tps.name}}.css';
 {{{?}}}
 ```
 
@@ -672,9 +672,9 @@ rendered output
 ```text
 import React from 'react';
 {{{? tps.answers.cssLang === 'modules'}}}
-import styles from './{{= tps.name}}.css'
+import styles from './{{= tps.name}}.css';
 {{{?? tps.answers.css }}}
-import from './{{= tps.name}}.css'
+import from './{{= tps.name}}.css';
 {{{?}}}
 ```
 
@@ -699,7 +699,7 @@ const App = () => {
 		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
 			/* contents... */
 		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	)
+	);
 };
 ```
 
@@ -721,7 +721,7 @@ const App = () => {
 		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
 			/* contents... */
 		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	)
+	);
 };
 ```
 
@@ -742,7 +742,7 @@ const App = () => {
 		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
 			/* contents... */
 		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	)
+	);
 };
 ```
 
@@ -784,51 +784,108 @@ import {{= value}} from "@app/{{= value}}";
 
 <TabItem value="inline" label="Inline">
 
-<Dot>
+Take this template using a inline loop statement to render props to the react
+componment when `props` are passed
+
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+>
 
 ```text
-{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
+{{{
+	const propsLastIndex = tps.answers.props.length - 1;
+}}}
+const App = ({{{~tps.answers.props :value:index}} {{= value + (index !== propsLastIndex ? "," : " ") }}{{~}}}) => {
+	return (
+		/* react code .... */
+	);
+};
 ```
 
 </Dot>
 
-</TabItem>
-</Tabs>
+Now when `props` is empty
+
+<Dot
+	tps={{answers: {props: []}}}
+	lang='tsx'
+>
+
+```text
+{{{
+	const propsLastIndex = tps.answers.props.length - 1;
+}}}
+const App = ({{{~tps.answers.props :value:index}} {{= value + (index !== propsLastIndex ? "," : " ") }}{{~}}}) => {
+	return (
+		/* react code .... */
+	);
+};
+```
+
+</Dot>
 
 :::tip
 
 If you dont need anything to complex, then use `join`!
 
-<Dot>
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+>
 
 ```text
-{{= [1,2,3,4].join("\n")}}
+const App = ({{{= tps.answers.props.join(", ")}}}) => {
+	return (
+		/* react code .... */
+	);
+};
 ```
 
 </Dot>
 
 :::
 
+</TabItem>
+</Tabs>
+
 Checkout our [API docs](../../api/template-engine/loops) for more examples on
 how you can take advantage of loops
 
 ### Defs (Partials)
 
-DoT supports defs (partials). Defs allow you to create reusable sections of a
-templates. Think of them as smaller templates that can be defined separately and
-then included within larger templates. This provides modularity and simplifies
-the process of maintaining and updating your templates.
+Def, or partials, allow you to create reusable sections of a templates. Think of
+them as smaller templates that can be defined separately and then included
+within larger templates. This provides modularity and simplifies the process of
+maintaining and updating your templates.
 
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+Take this template thats creating the `complexExpression` def thats will render
+a complex expression in both layout options `one` & `two` but not in any other
+one
+
+<Dot
+	tps={{answers: {layout: "one"}}}
+	lang='tsx'
+>
 
 ```text
-{{{##def.intro:
-This is my intro
+{{{##def.complexExpression:
+const someComplexExpression = /* some complex expression */
 #}}}
-{{#def.intro}}
+{{{? tps.answers.layout === "one"}}}
+/* layout one code... */
+
+{{#def.complexExpression}}
+{{{?? tps.answers.layout === 'two'}}}
+/* layout two code... */
+
+{{#def.complexExpression}}
+{{{??}}}
+/* default layout code... */
+{{{?}}}
 ```
 
 </Dot>
@@ -854,16 +911,20 @@ This is my intro
 
 #### Args
 
+You can also pass arguments to defs.
+
 <Tabs>
 <TabItem value="block" label="Block">
 
-<Dot>
+<Dot
+    lang='tsx'
+>
 
 ```text
-{{{##def.intro:
-This is my intro
+{{{##def.complexExpression:useTypescript:
+const someComplexExpression{{? useTypescript ?? false }}: string{{?}} = /* some complex expression */;
 #}}}
-{{#def.intro}}
+{{#def.complexExpression:true}}
 ```
 
 </Dot>
