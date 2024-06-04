@@ -73,6 +73,12 @@ const config = {
 			},
 		},
 		{
+			files: ['docs/**/*'],
+			rules: {
+				'import/no-unresolved': [ERROR, { ignore: ['^templates-mo'] }],
+			},
+		},
+		{
 			files: ['docs/**/*.mdx'],
 			extends: ['plugin:@docusaurus/recommended'],
 			plugins: ['@docusaurus'],
