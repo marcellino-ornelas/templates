@@ -30,6 +30,7 @@ const doT: any = {
 		defineBlock:
 			/^[^\S\r\n]*?\{\{\{##\s*([\w\.$]+)\s*(\:|=)\n?([\s\S]+?)\n?#\}\}\}[^\S\r\n]*\n?/gm,
 		defineParams: /^\s*([\w$]+):([\s\S]+)/,
+		defineBlockParams: /^\s*([\w$]+):\n?([\s\S]+)/,
 		conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
 		conditionalBlock:
 			/^[^\S\r\n]*?\{\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}\}[^\S\r\n]*\n?/gm,
@@ -88,8 +89,8 @@ function resolveDefs(c, block, def) {
 			}
 			if (!(code in def)) {
 				if (assign === ':') {
-					if (c.defineParams)
-						value.replace(c.defineParams, (m, param, v) => {
+					if (c.defineBlockParams)
+						value.replace(c.defineBlockParams, (m, param, v) => {
 							def[code] = { arg: param, text: v };
 						});
 					if (!(code in def)) def[code] = value;
