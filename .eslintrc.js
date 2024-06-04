@@ -99,7 +99,7 @@ const config = {
 			rules: {
 				'import/no-unresolved': [
 					ERROR,
-					{ ignore: ['^@theme', '^@docusaurus', '^@site'] },
+					{ ignore: ['^@theme', '^@docusaurus', '^@site', '^templates-mo'] },
 				],
 				'react/function-component-definition': [
 					ERROR,
