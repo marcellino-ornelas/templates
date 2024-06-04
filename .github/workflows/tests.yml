@@ -81,15 +81,13 @@ jobs:
 
   docs-build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./docs
     steps:
       - uses: actions/checkout@v1
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: 18
+
       - name: Cache node modules
         id: cache-npm
         uses: actions/cache@v3
@@ -108,11 +106,19 @@ jobs:
         continue-on-error: true
         run: npm list
 
+      - name: Build lib
+        run: |
+          npm install
+          npm run build
+
       - name: Npm Install
+        working-directory: ./docs
         run: npm install
 
       - name: Test Build
+        working-directory: ./docs
         run: npm run build
+      
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:
