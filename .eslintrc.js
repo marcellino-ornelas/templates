@@ -75,7 +75,10 @@ const config = {
 		{
 			files: ['docs/**/*'],
 			rules: {
-				'import/no-unresolved': [ERROR, { ignore: ['^templates-mo'] }],
+				'import/no-unresolved': [
+					ERROR,
+					{ ignore: ['^@theme', '^@docusaurus', '^@site', '^templates-mo'] },
+				],
 			},
 		},
 		{
@@ -84,10 +87,6 @@ const config = {
 			plugins: ['@docusaurus'],
 			parser: 'eslint-mdx',
 			rules: {
-				'import/no-unresolved': [
-					ERROR,
-					{ ignore: ['^@theme', '^@docusaurus', '^@site'] },
-				],
 				'react/react-in-jsx-scope': [IGNORE],
 				'react/self-closing-comp': [IGNORE],
 			},
@@ -103,10 +102,6 @@ const config = {
 			files: ['docs/**/*.tsx', 'docs/**/*.ts'],
 			plugins: ['react'],
 			rules: {
-				'import/no-unresolved': [
-					ERROR,
-					{ ignore: ['^@theme', '^@docusaurus', '^@site'] },
-				],
 				'react/function-component-definition': [
 					ERROR,
 					{
