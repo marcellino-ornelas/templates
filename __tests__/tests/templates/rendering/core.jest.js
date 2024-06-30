@@ -199,7 +199,7 @@ describe('[Templates] Render Process:', () => {
 		});
 	});
 
-	it('should be able to use experimental template engine', async () => {
+	it('should use experimental template engine by default', async () => {
 		const tps = new Templates('testing-experimental-template-engine');
 
 		tps.setAnswers({ one: true });
