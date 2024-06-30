@@ -19,9 +19,7 @@ const DEFAULT_OPTS: FileOptions = {
 /*
  * File
  */
-const DOT_EXTENTION_MATCH = /.(dot|jst|def)$/i;
-// const DOT_INTERPOLATION_MATCH = /\{\{([\s\S]+?)\}\}/g;
-// const FS_FAIL_IF_EXIST = { flags: 'wx' };
+const DOT_EXTENTION_MATCH = /.(dot|jst|tps|def)$/i;
 
 class File {
 	public _name: string;
@@ -81,7 +79,7 @@ class File {
 			try {
 				return this.isDot
 					? // How could we cache this here :thinking: this is happening for every dot file
-					  this.engine.template(fileData, null, defs)(realData)
+						this.engine.template(fileData, null, defs)(realData)
 					: fileData;
 			} catch (e) {
 				throw new DotError(this.fileNode, e.message);
