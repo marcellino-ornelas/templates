@@ -200,9 +200,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use experimental template engine', async () => {
-		const tps = new Templates('testing-experimental-template-engine', {
-			experimentalTemplateEngine: true,
-		});
+		const tps = new Templates('testing-experimental-template-engine');
 
 		tps.setAnswers({ one: true });
 
@@ -213,8 +211,10 @@ describe('[Templates] Render Process:', () => {
 		expect(indexFile).toHaveFileContents('hey there\nbye');
 	});
 
-	it('should not use experimental template engine by default', async () => {
-		const tps = new Templates('testing-experimental-template-engine');
+	it('should be able to turn off experimental template engine', async () => {
+		const tps = new Templates('testing-experimental-template-engine', {
+			experimentalTemplateEngine: false,
+		});
 
 		tps.setAnswers({ one: true });
 
