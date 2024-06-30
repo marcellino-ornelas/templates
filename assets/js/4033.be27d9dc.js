@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs_v_2=self.webpackChunkdocs_v_2||[]).push([[4033],{34033:e=>{e.exports=JSON.parse('{"prompts":[{"name":"...","message":"...","tpsType":"package","type":"confirm","default":true}]}')}}]);
