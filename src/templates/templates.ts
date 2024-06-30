@@ -52,7 +52,7 @@ export const DEFAULT_OPTIONS: TemplateOptions = {
 	wipe: false,
 	tpsPath: null,
 	extendedDest: '',
-	experimentalTemplateEngine: false,
+	experimentalTemplateEngine: true,
 };
 
 if (TPS.IS_TESTING) {
@@ -934,7 +934,7 @@ export class Templates {
 							}
 						}
 					});
-			  });
+				});
 	}
 
 	/**
