@@ -1,0 +1,359 @@
+---
+pagination_next: api/template-engine/loops
+pagination_prev: api/template-engine/interpolation
+sidebar_position: 3
+---
+
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Conditionals
+
+## Usage
+
+<Tabs>
+
+<TabItem value="block" label="Block">
+
+```text
+{{{? <condition> }}}
+if output
+{{{?? <else-if-condition> }}}
+else if output
+{{{??}}}
+else output
+{{{?}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{? <condition> }}if output{{?? <else-if-condition> }}else if output{{??}}else{{?}}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Using a if statement
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template below that is using a block if statement to conditionally
+render an css import when the `css` answer is `true`.
+
+<Dot
+	tps={{name: "react-component", answers: {css: true}}} 
+	lang="typescript"
+	templateMeta='{2-4}'
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
+```
+
+</Dot>
+
+Now when `css` is `false`, no output will be displayed.
+
+<Dot
+	tps={{name: "react-component", answers: {css: false}}} 
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline if statement to conditionally render a
+typescript type to the variable when the `typescript` answer is `true`.
+
+<Dot 
+	lang="typescript"
+	tps={{name: "react-component", answers: {typescript: true}}}
+>
+
+```text
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
+```
+
+</Dot>
+
+Now when `typescript` is `false`, no typescript typings will be added.
+
+<Dot
+	tps={{name: "react-component", answers: {typescript: false}}}
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```text
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+### Using else statements
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template that is using a block if-else statement to conditionally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules; otherwise, it will render a normal CSS import
+statement.
+
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "modules"}}}
+	templateMeta='{4-5}'
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{??}}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Now when `cssLang` is **not** `modules`, we will get a normal CSS import
+statement.
+
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "less"}}}
+	displayTemplate={false}
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{??}}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline if-else statement to conditionally
+render a component name. If `component` is set to a value, it will use the value
+of `component` as the component name; otherwise, it will render a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Page" }}}
+	lang="tsx"
+	templateMeta='{3,5}'
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Now when `component` is not set to a value, we will get a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: {}}}
+	lang="tsx"
+	templateMeta='{3,5}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+### Using else if statements
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template that is using a block else-if statement to conditonally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules. Else if `css` is `true`, it will render a CSS import
+statement. Otherwise it will render nothing.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
+	templateMeta='{4-5}'
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Now when `cssLang` is not `modules` and `css` is `true`, you will get a normal
+css import statement.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: true}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Lastly when `cssLang` is not `modules` and `css` is `false`, you will get no
+rendered output.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: false}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import from './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline else-if statement to conditonally
+render a component name. If `component` is `page`, it will render the
+`PageComponent` with a `block` prop. Else if `component` is set to a value, it
+will render the value as the component name. Otherwise, it will render a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "page" }}}
+	lang="tsx"
+	templateMeta='{3}'
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Now when the `component` answer is not `page`, it will use whatever the user
+passed into it. In this case we passed in `Box`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Box" }}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Lastly, if no answer was given for `component`, we will get a `div`.
+
+<Dot
+	tps={{name: "react-component"}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>

@@ -11,267 +11,929 @@ import TabItem from '@theme/TabItem';
 
 # Dynamic Files
 
-## Dynamic files breakdown
-
-### What is a dynamic file
-
-Tps goes beyond simple copy and paste functionality; it enables the existence of
-a more versatile and powerful system. When working with reusable concepts, the
-ability to incorporate additional information becomes essential. This is where
-dynamic files come into play.
-
-Dynamic files reside within your template's package folders, much like any other
-file. However, dynamic files undergo a different processing procedure. Tps reads
-the contents of dynamic files, which are then processed by a templating language
-called [doT](http://olado.github.io/doT/index.html).
-
-```mermaid
-graph LR;
-	step1("User renders
-		template")
-	step2("Tps loads all files and
-		folders from each
-		required package")
-	step3("Dymanic files")
-	step4("All other files/folders")
-	step5("Copy/paste")
-	step6("DoT template engine")
-	step7("New instance
-		of template created")
-    step1-->step2;
-    step2-->step3;
-    step2-->step4;
-    step4-->step5;
-    step5-->step7;
-	step3-->step6;
-	step6-->step7;
-```
-
-### What is doT
-
-DoT is based on JavaScript and uses `{{}}` brackets for interpolation. doT is a
-templating language similar to popular options like Handlebars, EJS, or Jade. It
-provides various types of interpolation, including loops, conditionals, and
-more. You can use any valid JavaScript code inside these brackets.
-
-To learn more about doT, you can visit its documentation. However, let's
-introduce you to the basics here.
-
-:::danger
-
-It's important to consider that not all JavaScript features may be supported
-across different computers or versions of Node when running these templates. As
-a result, certain JavaScript functionality may not work as expected or behave
-differently.
-
-:::
-
-## How to use doT
-
-Like mentioned before doT uses `{{}}` brackets. Here are some common ways on how
-you can use doT
-
 :::caution
 
-when it comes to creating complex templates, you may encounter a need to indent
-the dot syntax to improve readability. However, be aware that this can cause
-unexpected issues with the appearance of the rendered template. While the
-indented structure may look good in the template itself, when the dot processes
-these files, it doesn't recognize or handle the indentation properly. This has
-been my experience with using it, and you can find more detailed information
-about this issue in the following link:
-https://github.com/marcellino-ornelas/templates/issues/7
+If you not using a version of templates above `1.1.0`, please refer to the
+[legacy documentation](./dynamic-files-legacy).
 
 :::
+
+## Dynamic files
+
+Dynamic files are files that can be rendered with dynamic data, similar to how
+template engines work. You use a special syntax that gets replaced with the data
+you provide. This output is then saved into the file where the instance is being
+generated.
+
+A dynamic file with these contents:
+
+```text
+{{= tps.answers.name }} wants some more cake
+```
+
+will produce something like the following:
+
+```text
+lino wants some more cake
+```
+
+Dont worry about the specifics, well touch more on the syntax later on this
+page.
+
+## Template engine
+
+Our template engine was forked from the [doT](https://www.npmjs.com/package/dot)
+template engine. This provides great flexibility when creating your templates,
+along with additional features we provide to help with whitespace control.
+
+:::tip
+
+Keep in mind that all white space in the file will be preserved during render.
+At times, you may find yourself adding extra whitespace to make your template
+more readable. However, avoid doing this because the whitespace will remain in
+your new instance.
+
+Use our [playground page](/templates/playground) to test dynamiclly files
+without having to generate them.
+
+:::
+
+Our template engine supports two main syntaxes: `inline` and `block`.
+
+### Inline syntax
+
+Inline syntax is implemented using double curly brackets at the start and end of
+your expression `{{ ... }}`. This syntax is more flexible and is recommended
+when dealing with different control flows inline.
+
+Take this template that is using a inline interpolation statement to render the
+name of instance as this react components name.
+
+<Dot
+	tps={{ 
+		name: "Nav"
+	}}
+	lang="typescript"
+>
+
+```
+export const {{= tps.name }} = () => {
+	/* rest of react component code... */
+}
+```
+
+</Dot>
+
+:::info
+
+We will be using references to the [templates context](#templates-context)
+object like `tps.name`, `tps.answers.*`, `tps.utils.*` and others throughout
+this document. However, we won't cover this object in detail until later in the
+guide. For now, keep in mind that `tps.name` is the name of the instance you are
+generating, `utils` is a collection of helper functions designed to make
+creating dynamic templates easier, and `answers` is an object that holds the
+information the user of your template passes to it.
+
+:::
+
+### Block syntax
+
+Block syntax is implemented using three curly brackets at both the start and end
+of your expression `{{{ ... }}}`. The main difference is that block syntax needs
+to be placed on a new line, and it will remove all whitespace in front of and
+behind the brackets, completely removing the line from the output.
+
+Take this example using a block if statement: when `css` is `false` notice how
+there is no trace that anything was there before. No new lines, no spaces,
+nothing. It was completely wiped.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false
+		}
+	}}
+	lang="typescript"
+	templateMeta='{2-4}'
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+```
+
+</Dot>
+
+Now when `css` is `true` notice how the only thing being rendered is whats
+inside the if statement.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true
+		}
+	}}
+	lang="typescript"
+	displayTemplate={false}
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+```
+
+</Dot>
+
+You can also indent block syntax and all tabs and spaces will be removed.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false
+		}
+	}}
+	lang="typescript"
+	templateMeta='{2-4}'
+>
+
+```
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+<Example title='Why is there inline and block?'>
+
+Block syntax plays a special role in file generation. By removing all existence
+of white space, your rendered output looks nice and clean. Templates aims to not
+only make development eaiser but also enforce standards and best practices.
+
+Before block syntax, there was only inline syntax. However there was a lot of
+issues with the way these tags got parsed that left outputed files with
+unindented whitespace.
+
+**example:**
+
+Lets use the example template from above and change block syntax to inline
+syntax. Now when `css` & `state` are `false`, notice how there is extra
+whitespace behind.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false
+		}
+	}}
+	lang="typescript"
+	templateMeta='{2-4,7-9}'
+	resultMeta="{2,5}"
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}
+import './component.css';
+{{?}}
+
+const App = () => {
+	{{? tps.answers.state }}
+	const [state, setState] = useState(null);
+	{{?}}
+
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`, you can also see extra lines.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true
+		}
+	}}
+	lang="typescript"
+	resultMeta="{2,4,7,9}"
+	displayTemplate={false}
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}
+import './component.css';
+{{?}}
+
+const App = () => {
+	{{? tps.answers.state }}
+	const [state, setState] = useState(null);
+	{{?}}
+
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+In order to get the perfect output, you needed to sacrafice the readability of
+the template and do something like the following:
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false
+		}
+	}}
+	lang="typescript"
+	templateMeta='{2-3,5-6}'
+	resultMeta='{2,4}'
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}import './component.css';
+{{?}}
+const App = () => {
+	{{? tps.answers.state }}const [state, setState] = useState(null);
+	{{?}}
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`, you can also see extra lines.
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true
+		}
+	}}
+	lang="typescript"
+	displayTemplate={false}
+	resultMeta='{3,6}'
+>
+
+```
+import React from 'react';
+{{? tps.answers.css }}import './component.css';
+{{?}}
+const App = () => {
+	{{? tps.answers.state }}const [state, setState] = useState(null);
+	{{?}}
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+While this might not look the worst for one answer, imagine 3 or 4. Now lets see
+how block syntax improves this:
+
+<Dot
+	tps={{ 
+		answers: {
+			css: false,
+			state: false,
+		}
+	}}
+	lang="typescript"
+	templateMeta='{2-4,7-9}'
+	resultMeta='{2,4}'
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+Now when `css` & `state` are `true`,
+
+<Dot
+	tps={{ 
+		answers: {
+			css: true,
+			state: true,
+		}
+	}}
+	lang="typescript"
+	displayTemplate={false}
+	resultMeta='{3,6}'
+>
+
+```
+import React from 'react';
+{{{? tps.answers.css }}}
+import './component.css';
+{{{?}}}
+
+const App = () => {
+	{{{? tps.answers.state }}}
+	const [state, setState] = useState(null);
+	{{{?}}}
+
+	return (
+		/* other code ... */
+	);
+};
+```
+
+</Dot>
+
+</Example>
+
+## Template Syntaxes
 
 ### Evaluation
 
-In doT, evaluation is achieved using `{{ <expression>}}`. The expression can be
-any valid JavaScript code, enabling the creation of variables, functions, and
-various other possibilities. **The semi-colon at the end of the expression is
+<Tabs>
+<TabItem value="block" label="Block">
+
+```text
+{{{
+	<expressions...>
+}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{ <expressions...> }}
+```
+
+</TabItem>
+</Tabs>
+
+Evaluation are achieved by using inline or block brackets. This allows you to
+write any arbitrary JavaScript expressions. You can create variables, functions,
+conditions, the possibilities are endless. This can be helpful for simplifying
+more complex expressions. **The semi-colon at the end of each expression is
 mandatory!**
 
-<Dot>
+<Tabs>
+
+<TabItem value="block" label="Block">
+
+<Dot
+	templateMeta='{1-5}'
+	lang='ts'
+>
 
 ```text
-{{const name = "Marcellino Ornelas";}}
+{{{
+	const name = "Marcellino Ornelas";
+	const age = 21;
+	const ageCategory = age > 18 ? "Adult" : "Child";
+}}}
+/* rest of code... */
 ```
 
 </Dot>
+</TabItem>
 
-One limitation of evaluations are that it leaves a empty space where it was
-placed at. We recommend avoid using as much as possible but could be useful in
-some cases
+<TabItem value="inline" label="Inline">
 
-<Example title="Evaluations leaves new line">
+:::caution
 
-<Dot>
+Inline evaluations are not recommend due to the white space they leave behind.
+However we still support this syntax due to legacy reasons but may be removed in
+future versions.
+
+:::
+
+<Dot
+ 	templateMeta='{1}'
+>
 
 ```text
-// highlight-next-line
-{{const name = "john doe";}}
-hey
+{{ const name = "Marcellino Ornelas"; }}
+{{= name }}
 ```
 
 </Dot>
+</TabItem>
 
-</Example>
+</Tabs>
+
+Checkout our [API docs](../../api/template-engine/evaluation) for more examples
+on how you can take advantage of evaluations.
 
 ### Interpolation
 
-In doT, interpolation is achieved using `{{= <expression>}}`. This syntax allows
-the result of the specified expression to replace the brackets in the template.
+<Tabs>
 
-<Dot>
+<TabItem value="inline" label="Inline">
 
 ```text
-{{= 2 + 2}}
+{{= <expression> }}
+```
+
+</TabItem>
+</Tabs>
+
+Interpolation is achieved using the equal sign operator `=` along with inline
+brackets. This operator allows you to render dynamic output into the files
+contents.
+
+<Tabs>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline interpolation statement to render the
+name of instance as this react components name.
+
+<Dot
+	tps={{ 
+		name: "Nav"
+	}}
+	lang="typescript"
+>
+
+```
+export const {{= tps.name }} = () => {
+	/* rest of react component code... */
+}
 ```
 
 </Dot>
+
+</TabItem>
+</Tabs>
+
+Checkout our [API docs](../../api/template-engine/interpolation) for more
+examples on how you can take advantage of interpolations.
 
 ### Conditionals
 
-In doT, interpolation is achieved using `{{? <expression>}} ... {{?}}`. The
-result of the provided expression will be displayed if the expression returns
-truthy value
+<Tabs>
 
-<Dot>
+<TabItem value="block" label="Block">
 
 ```text
-Are you there?
-{{? 1 === 1}}
-I am here
-{{?}}
+{{{? <condition> }}}
+if output
+{{{?? <else-if-condition> }}}
+else if output
+{{{??}}}
+else output
+{{{?}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{? <condition> }}if output{{?? <else-if-condition> }}else if output{{??}}else output{{?}}
+```
+
+</TabItem>
+</Tabs>
+
+Conditionals are achieved using the question mark operator `?`, along with
+inline or block brackets. The result of the provided expression will be rendered
+into the output of the file when the expression returns a truthy value.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template below that is using a block if statement to conditionally
+render an css import when the `css` answer is `true`.
+
+<Dot
+	tps={{name: "react-component", answers: {css: true}}} 
+	lang="typescript"
+	templateMeta='{2-4}'
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
 ```
 
 </Dot>
 
-If you dont want the extra new lines, move all the conditional statements to one
-line
+Now when `css` is `false`, no output will be displayed.
 
-<Dot>
+<Dot
+	tps={{name: "react-component", answers: {css: false}}} 
+	lang="typescript"
+	displayTemplate={false}
+>
 
 ```text
-Are you there?
-{{? 1 === 1}}I am here{{?}}
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
 ```
 
 </Dot>
 
-If you want everthing to flow on one line then just put the condition on the
-same line
+</TabItem>
 
-<Dot>
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline if statement to conditionally render a
+typescript type to the variable when the `typescript` answer is `true`.
+
+<Dot 
+	lang="typescript"
+	tps={{name: "react-component", answers: {typescript: true}}}
+>
 
 ```text
-Are you there? {{? 1 === 1}}I am here{{?}}
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 ```
 
 </Dot>
 
-doT also supports else statements.
+Now when `typescript` is `false`, no typescript typings will be added.
 
-<Dot>
+<Dot
+	tps={{name: "react-component", answers: {typescript: false}}}
+	lang="typescript"
+	displayTemplate={false}
+>
 
 ```text
-Are you here? {{? 1 === 2}}I am here {{??}}I am not home {{?}}
+const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 ```
 
 </Dot>
 
-doT also supports else if statements.
+</TabItem>
+</Tabs>
 
-<Dot>
+#### Else
+
+You can also write else statements by adding an additional inline or block
+brackets that contains two question mark operators `??`.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template that is using a block if-else statement to conditionally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules; otherwise, it will render a normal CSS import
+statement.
+
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "modules"}}}
+	templateMeta='{4-5}'
+	resultMeta='{2}'
+>
 
 ```text
-Are you here? {{? 1===2}}I am here {{?? 1 ===1}}I might be home{{??}}I am not home {{?}}
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{??}}}
+import './{{= tps.name}}.css';
+{{{?}}}
 ```
 
 </Dot>
 
-One limitation of conditionals is that it leaves a white space behind when the
-condition is not met
+Now when `cssLang` is **not** `modules`, we will get a normal CSS import
+statement.
 
-<Dot resultMeta="{2}">
+<Dot
+	lang="typescript"
+	tps={{name: "footer", answers: { cssLang: "less"}}}
+	displayTemplate={false}
+	resultMeta='{2}'
+>
 
 ```text
-Are you there?
-{{? 1 === 2}}I am here{{?}}
-how about now?
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{??}}}
+import './{{= tps.name}}.css';
+{{{?}}}
 ```
 
 </Dot>
 
-The only way around this right now is placing the condition on the same line but
-adding a new line to the begining of the value
+</TabItem>
 
-<Dot>
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline if-else statement to conditionally
+render a component name. If `component` is set to a value, it will use the value
+of `component` as the component name; otherwise, it will render a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Page" }}}
+	lang="tsx"
+	templateMeta='{3,5}'
+>
 
 ```text
-Are you there?{{? 1 === 1}}{{="\n"}}I am here{{?}}
-how about now?{{? 1 === 2}}{{="\n"}}I am here{{?}}
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
 ```
 
 </Dot>
 
-Notice how the first condition value still showed up on a new line but the
-second condition didnt leave a new line
+Now when `component` is not set to a value, we will get a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: {}}}
+	lang="tsx"
+	templateMeta='{3,5}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+#### Else if
+
+You can also write else-if statements by adding an additional inline or block
+brackets that contains the two question mark operators `??` with a expression
+afterwards.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template that is using a block else-if statement to conditonally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules. Else if `css` is `true`, it will render a CSS import
+statement. Otherwise it will render nothing.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
+	templateMeta='{4-5}'
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Now when `cssLang` is not `modules` and `css` is `true`, you will get a normal
+css import statement.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: true}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+	resultMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+Lastly when `cssLang` is not `modules` and `css` is `false`, you will get no
+rendered output.
+
+<Dot
+	lang="typescript" 
+	tps={{name: "footer", answers: { cssLang: "other", css: false}}}
+	templateMeta='{4-5}'
+	displayTemplate={false}
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.cssLang === 'modules'}}}
+import styles from './{{= tps.name}}.css';
+{{{?? tps.answers.css }}}
+import from './{{= tps.name}}.css';
+{{{?}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is using a inline else-if statement to conditonally
+render a component name. If `component` is `page`, it will render the
+`PageComponent` with a `block` prop. Else if `component` is set to a value, it
+will render the value as the component name. Otherwise, it will render a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "page" }}}
+	lang="tsx"
+	templateMeta='{3}'
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Now when the `component` answer is not `page`, it will use whatever the user
+passed into it. In this case we passed in `Box`.
+
+<Dot
+	tps={{name: "react-component", answers: { component: "Box" }}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Lastly, if no answer was given for `component`, we will get a `div`.
+
+<Dot
+	tps={{name: "react-component"}}
+	lang="tsx"
+	templateMeta='{3}'
+	displayTemplate={false}
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+Checkout our [API docs](../../api/template-engine/conditionals) for more
+examples on how you can take advantage of conditionals.
 
 ### Loops
 
-In doT, loops is achieved using `{{~<array> :value:index}}{{= value}}{{~}}`.
+<Tabs>
 
-<Dot>
+<TabItem value="block" label="Block">
 
 ```text
-{{~[1, 2, 3, 4] :value:index}}
-{{= value}}
-{{~}}
+{{{~<array> :<value>:<index>}}}
+loop output
+{{{~}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{~<array> :<value>:<index>}}loop output{{~}}
+```
+
+</TabItem>
+</Tabs>
+
+Loops are achieved using the `~` operator along with inline or block brackets.
+The contents of the loop will be rendered into the output of the file for each
+item in the array.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template using a block loop statement to render import statements to
+the react file when `modules` is specified.
+
+<Dot
+	tps={{answers: { modules: ["utils", "pages"] }}}
+	lang='tsx'
+	templateMeta='{2-4}'
+	resultMeta='{2-3}'
+>
+
+```text
+import React from 'react';
+{{{~tps.answers.modules :value}}}
+import {{= value}} from "@app/{{= value}}";
+{{{~}}}
 ```
 
 </Dot>
 
-Unfortunately we need to keep all tags on the same line to get a cleaner output.
-By indenting `{{= value}}` to get a cleaner look will result in indent in the
-rendered output
+</TabItem>
 
-<Example title="Indent Issues">
+<TabItem value="inline" label="Inline">
 
-<Dot>
+Take this template using a inline loop statement to render props to the react
+component when `props` are passed.
 
-```text
-{{~[1, 2, 3, 4] :value:index}}
-	{{= value}}
-{{~}}
-```
-
-</Dot>
-
-</Example>
-
-If you dont want the extra spacing between each line then you need to move
-`{{= value}}` on the same line as your loop.
-
-<Dot>
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+	templateMeta='{4}'
+>
 
 ```text
-{{~[1,2,3,4] :value:index}}{{= value}}
-{{~}}
-```
-
-</Dot>
-
-To remove the extra space at the bottom of the output, you can move the end of
-the loop to the same line. However, this will cause all your items to be
-displayed on a single line. To address this, you can add a `\n` character after
-each value. To avoid displaying a new line after the last item, you can use a
-ternary operator to check if it is the last item.
-
-<Dot>
-
-```text
-{{~[1,2,3,4] :value:index}}{{= value + (index !== [1,2,3,4].length - 1 ? "\n" : "")}}{{~}}
+{{{
+	const propsLastIndex = tps.answers.props.length - 1;
+}}}
+const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
+	return (
+		/* react code .... */
+	);
+};
 ```
 
 </Dot>
@@ -280,111 +942,367 @@ ternary operator to check if it is the last item.
 
 If you dont need anything to complex, then use `join`!
 
-<Dot>
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+>
 
 ```text
-{{= [1,2,3,4].join("\n")}}
+const App = ({ {{= tps.answers.props.join(", ")}} }) => {
+	return (
+		/* react code .... */
+	);
+};
 ```
 
 </Dot>
 
 :::
 
-If you would like to keep output on one line then put all doT brackets on one
-line
+</TabItem>
+</Tabs>
 
-<Dot>
+Checkout our [API docs](../../api/template-engine/loops) for more examples on
+how you can take advantage of loops.
+
+### Defs (Partials)
+
+<Tabs>
+
+<TabItem value="block" label="Block">
 
 ```text
-{{~[1, 2, 3, 4] :value:index}}{{= value}}{{~}}
+{{{##def.<name>:<arg>:
+def contents
+#}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{##def.<name>:<arg>:def contents#}}
+```
+
+</TabItem>
+</Tabs>
+
+Defs, or partials, are achieved using `##def` at the beginning and `#` at the
+end of inline or block brackets. Defs allow you to create reusable sections of a
+template. Think of them as smaller templates that can be defined separately and
+then included within larger templates. This provides modularity and simplifies
+the process of maintaining and updating your templates.
+
+To render the contents of the def, use `#def` along with inline brackets.
+
+```text
+{{#def.<name>:<arg>}}
+```
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template thats creating a `complexExpression` def that will render a
+complex expression in both layout options `one` & `two` but not in any others.
+Utilizing a def for this allows you to maintain one version of the logic without
+duplicating it in your template.
+
+<Dot
+	tps={{answers: {layout: "one"}}}
+	lang='tsx'
+	templateMeta='{1-3,7,11}'
+	resultMeta='{3}'
+>
+
+```text
+{{{##def.complexExpression:
+const someComplexExpression = /* some complex expression */;
+#}}}
+{{{? tps.answers.layout === "one"}}}
+/* layout one code... */
+
+{{#def.complexExpression}}
+{{{?? tps.answers.layout === 'two'}}}
+/* layout two code... */
+
+{{#def.complexExpression}}
+{{{??}}}
+/* default layout code... */
+{{{?}}}
 ```
 
 </Dot>
 
-### Defs (Partials)
+</TabItem>
 
-DoT supports defs (partials). Defs allow you to create reusable sections of a
-templates. Think of them as smaller templates that can be defined separately and
-then included within larger templates. This provides modularity and simplifies
-the process of maintaining and updating your templates.
+<TabItem value="inline" label="Inline">
 
 <Dot>
 
 ```text
-{{##def.intro:
-This is my intro
-#}}
-
+{{##def.intro:This is my intro#}}
 {{#def.intro}}
 ```
 
 </Dot>
 
-You can also define functions as defs
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
 
 <Dot>
 
 ```text
-{{##def.intro = function(name) {
-		return `This is my intro`;
-}#}}
-
-{{#def.intro()}}
+{{{##def.intro:
+This is my intro
+#}}}
+{{#def.intro}}
 ```
 
 </Dot>
 
-## How to use doT with Templates
+:::
 
-Templates make it easy to use the doT template engine inside files. This helps
-you add dynamic content to your files. To use doT inside your templates files,
-you just need to add the `.dot` extension to the file. The `.dot` extension can
-be added to any file, regardless of its original extension. Once added, the
-contents of the file will be processed by doT. The resulting output will then be
-incorporated into the rendered file. Your rendered file will no longer have the
-`.dot` extention
+</TabItem>
+</Tabs>
 
-<Example>
+#### Args
 
-To use doT in a file named `server.js`, Rename the file to `server.js.dot`. Once
-processed and rendered, the resulting file will retain its original name, which
-is `server.js`.
+You can also pass one argument to a def. This argument can be any valid
+javascript value.
 
-</Example>
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot
+    lang='tsx'
+	templateMeta='{1,4}'
+>
+
+```text
+{{{##def.complexExpression:useTypescript:
+const someComplexExpression{{? useTypescript ?? false }}: string{{?}} = /* some complex expression */;
+#}}}
+{{#def.complexExpression:true}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot>
+
+```text
+{{##def.intro:name:My name is {{= name}}#}}
+{{#def.intro:"lino"}}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.intro:name:
+My name is {{= name}}
+#}}}
+{{#def.intro:"lino"}}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+If you need to pass more information to the def, you can pass an object as the
+argument and add all the information to the object. Keep in mind that if you
+pass an object directly, you need to follow it with a semicolon `;` or a space.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot
+    lang='tsx'
+	templateMeta='{5}'
+>
+
+```text
+{{{##def.someExpression:user:
+const name = "{{= user.name}}";
+const age = {{= user.age}};
+#}}}
+{{#def.someExpression:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot>
+
+```text
+{{##def.someExpression:user:My name is {{= user.name}} and my age is {{= user.age}}#}}
+{{#def.someExpression:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.intro:user:
+My name is {{= user.name}} and my age is {{= user.age}}
+#}}}
+{{#def.intro:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+#### Functions
+
+You can also define defs as an javascript function.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot templateMeta='{1-3}'>
+
+```text
+{{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}}
+{{#def.renderIntro("lino")}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot templateMeta='{1-3}'>
+
+```text
+{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}
+{{#def.renderIntro("lino")}}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}}
+{{#def.renderIntro("lino") }}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+---
+
+## How to utilize the template engine
+
+There are three main ways to use our template engine to make your template
+dynamic, in [file contents](#file-contents), [files names](#file-names), and
+[def files](#def-files).
 
 ### File contents
 
-Like mentioned above, once you add a `.dot` extention to your file name you are
-now able to use any dot syntax inside the file and tps will process it.
+To use our template engine in files, you must add a `.tps` extension to the end
+of your file name. When a new instance is rendered, this extension will be
+removed, leaving any other extension that was before the `.tps` extension
+intact.
 
-<Example open>
-
-<Dot lang="js" templateName="server.js.dot" tps={{answers: { security: true }}}>
+<Dot lang="js" templateName="server.js.tps" resultName='server.js' tps={{answers: { security: true }}}>
 
 ```text
 const express = require("express");
+{{{? tps.answers.security }}}
+const helmet = require("helmet");
+{{{?}}}
 
 const app = express();
 
-/* node code ... */
+{{{? tps.answers.security }}}
+app.use(helmet());
 
-{{? tps.answers.security }}app.use(helmet());{{?}}
-
+{{{?}}}
 /* node code ... */
 ```
 
 </Dot>
 
-</Example>
-
 ### File names
 
-File names can also take advantage of doT. This allows file names to be dynamic.
-You can use any valid doT syntax inside of file names. Unlike file contents, all
-file names get processed with doT so you can use doT syntax in any file name in
-your template even if they dont have a `.doT` extension.
+Every file within your template can utilize the template engine's capabilities
+directly in its file name. This allows for dynamic naming of files when creating
+a new instances.
 
-<Example open>
+Take this template named `react-component`, which includes a file named
+`{{=tps.name}}.js`:
+
+```text
+| - .tps/
+	| - react-component
+		| - default
+			| - {{=tps.name}}.js
+```
+
+Now if you rendered a new instance of this template named `Nav`:
+
+```bash
+tps react-component Nav
+```
+
+then you'll end up with:
+
+```text
+| - Nav/
+	| - Nav.js
+```
+
+Any functionality of our template engine can be used in files names, however
+here are some common use cases that we use when we build templates.
 
 <Tabs>
 
@@ -405,7 +1323,7 @@ Nav.js
 <TabItem value="utils" label="utils">
 
 ```text
-{{= tps.utils.camelCase(tps.name)}}.js.dot
+{{= tps.utils.camelCase(tps.name)}}.js
 ```
 
 If `name` was `my-nav` then the result would be:
@@ -415,72 +1333,33 @@ myNav.js
 ```
 
 </TabItem>
-
-<TabItem value="defs" label="Defs">
-
-you can utilize a def if your logic gets to complex for your file name
-
-:::caution
-
-Be aware that adding new lines to the def file will also show up in your file
-name
-
-:::
-
-```txt title="name.def"
-{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}
-```
-
-```text
-{{#def.name}}.js
-```
-
-If `name` was `nav` and `capitalize` was true then the result would be:
-
-```text
-Nav.js
-```
-
-if `capitalize` was false then the result would be:
-
-```txt
-nav.js
-```
-
-</TabItem>
-
 </Tabs>
-
-</Example>
 
 ### Def files
 
-Templates allows you to define doT defs inside files for easier use. Def files
-gets loaded before any files are rendered so you have access to all defs you
-define inside your template files.
-
-Def files are files inside your packages that have a `.def` extension.
-
-<Example>
+Templates allow you to define defs inside files for easier use. Def files gets
+loaded before any files are rendered so you have access to all defs you define
+inside your template files. Any file with a `.def` extension in any of your
+packages is considered a def file.
 
 ```text
 | - .tps/
 	| - react-component
 		| - default/
+			// highlight-next-line
 			| - helpers.def
+			| - some-other-file.js
 ```
 
-</Example>
-
-If you want your def files to be accessable anywhere put them inside your
+If you want your def files to be accessible everywhere, put them inside your
 `default` package. If your def file is only used inside a specific package then
-place it inside that package
+place it inside that package.
 
 :::caution
 
-def files placed inside packages may be usable inside template files inside
+Def files placed inside packages may be usable inside template files inside
 other packages, however this is discouraged and may not be supported in other
-versions
+versions.
 
 :::
 
@@ -488,106 +1367,122 @@ Def files can be used in two ways:
 
 #### single def file
 
-If your def file has no dot syntax then the whole file will be converted to a
-`def`. You can access this def inside your template files by using
-`{{#def.<file-name>}}`
+Single def files will use the entire file contents as the def contents. The name
+of this def will be the filename. You can access this def inside your template
+files by using `{{#def.<file-name>}}`.
 
-<Example>
-
-If you had this template folder structure:
-
-```text
-| - .tps/
-	| - some-template/
-		| - default/
-			| - helpers.def
-			| - index.txt.dot
-```
-
-and inside your `helpers.def` you had:
-
-```text
-This is my def file
-```
-
-and inside `index.txt.dot` you had:
-
-```txt
-hey there
-{{#def.helpers}}
-```
-
-Your rendered `index.txt` file would end up like this:
-
-```txt
-hey there
-This is my def file
-```
-
-</Example>
-
-#### multiple def functions inside a file
-
-You can define multiple def functions inside a def file by using the def syntax
-`{{##def.name: ... #}`. These def files can be accessed by the name you give
-them in the def.
-
-<Example>
-
-If you had this template folder structure:
+Take this `react-component` template that has a `imports.def` def file and
+`{{=tps.name}}.jsx.tps` file.
 
 ```text
 | - .tps/
-	| - some-template/
+	| - react-component/
 		| - default/
-			| - helpers.def
-			| - index.txt.dot
+			| - imports.def
+			| - {{=tps.name}}.jsx.tps
 ```
 
-and inside your `helpers.def` you had:
+Inside the `imports.def`, we have all the imports statements you will need for
+your react components.
+
+```tsx
+import React from 'react';
+import '{{= tps.name}}.css';
+```
+
+Now inside `{{=tps.name}}.jsx.tps` we can use this def by the file name.
+
+<Dot 
+	defs={{ 
+		imports: `\
+import React from 'react';
+import '{{= tps.name}}.css';`,
+	}}>
+
+```tsx
+{{#def.imports}}
+
+export const {{=tps.name}} = () => {
+	/* react component stuff ... */
+};
+```
+
+</Dot>
+
+#### Multi def file
+
+Multi def file is a def file that contains multiple defs. Multi def files uses
+the [defs syntax](#defs-partials) in order define more than one.
+
+Take this `react-component` template that has a `helper.def` def file and
+`{{=tps.name}}.jsx.tps` file.
 
 ```text
-{{##def.helper1:
-helper 1
-#}}
-
-{{##def.helper2:
-helper 2
-#}}
+| - .tps/
+	| - react-component/
+		| - default/
+			| - helper.def
+			| - {{=tps.name}}.jsx.tps
 ```
 
-and inside `index.txt.dot` you had:
+Inside the `helpers.def`, we have all the imports statements you will need for
+your react components and the props interface for when typescript is used.
 
-```txt
-hey there
-{{#def.helper1}}
-{{#def.helper2}}
+```tsx
+{{{##def.imports:
+import React from 'react';
+import '{{= tps.name}}.css';
+#}}}
+
+{{{##def.propInterface:
+interface Props {
+	/* props */
+}
+#}}}
 ```
 
-Your rendered `index.txt` file would end up like this:
+Now inside `{{=tps.name}}.jsx.tps` we can use these defs.
 
-```txt
-hey there
-helper 1
-helper 2
+<Dot
+	lang='tsx'
+	tps={{ answers: { typescript: true } }}
+	defs={{
+		imports: `\
+import React from 'react';
+import '{{= tps.name}}.css';`,
+		propsInterface:`\
+interface Props {
+    /* props */
+}`,
+	}}>
+
+```text
+{{#def.imports}}
+
+{{{? tps.answers.typescript}}}
+{{#def.propsInterface}}
+
+{{{?}}}
+export const {{=tps.name}} = () => {
+	/* react component stuff ... */
+};
 ```
 
-</Example>
+</Dot>
 
 ## Templates Context
 
-After converting a file to use doT, you gain access to the templates context
-object, which contains information about the template and rendering metadata. To
-utilize the context object, you can refer to the tps object within doT tags.
-Here's an example:
+After converting a file to a dynamic file, you gain access to the template's
+context object. This object contains information about the template and
+rendering metadata. The context object can be referenced in any of our template
+syntaxes.
 
 ```text
 {{ tps }}
 ```
 
-Now, let's explore some of the most commonly used properties available in this
-object. For a full list, you can refer to the
-[tps context API](../../api/template-context).
+We'll go over the most common properties of this object. For a full list, you
+can refer to the [tps context API](../../api/template-context).
 
 ### Name
 
@@ -607,9 +1502,10 @@ will be null.
 tps react-component Nav
 ```
 
-<Dot tps={{ name: "Nav" }}>
+<Dot tps={{ name: "Nav" }} lang='tsx'>
 
 ```text
+// highlight-next-line
 const {{= tps.name}} = (props) => {
 	return (
 		<div></div>
@@ -624,106 +1520,62 @@ const {{= tps.name}} = (props) => {
 :::tip
 
 Dont remember what the template name is? Refresh your mind
-[here](./templates#single-build-path)
+[here](./templates#single-build-path).
 
 :::
 
 ---
 
-### Packages
+### Answers
 
 ```text
-{{= tps.packages }}
+{{= tps.answers.<prompt-name> }}
 ```
 
-List of packages that were used when rendering your template.
-
-:::tip
-
-Remember `default` package is include by default
-
-:::
-
-When no additional packages are used:
-
-```json
-["default"]
-```
-
-when additional packages are used:
-
-```json
-["default", "css", "unit-tests"]
-```
+`tps.answers` is an object that holds the responses your user provided for your
+prompts. [Prompts](./prompts) are a way for template owners to ask users for
+additional information about how they want their template created. However
+[prompts](./prompts) aren't covered until a bit later in this guide.
 
 <Example>
 
-<Tabs>
-<TabItem value="Additional packages">
-
-```bash title="cli"
-tps react-component App --packages css
-```
-
-<Dot tps={{name: "Nav", packages: ['default', "css"]}} lang="js">
+when a user creates a new instance of a template:
 
 ```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
+tps react-component Nav
+```
 
+They will prompted a list of questions. In this case if they "want to use a css
+file". Template owners can now use the answers object to get the value the user
+answered.
+
+<Dot
+	tps={{name: "react-component", answers: {css: true}}} 
+	lang="typescript"
+	templateMeta='{2}'
+>
+
+```text
+import React from 'react';
+{{{? tps.answers.css }}}
+import "styles.css";
+{{{?}}}
 ```
 
 </Dot>
-
-</TabItem>
-
-<TabItem value="No additional packages">
-
-```bash title="cli"
-tps react-component App
-```
-
-<Dot tps={{name: "Nav", packages: ['default']}} lang="js">
-
-```text
-import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
-const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
-}
-
-```
-
-</Dot>
-
-</TabItem>
-</Tabs>
 
 </Example>
 
-:::tip
+---
 
-Don't remember how to use packages? Refresh your mind [here](./packages)
-
-:::
-
-### utils
+### Utils
 
 ```text
 {{= tps.utils }}
 ```
 
-Make your template creation journey more enjoyable with our collection of
-utilities. We've integrated powerful tools from
+`tps.utils` is a collection of helper functions to make creating templates
+easier. We've integrated powerful tools from
 [change-case](https://www.npmjs.com/package/change-case) and
 [inflection](https://www.npmjs.com/package/inflection) to streamline your
 workflow.
@@ -754,12 +1606,12 @@ To explore all the available functions, check out the
 tps react-component nav
 ```
 
-<Dot tps={{name: "nav", packages: ['default']}} lang="js">
+<Dot tps={{name: "nav", packages: ['default']}} lang="tsx">
 
 ```text
 import React from react;
 
-const {{= tps.utils.capitalize(tps.name)}} = (props) => {
+const {{= tps.utils.pascalCase(tps.name)}} = (props) => {
 	return (
 		<div></div>
 	)

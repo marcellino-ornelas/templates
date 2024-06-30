@@ -1,0 +1,121 @@
+---
+pagination_next: api/template-engine/interpolation
+sidebar_position: 1
+---
+
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Evaluation
+
+## Usage
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+```text
+{{{
+	<expressions...>
+}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{ <expressions...> }}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Defining variables
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot>
+
+```text
+// highlight-start
+{{{
+	const name = "Marcellino Ornelas";
+}}}
+// highlight-end
+{{= name }}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+:::caution
+
+Inline evaluations are not recommend due to the white space they leave behind.
+However we still support this syntax due to legacy reasons but may be removed in
+future versions.
+
+:::
+
+<Dot>
+
+```text
+// highlight-next-line
+{{ const name = "Marcellino Ornelas"; }}
+{{= name }}
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+### Defining functions
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot>
+
+```text
+// highlight-start
+{{{
+	const sayHello = (name) => {
+		return "Hello " + name
+	};
+}}}
+// highlight-end
+{{= sayHello("lino") }}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+:::caution
+
+Inline evaluations are not recommend due to the white space they leave behind.
+However we still support this syntax due to legacy reasons but may be removed in
+future versions.
+
+:::
+
+<Dot>
+
+```text
+{{ const name = "Marcellino Ornelas"; }}
+{{= name }}
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>

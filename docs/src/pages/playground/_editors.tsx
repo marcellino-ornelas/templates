@@ -9,7 +9,7 @@ import { Tps } from '@site/types/templates';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // eslint-disable-next-line
-import templateString from '!!raw-loader!./_template.js.dot';
+import templateString from '!!raw-loader!./_template.tsx.tps';
 import styles from './playground.module.css';
 
 const EDITOR_OPTS: editor.IStandaloneEditorConstructionOptions = {

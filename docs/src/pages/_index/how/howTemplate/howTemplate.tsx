@@ -21,7 +21,7 @@ export const HowTemplate = () => {
 
 								<FileSystemRow delay={750} name="package.json" />
 
-								<FileSystemRow delay={1000} name="server.js.dot" />
+								<FileSystemRow delay={1000} name="server.js.tps" />
 							</Folder>
 						</div>
 						<div className={howStyles.howCol}>

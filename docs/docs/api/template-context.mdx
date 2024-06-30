@@ -99,14 +99,15 @@ tps react-component App --packages css
 
 ```text
 import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
+{{{? tps.packages.includes("css")}}}
+import "{{= tps.name}}.css";
+{{{?}}}
+
 const {{= tps.name}} = (props) => {
 	return (
 		<div></div>
 	)
 }
-
 ```
 
 </Dot>
@@ -123,8 +124,10 @@ tps react-component App
 
 ```text
 import React from react;
-{{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
-{{?}}
+{{{? tps.packages.includes("css")}}}
+import "{{= tps.name}}.css";
+{{{?}}}
+
 const {{= tps.name}} = (props) => {
 	return (
 		<div></div>

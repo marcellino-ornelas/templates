@@ -1,0 +1,315 @@
+---
+pagination_next: api/template-engine/loops
+pagination_prev: api/template-engine/conditionals
+sidebar_position: 5
+---
+
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Defs
+
+## Usage
+
+<Tabs>
+
+<TabItem value="block" label="Block">
+
+```text
+{{{##def.<name>:<arg>:
+def contents
+#}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{##def.<name>:<arg>:def contents#}}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Using a def
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template thats creating a `complexExpression` def that will render a
+complex expression in both layout options `one` & `two` but not in any others.
+Utilizing a def for this allows you to maintain one version of the logic without
+duplicating it in your template.
+
+<Dot
+	tps={{answers: {layout: "one"}}}
+	lang='tsx'
+	templateMeta='{1-3,7,11}'
+	resultMeta='{3}'
+>
+
+```text
+{{{##def.complexExpression:
+const someComplexExpression = /* some complex expression */;
+#}}}
+{{{? tps.answers.layout === "one"}}}
+/* layout one code... */
+
+{{#def.complexExpression}}
+{{{?? tps.answers.layout === 'two'}}}
+/* layout two code... */
+
+{{#def.complexExpression}}
+{{{??}}}
+/* default layout code... */
+{{{?}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot>
+
+```text
+{{##def.intro:This is my intro#}}
+{{#def.intro}}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.intro:
+This is my intro
+#}}}
+{{#def.intro}}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+### Using def argument
+
+You can also pass one argument to a def. This argument can be any valid
+javascript value.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot
+    lang='tsx'
+	templateMeta='{1,4}'
+>
+
+```text
+{{{##def.complexExpression:useTypescript:
+const someComplexExpression{{? useTypescript ?? false }}: string{{?}} = /* some complex expression */;
+#}}}
+{{#def.complexExpression:true}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot>
+
+```text
+{{##def.intro:name:My name is {{= name}}#}}
+{{#def.intro:"lino"}}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.intro:name:
+My name is {{= name}}
+#}}}
+{{#def.intro:"lino"}}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+If you need to pass more information to the def, you can pass an object as the
+argument and add all the information to the object. Keep in mind that if you
+pass an object directly, you need to follow it with a semicolon `;` or a space.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot
+    lang='tsx'
+	templateMeta='{5}'
+>
+
+```text
+{{{##def.someExpression:user:
+const name = "{{= user.name}}";
+const age = {{= user.age}};
+#}}}
+{{#def.someExpression:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot>
+
+```text
+{{##def.someExpression:user:My name is {{= user.name}} and my age is {{= user.age}}#}}
+{{#def.someExpression:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.intro:user:
+My name is {{= user.name}} and my age is {{= user.age}}
+#}}}
+{{#def.intro:{ name: "lino", age: 24 }; }}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+### Using a function def
+
+You can also define defs as an javascript function.
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+<Dot templateMeta='{1-3}'>
+
+```text
+{{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}}
+{{#def.renderIntro("lino")}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+<Dot templateMeta='{1-3}'>
+
+```text
+{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}
+{{#def.renderIntro("lino")}}
+```
+
+</Dot>
+
+:::caution
+
+Inline defs are not recommend due to the white space they leave behind. However,
+we still support this syntax for legacy reasons, though it may be removed in
+future versions. You can achieve the same result with a block def:
+
+<Dot>
+
+```text
+{{{##def.renderIntro = function(name) {
+		return `My name is ${name}`;
+}#}}}
+{{#def.renderIntro("lino") }}
+```
+
+</Dot>
+
+:::
+
+</TabItem>
+</Tabs>
+
+### Use a def in a file name
+
+You can utilize a def if your logic gets to complex for your file name.
+
+:::caution
+
+Be aware that adding new lines to the def file will also show up in your file
+name.
+
+:::
+
+```txt title="name.def"
+{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}
+```
+
+If `name` was `nav` and `capitalize` was `true` then the result would be
+uppercase name
+
+<Dot
+	tps={{ name: "nav", answers: { capitalize: true } }}
+    defs={{"name": `{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}`}}
+>
+
+```text
+{{#def.name}}.js
+```
+
+</Dot>
+
+```text
+Nav.js
+```
+
+If `capitalize` was `false` then the result would be a lowercase `name`
+
+```txt
+nav.js
+```

@@ -520,13 +520,16 @@ dynamic files.
 
 ```text
 const express = require("express");
+{{{? tps.answers.security }}}
+const helmet = require("helmet");
+{{{?}}}
 
 const app = express();
 
-/* node code ... */
+{{{? tps.answers.security }}}
+app.use(helmet());
 
-{{? tps.answers.security }}app.use(helmet());{{?}}
-
+{{{?}}}
 /* node code ... */
 ```
 

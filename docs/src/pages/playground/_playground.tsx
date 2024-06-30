@@ -14,7 +14,7 @@ export const Playground = () => {
 	return (
 		<Layout
 			title="Template playground"
-			description="Test out dot file changes in browser"
+			description="Test our template engine file changes in the browser"
 		>
 			<PlaygroundContents />
 		</Layout>
@@ -35,6 +35,11 @@ const PlaygroundContents = () => {
 				type: 'input',
 				name: 'cssType',
 				value: 'css',
+			},
+			{
+				type: 'confirm',
+				name: 'typescript',
+				value: true,
 			},
 		],
 	});

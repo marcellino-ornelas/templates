@@ -1,0 +1,137 @@
+---
+pagination_next: api/template-engine/defs
+pagination_prev: api/template-engine/conditionals
+sidebar_position: 4
+---
+
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Loops
+
+## Usage
+
+<Tabs>
+
+<TabItem value="block" label="Block">
+
+```text
+{{{~<array> :<value>:<index>}}}
+loop output
+{{{~}}}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{~<array> :<value>:<index>}}loop output{{~}}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Using loops
+
+<Tabs>
+<TabItem value="block" label="Block">
+
+Take this template using a block loop statement to render import statements to
+the react file when `modules` is specified.
+
+<Dot
+	tps={{answers: { modules: ["utils", "pages"] }}}
+	lang='tsx'
+	templateMeta='{2-4}'
+	resultMeta='{2-3}'
+>
+
+```text
+import React from 'react';
+{{{~tps.answers.modules :value}}}
+import {{= value}} from "@app/{{= value}}";
+{{{~}}}
+```
+
+</Dot>
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+Take this template using a inline loop statement to render props to the react
+component when `props` are passed.
+
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+	templateMeta='{4}'
+>
+
+```text
+{{{
+	const propsLastIndex = tps.answers.props.length - 1;
+}}}
+const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
+	return (
+		/* react code .... */
+	);
+};
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+## Tips
+
+### Prefer join over inline loops when possibilities
+
+When you dont need anything complex and only want to separate values by some
+separator, prefer `join` over inline loops. This will help you keep your code
+nice and clean.
+
+Take this template using a inline loop.
+
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+	templateMeta='{4}'
+	result={false}
+>
+
+```text
+{{{
+	const propsLastIndex = tps.answers.props.length - 1;
+}}}
+const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
+	return (
+		/* react code .... */
+	);
+};
+```
+
+</Dot>
+
+vs this template using `join`.
+
+<Dot
+	tps={{answers: {props: ['name', 'onClick']}}}
+	lang='tsx'
+	result={false}
+>
+
+```text
+const App = ({ {{= tps.answers.props.join(", ")}} }) => {
+	return (
+		/* react code .... */
+	);
+};
+```
+
+</Dot>

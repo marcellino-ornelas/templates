@@ -1,0 +1,132 @@
+---
+pagination_next: api/template-engine/conditionals
+pagination_prev: api/template-engine/evaluation
+sidebar_position: 2
+---
+
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Interpolation
+
+## Usage
+
+<Tabs>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{= <expression> }}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Displaying content
+
+<Tabs>
+
+<TabItem value="inline" label="Inline">
+
+<Dot
+	lang='tsx'
+	templateMeta='{4}'
+>
+
+```text
+{{{
+	const name = "marcellino ornelas";
+}}}
+{{= name}}
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+### Displaying complex expression
+
+Any valid javascript expression can be used in between the brackets.
+
+<Tabs>
+
+<TabItem value="inline" label="Inline">
+
+<Dot
+	lang='tsx'
+	templateMeta='{4}'
+>
+
+```text
+{{{
+	const name = "marcellino ornelas";
+}}}
+{{= name.startsWith("m") ? `${name[0].toUpperCase()}${name.slice(1)}` : name }}
+```
+
+</Dot>
+
+</TabItem>
+</Tabs>
+
+### Instance file using template data
+
+You can render data passed into templates into your instances files which then
+can be used in the instance file itself.
+
+Instance files can take advantage of using template data by rendering the data
+in a language compatible way.
+
+<Tabs>
+
+<TabItem value="inline" label="Inline">
+
+Take this template that is rendering different types of data types into a `.js`
+file. After a instance is created, we can then invoke the js file and it will
+produce results that were defined in the template.
+
+<Dot
+	lang='tsx'
+>
+
+```text
+{{{
+	const name = "Marcellino ornelas";
+	const age = 24;
+	const userInfo = {
+		name,
+		age,
+	};
+	const users = [userInfo];
+}}}
+{{{/* Strings should be wrapped in qoutes of choice */}}}
+const name = "{{= name}}";
+{{{/* Numbers can be rendered to the output */}}}
+const age = {{= age}};
+{{{
+	/**
+	 * You can use JSON.stringify to display objects or arrays
+	 * or you can build your own custom function to do something similar
+	 */
+}}}
+const userInfo = {{= JSON.stringify(userInfo, undefined, 2)}};
+const users = {{= JSON.stringify(users, undefined, 2)}};
+
+console.log(name, age, userInfo, users);
+```
+
+</Dot>
+
+Invoking this file with `node` will now produce the following:
+
+```bash
+> node path/to/file.js
+Marcellino ornelas 24 { name: 'Marcellino ornelas', age: 24 } [ { name: 'Marcellino ornelas', age: 24 } ]
+```
+
+</TabItem>
+</Tabs>
