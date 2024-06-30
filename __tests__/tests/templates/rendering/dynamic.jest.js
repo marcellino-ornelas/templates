@@ -5,6 +5,9 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import * as path from 'path';
+import { mkTemplate } from '@test/utilities/templates';
+import { CWD } from '@tps/utilities/constants';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('fs');
 
@@ -20,12 +23,42 @@ describe('[TPS] Rendering dynamic:', () => {
 	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
+		reset();
+
 		tps = new Templates('testing-dynamic');
 		// For tests that dont care about answer
 		tps.setAnswers({
 			one: 'bad',
 		});
 		return playground.createBox('rendering_dynamic');
+	});
+
+	it('should load a dynamic file', async () => {
+		mkTemplate('test-dynamic-file', undefined, {
+			'./default/index.js.tps': `{{=tps.name}}`,
+		});
+
+		tps = new Templates('test-dynamic-file');
+
+		await tps.render(CWD, ['App']);
+
+		expect(path.join(CWD, 'App/index.js')).toBeFile();
+
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents('App');
+	});
+
+	it('should load legacy dynamic file', async () => {
+		mkTemplate('test-dynamic-file', undefined, {
+			'./default/index.js.dot': `{{=tps.name}}`,
+		});
+
+		tps = new Templates('test-dynamic-file');
+
+		await tps.render(CWD, ['App']);
+
+		expect(path.join(CWD, 'App/index.js')).toBeFile();
+
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents('App');
 	});
 
 	describe('File names', () => {
