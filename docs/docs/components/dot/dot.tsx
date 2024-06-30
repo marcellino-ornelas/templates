@@ -43,6 +43,7 @@ export const Dot = ({
 		defs,
 	});
 
+	const templateClasses = [styles.template];
 	const resultClasses = [styles.result];
 
 	// When no template is being displayed, we need to fix top `border-radius`
@@ -50,11 +51,16 @@ export const Dot = ({
 		resultClasses.push(styles.noTemplate);
 	}
 
+	// When no template is being displayed, we need to fix top `border-radius`
+	if (!result) {
+		templateClasses.push(styles.noResult);
+	}
+
 	return (
 		<div>
 			{displayTemplate && (
 				<CodeBlock
-					className={styles.template}
+					className={templateClasses.join(' ')}
 					showLineNumbers
 					title={templateName}
 					language={lang}

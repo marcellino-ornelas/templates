@@ -14,7 +14,7 @@ import TabItem from '@theme/TabItem';
 :::caution
 
 If you not using a version of templates above `1.1.0`, please refer to the
-[legacy documentation](./dynamic-files-legacy)
+[legacy documentation](./dynamic-files-legacy).
 
 :::
 
@@ -37,7 +37,8 @@ will produce something like the following:
 lino wants some more cake
 ```
 
-Dont worry about the specifics, well touch more on the syntax later on this page
+Dont worry about the specifics, well touch more on the syntax later on this
+page.
 
 ## Template engine
 
@@ -53,11 +54,11 @@ more readable. However, avoid doing this because the whitespace will remain in
 your new instance.
 
 Use our [playground page](/templates/playground) to test dynamiclly files
-without having to generate them
+without having to generate them.
 
 :::
 
-Our template engine supports two main syntaxes: `inline` and `block`
+Our template engine supports two main syntaxes: `inline` and `block`.
 
 ### Inline syntax
 
@@ -66,7 +67,7 @@ your expression `{{ ... }}`. This syntax is more flexible and is recommended
 when dealing with different control flows inline.
 
 Take this template that is using a inline interpolation statement to render the
-name of instance as this react components name
+name of instance as this react components name.
 
 <Dot
 	tps={{ 
@@ -126,7 +127,7 @@ import './component.css';
 </Dot>
 
 Now when `css` is `true` notice how the only thing being rendered is whats
-inside the if statement
+inside the if statement.
 
 <Dot
 	tps={{ 
@@ -147,7 +148,7 @@ import './component.css';
 
 </Dot>
 
-You can also indent block syntax and all tabs and spaces will be removed
+You can also indent block syntax and all tabs and spaces will be removed.
 
 <Dot
 	tps={{ 
@@ -437,7 +438,7 @@ mandatory!**
 
 Inline evaluations are not recommend due to the white space they leave behind.
 However we still support this syntax due to legacy reasons but may be removed in
-future versions
+future versions.
 
 :::
 
@@ -456,7 +457,7 @@ future versions
 </Tabs>
 
 Checkout our [API docs](../../api/template-engine/evaluation) for more examples
-on how you can take advantage of evaluations
+on how you can take advantage of evaluations.
 
 ### Interpolation
 
@@ -465,7 +466,7 @@ on how you can take advantage of evaluations
 <TabItem value="inline" label="Inline">
 
 ```text
-{{= <expressions...> }}
+{{= <expression> }}
 ```
 
 </TabItem>
@@ -476,23 +477,11 @@ brackets. This operator allows you to render dynamic output into the files
 contents.
 
 <Tabs>
-{/* <TabItem value="block" label="Block">
-
-<Dot>
-
-```text
-// highlight-next-line
-{{= 2 + 2}}
-```
-
-</Dot>
-
-</TabItem> */}
 
 <TabItem value="inline" label="Inline">
 
 Take this template that is using a inline interpolation statement to render the
-name of instance as this react components name
+name of instance as this react components name.
 
 <Dot
 	tps={{ 
@@ -513,7 +502,7 @@ export const {{= tps.name }} = () => {
 </Tabs>
 
 Checkout our [API docs](../../api/template-engine/interpolation) for more
-examples on how you can take advantage of interpolations
+examples on how you can take advantage of interpolations.
 
 ### Conditionals
 
@@ -871,7 +860,7 @@ const App = () => {
 </Tabs>
 
 Checkout our [API docs](../../api/template-engine/conditionals) for more
-examples on how you can take advantage of conditionals
+examples on how you can take advantage of conditionals.
 
 ### Loops
 
@@ -890,7 +879,7 @@ loop output
 <TabItem value="inline" label="Inline">
 
 ```text
-{{~<array> :<value>:<index> }}loop output{{~}}
+{{~<array> :<value>:<index>}}loop output{{~}}
 ```
 
 </TabItem>
@@ -898,7 +887,7 @@ loop output
 
 Loops are achieved using the `~` operator along with inline or block brackets.
 The contents of the loop will be rendered into the output of the file for each
-item in the array
+item in the array.
 
 <Tabs>
 <TabItem value="block" label="Block">
@@ -973,7 +962,7 @@ const App = ({ {{= tps.answers.props.join(", ")}} }) => {
 </Tabs>
 
 Checkout our [API docs](../../api/template-engine/loops) for more examples on
-how you can take advantage of loops
+how you can take advantage of loops.
 
 ### Defs (Partials)
 
@@ -1312,7 +1301,7 @@ then you'll end up with:
 ```
 
 Any functionality of our template engine can be used in files names, however
-here are some common use cases that we use when we build templates
+here are some common use cases that we use when we build templates.
 
 <Tabs>
 
@@ -1491,8 +1480,8 @@ syntaxes.
 {{ tps }}
 ```
 
-For a full list, you can refer to the
-[tps context API](../../api/template-context).
+We'll go over the most common properties of this object. For a full list, you
+can refer to the [tps context API](../../api/template-context).
 
 ### Name
 
@@ -1512,9 +1501,10 @@ will be null.
 tps react-component Nav
 ```
 
-<Dot tps={{ name: "Nav" }}>
+<Dot tps={{ name: "Nav" }} lang='tsx'>
 
 ```text
+// highlight-next-line
 const {{= tps.name}} = (props) => {
 	return (
 		<div></div>
@@ -1529,7 +1519,7 @@ const {{= tps.name}} = (props) => {
 :::tip
 
 Dont remember what the template name is? Refresh your mind
-[here](./templates#single-build-path)
+[here](./templates#single-build-path).
 
 :::
 
@@ -1556,7 +1546,7 @@ tps react-component Nav
 
 They will prompted a list of questions. In this case if they "want to use a css
 file". Template owners can now use the answers object to get the value the user
-answered
+answered.
 
 <Dot
 	tps={{name: "react-component", answers: {css: true}}} 
@@ -1615,7 +1605,7 @@ To explore all the available functions, check out the
 tps react-component nav
 ```
 
-<Dot tps={{name: "nav", packages: ['default']}} lang="js">
+<Dot tps={{name: "nav", packages: ['default']}} lang="tsx">
 
 ```text
 import React from react;

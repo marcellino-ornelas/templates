@@ -18,7 +18,7 @@ import TabItem from '@theme/TabItem';
 <TabItem value="inline" label="Inline">
 
 ```text
-{{= <expressions...> }}
+{{= <expression> }}
 ```
 
 </TabItem>
@@ -51,7 +51,7 @@ import TabItem from '@theme/TabItem';
 
 ### Displaying complex expression
 
-Any valid javascript expression can be used in between the brackets
+Any valid javascript expression can be used in between the brackets.
 
 <Tabs>
 
@@ -66,7 +66,7 @@ Any valid javascript expression can be used in between the brackets
 {{{
 	const name = "marcellino ornelas";
 }}}
-{{= name.startsWith("m") ? `${name[0].toUpperCase()}${name.slice(1)}` : "Correct" }}
+{{= name.startsWith("m") ? `${name[0].toUpperCase()}${name.slice(1)}` : name }}
 ```
 
 </Dot>
@@ -88,7 +88,7 @@ in a language compatible way.
 
 Take this template that is rendering different types of data types into a `.js`
 file. After a instance is created, we can then invoke the js file and it will
-produce results that were defined in the template
+produce results that were defined in the template.
 
 <Dot
 	lang='tsx'

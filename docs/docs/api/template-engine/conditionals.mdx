@@ -46,7 +46,7 @@ else output
 <TabItem value="block" label="Block">
 
 Take this template below that is using a block if statement to conditionally
-render an css import when the `css` answer is `true`
+render an css import when the `css` answer is `true`.
 
 <Dot
 	tps={{name: "react-component", answers: {css: true}}} 
@@ -64,7 +64,7 @@ import "styles.css";
 
 </Dot>
 
-Now when `css` is `false`
+Now when `css` is `false`, no output will be displayed.
 
 <Dot
 	tps={{name: "react-component", answers: {css: false}}} 
@@ -85,8 +85,8 @@ import "styles.css";
 
 <TabItem value="inline" label="Inline">
 
-Take this template that is using a inline if statement to conditionally add a
-typescript type to the variable when the `typescript` answer is `true`
+Take this template that is using a inline if statement to conditionally render a
+typescript type to the variable when the `typescript` answer is `true`.
 
 <Dot 
 	lang="typescript"
@@ -99,7 +99,7 @@ const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 
 </Dot>
 
-Now when `typescript` is `false`
+Now when `typescript` is `false`, no typescript typings will be added.
 
 <Dot
 	tps={{name: "react-component", answers: {typescript: false}}}
@@ -121,14 +121,15 @@ const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 <Tabs>
 <TabItem value="block" label="Block">
 
-Take this template that is using a block if else statement to conditionally
-render a import statement that would be compatible with css modules when
-`cssLang` is `modules` else will render a normal css import statement.
+Take this template that is using a block if-else statement to conditionally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules; otherwise, it will render a normal CSS import
+statement.
 
 <Dot
 	lang="typescript"
 	tps={{name: "footer", answers: { cssLang: "modules"}}}
-	templateMeta='{2-6}'
+	templateMeta='{4-5}'
 	resultMeta='{2}'
 >
 
@@ -143,7 +144,8 @@ import './{{= tps.name}}.css';
 
 </Dot>
 
-Now when `cssLang` is **not** `modules`
+Now when `cssLang` is **not** `modules`, we will get a normal CSS import
+statement.
 
 <Dot
 	lang="typescript"
@@ -167,13 +169,35 @@ import './{{= tps.name}}.css';
 
 <TabItem value="inline" label="Inline">
 
-Take this template that is using a inline if else statement to conditionally
-render a dynamic tag name when present else will render a `div`.
+Take this template that is using a inline if-else statement to conditionally
+render a component name. If `component` is set to a value, it will use the value
+of `component` as the component name; otherwise, it will render a `div`.
 
 <Dot
 	tps={{name: "react-component", answers: { component: "Page" }}}
 	lang="tsx"
 	templateMeta='{3,5}'
+>
+
+```text
+const App = () => {
+	return (
+		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+			/* contents... */
+		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+	);
+};
+```
+
+</Dot>
+
+Now when `component` is not set to a value, we will get a `div`.
+
+<Dot
+	tps={{name: "react-component", answers: {}}}
+	lang="tsx"
+	templateMeta='{3,5}'
+	displayTemplate={false}
 >
 
 ```text
@@ -196,13 +220,16 @@ const App = () => {
 <Tabs>
 <TabItem value="block" label="Block">
 
-Take this template using a block if statement to conditonally render a
-compatible css module import when `cssLang` is `modules`.
+Take this template that is using a block else-if statement to conditonally
+render a import statement. If `cssLang` is `modules`, it will render an import
+statement for CSS modules. Else if `css` is `true`, it will render a CSS import
+statement. Otherwise it will render nothing.
 
 <Dot
 	lang="typescript" 
 	tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
 	templateMeta='{4-5}'
+	resultMeta='{2}'
 >
 
 ```text
@@ -210,20 +237,21 @@ import React from 'react';
 {{{? tps.answers.cssLang === 'modules'}}}
 import styles from './{{= tps.name}}.css';
 {{{?? tps.answers.css }}}
-import from './{{= tps.name}}.css';
+import './{{= tps.name}}.css';
 {{{?}}}
 ```
 
 </Dot>
 
-Now when `cssLang` is not `modules` and `css` is `true` then you will get the
-following:
+Now when `cssLang` is not `modules` and `css` is `true`, you will get a normal
+css import statement.
 
 <Dot
 	lang="typescript" 
 	tps={{name: "footer", answers: { cssLang: "other", css: true}}}
 	templateMeta='{4-5}'
 	displayTemplate={false}
+	resultMeta='{2}'
 >
 
 ```text
@@ -231,14 +259,14 @@ import React from 'react';
 {{{? tps.answers.cssLang === 'modules'}}}
 import styles from './{{= tps.name}}.css';
 {{{?? tps.answers.css }}}
-import from './{{= tps.name}}.css';
+import './{{= tps.name}}.css';
 {{{?}}}
 ```
 
 </Dot>
 
-Lastly when `cssLang` is not `modules` and `css` is `false` then you will get no
-rendered output
+Lastly when `cssLang` is not `modules` and `css` is `false`, you will get no
+rendered output.
 
 <Dot
 	lang="typescript" 
@@ -262,8 +290,10 @@ import from './{{= tps.name}}.css';
 
 <TabItem value="inline" label="Inline">
 
-Take this template using a inline if statement to conditonally render the
-`PageComponent` with a `block` prop when the `component` answer is `page`.
+Take this template that is using a inline else-if statement to conditonally
+render a component name. If `component` is `page`, it will render the
+`PageComponent` with a `block` prop. Else if `component` is set to a value, it
+will render the value as the component name. Otherwise, it will render a `div`.
 
 <Dot
 	tps={{name: "react-component", answers: { component: "page" }}}
@@ -305,7 +335,7 @@ const App = () => {
 
 </Dot>
 
-lastly is no answer was given for `component` then it would default to a `div`
+Lastly, if no answer was given for `component`, we will get a `div`.
 
 <Dot
 	tps={{name: "react-component"}}
