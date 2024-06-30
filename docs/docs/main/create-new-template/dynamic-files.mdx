@@ -1372,14 +1372,14 @@ of this def will be the filename. You can access this def inside your template
 files by using `{{#def.<file-name>}}`.
 
 Take this `react-component` template that has a `imports.def` def file and
-`{{=tps.name}}.jsx.dot` file.
+`{{=tps.name}}.jsx.tps` file.
 
 ```text
 | - .tps/
 	| - react-component/
 		| - default/
 			| - imports.def
-			| - {{=tps.name}}.jsx.dot
+			| - {{=tps.name}}.jsx.tps
 ```
 
 Inside the `imports.def`, we have all the imports statements you will need for
@@ -1390,7 +1390,7 @@ import React from 'react';
 import '{{= tps.name}}.css';
 ```
 
-Now inside `{{=tps.name}}.jsx.dot` we can use this def by the file name.
+Now inside `{{=tps.name}}.jsx.tps` we can use this def by the file name.
 
 <Dot 
 	defs={{ 
@@ -1415,14 +1415,14 @@ Multi def file is a def file that contains multiple defs. Multi def files uses
 the [defs syntax](#defs-partials) in order define more than one.
 
 Take this `react-component` template that has a `helper.def` def file and
-`{{=tps.name}}.jsx.dot` file.
+`{{=tps.name}}.jsx.tps` file.
 
 ```text
 | - .tps/
 	| - react-component/
 		| - default/
 			| - helper.def
-			| - {{=tps.name}}.jsx.dot
+			| - {{=tps.name}}.jsx.tps
 ```
 
 Inside the `helpers.def`, we have all the imports statements you will need for
@@ -1441,7 +1441,7 @@ interface Props {
 #}}}
 ```
 
-Now inside `{{=tps.name}}.jsx.dot` we can use these defs.
+Now inside `{{=tps.name}}.jsx.tps` we can use these defs.
 
 <Dot
 	lang='tsx'

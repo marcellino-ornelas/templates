@@ -36,7 +36,7 @@ export const HowResult = () => {
 
 								<FileSystemRow name="package.json" />
 
-								<FileSystemRow name="server.js.dot" />
+								<FileSystemRow name="server.js.tps" />
 							</Folder>
 						</div>
 						<div className={howStyles.howCol}>
