@@ -1,6 +1,6 @@
 ---
-pagination_next: api/template-engine/conditionals
-# pagination_prev: api/template-engine/loops
+pagination_next: api/template-engine/defs
+pagination_prev: api/template-engine/conditionals
 sidebar_position: 4
 ---
 
@@ -11,13 +11,15 @@ import TabItem from '@theme/TabItem';
 
 # Loops
 
+## Usage
+
 <Tabs>
 
 <TabItem value="block" label="Block">
 
 ```text
-{{{~ <expressions...> }}}
-conditional output
+{{{~<array> :<value>:<index>}}}
+loop output
 {{{~}}}
 ```
 
@@ -26,7 +28,7 @@ conditional output
 <TabItem value="inline" label="Inline">
 
 ```text
-{{~ <expressions...> }}...{{~}}
+{{~<array> :<value>:<index> }}loop output{{~}}
 ```
 
 </TabItem>
@@ -34,6 +36,4 @@ conditional output
 
 ## Examples
 
-### ....
-
-....
+### Using loops

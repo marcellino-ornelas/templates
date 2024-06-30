@@ -1,0 +1,77 @@
+---
+pagination_next: api/template-engine/loops
+pagination_prev: api/template-engine/conditionals
+sidebar_position: 5
+---
+
+import { Example } from '@site/docs/components/example';
+import { Dot } from '@site/docs/components/dot';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Defs
+
+## Usage
+
+<Tabs>
+
+<TabItem value="block" label="Block">
+
+```text
+{{{##def.<name>:arg:
+def contents
+#}}}
+{{#def.<name>:arg }}
+```
+
+</TabItem>
+
+<TabItem value="inline" label="Inline">
+
+```text
+{{##def.<name>:arg:def contents#}}
+{{#def.<name>:arg}}
+```
+
+</TabItem>
+</Tabs>
+
+## Examples
+
+### Use a def in a file name
+
+you can utilize a def if your logic gets to complex for your file name
+
+:::caution
+
+Be aware that adding new lines to the def file will also show up in your file
+name
+
+:::
+
+```txt title="name.def"
+{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}
+```
+
+If `name` was `nav` and `capitalize` was `true` then the result would be:
+
+<Dot
+	tps={{ name: "nav", answers: { capitalize: true } }}
+    defs={{"name": `{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}`}}
+>
+
+```text
+{{#def.name}}.js
+```
+
+</Dot>
+
+```text
+Nav.js
+```
+
+if `capitalize` was false then the result would be:
+
+```txt
+nav.js
+```

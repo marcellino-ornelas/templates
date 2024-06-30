@@ -10,6 +10,7 @@ doT.templateSettings.varname = 'tps';
 
 interface Props {
 	templateName?: string;
+	resultName?: string;
 	children: React.ReactNode;
 	templateMeta: string;
 	resultMeta: string;
@@ -18,12 +19,15 @@ interface Props {
 	lang: string;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	tps?: Partial<Tps>;
+	defs?: Record<string, string>;
 }
 
 export const Dot = ({
 	templateName = 'Dot Template',
+	resultName = 'Result',
 	children,
 	tps = {},
+	defs = {},
 	result = true,
 	displayTemplate = true,
 	templateMeta = '',
@@ -36,6 +40,7 @@ export const Dot = ({
 	const output = useDot({
 		templateString,
 		tps,
+		defs,
 	});
 
 	const resultClasses = [styles.result];
@@ -61,7 +66,7 @@ export const Dot = ({
 
 			{result && (
 				<CodeBlock
-					title="Result"
+					title={resultName}
 					className={resultClasses.join(' ')}
 					showLineNumbers
 					language={lang}
