@@ -55,11 +55,11 @@ tps react-component path/to/dir/<component-name>
 
 ```txt title="Creates"
 | - <component-name>
-	| - index.js (optional)
-	| - <component-name>.js
+	| - index.jsx (optional)
+	| - <component-name>.jsx
 	| - <component-name>.css (optional)
 	| - <component-name>.test.js (optional)
-	| - <component-name>.stories.js (optional)
+	| - <component-name>.stories.jsx (optional)
 ```
 
 <Example>
@@ -72,12 +72,12 @@ tps react-component path/to/dir/<component-name>
 tps react-component Nav
 ```
 
-Produces:
+Will produces something like the following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
+	| - index.jsx
+	| - Nav.jsx
 	| - Nav.css
 ```
 
@@ -95,8 +95,8 @@ Produces:
 | - src/
 	| - components/
 		| - Nav
-			| - index.js
-			| - Nav.js
+			| - index.jsx
+			| - Nav.jsx
 			| - Nav.css
 ```
 
@@ -147,8 +147,8 @@ Lets say you have a basic react folder structure like so:
 			| - ...
 		| - pages/
 			| - ...
-		| - index.js
-		| - app.js
+		| - index.jsx
+		| - app.jsx
 	| - package.json
 	| - package-lock.json
 ```
@@ -181,15 +181,15 @@ following:
 		| - components/
 			// highlight-start
 			| - Nav/
-				| - index.js
-				| - Nav.js
+				| - index.jsx
+				| - Nav.jsx
 				| - Nav.css
 			// highlight-end
 			| - ...
 		| - pages/
 			| - ...
-		| - index.js
-		| - app.js
+		| - index.jsx
+		| - app.jsx
 	| - package.json
 	| - package-lock.json
 ```
@@ -206,20 +206,21 @@ either on the command line or in your `.tps/.tpsrc` file.
 
 <TabItem value="cli">
 
-Lets say your project always uses a `tsx` extension for its components. You can
-add `tsx` to the `extension` answer when creating a new instance and you will no
-longer be prompted that question
+Lets say your project always uses a `js` extension for its components. You can
+add `js` to the `extension` answer when creating a new instance and you will no
+longer be prompted that question.
 
 ```bash
-tps react-component Nav --extension=tsx
+tps react-component Nav --extension=js
 ```
 
-Produces:
+Depending on the rest of your answers, it will generate something similar to the
+following:
 
 ```txt
 | - Nav
-	| - index.tsx
-	| - Nav.tsx
+	| - index.js
+	| - Nav.js
 	| - Nav.css
 ```
 
@@ -233,17 +234,28 @@ If you havent already initialize your repo:
 tps init
 ```
 
-Lets say your project always uses a `tsx` extension for its components. You can
-add `tsx` to the `extension` answer.
+Lets say your project always uses a `js` extension for its components. You can
+add `js` to the `extension` answer. Now when creating a new instance and you
+will no longer be prompted that question.
 
 ```json title=".tps/.tpsrc"
 {
 	"react-component": {
 		"answers": {
-			"extension": "tsx"
+			"extension": "js"
 		}
 	}
-}
+}1
+```
+
+Depending on the rest of your answers, it will generate something similar to the
+following:
+
+```txt
+| - Nav
+	| - index.js
+	| - Nav.js
+	| - Nav.css
 ```
 
 </TabItem>
@@ -255,12 +267,13 @@ add `tsx` to the `extension` answer.
 By default, templates creates a new folder for you. If you don't want a new
 folder for your react component, you can use the
 [`newFolder`](../../api/template#new-folder) and
-[`index`](./react-component#options) options. These options both default to true
+[`index`](./react-component#options) options. These options both default to
+`true`.
 
 The [`newFolder`](../../api/template#new-folder) option tells templates whether
 or not to place everything into a new folder.
 
-The [`index`](./react-component#options) option determines whether a `index.js`
+The [`index`](./react-component#options) option determines whether a `index`
 file should be created.
 
 Lets say you have a basic react folder structure like so:
@@ -270,13 +283,13 @@ Lets say you have a basic react folder structure like so:
 	| - src/
 		// highlight-start
 		| - components/
-			| - Nav.js
+			| - Nav.jsx
 			| - Nav.css
 			// highlight-end
 		| - pages/
 			| - ...
-		| - index.js
-		| - app.js
+		| - index.jsx
+		| - app.jsx
 	| - package.json
 	| - package-lock.json
 ```
@@ -337,16 +350,16 @@ Depending on your answers, it would produce something to the following:
 | - <cwd>/
 	| - src/
 		| - components/
-			| - nav.js
+			| - nav.jsx
 			| - nav.css
 			// highlight-start
-			| - footer.js
+			| - footer.jsx
 			| - footer.css
 			// highlight-end
 		| - pages/
 			| - ...
-		| - index.js
-		| - app.js
+		| - index.jsx
+		| - app.jsx
 	| - package.json
 	| - package-lock.json
 ```
