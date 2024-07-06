@@ -1,6 +1,6 @@
 import * as path from 'path';
 import fs from 'fs';
-import * as minimatch from 'minimatch';
+import { minimatch } from 'minimatch';
 import { isDir } from '@tps/utilities/fileSystem';
 import { couldMatchObj } from '@tps/utilities/helpers';
 import {
@@ -38,18 +38,16 @@ export class DirectoryNode extends FileSystemNode {
 	}
 
 	_renderChildren(): void {
-		let dirContents;
+		let directoryChildren: string[];
 
 		try {
-			dirContents = fs.readdirSync(this.path);
+			directoryChildren = fs.readdirSync(this.path);
 		} catch (e) {
 			throw new Error(`[TPS ERROR] Path is not a directory (${this.path})`);
 		}
 
-		dirContents
-			.filter(
-				(...args) => !minimatch.filter(FileSystemNode.ignoreFiles)(...args),
-			)
+		directoryChildren
+			.filter((child) => !minimatch(child, FileSystemNode.ignoreFiles))
 			.forEach((name) => {
 				const dirContentPath = path.join(this.path, name);
 				const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;
