@@ -118,7 +118,7 @@ jobs:
       - name: Test Build
         working-directory: ./docs
         run: npm run build
-      
+
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:
