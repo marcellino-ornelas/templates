@@ -75,6 +75,7 @@ jobs:
         run: npm install
       - name: Run Formatter check
         run: |
+          npx prettier --version
           npm run format:check
 
   typecheck:
