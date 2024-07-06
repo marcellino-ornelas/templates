@@ -88,7 +88,7 @@
 	"dependencies": {
 		"@types/yargs": "^17.0.24",
 		"ansi-colors": "4.1.1",
-		"bluebird": "3.5.5",
+		"bluebird": "^3.7.2",
 		"change-case": "^4.1.2",
 		"cosmiconfig": "^9.0.0",
 		"debug": "4.1.1",
