@@ -58,7 +58,7 @@
 		"typecheck": "tsc --noEmit",
 		"lint": "./node_modules/.bin/eslint .",
 		"format": "prettier --write .",
-		"format:check": "prettier .",
+		"format:check": "prettier --check .",
 		"build": "npm run code:prod",
 		"test": "npm run code:build && echo 'built' && ./.bin/run-test"
 	},
