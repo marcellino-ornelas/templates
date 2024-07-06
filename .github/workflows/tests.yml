@@ -77,7 +77,7 @@ jobs:
         run: npm install --prefix docs
       - name: Test Code
         run: |
-          npm run format
+          npm run format:check
 
   typecheck:
     runs-on: ubuntu-latest
