@@ -63,6 +63,20 @@ jobs:
         run: |
           npm run lint
 
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - name: Npm Install
+        run: npm install
+      - name: Run Formatter check
+        run: |
+          npx prettier --version
+          npm run format:check
+
   typecheck:
     runs-on: ubuntu-latest
     strategy:
@@ -118,7 +132,7 @@ jobs:
       - name: Test Build
         working-directory: ./docs
         run: npm run build
-      
+
   # test-init:
   #   runs-on: ubuntu-latest
   #   strategy:

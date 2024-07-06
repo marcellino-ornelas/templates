@@ -934,7 +934,7 @@ export class Templates {
 							}
 						}
 					});
-				});
+			  });
 	}
 
 	/**
