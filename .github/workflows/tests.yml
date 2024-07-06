@@ -73,9 +73,7 @@ jobs:
           node-version: 18
       - name: Npm Install
         run: npm install
-      - name: Npm Install docs
-        run: npm install --prefix docs
-      - name: Test Code
+      - name: Run Formatter check
         run: |
           npm run format:check
 
