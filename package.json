@@ -99,7 +99,7 @@
 		"inquirer": "6.2.2",
 		"is": "3.3.0",
 		"memfs": "^4.2.1",
-		"minimatch": "3.0.4",
+		"minimatch": "^9.0.5",
 		"npm-paths": "^2.0.0",
 		"prettier": "^3.0.3",
 		"prettyjson-256": "1.5.18",
