@@ -64,7 +64,7 @@
 	},
 	"devDependencies": {
 		"@docusaurus/eslint-plugin": "^2.4.1",
-		"@types/bluebird": "^3.5.5",
+		"@types/bluebird": "^3.5.42",
 		"@types/dot": "^1.1.5",
 		"@types/inquirer": "^9.0.3",
 		"@types/is": "^0.0.21",
