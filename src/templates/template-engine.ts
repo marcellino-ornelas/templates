@@ -65,7 +65,7 @@ doT.encodeHTMLSource = function (doNotSkipEncoded) {
 		return code
 			? code.toString().replace(matchHTML, (m) => {
 					return encodeHTMLRules[m] || m;
-			  })
+				})
 			: '';
 	};
 };
@@ -170,8 +170,8 @@ doT.template = function (tmpl, c, def) {
 						? "';}else if(" + unescape(code) + "){out+='"
 						: "';}else{out+='"
 					: code
-					? "';if(" + unescape(code) + "){out+='"
-					: "';}out+='";
+						? "';if(" + unescape(code) + "){out+='"
+						: "';}out+='";
 			})
 			.replace(c.conditional || skip, (m, elsecase, code) => {
 				return elsecase
@@ -179,8 +179,8 @@ doT.template = function (tmpl, c, def) {
 						? "';}else if(" + unescape(code) + "){out+='"
 						: "';}else{out+='"
 					: code
-					? "';if(" + unescape(code) + "){out+='"
-					: "';}out+='";
+						? "';if(" + unescape(code) + "){out+='"
+						: "';}out+='";
 			})
 			.replace(c.iterateBlock || skip, (m, iterate, vname, iname) => {
 				if (!iterate) return "';} } out+='";
