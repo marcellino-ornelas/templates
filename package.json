@@ -57,6 +57,8 @@
 		"test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
 		"typecheck": "tsc --noEmit",
 		"lint": "./node_modules/.bin/eslint .",
+		"format": "prettier --write .",
+		"format:check": "prettier --check .",
 		"build": "npm run code:prod",
 		"test": "npm run code:build && echo 'built' && ./.bin/run-test"
 	},

@@ -59,7 +59,7 @@ This is my text
 {{{?}}}
 
 hey`,
-				{ one: true }
+				{ one: true },
 			);
 
 			expect(result).toBe(`\
@@ -76,7 +76,7 @@ hey`);
 				{{{?}}}
 	
 				hey`,
-				{ one: true }
+				{ one: true },
 			);
 
 			expect(result).toBe(`\
@@ -92,7 +92,7 @@ hey`);
 			{{{? tps.one}}}
 			This is my text
 			{{{?}}}`,
-			{ one: false }
+			{ one: false },
 		);
 
 		expect(result).toBe('');
@@ -108,14 +108,14 @@ hey`);
 			This is my second text
 			{{{?}}}
 			`,
-			{ one: true, two: true }
+			{ one: true, two: true },
 		);
 
 		expect(result).toBe(
 			`\
 			This is my text
 			This is my second text
-			`
+			`,
 		);
 	});
 });
