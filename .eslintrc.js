@@ -89,6 +89,7 @@ const config = {
 			rules: {
 				'react/react-in-jsx-scope': [IGNORE],
 				'react/self-closing-comp': [IGNORE],
+				'react/no-unescaped-entities': IGNORE,
 			},
 		},
 		{
