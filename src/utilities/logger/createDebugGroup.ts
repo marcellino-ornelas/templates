@@ -3,7 +3,9 @@ export default class CreateDebugGroup<TData = any> {
 	constructor(
 		public name: string,
 		public queue: [string, ...TData[]][] = [],
-	) {}
+	) {
+		// Do nothing
+	}
 
 	info(...message: TData[]): void {
 		this.queue.push(['info', ...message]);
