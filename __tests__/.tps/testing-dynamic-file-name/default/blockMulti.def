@@ -1,0 +1,7 @@
+{{{##def.blockMultiDef:
+{{= tps.name}}
+#}}}
+
+{{{##def.blockMultiDef2:
+12
+#}}}
