@@ -4,7 +4,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Button } from '@site/docs/components/button';
 import { Icon } from '@iconify/react';
-import ReactComponentGif2 from './react-component.gif';
+import ReactComponentTemplateGif from './react-component.gif';
 
 # react-component
 
@@ -42,7 +42,7 @@ Generate a fully functioning React function component.
 
 <img
 	className="shadow--lw"
-	src={ReactComponentGif2}
+	src={ReactComponentTemplateGif}
 	style={{ width: '100%', borderRadius: '5px' }}
 	alt="react component template usage gif"
 />
@@ -193,12 +193,14 @@ could use the following command:
 > tps react-component src/components/Nav
 ```
 
-The name you pass in for your component will be used as the name of your folder
-and component files. So if your repo uses
+:::tip
+
+The name you pass in will be used as the name of your folder and component
+files. If your repository uses
 [param-case](../../api/template-context#paramCase),
 [camelCase](../../api/template-context#camelCase), or
-[snake_case](../../api/template-context#pascalCase) file name patterns, you can
-also pass in those formats
+[snake_case](../../api/template-context#pascalCase) file naming patterns, you
+can also use those naming conventions.
 
 ```bash
 # camel case
@@ -212,7 +214,9 @@ also pass in those formats
 ```
 
 Your component name will be the name you passed in converted into
-[Pascalcase](../../api/template-context#pascalCase)
+[Pascalcase](../../api/template-context#pascalCase).
+
+:::
 
 Once the command is run, you will be prompted some questions:
 
@@ -226,7 +230,7 @@ Once the command is run, you will be prompted some questions:
 ? Would you like to include a storybook file?
 ```
 
-Depending on the answers you provide it will generate something similar to the
+Depending on your answers, you'll end up with something similar to the
 following:
 
 ```txt
@@ -238,6 +242,36 @@ following:
 				| - index.jsx
 				| - Nav.jsx
 				| - Nav.css
+			// highlight-end
+			| - ...
+		| - pages/
+			| - ...
+		| - index.jsx
+		| - app.jsx
+	| - package.json
+	| - package-lock.json
+```
+
+If you used another naming format, such as
+[param-case](../../api/template-context#paramCase), and created a component
+called `nav-item`:
+
+```bash
+> tps react-component src/components/nav-item
+```
+
+Depending on your answers, you'll end up with something similar to the
+following:
+
+```txt
+| - <cwd>/
+	| - src/
+		| - components/
+			// highlight-start
+			| - nav-item/
+				| - index.jsx
+				| - nav-item.jsx
+				| - nav-item.css
 			// highlight-end
 			| - ...
 		| - pages/
