@@ -3,15 +3,37 @@ import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Button } from '@site/docs/components/button';
-import ReactComponentGif2 from './react-component.gif';
+import { Icon } from '@iconify/react';
+import ReactComponentTemplateGif from './react-component.gif';
 
 # react-component
 
 <div className="row" style={{ fontSize: 20 }}>
-	<div className="col col--6">🎉 Supports Typescript</div>
-	<div className="col col--6">📗 Supports Storybook</div>
-	<div className="col col--6">🧪 Supports Unit tests</div>
-	<div className="col col--6">💅 Supports multiple CSS languages</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon
+			inline
+			icon="skill-icons:typescript"
+			width="25px"
+			className="margin-right--xs"
+		/>
+		Supports Typescript
+	</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon
+			icon="logos:storybook-icon"
+			width="25px"
+			className="margin-right--xs"
+		/>
+		Supports Storybook
+	</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon inline icon="logos:jest" width="25px" className="margin-right--xs" />{' '}
+		Supports Unit tests
+	</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon icon="skill-icons:css" width="25px" className="margin-right--xs" />{' '}
+		Supports multiple CSS languages
+	</div>
 </div>
 
 <br />
@@ -20,7 +42,7 @@ Generate a fully functioning React function component.
 
 <img
 	className="shadow--lw"
-	src={ReactComponentGif2}
+	src={ReactComponentTemplateGif}
 	style={{ width: '100%', borderRadius: '5px' }}
 	alt="react component template usage gif"
 />
@@ -56,7 +78,7 @@ using the form below. We hope to hear from you soon!
 ```bash title="Usage"
 tps react-component <component-name>
 
-# or long build path
+# or in a directory
 
 tps react-component path/to/dir/<component-name>
 ```
@@ -74,7 +96,7 @@ tps react-component path/to/dir/<component-name>
 
 <Tabs>
 
-<TabItem value="default">
+<TabItem value="Default">
 
 ```bash
 tps react-component Nav
@@ -91,13 +113,13 @@ Will produces something like the following:
 
 </TabItem>
 
-<TabItem value="long build path">
+<TabItem value="In directory">
 
 ```bash
 tps react-component src/components/Nav
 ```
 
-Produces:
+Will produces something like the following:
 
 ```txt
 | - src/
@@ -113,6 +135,9 @@ Produces:
 </Tabs>
 
 </Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
 
 ## Installation
 
@@ -161,14 +186,39 @@ Lets say you have a basic react folder structure like so:
 	| - package-lock.json
 ```
 
-If you wanted to generate a new component called `Nav` in the components folder,
-you could use the following command:
+If you wanted to generate a new nav component in the components folder, you
+could use the following command:
 
 ```bash
 > tps react-component src/components/Nav
 ```
 
-You will be prompted to answer the following questions:
+:::tip
+
+The name you pass in will be used as the name of your folder and component
+files. If your repository uses
+[param-case](../../api/template-context#paramCase),
+[camelCase](../../api/template-context#camelCase), or
+[snake_case](../../api/template-context#pascalCase) file naming patterns, you
+can also use those naming conventions.
+
+```bash
+# camel case
+> tps react-component src/components/navItem
+
+# or param case
+> tps react-component src/components/nav-item
+
+# or snake case
+> tps react-component src/components/nav_item
+```
+
+Your component name will be the name you passed in converted into
+[Pascalcase](../../api/template-context#pascalCase).
+
+:::
+
+Once the command is run, you will be prompted some questions:
 
 ```
 ? Would you like to use typescript?
@@ -180,7 +230,7 @@ You will be prompted to answer the following questions:
 ? Would you like to include a storybook file?
 ```
 
-Depending on the answers you provide it will generate something similar to the
+Depending on your answers, you'll end up with something similar to the
 following:
 
 ```txt
@@ -192,6 +242,36 @@ following:
 				| - index.jsx
 				| - Nav.jsx
 				| - Nav.css
+			// highlight-end
+			| - ...
+		| - pages/
+			| - ...
+		| - index.jsx
+		| - app.jsx
+	| - package.json
+	| - package-lock.json
+```
+
+If you used another naming format, such as
+[param-case](../../api/template-context#paramCase), and created a component
+called `nav-item`:
+
+```bash
+> tps react-component src/components/nav-item
+```
+
+Depending on your answers, you'll end up with something similar to the
+following:
+
+```txt
+| - <cwd>/
+	| - src/
+		| - components/
+			// highlight-start
+			| - nav-item/
+				| - index.jsx
+				| - nav-item.jsx
+				| - nav-item.css
 			// highlight-end
 			| - ...
 		| - pages/
