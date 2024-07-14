@@ -6,6 +6,7 @@ import {
 	ValidateFn,
 	DefaultFn,
 	WhenFn,
+	AnswersData,
 } from '@tps/types/settings';
 import type Prompter from './prompter';
 
@@ -21,6 +22,8 @@ export default class Prompt {
 	public type: SettingsFilePrompt['type'];
 
 	public default: SettingsFilePrompt['default'];
+
+	public hidden: SettingsFilePrompt['hidden'];
 
 	public choices: SettingsFilePrompt['choices'];
 
@@ -71,6 +74,7 @@ export default class Prompt {
 		//   defaultValue = prompt.default;
 		// }
 
+		this.hidden = prompt.hidden ?? false;
 		this.choices = prompt.choices || [];
 		this.pageSize = prompt.pageSize;
 		this.prefix = prompt.prefix;
@@ -119,6 +123,12 @@ export default class Prompt {
 
 	isPkg(): boolean {
 		return !this.isData();
+	}
+
+	getDefaultValue(answers: AnswersHash): AnswersData {
+		return this.default instanceof Function
+			? this.default(answers)
+			: this.default;
 	}
 
 	answerWith<T>(answers: Record<string, T>): T {

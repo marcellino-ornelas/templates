@@ -33,6 +33,8 @@ export interface SettingsFilePrompt {
 
 	choices?: string[];
 
+	hidden?: boolean;
+
 	aliases?: string[];
 
 	pageSize?: number;

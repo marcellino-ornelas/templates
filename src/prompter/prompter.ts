@@ -62,7 +62,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 	}
 
 	setAnswers(answers: Partial<TAnswers>): void {
-		if (is.object(answers) && is.empty(answers)) {
+		if (!is.object(answers)) {
 			throw new PromptInvalidAnswersError(answers);
 		}
 
@@ -97,7 +97,8 @@ export default class Prompter<TAnswers = AnswersHash> {
 
 	async getAnswers(): Promise<TAnswers> {
 		logger.prompter.info('Fetching answers...');
-		if (!this.needsAnswers()) return;
+		if (!this.needsAnswers()) return this.answers;
+
 		const promptsLeft = this._getPromptsThatNeedAnswers();
 		logger.prompter.info('Current Answers: %n', this.answers);
 		logger.prompter.info(
@@ -108,15 +109,41 @@ export default class Prompter<TAnswers = AnswersHash> {
 		if (this.opts.default) {
 			const allDefaults = {};
 			promptsLeft.forEach((prompt) => {
-				allDefaults[prompt.name] =
-					prompt.default instanceof Function
-						? prompt.default({ ...allDefaults, ...this.answers })
-						: prompt.default;
+				// TODO: should default to null
+				allDefaults[prompt.name] = prompt.getDefaultValue({
+					...allDefaults,
+					...this.answers,
+				});
 			});
 			this.setAnswers(allDefaults);
 		} else {
+			const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
+			const allHiddenDefaults = {};
+
+			logger.prompter.info(
+				'Hidden prompts: %n',
+				hiddenPrompts.map((p) => p.name),
+			);
+
+			hiddenPrompts.forEach((prompt) => {
+				const defaultValue = prompt.getDefaultValue({
+					...allHiddenDefaults,
+					...this.answers,
+				});
+
+				// TODO: getDefaultValue really should be doing this but dont want to break any functionality with `default` option
+				allHiddenDefaults[prompt.name] = defaultValue ?? null;
+			});
+			this.setAnswers(allHiddenDefaults);
+
+			logger.prompter.info('Hidden answers: %n', allHiddenDefaults);
+
+			const promptsWithHiddenRemoved = this._getPromptsThatNeedAnswers();
+
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const newAnswers = await (inquirer as any).prompt(promptsLeft);
+			const newAnswers = await (inquirer as any).prompt(
+				promptsWithHiddenRemoved,
+			);
 
 			this.setAnswers(newAnswers);
 		}
