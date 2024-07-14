@@ -18,10 +18,15 @@ interface PrompterOptions {
 	 * Use all default answers
 	 */
 	default: boolean;
+	/**
+	 * prompt hidden prompts to users
+	 */
+	showHiddenPrompts: boolean;
 }
 
 const DEFAULT_OPTIONS: PrompterOptions = {
 	default: false,
+	showHiddenPrompts: false,
 };
 
 export default class Prompter<TAnswers = AnswersHash> {
@@ -39,7 +44,10 @@ export default class Prompter<TAnswers = AnswersHash> {
 	) {
 		logger.prompter.info('Prompts: %n', prompts);
 
-		this.opts = defaults(opts, DEFAULT_OPTIONS);
+		this.opts = {
+			...DEFAULT_OPTIONS,
+			...opts,
+		};
 		this.answers = {} as TAnswers;
 		this.prompts = prompts.map((p) => new Prompt(p, this));
 		this.answered = 0;
@@ -61,7 +69,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 		return prompt;
 	}
 
-	setAnswers(answers: Partial<TAnswers>): void {
+	setAnswers(answers: Partial<TAnswers>): TAnswers {
 		if (!is.object(answers)) {
 			throw new PromptInvalidAnswersError(answers);
 		}
@@ -72,6 +80,8 @@ export default class Prompter<TAnswers = AnswersHash> {
 				this.setAnswer(prompt.name, answer);
 			}
 		});
+
+		return this.answers;
 	}
 
 	setAnswer(name: string, answer: AnswersData): void {
@@ -115,48 +125,41 @@ export default class Prompter<TAnswers = AnswersHash> {
 					...this.answers,
 				});
 			});
-			this.setAnswers(allDefaults);
-		} else {
+
+			return this.setAnswers(allDefaults);
+		}
+
+		if (!this.opts.showHiddenPrompts) {
 			const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
 			const allHiddenDefaults = {};
-
 			logger.prompter.info(
 				'Hidden prompts: %n',
 				hiddenPrompts.map((p) => p.name),
 			);
-
 			hiddenPrompts.forEach((prompt) => {
 				const defaultValue = prompt.getDefaultValue({
 					...allHiddenDefaults,
 					...this.answers,
 				});
-
 				// TODO: getDefaultValue really should be doing this but dont want to break any functionality with `default` option
 				allHiddenDefaults[prompt.name] = defaultValue ?? null;
 			});
-			this.setAnswers(allHiddenDefaults);
-
 			logger.prompter.info('Hidden answers: %n', allHiddenDefaults);
 
-			const promptsWithHiddenRemoved = this._getPromptsThatNeedAnswers();
-
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const newAnswers = await (inquirer as any).prompt(
-				promptsWithHiddenRemoved,
-			);
-
-			this.setAnswers(newAnswers);
+			this.setAnswers(allHiddenDefaults);
 		}
 
-		const answers: TAnswers = {} as TAnswers;
+		const promptsThatStillNeedAnswers = this._getPromptsThatNeedAnswers();
 
-		this.prompts.forEach((prompt) => {
-			const { name } = prompt;
-			const answer = this.answers[name];
-			answers[name] = answer;
-			return answers;
-		});
+		if (!promptsThatStillNeedAnswers.length) {
+			return this.answers;
+		}
 
-		return answers;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const newAnswers = await (inquirer as any).prompt(
+			promptsThatStillNeedAnswers,
+		);
+
+		return this.setAnswers(newAnswers);
 	}
 }

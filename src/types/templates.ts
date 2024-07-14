@@ -16,6 +16,10 @@ export interface TemplateOptions {
 	 */
 	default: boolean;
 	/**
+	 * Show hidden prompts
+	 */
+	hidden: boolean;
+	/**
 	 * Force creation of template. This will over write files
 	 */
 	force: boolean;
