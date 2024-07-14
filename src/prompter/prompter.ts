@@ -95,52 +95,41 @@ export default class Prompter<TAnswers = AnswersHash> {
 		return is.defined(answers[prompt.name]);
 	}
 
-	getAnswers(): Promise<TAnswers> {
-		return Promise.resolve()
-			.then(() => {
-				logger.prompter.info('Fetching answers...');
+	async getAnswers(): Promise<TAnswers> {
+		logger.prompter.info('Fetching answers...');
+		if (!this.needsAnswers()) return;
+		const promptsLeft = this._getPromptsThatNeedAnswers();
+		logger.prompter.info('Current Answers: %n', this.answers);
+		logger.prompter.info(
+			'Prompts that need answers: %n',
+			promptsLeft.map((p) => p.name),
+		);
 
-				if (!this.needsAnswers()) return;
-				const promptsLeft = this._getPromptsThatNeedAnswers();
-
-				logger.prompter.info('Current Answers: %n', this.answers);
-
-				logger.prompter.info(
-					'Prompts that need answers: %n',
-					promptsLeft.map((p) => p.name),
-				);
-
-				if (this.opts.default) {
-					const allDefaults = {};
-
-					promptsLeft.forEach((prompt) => {
-						allDefaults[prompt.name] =
-							prompt.default instanceof Function
-								? prompt.default({ ...allDefaults, ...this.answers })
-								: prompt.default;
-					});
-
-					this.setAnswers(allDefaults);
-				} else {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return (inquirer as any).prompt(promptsLeft).then((newAnswers) => {
-						this.setAnswers(newAnswers);
-					});
-				}
-			})
-			.then(() => {
-				const answers: TAnswers = {} as TAnswers;
-
-				this.prompts.forEach((prompt) => {
-					const { name } = prompt;
-					const answer = this.answers[name];
-
-					answers[name] = answer;
-
-					return answers;
-				});
-
-				return Promise.resolve(answers);
+		if (this.opts.default) {
+			const allDefaults = {};
+			promptsLeft.forEach((prompt) => {
+				allDefaults[prompt.name] =
+					prompt.default instanceof Function
+						? prompt.default({ ...allDefaults, ...this.answers })
+						: prompt.default;
 			});
+			this.setAnswers(allDefaults);
+		} else {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const newAnswers = await (inquirer as any).prompt(promptsLeft);
+
+			this.setAnswers(newAnswers);
+		}
+
+		const answers: TAnswers = {} as TAnswers;
+
+		this.prompts.forEach((prompt) => {
+			const { name } = prompt;
+			const answer = this.answers[name];
+			answers[name] = answer;
+			return answers;
+		});
+
+		return answers;
 	}
 }
