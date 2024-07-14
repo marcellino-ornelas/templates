@@ -2,7 +2,6 @@
  * Modules
  */
 import Prompter from '@tps/prompter';
-import { PROMPTER_QUESTIONS } from '@test/utilities/constants';
 import { mkPrompt } from '@test/utilities/templates';
 import inquirer from 'inquirer';
 

@@ -1,6 +1,6 @@
 import * as is from 'is';
 import * as inquirer from 'inquirer';
-import { hasProp, defaults } from '@tps/utilities/helpers';
+import { hasProp } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
 import {
 	PromptNoPromptFoundError,
