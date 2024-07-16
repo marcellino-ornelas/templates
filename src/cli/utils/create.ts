@@ -72,6 +72,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;
 	if (argv.hasOwnProperty('wipe')) tpsConfig.wipe = argv.wipe;
 	if (argv.hasOwnProperty('default')) tpsConfig.default = argv.default;
+	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.default;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
 	const tps = new Template(argv.use, tpsConfig);
