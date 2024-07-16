@@ -9,6 +9,7 @@ export interface UseArgv {
 	use: string;
 	packages: string[];
 	default: boolean;
+	hidden: boolean;
 	newFolder: boolean;
 	force: boolean;
 	wipe: boolean;
@@ -46,6 +47,10 @@ export const options = {
 			'force the template to be made. This will delete the directory if exists',
 		type: 'boolean',
 	},
+	hidden: {
+		describe: 'Prompt hidden prompts',
+		type: 'boolean',
+	},
 };
 
 export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
@@ -72,7 +77,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;
 	if (argv.hasOwnProperty('wipe')) tpsConfig.wipe = argv.wipe;
 	if (argv.hasOwnProperty('default')) tpsConfig.default = argv.default;
-	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.default;
+	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.hidden;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
 	const tps = new Template(argv.use, tpsConfig);
