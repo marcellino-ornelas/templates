@@ -1,6 +1,15 @@
+import Admonition from '@theme/Admonition';
+import { Contruction } from '@site/docs/components/contruction';
+
 # Prompt configuration
 
-Prompt configuration object
+<Contruction />
+
+Prompt configuration object. We use
+[inquirer](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0) library for
+prompting. All inquirer prompt properties are supported when creating prompts.
+For more information on the available properties in inquirer, you can refer to
+the documentation [here](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0).
 
 ```ts title="Type"
 interface Prompt {
@@ -19,7 +28,7 @@ interface Prompt {
 	/**
 	 * How you want templates to process this prompts answer
 	 */
-	typeType: 'package' | 'data';
+	tpsType: 'package' | 'data';
 	/**
 	 * choices for your prompt.
 	 *
@@ -27,8 +36,93 @@ interface Prompt {
 	 */
 	choices?: string[];
 	/**
+	 * Make prompt a hidden prompt
+	 * @version templates@>v1.1.1
+	 */
+	hidden?: boolean;
+	/**
 	 * Default answer for the prompt
 	 */
 	default?: any;
+}
+```
+
+## Examples
+
+### Using confirm
+
+Say you have this `react-component` template:
+
+```text
+| - tps-example
+	| - .tps/
+		| - react-component/
+			| - settings.json
+			| - default/
+				| - index.js
+			| - css
+				| - {{=tps.name}}.css
+```
+
+Adding this prompt will allow you to conditionally render the css package.
+
+```json title="settings.json"
+{
+	"prompts": [
+		{
+			"name": "css",
+			"type": "confirm",
+			"message": "Would you like to add a css file?"
+		}
+	]
+}
+```
+
+Now if the user answers true like so:
+
+```bash
+tps react-component App --css
+```
+
+then this will be the new template:
+
+```text
+    | - tps-example
+        | - .tps/
+            | - ...
+        | - App
+           | - index.js
+           | - App.css
+```
+
+Now if the user answers false like so:
+
+```bash
+tps react-component App --no-css
+```
+
+then this will be the new template:
+
+```text
+    | - tps-example
+        | - .tps/
+            | - ...
+        | - App
+           | - index.js
+```
+
+### Using checkbox
+
+```json title="settings.json"
+{
+	"prompts": [
+		{
+			"name": "modules",
+			"type": "checkbox",
+			"choices": ["react", "express", "fs", "path"],
+			"tpsType": "data",
+			"message": "What node modules would you like to import into this js file?"
+		}
+	]
 }
 ```

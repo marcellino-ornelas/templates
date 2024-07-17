@@ -48,7 +48,7 @@ export const options = {
 		type: 'boolean',
 	},
 	hidden: {
-		describe: 'Prompt hidden prompts',
+		describe: 'Prompt all hidden prompts',
 		type: 'boolean',
 	},
 };

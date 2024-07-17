@@ -38,6 +38,7 @@ interface TemplateOptions {
 	wipe?: boolean;
 	force?: boolean;
 	newFolder?: boolean;
+	hidden?: boolean;
 }
 ```
 
@@ -482,5 +483,89 @@ tps express-app app --no-newFolder
 ```
 
 Notice how this no longer creates a `app` directory.
+
+</Example>
+
+### Hidden
+
+<span className="badge badge--secondary margin-left--xs margin-bottom--lg">
+	templates@>v1.1.1
+</span>
+
+```ts title="Type"
+boolean;
+```
+
+```ts title="Default"
+false;
+```
+
+The `hidden` option will prompt all hidden prompts. Hidden prompts are prompts
+that do not get prompted by default. You can read more about hidden prompts and
+how they work in the
+[hidden prompt guide](../main/create-new-template/prompts.mdx#hidden).
+
+<Tabs>
+<TabItem value="cli" label="CLI">
+
+```bash
+tps react-component Nav --hidden
+```
+
+</TabItem>
+
+<TabItem value="tpsrc" label=".tpsrc">
+
+```json title=".tpsrc"
+{
+	"react-component": {
+		"opts": {
+			// highlight-next-line
+			"hidden": true
+		}
+	}
+}
+```
+
+</TabItem>
+
+<TabItem value="node" label="Node">
+
+```ts
+new Templates('react-component', {
+	// highlight-next-line
+	hidden: true,
+});
+```
+
+</TabItem>
+
+</Tabs>
+
+<Example>
+
+If I was rendering a new instance of `express-app` template called `app`, you
+can pass the hidden option to the cli and you will now be prompted hidden
+prompts.
+
+without the hidden command you will only be prompted non hidden prompts
+
+```bash
+tps react-component Nav
+? non hidden prompt1 (y/N)
+? non hidden prompt2 (y/N)
+```
+
+Now if you use the `hidden` option, you will be prompted hidden prompts as well:
+
+```bash
+tps react-component Nav --hidden
+? non hidden prompt1 (y/N)
+? non hidden prompt2 (y/N)
+# highlight-start
+? hidden prompt1 (y/N)
+? hidden prompt2 (y/N)
+# highlight-end
+```
 
 </Example>
