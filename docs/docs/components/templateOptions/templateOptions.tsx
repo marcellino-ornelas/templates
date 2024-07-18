@@ -43,6 +43,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 						<th>option</th>
 						<th>alias</th>
 						<th>default</th>
+						<th>hidden</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,6 +71,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 									? prompt?.default({})
 									: prompt?.default?.toString()}
 							</td>
+							<td>{(prompt.hidden ?? false).toString()}</td>
 						</tr>
 					))}
 				</tbody>
