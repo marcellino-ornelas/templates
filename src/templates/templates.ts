@@ -47,6 +47,7 @@ export const DEFAULT_OPTIONS: TemplateOptions = {
 	noGlobalConfig: false,
 	defaultPackage: true,
 	default: false,
+	hidden: false,
 	force: false,
 	newFolder: true,
 	wipe: false,
@@ -280,9 +281,12 @@ export class Templates {
 		if (this.templateSettings.prompts) {
 			logger.tps.info('Loading prompts... %o', {
 				defaultValues: this.opts.default,
+				showHiddenPrompts: this.opts.hidden,
 			});
+
 			this._prompts = new Prompter(this.templateSettings.prompts, {
 				default: this.opts.default,
+				showHiddenPrompts: this.opts.hidden,
 			});
 		} else {
 			logger.tps.info('No prompts to load!', this.templateSettings);

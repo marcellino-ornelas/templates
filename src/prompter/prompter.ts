@@ -1,6 +1,6 @@
 import * as is from 'is';
 import * as inquirer from 'inquirer';
-import { hasProp, defaults } from '@tps/utilities/helpers';
+import { hasProp } from '@tps/utilities/helpers';
 import logger from '@tps/utilities/logger';
 import {
 	PromptNoPromptFoundError,
@@ -18,10 +18,15 @@ interface PrompterOptions {
 	 * Use all default answers
 	 */
 	default: boolean;
+	/**
+	 * prompt hidden prompts to users
+	 */
+	showHiddenPrompts: boolean;
 }
 
 const DEFAULT_OPTIONS: PrompterOptions = {
 	default: false,
+	showHiddenPrompts: false,
 };
 
 export default class Prompter<TAnswers = AnswersHash> {
@@ -39,7 +44,10 @@ export default class Prompter<TAnswers = AnswersHash> {
 	) {
 		logger.prompter.info('Prompts: %n', prompts);
 
-		this.opts = defaults(opts, DEFAULT_OPTIONS);
+		this.opts = {
+			...DEFAULT_OPTIONS,
+			...opts,
+		};
 		this.answers = {} as TAnswers;
 		this.prompts = prompts.map((p) => new Prompt(p, this));
 		this.answered = 0;
@@ -61,8 +69,8 @@ export default class Prompter<TAnswers = AnswersHash> {
 		return prompt;
 	}
 
-	setAnswers(answers: Partial<TAnswers>): void {
-		if (is.object(answers) && is.empty(answers)) {
+	setAnswers(answers: Partial<TAnswers>): TAnswers {
+		if (!is.object(answers)) {
 			throw new PromptInvalidAnswersError(answers);
 		}
 
@@ -72,6 +80,8 @@ export default class Prompter<TAnswers = AnswersHash> {
 				this.setAnswer(prompt.name, answer);
 			}
 		});
+
+		return this.answers;
 	}
 
 	setAnswer(name: string, answer: AnswersData): void {
@@ -95,52 +105,61 @@ export default class Prompter<TAnswers = AnswersHash> {
 		return is.defined(answers[prompt.name]);
 	}
 
-	getAnswers(): Promise<TAnswers> {
-		return Promise.resolve()
-			.then(() => {
-				logger.prompter.info('Fetching answers...');
+	async getAnswers(): Promise<TAnswers> {
+		logger.prompter.info('Fetching answers...');
+		if (!this.needsAnswers()) return this.answers;
 
-				if (!this.needsAnswers()) return;
-				const promptsLeft = this._getPromptsThatNeedAnswers();
+		const promptsLeft = this._getPromptsThatNeedAnswers();
+		logger.prompter.info('Current Answers: %n', this.answers);
+		logger.prompter.info(
+			'Prompts that need answers: %n',
+			promptsLeft.map((p) => p.name),
+		);
 
-				logger.prompter.info('Current Answers: %n', this.answers);
-
-				logger.prompter.info(
-					'Prompts that need answers: %n',
-					promptsLeft.map((p) => p.name),
-				);
-
-				if (this.opts.default) {
-					const allDefaults = {};
-
-					promptsLeft.forEach((prompt) => {
-						allDefaults[prompt.name] =
-							prompt.default instanceof Function
-								? prompt.default({ ...allDefaults, ...this.answers })
-								: prompt.default;
-					});
-
-					this.setAnswers(allDefaults);
-				} else {
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					return (inquirer as any).prompt(promptsLeft).then((newAnswers) => {
-						this.setAnswers(newAnswers);
-					});
-				}
-			})
-			.then(() => {
-				const answers: TAnswers = {} as TAnswers;
-
-				this.prompts.forEach((prompt) => {
-					const { name } = prompt;
-					const answer = this.answers[name];
-
-					answers[name] = answer;
-
-					return answers;
+		if (this.opts.default) {
+			const allDefaults = {};
+			promptsLeft.forEach((prompt) => {
+				// TODO: should default to null
+				allDefaults[prompt.name] = prompt.getDefaultValue({
+					...allDefaults,
+					...this.answers,
 				});
-
-				return Promise.resolve(answers);
 			});
+
+			return this.setAnswers(allDefaults);
+		}
+
+		if (!this.opts.showHiddenPrompts) {
+			const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
+			const allHiddenDefaults = {};
+			logger.prompter.info(
+				'Hidden prompts: %n',
+				hiddenPrompts.map((p) => p.name),
+			);
+			hiddenPrompts.forEach((prompt) => {
+				const defaultValue = prompt.getDefaultValue({
+					...allHiddenDefaults,
+					...this.answers,
+				});
+				// TODO: getDefaultValue really should be doing this but dont want to break any functionality with `default` option
+				allHiddenDefaults[prompt.name] = defaultValue ?? null;
+			});
+			logger.prompter.info('Hidden answers: %n', allHiddenDefaults);
+
+			this.setAnswers(allHiddenDefaults);
+		}
+
+		const promptsThatStillNeedAnswers = this._getPromptsThatNeedAnswers();
+
+		if (!promptsThatStillNeedAnswers.length) {
+			return this.answers;
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const newAnswers = await (inquirer as any).prompt(
+			promptsThatStillNeedAnswers,
+		);
+
+		return this.setAnswers(newAnswers);
 	}
 }

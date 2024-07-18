@@ -2,41 +2,233 @@
  * Modules
  */
 import Prompter from '@tps/prompter';
-import { PROMPTER_QUESTIONS } from '@test/utilities/constants';
+import { mkPrompt } from '@test/utilities/templates';
+import inquirer from 'inquirer';
 
-const ANSWER_TO_PROMPTS = {
-	testingPrompt: 'data',
-};
+jest.mock('inquirer');
 
 describe('[Prompter] Core:', () => {
-	let prompter;
-	beforeEach(() => {
-		prompter = new Prompter(PROMPTER_QUESTIONS);
+	it('should have all prompt answers', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+			}),
+			mkPrompt({
+				name: 'prompt2',
+			}),
+		]);
+
+		const answers = {
+			prompt1: true,
+			prompt2: true,
+		};
+
+		prompter.setAnswers(answers);
+
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(expect.objectContaining(answers));
 	});
 
-	it('should have all prompt answers', () => {
-		prompter.setAnswers(ANSWER_TO_PROMPTS);
+	it('should use default values when passed default option', async () => {
+		const prompter = new Prompter(
+			[
+				mkPrompt({
+					name: 'prompt1',
+					default: false,
+				}),
+				mkPrompt({
+					name: 'prompt2',
+					default: true,
+				}),
+			],
+			{
+				default: true,
+			},
+		);
 
-		return prompter.getAnswers().then((promptAnswers) => {
-			expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
-		});
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt1: false,
+				prompt2: true,
+			}),
+		);
 	});
 
-	it('should have all prompt answer when answered with alias', () => {
+	it('should be able to answer prompt with alias', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+				aliases: ['p'],
+			}),
+		]);
+
 		prompter.setAnswers({
-			t: 'data',
+			p: true,
 		});
 
-		return prompter.getAnswers().then((promptAnswers) => {
-			expect(promptAnswers).toEqual(expect.objectContaining(ANSWER_TO_PROMPTS));
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt1: true,
+			}),
+		);
+	});
+
+	it('should return true if prompt has a answer', () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+			}),
+		]);
+
+		prompter.setAnswers({
+			prompt1: 'oh ya!',
 		});
+
+		expect(prompter.hasAnswerToPrompt('prompt1')).toBeTruthy();
+	});
+
+	it('should return true if prompt has an answer, by alias', () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+				aliases: ['p'],
+			}),
+		]);
+
+		prompter.setAnswers({
+			p: true,
+		});
+
+		expect(prompter.hasAnswerToPrompt('prompt1')).toBeTruthy();
+	});
+
+	it('should return false if prompt has an answer, by alias', () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+				aliases: ['p'],
+			}),
+		]);
+
+		expect(prompter.hasAnswerToPrompt('prompt1')).toBeFalsy();
 	});
 
 	it('should tell you if it has answer to a prompt', () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+			}),
+		]);
+
 		prompter.setAnswers({
-			t: 'oh ya!',
+			prompt1: 'oh ya!',
 		});
 
-		expect(prompter.hasAnswerToPrompt('testingPrompt')).toBeTruthy();
+		expect(prompter.hasAnswerToPrompt('prompt1')).toBeTruthy();
+	});
+
+	it('should support hidden prompts', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+			}),
+			mkPrompt({
+				name: 'prompt2',
+				hidden: true,
+			}),
+		]);
+
+		prompter.setAnswers({
+			prompt1: true,
+		});
+
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt1: true,
+				prompt2: null,
+			}),
+		);
+	});
+
+	it('should use default value for hidden prompt when set', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt2',
+				hidden: true,
+				default: true,
+			}),
+		]);
+
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt2: true,
+			}),
+		);
+	});
+
+	it('should use default value for hidden prompt when set', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt2',
+				hidden: true,
+				default: true,
+			}),
+		]);
+
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt2: true,
+			}),
+		);
+	});
+
+	it('should show hidden prompts when showHiddenPrompts is true', async () => {
+		const prompter = new Prompter(
+			[
+				mkPrompt({
+					name: 'prompt1',
+					hidden: true,
+					default: true,
+				}),
+				mkPrompt({
+					name: 'prompt2',
+					default: true,
+				}),
+			],
+			{
+				showHiddenPrompts: true,
+			},
+		);
+
+		jest.mocked(inquirer.prompt).mockResolvedValue({
+			prompt2: true,
+		});
+
+		await prompter.getAnswers();
+
+		expect(inquirer.prompt).toHaveBeenCalledWith(
+			expect.arrayContaining([
+				expect.objectContaining({
+					name: 'prompt1',
+					hidden: true,
+					default: true,
+				}),
+				expect.objectContaining({
+					name: 'prompt2',
+					default: true,
+				}),
+			]),
+		);
 	});
 });
