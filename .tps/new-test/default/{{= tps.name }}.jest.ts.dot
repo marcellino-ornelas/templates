@@ -1,56 +1,40 @@
-{{{
-	const useTemplates = tps.answers.modules.includes('templates');
-}}}
 /*
  * Modules
  */
-{{{? tps.answers.playground }}}
-import Playground from '@test/utilities/playground';
-import { TESTING_DIR } from '@test/utilities/constants';
+{{{? tps.answers.templates }}}
+import { mkTemplate } from '@test/utilities/templates';
+import Templates from '@tps/templates';
+import { CWD } from "@tps/utilities/constants"
+import { reset, vol } from '@test/utilities/vol';
+import path from "path"
+{{{??}}}
+// import _ from '@tps/_';
 {{{?}}}
-{{{? tps.answers.modules.length}}}
-{{{~ tps.answers.modules :module:index }}}
-import {{= module === "templates" ? tps.u.capitalize(module) : module}} from '@tps/{{= module}}';
-{{{~}}}
-{{??}}
-import _ from '@tps/_';
-{{{?}}}
+{{{? tps.answers.templates }}}
 
 jest.mock('fs');
-
-/*
- * Constants
- */
-{{{? tps.answers.playground }}}
-const playground = new Playground(TESTING_DIR)
 {{{?}}}
 
-describe('[TPS] _', () => {
-	{{{? useTemplates}}}
-	let tps: Templates;
-
-	{{{?}}}
-	{{{? tps.answers.playground}}}
-	beforeAll(() => playground.create() );
-	afterAll(() => playground.destroy() );
-
-	{{{?}}}
+describe('{{= tps.utils.sentenceCase(tps.name)}}', () => {
+	{{{? tps.answers.templates }}}
 	beforeEach(() => {
-		{{{? useTemplates }}}
-		tps = new Templates('testing');
-		{{{?}}}
-		{{{? tps.answers.playground }}}
-		
-		return playground.createBox('_');
-		{{{?}}}
+		// jest.resetAllMocks();
+		reset();
 	});
+	{{{?}}}
 
 	it('should ...', async () => {
-		{{{? useTemplates && tps.answers.playground}}}
-		await tps.render(playground.box(), "App");
+		{{{? tps.answers.templates }}}
+		const templateName = "{{= tps.utils.paramCase(tps.name)}}";
+		
+		mkTemplate(templateName)
+
+		const tps = new Templates(templateName);
+		
+		await tps.render(CWD, "App");
 
 		// @ts-expect-error no types for extending jest functions
-		expect(playground.pathTo('...')).toBeFile();
+		expect(path.join(CWD, "App")).toBeDirectory();
 		{{{?}}}
 	});
 });
