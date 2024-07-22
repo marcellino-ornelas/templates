@@ -5,25 +5,12 @@
 	},
 	"prompts": [
 		{
-			"name": "playground",
+			"name": "templates",
+			"aliases": ["t", "tps"],
 			"type": "confirm",
 			"tpsType": "data",
-			"message": "Will this test create new files in our fileSystem?",
-			"default": false
-		},
-		{
-			"name": "modules",
-			"type": "checkbox",
-			"choices": [
-				"templates",
-				"prompter",
-				"fileSystem",
-				"utilities",
-				"fileSystemTree",
-				"errors"
-			],
-			"tpsType": "data",
-			"message": "What modules do you need?"
+			"message": "Do you want to import templates?",
+			"default": true
 		}
 	]
 }
