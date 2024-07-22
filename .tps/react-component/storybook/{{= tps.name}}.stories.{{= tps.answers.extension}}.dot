@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { {{#def.componentName}} } from './{{= tps.name}}';
 
 const meta{{? tps.answers.typescript}}: Meta<typeof {{#def.componentName}}>{{?}} = {
-  component: {{#def.componentName}},
+	component: {{#def.componentName}},
 };
 
 export default meta;
@@ -13,7 +13,7 @@ type Story = StoryObj<typeof {{#def.componentName}}>;
 {{{?}}}
 
 export const Primary{{? tps.answers.typescript}}: Story{{?}} = {
-  args: {
-    /* props */
-  },
+	args: {
+		/* props */
+	},
 };

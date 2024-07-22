@@ -41,6 +41,7 @@ import {
 	getDefaultSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
+import { AnswersHash } from '@tps/types/settings';
 
 export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
@@ -102,7 +103,7 @@ const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
  * @class
  * @classdesc Create a new instance of a template
  */
-export class Templates {
+export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	public name: string;
 
 	public opts: TemplateOptions;
@@ -284,7 +285,7 @@ export class Templates {
 				showHiddenPrompts: this.opts.hidden,
 			});
 
-			this._prompts = new Prompter(this.templateSettings.prompts, {
+			this._prompts = new Prompter<TAnswers>(this.templateSettings.prompts, {
 				default: this.opts.default,
 				showHiddenPrompts: this.opts.hidden,
 			});
@@ -380,7 +381,7 @@ export class Templates {
 	 * @param answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	setAnswers(answers: Record<string, any>) {
+	setAnswers(answers: TAnswers) {
 		if (!this.hasPrompts()) {
 			throw new NoPromptsError();
 		}
