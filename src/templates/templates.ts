@@ -35,13 +35,13 @@ import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
 import { Tpsrc } from '@tps/types/tpsrc';
+import { AnswersHash } from '@tps/types/settings';
 import {
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
-import { AnswersHash } from '@tps/types/settings';
 
 export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
