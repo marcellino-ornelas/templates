@@ -7,7 +7,34 @@ module.exports = {
 	},
 	prompts: [
 		{
+			name: 'export',
+			message: 'Would you like a default export or named export?',
+			type: 'checkbox',
+			tpsType: 'data',
+			choices: ['default', 'named'],
+			default: 'default',
+		},
+		{
+			name: 'inlineDefaultExport',
+			message:
+				'Would you like your default export on the same line as your component?',
+			type: 'confirm',
+			tpsType: 'data',
+			hidden: true,
+			default: false,
+		},
+		{
+			name: 'functionStyle',
+			message:
+				'Would you like a arrow function or a function declaration for your component?',
+			type: 'checkbox',
+			tpsType: 'data',
+			choices: ['function', 'arrow'],
+			default: 'function',
+		},
+		{
 			name: 'typescript',
+			aliases: ['t'],
 			type: 'confirm',
 			tpsType: 'data',
 			message: 'Would you like to use typescript',
@@ -33,8 +60,8 @@ module.exports = {
 			default: true,
 		},
 		{
-			name: 'cssType',
-			aliases: ['z'],
+			name: 'cssExtension',
+			aliases: ['cssType', 'cssExt'],
 			tpsType: 'data',
 			type: 'input',
 			message: 'What type of css extension would you like?',
@@ -45,15 +72,14 @@ module.exports = {
 		},
 		{
 			name: 'test',
-			aliases: ['t'],
 			type: 'confirm',
 			tpsType: 'package',
 			message: 'Would you like to include unit tests?',
 			default: false,
 		},
 		{
-			name: 'testType',
-			aliases: ['y'],
+			name: 'testExtension',
+			aliases: ['testType', 'testExt'],
 			tpsType: 'data',
 			type: 'input',
 			message: 'What type of test extension would you like?',
@@ -61,8 +87,8 @@ module.exports = {
 				return !!answers.test;
 			},
 			default: (answers) => {
-				if (answers.typescript) return 'test.ts';
-				return 'test.js';
+				if (answers.typescript) return 'test.tsx';
+				return 'test.jsx';
 			},
 		},
 		{
@@ -73,9 +99,18 @@ module.exports = {
 			message: 'Would you like to include a index file?',
 			default: true,
 		},
+		// {
+		// 	name: 'component',
+		// 	hidden: true,
+		// 	type: 'confirm',
+		// 	tpsType: 'data',
+		// 	message: 'What component would you like as the base component?',
+		// 	default: null,
+		// },
 		{
 			name: 'storybook',
 			aliases: ['s', 'story'],
+			hidden: true,
 			type: 'confirm',
 			tpsType: 'package',
 			message: 'Would you like to include a storybook file?',

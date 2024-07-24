@@ -1,3 +1,7 @@
 {{{##def.componentName:
 {{= tps.u.pascalCase(tps.name)}}
 #}}}
+
+{{{##def.export:
+{{? tps.answers.export === "named" }}export {{?? tps.answers.inlineDefaultExport }}export default {{?}}
+#}}}
