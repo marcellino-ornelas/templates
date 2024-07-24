@@ -99,14 +99,14 @@ module.exports = {
 			message: 'Would you like to include a index file?',
 			default: true,
 		},
-		// {
-		// 	name: 'component',
-		// 	hidden: true,
-		// 	type: 'confirm',
-		// 	tpsType: 'data',
-		// 	message: 'What component would you like as the base component?',
-		// 	default: null,
-		// },
+		{
+			name: 'component',
+			hidden: true,
+			type: 'confirm',
+			tpsType: 'data',
+			message: 'What component would you like as the base component?',
+			default: null,
+		},
 		{
 			name: 'storybook',
 			aliases: ['s', 'story'],

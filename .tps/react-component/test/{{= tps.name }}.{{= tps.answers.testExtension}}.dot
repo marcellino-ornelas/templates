@@ -1,5 +1,5 @@
 import React from 'react';
-import { {{#def.componentName}} } from './{{= tps.name}}';
+{{#def.componentImport}}
 
 describe('{{#def.componentName}}', () => {
 	it('first test', () => {

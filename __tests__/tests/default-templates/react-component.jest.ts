@@ -18,7 +18,7 @@ interface ReactComponentAnswers {
 	export?: 'named' | 'default';
 	functionStyle?: 'function' | 'arrow';
 	inlineDefaultExport?: boolean;
-	// component?: string | null;
+	component?: string | null;
 }
 
 jest.mock('fs');
@@ -282,6 +282,32 @@ export default App;
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
+import App from './App';
+
+describe('App', () => {
+	it('first test', () => {
+		<App />
+	});
+});
+`);
+	});
+
+	it('should support different export statements in tests', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			test: true,
+			export: 'named',
+		});
+
+		await tps.render(CWD, 'App');
+
+		// TODO: Should be jsx
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+import React from 'react';
 import { App } from './App';
 
 describe('App', () => {
@@ -308,7 +334,7 @@ describe('App', () => {
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.tsx')).toHaveFileContents(`\
 import React from 'react';
-import { App } from './App';
+import App from './App';
 
 describe('App', () => {
 	it('first test', () => {
@@ -325,6 +351,24 @@ describe('App', () => {
 
 		tps.setAnswers({
 			index: true,
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/index.jsx')).toHaveFileContents(`\
+export { default } from './App';
+`);
+	});
+
+	it('should support named export import statement', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			index: true,
+			export: 'named',
 		});
 
 		await tps.render(CWD, 'App');
@@ -363,6 +407,36 @@ export * from './App';
 
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
+import App from './App';
+
+const meta = {
+	component: App,
+};
+
+export default meta;
+
+export const Primary = {
+	args: {
+		/* props */
+	},
+};
+`);
+	});
+
+	it('should support differnt types of exports in storybook', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			storybook: true,
+			export: 'named',
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
 import { App } from './App';
 
 const meta = {
@@ -395,7 +469,7 @@ export const Primary = {
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.stories.tsx')).toHaveFileContents(`\
 import type { Meta, StoryObj } from '@storybook/react';
-import { App } from './App';
+import App from './App';
 
 const meta: Meta<typeof App> = {
 	component: App,
@@ -412,31 +486,31 @@ export const Primary: Story = {
 `);
 	});
 
-	// 	it('should be able to use set a base component', async () => {
-	// 		const tps = new Templates<ReactComponentAnswers>('react-component', {
-	// 			default: true,
-	// 		});
+	it('should be able to use set a base component', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
 
-	// 		tps.setAnswers({
-	// 			component: 'Box',
-	// 		});
+		tps.setAnswers({
+			component: 'Box',
+		});
 
-	// 		await tps.render(CWD, 'App');
+		await tps.render(CWD, 'App');
 
-	// 		// @ts-expect-error no types for extending jest functions
-	// 		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
-	// import React, { useEffect, useState } from 'react';
-	// import './App.css';
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+import React, { useEffect, useState } from 'react';
+import './App.css';
 
-	// function App({}) {
-	// 	return (
-	// 		<div>
-	// 			{/* ... */}
-	// 		</div>
-	// 	);
-	// };
+function App({}) {
+	return (
+		<Box>
+			{/* ... */}
+		</Box>
+	);
+};
 
-	// export default App;
-	// `);
-	// 	});
+export default App;
+`);
+	});
 });

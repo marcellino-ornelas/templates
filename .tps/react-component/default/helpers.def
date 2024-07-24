@@ -5,3 +5,11 @@
 {{{##def.export:
 {{? tps.answers.export === "named" }}export {{?? tps.answers.inlineDefaultExport }}export default {{?}}
 #}}}
+
+{{{##def.componentImport:
+{{{? tps.answers.export === "named" }}}
+import { {{#def.componentName}} } from './{{= tps.name}}';
+{{{??}}}
+import {{#def.componentName}} from './{{= tps.name}}';
+{{{?}}}
+#}}}
