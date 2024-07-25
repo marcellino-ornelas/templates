@@ -19,12 +19,9 @@ interface Props {
 {{#def.export}}const {{#def.componentName}} = ({}{{? tps.answers.typescript}}: Props{{?}}) => {
 {{{?}}}
 	return (
-		{{{
-			const component = tps.answers.component ?? 'div';
-		}}}
-		<{{= component }}>
+		<{{= tps.answers.component }}>
 			{/* ... */}
-		</{{= component }}>
+		</{{= tps.answers.component }}>
 	);
 };
 {{{? isDefaultExport && !tps.answers.inlineDefaultExport }}}

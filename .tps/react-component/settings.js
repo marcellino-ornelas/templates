@@ -105,7 +105,7 @@ module.exports = {
 			type: 'confirm',
 			tpsType: 'data',
 			message: 'What component would you like as the base component?',
-			default: null,
+			default: 'div',
 		},
 		{
 			name: 'storybook',
