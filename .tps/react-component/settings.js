@@ -78,6 +78,28 @@ module.exports = {
 			default: false,
 		},
 		{
+			name: 'reactTestingLibrary',
+			type: 'confirm',
+			tpsType: 'data',
+			message:
+				'Would you like to use @testing-library/react in your test file?',
+			when: (answers) => {
+				return !!answers.test;
+			},
+			default: false,
+		},
+		{
+			name: 'jestDomImport',
+			type: 'confirm',
+			tpsType: 'data',
+			message: 'Would you like a @testing-library/jest-dom import?',
+			when: (answers) => {
+				return !!answers.reactTestingLibrary;
+			},
+			hidden: true,
+			default: false,
+		},
+		{
 			name: 'testExtension',
 			aliases: ['testType', 'testExt'],
 			tpsType: 'data',

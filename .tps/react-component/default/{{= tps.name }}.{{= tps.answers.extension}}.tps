@@ -20,7 +20,7 @@ interface Props {
 {{{?}}}
 	return (
 		<{{= tps.answers.component }}>
-			{/* ... */}
+			{{#def.componentName}} component
 		</{{= tps.answers.component }}>
 	);
 };

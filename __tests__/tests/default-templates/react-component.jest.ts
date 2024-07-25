@@ -19,6 +19,8 @@ interface ReactComponentAnswers {
 	functionStyle?: 'function' | 'arrow';
 	inlineDefaultExport?: boolean;
 	component?: string | null;
+	reactTestingLibrary?: boolean;
+	jestDomImport?: boolean;
 }
 
 jest.mock('fs');
@@ -63,7 +65,7 @@ import './App.css';
 function App({}) {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -92,7 +94,7 @@ import './App.css';
 export default function App({}) {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -118,7 +120,7 @@ import './App.css';
 export function App({}) {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -145,7 +147,7 @@ import './App.css';
 const App = ({}) => {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -174,7 +176,7 @@ import './App.css';
 export const App = ({}) => {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -205,7 +207,7 @@ interface Props {
 function App({}: Props) {
 	return (
 		<div>
-			{/* ... */}
+			App component
 		</div>
 	);
 };
@@ -278,14 +280,13 @@ export default App;
 
 		await tps.render(CWD, 'App');
 
-		// TODO: Should be jsx
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import App from './App';
 
 describe('App', () => {
-	it('first test', () => {
+	it('should render the component', () => {
 		<App />
 	});
 });
@@ -304,14 +305,13 @@ describe('App', () => {
 
 		await tps.render(CWD, 'App');
 
-		// TODO: Should be jsx
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import { App } from './App';
 
 describe('App', () => {
-	it('first test', () => {
+	it('should render the component', () => {
 		<App />
 	});
 });
@@ -330,15 +330,72 @@ describe('App', () => {
 
 		await tps.render(CWD, 'App');
 
-		// TODO: Should be tsx
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.tsx')).toHaveFileContents(`\
 import React from 'react';
 import App from './App';
 
 describe('App', () => {
-	it('first test', () => {
+	it('should render the component', () => {
 		<App />
+	});
+});
+`);
+	});
+
+	it('should support test file with react tsting library', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			test: true,
+			reactTestingLibrary: true,
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+describe('App', () => {
+	it('should render the component', () => {
+		render(<App />);
+
+		expect(screen.getByText('App component')).toBeInTheDocument();
+	});
+});
+`);
+	});
+
+	it('should support test file with react testing library and jest dom import', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			test: true,
+			reactTestingLibrary: true,
+			jestDomImport: true,
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import App from './App';
+
+describe('App', () => {
+	it('should render the component', () => {
+		render(<App />);
+
+		expect(screen.getByText('App component')).toBeInTheDocument();
 	});
 });
 `);
@@ -505,7 +562,7 @@ import './App.css';
 function App({}) {
 	return (
 		<Box>
-			{/* ... */}
+			App component
 		</Box>
 	);
 };
