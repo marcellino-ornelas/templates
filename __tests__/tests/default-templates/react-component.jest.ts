@@ -283,11 +283,14 @@ export default App;
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('App', () => {
 	it('should render the component', () => {
-		<App />
+		render(<App />);
+
+		expect(screen.getByText('App component')).toBeInTheDocument();
 	});
 });
 `);
@@ -308,11 +311,14 @@ describe('App', () => {
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { App } from './App';
 
 describe('App', () => {
 	it('should render the component', () => {
-		<App />
+		render(<App />);
+
+		expect(screen.getByText('App component')).toBeInTheDocument();
 	});
 });
 `);
@@ -333,31 +339,6 @@ describe('App', () => {
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.test.tsx')).toHaveFileContents(`\
 import React from 'react';
-import App from './App';
-
-describe('App', () => {
-	it('should render the component', () => {
-		<App />
-	});
-});
-`);
-	});
-
-	it('should support test file with react tsting library', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			test: true,
-			reactTestingLibrary: true,
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
@@ -366,6 +347,31 @@ describe('App', () => {
 		render(<App />);
 
 		expect(screen.getByText('App component')).toBeInTheDocument();
+	});
+});
+`);
+	});
+
+	it('should support be able to not use react testing library', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			test: true,
+			reactTestingLibrary: false,
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+import React from 'react';
+import App from './App';
+
+describe('App', () => {
+	it('should render the component', () => {
+		<App />
 	});
 });
 `);

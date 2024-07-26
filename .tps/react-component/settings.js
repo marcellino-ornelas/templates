@@ -9,7 +9,7 @@ module.exports = {
 		{
 			name: 'export',
 			message: 'Would you like a default export or named export?',
-			type: 'checkbox',
+			type: 'list',
 			tpsType: 'data',
 			choices: ['default', 'named'],
 			default: 'default',
@@ -27,9 +27,10 @@ module.exports = {
 			name: 'functionStyle',
 			message:
 				'Would you like a arrow function or a function declaration for your component?',
-			type: 'checkbox',
+			type: 'list',
 			tpsType: 'data',
 			choices: ['function', 'arrow'],
+			hidden: true,
 			default: 'function',
 		},
 		{
@@ -86,7 +87,8 @@ module.exports = {
 			when: (answers) => {
 				return !!answers.test;
 			},
-			default: false,
+			hidden: true,
+			default: true,
 		},
 		{
 			name: 'jestDomImport',
@@ -109,8 +111,7 @@ module.exports = {
 				return !!answers.test;
 			},
 			default: (answers) => {
-				if (answers.typescript) return 'test.tsx';
-				return 'test.jsx';
+				return `test.${answers.extension}`;
 			},
 		},
 		{
