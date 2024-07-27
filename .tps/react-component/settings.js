@@ -123,6 +123,15 @@ module.exports = {
 			default: true,
 		},
 		{
+			name: 'indexExportPattern',
+			aliases: ['i'],
+			type: 'list',
+			tpsType: 'data',
+			message: 'What type of export pattern do you want for your index file?',
+			choices: ['shorthand', 'Explicit'],
+			default: 'shorthand',
+		},
+		{
 			name: 'component',
 			hidden: true,
 			type: 'confirm',
