@@ -1,7 +1,7 @@
 import React from 'react';
-{{{? tps.answers.reactTestingLibrary}}}
+{{{? tps.answers.reactTestingLibrary }}}
 import { render, screen } from '@testing-library/react';
-{{{?tps.answers.jestDomImport }}}
+{{{? tps.answers.jestDomImport }}}
 import '@testing-library/jest-dom';
 {{{?}}}
 {{{?}}}
