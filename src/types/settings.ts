@@ -22,6 +22,14 @@ export type AnswersData = any;
 
 export type AnswersHash = Record<string, AnswersData>;
 
+export interface PromptChoiceObject {
+	name: string;
+	short: string;
+	value: string;
+}
+
+export type PromptChoice = string | PromptChoiceObject;
+
 export interface SettingsFilePrompt {
 	name: string;
 
@@ -31,7 +39,7 @@ export interface SettingsFilePrompt {
 
 	type: keyof typeof SettingsFilePromptType;
 
-	choices?: string[];
+	choices?: PromptChoice[];
 
 	hidden?: boolean;
 
