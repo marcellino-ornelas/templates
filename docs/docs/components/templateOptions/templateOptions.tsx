@@ -33,13 +33,13 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 	}, []);
 
 	const answers: AnswersHash = useMemo(() => {
-		return settingsFile?.prompts?.reduce((answers, prompt) => {
-			answers[prompt.name] =
+		return settingsFile?.prompts?.reduce((answersAcc, prompt) => {
+			answersAcc[prompt.name] =
 				typeof prompt.default === 'function'
-					? prompt.default(answers)
+					? prompt.default(answersAcc)
 					: prompt.default;
 
-			return answers;
+			return answersAcc;
 		}, {});
 	}, [settingsFile]);
 
