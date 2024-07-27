@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type {
 	SettingsFile,
 	SettingsFilePrompt,
+	AnswersHash,
 } from 'templates-mo/src/types/settings';
 import styles from './templateOptions.module.css';
+
+const getChoices = (prompt: SettingsFilePrompt): string[] => {
+	return (prompt?.choices || []).map((choice) => {
+		return typeof choice === 'string' ? choice : choice?.value;
+	});
+};
 
 interface Props {
 	template: string;
@@ -25,13 +32,18 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 		})();
 	}, []);
 
-	const getChoices = (prompt: SettingsFilePrompt) => {
-		return (prompt?.choices || []).map((choice) => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			return choice?.value || choice;
-		});
-	};
+	const answers: AnswersHash = useMemo(() => {
+		return settingsFile?.prompts?.reduce((answers, prompt) => {
+			answers[prompt.name] =
+				typeof prompt.default === 'function'
+					? prompt.default(answers)
+					: prompt.default;
+
+			return answers;
+		}, {});
+	}, [settingsFile]);
+
+	console.log(answers, settingsFile);
 
 	return (
 		<div className={styles.tableContainer}>
@@ -66,11 +78,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 									)
 									.join(', ')}
 							</td>
-							<td>
-								{typeof prompt?.default === 'function'
-									? prompt?.default({})
-									: prompt?.default?.toString()}
-							</td>
+							<td>{(answers[prompt.name] ?? '').toString()}</td>
 							<td>{(prompt.hidden ?? false).toString()}</td>
 						</tr>
 					))}
