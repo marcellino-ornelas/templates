@@ -2,14 +2,14 @@
 {{{? tps.answers.indexExportPattern === 'shorthand' }}}
 export * from './{{= tps.name}}';
 {{{??}}}
-import { {{#def.componentName}} } from './{{= tps.name}}';
+{{#def.componentImport}}
 export { {{#def.componentName}} };
 {{{?}}}
 {{{??}}}
 {{{? tps.answers.indexExportPattern === 'shorthand' }}}
 export { default } from './{{= tps.name}}';
 {{{??}}}
-import {{#def.componentName}} from './{{= tps.name}}';
+{{#def.componentImport}}
 export default {{#def.componentName}};
 {{{?}}}
 {{{?}}}
