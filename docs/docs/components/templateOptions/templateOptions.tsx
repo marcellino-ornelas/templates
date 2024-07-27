@@ -43,8 +43,6 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 		}, {});
 	}, [settingsFile]);
 
-	console.log(answers, settingsFile);
-
 	return (
 		<div className={styles.tableContainer}>
 			<table>
