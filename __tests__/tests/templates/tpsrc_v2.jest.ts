@@ -93,6 +93,26 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
+	it('should be able to use a prompt alias', () => {
+		mkTpsrc(LOCAL_CONFIG_PATH, {
+			'testing-prompt-core': {
+				opts: {
+					extendedDest: './local-path',
+				},
+				answers: {
+					t: 'local',
+				},
+			},
+		});
+
+		const tps: Templates = new Templates('testing-prompt-core');
+
+		expect(tps.opts.extendedDest).toBe('./local-path');
+
+		// eslint-disable-next-line no-underscore-dangle
+		expect(tps._prompts.answers.test1).toBe('local');
+	});
+
 	it('should load a parent tpsrc file', () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
