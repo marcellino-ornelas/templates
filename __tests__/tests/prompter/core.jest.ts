@@ -176,10 +176,6 @@ describe('[Prompter] Core:', () => {
 			}),
 		]);
 
-		// prompter.setAnswers({
-		// 	prompt1: 'prompt1',
-		// });
-
 		const result = await prompter.getAnswers();
 
 		expect(result).toEqual(
