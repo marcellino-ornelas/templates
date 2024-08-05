@@ -109,7 +109,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 		logger.prompter.info('Fetching answers...');
 		if (!this.needsAnswers()) return this.answers;
 
-		const promptsLeft = this._getPromptsThatNeedAnswers();
+		let promptsLeft = this._getPromptsThatNeedAnswers();
 		logger.prompter.info('Current Answers: %n', this.answers);
 		logger.prompter.info(
 			'Prompts that need answers: %n',
@@ -128,9 +128,22 @@ export default class Prompter<TAnswers = AnswersHash> {
 
 			return this.setAnswers(allDefaults);
 		}
+		const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
 
+		// remove hidden prompts if we arent showing them
 		if (!this.opts.showHiddenPrompts) {
-			const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
+			promptsLeft = promptsLeft.filter((prompt) => !prompt.hidden);
+		}
+
+		if (promptsLeft.length) {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const newAnswers = await (inquirer as any).prompt(promptsLeft);
+
+			this.setAnswers(newAnswers);
+		}
+
+		// Calculate hidden prompts after user prompts so user answers can be used
+		if (!this.opts.showHiddenPrompts) {
 			const allHiddenDefaults = {};
 			logger.prompter.info(
 				'Hidden prompts: %n',
@@ -145,21 +158,9 @@ export default class Prompter<TAnswers = AnswersHash> {
 				allHiddenDefaults[prompt.name] = defaultValue ?? null;
 			});
 			logger.prompter.info('Hidden answers: %n', allHiddenDefaults);
-
 			this.setAnswers(allHiddenDefaults);
 		}
 
-		const promptsThatStillNeedAnswers = this._getPromptsThatNeedAnswers();
-
-		if (!promptsThatStillNeedAnswers.length) {
-			return this.answers;
-		}
-
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const newAnswers = await (inquirer as any).prompt(
-			promptsThatStillNeedAnswers,
-		);
-
-		return this.setAnswers(newAnswers);
+		return this.answers;
 	}
 }

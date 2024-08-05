@@ -157,6 +157,35 @@ describe('[Prompter] Core:', () => {
 		);
 	});
 
+	it('should answer hidden prompts after regular prompts', async () => {
+		jest.mocked(inquirer.prompt).mockResolvedValue({
+			prompt1: 'prompt1',
+		});
+
+		const prompter = new Prompter([
+			// hidden prompt should be able to use answer from non hidden prompt
+			mkPrompt({
+				name: 'prompt2',
+				type: 'input',
+				default: (answers) => `${answers.prompt1}`,
+				hidden: true,
+			}),
+			mkPrompt({
+				name: 'prompt1',
+				type: 'input',
+			}),
+		]);
+
+		const result = await prompter.getAnswers();
+
+		expect(result).toEqual(
+			expect.objectContaining({
+				prompt1: 'prompt1',
+				prompt2: 'prompt1',
+			}),
+		);
+	});
+
 	it('should use default value for hidden prompt when set', async () => {
 		const prompter = new Prompter([
 			mkPrompt({
