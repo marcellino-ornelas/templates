@@ -13,6 +13,7 @@ module.exports = {
 			tpsType: 'data',
 			choices: ['default', 'named'],
 			default: 'default',
+			hidden: true,
 		},
 		{
 			name: 'inlineDefaultExport',
@@ -127,6 +128,7 @@ module.exports = {
 			aliases: ['indexExt'],
 			tpsType: 'data',
 			type: 'input',
+			hidden: true,
 			message: 'What type of extension would you like for your index file?',
 			when: (answers) => {
 				return !!answers.index;
@@ -145,6 +147,7 @@ module.exports = {
 			aliases: ['i'],
 			type: 'list',
 			tpsType: 'data',
+			hidden: true,
 			message: 'What type of export pattern do you want for your index file?',
 			choices: ['shorthand', 'Explicit'],
 			default: 'shorthand',
