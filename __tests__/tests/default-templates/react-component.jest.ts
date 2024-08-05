@@ -103,7 +103,7 @@ export default App;
 		await tps.render(CWD, 'nav-item');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+		expect(path.join(CWD, 'nav-item/nav-item.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './nav-item.css';
 
@@ -115,7 +115,7 @@ function NavItem({}) {
 	);
 };
 
-export default App;
+export default NavItem;
 `);
 	});
 
