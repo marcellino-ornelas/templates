@@ -10,9 +10,11 @@ interface ReactComponentAnswers {
 	typescript?: boolean;
 	css?: boolean;
 	index?: boolean;
+	indexExtension: boolean;
 	extension?: string;
-	cssType?: string;
+	cssExtension?: string;
 	test?: boolean;
+	testExtension: string;
 	testType?: boolean;
 	storybook?: boolean;
 	export?: 'named' | 'default';
@@ -298,7 +300,7 @@ export default App;
 
 		tps.setAnswers({
 			css: true,
-			cssType: 'module.css',
+			cssExtension: 'module.css',
 		});
 
 		await tps.render(CWD, 'App');
@@ -316,7 +318,7 @@ export default App;
 
 		tps.setAnswers({
 			css: true,
-			cssType: 'module.less',
+			cssExtension: 'module.less',
 		});
 
 		await tps.render(CWD, 'App');
@@ -482,6 +484,35 @@ export { default } from './App';
 `);
 	});
 
+	// Bug
+	it('should be able to use index file ...', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			// indexExtension: null,
+			typescript: false,
+			extension: 'jsx',
+			css: true,
+			cssExtension: 'css',
+			test: true,
+			testExtension: 'test.jsx',
+			index: true,
+		});
+		// tps.setAnswers({
+		// 	index: true,
+		// 	test: true,
+		// });
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+export { default } from './App';
+`);
+	});
+
 	it('should strip ending x in the index file for jsx extensions', async () => {
 		const tps = new Templates<ReactComponentAnswers>('react-component', {
 			default: true,
@@ -489,6 +520,7 @@ export { default } from './App';
 
 		tps.setAnswers({
 			index: true,
+			extension: 'jsx',
 		});
 
 		await tps.render(CWD, 'App');
