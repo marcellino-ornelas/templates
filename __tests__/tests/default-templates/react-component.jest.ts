@@ -95,6 +95,30 @@ export default App;
 `);
 	});
 
+	it('should always use pascal case in component name correct component contents', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		await tps.render(CWD, 'nav-item');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+import React, { useEffect, useState } from 'react';
+import './nav-item.css';
+
+function NavItem({}) {
+	return (
+		<div>
+			NavItem component
+		</div>
+	);
+};
+
+export default App;
+`);
+	});
+
 	it('should always use pascal case for component name', async () => {
 		const tps = new Templates<ReactComponentAnswers>('react-component', {
 			default: true,
