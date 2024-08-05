@@ -42,7 +42,7 @@ describe('React component', () => {
 		expect(path.join(CWD, 'App')).toBeDirectory();
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).toBeFile();
+		expect(path.join(CWD, 'App/index.js')).toBeFile();
 
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'App/App.jsx')).toBeFile();
@@ -62,7 +62,7 @@ describe('React component', () => {
 		expect(path.join(CWD, 'nav_item')).toBeDirectory();
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'nav_item/index.jsx')).toBeFile();
+		expect(path.join(CWD, 'nav_item/index.js')).toBeFile();
 
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'nav_item/nav_item.jsx')).toBeFile();
@@ -453,9 +453,40 @@ describe('App', () => {
 		await tps.render(CWD, 'App');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).toHaveFileContents(`\
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 export { default } from './App';
 `);
+	});
+
+	it('should strip ending x in the index file for jsx extensions', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			index: true,
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/index.js')).toBeFile();
+	});
+
+	it('should strip ending x in the index file for tsx extensions', async () => {
+		const tps = new Templates<ReactComponentAnswers>('react-component', {
+			default: true,
+		});
+
+		tps.setAnswers({
+			index: true,
+			extension: 'tsx',
+		});
+
+		await tps.render(CWD, 'App');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'App/index.ts')).toBeFile();
 	});
 
 	it('should be able to use index file with explicit export', async () => {
@@ -471,7 +502,7 @@ export { default } from './App';
 		await tps.render(CWD, 'App');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).toHaveFileContents(`\
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import App from './App';
 export default App;
 `);
@@ -490,7 +521,7 @@ export default App;
 		await tps.render(CWD, 'App');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).toHaveFileContents(`\
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 export * from './App';
 `);
 	});
@@ -509,7 +540,7 @@ export * from './App';
 		await tps.render(CWD, 'App');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).toHaveFileContents(`\
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import { App } from './App';
 export { App };
 `);

@@ -123,6 +123,24 @@ module.exports = {
 			default: true,
 		},
 		{
+			name: 'indexExtension',
+			aliases: ['indexExt'],
+			tpsType: 'data',
+			type: 'input',
+			message: 'What type of extension would you like for your index file?',
+			when: (answers) => {
+				return !!answers.index;
+			},
+			default: (answers) => {
+				// if jsx or tsx extension, strip ending `x` for index file
+				if (/^(t|j)sx$/.test(answers.extension)) {
+					return answers.extension.slice(0, -1);
+				}
+
+				return answers.extension;
+			},
+		},
+		{
 			name: 'indexExportPattern',
 			aliases: ['i'],
 			type: 'list',
