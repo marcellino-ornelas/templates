@@ -381,7 +381,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 * @param answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
 	 */
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	setAnswers(answers: TAnswers) {
+	setAnswers(answers: Partial<TAnswers>) {
 		if (!this.hasPrompts()) {
 			throw new NoPromptsError();
 		}
