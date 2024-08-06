@@ -97,57 +97,129 @@ export default App;
 `);
 	});
 
-	it('should always use pascal case in component name correct component contents', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
+	// default
+	describe('component', () => {
+		it('should be able to not use a css file', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				css: false,
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).not.toHaveFileContents(
+				"import './App.css';",
+			);
 		});
 
-		await tps.render(CWD, 'nav-item');
+		it('should support modules css import', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'nav-item/nav-item.jsx')).toHaveFileContents(`\
+			tps.setAnswers({
+				css: true,
+				cssExtension: 'module.css',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(
+				"import styles from './App.module.css';",
+			);
+		});
+
+		it('should support modules less import', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				css: true,
+				cssExtension: 'module.less',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(
+				"import styles from './App.module.less';",
+			);
+		});
+
+		it('should always use pascal case for component name', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'nav_item');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'nav_item/nav_item.jsx')).toHaveFileContents(
+				`function NavItem`,
+			);
+		});
+
+		it('should always use pascal case in component contents', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'nav-item');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'nav-item/nav-item.jsx')).toHaveFileContents(
+				`NavItem component`,
+			);
+		});
+
+		it('should be able to use default export', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				export: 'default',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
-import './nav-item.css';
+import './App.css';
 
-function NavItem({}) {
+function App({}) {
 	return (
 		<div>
-			NavItem component
+			App component
 		</div>
 	);
 };
 
-export default NavItem;
+export default App;
 `);
-	});
-
-	it('should always use pascal case for component name', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		await tps.render(CWD, 'nav_item');
+		it('should be able to use inline default export', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'nav_item/nav_item.jsx')).toHaveFileContents(
-			`function NavItem`,
-		);
-	});
+			tps.setAnswers({
+				export: 'default',
+				inlineDefaultExport: true,
+			});
 
-	it('should be able to use inline default export', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
+			await tps.render(CWD, 'App');
 
-		tps.setAnswers({
-			export: 'default',
-			inlineDefaultExport: true,
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
@@ -159,21 +231,22 @@ export default function App({}) {
 	);
 };
 `);
-	});
-
-	it('should be able to use named export with function style', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			export: 'named',
-		});
+		it('should ignore inlineDefaultExport when export is not default', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				export: 'named',
+				inlineDefaultExport: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
@@ -185,22 +258,22 @@ export function App({}) {
 	);
 };
 `);
-	});
-
-	it('should be able to use default export with arrow style', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			export: 'default',
-			functionStyle: 'arrow',
-		});
+		it('should be able to use default export with arrow style', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				export: 'default',
+				functionStyle: 'arrow',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
@@ -214,22 +287,78 @@ const App = ({}) => {
 
 export default App;
 `);
-	});
-
-	it('should be able to use named export with arrow style', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			export: 'named',
-			functionStyle: 'arrow',
+		// 		it('should be able to use default export with arrow style', async () => {
+		// 			const tps = new Templates<ReactComponentAnswers>('react-component', {
+		// 				default: true,
+		// 			});
+
+		// 			tps.setAnswers({
+		// 				export: 'default',
+		// 				inlineDefaultExport: true,
+		// 				functionStyle: 'arrow',
+		// 			});
+
+		// 			await tps.render(CWD, 'App');
+
+		// 			// @ts-expect-error no types for extending jest functions
+		// 			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+		// import React, { useEffect, useState } from 'react';
+		// import './App.css';
+
+		// const App = ({}) => {
+		// 	return (
+		// 		<div>
+		// 			App component
+		// 		</div>
+		// 	);
+		// };
+
+		// export default App;
+		// `);
+		// 		});
+
+		it('should be able to use named export', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				export: 'named',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+import React, { useEffect, useState } from 'react';
+import './App.css';
+
+export function App({}) {
+	return (
+		<div>
+			App component
+		</div>
+	);
+};
+`);
 		});
 
-		await tps.render(CWD, 'App');
+		it('should be able to use named export with arrow style', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+			tps.setAnswers({
+				export: 'named',
+				functionStyle: 'arrow',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
@@ -241,22 +370,22 @@ export const App = ({}) => {
 	);
 };
 `);
-	});
-
-	it('should be able to use typescript', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			typescript: true,
-			extension: 'tsx',
-		});
+		it('should be able to use typescript', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				typescript: true,
+				extension: 'tsx',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.tsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.tsx')).toHaveFileContents(`\
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
@@ -274,74 +403,23 @@ function App({}: Props) {
 
 export default App;
 `);
+		});
 	});
 
-	it('should be able to not use a css file', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
+	describe('test', () => {
+		it('should support test file', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		tps.setAnswers({
-			css: false,
-		});
+			tps.setAnswers({
+				test: true,
+			});
 
-		await tps.render(CWD, 'App');
+			await tps.render(CWD, 'App');
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).not.toHaveFileContents(
-			"import './App.css';",
-		);
-	});
-
-	it('should support modules css import', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			css: true,
-			cssExtension: 'module.css',
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(
-			"import styles from './App.module.css';",
-		);
-	});
-
-	it('should support modules less import', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			css: true,
-			cssExtension: 'module.less',
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(
-			"import styles from './App.module.less';",
-		);
-	});
-
-	it('should support test file', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			test: true,
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
@@ -354,22 +432,22 @@ describe('App', () => {
 	});
 });
 `);
-	});
-
-	it('should support different export statements in tests', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			test: true,
-			export: 'named',
-		});
+		it('should support different export statements in tests', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				test: true,
+				export: 'named',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { App } from './App';
@@ -382,22 +460,22 @@ describe('App', () => {
 	});
 });
 `);
-	});
-
-	it('should support test file with typescript', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			test: true,
-			typescript: true,
-		});
+		it('should support test file with typescript', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				test: true,
+				typescript: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.tsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.tsx')).toHaveFileContents(`\
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
@@ -410,22 +488,22 @@ describe('App', () => {
 	});
 });
 `);
-	});
-
-	it('should support be able to not use react testing library', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			test: true,
-			reactTestingLibrary: false,
-		});
+		it('should support be able to not use react testing library', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				test: true,
+				reactTestingLibrary: false,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import App from './App';
 
@@ -435,23 +513,23 @@ describe('App', () => {
 	});
 });
 `);
-	});
-
-	it('should support test file with react testing library and jest dom import', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			test: true,
-			reactTestingLibrary: true,
-			jestDomImport: true,
-		});
+		it('should support test file with react testing library and jest dom import', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				test: true,
+				reactTestingLibrary: true,
+				jestDomImport: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -465,171 +543,145 @@ describe('App', () => {
 	});
 });
 `);
+		});
 	});
+	describe('index', () => {
+		it('should be able to use index file', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-	it('should be able to use index file', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
+			tps.setAnswers({
+				index: true,
+			});
 
-		tps.setAnswers({
-			index: true,
-		});
+			await tps.render(CWD, 'App');
 
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 export { default } from './App';
 `);
-	});
-
-	// Bug
-	it('should be able to use index file ...', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			// indexExtension: null,
-			typescript: false,
-			extension: 'jsx',
-			css: true,
-			cssExtension: 'css',
-			test: true,
-			testExtension: 'test.jsx',
-			index: true,
-		});
-		// tps.setAnswers({
-		// 	index: true,
-		// 	test: true,
-		// });
+		it('should strip ending x in the index file for jsx extensions', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				index: true,
+				extension: 'jsx',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
-export { default } from './App';
-`);
-	});
+			await tps.render(CWD, 'App');
 
-	it('should strip ending x in the index file for jsx extensions', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toBeFile();
 		});
 
-		tps.setAnswers({
-			index: true,
-			extension: 'jsx',
+		it('should strip ending x in the index file for tsx extensions', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				index: true,
+				extension: 'tsx',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.ts')).toBeFile();
 		});
 
-		await tps.render(CWD, 'App');
+		it('should be able to use index file with explicit export', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toBeFile();
-	});
+			tps.setAnswers({
+				index: true,
+				indexExportPattern: 'explicit',
+			});
 
-	it('should strip ending x in the index file for tsx extensions', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
+			await tps.render(CWD, 'App');
 
-		tps.setAnswers({
-			index: true,
-			extension: 'tsx',
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.ts')).toBeFile();
-	});
-
-	it('should be able to use index file with explicit export', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			index: true,
-			indexExportPattern: 'explicit',
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import App from './App';
 export default App;
 `);
-	});
-
-	it('should support named export import statement', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			index: true,
-			export: 'named',
-		});
+		it('should support named export import statement', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				index: true,
+				export: 'named',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 export * from './App';
 `);
-	});
-
-	it('should support named export import statement with explicit import', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			index: true,
-			export: 'named',
-			indexExportPattern: 'explicit',
-		});
+		it('should support named export import statement with explicit import', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				index: true,
+				export: 'named',
+				indexExportPattern: 'explicit',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import { App } from './App';
 export { App };
 `);
+		});
+
+		it('should be able to not use a index file', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				index: false,
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.jsx')).not.toBeFile();
+		});
 	});
 
-	it('should be able to not use a index file', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
+	describe('storybook', () => {
+		it('should be able to use storybook', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		tps.setAnswers({
-			index: false,
-		});
+			tps.setAnswers({
+				storybook: true,
+			});
 
-		await tps.render(CWD, 'App');
+			await tps.render(CWD, 'App');
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/index.jsx')).not.toBeFile();
-	});
-
-	it('should be able to use storybook', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			storybook: true,
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
 import App from './App';
 
 const meta = {
@@ -644,22 +696,22 @@ export const Primary = {
 	},
 };
 `);
-	});
-
-	it('should support differnt types of exports in storybook', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			storybook: true,
-			export: 'named',
-		});
+		it('should support differnt types of exports in storybook', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				storybook: true,
+				export: 'named',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.stories.jsx')).toHaveFileContents(`\
 import { App } from './App';
 
 const meta = {
@@ -674,23 +726,23 @@ export const Primary = {
 	},
 };
 `);
-	});
-
-	it('should be able to use storybook with typescript', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
 		});
 
-		tps.setAnswers({
-			storybook: true,
-			typescript: true,
-			extension: 'tsx',
-		});
+		it('should be able to use storybook with typescript', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
 
-		await tps.render(CWD, 'App');
+			tps.setAnswers({
+				storybook: true,
+				typescript: true,
+				extension: 'tsx',
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.stories.tsx')).toHaveFileContents(`\
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.stories.tsx')).toHaveFileContents(`\
 import type { Meta, StoryObj } from '@storybook/react';
 import App from './App';
 
@@ -707,6 +759,7 @@ export const Primary: Story = {
 	},
 };
 `);
+		});
 	});
 
 	it('should be able to use set a base component', async () => {
