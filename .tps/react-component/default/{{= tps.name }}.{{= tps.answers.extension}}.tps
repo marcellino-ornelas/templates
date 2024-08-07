@@ -9,15 +9,15 @@ import {{? tps.answers.cssExtension.startsWith("module.")}}styles from {{?}}'./{
 {{{?}}}
 {{{? tps.answers.typescript}}}
 
-interface Props {
+interface {{#def.propsInterfaceName}} {
 	// props
 }
 {{{?}}}
 
 {{{? isFunctionStyle }}}
-{{#def.export}}function {{#def.componentName}}({}{{? tps.answers.typescript}}: Props{{?}}) {
+{{#def.export}}function {{#def.componentName}}({}{{? tps.answers.typescript}}: {{#def.propsInterfaceName}}{{?}}) {
 {{{??}}}
-{{#def.export}}const {{#def.componentName}} = ({}{{? tps.answers.typescript}}: Props{{?}}) => {
+{{#def.export}}const {{#def.componentName}} = ({}{{? tps.answers.typescript}}: {{#def.propsInterfaceName}}{{?}}) => {
 {{{?}}}
 	return (
 		<{{= tps.answers.component }}>

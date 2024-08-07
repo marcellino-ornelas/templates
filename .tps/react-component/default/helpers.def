@@ -2,6 +2,10 @@
 {{= tps.u.pascalCase(tps.name)}}
 #}}}
 
+{{{##def.propsInterfaceName:
+{{#def.componentName}}Props
+#}}}
+
 {{{##def.export:
 {{? tps.answers.export === "named" }}export {{?? tps.answers.inlineDefaultExport && tps.answers.functionStyle !== 'arrow' }}export default {{?}}
 #}}}

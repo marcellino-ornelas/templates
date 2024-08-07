@@ -429,11 +429,11 @@ export const App = ({}) => {
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-interface Props {
+interface AppProps {
 	// props
 }
 
-function App({}: Props) {
+function App({}: AppProps) {
 	return (
 		<div>
 			App component
