@@ -73,7 +73,7 @@ describe('React component', () => {
 		expect(path.join(CWD, 'nav_item/nav_item.css')).toBeFile();
 	});
 
-	it('should have correct component contents', async () => {
+	it('should be able to use all defaults', async () => {
 		const tps = new Templates<ReactComponentAnswers>('react-component', {
 			default: true,
 		});
@@ -95,6 +95,46 @@ function App({}) {
 
 export default App;
 `);
+	});
+
+	describe('helpers.def', () => {
+		describe('componentImport', () => {
+			it('should support default export', async () => {
+				const tps = new Templates<ReactComponentAnswers>('react-component', {
+					default: true,
+				});
+
+				tps.setAnswers({
+					export: 'default',
+					test: true,
+				});
+
+				await tps.render(CWD, 'App');
+
+				// @ts-expect-error no types for extending jest functions
+				expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(
+					"import App from './App';",
+				);
+			});
+
+			it('should support named export', async () => {
+				const tps = new Templates<ReactComponentAnswers>('react-component', {
+					default: true,
+				});
+
+				tps.setAnswers({
+					export: 'named',
+					test: true,
+				});
+
+				await tps.render(CWD, 'App');
+
+				// @ts-expect-error no types for extending jest functions
+				expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(
+					"import { App } from './App';",
+				);
+			});
+		});
 	});
 
 	// default
@@ -404,6 +444,27 @@ function App({}: Props) {
 export default App;
 `);
 		});
+
+		it('should be able to use set a base component', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				component: 'Box',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+	return (
+		<Box>
+			App component
+		</Box>
+	);
+`);
+		});
 	});
 
 	describe('test', () => {
@@ -447,19 +508,9 @@ describe('App', () => {
 			await tps.render(CWD, 'App');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(`\
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { App } from './App';
-
-describe('App', () => {
-	it('should render the component', () => {
-		render(<App />);
-
-		expect(screen.getByText('App component')).toBeInTheDocument();
-	});
-});
-`);
+			expect(path.join(CWD, 'App/App.test.jsx')).toHaveFileContents(
+				`import { App } from './App';`,
+			);
 		});
 
 		it('should support test file with typescript', async () => {
@@ -610,6 +661,7 @@ export { default } from './App';
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import App from './App';
+
 export default App;
 `);
 		});
@@ -648,6 +700,7 @@ export * from './App';
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
 import { App } from './App';
+
 export { App };
 `);
 		});
@@ -760,33 +813,5 @@ export const Primary: Story = {
 };
 `);
 		});
-	});
-
-	it('should be able to use set a base component', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
-			default: true,
-		});
-
-		tps.setAnswers({
-			component: 'Box',
-		});
-
-		await tps.render(CWD, 'App');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
-import React, { useEffect, useState } from 'react';
-import './App.css';
-
-function App({}) {
-	return (
-		<Box>
-			App component
-		</Box>
-	);
-};
-
-export default App;
-`);
 	});
 });

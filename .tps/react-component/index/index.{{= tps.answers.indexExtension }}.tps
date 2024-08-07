@@ -3,6 +3,7 @@
 export * from './{{= tps.name}}';
 {{{??}}}
 {{#def.componentImport}}
+
 export { {{#def.componentName}} };
 {{{?}}}
 {{{??}}}
@@ -10,6 +11,7 @@ export { {{#def.componentName}} };
 export { default } from './{{= tps.name}}';
 {{{??}}}
 {{#def.componentImport}}
+
 export default {{#def.componentName}};
 {{{?}}}
 {{{?}}}
