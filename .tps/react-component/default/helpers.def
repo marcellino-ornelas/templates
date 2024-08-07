@@ -3,7 +3,7 @@
 #}}}
 
 {{{##def.export:
-{{? tps.answers.export === "named" }}export {{?? tps.answers.inlineDefaultExport }}export default {{?}}
+{{? tps.answers.export === "named" }}export {{?? tps.answers.inlineDefaultExport && tps.answers.functionStyle !== 'arrow' }}export default {{?}}
 #}}}
 
 {{{##def.componentImport:

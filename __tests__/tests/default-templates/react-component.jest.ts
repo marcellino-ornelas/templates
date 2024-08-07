@@ -260,6 +260,36 @@ export function App({}) {
 `);
 		});
 
+		it('should ignore inlineDefaultExport when functionStyle is arrow', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				export: 'default',
+				inlineDefaultExport: true,
+				functionStyle: 'arrow',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
+import React, { useEffect, useState } from 'react';
+import './App.css';
+
+const App = ({}) => {
+	return (
+		<div>
+			App component
+		</div>
+	);
+};
+
+export default App;
+`);
+		});
+
 		it('should be able to use default export with arrow style', async () => {
 			const tps = new Templates<ReactComponentAnswers>('react-component', {
 				default: true,
@@ -288,36 +318,6 @@ const App = ({}) => {
 export default App;
 `);
 		});
-
-		// 		it('should be able to use default export with arrow style', async () => {
-		// 			const tps = new Templates<ReactComponentAnswers>('react-component', {
-		// 				default: true,
-		// 			});
-
-		// 			tps.setAnswers({
-		// 				export: 'default',
-		// 				inlineDefaultExport: true,
-		// 				functionStyle: 'arrow',
-		// 			});
-
-		// 			await tps.render(CWD, 'App');
-
-		// 			// @ts-expect-error no types for extending jest functions
-		// 			expect(path.join(CWD, 'App/App.jsx')).toHaveFileContents(`\
-		// import React, { useEffect, useState } from 'react';
-		// import './App.css';
-
-		// const App = ({}) => {
-		// 	return (
-		// 		<div>
-		// 			App component
-		// 		</div>
-		// 	);
-		// };
-
-		// export default App;
-		// `);
-		// 		});
 
 		it('should be able to use named export', async () => {
 			const tps = new Templates<ReactComponentAnswers>('react-component', {

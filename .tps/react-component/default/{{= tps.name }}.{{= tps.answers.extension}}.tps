@@ -1,6 +1,7 @@
 {{{
 	const isDefaultExport = tps.answers.export === "default";
 	const isFunctionStyle = tps.answers.functionStyle === "function";
+	const isArrowStyle = tps.answers.functionStyle === "arrow";
 }}}
 import React, { useEffect, useState } from 'react';
 {{{? tps.answers.css}}}
@@ -24,7 +25,7 @@ interface Props {
 		</{{= tps.answers.component }}>
 	);
 };
-{{{? isDefaultExport && !tps.answers.inlineDefaultExport }}}
+{{{? isDefaultExport && (!tps.answers.inlineDefaultExport || isArrowStyle) }}}
 
 export default {{#def.componentName}};
 {{{?}}}
