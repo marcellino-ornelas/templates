@@ -149,7 +149,7 @@ module.exports = {
 			tpsType: 'data',
 			hidden: true,
 			message: 'What type of export pattern do you want for your index file?',
-			choices: ['shorthand', 'Explicit'],
+			choices: ['shorthand', 'explicit'],
 			default: 'shorthand',
 		},
 		{
