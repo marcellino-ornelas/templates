@@ -5,7 +5,6 @@ import { ConfigProvider, theme } from 'antd';
 import { useColorMode } from '@docusaurus/theme-common';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { PlaygroundTps } from '@site/types/playground';
-// import Nav from '@site/src/components/Nav';
 import { Editors } from './_editors';
 import { Options } from './_options';
 
@@ -17,7 +16,6 @@ export const Playground = () => {
 			title="Template playground"
 			description="Test our template engine file changes in the browser"
 		>
-			{/* <Nav /> */}
 			<PlaygroundContents />
 		</Layout>
 	);
