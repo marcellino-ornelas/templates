@@ -7,7 +7,36 @@ module.exports = {
 	},
 	prompts: [
 		{
+			name: 'export',
+			message: 'Would you like a default export or named export?',
+			type: 'list',
+			tpsType: 'data',
+			choices: ['default', 'named'],
+			default: 'default',
+			hidden: true,
+		},
+		{
+			name: 'inlineDefaultExport',
+			message:
+				'Would you like your default export on the same line as your component?',
+			type: 'confirm',
+			tpsType: 'data',
+			hidden: true,
+			default: false,
+		},
+		{
+			name: 'functionStyle',
+			message:
+				'Would you like a arrow function or a function declaration for your component?',
+			type: 'list',
+			tpsType: 'data',
+			choices: ['function', 'arrow'],
+			hidden: true,
+			default: 'function',
+		},
+		{
 			name: 'typescript',
+			aliases: ['t'],
 			type: 'confirm',
 			tpsType: 'data',
 			message: 'Would you like to use typescript',
@@ -33,8 +62,8 @@ module.exports = {
 			default: true,
 		},
 		{
-			name: 'cssType',
-			aliases: ['z'],
+			name: 'cssExtension',
+			aliases: ['cssType', 'cssExt'],
 			tpsType: 'data',
 			type: 'input',
 			message: 'What type of css extension would you like?',
@@ -45,15 +74,37 @@ module.exports = {
 		},
 		{
 			name: 'test',
-			aliases: ['t'],
 			type: 'confirm',
 			tpsType: 'package',
 			message: 'Would you like to include unit tests?',
 			default: false,
 		},
 		{
-			name: 'testType',
-			aliases: ['y'],
+			name: 'reactTestingLibrary',
+			type: 'confirm',
+			tpsType: 'data',
+			message:
+				'Would you like to use @testing-library/react in your test file?',
+			when: (answers) => {
+				return !!answers.test;
+			},
+			hidden: true,
+			default: true,
+		},
+		{
+			name: 'jestDomImport',
+			type: 'confirm',
+			tpsType: 'data',
+			message: 'Would you like a @testing-library/jest-dom import?',
+			when: (answers) => {
+				return !!answers.reactTestingLibrary;
+			},
+			hidden: true,
+			default: false,
+		},
+		{
+			name: 'testExtension',
+			aliases: ['testType', 'testExt'],
 			tpsType: 'data',
 			type: 'input',
 			message: 'What type of test extension would you like?',
@@ -61,8 +112,7 @@ module.exports = {
 				return !!answers.test;
 			},
 			default: (answers) => {
-				if (answers.typescript) return 'test.ts';
-				return 'test.js';
+				return `test.${answers.extension}`;
 			},
 		},
 		{
@@ -74,8 +124,46 @@ module.exports = {
 			default: true,
 		},
 		{
+			name: 'indexExtension',
+			aliases: ['indexExt'],
+			tpsType: 'data',
+			type: 'input',
+			hidden: true,
+			message: 'What type of extension would you like for your index file?',
+			when: (answers) => {
+				return !!answers.index;
+			},
+			default: (answers) => {
+				// if jsx or tsx extension, strip ending `x` for index file
+				if (/^(t|j)sx$/.test(answers.extension)) {
+					return answers.extension.slice(0, -1);
+				}
+
+				return answers.extension;
+			},
+		},
+		{
+			name: 'indexExportPattern',
+			aliases: ['i'],
+			type: 'list',
+			tpsType: 'data',
+			hidden: true,
+			message: 'What type of export pattern do you want for your index file?',
+			choices: ['shorthand', 'explicit'],
+			default: 'shorthand',
+		},
+		{
+			name: 'component',
+			hidden: true,
+			type: 'confirm',
+			tpsType: 'data',
+			message: 'What component would you like as the base component?',
+			default: 'div',
+		},
+		{
 			name: 'storybook',
 			aliases: ['s', 'story'],
+			hidden: true,
 			type: 'confirm',
 			tpsType: 'package',
 			message: 'Would you like to include a storybook file?',
