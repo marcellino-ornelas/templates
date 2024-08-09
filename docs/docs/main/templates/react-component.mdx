@@ -244,12 +244,6 @@ following:
 				| - Nav.css
 			// highlight-end
 			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
 ```
 
 If you used another naming format, such as
@@ -274,12 +268,25 @@ following:
 				| - nav-item.css
 			// highlight-end
 			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+```
+
+By default, we generate a component with a default export and function
+declaration, so you will end up with something like the following:
+
+{/* prettier-ignore */}
+```tsx
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+function Nav({}) {
+	return (
+		<div>
+			Nav component
+		</div>
+	);
+};
+
+export default Nav;
 ```
 
 ### How to use options
@@ -452,11 +459,16 @@ Depending on your answers, it would produce something to the following:
 	| - package-lock.json
 ```
 
-### How to use with typescript
+### How to use different export styles
 
-When generating a new instance of this template you will be asked if you want to
-use typescript. However if you know you want to use typescript in your project
-you can do one of the following:
+By default, this template will use a default export when exporting your new
+component. If your repo use's a different type of export pattern, you can use
+the `export` option. Currently only default exports and named exports are
+supported. You can do this either on the command line or in your .tps/.tpsrc
+file.
+
+If you want to use a named export for your export pattern you can do one of the
+following:
 
 <Tabs>
 
@@ -466,20 +478,124 @@ You can pass in the following flags when your generating your new instance and
 you will no longer be prompted those questions
 
 ```bash
-tps react-component Nav --typescript --extension=tsx
+tps react-component Nav --export named
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use named exports
+when generating your new component.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"export": "named"
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now when your component is rendered it will use a named export similar to the
+following:
+
+{/* prettier-ignore */}
+```tsx
+import React, { useEffect, useState } from 'react';
+import './App.css';
+
+export function App({}) {
+	return (
+		<div>
+			App component
+		</div>
+	);
+};
+```
+
+### How to use with typescript
+
+When generating a new instance of this template you will be asked if you want to
+use typescript. However if you know you want to use typescript in your project
+you can use the `typescript` option.
+
+When the `typescript` option is provided, it will render your new component
+using typescript. This will add a props interface to your component file and
+change the default value for `extension` to `tsx`.
+
+:::tip
+
+Only the default value for `extension` will be changed and this prompt will
+still be asked when generating new instances. If dont want this prompt to be
+prompted, set the `extension` option in your [config file](../tpsrc.mdx) or on
+the command line
+
+<Tabs>
+
+<TabItem value="cli">
+
+```bash
+tps react-component Nav --extension tsx
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"extension": "tsx"
+		}
+	}
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+If you want a different extension than `tsx`, just change the value to what you
+wish.
+
+:::
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted those questions
+
+```bash
+tps react-component Nav --typescript
 
 # or
 
-tps react-component Nav --typescript -e tsx
-```
-
-Produces:
-
-```txt
-| - Nav
-	| - index.tsx
-	| - Nav.tsx
-	| - Nav.css
+tps react-component Nav -t
 ```
 
 </TabItem>
@@ -500,21 +616,24 @@ tps init
 {
 	"react-component": {
 		"answers": {
-			"typescript": true,
-			"extension": "tsx"
+			"typescript": true
 		}
 	}
 }
 ```
 
 Now when generating a new instance you no longer will be prompted for these two
-questions or have to supply the two flags to the cli command
+questions or have to supply the two flags to the cli command.
 
 ```bash
 tps react-component Nav
 ```
 
-Would produce:
+</TabItem>
+
+</Tabs>
+
+Depending on your answers, it would produce something to the following:
 
 ```txt
 | - Nav
@@ -523,9 +642,96 @@ Would produce:
 	| - Nav.css
 ```
 
+Your component file will end up with something like the following:
+
+{/* prettier-ignore */}
+```tsx
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+interface NavProps {
+	// props
+}
+
+function Nav({}: NavProps) {
+	return (
+		<div>
+			Nav component
+		</div>
+	);
+};
+
+export default Nav;
+```
+
+### How to use different function styles
+
+By default, this template will use a function declaration for your new
+component. If your repo use's a different type of function pattern, you can use
+the `functionStyle` option. Currently only arrow and function declaration styles
+are supported. You can do this either on the command line or in your .tps/.tpsrc
+file.
+
+If you want to use a arrow function you can do one of the following:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted those questions
+
+```bash
+tps react-component Nav --functionStyle arrow
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use arrow
+functions when generating your new component.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"export": "named"
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
+```
+
 </TabItem>
 
 </Tabs>
+
+Now when your component is rendered it will use a named export similar to the
+following:
+
+{/* prettier-ignore */}
+```tsx
+import React, { useEffect, useState } from 'react';
+import './App.css';
+
+export function App({}) {
+	return (
+		<div>
+			App component
+		</div>
+	);
+};
+```
 
 ### Use all default answers
 

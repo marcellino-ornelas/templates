@@ -419,7 +419,6 @@ export const App = ({}) => {
 
 			tps.setAnswers({
 				typescript: true,
-				extension: 'tsx',
 			});
 
 			await tps.render(CWD, 'App');
