@@ -494,6 +494,34 @@ describe('App', () => {
 `);
 		});
 
+		it('should use the `extension` in `testExtension`', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				extension: 'js',
+				test: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/App.test.js')).toHaveFileContents(`\
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+describe('App', () => {
+	it('should render the component', () => {
+		render(<App />);
+
+		expect(screen.getByText('App component')).toBeInTheDocument();
+	});
+});
+`);
+		});
+
 		it('should support different export statements in tests', async () => {
 			const tps = new Templates<ReactComponentAnswers>('react-component', {
 				default: true,
