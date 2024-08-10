@@ -461,21 +461,19 @@ Depending on your answers, it would produce something to the following:
 
 ### How to use different export styles
 
-By default, this template will use a default export when exporting your new
-component. If your repo use's a different type of export pattern, you can use
-the `export` option. Currently only default exports and named exports are
-supported. You can do this either on the command line or in your .tps/.tpsrc
-file.
+By default, this template uses a default export when exporting your new
+component. If your repo uses a different export pattern, you can configure it
+with the `export` option. Currently, only `default` and `named` exports are
+supported. You can specify this either on the command line or in your
+[config file](../tpsrc.mdx) file.
 
-If you want to use a named export for your export pattern you can do one of the
-following:
+To use a named export for your component, you can do one of the following:
 
 <Tabs>
 
 <TabItem value="cli">
 
-You can pass in the following flags when your generating your new instance and
-you will no longer be prompted those questions
+You can pass in the following flag when your generating your new instance:
 
 ```bash
 tps react-component Nav --export named
@@ -486,7 +484,7 @@ tps react-component Nav --export named
 <TabItem value=".tps/.tpsrc">
 
 You can add the following to your `.tps/.tpsrc` file to always use named exports
-when generating your new component.
+when generating a new component.
 
 If you havent already initialize your repo:
 
@@ -512,7 +510,7 @@ tps react-component Nav
 
 </Tabs>
 
-Now when your component is rendered it will use a named export similar to the
+Now, when your component is rendered, it will use a named export, similar to the
 following:
 
 {/* prettier-ignore */}
@@ -531,24 +529,32 @@ export function App({}) {
 
 ### How to use with typescript
 
-When generating a new instance of this template you will be asked if you want to
-use typescript. However if you know you want to use typescript in your project
-you can use the `typescript` option.
+The `typescript` option controls whether the component will be rendered using
+typescript or not.
 
-When the `typescript` option is provided, it will render your new component
-using typescript. This will add a props interface to your component file and
-change the default value for `extension` to `tsx`.
+When your component uses typescript it will add a typesscript interface for the
+component props and change the default value for the `extension` option to
+`tsx`.
+
+When generating a new instance of this template, you will be asked if you want
+to use Typescript. However, if you know your going to use typescript and you
+dont want to be prompted every time, set the `typescript` option on the command
+line or in your [config file](../tpsrc.mdx).
 
 :::tip
 
 Only the default value for `extension` will be changed and this prompt will
 still be asked when generating new instances. If dont want this prompt to be
 prompted, set the `extension` option in your [config file](../tpsrc.mdx) or on
-the command line
+the command line.
+
+To generate your component using typescript, you can do one of the following:
 
 <Tabs>
 
 <TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
 
 ```bash
 tps react-component Nav --extension tsx
@@ -557,6 +563,9 @@ tps react-component Nav --extension tsx
 </TabItem>
 
 <TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use typescript
+when generating a new component.
 
 If you havent already initialize your repo:
 
@@ -603,8 +612,7 @@ tps react-component Nav -t
 <TabItem value=".tps/.tpsrc">
 
 You can add the following to your `.tps/.tpsrc` file to always use typescript
-when generating a react component in your repos directory and all its
-subdirectories.
+when generating a react component in your repo.
 
 If you havent already initialize your repo:
 
@@ -666,20 +674,19 @@ export default Nav;
 
 ### How to use different function styles
 
-By default, this template will use a function declaration for your new
-component. If your repo use's a different type of function pattern, you can use
-the `functionStyle` option. Currently only arrow and function declaration styles
-are supported. You can do this either on the command line or in your .tps/.tpsrc
-file.
+By default, this template uses a function declaration for your new component. If
+your repo uses a different function pattern, you can configure it with the
+`functionStyle` option. Currently, only `arrow` functions and `function`
+declarations are supported. You can specify this either on the command line or
+in your [config file](../tpsrc.mdx) file.
 
-If you want to use a arrow function you can do one of the following:
+To use an arrow function for your component, you can do one of the following:
 
 <Tabs>
 
 <TabItem value="cli">
 
-You can pass in the following flags when your generating your new instance and
-you will no longer be prompted those questions
+You can pass in the following flag when your generating your new instance:
 
 ```bash
 tps react-component Nav --functionStyle arrow
@@ -690,7 +697,7 @@ tps react-component Nav --functionStyle arrow
 <TabItem value=".tps/.tpsrc">
 
 You can add the following to your `.tps/.tpsrc` file to always use arrow
-functions when generating your new component.
+functions when generating a new component.
 
 If you havent already initialize your repo:
 
@@ -702,7 +709,7 @@ tps init
 {
 	"react-component": {
 		"answers": {
-			"export": "named"
+			"functionStyle": "arrow"
 		}
 	}
 }
@@ -716,21 +723,23 @@ tps react-component Nav
 
 </Tabs>
 
-Now when your component is rendered it will use a named export similar to the
-following:
+Now, when your component is rendered, it will use an arrow function, similar to
+the following:
 
 {/* prettier-ignore */}
 ```tsx
 import React, { useEffect, useState } from 'react';
-import './App.css';
+import './Nav.css';
 
-export function App({}) {
+const Nav = ({}) => {
 	return (
 		<div>
-			App component
+			Nav component
 		</div>
 	);
 };
+
+export default Nav;
 ```
 
 ### Use all default answers
