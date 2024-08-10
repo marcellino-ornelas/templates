@@ -20,11 +20,11 @@ import ReactComponentTemplateGif from './react-component.gif';
 	</div>
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon
-			icon="logos:storybook-icon"
+			icon="logos:testing-library"
 			width="25px"
 			className="margin-right--xs"
-		/>
-		Supports Storybook
+		/>{' '}
+		Supports React testing library
 	</div>
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon inline icon="logos:jest" width="25px" className="margin-right--xs" />{' '}
@@ -33,6 +33,14 @@ import ReactComponentTemplateGif from './react-component.gif';
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon icon="skill-icons:css" width="25px" className="margin-right--xs" />{' '}
 		Supports multiple CSS languages
+	</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon
+			icon="logos:storybook-icon"
+			width="25px"
+			className="margin-right--xs"
+		/>
+		Supports Storybook
 	</div>
 </div>
 
@@ -273,18 +281,13 @@ following:
 By default, we generate a component with a default export and function
 declaration, so you will end up with something like the following:
 
-{/* prettier-ignore */}
-```tsx
+```tsx title="Nav.jsx"
 import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 function Nav({}) {
-	return (
-		<div>
-			Nav component
-		</div>
-	);
-};
+	return <div>Nav component</div>;
+}
 
 export default Nav;
 ```
@@ -513,18 +516,72 @@ tps react-component Nav
 Now, when your component is rendered, it will use a named export, similar to the
 following:
 
-{/* prettier-ignore */}
-```tsx
+```tsx title="Nav.jsx"
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+export function Nav({}) {
+	return <div>Nav component</div>;
+}
+```
+
+#### Inline default exports
+
+This template also supports inline default export statements. You can use a
+inline default export by using the `inlineDefaultExport` option. You can specify
+this either on the command line or in your [config file](../tpsrc.mdx) file.
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
+
+```bash
+tps react-component Nav --inlineDefaultExport
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use named exports
+when generating a new component.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"inlineDefaultExport": true
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now, when your component is rendered, it will use a inline default export,
+similar to the following:
+
+```tsx title="Nav.jsx"
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-export function App({}) {
-	return (
-		<div>
-			App component
-		</div>
-	);
-};
+export default function App({}) {
+	return <div>App component</div>;
+}
 ```
 
 ### How to use with typescript
@@ -652,8 +709,7 @@ Depending on your answers, it would produce something to the following:
 
 Your component file will end up with something like the following:
 
-{/* prettier-ignore */}
-```tsx
+```tsx title="Nav.tsx"
 import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
@@ -662,12 +718,8 @@ interface NavProps {
 }
 
 function Nav({}: NavProps) {
-	return (
-		<div>
-			Nav component
-		</div>
-	);
-};
+	return <div>Nav component</div>;
+}
 
 export default Nav;
 ```
@@ -726,17 +778,12 @@ tps react-component Nav
 Now, when your component is rendered, it will use an arrow function, similar to
 the following:
 
-{/* prettier-ignore */}
-```tsx
+```tsx title="Nav.jsx"
 import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 const Nav = ({}) => {
-	return (
-		<div>
-			Nav component
-		</div>
-	);
+	return <div>Nav component</div>;
 };
 
 export default Nav;
