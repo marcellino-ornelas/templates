@@ -677,12 +677,32 @@ export { default } from './App';
 			expect(path.join(CWD, 'App/index.ts')).toBeFile();
 		});
 
-		it('should be able to use index file with explicit export', async () => {
+		it('should be able to use default export with shorthand export', async () => {
 			const tps = new Templates<ReactComponentAnswers>('react-component', {
 				default: true,
 			});
 
 			tps.setAnswers({
+				export: 'default',
+				index: true,
+				indexExportPattern: 'explicit',
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App/index.js')).toHaveFileContents(`\
+export { default } from './App';
+`);
+		});
+
+		it('should be able to use default export with explicit export', async () => {
+			const tps = new Templates<ReactComponentAnswers>('react-component', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				export: 'default',
 				index: true,
 				indexExportPattern: 'explicit',
 			});
@@ -697,7 +717,7 @@ export default App;
 `);
 		});
 
-		it('should support named export import statement', async () => {
+		it('should support named export import statement with shorthand export', async () => {
 			const tps = new Templates<ReactComponentAnswers>('react-component', {
 				default: true,
 			});
@@ -705,6 +725,7 @@ export default App;
 			tps.setAnswers({
 				index: true,
 				export: 'named',
+				indexExportPattern: 'shorthand',
 			});
 
 			await tps.render(CWD, 'App');
