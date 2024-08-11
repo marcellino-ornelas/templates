@@ -685,7 +685,7 @@ export { default } from './App';
 			tps.setAnswers({
 				export: 'default',
 				index: true,
-				indexExportPattern: 'explicit',
+				indexExportPattern: 'shorthand',
 			});
 
 			await tps.render(CWD, 'App');
