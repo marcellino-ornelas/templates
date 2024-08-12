@@ -436,15 +436,14 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Rendering templates to locations %n', pathsToCreate);
 
+		if (await !isDirAsync(finalDest)) {
+			logger.tps.error('final destination was not a directory %n', {
+				finalDest,
+			});
+			throw new DirectoryNotFoundError(finalDest);
+		}
+
 		return Promise.resolve()
-			.then(() => {
-				if (!isDir(finalDest)) {
-					logger.tps.error('final destination was not a directory %n', {
-						finalDest,
-					});
-					throw new DirectoryNotFoundError(finalDest);
-				}
-			})
 			.then(() => this._answerRestOfPrompts())
 			.then(() => {
 				logger.tps.info('Rendering template at %s', finalDest);

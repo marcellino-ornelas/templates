@@ -17,6 +17,18 @@ export function isDir(filePath: string): boolean {
 }
 
 /**
+ * Check to see if the `path` is a valid directory
+ */
+export async function isDirAsync(filePath: string): Promise<boolean> {
+	try {
+		const dir = await fs.promises.lstat(filePath);
+		return dir.isDirectory();
+	} catch (e) {
+		return false;
+	}
+}
+
+/**
  * Check to see if the `path` is a valid file
  */
 export function isFile(filePath: string): boolean {
