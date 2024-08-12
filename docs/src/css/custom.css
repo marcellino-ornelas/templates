@@ -34,3 +34,11 @@
 body {
 	font-size: 16px;
 }
+
+/* p a {
+	--ifm-link-decoration: underline
+} */
+
+.markdown a {
+	--ifm-link-decoration: underline
+}
