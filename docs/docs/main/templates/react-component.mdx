@@ -1,3 +1,14 @@
+---
+description: Template to generate react component
+keywords:
+  - react
+  - react component
+  - react component scaffold
+  - react component boilerplate
+  - react component generator
+  - react component typescript
+---
+
 import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
@@ -20,11 +31,11 @@ import ReactComponentTemplateGif from './react-component.gif';
 	</div>
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon
-			icon="logos:storybook-icon"
+			icon="logos:testing-library"
 			width="25px"
 			className="margin-right--xs"
-		/>
-		Supports Storybook
+		/>{' '}
+		Supports React testing library
 	</div>
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon inline icon="logos:jest" width="25px" className="margin-right--xs" />{' '}
@@ -33,6 +44,14 @@ import ReactComponentTemplateGif from './react-component.gif';
 	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
 		<Icon icon="skill-icons:css" width="25px" className="margin-right--xs" />{' '}
 		Supports multiple CSS languages
+	</div>
+	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
+		<Icon
+			icon="logos:storybook-icon"
+			width="25px"
+			className="margin-right--xs"
+		/>
+		Supports Storybook
 	</div>
 </div>
 
@@ -85,7 +104,7 @@ tps react-component path/to/dir/<component-name>
 
 ```txt title="Creates"
 | - <component-name>
-	| - index.jsx (optional)
+	| - index.js (optional)
 	| - <component-name>.jsx
 	| - <component-name>.css (optional)
 	| - <component-name>.test.js (optional)
@@ -106,7 +125,7 @@ Will produces something like the following:
 
 ```txt
 | - Nav
-	| - index.jsx
+	| - index.js
 	| - Nav.jsx
 	| - Nav.css
 ```
@@ -125,7 +144,7 @@ Will produces something like the following:
 | - src/
 	| - components/
 		| - Nav
-			| - index.jsx
+			| - index.js
 			| - Nav.jsx
 			| - Nav.css
 ```
@@ -239,17 +258,11 @@ following:
 		| - components/
 			// highlight-start
 			| - Nav/
-				| - index.jsx
+				| - index.js
 				| - Nav.jsx
 				| - Nav.css
 			// highlight-end
 			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
 ```
 
 If you used another naming format, such as
@@ -269,17 +282,25 @@ following:
 		| - components/
 			// highlight-start
 			| - nav-item/
-				| - index.jsx
+				| - index.js
 				| - nav-item.jsx
 				| - nav-item.css
 			// highlight-end
 			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+```
+
+By default, we generate a component with a default export and function
+declaration, so you will end up with something like the following:
+
+```tsx title="Nav.jsx"
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+function Nav({}) {
+	return <div>Nav component</div>;
+}
+
+export default Nav;
 ```
 
 ### How to use options
@@ -452,43 +473,32 @@ Depending on your answers, it would produce something to the following:
 	| - package-lock.json
 ```
 
-### How to use with typescript
+### How to use different export styles
 
-When generating a new instance of this template you will be asked if you want to
-use typescript. However if you know you want to use typescript in your project
-you can do one of the following:
+By default, this template uses a default export when exporting your new
+component. If your repo uses a different export pattern, you can configure it
+with the `export` option. Currently, only `default` and `named` exports are
+supported. You can specify this either on the command line or in your
+[config file](../tpsrc.mdx) file.
+
+To use a named export for your component, you can do one of the following:
 
 <Tabs>
 
 <TabItem value="cli">
 
-You can pass in the following flags when your generating your new instance and
-you will no longer be prompted those questions
+You can pass in the following flag when your generating your new instance:
 
 ```bash
-tps react-component Nav --typescript --extension=tsx
-
-# or
-
-tps react-component Nav --typescript -e tsx
-```
-
-Produces:
-
-```txt
-| - Nav
-	| - index.tsx
-	| - Nav.tsx
-	| - Nav.css
+tps react-component Nav --export named
 ```
 
 </TabItem>
 
 <TabItem value=".tps/.tpsrc">
 
-You can add the following to your `.tps/.tpsrc` file to always use typescript
-when generating a react component in your repos directory and all its
-subdirectories.
+You can add the following to your `.tps/.tpsrc` file to always use named exports
+when generating a new component.
 
 If you havent already initialize your repo:
 
@@ -500,32 +510,253 @@ tps init
 {
 	"react-component": {
 		"answers": {
-			"typescript": true,
-			"extension": "tsx"
+			"export": "named"
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now, when your component is rendered, it will use a named export, similar to the
+following:
+
+```tsx title="Nav.jsx"
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+export function Nav({}) {
+	return <div>Nav component</div>;
+}
+```
+
+#### Inline default exports
+
+This template also supports inline default export statements. You can use a
+inline default export by using the `inlineDefaultExport` option. You can specify
+this either on the command line or in your [config file](../tpsrc.mdx) file.
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
+
+```bash
+tps react-component Nav --inlineDefaultExport
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use inline
+default exports when generating a new component.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"inlineDefaultExport": true
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now, when your component is rendered, it will use a inline default export,
+similar to the following:
+
+```tsx title="Nav.jsx"
+import React, { useEffect, useState } from 'react';
+import './App.css';
+
+export default function App({}) {
+	return <div>App component</div>;
+}
+```
+
+### How to use with typescript
+
+The `typescript` option controls whether the component will be rendered using
+typescript or not.
+
+When your component uses typescript it will add a typescript interface for the
+component props and changes the default value for the `extension` option to
+`tsx`.
+
+When generating a new instance of this template, you will be asked if you want
+to use Typescript. However, if you know your going to use typescript and you
+dont want to be prompted every time, set the `typescript` option on the command
+line or in your [config file](../tpsrc.mdx).
+
+:::tip
+
+Only the default value for `extension` will be changed and this prompt will
+still be asked when generating new instances. If dont want this prompt to be
+prompted, set the `extension` option in your [config file](../tpsrc.mdx) or on
+the command line.
+
+:::
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flags when your generating your new instance and
+you will no longer be prompted this question.
+
+```bash
+tps react-component Nav --typescript
+
+# or
+
+tps react-component Nav -t
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use typescript
+when generating a react component in your repo.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"typescript": true
 		}
 	}
 }
 ```
 
 Now when generating a new instance you no longer will be prompted for these two
-questions or have to supply the two flags to the cli command
+questions or have to supply the two flags to the cli command.
 
 ```bash
 tps react-component Nav
 ```
 
-Would produce:
+</TabItem>
+
+</Tabs>
+
+Depending on your answers, it would produce something to the following:
 
 ```txt
 | - Nav
-	| - index.tsx
+	| - index.ts
 	| - Nav.tsx
 	| - Nav.css
+```
+
+Your component file will end up with something like the following:
+
+```tsx title="Nav.tsx"
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+interface NavProps {
+	// props
+}
+
+function Nav({}: NavProps) {
+	return <div>Nav component</div>;
+}
+
+export default Nav;
+```
+
+### How to use different function styles
+
+By default, this template uses a function declaration for your new component. If
+your repo uses a different function pattern, you can configure it with the
+`functionStyle` option. Currently, only `arrow` functions and `function`
+declarations are supported. You can specify this either on the command line or
+in your [config file](../tpsrc.mdx) file.
+
+To use an arrow function for your component, you can do one of the following:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
+
+```bash
+tps react-component Nav --functionStyle arrow
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always use arrow
+functions when generating a new component.
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+	"react-component": {
+		"answers": {
+			"functionStyle": "arrow"
+		}
+	}
+}
+```
+
+```bash
+tps react-component Nav
 ```
 
 </TabItem>
 
 </Tabs>
+
+Now, when your component is rendered, it will use an arrow function, similar to
+the following:
+
+```tsx title="Nav.jsx"
+import React, { useEffect, useState } from 'react';
+import './Nav.css';
+
+const Nav = ({}) => {
+	return <div>Nav component</div>;
+};
+
+export default Nav;
+```
 
 ### Use all default answers
 
