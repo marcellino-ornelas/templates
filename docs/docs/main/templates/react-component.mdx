@@ -545,8 +545,8 @@ tps react-component Nav --inlineDefaultExport
 
 <TabItem value=".tps/.tpsrc">
 
-You can add the following to your `.tps/.tpsrc` file to always use named exports
-when generating a new component.
+You can add the following to your `.tps/.tpsrc` file to always use inline
+default exports when generating a new component.
 
 If you havent already initialize your repo:
 
@@ -589,8 +589,8 @@ export default function App({}) {
 The `typescript` option controls whether the component will be rendered using
 typescript or not.
 
-When your component uses typescript it will add a typesscript interface for the
-component props and change the default value for the `extension` option to
+When your component uses typescript it will add a typescript interface for the
+component props and changes the default value for the `extension` option to
 `tsx`.
 
 When generating a new instance of this template, you will be asked if you want
@@ -605,48 +605,6 @@ still be asked when generating new instances. If dont want this prompt to be
 prompted, set the `extension` option in your [config file](../tpsrc.mdx) or on
 the command line.
 
-To generate your component using typescript, you can do one of the following:
-
-<Tabs>
-
-<TabItem value="cli">
-
-You can pass in the following flag when your generating your new instance:
-
-```bash
-tps react-component Nav --extension tsx
-```
-
-</TabItem>
-
-<TabItem value=".tps/.tpsrc">
-
-You can add the following to your `.tps/.tpsrc` file to always use typescript
-when generating a new component.
-
-If you havent already initialize your repo:
-
-```bash
-tps init
-```
-
-```json title=".tps/.tpsrc"
-{
-	"react-component": {
-		"answers": {
-			"extension": "tsx"
-		}
-	}
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-If you want a different extension than `tsx`, just change the value to what you
-wish.
-
 :::
 
 <Tabs>
@@ -654,7 +612,7 @@ wish.
 <TabItem value="cli">
 
 You can pass in the following flags when your generating your new instance and
-you will no longer be prompted those questions
+you will no longer be prompted this question.
 
 ```bash
 tps react-component Nav --typescript
