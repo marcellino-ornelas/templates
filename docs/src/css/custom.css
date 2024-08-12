@@ -36,5 +36,13 @@ body {
 }
 
 .markdown a {
-	--ifm-link-decoration: underline
+	--ifm-link-decoration: underline;
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link:hover code,
+.table-of-contents__link--active,
+.table-of-contents__link--active code {
+	--ifm-link-decoration: underline;
+	text-decoration: var(--ifm-link-decoration);
 }
