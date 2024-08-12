@@ -18,7 +18,8 @@ module.exports = {
 		},
 		{
 			name: 'inlineDefaultExport',
-			description: 'Places export default on the same line as the component',
+			description:
+				'Places the default export on the same line as the component, if export is default.',
 			message:
 				'Would you like your default export on the same line as your component?',
 			type: 'confirm',
@@ -28,7 +29,7 @@ module.exports = {
 		},
 		{
 			name: 'functionStyle',
-			description: 'Type of function you would like to use in your component',
+			description: 'Type of function that will be used in your component',
 			message:
 				'Would you like a arrow function or a function declaration for your component?',
 			type: 'list',
@@ -48,7 +49,7 @@ module.exports = {
 		},
 		{
 			name: 'extension',
-			description: 'Extension to use for the component file',
+			description: 'Extension that will be used for the component file',
 			message: 'What type of extension do you want for your component?',
 			aliases: ['e', 'ext', 'extention'],
 			type: 'input',
@@ -69,7 +70,7 @@ module.exports = {
 		},
 		{
 			name: 'cssExtension',
-			description: 'Extension to use for the css file',
+			description: 'Extension that will be used for the css file',
 			aliases: ['cssType', 'cssExt'],
 			tpsType: 'data',
 			type: 'input',
@@ -115,7 +116,7 @@ module.exports = {
 		},
 		{
 			name: 'testExtension',
-			description: 'Extension to use for the test file',
+			description: 'Extension that will be used for the test file',
 			message: 'What type of test extension would you like?',
 			aliases: ['testType', 'testExt'],
 			tpsType: 'data',
@@ -138,7 +139,7 @@ module.exports = {
 		},
 		{
 			name: 'indexExtension',
-			description: 'Extension to use for the index file',
+			description: 'Extension that will be used for the index file',
 			message: 'What type of extension would you like for your index file?',
 			aliases: ['indexExt'],
 			tpsType: 'data',
@@ -158,7 +159,8 @@ module.exports = {
 		},
 		{
 			name: 'indexExportPattern',
-			description: 'Type of export pattern to use for the index file',
+			description:
+				'Type of export pattern that will be used for the index file',
 			message: 'What type of export pattern do you want for your index file?',
 			aliases: ['i'],
 			type: 'list',
