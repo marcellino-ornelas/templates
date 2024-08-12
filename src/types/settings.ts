@@ -35,6 +35,8 @@ export interface SettingsFilePrompt {
 
 	message: string;
 
+	description?: string;
+
 	tpsType: keyof typeof SettingsFilePromptTpsType;
 
 	type: keyof typeof SettingsFilePromptType;

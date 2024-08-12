@@ -62,7 +62,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 						<tr key={prompt.name}>
 							<td>{prompt.name}</td>
 							<td>
-								{prompt.message}
+								{prompt.description || prompt.message}
 								<br />
 								<span style={{ color: 'grey' }}>
 									{!!prompt?.choices?.length &&

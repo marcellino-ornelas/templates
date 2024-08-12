@@ -15,6 +15,8 @@ export default class Prompt {
 
 	public message: SettingsFilePrompt['message'];
 
+	public description: SettingsFilePrompt['description'];
+
 	public aliases: SettingsFilePrompt['aliases'];
 
 	public tpsType: SettingsFilePrompt['tpsType'];
@@ -56,6 +58,7 @@ export default class Prompt {
 		this.name = prompt.name;
 		this.type = prompt.type;
 		this.message = prompt.message;
+		this.description = prompt.description;
 
 		// let defaultValue;
 		// const isPrompterDefaultIndex = ['list', 'rawlist', 'expand'].includes(
