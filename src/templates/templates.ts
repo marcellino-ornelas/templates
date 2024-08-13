@@ -11,11 +11,11 @@ import {
 	findUp,
 	isDir,
 	isFile,
+	isDirAsync,
 } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
 import {
 	eachObj,
-	defaults,
 	hasProp,
 	getNpmPaths,
 	getAllDirectoriesAndUp,
@@ -98,6 +98,9 @@ const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
 	loaders: defaultLoadersSync,
 	searchPlaces: tpsrcSearchPlaces,
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RenderData = Record<string, any>;
 
 /**
  * @class
@@ -398,13 +401,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	async render<T extends string | string[]>(
 		dest: string,
 		buildPaths?: T,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data?: Record<string, any> = {},
+		data?: RenderData = {},
 	): Promise<T extends string[] ? string[] : string> {
-		let dataForTemplating;
 		let buildInDest = false;
 		let pathsToCreate = buildPaths;
-		// const { name: globalName } = data;
 		let finalDest = dest;
 
 		if (!buildPaths) {
@@ -436,203 +436,202 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Rendering templates to locations %n', pathsToCreate);
 
+		if (!(await isDirAsync(finalDest))) {
+			logger.tps.error('final destination was not a directory %n', {
+				finalDest,
+			});
+			throw new DirectoryNotFoundError(finalDest);
+		}
+
+		await this._answerRestOfPrompts();
+
+		logger.tps.info('Rendering template at %s', finalDest);
+
+		const builders: Promise<never>[] = pathsToCreate.map((buildPath) => {
+			return this._renderBuildPath(
+				buildPath,
+				buildInDest,
+				buildNewFolder,
+				data,
+			);
+		});
+
+		await Promise.all(builders);
+
+		if (is.array.empty(this.buildErrors)) {
+			logger.tps.success('Finished rendering templates');
+
+			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
+		}
+
+		logger.tps.info('Build Errors: %o', this.buildErrors.length);
+		logger.tps.info(
+			'Build Paths need to be cleaned %n',
+			this.buildErrors.map(({ buildPath }) => buildPath),
+		);
+		this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
+			this._cleanUpFailBuild(buildPath, buildNewFolder && !didBuildPathExist);
+		});
+
+		const errors = this.buildErrors.map(({ error }) => error);
+
+		return Promise.reject(errors.length === 1 ? errors[0] : errors);
+	}
+
+	private async _renderBuildPath(
+		buildPath: string,
+		buildInDest: boolean,
+		buildNewFolder: boolean,
+		data: RenderData,
+	): Promise<never> {
+		const { name, dir } = path.parse(buildPath);
+		/**
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test' // short build path
+		 *    new folder: true
+		 *  then
+		 *    realBuildPath: '/User/home/app/test'
+		 *    - A new directory named `test` needs to be created
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test/test2' // long build path
+		 *    new folder: true
+		 *  then
+		 *    realBuildPath: '/User/home/app/test/test2'
+		 *    - A new directory named `test` needs to be created if doesn't exist already, `test2` should be created regardless
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: '' // build in dest
+		 *    new folder: true??
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - this directory should not be created or overridden since it should exist.
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test' // short build path
+		 *    new folder: false
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - this directory should not be created or overridden since it should exist.
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test/test2' // short build path
+		 *    new folder: false
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - A directory named `test` needs to be created if not already exists
+		 *
+		 */
+		const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
+		const answers = this.hasPrompts() ? this._prompts.answers : {};
+
+		const renderData = {
+			...data,
+			packages: this.packagesUsed,
+			template: this.template,
+			answers,
+			a: answers,
+			utils,
+			u: utils,
+			name,
+			dir,
+		};
+		let doesBuildPathExist = isDir(realBuildPath);
+
+		const groupName = `render_${buildPath}`;
+		const loggerGroup = logger.tps.group(groupName, {
+			clear: true,
+		});
+
+		const marker = colors.magenta('*'.repeat(buildPath.length + 12));
+
+		loggerGroup.info(`\n${marker}\nBuild Path: ${buildPath}\n${marker}`);
+
+		loggerGroup.info('Render config: %n', {
+			name: renderData.name,
+			buildPath,
+			'Final Destination': realBuildPath,
+			doesBuildPathExist,
+			buildInDest,
+			buildNewFolder,
+		});
+
 		return Promise.resolve()
 			.then(() => {
-				if (!isDir(finalDest)) {
-					logger.tps.error('final destination was not a directory %n', {
-						finalDest,
-					});
-					throw new DirectoryNotFoundError(finalDest);
-				}
-			})
-			.then(() => this._answerRestOfPrompts())
-			.then(() => {
-				logger.tps.info('Rendering template at %s', finalDest);
-				const answers = this.hasPrompts() ? this._prompts.answers : {};
+				const { wipe, force } = this.opts;
 
-				dataForTemplating = {
-					...data,
-					packages: this.packagesUsed,
-					template: this.template,
-					answers,
-					a: answers,
-					utils,
-					u: utils,
-				};
-			})
-			.then(() => {
-				const builders = pathsToCreate.map((buildPath) => {
-					const { name, dir } = path.parse(buildPath);
+				if (doesBuildPathExist) {
 					/**
-					 * @example
-					 *  if
-					 *    cwd: '/User/home/app'
-					 *    build path: 'test' // short build path
-					 *    new folder: true
-					 *  then
-					 *    realBuildPath: '/User/home/app/test'
-					 *    - A new directory named `test` needs to be created
-					 *
-					 * @example
-					 *  if
-					 *    cwd: '/User/home/app'
-					 *    build path: 'test/test2' // long build path
-					 *    new folder: true
-					 *  then
-					 *    realBuildPath: '/User/home/app/test/test2'
-					 *    - A new directory named `test` needs to be created if doesn't exist already, `test2` should be created regardless
-					 *
-					 * @example
-					 *  if
-					 *    cwd: '/User/home/app'
-					 *    build path: '' // build in dest
-					 *    new folder: true??
-					 *  then
-					 *    realBuildPath: '/User/home/app'
-					 *    - this directory should not be created or overridden since it should exist.
-					 *
-					 * @example
-					 *  if
-					 *    cwd: '/User/home/app'
-					 *    build path: 'test' // short build path
-					 *    new folder: false
-					 *  then
-					 *    realBuildPath: '/User/home/app'
-					 *    - this directory should not be created or overridden since it should exist.
-					 *
-					 * @example
-					 *  if
-					 *    cwd: '/User/home/app'
-					 *    build path: 'test/test2' // short build path
-					 *    new folder: false
-					 *  then
-					 *    realBuildPath: '/User/home/app'
-					 *    - A directory named `test` needs to be created if not already exists
-					 *
+					 * If `wipe=true` then we need to delete the directory that we will be overriding.
+					 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
 					 */
-					const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
-					const renderData = defaults({ name, dir }, dataForTemplating);
-					let doesBuildPathExist = isDir(realBuildPath);
-
-					const groupName = `render_${buildPath}`;
-					const loggerGroup = logger.tps.group(groupName, {
-						clear: true,
-					});
-
-					const marker = colors.magenta('*'.repeat(buildPath.length + 12));
-
-					loggerGroup.info(`\n${marker}\nBuild Path: ${buildPath}\n${marker}`);
-
-					loggerGroup.info('Render config: %n', {
-						name: renderData.name,
-						buildPath,
-						'Final Destination': realBuildPath,
-						doesBuildPathExist,
-						buildInDest,
-						buildNewFolder,
-					});
-
-					return Promise.resolve()
-						.then(() => {
-							const { wipe, force } = this.opts;
-
-							if (doesBuildPathExist) {
-								/**
-								 * If `wipe=true` then we need to delete the directory that we will be overriding.
-								 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
-								 */
-								if (wipe && !buildInDest) {
-									if (!buildNewFolder) {
-										loggerGroup.info(
-											'Skipping wipe because we are not building a new folder',
-										);
-										// super hacky yes i know. The reason this needs to happen is because
-										// when were using wipe but were not building a new folder we need to make sure all
-										// files that already exist get overridden
-										this.compiledFiles.forEach((file) => {
-											// eslint-disable-next-line no-param-reassign
-											file.opts.force = true;
-										});
-										return;
-									}
-									loggerGroup.info('Wiping destination %s', realBuildPath);
-									doesBuildPathExist = false;
-									return this._wipe(realBuildPath);
-								}
-
-								if (!force && !wipe) {
-									loggerGroup.info(
-										'Checking to see if there are duplicate files',
-									);
-									return this._checkForFiles(realBuildPath, renderData);
-								}
-							} else {
-								loggerGroup.info('Build path does not exist...');
-							}
-						})
-						.then(() => {
-							// Create a new folder unless told not to
-							// if we are building the template in dest folder don't create new folder
-							if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
-								loggerGroup.info('Creating real build path %s', realBuildPath);
-								return fs.promises
-									.mkdir(realBuildPath, { recursive: true })
-									.catch((err) => {
-										loggerGroup.warn(
-											'Building build path folder had a issue %n',
-											err,
-										);
-									});
-							}
-
+					if (wipe && !buildInDest) {
+						if (!buildNewFolder) {
 							loggerGroup.info(
-								'Not creating real build path %s',
-								realBuildPath,
+								'Skipping wipe because we are not building a new folder',
 							);
-						})
-						.then(() => this._renderAllDirectories(realBuildPath))
-						.then(() => this._renderAllFiles(realBuildPath, renderData))
-						.then(() => {
-							loggerGroup.success(
-								`Build Path: %s ${colors.green.italic('(created)')}`,
-								buildPath,
-							);
-						})
-						.catch((err) => {
-							loggerGroup.error('Build Path: %s %n', buildPath, err);
-							this._scheduleCleanUpForBuild(
-								realBuildPath,
-								err,
-								doesBuildPathExist,
-							);
-						})
-						.then(() => logger.tps.printGroup(groupName));
-				});
-
-				return Promise.all(builders).then(() => {
-					if (is.array.empty(this.buildErrors)) {
-						logger.tps.success('Finished rendering templates');
-
-						return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
+							// super hacky yes i know. The reason this needs to happen is because
+							// when were using wipe but were not building a new folder we need to make sure all
+							// files that already exist get overridden
+							this.compiledFiles.forEach((file) => {
+								// eslint-disable-next-line no-param-reassign
+								file.opts.force = true;
+							});
+							return;
+						}
+						loggerGroup.info('Wiping destination %s', realBuildPath);
+						doesBuildPathExist = false;
+						return this._wipe(realBuildPath);
 					}
 
-					logger.tps.info('Build Errors: %o', this.buildErrors.length);
-					logger.tps.info(
-						'Build Paths need to be cleaned %n',
-						this.buildErrors.map(({ buildPath }) => buildPath),
-					);
-					this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
-						this._cleanUpFailBuild(
-							buildPath,
-							buildNewFolder && !didBuildPathExist,
-						);
-					});
+					if (!force && !wipe) {
+						loggerGroup.info('Checking to see if there are duplicate files');
+						return this._checkForFiles(realBuildPath, renderData);
+					}
+				} else {
+					loggerGroup.info('Build path does not exist...');
+				}
+			})
+			.then(() => {
+				// Create a new folder unless told not to
+				// if we are building the template in dest folder don't create new folder
+				if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
+					loggerGroup.info('Creating real build path %s', realBuildPath);
+					return fs.promises
+						.mkdir(realBuildPath, { recursive: true })
+						.catch((err) => {
+							loggerGroup.warn(
+								'Building build path folder had a issue %n',
+								err,
+							);
+						});
+				}
 
-					const errors = this.buildErrors.map(({ error }) => error);
-
-					return Promise.reject(errors.length === 1 ? errors[0] : errors);
-				});
-			});
+				loggerGroup.info('Not creating real build path %s', realBuildPath);
+			})
+			.then(() => this._renderAllDirectories(realBuildPath))
+			.then(() => this._renderAllFiles(realBuildPath, renderData))
+			.then(() => {
+				loggerGroup.success(
+					`Build Path: %s ${colors.green.italic('(created)')}`,
+					buildPath,
+				);
+			})
+			.catch((err) => {
+				loggerGroup.error('Build Path: %s %n', buildPath, err);
+				this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
+			})
+			.then(() => logger.tps.printGroup(groupName));
 	}
 
 	_wipe(realBuildPath) {

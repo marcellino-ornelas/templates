@@ -17,9 +17,9 @@ const renderAllDirectoriesMock = jest
 
 const renderAllFilesMock = jest
 	.fn()
-	.mockName('_renderAllDirectories')
+	.mockName('_renderAllFiles')
 	.mockImplementation(() => {
-		throw new Error('_renderAllDirectories test');
+		throw new Error('_renderAllFiles test');
 	});
 
 /*
