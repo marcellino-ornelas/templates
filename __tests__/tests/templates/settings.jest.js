@@ -65,7 +65,7 @@ describe('[Templates] Settings:', () => {
 			expect(path.join(CWD, 'App')).toBeDirectory();
 		});
 
-		it('Should be able to use onRendered event', async () => {
+		it('Should be able to use onRendered event with single build path', async () => {
 			mkTemplate('test-events-on-rendered');
 
 			const tps = new Templates('test-events-on-rendered');
@@ -74,11 +74,31 @@ describe('[Templates] Settings:', () => {
 			tps.templateSettings.events.onRendered = jest
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.mockImplementation((_) => {
-					expect(path.join(CWD, 'App')).toBeDirectory();
+				.mockImplementation((_, createdPath) => {
+					// all build paths should be completed
+					expect(createdPath).toBeDirectory();
 				});
 
 			await tps.render(CWD, 'App');
+		});
+
+		it('Should be able to use onRendered event with multiple build paths', async () => {
+			mkTemplate('test-events-on-rendered');
+
+			const tps = new Templates('test-events-on-rendered');
+
+			tps.templateSettings.events = {};
+			tps.templateSettings.events.onRendered = jest
+				.fn()
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				.mockImplementation((_, createdPaths) => {
+					// all build paths should be completed
+					createdPaths.forEach((createdPath) => {
+						expect(createdPath).toBeDirectory();
+					});
+				});
+
+			await tps.render(CWD, ['App', 'App2']);
 		});
 
 		it('Should be able to use onBuildPathRender event', async () => {

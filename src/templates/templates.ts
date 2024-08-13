@@ -504,10 +504,14 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		if (is.array.empty(this.buildErrors)) {
 			logger.tps.success('Finished rendering templates');
 
-			await this._emitEvent('onRendered');
+			const createdPaths = Array.isArray(buildPaths)
+				? pathsToCreate
+				: pathsToCreate[0];
+
+			await this._emitEvent('onRendered', createdPaths);
 
 			// @ts-expect-error Not sure whats wrong here
-			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
+			return createdPaths;
 		}
 
 		logger.tps.info('Build Errors: %o', this.buildErrors.length);
