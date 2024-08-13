@@ -37,6 +37,16 @@ describe('[Templates] Settings:', () => {
 	});
 
 	describe('events', () => {
+		it('should ignore event if not specified', async () => {
+			mkTemplate('test-events-on-render');
+
+			const tps = new Templates('test-events-on-render');
+
+			await tps.render(CWD, 'App');
+
+			expect(path.join(CWD, 'App')).toBeDirectory();
+		});
+
 		it('Should be able to use onRender event', async () => {
 			mkTemplate('test-events-on-render');
 
