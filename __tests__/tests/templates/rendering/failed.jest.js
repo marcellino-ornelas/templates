@@ -113,4 +113,59 @@ describe('[TPS] Rendered Failed Cases:', () => {
 			expect(app2Folder).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 		});
 	});
+
+	it('should return array of errors when multiple fail', () => {
+		const fileInApp = playground.pathTo('App/storeUtils/user.js');
+		const appFolder = playground.pathTo('App');
+		const app2Folder = playground.pathTo('App2');
+		const fileInApp2 = playground.pathTo('App2/storeUtils/user.js');
+
+		writeFile(fileInApp, 'blah');
+		writeFile(fileInApp2, 'blah');
+
+		expect(fileInApp).toBeFile();
+		expect(fileInApp2).toBeFile();
+
+		return tps.render(playground.box(), ['App', 'App2']).catch((errors) => {
+			expect(errors).toBeInstanceOf(Array);
+
+			errors.forEach((error) => expect(error).toBeInstanceOf(Error));
+
+			expect(fileInApp).toBeFile();
+			expect(appFolder).not.toHaveAllFilesAndDirectories([
+				'db',
+				'server',
+				'db/db.js',
+				'index.js',
+			]);
+
+			expect(app2Folder).not.toHaveAllFilesAndDirectories(
+				'db',
+				'server',
+				'db/db.js',
+				'index.js',
+			);
+		});
+	});
+
+	it('should return error when one fails', () => {
+		const fileInApp = playground.pathTo('App/storeUtils/user.js');
+		const appFolder = playground.pathTo('App');
+
+		writeFile(fileInApp, 'blah');
+
+		expect(fileInApp).toBeFile();
+
+		return tps.render(playground.box(), ['App', 'App2']).catch((error) => {
+			expect(error).toBeInstanceOf(Error);
+
+			expect(fileInApp).toBeFile();
+			expect(appFolder).not.toHaveAllFilesAndDirectories([
+				'db',
+				'server',
+				'db/db.js',
+				'index.js',
+			]);
+		});
+	});
 });

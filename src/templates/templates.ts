@@ -459,40 +459,35 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			u: utils,
 		};
 
-		return Promise.resolve().then(() => {
-			const builders = pathsToCreate.map((buildPath) => {
-				return this._renderBuildPath(
-					buildPath,
-					buildInDest,
-					buildNewFolder,
-					dataForTemplating,
-				);
-			});
-
-			return Promise.all(builders).then(() => {
-				if (is.array.empty(this.buildErrors)) {
-					logger.tps.success('Finished rendering templates');
-
-					return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
-				}
-
-				logger.tps.info('Build Errors: %o', this.buildErrors.length);
-				logger.tps.info(
-					'Build Paths need to be cleaned %n',
-					this.buildErrors.map(({ buildPath }) => buildPath),
-				);
-				this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
-					this._cleanUpFailBuild(
-						buildPath,
-						buildNewFolder && !didBuildPathExist,
-					);
-				});
-
-				const errors = this.buildErrors.map(({ error }) => error);
-
-				return Promise.reject(errors.length === 1 ? errors[0] : errors);
-			});
+		const builders: Promise<never>[] = pathsToCreate.map((buildPath) => {
+			return this._renderBuildPath(
+				buildPath,
+				buildInDest,
+				buildNewFolder,
+				dataForTemplating,
+			);
 		});
+
+		await Promise.all(builders);
+
+		if (is.array.empty(this.buildErrors)) {
+			logger.tps.success('Finished rendering templates');
+
+			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
+		}
+
+		logger.tps.info('Build Errors: %o', this.buildErrors.length);
+		logger.tps.info(
+			'Build Paths need to be cleaned %n',
+			this.buildErrors.map(({ buildPath }) => buildPath),
+		);
+		this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
+			this._cleanUpFailBuild(buildPath, buildNewFolder && !didBuildPathExist);
+		});
+
+		const errors = this.buildErrors.map(({ error }) => error);
+
+		return Promise.reject(errors.length === 1 ? errors[0] : errors);
 	}
 
 	private async _renderBuildPath(
@@ -501,7 +496,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildNewFolder: boolean,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		dataForTemplating: Record<string, any> = {},
-	) {
+	): Promise<never> {
 		const { name, dir } = path.parse(buildPath);
 		/**
 		 * @example
