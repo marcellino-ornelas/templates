@@ -12,7 +12,7 @@ import FileNode from './fileNode';
 
 type FindKeyPattern = Partial<{
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	[Property in keyof FileSystemNode]: any;
+	[Property in keyof FileNode]: any;
 }>;
 
 export class DirectoryNode extends FileSystemNode {
