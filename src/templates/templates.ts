@@ -403,10 +403,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildPaths?: T,
 		data?: RenderData = {},
 	): Promise<T extends string[] ? string[] : string> {
-		// let dataForTemplating;
 		let buildInDest = false;
 		let pathsToCreate = buildPaths;
-		// const { name: globalName } = data;
 		let finalDest = dest;
 
 		if (!buildPaths) {
