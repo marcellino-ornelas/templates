@@ -16,7 +16,6 @@ import {
 import Prompter from '@tps/prompter';
 import {
 	eachObj,
-	defaults,
 	hasProp,
 	getNpmPaths,
 	getAllDirectoriesAndUp,
@@ -99,6 +98,9 @@ const tpsrcConfig = cosmiconfigSync(tpsConfigName, {
 	loaders: defaultLoadersSync,
 	searchPlaces: tpsrcSearchPlaces,
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RenderData = Record<string, any>;
 
 /**
  * @class
@@ -399,8 +401,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	async render<T extends string | string[]>(
 		dest: string,
 		buildPaths?: T,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data?: Record<string, any> = {},
+		data?: RenderData = {},
 	): Promise<T extends string[] ? string[] : string> {
 		// let dataForTemplating;
 		let buildInDest = false;
@@ -447,24 +448,13 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		await this._answerRestOfPrompts();
 
 		logger.tps.info('Rendering template at %s', finalDest);
-		const answers = this.hasPrompts() ? this._prompts.answers : {};
-
-		const dataForTemplating = {
-			...data,
-			packages: this.packagesUsed,
-			template: this.template,
-			answers,
-			a: answers,
-			utils,
-			u: utils,
-		};
 
 		const builders: Promise<never>[] = pathsToCreate.map((buildPath) => {
 			return this._renderBuildPath(
 				buildPath,
 				buildInDest,
 				buildNewFolder,
-				dataForTemplating,
+				data,
 			);
 		});
 
@@ -495,7 +485,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildInDest: boolean,
 		buildNewFolder: boolean,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		dataForTemplating: Record<string, any> = {},
+		data: RenderData,
 	): Promise<never> {
 		const { name, dir } = path.parse(buildPath);
 		/**
@@ -546,7 +536,19 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		 *
 		 */
 		const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
-		const renderData = defaults({ name, dir }, dataForTemplating);
+		const answers = this.hasPrompts() ? this._prompts.answers : {};
+
+		const renderData = {
+			...data,
+			packages: this.packagesUsed,
+			template: this.template,
+			answers,
+			a: answers,
+			utils,
+			u: utils,
+			name,
+			dir,
+		};
 		let doesBuildPathExist = isDir(realBuildPath);
 
 		const groupName = `render_${buildPath}`;
