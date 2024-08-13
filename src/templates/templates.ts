@@ -194,7 +194,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 *		'package.json'
 	 *	]
 	 */
-	public static tpsrcConfigNames: string[] = tpsrcSearchPlaces;
+	public static readonly tpsrcConfigNames: string[] = tpsrcSearchPlaces;
 
 	/**
 	 * Get all locations a template can be
@@ -684,7 +684,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildPath: string,
 		err: Error,
 		didBuildPathExist: boolean,
-	) {
+	): void {
 		logger.tps
 			.group(`render_${buildPath}`)
 			.info('Build Path schedule for cleaning %s %o', buildPath, {
@@ -697,7 +697,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		});
 	}
 
-	_cleanUpFailBuild(buildError, buildNewFolder) {
+	_cleanUpFailBuild(buildError: string, buildNewFolder: boolean): void {
 		logger.tps.info('Processing build cleanup %s %o', buildError, {
 			buildNewFolder,
 		});
@@ -771,7 +771,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		logger.tps.success('Clean up finished');
 	}
 
-	_checkForFiles(dest, data) {
+	_checkForFiles(dest: string, data: RenderData): void {
 		for (let i = 0; i < this.compiledFiles.length; i++) {
 			const file = this.compiledFiles[i];
 			const finalDest = file.dest(dest, data, this._defs);
@@ -787,7 +787,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 * @param {String} buildPath - destination path to render all files to
 	 * @param {Object} [data={}] - data passed in for dot
 	 */
-	_renderAllFiles(buildPath, data) {
+	_renderAllFiles(buildPath: string, data: RenderData): Promise<void> {
 		const loggerGroup = logger.tps.group(`render_${buildPath}`);
 		loggerGroup.info('Rendering files');
 
@@ -964,45 +964,44 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 	/**
 	 * Creates a array of all packages user wants for render process successful
-	 * @private
-	 * @returns {DirNode[]} - array of all the packages
 	 */
-	_getPackageArray() {
+	private _getPackageArray(): DirNode[] {
 		return this.packagesUsed.map((pkgName) => this.pkg(pkgName));
 	}
 
-	_answerRestOfPrompts() {
-		return !this._prompts
-			? null
-			: this._prompts.getAnswers().then((answers) => {
-					logger.tps.info('Answers from prompts %n', answers);
-					eachObj(answers, (answer, answerName) => {
-						if (this._prompts.getPrompt(answerName).isPkg()) {
-							switch (true) {
-								// @ts-expect-error need to fix library
-								case is.undef(answer):
-									break;
-								// @ts-expect-error need to fix library
-								case is.bool(answer):
-									if (answer) {
-										this.loadPackage(answerName);
-									}
-									break;
-								case is.string(answer) && !!answer.length:
-									this.loadPackage(answer);
-									break;
-								// @ts-expect-error need to fix library
-								case is.array(answer) && !is.array.empty(answer):
-									this.loadPackages(answer);
-									break;
-								default:
-									throw new Error(
-										'Data type is not supported as answer to a tps prompt',
-									);
-							}
+	async _answerRestOfPrompts(): Promise<void> {
+		if (!this._prompts) return;
+
+		const answers = await this._prompts.getAnswers();
+
+		logger.tps.info('Answers from prompts %n', answers);
+
+		eachObj(answers, (answer, answerName) => {
+			if (this._prompts.getPrompt(answerName).isPkg()) {
+				switch (true) {
+					// @ts-expect-error need to fix library
+					case is.undef(answer):
+						break;
+					// @ts-expect-error need to fix library
+					case is.bool(answer):
+						if (answer) {
+							this.loadPackage(answerName);
 						}
-					});
-				});
+						break;
+					case is.string(answer) && !!answer.length:
+						this.loadPackage(answer);
+						break;
+					// @ts-expect-error need to fix library
+					case is.array(answer) && !is.array.empty(answer):
+						this.loadPackages(answer);
+						break;
+					default:
+						throw new Error(
+							'Data type is not supported as answer to a tps prompt',
+						);
+				}
+			}
+		});
 	}
 
 	/**
@@ -1031,7 +1030,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		});
 	}
 
-	_loadTpsSpecificConfig(templateName: string, config: Tpsrc) {
+	private _loadTpsSpecificConfig(templateName: string, config: Tpsrc): void {
 		const templateConfig = config[templateName] ?? null;
 
 		if (templateConfig && is.object(templateConfig)) {
@@ -1051,8 +1050,14 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 }
 
 class SuccessfulBuild {
+	/**
+	 * Paths of files that were successfully built
+	 */
 	public files: string[] = [];
 
+	/**
+	 * Paths of directories that were successfully built
+	 */
 	public dirs: string[] = [];
 }
 
