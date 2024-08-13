@@ -96,6 +96,20 @@ describe('[Templates] Render Process:', () => {
 		return Promise.all(all);
 	});
 
+	it('should be able to render with multiple build paths', async () => {
+		const tps = new Templates('testing');
+
+		const buildPaths = Array.from({ length: 100 }, (_, i) => `app_${i + 1}`);
+
+		await tps.render(playground.box(), buildPaths);
+
+		buildPaths.forEach((buildPath) => {
+			const destPath = playground.pathTo(buildPath);
+
+			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+		});
+	});
+
 	it('should be able to render a local template with long build path', async () => {
 		const tps = new Templates('testing');
 
