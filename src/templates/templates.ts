@@ -1,9 +1,14 @@
+/* eslint-disable max-classes-per-file */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
 import * as path from 'path';
 import fs from 'fs';
 import * as is from 'is';
-import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
+import {
+	DirectoryNode,
+	DirNode,
+	FileNode,
+	FileSystemNode,
+} from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import {
@@ -30,18 +35,23 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import * as colors from 'ansi-colors';
-import Promise from 'bluebird';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
 import { Tpsrc } from '@tps/types/tpsrc';
-import { AnswersHash } from '@tps/types/settings';
+import { AnswersHash, SettingsFile } from '@tps/types/settings';
 import {
 	cosmiconfigSync,
 	defaultLoadersSync,
 	getDefaultSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
+
+interface BuildErrors {
+	error: Error;
+	buildPath: string;
+	didBuildPathExist: boolean;
+}
 
 export const DEFAULT_OPTIONS: TemplateOptions = {
 	noLocalConfig: false,
@@ -107,12 +117,41 @@ type RenderData = Record<string, any>;
  * @classdesc Create a new instance of a template
  */
 export class Templates<TAnswers extends AnswersHash = AnswersHash> {
-	public name: string;
+	/**
+	 * name of template
+	 */
+	public template: string;
 
+	/**
+	 * Templates options
+	 */
 	public opts: TemplateOptions;
 
-	public tpsPath: string | null;
+	public packages: Record<string, DirNode>;
 
+	public packagesUsed: string[];
+
+	private _defs: Record<string, string>;
+
+	public successfulBuilds: SuccessfulBuild;
+
+	public buildErrors: BuildErrors[];
+
+	public templateSettings: SettingsFile;
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public engine: any;
+
+	// public engine: typeof templateEngine | typeof (doT as any);
+
+	/**
+	 * Path to the templates settings file
+	 */
+	public templateSettingsPath: string;
+
+	/**
+	 * Path to the templates directory
+	 */
 	public src: string;
 
 	public _prompts: Prompter;
@@ -200,7 +239,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		return path.join(TPS.USER_HOME, TPS.TPS_FOLDER);
 	}
 
-	public static getLocalTpsPath(): string {
+	public static getLocalTpsPath(): string | null {
 		const tpsLocal: string = findUp(TPS.TPS_FOLDER, TPS.CWD);
 		const hasLocalTpsFolder = tpsLocal && tpsLocal !== TPS.GLOBAL_PATH;
 
@@ -218,7 +257,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	public static hasLocalTps(): boolean {
-		return Templates.getLocalTpsPath();
+		return !!Templates.getLocalTpsPath();
 	}
 
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
@@ -229,12 +268,12 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		this.template = templateName;
 
 		const templateLocation =
-			this.constructor.findTemplate(templateName) ||
-			this.constructor.findTemplate(`tps-${templateName}`);
+			Templates.findTemplate(templateName) ||
+			Templates.findTemplate(`tps-${templateName}`);
 
 		if (!templateLocation) {
 			logger.tps.error('Template not found! \n%O', {
-				searchedPaths: this.constructor.getTemplateLocations(),
+				searchedPaths: Templates.getTemplateLocations(),
 			});
 			throw new TemplateNotFoundError(templateName);
 		}
@@ -252,8 +291,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		this._defs = {};
 		this.successfulBuilds = new SuccessfulBuild();
 		this.buildErrors = [];
-		this.data = {};
-		this.templateSettings = {};
+		this.templateSettings = {} as SettingsFile;
 		this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
 
 		logger.tps.info('Settings file location: %s', this.templateSettingsPath);
@@ -264,7 +302,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
-			this.templateSettings = {};
+			this.templateSettings = {} as SettingsFile;
 		}
 		logger.tps.info('Template settings: %n', this.templateSettings);
 
@@ -383,8 +421,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 * Set answers for prompts
 	 * @param answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	setAnswers(answers: Partial<TAnswers>) {
+	setAnswers(answers: Partial<TAnswers>): void {
 		if (!this.hasPrompts()) {
 			throw new NoPromptsError();
 		}
@@ -401,23 +438,26 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	async render<T extends string | string[]>(
 		dest: string,
 		buildPaths?: T,
-		data?: RenderData = {},
+		data: RenderData = {},
 	): Promise<T extends string[] ? string[] : string> {
 		let buildInDest = false;
-		let pathsToCreate = buildPaths;
+		let pathsToCreate: string[];
 		let finalDest = dest;
 
 		if (!buildPaths) {
 			buildInDest = true;
 			pathsToCreate = ['./'];
-		} else if (is.string(buildPaths)) {
+		} else if (typeof buildPaths === 'string') {
 			pathsToCreate = [buildPaths];
+		} else {
+			pathsToCreate = buildPaths;
 		}
 
 		// if were building in the destination. then we aren't creating any new folders
 		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
 		logger.tps.info('Build paths: %n', pathsToCreate);
 
+		// @ts-expect-error need to fix library
 		if (is.array.empty(buildPaths)) {
 			throw new Error(
 				'Param `buildPaths` need to be a string or array of strings',
@@ -447,7 +487,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Rendering template at %s', finalDest);
 
-		const builders: Promise<never>[] = pathsToCreate.map((buildPath) => {
+		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
 			return this._renderBuildPath(
 				buildPath,
 				buildInDest,
@@ -458,9 +498,11 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		await Promise.all(builders);
 
+		// @ts-expect-error need to fix library
 		if (is.array.empty(this.buildErrors)) {
 			logger.tps.success('Finished rendering templates');
 
+			// @ts-expect-error Not sure whats wrong here
 			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
 		}
 
@@ -483,7 +525,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildInDest: boolean,
 		buildNewFolder: boolean,
 		data: RenderData,
-	): Promise<never> {
+	): Promise<void> {
 		const { name, dir } = path.parse(buildPath);
 		/**
 		 * @example
@@ -634,11 +676,15 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			.then(() => logger.tps.printGroup(groupName));
 	}
 
-	_wipe(realBuildPath) {
-		return fs.promises.rm(realBuildPath, { force: true, recursive: true });
+	async _wipe(realBuildPath: string): Promise<void> {
+		await fs.promises.rm(realBuildPath, { force: true, recursive: true });
 	}
 
-	_scheduleCleanUpForBuild(buildPath, err, didBuildPathExist) {
+	_scheduleCleanUpForBuild(
+		buildPath: string,
+		err: Error,
+		didBuildPathExist: boolean,
+	) {
 		logger.tps
 			.group(`render_${buildPath}`)
 			.info('Build Path schedule for cleaning %s %o', buildPath, {
@@ -670,8 +716,11 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		// eslint-disable-next-line prefer-const
 		let { files, dirs } = this.successfulBuilds;
 
-		const filesIsEmpty = is.array.empty(files);
-		const dirsIsEmpty = is.array.empty(dirs);
+		// @ts-expect-error need to fix library
+		const filesIsEmpty: boolean = is.array.empty(files);
+
+		// @ts-expect-error need to fix library
+		const dirsIsEmpty: boolean = is.array.empty(dirs);
 
 		if (filesIsEmpty && dirsIsEmpty) {
 			logger.tps.success('Nothing to clean... Moving on to next');
@@ -681,6 +730,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		if (!dirsIsEmpty) {
 			const dirsThatMatch = dirs.filter((dir) => dir.includes(buildPath));
 
+			// @ts-expect-error need to fix library
 			if (!is.array.empty(dirsThatMatch)) {
 				logger.tps.info('Cleaning directories %n', dirsThatMatch);
 			}
@@ -703,6 +753,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		if (!filesIsEmpty) {
 			const filesThatMatch = files.filter((file) => file.includes(buildPath));
 
+			// @ts-expect-error need to fix library
 			if (!is.array.empty(filesThatMatch)) {
 				logger.tps.info('Cleaning files %n', filesThatMatch);
 			}
@@ -723,7 +774,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	_checkForFiles(dest, data) {
 		for (let i = 0; i < this.compiledFiles.length; i++) {
 			const file = this.compiledFiles[i];
-			const finalDest = file.dest(dest, data, this._def);
+			const finalDest = file.dest(dest, data, this._defs);
 
 			if (isFile(finalDest)) {
 				throw new FileExistError(finalDest);
@@ -801,58 +852,65 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 	/**
 	 * Creates all directories that our template uses in `buildPath` folder
-	 * @private
-	 * @param {String} buildPath - destination path to make all directories. Should be a folder
+	 * @param buildPath - destination path to make all directories. Should be a folder
 	 */
-	_renderAllDirectories(buildPath) {
-		const dirTracker = {};
-		const dirsInProgress = [];
+	private async _renderAllDirectories(buildPath: string): Promise<void> {
+		const dirTracker: Record<string, boolean> = {};
 
 		const loggerGroup = logger.tps.group(`render_${buildPath}`);
 		loggerGroup.info('Rendering directories in %s', buildPath);
 
-		this._getPackageArray().forEach((pkg) => {
-			const dirs = pkg.find({ type: 'dir' });
+		const dirsInProgress = this._getPackageArray().map(
+			async (pkg): Promise<void> => {
+				const dirs = pkg.find({ type: 'dir' });
 
-			const dirsGettingCreated = Promise.each(dirs, (dirNode) => {
-				/* skip if directory has already been made */
-				if (hasProp(dirTracker, dirNode.path)) return;
-				const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(pkg, false);
-				const dirPathInNewLocation = path.join(
-					buildPath,
-					dirPathRelativeFromPkg,
+				const dirsGettingCreated = dirs.map(
+					async (dirNode: DirectoryNode): Promise<void> => {
+						/* skip if directory has already been made */
+						if (hasProp(dirTracker, dirNode.path)) return;
+						const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(
+							pkg,
+							false,
+						);
+						const dirPathInNewLocation = path.join(
+							buildPath,
+							dirPathRelativeFromPkg,
+						);
+
+						dirTracker[dirNode.path] = true;
+						if (await isDirAsync(dirPathInNewLocation)) {
+							return;
+						}
+
+						try {
+							await fs.promises.mkdir(dirPathInNewLocation);
+
+							this.successfulBuilds.dirs.push(dirPathInNewLocation);
+
+							loggerGroup.info(
+								`   - %s ${colors.green.italic('(created)')}`,
+								dirPathRelativeFromPkg,
+							);
+						} catch (err) {
+							/* do nothing if dir already exist */
+							loggerGroup.warn(
+								`   - %s ${colors.red.italic('failed')} %n`,
+								dirPathRelativeFromPkg,
+								err,
+							);
+
+							return Promise.reject(err);
+						}
+					},
 				);
 
-				dirTracker[dirNode.path] = true;
-				if (isDir(dirPathInNewLocation)) {
-					return;
-				}
-				/* mark directory as already made */
-				return fs.promises
-					.mkdir(dirPathInNewLocation)
-					.then(() => {
-						this.successfulBuilds.dirs.push(dirPathInNewLocation);
-						loggerGroup.info(
-							`   - %s ${colors.green.italic('(created)')}`,
-							dirPathRelativeFromPkg,
-						);
-					})
-					.catch((err) => {
-						/* do nothing if dir already exist */
-						loggerGroup.warn(
-							`   - %s ${colors.red.italic('failed')} %n`,
-							dirPathRelativeFromPkg,
-							err,
-						);
+				await Promise.all(dirsGettingCreated);
+			},
+		);
 
-						return Promise.reject(err);
-					});
-			});
+		await Promise.all(dirsInProgress);
 
-			dirsInProgress.push(dirsGettingCreated);
-		});
-
-		return dirsInProgress.length && Promise.all(dirsInProgress);
+		// return dirsInProgress.length && Promise.all(dirsInProgress);
 	}
 
 	/**
@@ -866,6 +924,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
+		// @ts-expect-error need to fix library
 		if (!is.array.empty(defFiles)) {
 			logger.tps.info('Compiling def files %o', { force });
 
@@ -888,17 +947,19 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
 		});
 
-		pkg.find({ type: 'file', ext: { not: '.def' } }).forEach((fileNode) => {
-			const file = new File(fileNode, {
-				force,
-				useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+		pkg
+			.find({ type: 'file', ext: { not: '.def' } })
+			.forEach((fileNode: FileNode) => {
+				const file = new File(fileNode, {
+					force,
+					useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+				});
+				logger.tps.info(
+					`  - %s ${colors.green.italic('compiled')}`,
+					fileNode.path,
+				);
+				this.compiledFiles.push(file);
 			});
-			logger.tps.info(
-				`  - %s ${colors.green.italic('compiled')}`,
-				fileNode.path,
-			);
-			this.compiledFiles.push(file);
-		});
 	}
 
 	/**
@@ -918,8 +979,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 					eachObj(answers, (answer, answerName) => {
 						if (this._prompts.getPrompt(answerName).isPkg()) {
 							switch (true) {
+								// @ts-expect-error need to fix library
 								case is.undef(answer):
 									break;
+								// @ts-expect-error need to fix library
 								case is.bool(answer):
 									if (answer) {
 										this.loadPackage(answerName);
@@ -928,6 +991,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 								case is.string(answer) && !!answer.length:
 									this.loadPackage(answer);
 									break;
+								// @ts-expect-error need to fix library
 								case is.array(answer) && !is.array.empty(answer):
 									this.loadPackages(answer);
 									break;
@@ -979,15 +1043,17 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			};
 
 			if (is.object(answers) && !is.empty(answers)) {
-				this.setAnswers(answers);
+				// TODO: Is this the best way to handle this?
+				this.setAnswers(answers as TAnswers);
 			}
 		}
 	}
 }
 
-function SuccessfulBuild() {
-	this.files = [];
-	this.dirs = [];
+class SuccessfulBuild {
+	public files: string[] = [];
+
+	public dirs: string[] = [];
 }
 
 export { TemplateOptions } from '@tps/types/templates';

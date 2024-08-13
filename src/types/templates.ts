@@ -46,5 +46,6 @@ export interface TemplateOptions {
 }
 
 export interface TemplateAnswers {
-	[answerName: string]: unknown;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[answerName: string]: any;
 }
