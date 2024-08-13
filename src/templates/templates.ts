@@ -484,7 +484,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildPath: string,
 		buildInDest: boolean,
 		buildNewFolder: boolean,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		data: RenderData,
 	): Promise<never> {
 		const { name, dir } = path.parse(buildPath);
