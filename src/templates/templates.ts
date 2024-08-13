@@ -453,16 +453,18 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			pathsToCreate = buildPaths;
 		}
 
-		// if were building in the destination. then we aren't creating any new folders
-		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
-		logger.tps.info('Build paths: %n', pathsToCreate);
-
 		// @ts-expect-error need to fix library
 		if (is.array.empty(buildPaths)) {
 			throw new Error(
 				'Param `buildPaths` need to be a string or array of strings',
 			);
 		}
+
+		await this._emitEvent('onRender');
+
+		// if were building in the destination. then we aren't creating any new folders
+		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
+		logger.tps.info('Build paths: %n', pathsToCreate);
 
 		// Append dest config
 		if (this.opts.extendedDest) {
@@ -502,6 +504,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		if (is.array.empty(this.buildErrors)) {
 			logger.tps.success('Finished rendering templates');
 
+			await this._emitEvent('onRendered');
+
 			// @ts-expect-error Not sure whats wrong here
 			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
 		}
@@ -526,6 +530,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildNewFolder: boolean,
 		data: RenderData,
 	): Promise<void> {
+		await this._emitEvent('onBuildPathRender', buildPath);
+
 		const { name, dir } = path.parse(buildPath);
 		/**
 		 * @example
@@ -673,7 +679,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				loggerGroup.error('Build Path: %s %n', buildPath, err);
 				this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
 			})
-			.then(() => logger.tps.printGroup(groupName));
+			.then(() => logger.tps.printGroup(groupName))
+			.then(() => this._emitEvent('onBuildPathRendered', buildPath));
 	}
 
 	async _wipe(realBuildPath: string): Promise<void> {
@@ -1045,6 +1052,16 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				// TODO: Is this the best way to handle this?
 				this.setAnswers(answers as TAnswers);
 			}
+		}
+	}
+
+	private async _emitEvent(
+		event: keyof SettingsFile['events'],
+		...args: unknown[]
+	): Promise<void> {
+		const events = this.templateSettings?.events || {};
+		if (event in events && typeof events[event] === 'function') {
+			await events[event]?.(this, ...args);
 		}
 	}
 }
