@@ -104,7 +104,11 @@ interface SettingsFileEvents {
 	/**
 	 * Callback function to call when all build paths are rendered
 	 */
-	onRendered: (tps: Templates, createdPaths: string[]) => SettingsFileEventsFn;
+	onRendered: (
+		tps: Templates,
+		dest: string,
+		createdPaths: string | string[],
+	) => SettingsFileEventsFn;
 }
 
 export interface SettingsFile {

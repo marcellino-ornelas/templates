@@ -154,7 +154,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 */
 	public src: string;
 
-	public _prompts: Prompter;
+	public _prompts: Prompter<TAnswers>;
 
 	public compiledFiles: File[];
 
@@ -418,6 +418,13 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	/**
+	 * Get answers
+	 */
+	getAnswers(): TAnswers {
+		return this._prompts.answers;
+	}
+
+	/**
 	 * Set answers for prompts
 	 * @param answers - object of prompts answers. Key should be the name of the prompt and value should be the answer to it
 	 */
@@ -508,7 +515,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				? pathsToCreate
 				: pathsToCreate[0];
 
-			await this._emitEvent('onRendered', createdPaths);
+			await this._emitEvent('onRendered', finalDest, createdPaths);
 
 			// @ts-expect-error Not sure whats wrong here
 			return createdPaths;
@@ -1059,12 +1066,18 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		}
 	}
 
-	private async _emitEvent(
-		event: keyof SettingsFile['events'],
-		...args: unknown[]
+	private async _emitEvent<TEvent extends keyof SettingsFile['events']>(
+		event: TEvent,
+		...args: Parameters<SettingsFile['events'][TEvent]> extends [
+			Templates,
+			...infer Rest,
+		]
+			? Rest
+			: never
 	): Promise<void> {
-		const events = this.templateSettings?.events || {};
+		const events = this.templateSettings?.events ?? null;
 		if (event in events && typeof events[event] === 'function') {
+			// @ts-expect-error idk lol
 			await events[event]?.(this, ...args);
 		}
 	}

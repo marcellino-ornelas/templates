@@ -1,4 +1,5 @@
 // @ts-check
+// const prettier = require('prettier/standalone.js');
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -189,5 +190,57 @@ module.exports = {
 			tpsType: 'package',
 			default: false,
 		},
+		{
+			name: 'formatter',
+			description:
+				'Type of formatter you would like to use to format the component',
+			message: 'What type of formatter do you want to use to format your code',
+			type: 'list',
+			tpsType: 'data',
+			hidden: true,
+			choices: ['prettier', 'biome'],
+			default: 'prettier',
+		},
+		{
+			name: 'linter',
+			description:
+				'Type of linter you would like to use to format the component',
+			message: 'What type of linter do you want to use to fix your code',
+			type: 'list',
+			tpsType: 'data',
+			hidden: true,
+			choices: ['eslint', 'biome'],
+			default: 'eslint',
+		},
 	],
+	events: {
+		async onRendered(tps, dest, createdPaths) {
+			const prettier = (await import('prettier')).default;
+			const { $ } = await import('zx');
+
+			$.preferLocal = true;
+
+			const configPath = await prettier.resolveConfigFile(`${dest}/hey.json`);
+			// issue 1:
+			// 		if prettier and biome are both globally installed running
+			// 		both in the same process would overwrite eachother
+			// issue 2:
+			// 		if eslint and biome are both globally installed running
+			// 		both in the same process would overwrite eachother
+			// Questions:
+			// 		Would someone want to run both?? :thinking:
+
+			try {
+				await $`prettier ${createdPaths} --ignore-unknown --write --ignore-path ./.prettierignore`;
+			} catch (e) {
+				console.warn('prettier', e);
+			}
+
+			try {
+				await $`eslint ${createdPaths} --fix`;
+			} catch (e) {
+				console.warn('eslint', e);
+			}
+		},
+	},
 };
