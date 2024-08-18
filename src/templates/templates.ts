@@ -1075,10 +1075,16 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			? Rest
 			: never
 	): Promise<void> {
+		logger.tps.info(`Running event ${event}`);
 		const events = this.templateSettings?.events ?? null;
 		if (event in events && typeof events[event] === 'function') {
-			// @ts-expect-error idk lol
-			await events[event]?.(this, ...args);
+			logger.tps.info(`Running ${event} function...`);
+			try {
+				// @ts-expect-error idk lol
+				await events[event]?.(this, ...args);
+			} catch (e) {
+				logger.tps.error(`Event ${event} failed: %n`, e);
+			}
 		}
 	}
 }

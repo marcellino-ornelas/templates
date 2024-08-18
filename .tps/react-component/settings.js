@@ -192,54 +192,84 @@ module.exports = {
 		},
 		{
 			name: 'formatter',
+			aliases: ['format'],
 			description:
 				'Type of formatter you would like to use to format the component',
 			message: 'What type of formatter do you want to use to format your code',
 			type: 'list',
 			tpsType: 'data',
 			hidden: true,
-			choices: ['prettier', 'biome'],
-			default: 'prettier',
+			choices: ['prettier', 'biome', 'none'],
+			default: 'none',
 		},
 		{
 			name: 'linter',
+			aliases: ['lint'],
 			description:
 				'Type of linter you would like to use to format the component',
 			message: 'What type of linter do you want to use to fix your code',
 			type: 'list',
 			tpsType: 'data',
 			hidden: true,
-			choices: ['eslint', 'biome'],
-			default: 'eslint',
+			choices: ['eslint', 'biome', 'none'],
+			default: 'none',
 		},
 	],
 	events: {
 		async onRendered(tps, dest, createdPaths) {
-			const prettier = (await import('prettier')).default;
-			const { $ } = await import('zx');
+			const { $, ProcessOutput, spinner } = await import('zx');
 
-			$.preferLocal = true;
+			const $$ = $({
+				preferLocal: true,
+				quiet: true,
+			});
 
-			const configPath = await prettier.resolveConfigFile(`${dest}/hey.json`);
-			// issue 1:
-			// 		if prettier and biome are both globally installed running
-			// 		both in the same process would overwrite eachother
-			// issue 2:
-			// 		if eslint and biome are both globally installed running
-			// 		both in the same process would overwrite eachother
-			// Questions:
-			// 		Would someone want to run both?? :thinking:
+			const runCommand = async (name, command) => {
+				try {
+					console.log(`✨ Running ${name}...`);
+					await command();
+				} catch (e) {
+					console.error(`❌ ${name} Failed!`);
+					if (e instanceof ProcessOutput) {
+						console.error(e.text());
+					} else {
+						console.error(e);
+					}
+				}
+			};
 
-			try {
-				await $`prettier ${createdPaths} --ignore-unknown --write --ignore-path ./.prettierignore`;
-			} catch (e) {
-				console.warn('prettier', e);
+			const answers = tps.getAnswers();
+
+			switch (answers.formatter) {
+				case 'prettier':
+					await runCommand(
+						'Prettier',
+						() =>
+							$$`prettier ${createdPaths} --ignore-unknown --write --ignore-path ./.prettierignore`,
+					);
+					break;
+				case 'biome':
+					await runCommand(
+						'Biome (Format)',
+						() => $$`biome ${createdPaths} format --write`,
+					);
+					break;
+				case 'none':
+					break;
 			}
 
-			try {
-				await $`eslint ${createdPaths} --fix`;
-			} catch (e) {
-				console.warn('eslint', e);
+			switch (answers.linter) {
+				case 'eslint':
+					await runCommand('Eslint', () => $$`eslint ${createdPaths} --fix`);
+					break;
+				case 'biome':
+					await runCommand(
+						'Biome',
+						() => $$`biome ${createdPaths} lint --write`,
+					);
+					break;
+				case 'none':
+					break;
 			}
 		},
 	},
