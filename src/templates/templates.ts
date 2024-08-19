@@ -515,7 +515,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				? pathsToCreate
 				: pathsToCreate[0];
 
-			await this._emitEvent('onRendered', finalDest, createdPaths);
+			await this._emitEvent('onRendered', {
+				dest: finalDest,
+				buildPaths: createdPaths,
+			});
 
 			// @ts-expect-error Not sure whats wrong here
 			return createdPaths;
@@ -541,7 +544,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		buildNewFolder: boolean,
 		data: RenderData,
 	): Promise<void> {
-		await this._emitEvent('onBuildPathRender', buildPath);
+		await this._emitEvent('onBuildPathRender', { buildPath });
 
 		const { name, dir } = path.parse(buildPath);
 		/**
@@ -691,7 +694,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
 			})
 			.then(() => logger.tps.printGroup(groupName))
-			.then(() => this._emitEvent('onBuildPathRendered', buildPath));
+			.then(() => this._emitEvent('onBuildPathRendered', { buildPath }));
 	}
 
 	async _wipe(realBuildPath: string): Promise<void> {

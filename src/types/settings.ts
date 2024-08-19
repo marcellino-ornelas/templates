@@ -80,35 +80,39 @@ export type ValidateFn = (
 	answers: AnswersHash,
 ) => (boolean | string) | Promise<boolean | string>;
 
-type SettingsFileEventsFn = Promise<void>;
-
 interface SettingsFileEvents {
 	/**
 	 * Callback function to call before build paths are rendered
 	 */
-	onRender: (tps: Templates) => SettingsFileEventsFn;
+	onRender: (tps: Templates) => Promise<void>;
 	/**
 	 * Callback function to call before an build path is rendered
 	 */
 	onBuildPathRender: (
 		tps: Templates,
-		buildPath: string,
-	) => SettingsFileEventsFn;
+		args: {
+			buildPath: string;
+		},
+	) => Promise<void>;
 	/**
 	 * Callback function to call when an build path is rendered
 	 */
 	onBuildPathRendered: (
 		tps: Templates,
-		buildPath: string,
-	) => SettingsFileEventsFn;
+		args: {
+			buildPath: string;
+		},
+	) => Promise<void>;
 	/**
 	 * Callback function to call when all build paths are rendered
 	 */
 	onRendered: (
 		tps: Templates,
-		dest: string,
-		createdPaths: string | string[],
-	) => SettingsFileEventsFn;
+		args: {
+			dest: string;
+			buildPaths: string | string[];
+		},
+	) => Promise<void>;
 }
 
 export interface SettingsFile {

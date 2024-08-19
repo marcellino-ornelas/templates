@@ -199,7 +199,7 @@ module.exports = {
 			type: 'list',
 			tpsType: 'data',
 			hidden: true,
-			choices: ['prettier', 'biome', 'none'],
+			choices: ['none', 'prettier', 'biome'],
 			default: 'none',
 		},
 		{
@@ -211,13 +211,13 @@ module.exports = {
 			type: 'list',
 			tpsType: 'data',
 			hidden: true,
-			choices: ['eslint', 'biome', 'none'],
+			choices: ['none', 'eslint', 'biome'],
 			default: 'none',
 		},
 	],
 	events: {
-		async onRendered(tps, dest, createdPaths) {
-			const { $, ProcessOutput, spinner } = await import('zx');
+		async onRendered(tps, { dest, buildPaths }) {
+			const { $, ProcessOutput } = await import('zx');
 
 			const $$ = $({
 				preferLocal: true,
@@ -245,13 +245,13 @@ module.exports = {
 					await runCommand(
 						'Prettier',
 						() =>
-							$$`prettier ${createdPaths} --ignore-unknown --write --ignore-path ./.prettierignore`,
+							$$`prettier ${buildPaths} --ignore-unknown --write --ignore-path ./.prettierignore`,
 					);
 					break;
 				case 'biome':
 					await runCommand(
 						'Biome (Format)',
-						() => $$`biome ${createdPaths} format --write`,
+						() => $$`biome ${buildPaths} format --write`,
 					);
 					break;
 				case 'none':
@@ -260,13 +260,10 @@ module.exports = {
 
 			switch (answers.linter) {
 				case 'eslint':
-					await runCommand('Eslint', () => $$`eslint ${createdPaths} --fix`);
+					await runCommand('Eslint', () => $$`eslint ${buildPaths} --fix`);
 					break;
 				case 'biome':
-					await runCommand(
-						'Biome',
-						() => $$`biome ${createdPaths} lint --write`,
-					);
+					await runCommand('Biome', () => $$`biome ${buildPaths} lint --write`);
 					break;
 				case 'none':
 					break;
