@@ -1,12 +1,12 @@
 ---
 description: Template to generate react component
 keywords:
-  - react
-  - react component
-  - react component scaffold
-  - react component boilerplate
-  - react component generator
-  - react component typescript
+    - react
+    - react component
+    - react component scaffold
+    - react component boilerplate
+    - react component generator
+    - react component typescript
 ---
 
 import { TemplateOptions } from '@site/docs/components/templateOptions';
@@ -20,39 +20,48 @@ import ReactComponentTemplateGif from './react-component.gif';
 # react-component
 
 <div className="row" style={{ fontSize: 20 }}>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			inline
-			icon="skill-icons:typescript"
-			width="25px"
-			className="margin-right--xs"
-		/>
-		Supports Typescript
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			icon="logos:testing-library"
-			width="25px"
-			className="margin-right--xs"
-		/>{' '}
-		Supports React testing library
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon inline icon="logos:jest" width="25px" className="margin-right--xs" />{' '}
-		Supports Unit tests
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon icon="skill-icons:css" width="25px" className="margin-right--xs" />{' '}
-		Supports multiple CSS languages
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			icon="logos:storybook-icon"
-			width="25px"
-			className="margin-right--xs"
-		/>
-		Supports Storybook
-	</div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            inline
+            icon="skill-icons:typescript"
+            width="25px"
+            className="margin-right--xs"
+        />
+        Supports Typescript
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="logos:testing-library"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        Supports React testing library
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            inline
+            icon="logos:jest"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        Supports Unit tests
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="skill-icons:css"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        Supports multiple CSS languages
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="logos:storybook-icon"
+            width="25px"
+            className="margin-right--xs"
+        />
+        Supports Storybook
+    </div>
 </div>
 
 <br />
@@ -60,10 +69,10 @@ import ReactComponentTemplateGif from './react-component.gif';
 Generate a fully functioning React function component.
 
 <img
-	className="shadow--lw"
-	src={ReactComponentTemplateGif}
-	style={{ width: '100%', borderRadius: '5px' }}
-	alt="react component template usage gif"
+    className="shadow--lw"
+    src={ReactComponentTemplateGif}
+    style={{ width: '100%', borderRadius: '5px' }}
+    alt="react component template usage gif"
 />
 
 ## Usage
@@ -78,18 +87,18 @@ Feel free to submit feature requests, suggestions, or any thoughts you have
 using the form below. We hope to hear from you soon!
 
 <Button
-	to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests-feedback"
-	size="sm"
-	onClick={() => {
-		if (typeof gtag === 'function') {
-			gtag('event', 'feedback_request_click', {
-				event_category: 'Feedback',
-				event_label: 'react-template',
-			});
-		}
-	}}
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests-feedback"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'react-template',
+            });
+        }
+    }}
 >
-	Submit feature request
+    Submit feature request
 </Button>
 
 :::
@@ -297,7 +306,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 function Nav({}) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 
 export default Nav;
@@ -432,14 +441,14 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"index": false
-		},
-		"opts": {
-			"newFolder": false
-		}
-	}
+    "react-component": {
+        "answers": {
+            "index": false
+        },
+        "opts": {
+            "newFolder": false
+        }
+    }
 }
 ```
 
@@ -508,11 +517,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"export": "named"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "export": "named"
+        }
+    }
 }
 ```
 
@@ -532,7 +541,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 export function Nav({}) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 ```
 
@@ -567,11 +576,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"inlineDefaultExport": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "inlineDefaultExport": true
+        }
+    }
 }
 ```
 
@@ -591,7 +600,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 export default function App({}) {
-	return <div>App component</div>;
+    return <div>App component</div>;
 }
 ```
 
@@ -648,11 +657,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"typescript": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "typescript": true
+        }
+    }
 }
 ```
 
@@ -683,11 +692,11 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 interface NavProps {
-	// props
+    // props
 }
 
 function Nav({}: NavProps) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 
 export default Nav;
@@ -728,11 +737,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"functionStyle": "arrow"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "functionStyle": "arrow"
+        }
+    }
 }
 ```
 
@@ -752,7 +761,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 const Nav = ({}) => {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 };
 
 export default Nav;
@@ -789,11 +798,11 @@ If you have typescript set in your tpsrc file.
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"typescript": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "typescript": true
+        }
+    }
 }
 ```
 
