@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 # yargs-cli-cmd
 
 <span className="badge badge--secondary margin-left--xs">
-	templates@>v1.0.19
+    templates@>v1.0.19
 </span>
 
 <br />
@@ -64,15 +64,15 @@ export const aliases = [];
 export const describe = 'This is my publish cli command';
 
 export const builder = {
-	flag: {
-		alias: '',
-		describe: '...',
-		type: 'boolean',
-	},
+    flag: {
+        alias: '',
+        describe: '...',
+        type: 'boolean',
+    },
 };
 
 export const handler = async (argv) => {
-	// code ...
+    // code ...
 };
 ```
 
@@ -100,15 +100,15 @@ export const aliases = [];
 export const describe = 'This is my publish cli command';
 
 export const builder = {
-	flag: {
-		alias: '',
-		describe: '...',
-		type: 'boolean',
-	},
+    flag: {
+        alias: '',
+        describe: '...',
+        type: 'boolean',
+    },
 };
 
 export const handler = async (argv) => {
-	// code ...
+    // code ...
 };
 ```
 
@@ -201,15 +201,15 @@ export const aliases = [];
 export const describe = 'This is my list cli command';
 
 export const builder = {
-	flag: {
-		alias: '',
-		describe: '...',
-		type: 'boolean',
-	},
+    flag: {
+        alias: '',
+        describe: '...',
+        type: 'boolean',
+    },
 };
 
 export const handler = async (argv) => {
-	// code ...
+    // code ...
 };
 ```
 
@@ -241,12 +241,12 @@ directory then you can add the following to your tpsrc file.
 
 ```json title=".tps/.tpsrc"
 {
-	"yargs-cli-cmd": {
-		"opts": {
-			// highlight-next-line
-			"extendDest": "./cli/commands"
-		}
-	}
+    "yargs-cli-cmd": {
+        "opts": {
+            // highlight-next-line
+            "extendDest": "./cli/commands"
+        }
+    }
 }
 ```
 
@@ -308,12 +308,12 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"yargs-cli-cmd": {
-		"opts": {
-			// highlight-next-line
-			"newFolder": false
-		}
-	}
+    "yargs-cli-cmd": {
+        "opts": {
+            // highlight-next-line
+            "newFolder": false
+        }
+    }
 }
 ```
 

@@ -4,8 +4,8 @@ import { Example } from '@site/docs/components/example';
 
 ```ts title="Type"
 interface TemplateConfig {
-	answers: TemplateConfigAnswers;
-	opts: TemplateConfigOptions;
+    answers: TemplateConfigAnswers;
+    opts: TemplateConfigOptions;
 }
 ```
 
@@ -13,7 +13,7 @@ interface TemplateConfig {
 
 ```ts title="Type"
 interface TemplateConfigAnswers {
-	[name: string]: any;
+    [name: string]: any;
 }
 ```
 
@@ -21,13 +21,13 @@ Object containing answers to prompts.
 
 ```json title=".tpsrc"
 {
-	"some-template": {
-		// highlight-start
-		"answers": {
-			"<prompt-name>": "<prompt-value>"
-		}
-		// highlight-end
-	}
+    "some-template": {
+        // highlight-start
+        "answers": {
+            "<prompt-name>": "<prompt-value>"
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -35,13 +35,13 @@ Object containing answers to prompts.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		// highlight-start
-		"answers": {
-			"css": true
-		}
-		// highlight-end
-	}
+    "react-component": {
+        // highlight-start
+        "answers": {
+            "css": true
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -51,7 +51,7 @@ Object containing answers to prompts.
 
 ```ts title="Type"
 interface TemplateConfigOptions {
-	[name: string]: any;
+    [name: string]: any;
 }
 ```
 
@@ -60,13 +60,13 @@ Object containing options for templates. See
 
 ```json title=".tpsrc"
 {
-	"some-template": {
-		// highlight-start
-		"opts": {
-			"<option-name>": "<option-value>"
-		}
-		// highlight-end
-	}
+    "some-template": {
+        // highlight-start
+        "opts": {
+            "<option-name>": "<option-value>"
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -74,13 +74,13 @@ Object containing options for templates. See
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		// highlight-start
-		"opts": {
-			"wipe": true
-		}
-		// highlight-end
-	}
+    "react-component": {
+        // highlight-start
+        "opts": {
+            "wipe": true
+        }
+        // highlight-end
+    }
 }
 ```
 
