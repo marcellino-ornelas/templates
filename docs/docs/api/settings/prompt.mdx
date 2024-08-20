@@ -12,41 +12,41 @@ the documentation [here](https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0).
 
 ```ts title="Type"
 interface Prompt {
-	/**
-	 * Name of prompt
-	 */
-	name: string;
-	/**
-	 * Prompt description
-	 */
-	description: string;
-	/**
-	 * Message you would like to show user
-	 */
-	message: string;
-	/**
-	 * Type of prompt you would like to use
-	 */
-	type: 'confirm' | 'input' | 'checkbox' | 'list' | 'rawlist' | 'password';
-	/**
-	 * How you want templates to process this prompts answer
-	 */
-	tpsType: 'package' | 'data';
-	/**
-	 * choices for your prompt.
-	 *
-	 * Only needed for prompts of type `list`, `rawlist` or `checkbox`
-	 */
-	choices?: string[];
-	/**
-	 * Make prompt a hidden prompt
-	 * @version templates@>v1.1.1
-	 */
-	hidden?: boolean;
-	/**
-	 * Default answer for the prompt
-	 */
-	default?: any;
+    /**
+     * Name of prompt
+     */
+    name: string;
+    /**
+     * Prompt description
+     */
+    description: string;
+    /**
+     * Message you would like to show user
+     */
+    message: string;
+    /**
+     * Type of prompt you would like to use
+     */
+    type: 'confirm' | 'input' | 'checkbox' | 'list' | 'rawlist' | 'password';
+    /**
+     * How you want templates to process this prompts answer
+     */
+    tpsType: 'package' | 'data';
+    /**
+     * choices for your prompt.
+     *
+     * Only needed for prompts of type `list`, `rawlist` or `checkbox`
+     */
+    choices?: string[];
+    /**
+     * Make prompt a hidden prompt
+     * @version templates@>v1.1.1
+     */
+    hidden?: boolean;
+    /**
+     * Default answer for the prompt
+     */
+    default?: any;
 }
 ```
 
@@ -71,13 +71,13 @@ Adding this prompt will allow you to conditionally render the css package.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "css",
-			"type": "confirm",
-			"message": "Would you like to add a css file?"
-		}
-	]
+    "prompts": [
+        {
+            "name": "css",
+            "type": "confirm",
+            "message": "Would you like to add a css file?"
+        }
+    ]
 }
 ```
 
@@ -118,14 +118,14 @@ then this will be the new template:
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "modules",
-			"type": "checkbox",
-			"choices": ["react", "express", "fs", "path"],
-			"tpsType": "data",
-			"message": "What node modules would you like to import into this js file?"
-		}
-	]
+    "prompts": [
+        {
+            "name": "modules",
+            "type": "checkbox",
+            "choices": ["react", "express", "fs", "path"],
+            "tpsType": "data",
+            "message": "What node modules would you like to import into this js file?"
+        }
+    ]
 }
 ```

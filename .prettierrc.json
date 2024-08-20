@@ -9,7 +9,9 @@
 			"files": "*.mdx",
 			"options": {
 				"parser": "mdx",
-				"proseWrap": "always"
+				"tabWidth": 4,
+				"proseWrap": "always",
+				"useTabs": false
 			}
 		}
 	]
