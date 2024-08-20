@@ -20,9 +20,9 @@ All packages live inside of a tps `template` folder
 
 ```text
 | - .tps/
-	| - some-template/
-		// highlight-next-line
-		| - <packages...>/
+    | - some-template/
+        // highlight-next-line
+        | - <packages...>/
 ```
 
 `packages` can be named whatever you like except for one. Each `template` can
@@ -49,16 +49,16 @@ use a template. It keeps all the essential elements in one place.
 
 ```text title="Template"
 | - .tps/
-	| - some-template/
-		| - default/
-			// highlight-next-line
-			| - <all of the default package files/folders...>
+    | - some-template/
+        | - default/
+            // highlight-next-line
+            | - <all of the default package files/folders...>
 ```
 
 ```text title="Result"
 | - app/
-	// highlight-next-line
-	| - <all of the default package files/folders...>
+    // highlight-next-line
+    | - <all of the default package files/folders...>
 ```
 
 <Example open>
@@ -68,10 +68,10 @@ for setting up a brand new webserver with all the bells and whistles included.
 
 ```text title="Template"
 | - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
 ```
 
 let's say today we had a new idea for a trash removal company called
@@ -86,10 +86,10 @@ tps node-server trash-removal
 
 ```text title="Result"
 | - trash-removal/
-	// highlight-start
-	| - server.js
-	| - package.json
-	// highlight-end
+    // highlight-start
+    | - server.js
+    | - package.json
+    // highlight-end
 ```
 
 </Example>
@@ -105,19 +105,19 @@ as you wish.
 
 ```text
 | - .tps/
-	| - <template>/
-		// highlight-start
-		| - default/
-			| - <default files/folders...>
-		| - package2/
-			| - <package2 files/folders...>
-		// highlight-end
+    | - <template>/
+        // highlight-start
+        | - default/
+            | - <default files/folders...>
+        | - package2/
+            | - <package2 files/folders...>
+        // highlight-end
 
 | - app/
-	// highlight-start
-	| - <default files/folder...>
-	| - <package2 files/folders...>
-	// highlight-end
+    // highlight-start
+    | - <default files/folder...>
+    | - <package2 files/folders...>
+    // highlight-end
 ```
 
 If you have more than one package but don't specific that you want to use any
@@ -126,15 +126,15 @@ additional ones. Your app folder will only be the files and folders from
 
 ```text
 | - .tps/
-	| - <template>/
-		| - default/
-			| - <default files/folders...>
-		| - package2/
-			| - <package2 files/folders...>
+    | - <template>/
+        | - default/
+            | - <default files/folders...>
+        | - package2/
+            | - <package2 files/folders...>
 
 | - app/
-	// highlight-next-line
-	| - <default files/folders...>
+    // highlight-next-line
+    | - <default files/folders...>
 ```
 
 <Example open title="Using additional packages">
@@ -145,12 +145,12 @@ and optionally can set up unit tests for us
 
 ```text title="Template"
 | - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-		| - unit-tests/
-			| - server.test.js
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
+        | - unit-tests/
+            | - server.test.js
 ```
 
 Now if we wanted to create a new app but have unit tests set up for us alrealy
@@ -162,11 +162,11 @@ tps node-server trash-removal --packages unit-tests
 
 ```text title="Result"
 | - trash-removal/
-	// highlight-start
-	| - server.js
-	| - server.test.js
-	| - package.json
-	// highlight-end
+    // highlight-start
+    | - server.js
+    | - server.test.js
+    | - package.json
+    // highlight-end
 ```
 
 </Example>
@@ -179,12 +179,12 @@ and optionally can set up unit tests for us
 
 ```text title="Template"
 | - .tps/
-	| - node-server/
-		| - default/
-			| - server.js
-			| - package.json
-		| - unit-tests/
-			| - server.test.js
+    | - node-server/
+        | - default/
+            | - server.js
+            | - package.json
+        | - unit-tests/
+            | - server.test.js
 ```
 
 Now if we wanted to create a new app but we didnt want unit tests for this app
@@ -196,10 +196,10 @@ tps node-server trash-removal
 
 ```text title="Result"
 | - trash-removal/
-	// highlight-start
-	| - server.js
-	| - package.json
-	// highlight-end
+    // highlight-start
+    | - server.js
+    | - package.json
+    // highlight-end
 ```
 
 :::tip

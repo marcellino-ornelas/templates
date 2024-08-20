@@ -259,13 +259,13 @@ the template
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-next-line
-		| - unit/        <-- matches name of prompt
-			| - server.test.js
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-next-line
+        | - unit/        <-- matches name of prompt
+            | - server.test.js
 ```
 
 When the user is rendering a new template, the prompt will be displayed and they
@@ -286,9 +286,9 @@ process so a `server.test.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - server.test.js
+    | - server.js
+    // highlight-next-line
+    | - server.test.js
 ```
 
 </TabItem>
@@ -300,7 +300,7 @@ rendering process so no `server.test.js`.
 
 ```text
 | - newApp/
-	| - server.js
+    | - server.js
 ```
 
 </TabItem>
@@ -344,16 +344,16 @@ a package in our template.
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-start
-		| - react/
-			| - react.js
-		| - angular/
-			| - angular.js
-		// highlight-end
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-start
+        | - react/
+            | - react.js
+        | - angular/
+            | - angular.js
+        // highlight-end
 ```
 
 When the user is rendering a new instance, the prompt will be displayed and the
@@ -377,9 +377,9 @@ rendering process so a `react.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - react.js
+    | - server.js
+    // highlight-next-line
+    | - react.js
 ```
 
 </TabItem>
@@ -391,9 +391,9 @@ rendering process so a `angular.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - angular.js
+    | - server.js
+    // highlight-next-line
+    | - angular.js
 ```
 
 </TabItem>
@@ -438,20 +438,20 @@ a package in our template.
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-start
-		| - metrics/
-			| - metrics.js
-		| - unit/
-			| - server.test.js
-		| - e2e/
-			| - website.test.js
-		| - api/
-			| - api.js
-		// highlight-end
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-start
+        | - metrics/
+            | - metrics.js
+        | - unit/
+            | - server.test.js
+        | - e2e/
+            | - website.test.js
+        | - api/
+            | - api.js
+        // highlight-end
 ```
 
 When the user renders a new template. tps will ask for an list of inputs.
@@ -463,11 +463,11 @@ the rendering process
 
 ```text
 | - newApp/
-	// highlight-next-line
-	| - metrics.js
-	// highlight-next-line
-	| - server.test.js
-	| - server.js
+    // highlight-next-line
+    | - metrics.js
+    // highlight-next-line
+    | - server.test.js
+    | - server.js
 ```
 
 </Example>
