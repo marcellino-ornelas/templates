@@ -6,7 +6,7 @@ pagination_next: null
 pagination_prev: null
 ---
 
-import Link from '@docusaurus/Link';
+import { Button } from '@site/docs/components/button';
 import styles from './intro.module.css';
 
 # Welcome to Templates
@@ -38,17 +38,14 @@ the whole library and not individual templates you can create.
 :::
 
 <div className={styles.templateOptions}>
-  <div className={styles.templateOption}>
+<div className={styles.templateOption}>
 
 ## Create a new template
 
 Learn how to create your first template.
 
 <div>
-    {/* eslint-disable react/self-closing-comp */}
-  <Link className={styles.btn} to="./create-new-template/">
-    visit
-  </Link>
+    <Button to="./create-new-template/" text="visit" />
 </div>
 </div>
 
@@ -59,11 +56,8 @@ Learn how to create your first template.
 Explore our library of existing templates.
 
 <div>
-    <Link className={styles.btn} to="./templates/">
-        visit
-    </Link>
+    <Button to="./templates/" text="visit" />
 </div>
-
 </div>
 
 </div>
