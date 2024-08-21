@@ -1,12 +1,12 @@
 ---
 description: Template to generate react component
 keywords:
-  - react
-  - react component
-  - react component scaffold
-  - react component boilerplate
-  - react component generator
-  - react component typescript
+    - react
+    - react component
+    - react component scaffold
+    - react component boilerplate
+    - react component generator
+    - react component typescript
 ---
 
 import { TemplateOptions } from '@site/docs/components/templateOptions';
@@ -20,39 +20,48 @@ import ReactComponentTemplateGif from './react-component.gif';
 # react-component
 
 <div className="row" style={{ fontSize: 20 }}>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			inline
-			icon="skill-icons:typescript"
-			width="25px"
-			className="margin-right--xs"
-		/>
-		Supports Typescript
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			icon="logos:testing-library"
-			width="25px"
-			className="margin-right--xs"
-		/>{' '}
-		Supports React testing library
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon inline icon="logos:jest" width="25px" className="margin-right--xs" />{' '}
-		Supports Unit tests
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon icon="skill-icons:css" width="25px" className="margin-right--xs" />{' '}
-		Supports multiple CSS languages
-	</div>
-	<div className="col col--6 display--flex align-items--center margin-bottom--xs">
-		<Icon
-			icon="logos:storybook-icon"
-			width="25px"
-			className="margin-right--xs"
-		/>
-		Supports Storybook
-	</div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            inline
+            icon="skill-icons:typescript"
+            width="25px"
+            className="margin-right--xs"
+        />
+        <span>Supports Typescript</span>
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="logos:testing-library"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        <span>Supports React testing library</span>
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            inline
+            icon="logos:jest"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        <span>Supports Unit tests</span>
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="skill-icons:css"
+            width="25px"
+            className="margin-right--xs"
+        />{' '}
+        <span>Supports multiple CSS languages</span>
+    </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon
+            icon="logos:storybook-icon"
+            width="25px"
+            className="margin-right--xs"
+        />
+        <span>Supports Storybook</span>
+    </div>
 </div>
 
 <br />
@@ -60,10 +69,10 @@ import ReactComponentTemplateGif from './react-component.gif';
 Generate a fully functioning React function component.
 
 <img
-	className="shadow--lw"
-	src={ReactComponentTemplateGif}
-	style={{ width: '100%', borderRadius: '5px' }}
-	alt="react component template usage gif"
+    className="shadow--lw"
+    src={ReactComponentTemplateGif}
+    style={{ width: '100%', borderRadius: '5px' }}
+    alt="react component template usage gif"
 />
 
 ## Usage
@@ -78,19 +87,18 @@ Feel free to submit feature requests, suggestions, or any thoughts you have
 using the form below. We hope to hear from you soon!
 
 <Button
-	to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests-feedback"
-	size="sm"
-	onClick={() => {
-		if (typeof gtag === 'function') {
-			gtag('event', 'feedback_request_click', {
-				event_category: 'Feedback',
-				event_label: 'react-template',
-			});
-		}
-	}}
->
-	Submit feature request
-</Button>
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-component-feature-requests-feedback"
+    text="Submit feature request"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'react-template',
+            });
+        }
+    }}
+/>
 
 :::
 
@@ -104,17 +112,15 @@ tps react-component path/to/dir/<component-name>
 
 ```txt title="Creates"
 | - <component-name>
-	| - index.js (optional)
-	| - <component-name>.jsx
-	| - <component-name>.css (optional)
-	| - <component-name>.test.js (optional)
-	| - <component-name>.stories.jsx (optional)
+    | - index.js (optional)
+    | - <component-name>.jsx
+    | - <component-name>.css (optional)
+    | - <component-name>.test.js (optional)
+    | - <component-name>.stories.jsx (optional)
 ```
 
 <Example>
-
 <Tabs>
-
 <TabItem value="Default">
 
 ```bash
@@ -125,13 +131,12 @@ Will produces something like the following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.jsx
-	| - Nav.css
+    | - index.js
+    | - Nav.jsx
+    | - Nav.css
 ```
 
 </TabItem>
-
 <TabItem value="In directory">
 
 ```bash
@@ -142,17 +147,15 @@ Will produces something like the following:
 
 ```txt
 | - src/
-	| - components/
-		| - Nav
-			| - index.js
-			| - Nav.jsx
-			| - Nav.css
+    | - components/
+        | - Nav
+            | - index.js
+            | - Nav.jsx
+            | - Nav.css
 ```
 
 </TabItem>
-
 </Tabs>
-
 </Example>
 
 Check out our [examples section](#examples) to see detailed instructions on how
@@ -194,15 +197,15 @@ Lets say you have a basic react folder structure like so:
 
 ```text
 | - <cwd>/
-	| - src/
-		| - components/
-			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        | - components/
+            | - ...
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 If you wanted to generate a new nav component in the components folder, you
@@ -254,15 +257,15 @@ following:
 
 ```txt
 | - <cwd>/
-	| - src/
-		| - components/
-			// highlight-start
-			| - Nav/
-				| - index.js
-				| - Nav.jsx
-				| - Nav.css
-			// highlight-end
-			| - ...
+    | - src/
+        | - components/
+            // highlight-start
+            | - Nav/
+                | - index.js
+                | - Nav.jsx
+                | - Nav.css
+            // highlight-end
+            | - ...
 ```
 
 If you used another naming format, such as
@@ -278,15 +281,15 @@ following:
 
 ```txt
 | - <cwd>/
-	| - src/
-		| - components/
-			// highlight-start
-			| - nav-item/
-				| - index.js
-				| - nav-item.jsx
-				| - nav-item.css
-			// highlight-end
-			| - ...
+    | - src/
+        | - components/
+            // highlight-start
+            | - nav-item/
+                | - index.js
+                | - nav-item.jsx
+                | - nav-item.css
+            // highlight-end
+            | - ...
 ```
 
 By default, we generate a component with a default export and function
@@ -297,7 +300,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 function Nav({}) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 
 export default Nav;
@@ -328,9 +331,9 @@ following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
-	| - Nav.css
+    | - index.js
+    | - Nav.js
+    | - Nav.css
 ```
 
 </TabItem>
@@ -349,11 +352,11 @@ will no longer be prompted that question.
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"extension": "js"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "extension": "js"
+        }
+    }
 }1
 ```
 
@@ -362,9 +365,9 @@ following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
-	| - Nav.css
+    | - index.js
+    | - Nav.js
+    | - Nav.css
 ```
 
 </TabItem>
@@ -389,18 +392,18 @@ Lets say you have a basic react folder structure like so:
 
 ```text
 | - <cwd>/
-	| - src/
-		// highlight-start
-		| - components/
-			| - Nav.jsx
-			| - Nav.css
-			// highlight-end
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        // highlight-start
+        | - components/
+            | - Nav.jsx
+            | - Nav.css
+            // highlight-end
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 If you wanted to generate a new component called `footer` in the components
@@ -432,14 +435,14 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"index": false
-		},
-		"opts": {
-			"newFolder": false
-		}
-	}
+    "react-component": {
+        "answers": {
+            "index": false
+        },
+        "opts": {
+            "newFolder": false
+        }
+    }
 }
 ```
 
@@ -457,20 +460,20 @@ Depending on your answers, it would produce something to the following:
 
 ```text
 | - <cwd>/
-	| - src/
-		| - components/
-			| - nav.jsx
-			| - nav.css
-			// highlight-start
-			| - footer.jsx
-			| - footer.css
-			// highlight-end
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        | - components/
+            | - nav.jsx
+            | - nav.css
+            // highlight-start
+            | - footer.jsx
+            | - footer.css
+            // highlight-end
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 ### How to use different export styles
@@ -508,11 +511,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"export": "named"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "export": "named"
+        }
+    }
 }
 ```
 
@@ -532,7 +535,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 export function Nav({}) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 ```
 
@@ -567,11 +570,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"inlineDefaultExport": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "inlineDefaultExport": true
+        }
+    }
 }
 ```
 
@@ -591,7 +594,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 export default function App({}) {
-	return <div>App component</div>;
+    return <div>App component</div>;
 }
 ```
 
@@ -648,11 +651,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"typescript": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "typescript": true
+        }
+    }
 }
 ```
 
@@ -671,9 +674,9 @@ Depending on your answers, it would produce something to the following:
 
 ```txt
 | - Nav
-	| - index.ts
-	| - Nav.tsx
-	| - Nav.css
+    | - index.ts
+    | - Nav.tsx
+    | - Nav.css
 ```
 
 Your component file will end up with something like the following:
@@ -683,11 +686,11 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 interface NavProps {
-	// props
+    // props
 }
 
 function Nav({}: NavProps) {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 }
 
 export default Nav;
@@ -728,11 +731,11 @@ tps init
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"functionStyle": "arrow"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "functionStyle": "arrow"
+        }
+    }
 }
 ```
 
@@ -752,7 +755,7 @@ import React, { useEffect, useState } from 'react';
 import './Nav.css';
 
 const Nav = ({}) => {
-	return <div>Nav component</div>;
+    return <div>Nav component</div>;
 };
 
 export default Nav;
@@ -789,11 +792,11 @@ If you have typescript set in your tpsrc file.
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"typescript": true
-		}
-	}
+    "react-component": {
+        "answers": {
+            "typescript": true
+        }
+    }
 }
 ```
 

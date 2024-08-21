@@ -67,9 +67,7 @@ const example = (name: string) => {
 		overrideExample?.[name]?.render?.(name, exampleText) ||
 		`tps.utils.${name}("${exampleText}")`;
 
-	return `const result = ${code};
-
-render(result);`;
+	return `() => ${code}`;
 };
 
 const infectionLink = (name) => {
@@ -150,7 +148,7 @@ export const TemplatesContextUtils = () => {
 						).join(', ')}) }}`}
 					</CodeBlock>
 					<Example>
-						<CodeBlock language="jsx" live noInline metastring="title='hey'">
+						<CodeBlock language="jsx" live metastring="title='hey'">
 							{example(name)}
 						</CodeBlock>
 					</Example>

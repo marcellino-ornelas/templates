@@ -70,15 +70,15 @@ Take this template that is using a inline interpolation statement to render the
 name of instance as this react components name.
 
 <Dot
-	tps={{ 
-		name: "Nav"
-	}}
-	lang="typescript"
+    tps={{ 
+        name: "Nav"
+    }}
+    lang="typescript"
 >
 
 ```
 export const {{= tps.name }} = () => {
-	/* rest of react component code... */
+    /* rest of react component code... */
 }
 ```
 
@@ -108,13 +108,13 @@ there is no trace that anything was there before. No new lines, no spaces,
 nothing. It was completely wiped.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: false
-		}
-	}}
-	lang="typescript"
-	templateMeta='{2-4}'
+    tps={{ 
+        answers: {
+            css: false
+        }
+    }}
+    lang="typescript"
+    templateMeta='{2-4}'
 >
 
 ```
@@ -130,13 +130,13 @@ Now when `css` is `true` notice how the only thing being rendered is whats
 inside the if statement.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: true
-		}
-	}}
-	lang="typescript"
-	displayTemplate={false}
+    tps={{ 
+        answers: {
+            css: true
+        }
+    }}
+    lang="typescript"
+    displayTemplate={false}
 >
 
 ```
@@ -151,24 +151,24 @@ import './component.css';
 You can also indent block syntax and all tabs and spaces will be removed.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: false
-		}
-	}}
-	lang="typescript"
-	templateMeta='{2-4}'
+    tps={{ 
+        answers: {
+            css: false
+        }
+    }}
+    lang="typescript"
+    templateMeta='{2-4}'
 >
 
 ```
 const App = () => {
-	{{{? tps.answers.state }}}
-	const [state, setState] = useState(null);
-	{{{?}}}
+    {{{? tps.answers.state }}}
+    const [state, setState] = useState(null);
+    {{{?}}}
 
-	return (
-		/* other code ... */
-	);
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -191,15 +191,15 @@ syntax. Now when `css` & `state` are `false`, notice how there is extra
 whitespace behind.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: false,
-			state: false
-		}
-	}}
-	lang="typescript"
-	templateMeta='{2-4,7-9}'
-	resultMeta="{2,5}"
+    tps={{ 
+        answers: {
+            css: false,
+            state: false
+        }
+    }}
+    lang="typescript"
+    templateMeta='{2-4,7-9}'
+    resultMeta="{2,5}"
 >
 
 ```
@@ -209,13 +209,13 @@ import './component.css';
 {{?}}
 
 const App = () => {
-	{{? tps.answers.state }}
-	const [state, setState] = useState(null);
-	{{?}}
+    {{? tps.answers.state }}
+    const [state, setState] = useState(null);
+    {{?}}
 
-	return (
-		/* other code ... */
-	);
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -224,15 +224,15 @@ const App = () => {
 Now when `css` & `state` are `true`, you can also see extra lines.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: true,
-			state: true
-		}
-	}}
-	lang="typescript"
-	resultMeta="{2,4,7,9}"
-	displayTemplate={false}
+    tps={{ 
+        answers: {
+            css: true,
+            state: true
+        }
+    }}
+    lang="typescript"
+    resultMeta="{2,4,7,9}"
+    displayTemplate={false}
 >
 
 ```
@@ -242,13 +242,13 @@ import './component.css';
 {{?}}
 
 const App = () => {
-	{{? tps.answers.state }}
-	const [state, setState] = useState(null);
-	{{?}}
+    {{? tps.answers.state }}
+    const [state, setState] = useState(null);
+    {{?}}
 
-	return (
-		/* other code ... */
-	);
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -258,15 +258,15 @@ In order to get the perfect output, you needed to sacrafice the readability of
 the template and do something like the following:
 
 <Dot
-	tps={{ 
-		answers: {
-			css: false,
-			state: false
-		}
-	}}
-	lang="typescript"
-	templateMeta='{2-3,5-6}'
-	resultMeta='{2,4}'
+    tps={{ 
+        answers: {
+            css: false,
+            state: false
+        }
+    }}
+    lang="typescript"
+    templateMeta='{2-3,5-6}'
+    resultMeta='{2,4}'
 >
 
 ```
@@ -274,11 +274,11 @@ import React from 'react';
 {{? tps.answers.css }}import './component.css';
 {{?}}
 const App = () => {
-	{{? tps.answers.state }}const [state, setState] = useState(null);
-	{{?}}
-	return (
-		/* other code ... */
-	);
+    {{? tps.answers.state }}const [state, setState] = useState(null);
+    {{?}}
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -287,15 +287,15 @@ const App = () => {
 Now when `css` & `state` are `true`, you can also see extra lines.
 
 <Dot
-	tps={{ 
-		answers: {
-			css: true,
-			state: true
-		}
-	}}
-	lang="typescript"
-	displayTemplate={false}
-	resultMeta='{3,6}'
+    tps={{ 
+        answers: {
+            css: true,
+            state: true
+        }
+    }}
+    lang="typescript"
+    displayTemplate={false}
+    resultMeta='{3,6}'
 >
 
 ```
@@ -303,11 +303,11 @@ import React from 'react';
 {{? tps.answers.css }}import './component.css';
 {{?}}
 const App = () => {
-	{{? tps.answers.state }}const [state, setState] = useState(null);
-	{{?}}
-	return (
-		/* other code ... */
-	);
+    {{? tps.answers.state }}const [state, setState] = useState(null);
+    {{?}}
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -317,15 +317,15 @@ While this might not look the worst for one answer, imagine 3 or 4. Now lets see
 how block syntax improves this:
 
 <Dot
-	tps={{ 
-		answers: {
-			css: false,
-			state: false,
-		}
-	}}
-	lang="typescript"
-	templateMeta='{2-4,7-9}'
-	resultMeta='{2,4}'
+    tps={{ 
+        answers: {
+            css: false,
+            state: false,
+        }
+    }}
+    lang="typescript"
+    templateMeta='{2-4,7-9}'
+    resultMeta='{2,4}'
 >
 
 ```
@@ -335,13 +335,13 @@ import './component.css';
 {{{?}}}
 
 const App = () => {
-	{{{? tps.answers.state }}}
-	const [state, setState] = useState(null);
-	{{{?}}}
+    {{{? tps.answers.state }}}
+    const [state, setState] = useState(null);
+    {{{?}}}
 
-	return (
-		/* other code ... */
-	);
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -350,15 +350,15 @@ const App = () => {
 Now when `css` & `state` are `true`,
 
 <Dot
-	tps={{ 
-		answers: {
-			css: true,
-			state: true,
-		}
-	}}
-	lang="typescript"
-	displayTemplate={false}
-	resultMeta='{3,6}'
+    tps={{ 
+        answers: {
+            css: true,
+            state: true,
+        }
+    }}
+    lang="typescript"
+    displayTemplate={false}
+    resultMeta='{3,6}'
 >
 
 ```
@@ -368,13 +368,13 @@ import './component.css';
 {{{?}}}
 
 const App = () => {
-	{{{? tps.answers.state }}}
-	const [state, setState] = useState(null);
-	{{{?}}}
+    {{{? tps.answers.state }}}
+    const [state, setState] = useState(null);
+    {{{?}}}
 
-	return (
-		/* other code ... */
-	);
+    return (
+        /* other code ... */
+    );
 };
 ```
 
@@ -391,7 +391,7 @@ const App = () => {
 
 ```text
 {{{
-	<expressions...>
+    <expressions...>
 }}}
 ```
 
@@ -417,15 +417,15 @@ mandatory!**
 <TabItem value="block" label="Block">
 
 <Dot
-	templateMeta='{1-5}'
-	lang='ts'
+    templateMeta='{1-5}'
+    lang='ts'
 >
 
 ```text
 {{{
-	const name = "Marcellino Ornelas";
-	const age = 21;
-	const ageCategory = age > 18 ? "Adult" : "Child";
+    const name = "Marcellino Ornelas";
+    const age = 21;
+    const ageCategory = age > 18 ? "Adult" : "Child";
 }}}
 /* rest of code... */
 ```
@@ -444,7 +444,7 @@ future versions.
 :::
 
 <Dot
- 	templateMeta='{1}'
+     templateMeta='{1}'
 >
 
 ```text
@@ -485,15 +485,15 @@ Take this template that is using a inline interpolation statement to render the
 name of instance as this react components name.
 
 <Dot
-	tps={{ 
-		name: "Nav"
-	}}
-	lang="typescript"
+    tps={{ 
+        name: "Nav"
+    }}
+    lang="typescript"
 >
 
 ```
 export const {{= tps.name }} = () => {
-	/* rest of react component code... */
+    /* rest of react component code... */
 }
 ```
 
@@ -543,10 +543,10 @@ Take this template below that is using a block if statement to conditionally
 render an css import when the `css` answer is `true`.
 
 <Dot
-	tps={{name: "react-component", answers: {css: true}}} 
-	lang="typescript"
-	templateMeta='{2-4}'
-	resultMeta='{2}'
+    tps={{name: "react-component", answers: {css: true}}} 
+    lang="typescript"
+    templateMeta='{2-4}'
+    resultMeta='{2}'
 >
 
 ```text
@@ -561,9 +561,9 @@ import "styles.css";
 Now when `css` is `false`, no output will be displayed.
 
 <Dot
-	tps={{name: "react-component", answers: {css: false}}} 
-	lang="typescript"
-	displayTemplate={false}
+    tps={{name: "react-component", answers: {css: false}}} 
+    lang="typescript"
+    displayTemplate={false}
 >
 
 ```text
@@ -583,8 +583,8 @@ Take this template that is using a inline if statement to conditionally render a
 typescript type to the variable when the `typescript` answer is `true`.
 
 <Dot 
-	lang="typescript"
-	tps={{name: "react-component", answers: {typescript: true}}}
+    lang="typescript"
+    tps={{name: "react-component", answers: {typescript: true}}}
 >
 
 ```text
@@ -596,9 +596,9 @@ const name{{? tps.answers.typescript }}: string{{?}} = 'lino';
 Now when `typescript` is `false`, no typescript typings will be added.
 
 <Dot
-	tps={{name: "react-component", answers: {typescript: false}}}
-	lang="typescript"
-	displayTemplate={false}
+    tps={{name: "react-component", answers: {typescript: false}}}
+    lang="typescript"
+    displayTemplate={false}
 >
 
 ```text
@@ -624,10 +624,10 @@ statement for CSS modules; otherwise, it will render a normal CSS import
 statement.
 
 <Dot
-	lang="typescript"
-	tps={{name: "footer", answers: { cssLang: "modules"}}}
-	templateMeta='{4-5}'
-	resultMeta='{2}'
+    lang="typescript"
+    tps={{name: "footer", answers: { cssLang: "modules"}}}
+    templateMeta='{4-5}'
+    resultMeta='{2}'
 >
 
 ```text
@@ -645,10 +645,10 @@ Now when `cssLang` is **not** `modules`, we will get a normal CSS import
 statement.
 
 <Dot
-	lang="typescript"
-	tps={{name: "footer", answers: { cssLang: "less"}}}
-	displayTemplate={false}
-	resultMeta='{2}'
+    lang="typescript"
+    tps={{name: "footer", answers: { cssLang: "less"}}}
+    displayTemplate={false}
+    resultMeta='{2}'
 >
 
 ```text
@@ -671,18 +671,18 @@ render a component name. If `component` is set to a value, it will use the value
 of `component` as the component name; otherwise, it will render a `div`.
 
 <Dot
-	tps={{name: "react-component", answers: { component: "Page" }}}
-	lang="tsx"
-	templateMeta='{3,5}'
+    tps={{name: "react-component", answers: { component: "Page" }}}
+    lang="tsx"
+    templateMeta='{3,5}'
 >
 
 ```text
 const App = () => {
-	return (
-		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-			/* contents... */
-		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	);
+    return (
+        <{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+            /* contents... */
+        </{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+    );
 };
 ```
 
@@ -691,19 +691,19 @@ const App = () => {
 Now when `component` is not set to a value, we will get a `div`.
 
 <Dot
-	tps={{name: "react-component", answers: {}}}
-	lang="tsx"
-	templateMeta='{3,5}'
-	displayTemplate={false}
+    tps={{name: "react-component", answers: {}}}
+    lang="tsx"
+    templateMeta='{3,5}'
+    displayTemplate={false}
 >
 
 ```text
 const App = () => {
-	return (
-		<{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-			/* contents... */
-		</{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	);
+    return (
+        <{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+            /* contents... */
+        </{{? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+    );
 };
 ```
 
@@ -727,10 +727,10 @@ statement for CSS modules. Else if `css` is `true`, it will render a CSS import
 statement. Otherwise it will render nothing.
 
 <Dot
-	lang="typescript" 
-	tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
-	templateMeta='{4-5}'
-	resultMeta='{2}'
+    lang="typescript" 
+    tps={{name: "footer", answers: { cssLang: "modules", css: true}}}
+    templateMeta='{4-5}'
+    resultMeta='{2}'
 >
 
 ```text
@@ -748,11 +748,11 @@ Now when `cssLang` is not `modules` and `css` is `true`, you will get a normal
 css import statement.
 
 <Dot
-	lang="typescript" 
-	tps={{name: "footer", answers: { cssLang: "other", css: true}}}
-	templateMeta='{4-5}'
-	displayTemplate={false}
-	resultMeta='{2}'
+    lang="typescript" 
+    tps={{name: "footer", answers: { cssLang: "other", css: true}}}
+    templateMeta='{4-5}'
+    displayTemplate={false}
+    resultMeta='{2}'
 >
 
 ```text
@@ -770,10 +770,10 @@ Lastly when `cssLang` is not `modules` and `css` is `false`, you will get no
 rendered output.
 
 <Dot
-	lang="typescript" 
-	tps={{name: "footer", answers: { cssLang: "other", css: false}}}
-	templateMeta='{4-5}'
-	displayTemplate={false}
+    lang="typescript" 
+    tps={{name: "footer", answers: { cssLang: "other", css: false}}}
+    templateMeta='{4-5}'
+    displayTemplate={false}
 >
 
 ```text
@@ -797,18 +797,18 @@ render a component name. If `component` is `page`, it will render the
 will render the value as the component name. Otherwise, it will render a `div`.
 
 <Dot
-	tps={{name: "react-component", answers: { component: "page" }}}
-	lang="tsx"
-	templateMeta='{3}'
+    tps={{name: "react-component", answers: { component: "page" }}}
+    lang="tsx"
+    templateMeta='{3}'
 >
 
 ```text
 const App = () => {
-	return (
-		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-			/* contents... */
-		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	);
+    return (
+        <{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+            /* contents... */
+        </{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+    );
 };
 ```
 
@@ -818,19 +818,19 @@ Now when the `component` answer is not `page`, it will use whatever the user
 passed into it. In this case we passed in `Box`.
 
 <Dot
-	tps={{name: "react-component", answers: { component: "Box" }}}
-	lang="tsx"
-	templateMeta='{3}'
-	displayTemplate={false}
+    tps={{name: "react-component", answers: { component: "Box" }}}
+    lang="tsx"
+    templateMeta='{3}'
+    displayTemplate={false}
 >
 
 ```text
 const App = () => {
-	return (
-		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-			/* contents... */
-		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	);
+    return (
+        <{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+            /* contents... */
+        </{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+    );
 };
 ```
 
@@ -839,19 +839,19 @@ const App = () => {
 Lastly, if no answer was given for `component`, we will get a `div`.
 
 <Dot
-	tps={{name: "react-component"}}
-	lang="tsx"
-	templateMeta='{3}'
-	displayTemplate={false}
+    tps={{name: "react-component"}}
+    lang="tsx"
+    templateMeta='{3}'
+    displayTemplate={false}
 >
 
 ```text
 const App = () => {
-	return (
-		<{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-			/* contents... */
-		</{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
-	);
+    return (
+        <{{? tps.answers.component === 'page' }}PageComponent block{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+            /* contents... */
+        </{{? tps.answers.component === 'page' }}PageComponent{{?? tps.answers.component }}{{= tps.answers.component }}{{??}}div{{?}}>
+    );
 };
 ```
 
@@ -897,10 +897,10 @@ Take this template using a block loop statement to render import statements to
 the react file when `modules` is specified.
 
 <Dot
-	tps={{answers: { modules: ["utils", "pages"] }}}
-	lang='tsx'
-	templateMeta='{2-4}'
-	resultMeta='{2-3}'
+    tps={{answers: { modules: ["utils", "pages"] }}}
+    lang='tsx'
+    templateMeta='{2-4}'
+    resultMeta='{2-3}'
 >
 
 ```text
@@ -920,19 +920,19 @@ Take this template using a inline loop statement to render props to the react
 component when `props` are passed.
 
 <Dot
-	tps={{answers: {props: ['name', 'onClick']}}}
-	lang='tsx'
-	templateMeta='{4}'
+    tps={{answers: {props: ['name', 'onClick']}}}
+    lang='tsx'
+    templateMeta='{4}'
 >
 
 ```text
 {{{
-	const propsLastIndex = tps.answers.props.length - 1;
+    const propsLastIndex = tps.answers.props.length - 1;
 }}}
 const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
-	return (
-		/* react code .... */
-	);
+    return (
+        /* react code .... */
+    );
 };
 ```
 
@@ -943,15 +943,15 @@ const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLa
 If you dont need anything to complex, then use `join`!
 
 <Dot
-	tps={{answers: {props: ['name', 'onClick']}}}
-	lang='tsx'
+    tps={{answers: {props: ['name', 'onClick']}}}
+    lang='tsx'
 >
 
 ```text
 const App = ({ {{= tps.answers.props.join(", ")}} }) => {
-	return (
-		/* react code .... */
-	);
+    return (
+        /* react code .... */
+    );
 };
 ```
 
@@ -1009,10 +1009,10 @@ Utilizing a def for this allows you to maintain one version of the logic without
 duplicating it in your template.
 
 <Dot
-	tps={{answers: {layout: "one"}}}
-	lang='tsx'
-	templateMeta='{1-3,7,11}'
-	resultMeta='{3}'
+    tps={{answers: {layout: "one"}}}
+    lang='tsx'
+    templateMeta='{1-3,7,11}'
+    resultMeta='{3}'
 >
 
 ```text
@@ -1079,7 +1079,7 @@ javascript value.
 
 <Dot
     lang='tsx'
-	templateMeta='{1,4}'
+    templateMeta='{1,4}'
 >
 
 ```text
@@ -1135,7 +1135,7 @@ pass an object directly, you need to follow it with a semicolon `;` or a space.
 
 <Dot
     lang='tsx'
-	templateMeta='{5}'
+    templateMeta='{5}'
 >
 
 ```text
@@ -1194,7 +1194,7 @@ You can also define defs as an javascript function.
 
 ```text
 {{{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}}
 {{#def.renderIntro("lino")}}
 ```
@@ -1209,7 +1209,7 @@ You can also define defs as an javascript function.
 
 ```text
 {{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}
 {{#def.renderIntro("lino")}}
 ```
@@ -1226,7 +1226,7 @@ future versions. You can achieve the same result with a block def:
 
 ```text
 {{{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}}
 {{#def.renderIntro("lino") }}
 ```
@@ -1283,9 +1283,9 @@ Take this template named `react-component`, which includes a file named
 
 ```text
 | - .tps/
-	| - react-component
-		| - default
-			| - {{=tps.name}}.js
+    | - react-component
+        | - default
+            | - {{=tps.name}}.js
 ```
 
 Now if you rendered a new instance of this template named `Nav`:
@@ -1298,7 +1298,7 @@ then you'll end up with:
 
 ```text
 | - Nav/
-	| - Nav.js
+    | - Nav.js
 ```
 
 Any functionality of our template engine can be used in files names, however
@@ -1344,11 +1344,11 @@ packages is considered a def file.
 
 ```text
 | - .tps/
-	| - react-component
-		| - default/
-			// highlight-next-line
-			| - helpers.def
-			| - some-other-file.js
+    | - react-component
+        | - default/
+            // highlight-next-line
+            | - helpers.def
+            | - some-other-file.js
 ```
 
 If you want your def files to be accessible everywhere, put them inside your
@@ -1376,10 +1376,10 @@ Take this `react-component` template that has a `imports.def` def file and
 
 ```text
 | - .tps/
-	| - react-component/
-		| - default/
-			| - imports.def
-			| - {{=tps.name}}.jsx.tps
+    | - react-component/
+        | - default/
+            | - imports.def
+            | - {{=tps.name}}.jsx.tps
 ```
 
 Inside the `imports.def`, we have all the imports statements you will need for
@@ -1393,17 +1393,17 @@ import '{{= tps.name}}.css';
 Now inside `{{=tps.name}}.jsx.tps` we can use this def by the file name.
 
 <Dot 
-	defs={{ 
-		imports: `\
+    defs={{ 
+        imports: `\
 import React from 'react';
 import '{{= tps.name}}.css';`,
-	}}>
+    }}>
 
 ```tsx
 {{#def.imports}}
 
 export const {{=tps.name}} = () => {
-	/* react component stuff ... */
+    /* react component stuff ... */
 };
 ```
 
@@ -1419,10 +1419,10 @@ Take this `react-component` template that has a `helper.def` def file and
 
 ```text
 | - .tps/
-	| - react-component/
-		| - default/
-			| - helper.def
-			| - {{=tps.name}}.jsx.tps
+    | - react-component/
+        | - default/
+            | - helper.def
+            | - {{=tps.name}}.jsx.tps
 ```
 
 Inside the `helpers.def`, we have all the imports statements you will need for
@@ -1436,7 +1436,7 @@ import '{{= tps.name}}.css';
 
 {{{##def.propInterface:
 interface Props {
-	/* props */
+    /* props */
 }
 #}}}
 ```
@@ -1444,17 +1444,17 @@ interface Props {
 Now inside `{{=tps.name}}.jsx.tps` we can use these defs.
 
 <Dot
-	lang='tsx'
-	tps={{ answers: { typescript: true } }}
-	defs={{
-		imports: `\
+    lang='tsx'
+    tps={{ answers: { typescript: true } }}
+    defs={{
+        imports: `\
 import React from 'react';
 import '{{= tps.name}}.css';`,
-		propsInterface:`\
+        propsInterface:`\
 interface Props {
     /* props */
 }`,
-	}}>
+    }}>
 
 ```text
 {{#def.imports}}
@@ -1464,7 +1464,7 @@ interface Props {
 
 {{{?}}}
 export const {{=tps.name}} = () => {
-	/* react component stuff ... */
+    /* react component stuff ... */
 };
 ```
 
@@ -1507,9 +1507,9 @@ tps react-component Nav
 ```text
 // highlight-next-line
 const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 ```
 
@@ -1550,9 +1550,9 @@ file". Template owners can now use the answers object to get the value the user
 answered.
 
 <Dot
-	tps={{name: "react-component", answers: {css: true}}} 
-	lang="typescript"
-	templateMeta='{2}'
+    tps={{name: "react-component", answers: {css: true}}} 
+    lang="typescript"
+    templateMeta='{2}'
 >
 
 ```text
@@ -1582,20 +1582,20 @@ workflow.
 
 here are a list of some:
 
-- [camelCase](../../api/template-context#camelCase)
-- [capitalCase](../../api/template-context#capitalCase)
-- [constantCase](../../api/template-context#constantCase)
-- [dotCase](../../api/template-context#dotCase)
-- [headerCase](../../api/template-context#headerCase)
-- [paramCase](../../api/template-context#paramCase)
-- [pascalCase](../../api/template-context#pascalCase)
-- [snakeCase](../../api/template-context#snakeCase)
-- [pluralize](../../api/template-context#pluralize)
-- [singularize](../../api/template-context#singularize)
-- [camelize](../../api/template-context#camelize)
-- [underscore](../../api/template-context#underscore)
-- [humanize](../../api/template-context#humanize)
-- [capitalize](../../api/template-context#capitalize)
+-   [camelCase](../../api/template-context#camelCase)
+-   [capitalCase](../../api/template-context#capitalCase)
+-   [constantCase](../../api/template-context#constantCase)
+-   [dotCase](../../api/template-context#dotCase)
+-   [headerCase](../../api/template-context#headerCase)
+-   [paramCase](../../api/template-context#paramCase)
+-   [pascalCase](../../api/template-context#pascalCase)
+-   [snakeCase](../../api/template-context#snakeCase)
+-   [pluralize](../../api/template-context#pluralize)
+-   [singularize](../../api/template-context#singularize)
+-   [camelize](../../api/template-context#camelize)
+-   [underscore](../../api/template-context#underscore)
+-   [humanize](../../api/template-context#humanize)
+-   [capitalize](../../api/template-context#capitalize)
 
 To explore all the available functions, check out the
 [tps context utils API](../../api/template-context#utils).
@@ -1612,9 +1612,9 @@ tps react-component nav
 import React from react;
 
 const {{= tps.utils.pascalCase(tps.name)}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 ```
 

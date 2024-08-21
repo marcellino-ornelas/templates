@@ -41,9 +41,9 @@ properties depending on the type of prompt.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		/* prompts ... */
-	]
+    "prompts": [
+        /* prompts ... */
+    ]
 }
 ```
 
@@ -65,13 +65,13 @@ under the [`tps.answers`](../../api/template-context#answers) object property.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "<some-name>"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "<some-name>"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -86,13 +86,13 @@ answer.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "age"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "age"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -113,13 +113,13 @@ the user when they are rendering a new instance.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"message": "<some-message>"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "message": "<some-message>"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -127,13 +127,13 @@ the user when they are rendering a new instance.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "unit",
-			// highlight-next-line
-			"message": "Would you like to include unit tests?"
-		}
-	]
+    "prompts": [
+        {
+            "name": "unit",
+            // highlight-next-line
+            "message": "Would you like to include unit tests?"
+        }
+    ]
 }
 ```
 
@@ -158,13 +158,13 @@ prompting you would like to use. You can see more about this property in the
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"type": "confirm | input | checkbox | list | rawlist | password"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "type": "confirm | input | checkbox | list | rawlist | password"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -172,14 +172,14 @@ prompting you would like to use. You can see more about this property in the
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "over18",
-			// highlight-next-line
-			"type": "confirm",
-			"message": "Are you over the age of 18?"
-		}
-	]
+    "prompts": [
+        {
+            "name": "over18",
+            // highlight-next-line
+            "type": "confirm",
+            "message": "Are you over the age of 18?"
+        }
+    ]
 }
 ```
 
@@ -209,13 +209,13 @@ If you don't specify a `tpsType` field. Tps will use `package` by default.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"tpsType": "package"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "tpsType": "package"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -243,14 +243,14 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "unit",
-			"tpsType": "package",
-			"type": "confirm",
-			"message": "Do you want to include unit tests?"
-		}
-	]
+    "prompts": [
+        {
+            "name": "unit",
+            "tpsType": "package",
+            "type": "confirm",
+            "message": "Do you want to include unit tests?"
+        }
+    ]
 }
 ```
 
@@ -259,13 +259,13 @@ the template
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-next-line
-		| - unit/        <-- matches name of prompt
-			| - server.test.js
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-next-line
+        | - unit/        <-- matches name of prompt
+            | - server.test.js
 ```
 
 When the user is rendering a new template, the prompt will be displayed and they
@@ -286,9 +286,9 @@ process so a `server.test.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - server.test.js
+    | - server.js
+    // highlight-next-line
+    | - server.test.js
 ```
 
 </TabItem>
@@ -300,7 +300,7 @@ rendering process so no `server.test.js`.
 
 ```text
 | - newApp/
-	| - server.js
+    | - server.js
 ```
 
 </TabItem>
@@ -325,17 +325,17 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "framework",
-			"tpsType": "package",
-			"message": "What type of frontend framework would you like to use?",
-			// highlight-start
-			"type": "list", // <--- makes prompt accept strings
-			"choices": ["react", "angular"]
-			// highlight-end
-		}
-	]
+    "prompts": [
+        {
+            "name": "framework",
+            "tpsType": "package",
+            "message": "What type of frontend framework would you like to use?",
+            // highlight-start
+            "type": "list", // <--- makes prompt accept strings
+            "choices": ["react", "angular"]
+            // highlight-end
+        }
+    ]
 }
 ```
 
@@ -344,16 +344,16 @@ a package in our template.
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-start
-		| - react/
-			| - react.js
-		| - angular/
-			| - angular.js
-		// highlight-end
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-start
+        | - react/
+            | - react.js
+        | - angular/
+            | - angular.js
+        // highlight-end
 ```
 
 When the user is rendering a new instance, the prompt will be displayed and the
@@ -377,9 +377,9 @@ rendering process so a `react.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - react.js
+    | - server.js
+    // highlight-next-line
+    | - react.js
 ```
 
 </TabItem>
@@ -391,9 +391,9 @@ rendering process so a `angular.js` will be added
 
 ```text
 | - newApp/
-	| - server.js
-	// highlight-next-line
-	| - angular.js
+    | - server.js
+    // highlight-next-line
+    | - angular.js
 ```
 
 </TabItem>
@@ -419,17 +419,17 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "extras",
-			"message": "Would you like to include any other features?",
-			"tpsType": "package",
-			// highlight-start
-			"type": "checkbox", // <--- makes prompt accept list of strings
-			"choices": ["metrics", "unit", "e2e", "api"]
-			// highlight-end
-		}
-	]
+    "prompts": [
+        {
+            "name": "extras",
+            "message": "Would you like to include any other features?",
+            "tpsType": "package",
+            // highlight-start
+            "type": "checkbox", // <--- makes prompt accept list of strings
+            "choices": ["metrics", "unit", "e2e", "api"]
+            // highlight-end
+        }
+    ]
 }
 ```
 
@@ -438,20 +438,20 @@ a package in our template.
 
 ```text
 | - .tps/
-	| - express-app/
-		| settings.json
-		| - default/
-			| - server.js
-		// highlight-start
-		| - metrics/
-			| - metrics.js
-		| - unit/
-			| - server.test.js
-		| - e2e/
-			| - website.test.js
-		| - api/
-			| - api.js
-		// highlight-end
+    | - express-app/
+        | settings.json
+        | - default/
+            | - server.js
+        // highlight-start
+        | - metrics/
+            | - metrics.js
+        | - unit/
+            | - server.test.js
+        | - e2e/
+            | - website.test.js
+        | - api/
+            | - api.js
+        // highlight-end
 ```
 
 When the user renders a new template. tps will ask for an list of inputs.
@@ -463,11 +463,11 @@ the rendering process
 
 ```text
 | - newApp/
-	// highlight-next-line
-	| - metrics.js
-	// highlight-next-line
-	| - server.test.js
-	| - server.js
+    // highlight-next-line
+    | - metrics.js
+    // highlight-next-line
+    | - server.test.js
+    | - server.js
 ```
 
 </Example>
@@ -476,13 +476,13 @@ the rendering process
 
 ```json
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"tpsType": "data"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "tpsType": "data"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -499,16 +499,16 @@ Say were rendering a new `express-app` instance and we have a prompt like so
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "security",
-			"message": "Would you like to include common express security packages?",
-			"tpsType": "data",
-			// highlight-start
-			"type": "confirm" // <--- makes prompt accept boolean
-			// highlight-end
-		}
-	]
+    "prompts": [
+        {
+            "name": "security",
+            "message": "Would you like to include common express security packages?",
+            "tpsType": "data",
+            // highlight-start
+            "type": "confirm" // <--- makes prompt accept boolean
+            // highlight-end
+        }
+    ]
 }
 ```
 
@@ -547,14 +547,14 @@ can be used when answer prompts either through the command line, node, or a
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "some-name",
-			/* ... */
-			// highlight-next-line
-			"aliases": ["<alias-name>"]
-		}
-	]
+    "prompts": [
+        {
+            "name": "some-name",
+            /* ... */
+            // highlight-next-line
+            "aliases": ["<alias-name>"]
+        }
+    ]
 }
 ```
 
@@ -565,15 +565,15 @@ On the command line, single letter aliases should be answered with a single dash
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "name",
-			"type": "input",
-			/* ... */
-			// highlight-next-line
-			"aliases": ["n", "realName"]
-		}
-	]
+    "prompts": [
+        {
+            "name": "name",
+            "type": "input",
+            /* ... */
+            // highlight-next-line
+            "aliases": ["n", "realName"]
+        }
+    ]
 }
 ```
 
@@ -600,14 +600,14 @@ this settings file
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "framework",
-			"choices": ["react", "vue", "angular"],
-			/* ... */
-			"aliases": ["f"]
-		}
-	]
+    "prompts": [
+        {
+            "name": "framework",
+            "choices": ["react", "vue", "angular"],
+            /* ... */
+            "aliases": ["f"]
+        }
+    ]
 }
 ```
 
@@ -641,9 +641,8 @@ tps.setAnswers({ f: 'react' });
 
 ### Hidden
 
-<span className="badge badge--secondary margin-left--xs margin-bottom--lg">
-	templates@>v1.1.1
-</span>
+{/* prettier-ignore */}
+<span className="badge badge--secondary margin-left--xs margin-bottom--lg">templates@>v1.1.1</span>
 
 The `hidden` option makes the prompt a hidden prompt. Hidden prompts do not get
 prompted by default. This is useful when you want to add more customizable logic
@@ -652,13 +651,13 @@ questions.
 
 ```json
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"hidden": true
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "hidden": true
+            // ...
+        }
+    ]
 }
 ```
 
@@ -669,22 +668,22 @@ prompts, one being a hidden prompt and the not.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "prompt1",
-			"message": "Would you like to include prompt1",
-			"tpsType": "data",
-			"type": "confirm"
-		},
-		{
-			"name": "prompt2",
-			"message": "Would you like to include prompt2",
-			"tpsType": "data",
-			"type": "confirm",
-			// highlight-next-line
-			"hidden": true
-		}
-	]
+    "prompts": [
+        {
+            "name": "prompt1",
+            "message": "Would you like to include prompt1",
+            "tpsType": "data",
+            "type": "confirm"
+        },
+        {
+            "name": "prompt2",
+            "message": "Would you like to include prompt2",
+            "tpsType": "data",
+            "type": "confirm",
+            // highlight-next-line
+            "hidden": true
+        }
+    ]
 }
 ```
 
@@ -718,12 +717,12 @@ tps hidden-prompt-test test --hidden
 
 ```json title=".tpsrc"
 {
-	"hidden-prompt-test": {
-		"opts": {
-			// highlight-next-line
-			"hidden": true
-		}
-	}
+    "hidden-prompt-test": {
+        "opts": {
+            // highlight-next-line
+            "hidden": true
+        }
+    }
 }
 ```
 
@@ -738,22 +737,22 @@ prompts, one being a hidden prompt and the not.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "prompt1",
-			"message": "Would you like to include prompt1",
-			"tpsType": "data",
-			"type": "confirm"
-		},
-		{
-			"name": "prompt2",
-			"message": "Would you like to include prompt2",
-			"tpsType": "data",
-			"type": "confirm",
-			// highlight-next-line
-			"hidden": true
-		}
-	]
+    "prompts": [
+        {
+            "name": "prompt1",
+            "message": "Would you like to include prompt1",
+            "tpsType": "data",
+            "type": "confirm"
+        },
+        {
+            "name": "prompt2",
+            "message": "Would you like to include prompt2",
+            "tpsType": "data",
+            "type": "confirm",
+            // highlight-next-line
+            "hidden": true
+        }
+    ]
 }
 ```
 
@@ -786,12 +785,12 @@ tps hidden-prompt-test test --hiddenPrompt
 
 ```json title=".tpsrc"
 {
-	"hidden-prompt-test": {
-		"opts": {
-			// highlight-next-line
-			"hiddenPrompt": true
-		}
-	}
+    "hidden-prompt-test": {
+        "opts": {
+            // highlight-next-line
+            "hiddenPrompt": true
+        }
+    }
 }
 ```
 
@@ -806,22 +805,22 @@ prompts, one being a hidden prompt and the not.
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "prompt1",
-			"message": "Would you like to include prompt1",
-			"tpsType": "data",
-			"type": "confirm"
-		},
-		{
-			"name": "prompt2",
-			"message": "Would you like to include prompt2",
-			"tpsType": "data",
-			"type": "confirm",
-			// highlight-next-line
-			"hidden": true
-		}
-	]
+    "prompts": [
+        {
+            "name": "prompt1",
+            "message": "Would you like to include prompt1",
+            "tpsType": "data",
+            "type": "confirm"
+        },
+        {
+            "name": "prompt2",
+            "message": "Would you like to include prompt2",
+            "tpsType": "data",
+            "type": "confirm",
+            // highlight-next-line
+            "hidden": true
+        }
+    ]
 }
 ```
 
@@ -862,15 +861,15 @@ this settings file
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "unit",
-			"message": "Would you like to include unit tests?",
-			"tpsType": "package",
-			"type": "confirm"
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "unit",
+            "message": "Would you like to include unit tests?",
+            "tpsType": "package",
+            "type": "confirm"
+        }
+    ]
 }
 ```
 
@@ -908,15 +907,15 @@ this settings file
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "unit",
-			"message": "Would you like to include unit tests?",
-			"tpsType": "package",
-			"type": "confirm"
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "unit",
+            "message": "Would you like to include unit tests?",
+            "tpsType": "package",
+            "type": "confirm"
+        }
+    ]
 }
 ```
 
@@ -952,16 +951,16 @@ this settings file
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "framework",
-			"message": "What frontend package would you like to include",
-			"tpsType": "package",
-			"type": "list",
-			"choices": ["react", "angular", "vue"]
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "framework",
+            "message": "What frontend package would you like to include",
+            "tpsType": "package",
+            "type": "list",
+            "choices": ["react", "angular", "vue"]
+        }
+    ]
 }
 ```
 
@@ -993,15 +992,15 @@ this settings file
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			"name": "extras",
-			"message": "Would you like to include any other features?",
-			"tpsType": "package",
-			"type": "checkbox", // <--- makes prompt accept list of strings
-			"choices": ["metrics", "unit", "e2e", "api"]
-		}
-	]
+    "prompts": [
+        {
+            "name": "extras",
+            "message": "Would you like to include any other features?",
+            "tpsType": "package",
+            "type": "checkbox", // <--- makes prompt accept list of strings
+            "choices": ["metrics", "unit", "e2e", "api"]
+        }
+    ]
 }
 ```
 
@@ -1065,13 +1064,13 @@ You can read more about how to use our configuration file in our
 
 ```json title=".tpsrc"
 {
-	"<template-name>": {
-		// highlight-start
-		"answers": {
-			"<prompt-name>": "<prompt-answer>"
-		}
-		// highlight-end
-	}
+    "<template-name>": {
+        // highlight-start
+        "answers": {
+            "<prompt-name>": "<prompt-answer>"
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -1081,13 +1080,13 @@ If I had a template named `hello-world` and a prompt named `age`:
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "age"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "age"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -1095,12 +1094,12 @@ Then I can set the answer to the prompt in our `.tpsrc` file with:
 
 ```json title=".tpsrc"
 {
-	"hello-world": {
-		"answers": {
-			// highlight-next-line
-			"age": 23
-		}
-	}
+    "hello-world": {
+        "answers": {
+            // highlight-next-line
+            "age": 23
+        }
+    }
 }
 ```
 

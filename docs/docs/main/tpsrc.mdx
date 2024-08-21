@@ -21,10 +21,10 @@ Produces:
 
 ```text
 | - <cwd>
-	// highlight-start
-	| - .tps/
-		| - .tpsrc
-	// highlight-end
+    // highlight-start
+    | - .tps/
+        | - .tpsrc
+    // highlight-end
 ```
 
 The `.tps` folder also serves as the designated location for your custom
@@ -47,8 +47,8 @@ folder in the root of your repo.
 
 ```json title=".tpsrc"
 {
-	// highlight-next-line
-	"<template-name>": {}
+    // highlight-next-line
+    "<template-name>": {}
 }
 ```
 
@@ -63,11 +63,11 @@ template I would put the following inside of my tpsrc file
 
 ```json title=".tpsrc"
 {
-	// highlight-start
-	"react-component": {
-		/* react-component template specific configs */
-	}
-	// highlight-end
+    // highlight-start
+    "react-component": {
+        /* react-component template specific configs */
+    }
+    // highlight-end
 }
 ```
 
@@ -77,10 +77,10 @@ Like mentioned before, you can add multiple template configurations
 
 ```json title=".tpsrc"
 {
-	// highlight-start
-	"<template-name-1>": {},
-	"<template-name-2>": {}
-	// highlight-end
+    // highlight-start
+    "<template-name-1>": {},
+    "<template-name-2>": {}
+    // highlight-end
 }
 ```
 
@@ -91,14 +91,14 @@ also add configurations then the tpsrc files would look something like this:
 
 ```json title=".tpsrc"
 {
-	// highlight-start
-	"react-component": {
-		/* react-component template specific configs */
-	},
-	"express-app-route": {
-		/* express-app-route template specific configs */
-	}
-	// highlight-end
+    // highlight-start
+    "react-component": {
+        /* react-component template specific configs */
+    },
+    "express-app-route": {
+        /* express-app-route template specific configs */
+    }
+    // highlight-end
 }
 ```
 
@@ -122,13 +122,13 @@ a template to behave in a particular manner within a specific directory.
 
 ```json title=".tpsrc"
 {
-	"<template-name>": {
-		// highlight-start
-		"answers": {
-			"<prompt-name>": "<prompt-answer>"
-		}
-		// highlight-end
-	}
+    "<template-name>": {
+        // highlight-start
+        "answers": {
+            "<prompt-name>": "<prompt-answer>"
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -138,13 +138,13 @@ If I had a template named `hello-world` and a prompt named `age`:
 
 ```json title="settings.json"
 {
-	"prompts": [
-		{
-			// highlight-next-line
-			"name": "age"
-			// ...
-		}
-	]
+    "prompts": [
+        {
+            // highlight-next-line
+            "name": "age"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -152,12 +152,12 @@ The I can set the answer to the prompt in our `.tpsrc` file with
 
 ```json title=".tpsrc"
 {
-	"hello-world": {
-		"answers": {
-			// highlight-next-line
-			"age": 23
-		}
-	}
+    "hello-world": {
+        "answers": {
+            // highlight-next-line
+            "age": 23
+        }
+    }
 }
 ```
 
@@ -173,13 +173,13 @@ property
 
 ```json title=".tpsrc"
 {
-	"<template-name>": {
-		// highlight-start
-		"opts": {
-			"<opt-name>": "<opt-answer>"
-		}
-		// highlight-end
-	}
+    "<template-name>": {
+        // highlight-start
+        "opts": {
+            "<opt-name>": "<opt-answer>"
+        }
+        // highlight-end
+    }
 }
 ```
 
@@ -198,12 +198,12 @@ option to my templates configuration.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"force": true
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "force": true
+        }
+    }
 }
 ```
 

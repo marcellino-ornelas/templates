@@ -44,10 +44,10 @@ Take this template using a block loop statement to render import statements to
 the react file when `modules` is specified.
 
 <Dot
-	tps={{answers: { modules: ["utils", "pages"] }}}
-	lang='tsx'
-	templateMeta='{2-4}'
-	resultMeta='{2-3}'
+    tps={{answers: { modules: ["utils", "pages"] }}}
+    lang='tsx'
+    templateMeta='{2-4}'
+    resultMeta='{2-3}'
 >
 
 ```text
@@ -67,19 +67,19 @@ Take this template using a inline loop statement to render props to the react
 component when `props` are passed.
 
 <Dot
-	tps={{answers: {props: ['name', 'onClick']}}}
-	lang='tsx'
-	templateMeta='{4}'
+    tps={{answers: {props: ['name', 'onClick']}}}
+    lang='tsx'
+    templateMeta='{4}'
 >
 
 ```text
 {{{
-	const propsLastIndex = tps.answers.props.length - 1;
+    const propsLastIndex = tps.answers.props.length - 1;
 }}}
 const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
-	return (
-		/* react code .... */
-	);
+    return (
+        /* react code .... */
+    );
 };
 ```
 
@@ -99,20 +99,20 @@ nice and clean.
 Take this template using a inline loop.
 
 <Dot
-	tps={{answers: {props: ['name', 'onClick']}}}
-	lang='tsx'
-	templateMeta='{4}'
-	result={false}
+    tps={{answers: {props: ['name', 'onClick']}}}
+    lang='tsx'
+    templateMeta='{4}'
+    result={false}
 >
 
 ```text
 {{{
-	const propsLastIndex = tps.answers.props.length - 1;
+    const propsLastIndex = tps.answers.props.length - 1;
 }}}
 const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLastIndex ? ", " : "") }}{{~}} }) => {
-	return (
-		/* react code .... */
-	);
+    return (
+        /* react code .... */
+    );
 };
 ```
 
@@ -121,16 +121,16 @@ const App = ({ {{~tps.answers.props :value:index}}{{= value + (index !== propsLa
 vs this template using `join`.
 
 <Dot
-	tps={{answers: {props: ['name', 'onClick']}}}
-	lang='tsx'
-	result={false}
+    tps={{answers: {props: ['name', 'onClick']}}}
+    lang='tsx'
+    result={false}
 >
 
 ```text
 const App = ({ {{= tps.answers.props.join(", ")}} }) => {
-	return (
-		/* react code .... */
-	);
+    return (
+        /* react code .... */
+    );
 };
 ```
 

@@ -10,13 +10,13 @@ import TabItem from '@theme/TabItem';
 
 ```ts title="Type"
 interface Template {
-	constructor(templateName: string, opts: TemplateOptions): Template;
+    constructor(templateName: string, opts: TemplateOptions): Template;
 }
 ```
 
 ```ts title="Usage"
 new Templates('<template-name>', {
-	/* template options ... */
+    /* template options ... */
 });
 ```
 
@@ -24,7 +24,7 @@ new Templates('<template-name>', {
 
 ```ts
 new Templates('react-component', {
-	wipe: true,
+    wipe: true,
 });
 ```
 
@@ -34,11 +34,11 @@ new Templates('react-component', {
 
 ```ts title="Type"
 interface TemplateOptions {
-	extendDest?: string;
-	wipe?: boolean;
-	force?: boolean;
-	newFolder?: boolean;
-	hidden?: boolean;
+    extendDest?: string;
+    wipe?: boolean;
+    force?: boolean;
+    newFolder?: boolean;
+    hidden?: boolean;
 }
 ```
 
@@ -58,12 +58,12 @@ Optional path to add prepend to each
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"extendDest": "./path/to/some/directory"
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "extendDest": "./path/to/some/directory"
+        }
+    }
 }
 ```
 
@@ -73,7 +73,7 @@ Optional path to add prepend to each
 
 ```ts
 new Templates('react-component', {
-	extendDest: './path/to/some/directory',
+    extendDest: './path/to/some/directory',
 });
 ```
 
@@ -93,11 +93,11 @@ Imagine being in a directory named `app` and having a template named
 
 ```text
 | - app
-	| - .tps/
-		| - react-component/
-		| - .tpsrc
-	| - src/
-		| - <frontend-code...>
+    | - .tps/
+        | - react-component/
+        | - .tpsrc
+    | - src/
+        | - <frontend-code...>
 ```
 
 Lets say all of our react components live inside the `./src/` folder. So if I
@@ -112,12 +112,12 @@ Produces
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-next-line
-		| - Home/
-		| - ...
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-next-line
+        | - Home/
+        | - ...
 ```
 
 However since you know all components will live in the `src` folder you can
@@ -129,12 +129,12 @@ value.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"extendDest": "./src"
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "extendDest": "./src"
+        }
+    }
 }
 ```
 
@@ -144,8 +144,8 @@ value.
 
 ```ts
 new Templates('react-component', {
-	// highlight-next-line
-	extendDest: './src',
+    // highlight-next-line
+    extendDest: './src',
 });
 ```
 
@@ -163,12 +163,12 @@ still produces
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-next-line
-		| - Home/
-		| - ...
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-next-line
+        | - Home/
+        | - ...
 ```
 
 </Example>
@@ -194,12 +194,12 @@ potential conflicts during the rendering process.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"wipe": true
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "wipe": true
+        }
+    }
 }
 ```
 
@@ -209,8 +209,8 @@ potential conflicts during the rendering process.
 
 ```ts
 new Templates('react-component', {
-	// highlight-next-line
-	wipe: true,
+    // highlight-next-line
+    wipe: true,
 });
 ```
 
@@ -231,13 +231,13 @@ Lets say you have the following directory structure
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - ...
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - ...
+        // highlight-end
 ```
 
 If I was trying to rendering a new instance of `react-component` template and
@@ -253,13 +253,13 @@ Will produce:
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - <react-component template files ...>
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - <react-component template files ...>
+        // highlight-end
 ```
 
 </Example>
@@ -287,12 +287,12 @@ conflicts.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"force": true
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "force": true
+        }
+    }
 }
 ```
 
@@ -302,8 +302,8 @@ conflicts.
 
 ```ts
 new Templates('react-component', {
-	// highlight-next-line
-	force: true,
+    // highlight-next-line
+    force: true,
 });
 ```
 
@@ -324,13 +324,13 @@ Lets say you have the following directory structure
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - some-file.js
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - some-file.js
+        // highlight-end
 ```
 
 If I was trying to rendering a new instance of `react-component` template and
@@ -350,13 +350,13 @@ original file will be left in place and not touched.
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		| - Home/
-			// highlight-next-line
-			| - some-file.js
-			| - <react-component template files ...>
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js
+            | - <react-component template files ...>
 ```
 
 </TabItem>
@@ -368,13 +368,13 @@ file will be overridden by the templates `some-file.js`.
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		| - Home/
-			// highlight-next-line
-			| - some-file.js <--- from react-component
-			| - <react-component template files ...>
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js <--- from react-component
+            | - <react-component template files ...>
 ```
 
 Notice how `some-files.js` was not delete
@@ -414,12 +414,12 @@ in progress.
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"newFolder": false
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "newFolder": false
+        }
+    }
 }
 ```
 
@@ -429,8 +429,8 @@ in progress.
 
 ```ts
 new Templates('react-component', {
-	// highlight-next-line
-	newFolder: false,
+    // highlight-next-line
+    newFolder: false,
 });
 ```
 
@@ -457,10 +457,10 @@ tps express-app app
 
 ```text
 | - coding <---cwd
-	// highlight-start
-	| - app
-		| - <express-app contents ...>
-	// highlight-end
+    // highlight-start
+    | - app
+        | - <express-app contents ...>
+    // highlight-end
 ```
 
 </Example>
@@ -477,9 +477,9 @@ tps express-app app --no-newFolder
 
 ```text
 | - coding <---cwd
-	// highlight-start
-	| - <express-app contents ...>
-	// highlight-end
+    // highlight-start
+    | - <express-app contents ...>
+    // highlight-end
 ```
 
 Notice how this no longer creates a `app` directory.
@@ -488,9 +488,8 @@ Notice how this no longer creates a `app` directory.
 
 ### Hidden
 
-<span className="badge badge--secondary margin-left--xs margin-bottom--lg">
-	templates@>v1.1.1
-</span>
+{/* prettier-ignore */}
+<span className="badge badge--secondary margin-left--xs margin-bottom--lg">templates@>v1.1.1</span>
 
 ```ts title="Type"
 boolean;
@@ -518,12 +517,12 @@ tps react-component Nav --hidden
 
 ```json title=".tpsrc"
 {
-	"react-component": {
-		"opts": {
-			// highlight-next-line
-			"hidden": true
-		}
-	}
+    "react-component": {
+        "opts": {
+            // highlight-next-line
+            "hidden": true
+        }
+    }
 }
 ```
 
@@ -533,8 +532,8 @@ tps react-component Nav --hidden
 
 ```ts
 new Templates('react-component', {
-	// highlight-next-line
-	hidden: true,
+    // highlight-next-line
+    hidden: true,
 });
 ```
 
