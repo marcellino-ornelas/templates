@@ -110,7 +110,7 @@ interface SettingsFileEvents {
 		tps: Templates,
 		args: {
 			dest: string;
-			buildPaths: string | string[];
+			buildPaths: string[];
 		},
 	) => Promise<void>;
 }
