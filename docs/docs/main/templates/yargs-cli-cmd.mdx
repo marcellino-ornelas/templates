@@ -87,8 +87,8 @@ Produces:
 
 ```txt
 | - cli/
-	| - commands/
-		| - publish.js
+    | - commands/
+        | - publish.js
 ```
 
 ```js title="cli/commands/publish.js"
@@ -156,11 +156,11 @@ looks something like this:
 
 ```text
 | - <cwd>/
-	| - cli/
-		| - index.js
-		| - commands/
-			| - some-command.js
-			| - index.js
+    | - cli/
+        | - index.js
+        | - commands/
+            | - some-command.js
+            | - index.js
 ```
 
 If you want to add a new command called `list` you can run the following
@@ -183,13 +183,13 @@ within your `./cli/commands/` directory.
 
 ```text
 | - <cwd>/
-	| - cli/
-		| - index.js
-		| - commands/
-			// highlight-next-line
-			| - list.js
-			| - some-command.js
-			| - index.js
+    | - cli/
+        | - index.js
+        | - commands/
+            // highlight-next-line
+            | - list.js
+            | - some-command.js
+            | - index.js
 ```
 
 ```js title="cli/commands/list.js"
@@ -228,11 +228,11 @@ lets say you have a directory structure like this
 
 ```text
 | - <cwd>/
-	| - cli/
-		| - index.js
-		| - commands/
-			| - some-command.js
-			| - index.js
+    | - cli/
+        | - index.js
+        | - commands/
+            | - some-command.js
+            | - index.js
 ```
 
 If you wanted all your new commands to be generated in the `cli/commands`
@@ -258,13 +258,13 @@ tps yargs-cli-cmd list
 
 ```text
 | - <cwd>/
-	| - cli/
-		| - index.js
-		| - commands/
-			// highlight-next-line
-			| - list.js
-			| - some-command.js
-			| - index.js
+    | - cli/
+        | - index.js
+        | - commands/
+            // highlight-next-line
+            | - list.js
+            | - some-command.js
+            | - index.js
 ```
 
 Want to create sub commands? Add a build path and let the magic unfold
@@ -275,16 +275,16 @@ tps yargs-cli-cmd list_commands/template
 
 ```text
 | - <cwd>/
-	| - cli/
-		| - index.js
-		| - commands/
-			// highlight-start
-			| - list_commands/
-				| - template.js
-			// highlight-end
-			| - list.js
-			| - some-command.js
-			| - index.js
+    | - cli/
+        | - index.js
+        | - commands/
+            // highlight-start
+            | - list_commands/
+                | - template.js
+            // highlight-end
+            | - list.js
+            | - some-command.js
+            | - index.js
 ```
 
 ### Dont create a new folder
@@ -326,6 +326,6 @@ Produces:
 
 ```txt
 | - <cwd>
-	// highlight-next-line
-	| - publish.js
+    // highlight-next-line
+    | - publish.js
 ```

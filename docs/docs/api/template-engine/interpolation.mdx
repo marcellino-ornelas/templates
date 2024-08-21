@@ -32,13 +32,13 @@ import TabItem from '@theme/TabItem';
 <TabItem value="inline" label="Inline">
 
 <Dot
-	lang='tsx'
-	templateMeta='{4}'
+    lang='tsx'
+    templateMeta='{4}'
 >
 
 ```text
 {{{
-	const name = "marcellino ornelas";
+    const name = "marcellino ornelas";
 }}}
 {{= name}}
 ```
@@ -57,13 +57,13 @@ Any valid javascript expression can be used in between the brackets.
 <TabItem value="inline" label="Inline">
 
 <Dot
-	lang='tsx'
-	templateMeta='{4}'
+    lang='tsx'
+    templateMeta='{4}'
 >
 
 ```text
 {{{
-	const name = "marcellino ornelas";
+    const name = "marcellino ornelas";
 }}}
 {{= name.startsWith("m") ? `${name[0].toUpperCase()}${name.slice(1)}` : name }}
 ```
@@ -90,28 +90,28 @@ file. After a instance is created, we can then invoke the js file and it will
 produce results that were defined in the template.
 
 <Dot
-	lang='tsx'
+    lang='tsx'
 >
 
 ```text
 {{{
-	const name = "Marcellino ornelas";
-	const age = 24;
-	const userInfo = {
-		name,
-		age,
-	};
-	const users = [userInfo];
+    const name = "Marcellino ornelas";
+    const age = 24;
+    const userInfo = {
+        name,
+        age,
+    };
+    const users = [userInfo];
 }}}
 {{{/* Strings should be wrapped in qoutes of choice */}}}
 const name = "{{= name}}";
 {{{/* Numbers can be rendered to the output */}}}
 const age = {{= age}};
 {{{
-	/**
-	 * You can use JSON.stringify to display objects or arrays
-	 * or you can build your own custom function to do something similar
-	 */
+    /**
+     * You can use JSON.stringify to display objects or arrays
+     * or you can build your own custom function to do something similar
+     */
 }}}
 const userInfo = {{= JSON.stringify(userInfo, undefined, 2)}};
 const users = {{= JSON.stringify(users, undefined, 2)}};

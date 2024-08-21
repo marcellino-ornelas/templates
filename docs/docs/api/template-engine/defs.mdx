@@ -46,10 +46,10 @@ Utilizing a def for this allows you to maintain one version of the logic without
 duplicating it in your template.
 
 <Dot
-	tps={{answers: {layout: "one"}}}
-	lang='tsx'
-	templateMeta='{1-3,7,11}'
-	resultMeta='{3}'
+    tps={{answers: {layout: "one"}}}
+    lang='tsx'
+    templateMeta='{1-3,7,11}'
+    resultMeta='{3}'
 >
 
 ```text
@@ -116,7 +116,7 @@ javascript value.
 
 <Dot
     lang='tsx'
-	templateMeta='{1,4}'
+    templateMeta='{1,4}'
 >
 
 ```text
@@ -172,7 +172,7 @@ pass an object directly, you need to follow it with a semicolon `;` or a space.
 
 <Dot
     lang='tsx'
-	templateMeta='{5}'
+    templateMeta='{5}'
 >
 
 ```text
@@ -231,7 +231,7 @@ You can also define defs as an javascript function.
 
 ```text
 {{{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}}
 {{#def.renderIntro("lino")}}
 ```
@@ -246,7 +246,7 @@ You can also define defs as an javascript function.
 
 ```text
 {{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}
 {{#def.renderIntro("lino")}}
 ```
@@ -263,7 +263,7 @@ future versions. You can achieve the same result with a block def:
 
 ```text
 {{{##def.renderIntro = function(name) {
-		return `My name is ${name}`;
+        return `My name is ${name}`;
 }#}}}
 {{#def.renderIntro("lino") }}
 ```
@@ -294,7 +294,7 @@ If `name` was `nav` and `capitalize` was `true` then the result would be
 uppercase name
 
 <Dot
-	tps={{ name: "nav", answers: { capitalize: true } }}
+    tps={{ name: "nav", answers: { capitalize: true } }}
     defs={{"name": `{{? tps.answers.capitalize}}{{= tps.utils.capitalize(tps.name)}}{{??}}tps.name{{?}}`}}
 >
 
