@@ -3,6 +3,7 @@ import Link from '@docusaurus/Link';
 
 interface Props extends PropsWithChildren {
 	to?: string;
+	text?: React.ReactNode;
 	size?: 'lg' | 'sm';
 	onClick: () => void;
 	color?:
@@ -19,6 +20,7 @@ export const Button = ({
 	to,
 	size,
 	children,
+	text,
 	onClick,
 	color = 'primary',
 }: Props) => {
@@ -38,11 +40,11 @@ export const Button = ({
 
 	return to ? (
 		<Link to={to} {...props}>
-			{children}
+			{text || children}
 		</Link>
 	) : (
 		<button type="button" {...props}>
-			{children}
+			{text || children}
 		</button>
 	);
 };
