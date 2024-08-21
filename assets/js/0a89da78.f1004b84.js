@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs_v_2=self.webpackChunkdocs_v_2||[]).push([[6923],{13656:e=>{e.exports=JSON.parse('{"permalink":"/templates/blog/tags/facebook","page":1,"postsPerPage":10,"totalPages":1,"totalCount":1,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
