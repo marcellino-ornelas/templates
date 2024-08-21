@@ -93,11 +93,11 @@ Imagine being in a directory named `app` and having a template named
 
 ```text
 | - app
-	| - .tps/
-		| - react-component/
-		| - .tpsrc
-	| - src/
-		| - <frontend-code...>
+    | - .tps/
+        | - react-component/
+        | - .tpsrc
+    | - src/
+        | - <frontend-code...>
 ```
 
 Lets say all of our react components live inside the `./src/` folder. So if I
@@ -112,12 +112,12 @@ Produces
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-next-line
-		| - Home/
-		| - ...
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-next-line
+        | - Home/
+        | - ...
 ```
 
 However since you know all components will live in the `src` folder you can
@@ -163,12 +163,12 @@ still produces
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-next-line
-		| - Home/
-		| - ...
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-next-line
+        | - Home/
+        | - ...
 ```
 
 </Example>
@@ -231,13 +231,13 @@ Lets say you have the following directory structure
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - ...
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - ...
+        // highlight-end
 ```
 
 If I was trying to rendering a new instance of `react-component` template and
@@ -253,13 +253,13 @@ Will produce:
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - <react-component template files ...>
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - <react-component template files ...>
+        // highlight-end
 ```
 
 </Example>
@@ -324,13 +324,13 @@ Lets say you have the following directory structure
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		// highlight-start
-		| - Home/
-			| - some-file.js
-		// highlight-end
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - some-file.js
+        // highlight-end
 ```
 
 If I was trying to rendering a new instance of `react-component` template and
@@ -350,13 +350,13 @@ original file will be left in place and not touched.
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		| - Home/
-			// highlight-next-line
-			| - some-file.js
-			| - <react-component template files ...>
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js
+            | - <react-component template files ...>
 ```
 
 </TabItem>
@@ -368,13 +368,13 @@ file will be overridden by the templates `some-file.js`.
 
 ```text
 | - app
-	| - .tps/
-		| - ...
-	| - src/
-		| - Home/
-			// highlight-next-line
-			| - some-file.js <--- from react-component
-			| - <react-component template files ...>
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js <--- from react-component
+            | - <react-component template files ...>
 ```
 
 Notice how `some-files.js` was not delete
@@ -457,10 +457,10 @@ tps express-app app
 
 ```text
 | - coding <---cwd
-	// highlight-start
-	| - app
-		| - <express-app contents ...>
-	// highlight-end
+    // highlight-start
+    | - app
+        | - <express-app contents ...>
+    // highlight-end
 ```
 
 </Example>
@@ -477,9 +477,9 @@ tps express-app app --no-newFolder
 
 ```text
 | - coding <---cwd
-	// highlight-start
-	| - <express-app contents ...>
-	// highlight-end
+    // highlight-start
+    | - <express-app contents ...>
+    // highlight-end
 ```
 
 Notice how this no longer creates a `app` directory.

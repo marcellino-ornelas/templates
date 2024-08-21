@@ -27,24 +27,24 @@ called [doT](http://olado.github.io/doT/index.html).
 
 ```mermaid
 graph LR;
-	step1("User renders
-		template")
-	step2("Tps loads all files and
-		folders from each
-		required package")
-	step3("Dymanic files")
-	step4("All other files/folders")
-	step5("Copy/paste")
-	step6("DoT template engine")
-	step7("New instance
-		of template created")
+    step1("User renders
+        template")
+    step2("Tps loads all files and
+        folders from each
+        required package")
+    step3("Dymanic files")
+    step4("All other files/folders")
+    step5("Copy/paste")
+    step6("DoT template engine")
+    step7("New instance
+        of template created")
     step1-->step2;
     step2-->step3;
     step2-->step4;
     step4-->step5;
     step5-->step7;
-	step3-->step6;
-	step6-->step7;
+    step3-->step6;
+    step6-->step7;
 ```
 
 ### What is doT
@@ -242,7 +242,7 @@ rendered output
 
 ```text
 {{~[1, 2, 3, 4] :value:index}}
-	{{= value}}
+    {{= value}}
 {{~}}
 ```
 
@@ -326,7 +326,7 @@ You can also define functions as defs
 
 ```text
 {{##def.intro = function(name) {
-		return `This is my intro`;
+        return `This is my intro`;
 }#}}
 
 {{#def.intro()}}
@@ -465,9 +465,9 @@ Def files are files inside your packages that have a `.def` extension.
 
 ```text
 | - .tps/
-	| - react-component
-		| - default/
-			| - helpers.def
+    | - react-component
+        | - default/
+            | - helpers.def
 ```
 
 </Example>
@@ -498,10 +498,10 @@ If you had this template folder structure:
 
 ```text
 | - .tps/
-	| - some-template/
-		| - default/
-			| - helpers.def
-			| - index.txt.dot
+    | - some-template/
+        | - default/
+            | - helpers.def
+            | - index.txt.dot
 ```
 
 and inside your `helpers.def` you had:
@@ -538,10 +538,10 @@ If you had this template folder structure:
 
 ```text
 | - .tps/
-	| - some-template/
-		| - default/
-			| - helpers.def
-			| - index.txt.dot
+    | - some-template/
+        | - default/
+            | - helpers.def
+            | - index.txt.dot
 ```
 
 and inside your `helpers.def` you had:
@@ -610,9 +610,9 @@ tps react-component Nav
 
 ```text
 const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 ```
 
@@ -671,9 +671,9 @@ import React from react;
 {{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
 {{?}}
 const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 
 ```
@@ -695,9 +695,9 @@ import React from react;
 {{? tps.packages.includes("css")}}import "{{= tps.name}}.css";
 {{?}}
 const {{= tps.name}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 
 ```
@@ -759,9 +759,9 @@ tps react-component nav
 import React from react;
 
 const {{= tps.utils.capitalize(tps.name)}} = (props) => {
-	return (
-		<div></div>
-	)
+    return (
+        <div></div>
+    )
 }
 ```
 

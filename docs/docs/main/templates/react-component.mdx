@@ -113,11 +113,11 @@ tps react-component path/to/dir/<component-name>
 
 ```txt title="Creates"
 | - <component-name>
-	| - index.js (optional)
-	| - <component-name>.jsx
-	| - <component-name>.css (optional)
-	| - <component-name>.test.js (optional)
-	| - <component-name>.stories.jsx (optional)
+    | - index.js (optional)
+    | - <component-name>.jsx
+    | - <component-name>.css (optional)
+    | - <component-name>.test.js (optional)
+    | - <component-name>.stories.jsx (optional)
 ```
 
 <Example>
@@ -134,9 +134,9 @@ Will produces something like the following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.jsx
-	| - Nav.css
+    | - index.js
+    | - Nav.jsx
+    | - Nav.css
 ```
 
 </TabItem>
@@ -151,11 +151,11 @@ Will produces something like the following:
 
 ```txt
 | - src/
-	| - components/
-		| - Nav
-			| - index.js
-			| - Nav.jsx
-			| - Nav.css
+    | - components/
+        | - Nav
+            | - index.js
+            | - Nav.jsx
+            | - Nav.css
 ```
 
 </TabItem>
@@ -203,15 +203,15 @@ Lets say you have a basic react folder structure like so:
 
 ```text
 | - <cwd>/
-	| - src/
-		| - components/
-			| - ...
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        | - components/
+            | - ...
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 If you wanted to generate a new nav component in the components folder, you
@@ -263,15 +263,15 @@ following:
 
 ```txt
 | - <cwd>/
-	| - src/
-		| - components/
-			// highlight-start
-			| - Nav/
-				| - index.js
-				| - Nav.jsx
-				| - Nav.css
-			// highlight-end
-			| - ...
+    | - src/
+        | - components/
+            // highlight-start
+            | - Nav/
+                | - index.js
+                | - Nav.jsx
+                | - Nav.css
+            // highlight-end
+            | - ...
 ```
 
 If you used another naming format, such as
@@ -287,15 +287,15 @@ following:
 
 ```txt
 | - <cwd>/
-	| - src/
-		| - components/
-			// highlight-start
-			| - nav-item/
-				| - index.js
-				| - nav-item.jsx
-				| - nav-item.css
-			// highlight-end
-			| - ...
+    | - src/
+        | - components/
+            // highlight-start
+            | - nav-item/
+                | - index.js
+                | - nav-item.jsx
+                | - nav-item.css
+            // highlight-end
+            | - ...
 ```
 
 By default, we generate a component with a default export and function
@@ -337,9 +337,9 @@ following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
-	| - Nav.css
+    | - index.js
+    | - Nav.js
+    | - Nav.css
 ```
 
 </TabItem>
@@ -358,11 +358,11 @@ will no longer be prompted that question.
 
 ```json title=".tps/.tpsrc"
 {
-	"react-component": {
-		"answers": {
-			"extension": "js"
-		}
-	}
+    "react-component": {
+        "answers": {
+            "extension": "js"
+        }
+    }
 }1
 ```
 
@@ -371,9 +371,9 @@ following:
 
 ```txt
 | - Nav
-	| - index.js
-	| - Nav.js
-	| - Nav.css
+    | - index.js
+    | - Nav.js
+    | - Nav.css
 ```
 
 </TabItem>
@@ -398,18 +398,18 @@ Lets say you have a basic react folder structure like so:
 
 ```text
 | - <cwd>/
-	| - src/
-		// highlight-start
-		| - components/
-			| - Nav.jsx
-			| - Nav.css
-			// highlight-end
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        // highlight-start
+        | - components/
+            | - Nav.jsx
+            | - Nav.css
+            // highlight-end
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 If you wanted to generate a new component called `footer` in the components
@@ -466,20 +466,20 @@ Depending on your answers, it would produce something to the following:
 
 ```text
 | - <cwd>/
-	| - src/
-		| - components/
-			| - nav.jsx
-			| - nav.css
-			// highlight-start
-			| - footer.jsx
-			| - footer.css
-			// highlight-end
-		| - pages/
-			| - ...
-		| - index.jsx
-		| - app.jsx
-	| - package.json
-	| - package-lock.json
+    | - src/
+        | - components/
+            | - nav.jsx
+            | - nav.css
+            // highlight-start
+            | - footer.jsx
+            | - footer.css
+            // highlight-end
+        | - pages/
+            | - ...
+        | - index.jsx
+        | - app.jsx
+    | - package.json
+    | - package-lock.json
 ```
 
 ### How to use different export styles
@@ -680,9 +680,9 @@ Depending on your answers, it would produce something to the following:
 
 ```txt
 | - Nav
-	| - index.ts
-	| - Nav.tsx
-	| - Nav.css
+    | - index.ts
+    | - Nav.tsx
+    | - Nav.css
 ```
 
 Your component file will end up with something like the following:
