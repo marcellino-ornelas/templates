@@ -35,7 +35,7 @@ body {
 	font-size: 16px;
 }
 
-.markdown a {
+.markdown a:not(.card) {
 	--ifm-link-decoration: underline;
 }
 
