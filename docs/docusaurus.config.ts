@@ -1,12 +1,9 @@
-// @ts-check
-// Note: type annotations allow type checking and IDEs autocompletion
+// const templatesPlugin = require('./plugins/templates-libraries-plugin');
+import type { Config } from '@docusaurus/types';
+import { themes } from 'prism-react-renderer';
+import { TemplatesLibrariesPlugin } from './plugins';
 
-const { themes } = require('prism-react-renderer');
-
-const templatesPlugin = require('./templates-plugin');
-
-/** @type {import('@docusaurus/types').Config} */
-const config = {
+const config: Config = {
 	title: 'Templates',
 	tagline:
 		'Supercharge Your Development with Templates: Code Faster, Build Better!',
@@ -17,7 +14,7 @@ const config = {
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: '/templates/',
 
-	plugins: [templatesPlugin, '@docusaurus/theme-live-codeblock'],
+	plugins: [TemplatesLibrariesPlugin, '@docusaurus/theme-live-codeblock'],
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.
@@ -44,7 +41,7 @@ const config = {
 		[
 			'classic',
 			/** @type {import('@docusaurus/preset-classic').Options} */
-			({
+			{
 				docs: {
 					sidebarPath: require.resolve('./sidebars.js'),
 					// Please change this to your repo.
@@ -66,13 +63,13 @@ const config = {
 					trackingID: 'G-X6LWJQY18G',
 					anonymizeIP: true,
 				},
-			}),
+			},
 		],
 	],
 
 	themeConfig:
 		/** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-		({
+		{
 			// Replace with your project's social card
 			//   image: 'img/docusaurus-social-card.jpg',
 			navbar: {
@@ -169,8 +166,8 @@ const config = {
 				theme: themes.github,
 				darkTheme: themes.dracula,
 			},
-		}),
+		},
 	themes: ['@docusaurus/theme-mermaid'],
 };
 
-module.exports = config;
+export default config;
