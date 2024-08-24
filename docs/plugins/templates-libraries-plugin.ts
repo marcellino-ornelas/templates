@@ -48,7 +48,7 @@ const getTemplateSettings = async (
 		async (template) => {
 			const tps = new Templates(template);
 
-			console.log(tps);
+			// console.log(tps);
 
 			return {
 				name: tps.template,
@@ -70,7 +70,7 @@ function sanitizeTemplateSettings(
 	return templatesSettings.map((template) => {
 		const answers = {};
 
-		const prompts = template?.settings?.prompts.map((prompt) => {
+		const prompts = template?.settings?.prompts?.map((prompt) => {
 			const {
 				default: _default,
 				name,
