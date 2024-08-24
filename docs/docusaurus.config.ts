@@ -1,4 +1,3 @@
-// const templatesPlugin = require('./plugins/templates-libraries-plugin');
 import type { Config } from '@docusaurus/types';
 import { themes } from 'prism-react-renderer';
 import { TemplatesLibrariesPlugin } from './plugins';
@@ -40,7 +39,6 @@ const config: Config = {
 	presets: [
 		[
 			'classic',
-			/** @type {import('@docusaurus/preset-classic').Options} */
 			{
 				docs: {
 					sidebarPath: require.resolve('./sidebars.js'),
@@ -67,106 +65,104 @@ const config: Config = {
 		],
 	],
 
-	themeConfig:
-		/** @type {import('@docusaurus/preset-classic').ThemeConfig} */
-		{
-			// Replace with your project's social card
-			//   image: 'img/docusaurus-social-card.jpg',
-			navbar: {
-				title: 'Templates',
-				// logo: {
-				//   alt: 'My Site Logo',
-				//   //   src: 'img/logo.svg',
-				// },
-				items: [
-					{
-						type: 'docSidebar',
-						sidebarId: 'docs',
-						position: 'left',
-						label: 'Docs',
-					},
-					{
-						type: 'docSidebar',
-						sidebarId: 'api',
-						position: 'left',
-						label: 'API',
-					},
-					{
-						label: 'Playground',
-						to: '/playground/',
-						position: 'left',
-					},
-					{
-						href: 'https://github.com/marcellino-ornelas/templates/issues',
-						label: 'Feedback',
-						position: 'right',
-					},
-					//   { to: '/blog', label: 'Blog', position: 'left' },
-					{
-						href: 'https://github.com/marcellino-ornelas/templates',
-						label: 'GitHub',
-						position: 'right',
-					},
-				],
-			},
-			footer: {
-				style: 'dark',
-				links: [
-					{
-						title: 'Docs',
-						items: [
-							{
-								label: 'Docs',
-								to: 'docs/main/intro',
-							},
-							{
-								label: 'Api',
-								to: 'docs/api/',
-							},
-						],
-					},
-					{
-						title: 'Community',
-						items: [
-							{
-								label: 'Stack Overflow',
-								href: 'https://stackoverflow.com/questions/tagged/templates-mo',
-							},
-							//   {
-							//     label: 'Discord',
-							//     href: 'https://discordapp.com/invite/docusaurus',
-							//   },
-							//   {
-							//     label: 'Twitter',
-							//     href: 'https://twitter.com/docusaurus',
-							//   },
-						],
-					},
-					{
-						title: 'More',
-						items: [
-							//   {
-							//     label: 'Blog',
-							//     to: '/blog',
-							//   },
-							{
-								label: 'GitHub',
-								href: 'https://github.com/marcellino-ornelas/templates',
-							},
-							{
-								label: 'GitHub Issues',
-								href: 'https://github.com/marcellino-ornelas/templates/issues',
-							},
-						],
-					},
-				],
-				copyright: `Copyright © ${new Date().getFullYear()} Marcellino Ornelas, Inc. Built with Docusaurus.`,
-			},
-			prism: {
-				theme: themes.github,
-				darkTheme: themes.dracula,
-			},
+	themeConfig: {
+		// Replace with your project's social card
+		//   image: 'img/docusaurus-social-card.jpg',
+		navbar: {
+			title: 'Templates',
+			// logo: {
+			//   alt: 'My Site Logo',
+			//   //   src: 'img/logo.svg',
+			// },
+			items: [
+				{
+					type: 'docSidebar',
+					sidebarId: 'docs',
+					position: 'left',
+					label: 'Docs',
+				},
+				{
+					type: 'docSidebar',
+					sidebarId: 'api',
+					position: 'left',
+					label: 'API',
+				},
+				{
+					label: 'Playground',
+					to: '/playground/',
+					position: 'left',
+				},
+				{
+					href: 'https://github.com/marcellino-ornelas/templates/issues',
+					label: 'Feedback',
+					position: 'right',
+				},
+				//   { to: '/blog', label: 'Blog', position: 'left' },
+				{
+					href: 'https://github.com/marcellino-ornelas/templates',
+					label: 'GitHub',
+					position: 'right',
+				},
+			],
 		},
+		footer: {
+			style: 'dark',
+			links: [
+				{
+					title: 'Docs',
+					items: [
+						{
+							label: 'Docs',
+							to: 'docs/main/intro',
+						},
+						{
+							label: 'Api',
+							to: 'docs/api/',
+						},
+					],
+				},
+				{
+					title: 'Community',
+					items: [
+						{
+							label: 'Stack Overflow',
+							href: 'https://stackoverflow.com/questions/tagged/templates-mo',
+						},
+						//   {
+						//     label: 'Discord',
+						//     href: 'https://discordapp.com/invite/docusaurus',
+						//   },
+						//   {
+						//     label: 'Twitter',
+						//     href: 'https://twitter.com/docusaurus',
+						//   },
+					],
+				},
+				{
+					title: 'More',
+					items: [
+						//   {
+						//     label: 'Blog',
+						//     to: '/blog',
+						//   },
+						{
+							label: 'GitHub',
+							href: 'https://github.com/marcellino-ornelas/templates',
+						},
+						{
+							label: 'GitHub Issues',
+							href: 'https://github.com/marcellino-ornelas/templates/issues',
+						},
+					],
+				},
+			],
+			copyright: `Copyright © ${new Date().getFullYear()} Marcellino Ornelas, Inc. Built with Docusaurus.`,
+		},
+		prism: {
+			theme: themes.github,
+			darkTheme: themes.dracula,
+		},
+	},
 	themes: ['@docusaurus/theme-mermaid'],
 };
 

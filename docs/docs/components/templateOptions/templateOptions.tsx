@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { usePluginData } from '@docusaurus/useGlobalData';
 import type {
 	SettingsFile,
 	SettingsFilePrompt,
-	AnswersHash,
 } from 'templates-mo/src/types/settings';
 import styles from './templateOptions.module.css';
 
@@ -24,15 +23,12 @@ const getChoices = (prompt: SettingsFilePrompt): string[] => {
 
 interface Props {
 	template: string;
-	type: 'json' | 'js';
 }
 
-export const TemplateOptions = ({ template, type = 'json' }: Props) => {
-	// const [settingsFile, setSettingsFile] = useState<SettingsFile>(null);
-
-	const { templates }: TemplatesLibrariesPluginData = usePluginData(
+export const TemplateOptions = ({ template }: Props) => {
+	const { templates } = usePluginData(
 		'templates-libraries-plugin',
-	);
+	) as TemplatesLibrariesPluginData;
 
 	const { settings } = templates[template];
 
