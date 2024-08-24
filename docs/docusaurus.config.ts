@@ -13,7 +13,15 @@ const config: Config = {
 	// For GitHub pages deployment, it is often '/<projectName>/'
 	baseUrl: '/templates/',
 
-	plugins: [TemplatesLibrariesPlugin, '@docusaurus/theme-live-codeblock'],
+	plugins: [
+		[
+			TemplatesLibrariesPlugin,
+			{
+				templates: ['react-component', 'yargs-cli-cmd'],
+			},
+		],
+		'@docusaurus/theme-live-codeblock',
+	],
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.

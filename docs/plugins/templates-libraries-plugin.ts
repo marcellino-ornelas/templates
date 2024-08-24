@@ -2,11 +2,15 @@ import type {
 	SettingsFile,
 	SettingsFilePrompt,
 } from 'templates-mo/src/types/settings';
+import Templates from 'templates-mo';
 
-const TEMPLATES_LIBRARIES: string[] = ['react-component', 'yargs-cli-cmd'];
+interface TemplatesLibrariesPluginOptions {
+	templates: string[];
+}
 
 export const TemplatesLibrariesPlugin = function TemplatesLibrariesPlugin(
-	templates: string[] = TEMPLATES_LIBRARIES,
+	context,
+	{ templates }: TemplatesLibrariesPluginOptions,
 ) {
 	return {
 		name: 'templates-libraries-plugin',
@@ -42,11 +46,13 @@ const getTemplateSettings = async (
 ): Promise<TemplateSettings[]> => {
 	const templatesSettingsPromises: Promise<TemplateSettings>[] = templates.map(
 		async (template) => {
+			const tps = new Templates(template);
+
+			console.log(tps);
+
 			return {
-				name: template,
-				settings: (await import(
-					`templates-mo/.tps/${template}/settings`
-				)) as SettingsFile,
+				name: tps.template,
+				settings: tps.templateSettings,
 			};
 		},
 	);

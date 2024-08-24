@@ -302,6 +302,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
+			console.log(e);
 			this.templateSettings = {} as SettingsFile;
 		}
 		logger.tps.info('Template settings: %n', this.templateSettings);

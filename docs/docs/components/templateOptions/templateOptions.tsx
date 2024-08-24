@@ -30,6 +30,8 @@ export const TemplateOptions = ({ template }: Props) => {
 		'templates-libraries-plugin',
 	) as TemplatesLibrariesPluginData;
 
+	console.log(templates);
+
 	const { settings } = templates[template];
 
 	return (
