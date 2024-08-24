@@ -12,7 +12,6 @@ import { reset } from '@test/utilities/vol';
 import { TemplatesLibrariesPlugin } from '../../docs/plugins/templates-libraries-plugin';
 
 jest.mock('fs');
-jest.mock('cosmiconfig');
 
 describe('Templates library plugin', () => {
 	beforeEach(() => {
