@@ -298,16 +298,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		try {
 			logger.tps.info('Loading template settings file...');
-
-			console.log('hey', settingsConfig.search(this.src));
-			fs.readFileSync(`${this.src}/settings.js`);
 			// eslint-disable-next-line
 			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
-
-			fs.readFileSync(`${this.src}/settings.js`);
-			console.log(e);
 			this.templateSettings = {} as SettingsFile;
 		}
 		logger.tps.info('Template settings: %n', this.templateSettings);
