@@ -15,8 +15,7 @@ export const TemplatesLibrariesPlugin = function TemplatesLibrariesPlugin(
 
 			const templatesSettings = await getTemplateSettings(templates);
 
-			// `setGlobalData` only allows passing in JSON compliant data since build is in a different enviroment
-			// well need to jsonify our data which involves getting rid functions and getting the value from `default`
+			// sanitize data so we can pass it to the frontend
 			const templatesSettingsSantitize: TemplateSettings[] =
 				sanitizeTemplateSettings(templatesSettings);
 
