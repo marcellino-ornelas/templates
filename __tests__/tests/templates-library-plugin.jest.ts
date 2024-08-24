@@ -12,6 +12,7 @@ import { reset } from '@test/utilities/vol';
 import { TemplatesLibrariesPlugin } from '../../docs/plugins/templates-libraries-plugin';
 
 jest.mock('fs');
+jest.mock('cosmiconfig');
 
 describe('Templates library plugin', () => {
 	beforeEach(() => {
@@ -49,61 +50,29 @@ describe('Templates library plugin', () => {
 		);
 	});
 
-	// 	it('should be able to load a template with settings js file', async () => {
-	// 		const setGlobalData = jest.fn();
-	// 		const templateName = 'templates-library-plugin';
+	// it('should be able to load a template with settings js file', async () => {
+	// 	const setGlobalData = jest.fn();
+	// 	const templateName = 'templates-library-plugin';
 
-	// 		mkTemplate(templateName, undefined, {
-	// 			'default/hey.txt': 'hey',
-	// 			// 			'settings.js': `\
-	// 			// module.exports = {
-	// 			// 	prompts: [
-	// 			// 		{
-	// 			// 			name: 'prompt1',
-	// 			// 			message: 'Prompt1?',
-	// 			// 			tpsType: 'data',
-	// 			// 			type: 'confirm',
-	// 			// 		}
-	// 			// 	],
-	// 			// };`,
-	// 			'./settings.js': `\
-	// module.exports = {};`,
-	// 		});
+	// 	mkTemplate(templateName);
 
-	// 		const tps = new Templates(templateName);
-
-	// 		console.log(
-	// 			vol
-	// 				.readFileSync(
-	// 					'/Users/marcellinoornelas/Desktop/templates/__tests__/.tps/templates-library-plugin/settings.js',
-	// 				)
-	// 				.toString(),
-	// 		);
-
-	// 		console.log(
-	// 			vol.toTree({
-	// 				// dir: '/Users/marcellinoornelas/Desktop/templates/__tests__/.tps/templates-library-plugin',
-	// 				dir: '/Users/marcellinoornelas/Desktop/templates/__tests__/',
-	// 			}),
-	// 		);
-
-	// 		await TemplatesLibrariesPlugin(null, {
-	// 			templates: [templateName],
-	// 		}).contentLoaded({
-	// 			actions: { setGlobalData },
-	// 		});
-
-	// 		expect(setGlobalData).toHaveBeenCalledWith(
-	// 			expect.objectContaining({
-	// 				templates: expect.objectContaining({
-	// 					[templateName]: {
-	// 						name: templateName,
-	// 						settings: {
-	// 							prompts: expect.arrayContaining([DEFAULT_PROMPT]),
-	// 						},
-	// 					},
-	// 				}),
-	// 			}),
-	// 		);
+	// 	await TemplatesLibrariesPlugin(null, {
+	// 		templates: [templateName],
+	// 	}).contentLoaded({
+	// 		actions: { setGlobalData },
 	// 	});
+
+	// 	expect(setGlobalData).toHaveBeenCalledWith(
+	// 		expect.objectContaining({
+	// 			templates: expect.objectContaining({
+	// 				[templateName]: {
+	// 					name: templateName,
+	// 					settings: {
+	// 						prompts: expect.arrayContaining([DEFAULT_PROMPT]),
+	// 					},
+	// 				},
+	// 			}),
+	// 		}),
+	// 	);
+	// });
 });
