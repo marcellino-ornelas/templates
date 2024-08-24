@@ -1,80 +1,24 @@
 import type {
 	SettingsFile,
 	SettingsFilePrompt,
-} from '../../src/types/settings';
+} from 'templates-mo/src/types/settings';
 
 const TEMPLATES_LIBRARIES: string[] = ['react-component', 'yargs-cli-cmd'];
 
-interface TemplateSettings {
-	name: string;
-	settings: SettingsFile;
-}
-
-export const TemplatesLibrariesPlugin = function TemplatesLibrariesPlugin() {
+export const TemplatesLibrariesPlugin = function TemplatesLibrariesPlugin(
+	templates: string[] = TEMPLATES_LIBRARIES,
+) {
 	return {
 		name: 'templates-libraries-plugin',
 		async contentLoaded({ actions }) {
 			const { setGlobalData } = actions;
 
-			const templatesSettingsPromises: Promise<TemplateSettings>[] =
-				TEMPLATES_LIBRARIES.map(async (template) => {
-					return {
-						name: template,
-						settings: (await import(
-							`templates-mo/.tps/${template}/settings`
-						)) as SettingsFile,
-					};
-				});
-
-			const templatesSettings = await Promise.all(templatesSettingsPromises);
+			const templatesSettings = await getTemplateSettings(templates);
 
 			// `setGlobalData` only allows passing in JSON compliant data since build is in a different enviroment
 			// well need to jsonify our data which involves getting rid functions and getting the value from `default`
 			const templatesSettingsSantitize: TemplateSettings[] =
-				templatesSettings.map((template) => {
-					const answers = {};
-
-					const prompts = template?.settings?.prompts.map(
-						({
-							default: _default,
-							name,
-							message,
-							aliases,
-							choices,
-							tpsType,
-							type,
-							description,
-							hidden,
-						}) => {
-							const defaultValue =
-								typeof _default === 'function' ? _default(answers) : _default;
-
-							answers[name] = defaultValue;
-
-							return {
-								name,
-								message,
-								aliases,
-								choices,
-								tpsType,
-								type,
-								description,
-								hidden,
-								default: defaultValue,
-							} satisfies SettingsFilePrompt;
-						},
-					);
-
-					return {
-						...template,
-						settings: {
-							...template.settings,
-							prompts,
-						},
-					};
-				});
-
-			console.log(templatesSettingsSantitize);
+				sanitizeTemplateSettings(templatesSettings);
 
 			const templatesSettingsMap = templatesSettingsSantitize.reduce(
 				(acc, templateSettings) => {
@@ -88,3 +32,75 @@ export const TemplatesLibrariesPlugin = function TemplatesLibrariesPlugin() {
 		},
 	};
 };
+
+interface TemplateSettings {
+	name: string;
+	settings: SettingsFile;
+}
+
+const getTemplateSettings = async (
+	templates: string[],
+): Promise<TemplateSettings[]> => {
+	const templatesSettingsPromises: Promise<TemplateSettings>[] = templates.map(
+		async (template) => {
+			return {
+				name: template,
+				settings: (await import(
+					`templates-mo/.tps/${template}/settings`
+				)) as SettingsFile,
+			};
+		},
+	);
+
+	return Promise.all(templatesSettingsPromises);
+};
+
+/**
+ * `setGlobalData` only allows passing in JSON compliant data since build is in a different enviroment
+ * well need to jsonify our data which involves getting rid functions and getting the value from `default`
+ */
+function sanitizeTemplateSettings(
+	templatesSettings: TemplateSettings[],
+): TemplateSettings[] {
+	return templatesSettings.map((template) => {
+		const answers = {};
+
+		const prompts = template?.settings?.prompts.map((prompt) => {
+			const {
+				default: _default,
+				name,
+				message,
+				aliases,
+				choices,
+				tpsType,
+				type,
+				description,
+				hidden,
+			} = prompt;
+			const defaultValue =
+				typeof _default === 'function' ? _default(answers) : _default;
+
+			answers[name] = defaultValue;
+
+			return {
+				name,
+				message,
+				aliases,
+				choices,
+				tpsType,
+				type,
+				description,
+				hidden,
+				default: defaultValue,
+			} satisfies SettingsFilePrompt;
+		});
+
+		return {
+			...template,
+			settings: {
+				...template.settings,
+				prompts,
+			},
+		};
+	});
+}
