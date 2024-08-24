@@ -48,8 +48,6 @@ const getTemplateSettings = async (
 		async (template) => {
 			const tps = new Templates(template);
 
-			// console.log(tps);
-
 			return {
 				name: tps.template,
 				settings: tps.templateSettings,
