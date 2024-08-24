@@ -81,6 +81,6 @@ export type ValidateFn = (
 ) => (boolean | string) | Promise<boolean | string>;
 
 export interface SettingsFile {
-	opts: Partial<TemplateOptions>;
-	prompts: SettingsFilePrompt[];
+	opts?: Partial<TemplateOptions>;
+	prompts?: SettingsFilePrompt[];
 }
