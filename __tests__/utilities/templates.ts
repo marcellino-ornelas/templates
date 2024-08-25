@@ -5,7 +5,7 @@ import path from 'path';
 import os from 'os';
 import { CWD, USER_HOME } from '@tps/utilities/constants';
 import { DirectoryJSON } from 'memfs';
-import { SettingsFilePrompt } from '@tps/types/settings';
+import { SettingsFile, SettingsFilePrompt } from '@tps/types/settings';
 
 export type OptionsTpsrc = RecursivePartial<Tpsrc>;
 
@@ -75,6 +75,12 @@ export const mkGlobalTemplate = (
 	json: DirectoryJSON = {},
 ): void => {
 	mkTemplate(name, USER_HOME, json);
+};
+
+export type OptionsSettingsFile = RecursivePartial<SettingsFile>;
+
+export const mkSettingsFileJSON = (settings: OptionsSettingsFile): string => {
+	return JSON.stringify(settings);
 };
 
 export const DEFAULT_PROMPT: SettingsFilePrompt = {

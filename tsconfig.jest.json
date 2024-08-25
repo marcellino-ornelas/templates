@@ -6,7 +6,9 @@
 		"baseUrl": ".",
 		"paths": {
 			"@tps/*": ["./src/*"],
-			"@test/*": ["./__tests__/*"]
+			"@test/*": ["./__tests__/*"],
+			"templates-mo/*": ["./*"],
+			"templates-mo": ["./"]
 		}
 	},
 	"include": ["./src/**/*", "./__tests__/**/*"],
