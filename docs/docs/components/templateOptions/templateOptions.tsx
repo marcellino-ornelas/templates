@@ -1,10 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
+import { usePluginData } from '@docusaurus/useGlobalData';
 import type {
 	SettingsFile,
 	SettingsFilePrompt,
-	AnswersHash,
 } from 'templates-mo/src/types/settings';
 import styles from './templateOptions.module.css';
+
+interface TemplateSettings {
+	name: string;
+	settings: SettingsFile;
+}
+
+interface TemplatesLibrariesPluginData {
+	templates: Record<string, TemplateSettings>;
+}
 
 const getChoices = (prompt: SettingsFilePrompt): string[] => {
 	return (prompt?.choices || []).map((choice) => {
@@ -14,35 +23,16 @@ const getChoices = (prompt: SettingsFilePrompt): string[] => {
 
 interface Props {
 	template: string;
-	type: 'json' | 'js';
 }
 
-export const TemplateOptions = ({ template, type = 'json' }: Props) => {
-	const [settingsFile, setSettingsFile] = useState<SettingsFile>(null);
+export const TemplateOptions = ({ template }: Props) => {
+	const { templates } = usePluginData(
+		'templates-libraries-plugin',
+	) as TemplatesLibrariesPluginData;
 
-	useEffect(() => {
-		(async () => {
-			// eslint-disable-next-line import/no-extraneous-dependencies
-			const settingsFileRaw: SettingsFile = await import(
-				// eslint-disable-next-line import/extensions
-				`templates-mo/.tps/${template}/settings.${type}`
-			);
+	console.log(templates);
 
-			setSettingsFile(settingsFileRaw);
-		})();
-	}, []);
-
-	const answers: AnswersHash = useMemo(() => {
-		return settingsFile?.prompts?.reduce((answersAcc, prompt) => {
-			return {
-				...answersAcc,
-				[prompt.name]:
-					typeof prompt.default === 'function'
-						? prompt.default(answersAcc)
-						: prompt.default,
-			};
-		}, {});
-	}, [settingsFile]);
+	const { settings } = templates[template];
 
 	return (
 		<div className={styles.tableContainer}>
@@ -58,7 +48,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 					</tr>
 				</thead>
 				<tbody>
-					{settingsFile?.prompts?.map((prompt) => (
+					{settings?.prompts?.map((prompt) => (
 						<tr key={prompt.name}>
 							<td>{prompt.name}</td>
 							<td>
@@ -77,7 +67,7 @@ export const TemplateOptions = ({ template, type = 'json' }: Props) => {
 									)
 									.join(', ')}
 							</td>
-							<td>{(answers[prompt.name] ?? '').toString()}</td>
+							<td>{prompt.default.toString()}</td>
 							<td>{(prompt.hidden ?? false).toString()}</td>
 						</tr>
 					))}

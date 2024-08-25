@@ -25,5 +25,6 @@ module.exports = {
 	moduleNameMapper: {
 		'^@tps/(.+)$': path.join(__dirname, 'src/$1'),
 		'^@test/(.+)$': path.join(__dirname, '__tests__/$1'),
+		'^templates-mo$': path.join(__dirname),
 	},
 };
