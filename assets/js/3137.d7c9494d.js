@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkdocs_v_2=self.webpackChunkdocs_v_2||[]).push([[3137],{43137:e=>{e.exports=JSON.parse('{"opts":{"experimentalTemplateEngine":true,"newFolder":false},"prompts":[{"name":"templates","aliases":["t","tps"],"type":"confirm","tpsType":"data","message":"Do you want to import templates?","default":true}]}')}}]);
