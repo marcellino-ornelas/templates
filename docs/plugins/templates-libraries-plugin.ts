@@ -1,7 +1,9 @@
+// ts-expect-error library is not available in tests
 import type {
 	SettingsFile,
 	SettingsFilePrompt,
 } from 'templates-mo/src/types/settings';
+// ts-expect-error library is not available in tests
 import Templates from 'templates-mo';
 
 interface TemplatesLibrariesPluginOptions {
