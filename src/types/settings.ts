@@ -84,11 +84,11 @@ interface SettingsFileEvents {
 	/**
 	 * Callback function to call before build paths are rendered
 	 */
-	onRender: (tps: Templates) => Promise<void>;
+	onRender?: (tps: Templates) => Promise<void>;
 	/**
 	 * Callback function to call before an build path is rendered
 	 */
-	onBuildPathRender: (
+	onBuildPathRender?: (
 		tps: Templates,
 		args: {
 			buildPath: string;
@@ -97,7 +97,7 @@ interface SettingsFileEvents {
 	/**
 	 * Callback function to call when an build path is rendered
 	 */
-	onBuildPathRendered: (
+	onBuildPathRendered?: (
 		tps: Templates,
 		args: {
 			buildPath: string;
@@ -106,7 +106,7 @@ interface SettingsFileEvents {
 	/**
 	 * Callback function to call when all build paths are rendered
 	 */
-	onRendered: (
+	onRendered?: (
 		tps: Templates,
 		args: {
 			dest: string;

@@ -517,7 +517,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			});
 
 			// @ts-expect-error Not sure whats wrong here
-			return createdPaths;
+			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
 		}
 
 		logger.tps.info('Build Errors: %o', this.buildErrors.length);
