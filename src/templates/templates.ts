@@ -507,14 +507,14 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		await Promise.all(builders);
 
+		await this._emitEvent('onRendered', {
+			dest: finalDest,
+			buildPaths: pathsToCreate,
+		});
+
 		// @ts-expect-error need to fix library
 		if (is.array.empty(this.buildErrors)) {
 			logger.tps.success('Finished rendering templates');
-
-			await this._emitEvent('onRendered', {
-				dest: finalDest,
-				buildPaths: pathsToCreate,
-			});
 
 			// @ts-expect-error Not sure whats wrong here
 			return Array.isArray(buildPaths) ? pathsToCreate : pathsToCreate[0];
