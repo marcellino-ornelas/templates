@@ -111,6 +111,7 @@ interface SettingsFileEvents {
 		args: {
 			dest: string;
 			buildPaths: string[];
+			allCreatedFiles: string[];
 		},
 	) => Promise<void>;
 }

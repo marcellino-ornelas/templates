@@ -510,6 +510,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		await this._emitEvent('onRendered', {
 			dest: finalDest,
 			buildPaths: pathsToCreate,
+			allCreatedFiles: this.successfulBuilds.files,
 		});
 
 		// @ts-expect-error need to fix library
@@ -1076,7 +1077,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	): Promise<void> {
 		logger.tps.info(`Running event ${event}`);
 		const events = this.templateSettings?.events ?? null;
-		if (event in events && typeof events[event] === 'function') {
+		if (events && event in events && typeof events[event] === 'function') {
 			logger.tps.info(`Running ${event} function...`);
 			try {
 				// @ts-expect-error idk lol

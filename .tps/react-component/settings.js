@@ -216,7 +216,9 @@ module.exports = {
 		},
 	],
 	events: {
-		async onRendered(tps, { dest, buildPaths }) {
+		async onRendered(tps, { buildPaths, allCreatedFiles }) {
+			console.log(allCreatedFiles);
+
 			const { $, ProcessOutput } = await import('zx');
 
 			const $$ = $({
