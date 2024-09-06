@@ -510,7 +510,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		await this._emitEvent('onRendered', {
 			dest: finalDest,
 			buildPaths: pathsToCreate,
-			allCreatedFiles: this.successfulBuilds.files,
 		});
 
 		// @ts-expect-error need to fix library

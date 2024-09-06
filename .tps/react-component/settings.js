@@ -1,5 +1,4 @@
 // @ts-check
-// const prettier = require('prettier/standalone.js');
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -216,28 +215,39 @@ module.exports = {
 		},
 	],
 	events: {
-		async onRendered(tps, { buildPaths, allCreatedFiles }) {
-			console.log(allCreatedFiles);
+		async onRendered(tps, { dest, buildPaths }) {
+			console.log('hellooooo');
+			// const { $: execa, ProcessOutput } = await import('zx');
+			const { execa } = await import('execa');
+			// const execa = require('execa');
+			console.log('hellooooo 222222', execa);
 
-			const { $, ProcessOutput } = await import('zx');
+			const directoryForPrettier = tps.opts.newFolder ? buildPaths : dest;
 
-			const $$ = $({
-				preferLocal: true,
-				quiet: true,
-			});
+			console.log(directoryForPrettier);
+
+			// const $$ = $({
+			// 	preferLocal: true,
+			// 	quiet: true,
+			// });
 
 			const runCommand = async (name, command) => {
-				try {
-					console.log(`✨ Running ${name}...`);
-					await command();
-				} catch (e) {
-					console.error(`❌ ${name} Failed!`);
-					if (e instanceof ProcessOutput) {
-						console.error(e.text());
-					} else {
-						console.error(e);
-					}
-				}
+				// try {
+				// 	await command();
+				// } catch (e) {
+				// 	console.error(`❌ ${name} Failed!`);
+				// 	if (e instanceof ProcessOutput) {
+				// 		console.error(e.text());
+				// 	} else {
+				// 		console.error(e);
+				// 	}
+				// }
+
+				console.log(`✨ Running ${name}...`);
+				const { stdout, ...rest } = await command();
+
+				console.log(stdout);
+				console.log(rest);
 			};
 
 			const answers = tps.getAnswers();
@@ -247,13 +257,15 @@ module.exports = {
 					await runCommand(
 						'Prettier',
 						() =>
-							$$`prettier ${buildPaths} --ignore-unknown --write --ignore-path ./.prettierignore`,
+							// $$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
+							execa`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
 					);
 					break;
 				case 'biome':
 					await runCommand(
 						'Biome (Format)',
-						() => $$`biome ${buildPaths} format --write`,
+						// () => $$`biome ${directoryForPrettier} format --write`,
+						() => execa`biome ${directoryForPrettier} format --write`,
 					);
 					break;
 				case 'none':
@@ -262,10 +274,18 @@ module.exports = {
 
 			switch (answers.linter) {
 				case 'eslint':
-					await runCommand('Eslint', () => $$`eslint ${buildPaths} --fix`);
+					await runCommand(
+						'Eslint',
+						// () => $$`eslint ${directoryForPrettier} --fix`,
+						() => execa`eslint ${directoryForPrettier} --fix`,
+					);
 					break;
 				case 'biome':
-					await runCommand('Biome', () => $$`biome ${buildPaths} lint --write`);
+					await runCommand(
+						'Biome',
+						// () => $$`biome ${directoryForPrettier} lint --write`,
+						() => execa`biome ${directoryForPrettier} lint --write`,
+					);
 					break;
 				case 'none':
 					break;
