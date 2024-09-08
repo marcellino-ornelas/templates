@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-chec
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -216,31 +216,17 @@ module.exports = {
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
+			console.log('hello');
 			const { execa } = await import('execa');
+			console.log('hello 2');
 
-			const $ = execa({ preferLocal: true });
+			// const $ = execa({ preferLocal: true });
+
+			const $ = () => {};
 
 			const directoryForPrettier = tps.opts.newFolder ? buildPaths : dest;
 
-			console.log(directoryForPrettier);
-
-			// const $$ = $({
-			// 	preferLocal: true,
-			// 	quiet: true,
-			// });
-
 			const runCommand = async (name, command) => {
-				// try {
-				// 	await command();
-				// } catch (e) {
-				// 	console.error(`❌ ${name} Failed!`);
-				// 	if (e instanceof ProcessOutput) {
-				// 		console.error(e.text());
-				// 	} else {
-				// 		console.error(e);
-				// 	}
-				// }
-
 				console.log(`✨ Running ${name}...`);
 				const { stdout, ...rest } = await command();
 
