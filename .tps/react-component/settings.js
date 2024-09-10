@@ -1,4 +1,4 @@
-// @ts-chec
+// @ts-check
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -216,22 +216,23 @@ module.exports = {
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
-			console.log('hello');
-			const { execa } = await import('execa');
-			console.log('hello 2');
+			const { execa, ExecaError } = await import('execa');
 
-			// const $ = execa({ preferLocal: true });
-
-			const $ = () => {};
+			const $ = execa({ preferLocal: true });
 
 			const directoryForPrettier = tps.opts.newFolder ? buildPaths : dest;
 
 			const runCommand = async (name, command) => {
 				console.log(`✨ Running ${name}...`);
-				const { stdout, ...rest } = await command();
 
-				console.log(stdout);
-				console.log(rest);
+				try {
+					await command();
+				} catch (error) {
+					if (error instanceof ExecaError) {
+						console.log(`❌ ${name} failed!`);
+						console.error(error.message); // true
+					}
+				}
 			};
 
 			const answers = tps.getAnswers();
@@ -241,14 +242,12 @@ module.exports = {
 					await runCommand(
 						'Prettier',
 						() =>
-							// $$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
 							$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
 					);
 					break;
 				case 'biome':
 					await runCommand(
 						'Biome (Format)',
-						// () => $$`biome ${directoryForPrettier} format --write`,
 						() => $`biome ${directoryForPrettier} format --write`,
 					);
 					break;
@@ -260,14 +259,12 @@ module.exports = {
 				case 'eslint':
 					await runCommand(
 						'Eslint',
-						// () => $$`eslint ${directoryForPrettier} --fix`,
 						() => $`eslint ${directoryForPrettier} --fix`,
 					);
 					break;
 				case 'biome':
 					await runCommand(
 						'Biome',
-						// () => $$`biome ${directoryForPrettier} lint --write`,
 						() => $`biome ${directoryForPrettier} lint --write`,
 					);
 					break;

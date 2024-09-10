@@ -2,4 +2,4 @@
 
 DIR="$( dirname "${BASH_SOURCE[0]}" )"
 
-npx ts-node --compiler ts-patch/compiler "$DIR/../src/cli" $@
+npx tsx "$DIR/../src/cli" $@
