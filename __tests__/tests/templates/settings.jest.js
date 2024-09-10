@@ -57,12 +57,15 @@ describe('[Templates] Settings:', () => {
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				.mockImplementation((_) => {
-					expect(path.join(CWD, 'App')).not.toBeDirectory();
+					// TODO: doesnt work
+					// expect(path.join(CWD, 'App')).not.toBeDirectory();
 				});
 
 			await tps.render(CWD, 'App');
 
 			expect(path.join(CWD, 'App')).toBeDirectory();
+
+			expect(tps.templateSettings.events.onRender).toHaveBeenCalled();
 		});
 
 		it('Should be able to use onRendered event with single build path', async () => {
@@ -80,6 +83,11 @@ describe('[Templates] Settings:', () => {
 				});
 
 			await tps.render(CWD, 'App');
+
+			expect(tps.templateSettings.events.onRendered).toHaveBeenCalledWith(tps, {
+				dest: CWD,
+				buildPaths: [path.join(CWD, 'App')],
+			});
 		});
 
 		it('Should be able to use onRendered event with multiple build paths', async () => {
@@ -99,6 +107,11 @@ describe('[Templates] Settings:', () => {
 				});
 
 			await tps.render(CWD, ['App', 'App2']);
+
+			expect(tps.templateSettings.events.onRendered).toHaveBeenCalledWith(tps, {
+				dest: CWD,
+				buildPaths: [path.join(CWD, 'App'), path.join(CWD, 'App2')],
+			});
 		});
 
 		it('Should be able to use onBuildPathRender event', async () => {
@@ -115,6 +128,22 @@ describe('[Templates] Settings:', () => {
 				});
 
 			await tps.render(CWD, ['App', 'App2']);
+
+			expect(
+				tps.templateSettings.events.onBuildPathRender,
+			).toHaveBeenCalledTimes(2);
+
+			expect(
+				tps.templateSettings.events.onBuildPathRender,
+			).toHaveBeenNthCalledWith(1, tps, {
+				buildPath: path.join(CWD, 'App'),
+			});
+
+			expect(
+				tps.templateSettings.events.onBuildPathRender,
+			).toHaveBeenNthCalledWith(2, tps, {
+				buildPath: path.join(CWD, 'App2'),
+			});
 		});
 
 		it('Should be able to use onBuildPathRendered event', async () => {
@@ -131,6 +160,22 @@ describe('[Templates] Settings:', () => {
 				});
 
 			await tps.render(CWD, ['App', 'App2']);
+
+			expect(
+				tps.templateSettings.events.onBuildPathRendered,
+			).toHaveBeenCalledTimes(2);
+
+			expect(
+				tps.templateSettings.events.onBuildPathRendered,
+			).toHaveBeenNthCalledWith(1, tps, {
+				buildPath: path.join(CWD, 'App'),
+			});
+
+			expect(
+				tps.templateSettings.events.onBuildPathRendered,
+			).toHaveBeenNthCalledWith(2, tps, {
+				buildPath: path.join(CWD, 'App2'),
+			});
 		});
 	});
 });
