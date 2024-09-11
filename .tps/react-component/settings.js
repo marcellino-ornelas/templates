@@ -233,41 +233,6 @@ module.exports = {
 			if (linter) {
 				runCommand(linter, directoryForPrettier);
 			}
-
-			// switch (answers.formatter) {
-			// 	case 'prettier':
-			// 		await runCommand(
-			// 			'Prettier',
-			// 			() =>
-			// 				$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
-			// 		);
-			// 		break;
-			// 	case 'biome':
-			// 		await runCommand(
-			// 			'Biome (Format)',
-			// 			() => $`biome ${directoryForPrettier} format --write`,
-			// 		);
-			// 		break;
-			// 	case 'none':
-			// 		break;
-			// }
-
-			// switch (answers.linter) {
-			// 	case 'eslint':
-			// 		await runCommand(
-			// 			'Eslint',
-			// 			() => $`eslint ${directoryForPrettier} --fix`,
-			// 		);
-			// 		break;
-			// 	case 'biome':
-			// 		await runCommand(
-			// 			'Biome',
-			// 			() => $`biome ${directoryForPrettier} lint --write`,
-			// 		);
-			// 		break;
-			// 	case 'none':
-			// 		break;
-			// }
 		},
 	},
 };
