@@ -218,24 +218,7 @@ module.exports = {
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
-			// const { execa, ExecaError } = await import('execa');
-
-			// const $ = execa({ preferLocal: true });
-
 			const directoryForPrettier = tps.opts.newFolder ? buildPaths : [dest];
-
-			// const runCommand = async (name, command) => {
-			// 	console.log(`✨ Running ${name}...`);
-
-			// 	try {
-			// 		await command();
-			// 	} catch (error) {
-			// 		if (error instanceof ExecaError) {
-			// 			console.log(`❌ ${name} failed!`);
-			// 			console.error(error.message); // true
-			// 		}
-			// 	}
-			// };
 
 			const answers = tps.getAnswers();
 

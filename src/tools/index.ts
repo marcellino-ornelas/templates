@@ -46,5 +46,13 @@ export const linters = {
 
 export const runCommand = (module: OutputProcessor, paths: string[]): void => {
 	console.log(`✨ Running ${module.name}`);
-	sync(module.command, module.args(paths));
+	const result = sync(module.command, module.args(paths));
+
+	const isError = result.status > 0;
+
+	if (isError) {
+		console.log(`❌ ${module.name} failed!`);
+		console.log(result.stdout.toString());
+		console.log(result.stderr.toString());
+	}
 };
