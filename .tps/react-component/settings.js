@@ -1,5 +1,7 @@
 // @ts-check
 
+const { formatters, linters, runCommand } = require('../../lib/tools');
+
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
 	opts: {
@@ -216,61 +218,73 @@ module.exports = {
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
-			const { execa, ExecaError } = await import('execa');
+			// const { execa, ExecaError } = await import('execa');
 
-			const $ = execa({ preferLocal: true });
+			// const $ = execa({ preferLocal: true });
 
-			const directoryForPrettier = tps.opts.newFolder ? buildPaths : dest;
+			const directoryForPrettier = tps.opts.newFolder ? buildPaths : [dest];
 
-			const runCommand = async (name, command) => {
-				console.log(`✨ Running ${name}...`);
+			// const runCommand = async (name, command) => {
+			// 	console.log(`✨ Running ${name}...`);
 
-				try {
-					await command();
-				} catch (error) {
-					if (error instanceof ExecaError) {
-						console.log(`❌ ${name} failed!`);
-						console.error(error.message); // true
-					}
-				}
-			};
+			// 	try {
+			// 		await command();
+			// 	} catch (error) {
+			// 		if (error instanceof ExecaError) {
+			// 			console.log(`❌ ${name} failed!`);
+			// 			console.error(error.message); // true
+			// 		}
+			// 	}
+			// };
 
 			const answers = tps.getAnswers();
 
-			switch (answers.formatter) {
-				case 'prettier':
-					await runCommand(
-						'Prettier',
-						() =>
-							$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
-					);
-					break;
-				case 'biome':
-					await runCommand(
-						'Biome (Format)',
-						() => $`biome ${directoryForPrettier} format --write`,
-					);
-					break;
-				case 'none':
-					break;
+			const formatter = formatters[answers.formatter] ?? null;
+
+			if (formatter) {
+				runCommand(formatter, directoryForPrettier);
 			}
 
-			switch (answers.linter) {
-				case 'eslint':
-					await runCommand(
-						'Eslint',
-						() => $`eslint ${directoryForPrettier} --fix`,
-					);
-					break;
-				case 'biome':
-					await runCommand(
-						'Biome',
-						() => $`biome ${directoryForPrettier} lint --write`,
-					);
-					break;
-				case 'none':
-					break;
+			const linter = linters[answers.linter] ?? null;
+
+			if (linter) {
+				runCommand(linter, directoryForPrettier);
 			}
+
+			// switch (answers.formatter) {
+			// 	case 'prettier':
+			// 		await runCommand(
+			// 			'Prettier',
+			// 			() =>
+			// 				$`prettier ${directoryForPrettier} --ignore-unknown --write --ignore-path ./.prettierignore`,
+			// 		);
+			// 		break;
+			// 	case 'biome':
+			// 		await runCommand(
+			// 			'Biome (Format)',
+			// 			() => $`biome ${directoryForPrettier} format --write`,
+			// 		);
+			// 		break;
+			// 	case 'none':
+			// 		break;
+			// }
+
+			// switch (answers.linter) {
+			// 	case 'eslint':
+			// 		await runCommand(
+			// 			'Eslint',
+			// 			() => $`eslint ${directoryForPrettier} --fix`,
+			// 		);
+			// 		break;
+			// 	case 'biome':
+			// 		await runCommand(
+			// 			'Biome',
+			// 			() => $`biome ${directoryForPrettier} lint --write`,
+			// 		);
+			// 		break;
+			// 	case 'none':
+			// 		break;
+			// }
 		},
 	},
 };
