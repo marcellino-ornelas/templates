@@ -62,6 +62,19 @@ import ReactComponentTemplateGif from './react-component.gif';
         />
         <span>Supports Storybook</span>
     </div>
+    <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon icon="logos:prettier" width="25px" className="margin-right--xs" />
+        <Icon icon="devicon:biome" width="25px" className="margin-right--xs" />
+
+        <span>Automatic Formatting (beta)</span>
+    </div>
+     <div className="col col--6 display--flex align-items--center margin-bottom--xs">
+        <Icon icon="logos:eslint" width="25px" className="margin-right--xs" />
+        <Icon icon="devicon:biome" width="25px" className="margin-right--xs" />
+
+        <span>Automatic Lint Fixing (beta)</span>
+    </div>
+
 </div>
 
 <br />
@@ -760,6 +773,130 @@ const Nav = ({}) => {
 
 export default Nav;
 ```
+
+### Formatting (beta)
+
+By default, this template does not automatically run any formatters (e.g.,
+[Prettier](https://prettier.io/)). However, you can enable automatic formatting
+using the `formatter` option. Currently, only `prettier`, `biome`, and `none`
+are supported. You can specify this either on the command line or in your
+[config file](../tpsrc.mdx) file.
+
+To enable Prettier formatting, follow one of these methods:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
+
+```bash
+tps react-component Nav --formatter prettier
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always run prettier
+formatting when generating new instances:
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+    "react-component": {
+        "answers": {
+            "formatter": "prettier"
+        }
+    }
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now, after your new component is created, we will run prettier against the newly
+created files.
+
+:::caution
+
+When [not using a new folder](#no-new-folder), please note that we will run the
+formatter against your current working directory. We are working to improve this
+experience.
+
+:::
+
+### Linting (beta)
+
+By default, this template does not automatically run any linters (e.g.,
+[eslint](https://eslint.org/)). However, you can enable lint fixing by using the
+`linter` option. Currently, only `eslint`, `biome`, and `none` are supported.
+You can specify this either on the command line or in your
+[config file](../tpsrc.mdx) file.
+
+To enable eslint fixing, follow one of these methods:
+
+<Tabs>
+
+<TabItem value="cli">
+
+You can pass in the following flag when your generating your new instance:
+
+```bash
+tps react-component Nav --linter eslint
+```
+
+</TabItem>
+
+<TabItem value=".tps/.tpsrc">
+
+You can add the following to your `.tps/.tpsrc` file to always run eslint
+fixing:
+
+If you havent already initialize your repo:
+
+```bash
+tps init
+```
+
+```json title=".tps/.tpsrc"
+{
+    "react-component": {
+        "answers": {
+            "linter": "eslint"
+        }
+    }
+}
+```
+
+```bash
+tps react-component Nav
+```
+
+</TabItem>
+
+</Tabs>
+
+Now, after your new component is created, we will run eslint fix against the
+newly created files.
+
+:::caution
+
+When [not using a new folder](#no-new-folder), please note that we will run the
+linter against your current working directory. We are working to improve this
+experience.
+
+:::
 
 ### Use all default answers
 
