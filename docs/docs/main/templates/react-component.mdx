@@ -321,23 +321,51 @@ export default Nav;
 
 ### How to use options
 
-The React component template offers various customization options, which are
-listed in the [options](#options) table. These will be prompted to you when you
-create a new instance. However to save time and avoid answering the same
-questions each time, you can set your answers ahead of time. You can do this
-either on the command line or in your `.tps/.tpsrc` file.
+The React component template provides a wide range of options, which are listed
+in the [options](#options) table. Most options will be prompted to you when you
+create a new instance. However, you can also use options on the command line or
+in your [config file](../tpsrc.mdx).
+
+:::tip
+
+When using a option on the command line or in a [config file](../tpsrc.mdx), it
+will no longer be prompted.
+
+:::
+
+**example:**
+
+If you want to use a `js` extension for the component instead of the default
+`jsx`, you can do one of the following:
 
 <Tabs>
 
 <TabItem value="cli">
 
-Lets say your project always uses a `js` extension for its components. You can
-add `js` to the `extension` answer when creating a new instance and you will no
-longer be prompted that question.
+You can pass in the following flags when your generating your new instance:
 
 ```bash
 tps react-component Nav --extension=js
+
+# or
+
+tps react-component Nav --extension js
 ```
+
+:::tip
+
+Boolean options can be used by providing the option name for `true`, or by
+prefixing the option name with `--no-` to specify `false`.
+
+```bash
+# true
+--typescript
+
+# false
+--no-typescript
+```
+
+:::
 
 Depending on the rest of your answers, it will generate something similar to the
 following:
@@ -353,15 +381,14 @@ following:
 
 <TabItem value=".tps/.tpsrc">
 
+You can add the following to your `.tps/.tpsrc` file to always use a `js`
+extension for your component when generating a new instance in your repo.
+
 If you havent already initialize your repo:
 
 ```bash
 tps init
 ```
-
-Lets say your project always uses a `js` extension for its components. You can
-add `js` to the `extension` answer. Now when creating a new instance and you
-will no longer be prompted that question.
 
 ```json title=".tps/.tpsrc"
 {
@@ -370,7 +397,7 @@ will no longer be prompted that question.
             "extension": "js"
         }
     }
-}1
+}
 ```
 
 Depending on the rest of your answers, it will generate something similar to the
@@ -386,6 +413,13 @@ following:
 </TabItem>
 
 </Tabs>
+
+#### Hidden options
+
+Hidden options dont get prompted by default. However, you can always answer
+hidden options on the command line or in your [config file](../tpsrc.mdx).
+Additionally, you can use the [`hidden` option](../../api/template.mdx#hidden)
+to have all `hidden` options prompted.
 
 ### No new folder
 
