@@ -1,3 +1,7 @@
+/**
+ * Inspired from hey-api/openapi-ts
+ * https://github.com/hey-api/openapi-ts/blob/main/packages/openapi-ts/src/index.ts
+ */
 import { sync } from 'cross-spawn';
 
 type OutputProcessor = {
