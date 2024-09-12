@@ -41,7 +41,7 @@
 		"email": "marcellino.ornelas@gmail.com"
 	},
 	"engines": {
-		"node": ">=18.18"
+		"node": ">=16.7.0"
 	},
 	"homepage": "https://marcellino-ornelas.github.io/templates/",
 	"bin": {
