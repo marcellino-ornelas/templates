@@ -1,5 +1,5 @@
 // TODO: why cant I use @tps/templates :thinking:
-import type { TemplateOptions } from '@tps/templates/templates';
+import type { TemplateOptions, Templates } from '@tps/templates/templates';
 
 // eslint-disable-next-line no-shadow
 export enum SettingsFilePromptTpsType {
@@ -80,7 +80,43 @@ export type ValidateFn = (
 	answers: AnswersHash,
 ) => (boolean | string) | Promise<boolean | string>;
 
+interface SettingsFileEvents {
+	/**
+	 * Callback function to call before build paths are rendered
+	 */
+	onRender?: (tps: Templates) => Promise<void>;
+	/**
+	 * Callback function to call before an build path is rendered
+	 */
+	onBuildPathRender?: (
+		tps: Templates,
+		args: {
+			buildPath: string;
+		},
+	) => Promise<void>;
+	/**
+	 * Callback function to call when an build path is rendered
+	 */
+	onBuildPathRendered?: (
+		tps: Templates,
+		args: {
+			buildPath: string;
+		},
+	) => Promise<void>;
+	/**
+	 * Callback function to call when all build paths are rendered
+	 */
+	onRendered?: (
+		tps: Templates,
+		args: {
+			dest: string;
+			buildPaths: string[];
+		},
+	) => Promise<void>;
+}
+
 export interface SettingsFile {
 	opts?: Partial<TemplateOptions>;
 	prompts?: SettingsFilePrompt[];
+	events?: SettingsFileEvents;
 }

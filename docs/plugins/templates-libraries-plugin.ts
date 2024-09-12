@@ -52,8 +52,11 @@ const getTemplateSettings = async (
 
 			return {
 				name: tps.template,
-				settings: tps.templateSettings,
-			};
+				// TODO:
+				// 		For some reason jest test are failing because its saying were pulling types
+				// 		from `src` but it doesnt match `Templates['templateSettings]` which is someing from `lib`
+				settings: tps.templateSettings as unknown as SettingsFile,
+			} satisfies TemplateSettings;
 		},
 	);
 

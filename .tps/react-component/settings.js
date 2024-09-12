@@ -1,5 +1,7 @@
 // @ts-check
 
+const { formatters, linters, runCommand } = require('../../lib/tools');
+
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
 	opts: {
@@ -189,5 +191,48 @@ module.exports = {
 			tpsType: 'package',
 			default: false,
 		},
+		{
+			name: 'formatter',
+			aliases: ['format'],
+			description:
+				'Type of formatter you would like to use to format the component',
+			message: 'What type of formatter do you want to use to format your code',
+			type: 'list',
+			tpsType: 'data',
+			hidden: true,
+			choices: ['none', 'prettier', 'biome'],
+			default: 'none',
+		},
+		{
+			name: 'linter',
+			aliases: ['lint'],
+			description:
+				'Type of linter you would like to use to format the component',
+			message: 'What type of linter do you want to use to fix your code',
+			type: 'list',
+			tpsType: 'data',
+			hidden: true,
+			choices: ['none', 'eslint', 'biome'],
+			default: 'none',
+		},
 	],
+	events: {
+		async onRendered(tps, { dest, buildPaths }) {
+			const directoryForPrettier = tps.opts.newFolder ? buildPaths : [dest];
+
+			const answers = tps.getAnswers();
+
+			const formatter = formatters[answers.formatter] ?? null;
+
+			if (formatter) {
+				runCommand(formatter, directoryForPrettier);
+			}
+
+			const linter = linters[answers.linter] ?? null;
+
+			if (linter) {
+				runCommand(linter, directoryForPrettier);
+			}
+		},
+	},
 };
