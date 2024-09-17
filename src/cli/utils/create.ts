@@ -61,21 +61,23 @@ export const options = (yargs) => {
 
 	if (!template) return yargs;
 
-	const tps = new Template('react-component');
+	const tps = new Template(template);
 
 	// eslint-disable-next-line no-underscore-dangle
 	const templateOptions = tps._prompts.prompts.map((prompt) => {
 		const type = ((): string => {
-			switch (prompt.type) {
+			switch (prompt.type ?? 'input') {
 				case 'confirm':
 					return 'boolean';
 				case 'input':
 				case 'list':
+				case 'rawlist':
+				case 'password':
 					return 'string';
 				case 'checkbox':
 					return 'array';
 				default:
-					throw new Error('bad');
+					throw new Error(`Unsupported type: ${prompt.type}`);
 			}
 		})();
 
