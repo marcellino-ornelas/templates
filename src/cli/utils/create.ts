@@ -84,8 +84,6 @@ export const options = (yargs) => {
 			type,
 			name: prompt.name,
 			alias: prompt.aliases,
-			// eslint-disable-next-line no-underscore-dangle
-			// default: prompt.getDefaultValue(tps._prompts.answers),
 			...(prompt.choices.length && { choices: prompt.choices }),
 			// TODO: Will need to strip `tps-` prefix off of third party templates
 			group: `${sentenceCase(tps.template)}:`,
