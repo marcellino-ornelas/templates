@@ -1,6 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
 import Template from '@tps/templates';
+import { sentenceCase } from '@tps/templates/utils';
 import type { TemplateOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
@@ -16,41 +17,90 @@ export interface UseArgv {
 	buildPaths: string[];
 }
 
-export const options = {
-	use: {
-		alias: 'u',
-		describe: 'Template package to create your with',
-		type: 'string',
-	},
-	packages: {
-		alias: 'p',
-		describe: 'Additional Packages to use when building your template',
-		type: 'array',
-	},
-	default: {
-		alias: 'd',
-		type: 'boolean',
-		describe: 'Use all default answers to all prompts',
-	},
-	newFolder: {
-		alias: 'f',
-		describe: 'Create a new folder',
-		type: 'boolean',
-	},
-	force: {
-		describe:
-			'force the template to be made. This will override any files that tps needs to create',
-		type: 'boolean',
-	},
-	wipe: {
-		describe:
-			'force the template to be made. This will delete the directory if exists',
-		type: 'boolean',
-	},
-	hidden: {
-		describe: 'Prompt all hidden prompts',
-		type: 'boolean',
-	},
+// TODO: async is not working. need to debug. Completely ignores this function when its async
+export const options = (yargs) => {
+	const { argv } = yargs;
+	const template = argv._[0];
+
+	yargs.options({
+		use: {
+			alias: 'u',
+			describe: 'Template package to create your with',
+			type: 'string',
+		},
+		packages: {
+			alias: 'p',
+			describe: 'Additional Packages to use when building your template',
+			type: 'array',
+		},
+		default: {
+			alias: 'd',
+			type: 'boolean',
+			describe: 'Use all default answers to all prompts',
+		},
+		newFolder: {
+			alias: 'f',
+			describe: 'Create a new folder',
+			type: 'boolean',
+		},
+		force: {
+			describe:
+				'force the template to be made. This will override any files that tps needs to create',
+			type: 'boolean',
+		},
+		wipe: {
+			describe:
+				'force the template to be made. This will delete the directory if exists',
+			type: 'boolean',
+		},
+		hidden: {
+			describe: 'Prompt all hidden prompts',
+			type: 'boolean',
+		},
+	});
+
+	if (!template) return yargs;
+
+	const tps = new Template('react-component');
+
+	// eslint-disable-next-line no-underscore-dangle
+	const templateOptions = tps._prompts.prompts.map((prompt) => {
+		const type = ((): string => {
+			switch (prompt.type) {
+				case 'confirm':
+					return 'boolean';
+				case 'input':
+				case 'list':
+					return 'string';
+				case 'checkbox':
+					return 'array';
+				default:
+					throw new Error('bad');
+			}
+		})();
+
+		return {
+			describe: prompt.description,
+			type,
+			name: prompt.name,
+			alias: prompt.aliases,
+			// eslint-disable-next-line no-underscore-dangle
+			// default: prompt.getDefaultValue(tps._prompts.answers),
+			...(prompt.choices.length && { choices: prompt.choices }),
+			// TODO: Will need to strip `tps-` prefix off of third party templates
+			group: `${sentenceCase(tps.template)}:`,
+			demandOption: false,
+		};
+	});
+
+	const templateOptionsMap = templateOptions.reduce((acc, next) => {
+		acc[next.name] = next;
+		return acc;
+	}, {});
+
+	yargs.options(templateOptionsMap);
+
+	return yargs;
 };
 
 export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
