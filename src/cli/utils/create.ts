@@ -64,7 +64,10 @@ export const options = (yargs) => {
 	const tps = new Template(template);
 
 	// eslint-disable-next-line no-underscore-dangle
-	const templateOptions = tps._prompts.prompts.map((prompt) => {
+	if (!tps?._prompts) return yargs;
+
+	// eslint-disable-next-line no-underscore-dangle
+	const templateOptions = tps?._prompts?.prompts.map((prompt) => {
 		const type = ((): string => {
 			switch (prompt.type ?? 'input') {
 				case 'confirm':
@@ -93,7 +96,7 @@ export const options = (yargs) => {
 		};
 	});
 
-	const templateOptionsMap = templateOptions.reduce((acc, next) => {
+	const templateOptionsMap = templateOptions?.reduce((acc, next) => {
 		acc[next.name] = next;
 		return acc;
 	}, {});

@@ -154,7 +154,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 */
 	public src: string;
 
-	public _prompts: Prompter<TAnswers>;
+	public _prompts?: Prompter<TAnswers>;
 
 	public compiledFiles: File[];
 
