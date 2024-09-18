@@ -6,6 +6,8 @@ export default {
 
 	description: 'create a new folder with template',
 
+	deprecated: true,
+
 	builder: {
 		use: {
 			alias: 'u',

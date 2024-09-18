@@ -67,7 +67,7 @@ export const options = (yargs) => {
 	if (!tps?._prompts) return yargs;
 
 	// eslint-disable-next-line no-underscore-dangle
-	const templateOptions = tps?._prompts?.prompts.map((prompt) => {
+	const templateOptions = tps._prompts.prompts.map((prompt) => {
 		const type = ((): string => {
 			switch (prompt.type ?? 'input') {
 				case 'confirm':
@@ -84,12 +84,14 @@ export const options = (yargs) => {
 			}
 		})();
 
+		const addChoices = type === 'array';
+
 		return {
 			describe: prompt.description,
 			type,
 			name: prompt.name,
 			alias: prompt.aliases,
-			...(prompt.choices.length && { choices: prompt.choices }),
+			...(addChoices && { choices: prompt.choices }),
 			// TODO: Will need to strip `tps-` prefix off of third party templates
 			group: `${sentenceCase(tps.template)}:`,
 			demandOption: false,
