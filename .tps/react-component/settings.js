@@ -177,7 +177,7 @@ module.exports = {
 				'Element or component that will be returned in the component file',
 			message: 'What component would you like as the base component?',
 			hidden: true,
-			type: 'confirm',
+			type: 'input',
 			tpsType: 'data',
 			default: 'div',
 		},
