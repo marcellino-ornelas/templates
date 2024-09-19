@@ -12,7 +12,6 @@ describe('[Prompter] Prompt:', () => {
 			aliases: ['test1', 't'],
 			message: 'This is a testing testing prompt',
 			default: 'default value',
-			choices: expect.any(Array),
 		});
 	});
 

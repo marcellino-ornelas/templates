@@ -13,6 +13,6 @@ export const commands: CommandModule[] = [
 	copy,
 	migrate,
 	newCmd,
-	use,
 	create,
+	use,
 ];
