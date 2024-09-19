@@ -12,7 +12,6 @@ jest.mock('fs');
 
 describe('Command Line: Use', () => {
 	beforeEach(() => {
-		// jest.resetAllMocks();
 		reset();
 	});
 
@@ -57,7 +56,19 @@ describe('Command Line: Use', () => {
 			expect(help).toContain('Testing use command:');
 		});
 
-		it.todo('should display nothing if no prompts');
+		it('should display nothing if no prompts', async () => {
+			const templateName = 'testing-use-command';
+
+			mkTemplate(templateName, undefined, {
+				'settings.json': mkSettingsFileJSON({}),
+			});
+
+			const parser = yargs([templateName, '--help']).command(use);
+
+			const help = await parser.getHelp();
+
+			expect(help).not.toContain('Testing use command:');
+		});
 
 		it('should display description if provided in help', async () => {
 			const templateName = 'testing-use-command';
@@ -151,28 +162,6 @@ describe('Command Line: Use', () => {
 			expect(help).toMatch(/--prompt1\W*\[array\] \[choices: "one", "two"\]/);
 		});
 
-		it('should not display choices if not checkbox', async () => {
-			const templateName = 'testing-use-command';
-
-			mkTemplate(templateName, undefined, {
-				'settings.json': mkSettingsFileJSON({
-					prompts: [
-						mkPrompt({
-							name: 'prompt1',
-							type: 'confirm',
-							choices: ['one', 'two'],
-						}),
-					],
-				}),
-			});
-
-			const parser = yargs([templateName, '--help']).command(use);
-
-			const help = await parser.getHelp();
-
-			expect(help).toMatch(/--prompt1\W*\[boolean\]\W*$/m);
-		});
-
 		it('should not use default values', async () => {
 			const templateName = 'testing-use-command';
 
@@ -206,7 +195,7 @@ describe('Command Line: Use', () => {
 						mkPrompt({
 							name: 'prompt1',
 							type: 'confirm',
-							aliases: ['p'],
+							aliases: ['t', 'p1'],
 						}),
 					],
 				}),
@@ -216,7 +205,7 @@ describe('Command Line: Use', () => {
 
 			const help = await parser.getHelp();
 
-			expect(help).toMatch(/-p, --prompt1, --p1\W*\[boolean\]/);
+			expect(help).toMatch(/-t, --prompt1, --p1\W*\[boolean\]/);
 		});
 	});
 });

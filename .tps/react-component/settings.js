@@ -192,15 +192,6 @@ module.exports = {
 			default: false,
 		},
 		{
-			name: 'prompt1',
-			description: '.....',
-			message: 'hey',
-			aliases: ['p'],
-			type: 'confirm',
-			tpsType: 'package',
-			default: false,
-		},
-		{
 			name: 'formatter',
 			aliases: ['format'],
 			description:
