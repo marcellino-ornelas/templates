@@ -84,8 +84,6 @@ export const options = (yargs) => {
 			}
 		})();
 
-		// console.log(prompt, type);
-
 		return {
 			describe: prompt.description,
 			type,
