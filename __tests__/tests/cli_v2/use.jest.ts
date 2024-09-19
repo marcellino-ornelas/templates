@@ -186,7 +186,7 @@ describe('Command Line: Use', () => {
 			);
 		});
 
-		it('should support alaises', async () => {
+		it('should support aliases', async () => {
 			const templateName = 'testing-use-command';
 
 			mkTemplate(templateName, undefined, {
