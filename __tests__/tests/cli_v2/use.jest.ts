@@ -196,5 +196,27 @@ describe('Command Line: Use', () => {
 				/--prompt1\W*\[boolean\] \[default: true\]\W*$/m,
 			);
 		});
+
+		it('should support alaises', async () => {
+			const templateName = 'testing-use-command';
+
+			mkTemplate(templateName, undefined, {
+				'settings.json': mkSettingsFileJSON({
+					prompts: [
+						mkPrompt({
+							name: 'prompt1',
+							type: 'confirm',
+							aliases: ['p'],
+						}),
+					],
+				}),
+			});
+
+			const parser = yargs([templateName, '--help']).command(use);
+
+			const help = await parser.getHelp();
+
+			expect(help).toMatch(/-p, --prompt1, --p1\W*\[boolean\]/);
+		});
 	});
 });

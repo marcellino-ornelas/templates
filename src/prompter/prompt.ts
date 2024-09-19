@@ -27,7 +27,7 @@ export default class Prompt {
 
 	public hidden: SettingsFilePrompt['hidden'];
 
-	public choices: SettingsFilePrompt['choices'];
+	public choices?: SettingsFilePrompt['choices'];
 
 	public validate: SettingsFilePrompt['validate'];
 
@@ -78,7 +78,7 @@ export default class Prompt {
 		// }
 
 		this.hidden = prompt.hidden ?? false;
-		this.choices = prompt.choices || [];
+		this.choices = prompt.choices;
 		this.pageSize = prompt.pageSize;
 		this.prefix = prompt.prefix;
 		this.suffix = prompt.suffix;

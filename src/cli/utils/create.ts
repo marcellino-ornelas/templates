@@ -84,14 +84,14 @@ export const options = (yargs) => {
 			}
 		})();
 
-		const addChoices = type === 'array';
+		// console.log(prompt, type);
 
 		return {
 			describe: prompt.description,
 			type,
 			name: prompt.name,
 			alias: prompt.aliases,
-			...(addChoices && { choices: prompt.choices }),
+			...(prompt?.choices && { choices: prompt.choices }),
 			// TODO: Will need to strip `tps-` prefix off of third party templates
 			group: `${sentenceCase(tps.template)}:`,
 			demandOption: false,

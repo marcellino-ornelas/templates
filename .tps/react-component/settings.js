@@ -215,6 +215,15 @@ module.exports = {
 			choices: ['none', 'eslint', 'biome'],
 			default: 'none',
 		},
+		{
+			name: 'prompt1',
+			description: '.....',
+			message: 'hey',
+			type: 'confirm',
+			tpsType: 'package',
+			aliases: ['p'],
+			default: true,
+		},
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
