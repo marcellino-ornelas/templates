@@ -7,10 +7,11 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import createError from 'http-errors';
-import { errorHandler } from './middlewares/errorHandler.js';
-{{{? tps.answers.routing === "api" }}}
+{{{? tps.answers.api }}}
 import apiRouter from './api/index.js';
 {{{?}}}
+import { errorHandler, notFoundHandler } from './middlewares/error-handler.js';
+import router from './routes/index.js';
 
 const app = express();
 
@@ -45,14 +46,12 @@ if (process.env.NODE_ENV === 'development') {
 
 // === Routes ===
 
-{{{? tps.answers.routing === "api" }}}
-app.use('/api', indexRouter);
+app.use('/', router);
+
+{{{? tps.answers.api }}}
+app.use('/api', apiRouter);
+
 {{{?}}}
-
-app.get('/', (req, res) => {
-	res.send('hey');
-});
-
 // === Error Handling ===
 
 // Handle 404 errors
@@ -62,7 +61,7 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // === Start the server ===
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });

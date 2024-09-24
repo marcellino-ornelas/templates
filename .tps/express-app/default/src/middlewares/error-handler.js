@@ -5,7 +5,6 @@ export const notFoundHandler = (req, res, next) => {
 
 // Global error handler
 export const errorHandler = (err, req, res, next) => {
-	console.error(err.stack);
 	res.status(err.status || 500).json({
 		error: err.message || 'Internal Server Error',
 	});
