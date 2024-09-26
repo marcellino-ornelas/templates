@@ -13,6 +13,8 @@ import {
 	mkTemplate,
 } from '@test/utilities/templates';
 import { reset } from '@test/utilities/vol';
+import { CWD } from '@tps/utilities/constants';
+import path from 'path';
 
 jest.mock('fs');
 
@@ -77,6 +79,53 @@ describe('[Templates] Render Process:', () => {
 		expect(results).toEqual(destPath);
 
 		expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
+	});
+
+	it('should be able to render a template with nested files and folders', async () => {
+		const fileSystem = {};
+
+		for (let i = 0; i < 20; i++) {
+			const dir = `./default/src/dir${i}`;
+
+			for (let j = 0; j < 20; j++) {
+				const filePath = `${dir}/file${j}.txt`;
+
+				fileSystem[filePath] =
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+			}
+
+			const extraDirs = Array.from({
+				length: Math.floor(Math.random() * 10) + 1,
+			})
+				.fill(null)
+				.map((_, index) => `dir${index}`)
+				.join('/');
+
+			for (let j = 0; j < 20; j++) {
+				const filePath = `${dir}/${extraDirs}/file${j}.txt`;
+
+				fileSystem[filePath] =
+					'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+			}
+		}
+
+		mkTemplate('test-template-nested-files', CWD, fileSystem);
+
+		const tps = new Templates('test-template-nested-files');
+
+		const results = await tps.render(CWD, 'app');
+
+		const destPath = path.join(CWD, 'app');
+
+		expect(results).toEqual(destPath);
+
+		expect(destPath).toBeDirectory();
+
+		const expectedCreatedFiles = Object.keys(fileSystem).map((p) =>
+			p.replace('./default/', ''),
+		);
+
+		expect(destPath).toHaveAllFilesAndDirectories(expectedCreatedFiles);
 	});
 
 	it('should be able to render 1000 templates with no problems', () => {
