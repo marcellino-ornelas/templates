@@ -900,7 +900,9 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 						}
 
 						try {
-							await fs.promises.mkdir(dirPathInNewLocation);
+							await fs.promises.mkdir(dirPathInNewLocation, {
+								recursive: true,
+							});
 
 							this.successfulBuilds.dirs.push(dirPathInNewLocation);
 
