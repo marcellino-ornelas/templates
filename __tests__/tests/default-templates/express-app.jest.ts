@@ -51,12 +51,12 @@ describe('Express app', () => {
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App/src/app.js')).toHaveFileContents(
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App/src/app.js')).toHaveFileContents(`\
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
 // === Routes ===
 
 app.use('/', router);
@@ -85,12 +85,12 @@ app.use('/api', apiRouter);
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App/src/app.js')).not.toHaveFileContents(
+			expect(path.join(CWD, 'app/src/app.js')).not.toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App/src/app.js')).toHaveFileContents(`\
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
 // === Routes ===
 
 app.use('/', router);
