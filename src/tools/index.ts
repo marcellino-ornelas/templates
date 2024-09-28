@@ -67,9 +67,9 @@ export const packageManagers = {
 		command: 'npm',
 		name: 'Npm',
 	},
-	// yarn: {
-	// 	args: (paths) => [...paths, '--fix'],
-	// 	command: 'eslint',
-	// 	name: 'ESLint',
-	// },
+	yarn: {
+		args: (paths) => ['install', '--cwd', ...paths],
+		command: 'yarn',
+		name: 'Yarn install',
+	},
 } as const satisfies Record<string, OutputProcessor>;
