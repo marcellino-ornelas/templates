@@ -65,11 +65,11 @@ export const packageManagers = {
 	npm: {
 		args: (paths) => ['install', '--prefix', ...paths],
 		command: 'npm',
-		name: 'Npm',
+		name: 'Npm Install',
 	},
 	yarn: {
 		args: (paths) => ['install', '--cwd', ...paths],
 		command: 'yarn',
-		name: 'Yarn install',
+		name: 'Yarn Install',
 	},
 } as const satisfies Record<string, OutputProcessor>;
