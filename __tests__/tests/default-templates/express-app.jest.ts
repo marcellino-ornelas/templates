@@ -29,10 +29,10 @@ describe('Express app', () => {
 			default: true,
 		});
 
-		await tps.render(CWD, 'App');
+		await tps.render(CWD, 'app');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App')).toBeDirectory();
+		expect(path.join(CWD, 'app')).toBeDirectory();
 	});
 
 	describe('api', () => {
@@ -45,10 +45,10 @@ describe('Express app', () => {
 
 			tps.setAnswers({ api: true });
 
-			await tps.render(CWD, 'App');
+			await tps.render(CWD, 'app');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App')).toBeDirectory();
+			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'App/src/app.js')).toHaveFileContents(
@@ -65,6 +65,9 @@ app.use('/api', apiRouter);
 
 // === Error Handling ===
 `);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/api/index.js')).toBeFile();
 		});
 
 		it('should be able to not add an API route', async () => {
@@ -76,10 +79,10 @@ app.use('/api', apiRouter);
 
 			tps.setAnswers({ api: false });
 
-			await tps.render(CWD, 'App');
+			await tps.render(CWD, 'app');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'App')).toBeDirectory();
+			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'App/src/app.js')).not.toHaveFileContents(
@@ -106,15 +109,15 @@ app.use('/', router);
 
 		tps.setAnswers({ packageManager: 'npm' });
 
-		await tps.render(CWD, 'App');
+		await tps.render(CWD, 'app');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App')).toBeDirectory();
+		expect(path.join(CWD, 'app')).toBeDirectory();
 
 		expect(sync).toBeCalledWith('npm', [
 			'install',
 			'--prefix',
-			path.join(CWD, 'App'),
+			path.join(CWD, 'app'),
 		]);
 	});
 
@@ -127,15 +130,15 @@ app.use('/', router);
 
 		tps.setAnswers({ packageManager: 'yarn' });
 
-		await tps.render(CWD, 'App');
+		await tps.render(CWD, 'app');
 
 		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'App')).toBeDirectory();
+		expect(path.join(CWD, 'app')).toBeDirectory();
 
 		expect(sync).toBeCalledWith('yarn', [
 			'install',
 			'--cwd',
-			path.join(CWD, 'App'),
+			path.join(CWD, 'app'),
 		]);
 	});
 });
