@@ -23,9 +23,7 @@ describe('Express app', () => {
 	});
 
 	it('should be able to render the express app template', async () => {
-		const templateName = 'express-app';
-
-		const tps = new Templates<ExpressAppAnswers>(templateName, {
+		const tps = new Templates<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
 
@@ -35,11 +33,22 @@ describe('Express app', () => {
 		expect(path.join(CWD, 'app')).toBeDirectory();
 	});
 
+	describe('port', () => {
+		it('should support custom ports', () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app')).toBeDirectory();
+		});
+	});
+
 	describe('api', () => {
 		it('should be able to add an api route', async () => {
-			const templateName = 'express-app';
-
-			const tps = new Templates<ExpressAppAnswers>(templateName, {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -71,9 +80,7 @@ app.use('/api', apiRouter);
 		});
 
 		it('should be able to not add an API route', async () => {
-			const templateName = 'express-app';
-
-			const tps = new Templates<ExpressAppAnswers>(templateName, {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -102,9 +109,7 @@ app.use('/', router);
 
 	describe('packageManager', () => {
 		it('should be able to render the express app template with npm', async () => {
-			const templateName = 'express-app';
-
-			const tps = new Templates<ExpressAppAnswers>(templateName, {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -123,9 +128,7 @@ app.use('/', router);
 		});
 
 		it('should be able to render the express app template with yarn', async () => {
-			const templateName = 'express-app';
-
-			const tps = new Templates<ExpressAppAnswers>(templateName, {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 

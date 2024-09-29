@@ -5,6 +5,14 @@ const { runCommand, packageManagers } = require('../../lib/tools/index');
 module.exports = {
 	prompts: [
 		{
+			name: 'port',
+			description: 'Port for the web server',
+			message: 'What port do you want your web server to start on?',
+			tpsType: 'data',
+			type: 'input',
+			default: 3000,
+		},
+		{
 			name: 'packageManager',
 			aliases: ['pm'],
 			description: 'Type of package you want to use for package installation',
