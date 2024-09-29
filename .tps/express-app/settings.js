@@ -21,7 +21,7 @@ module.exports = {
 			message: 'Do you want to add a API?',
 			tpsType: 'package',
 			type: 'confirm',
-			default: true,
+			default: false,
 		},
 	],
 	events: {
