@@ -100,45 +100,47 @@ app.use('/', router);
 		});
 	});
 
-	it('should be able to render the express app template with npm', async () => {
-		const templateName = 'express-app';
+	describe('packageManager', () => {
+		it('should be able to render the express app template with npm', async () => {
+			const templateName = 'express-app';
 
-		const tps = new Templates<ExpressAppAnswers>(templateName, {
-			default: true,
+			const tps = new Templates<ExpressAppAnswers>(templateName, {
+				default: true,
+			});
+
+			tps.setAnswers({ packageManager: 'npm' });
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app')).toBeDirectory();
+
+			expect(sync).toBeCalledWith('npm', [
+				'install',
+				'--prefix',
+				path.join(CWD, 'app'),
+			]);
 		});
 
-		tps.setAnswers({ packageManager: 'npm' });
+		it('should be able to render the express app template with yarn', async () => {
+			const templateName = 'express-app';
 
-		await tps.render(CWD, 'app');
+			const tps = new Templates<ExpressAppAnswers>(templateName, {
+				default: true,
+			});
 
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'app')).toBeDirectory();
+			tps.setAnswers({ packageManager: 'yarn' });
 
-		expect(sync).toBeCalledWith('npm', [
-			'install',
-			'--prefix',
-			path.join(CWD, 'app'),
-		]);
-	});
+			await tps.render(CWD, 'app');
 
-	it('should be able to render the express app template with yarn', async () => {
-		const templateName = 'express-app';
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app')).toBeDirectory();
 
-		const tps = new Templates<ExpressAppAnswers>(templateName, {
-			default: true,
+			expect(sync).toBeCalledWith('yarn', [
+				'install',
+				'--cwd',
+				path.join(CWD, 'app'),
+			]);
 		});
-
-		tps.setAnswers({ packageManager: 'yarn' });
-
-		await tps.render(CWD, 'app');
-
-		// @ts-expect-error no types for extending jest functions
-		expect(path.join(CWD, 'app')).toBeDirectory();
-
-		expect(sync).toBeCalledWith('yarn', [
-			'install',
-			'--cwd',
-			path.join(CWD, 'app'),
-		]);
 	});
 });
