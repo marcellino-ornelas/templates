@@ -8,6 +8,7 @@ import path from 'path';
 import { sync } from 'cross-spawn';
 
 interface ExpressAppAnswers {
+	port: string | number;
 	packageManager?: 'npm' | 'yarn';
 	api?: boolean;
 }
@@ -34,15 +35,50 @@ describe('Express app', () => {
 	});
 
 	describe('port', () => {
-		it('should support custom ports', () => {
+		it('should support custom ports', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
+			tps.setAnswers({ port: 5000 });
+
 			await tps.render(CWD, 'app');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app')).toBeDirectory();
+			expect(path.join(CWD, 'app/.env')).toHaveFileContents('PORT=5000');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.env')).toHaveFileContents(
+				'CLIENT_URL=http://localhost:5000',
+			);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+				'const PORT = process.env.PORT || 5000;',
+			);
+		});
+
+		it('should support custom port when port is string', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({ port: '5000' });
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.env')).toHaveFileContents('PORT=5000');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.env')).toHaveFileContents(
+				'CLIENT_URL=http://localhost:5000',
+			);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+				'const PORT = process.env.PORT || 5000;',
+			);
 		});
 	});
 
