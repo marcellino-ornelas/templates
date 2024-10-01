@@ -39,7 +39,8 @@ patterns, and more. We are also planning to support:
 -   React
 -   Modes (production, playground, etc.)
 -   Databases (Mongo, SQL, etc.)
--   And more...
+-   And
+    [more...](https://github.com/users/marcellino-ornelas/projects/2/views/5?pane=issue&itemId=59501342)
 
 We welcome your feedback! Feel free to share ideas for tools or frameworks you'd
 like to see supported, or any thoughts you have on the structure of the Express
@@ -50,7 +51,9 @@ app and the libraries we use.
     text="Submit feature request"
     size="sm"
     onClick={() => {
+        // eslint-ignore-next-line gtag gets added by docusarous
         if (typeof gtag === 'function') {
+            // eslint-ignore-next-line gtag gets added by docusarous
             gtag('event', 'feedback_request_click', {
                 event_category: 'Feedback',
                 event_label: 'express-app',
@@ -147,15 +150,14 @@ tps copy express-app
 
 ### How to use
 
-This template will generate a fully functioning express app. The name you pass
-to the cli will be used as the apps directory name and the name in your
-package.json. If you would like this app in a directory, then append the
-directory path in front of the name.
+This template generates a fully functional Express app. The name you provide to
+the CLI will be used for both the app's directory and the package.json name. To
+create the app in a specific directory, prepend the directory path to the name.
 
-example:
+Example:
 
-If you wanted to build a new express app for a new resturant called
-`chickens-burgers` then you would run the following command:
+If you're building a new Express app for a restaurant called `chickens-burgers`,
+you would run the following command:
 
 ```bash
 tps express-app chickens-burgers
@@ -164,9 +166,9 @@ tps express-app chickens-burgers
 tps express-app ./project/chickens-burgers
 ```
 
-this will create a new directory called `chickens-burgers` and create all the
-nessessary files and directories you need for your new express app and install
-the required packages using your package manager of choice.
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your Express app, and install the required
+packages using your preferred package manager.
 
 ```txt
 |- funny-gifs/
@@ -185,8 +187,8 @@ the required packages using your package manager of choice.
     | - package-lock.json
 ```
 
-One your template is created you can `cd` into the directory and run the
-following command to start the app
+Once your template is created, you can cd into the directory and run the
+following command to start the app:
 
 ```bash
 npm run start
