@@ -1,0 +1,196 @@
+---
+description: Template to generate express app
+keywords:
+    - express
+    - express app
+    - express app scaffold
+    - express app boilerplate
+    - express app generator
+    # - express app typescript
+sidebar_label: express-app (alpha)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
+
+# express-app
+
+<span className="badge badge--success margin-left--sm">alpha</span>
+
+{/* prettier-ignore */}
+<span className="badge badge--secondary margin-left--xs">templates@>=v1.2.3</span>
+
+<br />
+
+<br />
+
+Create a fully functional Express app using ESM modules.
+
+:::caution
+
+This template is in its alpha stage and will be evolving rapidly with new
+features and updates. Changes may include directory structures, Express app
+patterns, and more. We are also planning to support:
+
+-   TypeScript
+-   React
+-   Modes (production, playground, etc.)
+-   Databases (Mongo, SQL, etc.)
+-   And more...
+
+We welcome your feedback! Feel free to share ideas for tools or frameworks you'd
+like to see supported, or any thoughts you have on the structure of the Express
+app and the libraries we use.
+
+<Button
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/express-app-feature-requests-feedback"
+    text="Submit feature request"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'express-app',
+            });
+        }
+    }}
+/>
+
+:::
+
+## Usage
+
+```bash title="Usage"
+tps express-app <app-name>
+
+# or in a directory
+
+tps express-app path/to/dir/<app-name>
+```
+
+```txt title="Creates"
+| - <cmd-name>/
+    | node_modules/
+        | - all libraries node modules...
+    | - src
+        | - config/
+            | - constrants.js
+        | - middlewares/
+            | - error-handler.js
+        | - routes
+            | - index.js
+        | app.js
+    | - .env
+    | - package.json
+    | - package-lock.json
+```
+
+<Example>
+
+<Tabs>
+
+<TabItem value="default">
+
+```bash
+tps express-app funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps express-app cli/commands/funny-gifs
+```
+
+</TabItem>
+
+</Tabs>
+
+</Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
+
+## Installation
+
+This templates is a part of Templates library. If you've already installed
+Templates, you'll have instant access to this template, and you can disregard
+this command.
+
+```bash
+npm i -g templates-mo
+```
+
+## Options
+
+<TemplateOptions template="express-app" type="js" />
+
+## Copy
+
+If you like this template, but want to modify a few things use the copy command.
+It allows you to duplicate the template into your project and tailor it to your
+needs.
+
+```bash
+# if your not initialized run
+tps init
+
+# copy template
+tps copy express-app
+```
+
+## Examples
+
+### How to use
+
+This template will generate a fully functioning express app. The name you pass
+to the cli will be used as the apps directory name and the name in your
+package.json. If you would like this app in a directory, then append the
+directory path in front of the name.
+
+example:
+
+If you wanted to build a new express app for a new resturant called
+`chickens-burgers` then you would run the following command:
+
+```bash
+tps express-app chickens-burgers
+
+# if you want this directory in say a directory called projects, then run the following command
+tps express-app ./project/chickens-burgers
+```
+
+this will create a new directory called `chickens-burgers` and create all the
+nessessary files and directories you need for your new express app and install
+the required packages using your package manager of choice.
+
+```txt
+|- funny-gifs/
+    | node_modules/
+        | - all libraries node modules...
+    | - src
+        | - config/
+            | - constrants.js
+        | - middlewares/
+            | - error-handler.js
+        | - routes
+            | - index.js
+        | app.js
+    | - .env
+    | - package.json
+    | - package-lock.json
+```
+
+One your template is created you can `cd` into the directory and run the
+following command to start the app
+
+```bash
+npm run start
+
+# dev mode with nodemon
+npm start:dev
+```
