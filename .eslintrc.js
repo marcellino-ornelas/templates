@@ -92,13 +92,6 @@ const config = {
 				'react/no-unescaped-entities': IGNORE,
 			},
 		},
-		// {
-		// 	files: ['docs/docs/main/templates/react-component.mdx'],
-		// 	rules: {
-		// 		// gtag is not defined
-		// 		'no-undef': 'off',
-		// 	},
-		// },
 		{
 			files: ['docs/**/*.tsx', 'docs/**/*.ts'],
 			plugins: ['react'],
