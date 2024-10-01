@@ -10,6 +10,7 @@ import createError from 'http-errors';
 {{{? tps.answers.api }}}
 import apiRouter from './api/index.js';
 {{{?}}}
+import { IS_DEV } from './config/constrants.js';
 import { errorHandler, notFoundHandler } from './middlewares/error-handler.js';
 import router from './routes/index.js';
 
@@ -40,7 +41,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // HTTP request logger for development
-if (process.env.NODE_ENV === 'development') {
+if ( IS_DEV ) {
 	app.use(morgan('dev'));
 }
 
