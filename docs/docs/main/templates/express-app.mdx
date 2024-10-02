@@ -51,9 +51,7 @@ app and the libraries we use.
     text="Submit feature request"
     size="sm"
     onClick={() => {
-        // eslint-disable-next-line no-undef -- gtag gets added by docusarous
         if (typeof gtag === 'function') {
-            // eslint-disable-next-line no-undef -- gtag gets added by docusarous
             gtag('event', 'feedback_request_click', {
                 event_category: 'Feedback',
                 event_label: 'express-app',

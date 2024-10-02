@@ -91,6 +91,9 @@ const config = {
 				'react/self-closing-comp': [IGNORE],
 				'react/no-unescaped-entities': IGNORE,
 			},
+			globals: {
+				gtag: 'readonly',
+			},
 		},
 		{
 			files: ['docs/**/*.tsx', 'docs/**/*.ts'],
