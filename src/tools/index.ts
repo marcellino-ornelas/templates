@@ -60,3 +60,16 @@ export const runCommand = (module: OutputProcessor, paths: string[]): void => {
 		console.log(result.stderr.toString());
 	}
 };
+
+export const packageManagers = {
+	npm: {
+		args: (paths) => ['install', '--prefix', ...paths],
+		command: 'npm',
+		name: 'Npm Install',
+	},
+	yarn: {
+		args: (paths) => ['install', '--cwd', ...paths],
+		command: 'yarn',
+		name: 'Yarn Install',
+	},
+} as const satisfies Record<string, OutputProcessor>;

@@ -1,6 +1,6 @@
 {
 	"name": "templates-mo",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"description": "Templates is a powerful filesystem generator that aims to simplify the process of getting started with and maintaining code applications",
 	"main": "lib/templates/index.js",
 	"keywords": [
@@ -52,7 +52,8 @@
 		"code:dev": "npm run code:build -- -w",
 		"code:prod": "npm run code:build",
 		"test:run:init": "npm run test:jest -- --runInBand --testPathPattern cli/init",
-		"test:core": "./.bin/ts ./.bin/generate-test-templates && npm run test:jest -- --testPathIgnorePatterns \"/.*/cli/.*\"",
+		"test:core": "npm run test:gen && npm run test:jest -- --testPathIgnorePatterns \"/.*/cli/.*\"",
+		"test:gen": "./.bin/ts ./.bin/generate-test-templates",
 		"test:jest": "jest",
 		"test:init": "npm run code:build && echo 'built' && INIT_ONLY=1 ./.bin/run-test",
 		"typecheck": "tsc --noEmit",

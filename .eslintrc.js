@@ -91,12 +91,8 @@ const config = {
 				'react/self-closing-comp': [IGNORE],
 				'react/no-unescaped-entities': IGNORE,
 			},
-		},
-		{
-			files: ['docs/docs/main/templates/react-component.mdx'],
-			rules: {
-				// gtag is not defined
-				'no-undef': 'off',
+			globals: {
+				gtag: 'readonly',
 			},
 		},
 		{
