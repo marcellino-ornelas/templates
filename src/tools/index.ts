@@ -3,6 +3,9 @@
  * https://github.com/hey-api/openapi-ts/blob/main/packages/openapi-ts/src/index.ts
  */
 import { sync } from 'cross-spawn';
+import type { SettingsFilePrompt } from '@tps/types/settings';
+
+type ExcludeNone<T extends string> = Exclude<T, 'none'>;
 
 type OutputProcessor = {
 	args: (paths: string[]) => ReadonlyArray<string>;
@@ -10,10 +13,30 @@ type OutputProcessor = {
 	name: string;
 };
 
+type OutputProcessorMap<T extends string> = Record<
+	ExcludeNone<T>,
+	OutputProcessor
+>;
+
+export const FORMATTER_PROMPT = {
+	name: 'formatter',
+	aliases: ['format'],
+	description:
+		'Type of formatter you would like to use to format the component',
+	message: 'What type of formatter do you want to use to format your code',
+	type: 'list',
+	tpsType: 'data',
+	hidden: true,
+	choices: ['none', 'prettier', 'biome'],
+	default: 'none',
+} as const satisfies SettingsFilePrompt;
+
+export type formatters = (typeof FORMATTER_PROMPT.choices)[number];
+
 /**
  * Map of supported formatters
  */
-export const formatters = {
+const formattersMap: OutputProcessorMap<formatters> = {
 	biome: {
 		args: (paths) => ['format', '--write', ...paths],
 		command: 'biome',
@@ -30,7 +53,18 @@ export const formatters = {
 		command: 'prettier',
 		name: 'Prettier',
 	},
-} as const satisfies Record<string, OutputProcessor>;
+};
+
+export const runFormatter = async (
+	formatter: formatters,
+	paths: string[],
+): Promise<void> => {
+	const formatterObj = formattersMap[formatter] ?? null;
+
+	if (formatter) {
+		runCommand(formatterObj, paths);
+	}
+};
 
 /**
  * Map of supported linters
