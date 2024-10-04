@@ -4,6 +4,9 @@
  */
 import { sync } from 'cross-spawn';
 import type { SettingsFilePrompt } from '@tps/types/settings';
+import path from 'path';
+import { MAIN_DIR } from '@tps/utilities/constants';
+import Templates from '@tps/templates';
 
 type ExcludeNone<T extends string> = Exclude<T, 'none'>;
 
@@ -17,6 +20,10 @@ type OutputProcessorMap<T extends string> = Record<
 	ExcludeNone<T>,
 	OutputProcessor
 >;
+
+function isErrnoException(error: unknown): error is NodeJS.ErrnoException {
+	return (error as NodeJS.ErrnoException).code !== undefined;
+}
 
 export const FORMATTER_PROMPT = {
 	name: 'formatter',
@@ -58,11 +65,12 @@ const formattersMap: OutputProcessorMap<formatters> = {
 export const runFormatter = async (
 	formatter: formatters,
 	paths: string[],
+	tps: Templates,
 ): Promise<void> => {
 	const formatterObj = formattersMap[formatter] ?? null;
 
 	if (formatter) {
-		runCommand(formatterObj, paths);
+		runCommand(formatterObj, paths, tps);
 	}
 };
 
@@ -82,13 +90,57 @@ export const linters = {
 	},
 } as const satisfies Record<string, OutputProcessor>;
 
-export const runCommand = (module: OutputProcessor, paths: string[]): void => {
+export const runCommand = (
+	module: OutputProcessor,
+	cwd: string,
+	paths: string[],
+	tps: Templates = null,
+): void => {
 	console.log(`✨ Running ${module.name}`);
-	const result = sync(module.command, module.args(paths));
 
-	const isError = result.status > 0;
+	const templatesNodeModulesBin = path.resolve(
+		__dirname,
+		'../../',
+		'node_modules',
+		'.bin',
+	);
 
-	if (isError) {
+	// TODO: Use find up
+	const destNodeModulesBin = path.resolve(cwd, 'node_modules', '.bin');
+
+	const templateNodeModuleBin = tps
+		? [path.resolve(tps.src, 'node_modules', '.bin')]
+		: [];
+
+	const bins = [
+		// Bins from main template directory which satisfies default templates
+		templatesNodeModulesBin,
+		// Bins from Modules from the `cwd` or in other words `dest`
+		destNodeModulesBin,
+		// Bins from template modules
+		...templateNodeModuleBin,
+		process.env.PATH,
+	];
+
+	const envPath = bins.join(':');
+
+	const result = sync(module.command, module.args(paths), {
+		env: { ...process.env, PATH: envPath },
+	});
+
+	if (result.error) {
+		const { error } = result;
+
+		if (isErrnoException(error)) {
+			if (error.code === 'ENOENT') {
+				console.log(`❌ Command not found: ${module.command}`);
+			}
+		} else {
+			console.log(`❌ ${module.name} failed!`);
+			console.log(error);
+		}
+	} else if (result.status > 0) {
+		// command error
 		console.log(`❌ ${module.name} failed!`);
 		console.log(result.stdout.toString());
 		console.log(result.stderr.toString());

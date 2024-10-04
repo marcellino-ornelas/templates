@@ -216,12 +216,12 @@ module.exports = {
 
 			const answers = tps.getAnswers();
 
-			runFormatter(answers.formatter, directoryForPrettier);
+			runFormatter(answers.formatter, dest, directoryForPrettier, tps);
 
 			const linter = linters[answers.linter] ?? null;
 
 			if (linter) {
-				runCommand(linter, directoryForPrettier);
+				runCommand(linter, dest, directoryForPrettier);
 			}
 		},
 	},
