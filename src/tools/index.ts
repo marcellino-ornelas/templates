@@ -64,13 +64,14 @@ const formattersMap: OutputProcessorMap<formatters> = {
 
 export const runFormatter = async (
 	formatter: formatters,
+	cwd: string,
 	paths: string[],
 	tps: Templates,
 ): Promise<void> => {
 	const formatterObj = formattersMap[formatter] ?? null;
 
 	if (formatter) {
-		runCommand(formatterObj, paths, tps);
+		runCommand(formatterObj, cwd, paths, tps);
 	}
 };
 
