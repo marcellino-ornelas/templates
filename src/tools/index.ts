@@ -6,6 +6,7 @@ import { sync } from 'cross-spawn';
 import type { SettingsFilePrompt } from '@tps/types/settings';
 import path from 'path';
 import Templates from '@tps/templates';
+import { findUp } from '@tps/utilities/fileSystem';
 
 const NONE = 'none';
 
@@ -112,17 +113,22 @@ export const runCommand = (
 	);
 
 	// TODO: Use find up
-	const destNodeModulesBin = path.resolve(cwd, 'node_modules', '.bin');
+	// const destNodeModulesBin = path.resolve(cwd, 'node_modules', '.bin');
+	const parentNodeModules = findUp('node_modules', cwd);
+	const destNodeModulesBin = parentNodeModules
+		? [path.resolve(parentNodeModules, '.bin')]
+		: [];
 
 	const templateNodeModuleBin = tps
 		? [path.resolve(tps.src, 'node_modules', '.bin')]
 		: [];
 
+	console.log('hey', destNodeModulesBin);
 	const bins = [
 		// Bins from main template directory which satisfies default templates
 		templatesNodeModulesBin,
 		// Bins from Modules from the `cwd` or in other words `dest`
-		destNodeModulesBin,
+		...destNodeModulesBin,
 		// Bins from template modules
 		...templateNodeModuleBin,
 		process.env.PATH,

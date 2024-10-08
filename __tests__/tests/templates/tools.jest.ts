@@ -5,7 +5,7 @@ import { mkTemplate } from '@test/utilities/templates';
 import { CWD, MAIN_DIR } from '@tps/utilities/constants';
 import Templates from '@tps/templates';
 import { OutputProcessor, runCommand, runFormatter } from '@tps/tools';
-import { reset } from '@test/utilities/vol';
+import { reset, vol } from '@test/utilities/vol';
 import path from 'path';
 import { sync } from 'cross-spawn';
 import {
@@ -26,7 +26,7 @@ const DEFAULT_COMMAND: OutputProcessor = {
 
 describe('Tools:', () => {
 	beforeEach(() => {
-		mockConsoleLog();
+		// mockConsoleLog();
 
 		jest.resetAllMocks();
 		reset();
@@ -71,6 +71,43 @@ describe('Tools:', () => {
 				expect.objectContaining({
 					env: expect.objectContaining({
 						PATH: expect.stringContaining(path.join(dir, 'node_modules/.bin')),
+					}),
+				}),
+			);
+		});
+
+		it('should include node modules from parent directory from CWD in PATH', async () => {
+			const templateName = 'run-comand';
+
+			mkTemplate(templateName);
+
+			const tps = new Templates(templateName, {
+				default: true,
+			});
+
+			await vol.promises.mkdir('/some/random/directory/inner', {
+				recursive: true,
+			});
+
+			await vol.promises.mkdir('/some/random/directory/node_modules', {
+				recursive: true,
+			});
+
+			runCommand(
+				DEFAULT_COMMAND,
+				'/some/random/directory/inner',
+				[path.join('/some/random/directory/inner', 'app')],
+				tps,
+			);
+
+			expect(sync).toHaveBeenCalledWith(
+				'command',
+				['--some-flag'],
+				expect.objectContaining({
+					env: expect.objectContaining({
+						PATH: expect.stringContaining(
+							path.join('/some/random/directory', 'node_modules/.bin'),
+						),
 					}),
 				}),
 			);
