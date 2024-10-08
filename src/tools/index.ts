@@ -123,7 +123,6 @@ export const runCommand = (
 		? [path.resolve(tps.src, 'node_modules', '.bin')]
 		: [];
 
-	console.log('hey', destNodeModulesBin);
 	const bins = [
 		// Bins from main template directory which satisfies default templates
 		templatesNodeModulesBin,

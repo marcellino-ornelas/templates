@@ -26,7 +26,7 @@ const DEFAULT_COMMAND: OutputProcessor = {
 
 describe('Tools:', () => {
 	beforeEach(() => {
-		// mockConsoleLog();
+		mockConsoleLog();
 
 		jest.resetAllMocks();
 		reset();
@@ -51,10 +51,7 @@ describe('Tools:', () => {
 			);
 		});
 
-		it.each([
-			{ type: 'templates main directory', dir: MAIN_DIR },
-			{ type: 'instance dest', dir: CWD },
-		])('should include $type .bin in PATH', async ({ dir }) => {
+		it('should include templates main directory .bin in PATH', async () => {
 			const templateName = 'run-comand';
 
 			mkTemplate(templateName);
@@ -70,7 +67,35 @@ describe('Tools:', () => {
 				['--some-flag'],
 				expect.objectContaining({
 					env: expect.objectContaining({
-						PATH: expect.stringContaining(path.join(dir, 'node_modules/.bin')),
+						PATH: expect.stringContaining(
+							path.join(MAIN_DIR, 'node_modules/.bin'),
+						),
+					}),
+				}),
+			);
+		});
+
+		it('should include dest .bin in PATH', async () => {
+			const templateName = 'run-comand';
+
+			mkTemplate(templateName);
+
+			await vol.promises.mkdir(path.join(CWD, 'node_modules'), {
+				recursive: true,
+			});
+
+			const tps = new Templates(templateName, {
+				default: true,
+			});
+
+			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
+
+			expect(sync).toHaveBeenCalledWith(
+				'command',
+				['--some-flag'],
+				expect.objectContaining({
+					env: expect.objectContaining({
+						PATH: expect.stringContaining(path.join(CWD, 'node_modules/.bin')),
 					}),
 				}),
 			);
