@@ -156,11 +156,11 @@ app.use('/', router);
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
-			expect(sync).toBeCalledWith('npm', [
-				'install',
-				'--prefix',
-				path.join(CWD, 'app'),
-			]);
+			expect(sync).toBeCalledWith(
+				'npm',
+				['install', '--prefix', path.join(CWD, 'app')],
+				expect.objectContaining({}),
+			);
 		});
 
 		it('should be able to render the express app template with yarn', async () => {
@@ -175,11 +175,11 @@ app.use('/', router);
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
-			expect(sync).toBeCalledWith('yarn', [
-				'install',
-				'--cwd',
-				path.join(CWD, 'app'),
-			]);
+			expect(sync).toBeCalledWith(
+				'yarn',
+				['install', '--cwd', path.join(CWD, 'app')],
+				expect.objectContaining({}),
+			);
 		});
 	});
 });
