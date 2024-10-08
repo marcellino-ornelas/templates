@@ -5,12 +5,13 @@
 import { sync } from 'cross-spawn';
 import type { SettingsFilePrompt } from '@tps/types/settings';
 import path from 'path';
-import { MAIN_DIR } from '@tps/utilities/constants';
 import Templates from '@tps/templates';
 
-type ExcludeNone<T extends string> = Exclude<T, 'none'>;
+const NONE = 'none';
 
-type OutputProcessor = {
+type ExcludeNone<T extends string> = Exclude<T, typeof NONE>;
+
+export type OutputProcessor = {
 	args: (paths: string[]) => ReadonlyArray<string>;
 	command: string;
 	name: string;
@@ -34,8 +35,8 @@ export const FORMATTER_PROMPT = {
 	type: 'list',
 	tpsType: 'data',
 	hidden: true,
-	choices: ['none', 'prettier', 'biome'],
-	default: 'none',
+	choices: [NONE, 'prettier', 'biome'],
+	default: NONE,
 } as const satisfies SettingsFilePrompt;
 
 export type formatters = (typeof FORMATTER_PROMPT.choices)[number];
@@ -66,11 +67,15 @@ export const runFormatter = async (
 	formatter: formatters,
 	cwd: string,
 	paths: string[],
-	tps: Templates,
+	tps?: Templates,
 ): Promise<void> => {
+	if (formatter === NONE) {
+		return;
+	}
+
 	const formatterObj = formattersMap[formatter] ?? null;
 
-	if (formatter) {
+	if (formatterObj) {
 		runCommand(formatterObj, cwd, paths, tps);
 	}
 };
@@ -129,18 +134,19 @@ export const runCommand = (
 		env: { ...process.env, PATH: envPath },
 	});
 
-	if (result.error) {
+	if (result?.error) {
 		const { error } = result;
 
 		if (isErrnoException(error)) {
 			if (error.code === 'ENOENT') {
 				console.log(`❌ Command not found: ${module.command}`);
+				return;
 			}
-		} else {
-			console.log(`❌ ${module.name} failed!`);
-			console.log(error);
 		}
-	} else if (result.status > 0) {
+
+		console.log(`❌ ${module.name} failed!`);
+		console.log(error);
+	} else if (result?.status > 0) {
 		// command error
 		console.log(`❌ ${module.name} failed!`);
 		console.log(result.stdout.toString());
