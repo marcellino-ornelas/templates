@@ -227,6 +227,4 @@ describe('Tools:', () => {
 			);
 		});
 	});
-
-	// it('should ...', async () => {});
 });
