@@ -1,4 +1,3 @@
-import { sync } from 'cross-spawn';
 import type { ExecFileException, SpawnSyncReturns } from 'child_process';
 
 export interface MockedConsole {
