@@ -5,7 +5,7 @@ import { mkTemplate } from '@test/utilities/templates';
 import { CWD, MAIN_DIR } from '@tps/utilities/constants';
 import Templates from '@tps/templates';
 import { OutputProcessor, runCommand, runFormatter } from '@tps/tools';
-import { reset, vol } from '@test/utilities/vol';
+import { reset } from '@test/utilities/vol';
 import path from 'path';
 import { sync } from 'cross-spawn';
 import {
