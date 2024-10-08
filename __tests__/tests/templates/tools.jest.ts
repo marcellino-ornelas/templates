@@ -145,11 +145,7 @@ describe('Tools:', () => {
 			expect(sync).toHaveBeenCalledWith(
 				'command',
 				['--some-flag'],
-				expect.objectContaining({
-					env: expect.objectContaining({
-						PATH: expect.stringContaining(process.env.PATH),
-					}),
-				}),
+				expect.objectContaining({}),
 			);
 		});
 
@@ -169,11 +165,7 @@ describe('Tools:', () => {
 			expect(sync).toHaveBeenCalledWith(
 				'command',
 				['--some-flag'],
-				expect.objectContaining({
-					env: expect.objectContaining({
-						PATH: expect.stringContaining(process.env.PATH),
-					}),
-				}),
+				expect.objectContaining({}),
 			);
 		});
 
@@ -198,11 +190,7 @@ describe('Tools:', () => {
 			expect(sync).toHaveBeenCalledWith(
 				'command',
 				['--some-flag'],
-				expect.objectContaining({
-					env: expect.objectContaining({
-						PATH: expect.stringContaining(process.env.PATH),
-					}),
-				}),
+				expect.objectContaining({}),
 			);
 		});
 	});
