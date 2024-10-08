@@ -1,6 +1,11 @@
 // @ts-check
 
-const { formatters, linters, runCommand } = require('../../lib/tools');
+const {
+	runFormatter,
+	linters,
+	runCommand,
+	FORMATTER_PROMPT,
+} = require('../../lib/tools');
 
 /** @type {import('../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -191,18 +196,7 @@ module.exports = {
 			tpsType: 'package',
 			default: false,
 		},
-		{
-			name: 'formatter',
-			aliases: ['format'],
-			description:
-				'Type of formatter you would like to use to format the component',
-			message: 'What type of formatter do you want to use to format your code',
-			type: 'list',
-			tpsType: 'data',
-			hidden: true,
-			choices: ['none', 'prettier', 'biome'],
-			default: 'none',
-		},
+		FORMATTER_PROMPT,
 		{
 			name: 'linter',
 			aliases: ['lint'],
@@ -222,16 +216,12 @@ module.exports = {
 
 			const answers = tps.getAnswers();
 
-			const formatter = formatters[answers.formatter] ?? null;
-
-			if (formatter) {
-				runCommand(formatter, directoryForPrettier);
-			}
+			runFormatter(answers.formatter, dest, directoryForPrettier, tps);
 
 			const linter = linters[answers.linter] ?? null;
 
 			if (linter) {
-				runCommand(linter, directoryForPrettier);
+				runCommand(linter, dest, directoryForPrettier);
 			}
 		},
 	},

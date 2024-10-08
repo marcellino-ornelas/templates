@@ -1,4 +1,5 @@
 // @ts-check
+const { runFormatter, FORMATTER_PROMPT } = require('../../lib/tools');
 
 /** @type {import('./../../src/types/settings').SettingsFile} */
 module.exports = {
@@ -50,5 +51,15 @@ module.exports = {
 			message: 'Please add a description',
 			default: '...',
 		},
+		FORMATTER_PROMPT,
 	],
+	events: {
+		async onRendered(tps, { dest, buildPaths }) {
+			const directoryForPrettier = tps.opts.newFolder ? buildPaths : [dest];
+
+			const answers = tps.getAnswers();
+
+			runFormatter(answers.formatter, dest, directoryForPrettier, tps);
+		},
+	},
 };

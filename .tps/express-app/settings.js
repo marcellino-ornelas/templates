@@ -33,14 +33,14 @@ module.exports = {
 		},
 	],
 	events: {
-		onRendered(tps, { buildPaths }) {
+		onRendered(tps, { dest, buildPaths }) {
 			const answers = tps.getAnswers();
 
 			const pm = packageManagers[answers.packageManager];
 
 			buildPaths.forEach((path) => {
 				// TODO: if someone runs with multiple build paths it will display two "Running npm install"
-				runCommand(pm, [path]);
+				runCommand(pm, dest, [path], tps);
 			});
 		},
 	},
