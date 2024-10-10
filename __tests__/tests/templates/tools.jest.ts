@@ -3,7 +3,6 @@
  */
 import { mkTemplate } from '@test/utilities/templates';
 import { CWD, MAIN_DIR } from '@tps/utilities/constants';
-import Templates from '@tps/templates';
 import { OutputProcessor, runCommand, runFormatter } from '@tps/tools';
 import { reset, vol } from '@test/utilities/vol';
 import path from 'path';
@@ -34,13 +33,7 @@ describe('Tools:', () => {
 
 	describe('runCommand', () => {
 		it('should be able to run a command', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -52,13 +45,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include templates main directory .bin in PATH', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -76,17 +63,11 @@ describe('Tools:', () => {
 		});
 
 		it('should include dest .bin in PATH', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
 			await vol.promises.mkdir(path.join(CWD, 'node_modules'), {
 				recursive: true,
 			});
 
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -102,13 +83,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include node modules from parent directory from CWD in PATH', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			await vol.promises.mkdir('/some/random/directory/inner', {
 				recursive: true,
@@ -139,13 +114,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include template directory in PATH', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -163,13 +132,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include all bins from $PATH', async () => {
-			const templateName = 'run-comand';
-
-			mkTemplate(templateName);
-
-			const tps = new Templates(templateName, {
-				default: true,
-			});
+			const tps = mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
