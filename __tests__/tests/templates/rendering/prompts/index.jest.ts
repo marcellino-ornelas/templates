@@ -2,7 +2,6 @@
  * Modules
  */
 import { mkTemplate } from '@test/utilities/templates';
-import Templates from '@tps/templates';
 import { CWD } from '@tps/utilities/constants';
 import { reset } from '@test/utilities/vol';
 import path from 'path';
