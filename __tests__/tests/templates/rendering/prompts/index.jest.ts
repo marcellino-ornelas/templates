@@ -16,13 +16,9 @@ describe('Index', () => {
 	});
 
 	it('should be able to use a template with no prompts', async () => {
-		const templateName = 'index';
-
-		mkTemplate(templateName, undefined, {
+		const tps = mkTemplate('index', undefined, {
 			'./settings.json': JSON.stringify({}),
 		});
-
-		const tps = new Templates(templateName);
 
 		await tps.render(CWD, 'App');
 
@@ -31,15 +27,11 @@ describe('Index', () => {
 	});
 
 	it('should be able to use a template with empty prompts', async () => {
-		const templateName = 'index';
-
-		mkTemplate(templateName, undefined, {
+		const tps = mkTemplate('index', undefined, {
 			'./settings.json': JSON.stringify({
 				prompts: [],
 			}),
 		});
-
-		const tps = new Templates(templateName);
 
 		await tps.render(CWD, 'App');
 
