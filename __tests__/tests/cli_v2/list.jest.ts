@@ -205,7 +205,7 @@ describe('Command Line: list', () => {
 		await parser.parseAsync(['list']);
 	});
 
-	it.only.each([
+	it.each([
 		...Templates.tpsrcConfigNames.map((name) => {
 			return {
 				name,
