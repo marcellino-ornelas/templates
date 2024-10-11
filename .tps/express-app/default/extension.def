@@ -1,0 +1,1 @@
+{{= tps.answers.typescript ? 'ts' : 'js'}}

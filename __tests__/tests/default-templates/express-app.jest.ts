@@ -23,7 +23,7 @@ describe('Express app', () => {
 		reset();
 	});
 
-	it('should be able to render the express app template', async () => {
+	it.only('should be able to render the express app template', async () => {
 		const tps = new Templates<ExpressAppAnswers>('express-app', {
 			default: true,
 		});

@@ -23,6 +23,15 @@ module.exports = {
 			default: 'npm',
 		},
 		{
+			name: 'typescript',
+			description: 'Generate the component in TypeScript',
+			aliases: ['t'],
+			type: 'confirm',
+			tpsType: 'data',
+			message: 'Would you like to use typescript',
+			default: false,
+		},
+		{
 			name: 'api',
 			aliases: ['a'],
 			description: 'Adds a API route to the app',

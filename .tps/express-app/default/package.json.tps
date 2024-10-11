@@ -3,11 +3,22 @@
 	"version": "1.0.0",
 	"description": "",
 	"type": "module",
+	{{{? tps.answers.typescript }}}
 	"main": "src/app.js",
+	{{{??}}}
+	"main": "src/app.js",
+	{{{?}}}
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"start:dev": "nodemon src/app.js",
-		"start": "node src/app.js"
+		{{{? tps.answers.typescript }}}
+		"start": "node dist/app.js",
+		"build": "tsc",
+		"dev": "tsc && nodemon dist/app.js",
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts"
+		{{{??}}}
+		"start": "node src/app.js",
+		"dev": "nodemon src/app.js"
+		{{{?}}}
 	},
 	"keywords": [],
 	"author": "",
@@ -26,6 +37,11 @@
 		"winston": "^3.14.2"
 	},
 	"devDependencies": {
+		{{{? tps.answers.typescript }}}
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.7.5",
+		"typescript": "^5.6.3",
+		{{{?}}}
 		"nodemon": "^3.1.7"
 	}
 }
