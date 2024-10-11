@@ -4,7 +4,7 @@
 	"description": "",
 	"type": "module",
 	{{{? tps.answers.typescript }}}
-	"main": "src/app.js",
+	"main": "dist/app.js",
 	{{{??}}}
 	"main": "src/app.js",
 	{{{?}}}

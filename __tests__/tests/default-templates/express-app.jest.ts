@@ -6,11 +6,13 @@ import { CWD } from '@tps/utilities/constants';
 import { reset } from '@test/utilities/vol';
 import path from 'path';
 import { sync } from 'cross-spawn';
+// import { mockConsoleLog } from '@test/utilities/mocks';
 
 interface ExpressAppAnswers {
 	port: string | number;
 	packageManager?: 'npm' | 'yarn';
 	api?: boolean;
+	typescript: true;
 }
 
 jest.mock('fs');
@@ -19,11 +21,12 @@ jest.mock('cross-spawn');
 
 describe('Express app', () => {
 	beforeEach(() => {
+		// mockConsoleLog();
 		jest.resetAllMocks();
 		reset();
 	});
 
-	it.only('should be able to render the express app template', async () => {
+	it('should be able to render the express app template', async () => {
 		const tps = new Templates<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
@@ -32,6 +35,49 @@ describe('Express app', () => {
 
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'app')).toBeDirectory();
+	});
+
+	it('should use javascript files by default', async () => {
+		const tps = new Templates<ExpressAppAnswers>('express-app', {
+			default: true,
+		});
+
+		await tps.render(CWD, 'app');
+
+		const jsFiles = [
+			path.join(CWD, 'app/src/app.js'),
+			path.join(CWD, 'app/src/middlewares/error-handler.js'),
+			path.join(CWD, 'app/src/config/constrants.js'),
+			path.join(CWD, 'app/src/routes/index.js'),
+		];
+
+		jsFiles.forEach((file) => {
+			// @ts-expect-error no types for extending jest functions
+			expect(file).toBeFile();
+		});
+	});
+
+	it('should use npm scripts to support javascript', async () => {
+		const tps = new Templates<ExpressAppAnswers>('express-app', {
+			default: true,
+		});
+
+		await tps.render(CWD, 'app');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
+			'"main": "src/app.js",',
+		);
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
+			`\
+	"scripts": {
+		"test": "echo \\"Error: no test specified\\" && exit 1",
+		"start": "node src/app.js",
+		"dev": "nodemon src/app.js"
+	},`,
+		);
 	});
 
 	describe('port', () => {
@@ -179,6 +225,37 @@ app.use('/', router);
 				'yarn',
 				['install', '--cwd', path.join(CWD, 'app')],
 				expect.objectContaining({}),
+			);
+		});
+	});
+
+	describe('typescript', () => {
+		it('should use npm scripts to support javascript', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
+				'"main": "dist/app.js",',
+			);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
+				`\
+	"scripts": {
+		"test": "echo \\"Error: no test specified\\" && exit 1",
+		"start": "node dist/app.js",
+		"build": "tsc",
+		"dev": "tsc && nodemon dist/app.js",
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts"
+	},`,
 			);
 		});
 	});
