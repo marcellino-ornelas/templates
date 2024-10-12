@@ -27,7 +27,7 @@ module.exports = {
 			description: 'Generate the component in TypeScript',
 			aliases: ['t'],
 			type: 'confirm',
-			tpsType: 'data',
+			tpsType: 'package',
 			message: 'Would you like to use typescript',
 			default: false,
 		},

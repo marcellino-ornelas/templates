@@ -14,7 +14,7 @@
 		"start": "node dist/app.js",
 		"build": "tsc",
 		"dev": "tsc && nodemon dist/app.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts"
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/app.ts"
 		{{{??}}}
 		"start": "node src/app.js",
 		"dev": "nodemon src/app.js"
@@ -38,9 +38,14 @@
 	},
 	"devDependencies": {
 		{{{? tps.answers.typescript }}}
+		"@types/compression": "^1.7.5",
+		"@types/cookie-parser": "^1.4.7",
+		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
+		"@types/morgan": "^1.9.9",
 		"@types/node": "^22.7.5",
 		"typescript": "^5.6.3",
+		"ts-node": "^10.9.2",
 		{{{?}}}
 		"nodemon": "^3.1.7"
 	}

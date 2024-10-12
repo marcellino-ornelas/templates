@@ -1,14 +1,15 @@
 {
 	"compilerOptions": {
-	  "target": "ES6",                         // Target modern JavaScript
-	  "module": "CommonJS",                     // For Node.js compatibility
-	  "strict": true,                           // Enable strict type checking
-	  "esModuleInterop": true,                  // Ensures compatibility with CommonJS modules
-	  "skipLibCheck": true,                     // Skip type checking for libraries
-	  "forceConsistentCasingInFileNames": true, // Enforce file name casing consistency
-	  "outDir": "./dist",                       // Output directory for compiled JavaScript
-	  "rootDir": "./src"                        // Root directory of the source files
+		"module": "ESNext",
+    	"target": "ES2020",
+    	"moduleResolution": "node",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"outDir": "./dist",
+		"rootDir": "./src"
 	},
-	"include": ["src/**/*"],                    // Include all files in src
-	"exclude": ["node_modules", "**/*.test.ts"] // Exclude node_modules and test files
-  }
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "**/*.test.ts"]
+}
