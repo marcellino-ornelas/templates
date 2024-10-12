@@ -44,17 +44,13 @@ describe('Express app', () => {
 
 		await tps.render(CWD, 'app');
 
-		const jsFiles = [
-			path.join(CWD, 'app/src/app.js'),
-			path.join(CWD, 'app/src/middlewares/error-handler.js'),
-			path.join(CWD, 'app/src/config/constrants.js'),
-			path.join(CWD, 'app/src/routes/index.js'),
-		];
-
-		jsFiles.forEach((file) => {
-			// @ts-expect-error no types for extending jest functions
-			expect(file).toBeFile();
-		});
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app')).toHaveAllFilesAndDirectories([
+			'./src/app.js',
+			'./src/middlewares/error-handler.js',
+			'./src/config/constrants.js',
+			'./src/routes/index.js',
+		]);
 	});
 
 	it('should use npm scripts to support javascript', async () => {
@@ -230,7 +226,25 @@ app.use('/', router);
 	});
 
 	describe('typescript', () => {
-		it('should use npm scripts to support javascript', async () => {
+		it('should use typescript files when enabled', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({ typescript: true });
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app')).toHaveAllFilesAndDirectories([
+				'./src/app.ts',
+				'./src/middlewares/error-handler.ts',
+				'./src/config/constrants.ts',
+				'./src/routes/index.ts',
+			]);
+		});
+
+		it('should use npm scripts to support typescript', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
@@ -254,7 +268,7 @@ app.use('/', router);
 		"start": "node dist/app.js",
 		"build": "tsc",
 		"dev": "tsc && nodemon dist/app.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app.ts"
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/app.ts"
 	},`,
 			);
 		});
