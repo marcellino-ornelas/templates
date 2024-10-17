@@ -235,6 +235,7 @@ app.use('/', router);
 
 			await tps.render(CWD, 'app');
 
+			// TODO: should have no .js files
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'app')).toHaveAllFilesAndDirectories([
 				'./src/app.ts',
@@ -271,6 +272,46 @@ app.use('/', router);
 		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/app.ts"
 	},`,
 			);
+		});
+
+		it('should add correct types to express functions', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			expect(path.join(CWD, 'app/src/middlewares/error-handler.ts'))
+				// @ts-expect-error no types for extending jest functions
+				.toHaveFileContents(
+					`\
+import type { Request, Response, NextFunction } from 'express';
+import type { HttpError } from 'http-errors';
+
+// 404 handler
+export const notFoundHandler = (req: Request, res: Response, next: NextFunction): void => {
+	res.status(404).json({ error: 'Route not found' });
+};
+
+// Global error handler
+export const errorHandler = (err: HttpError, req: Request, res: Response, next: NextFunction): void => {`,
+				);
+
+			expect(path.join(CWD, 'app/src/routes/index.ts'))
+				// @ts-expect-error no types for extending jest functions
+				.toHaveFileContents(
+					`\
+import express, { Request, Response, NextFunction } from 'express';
+
+const router = express.Router();
+
+// Web route for the homepage
+router.get('/', (req: Request, res: Response) => {`,
+				);
 		});
 	});
 });
