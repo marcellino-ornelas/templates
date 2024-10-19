@@ -14,6 +14,7 @@ import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Button } from '@site/docs/components/button';
+import { Badge, VersionBadge, BadgeList } from '@site/docs/components/badges';
 import { Icon } from '@iconify/react';
 import ReactComponentTemplateGif from './react-component.gif';
 
@@ -66,13 +67,13 @@ import ReactComponentTemplateGif from './react-component.gif';
         <Icon icon="logos:prettier" width="25px" className="margin-right--xs" />
         <Icon icon="devicon:biome" width="25px" className="margin-right--xs" />
 
-        <span>Automatic Formatting<span className="badge badge--success margin-left--sm">Beta</span></span>
+        <span>Automatic Formatting<Badge className="margin-left--sm" type="success">Beta</Badge></span>
     </div>
      <div className="col col--6 display--flex align-items--center margin-bottom--xs">
         <Icon icon="logos:eslint" width="25px" className="margin-right--xs" />
         <Icon icon="devicon:biome" width="25px" className="margin-right--xs" />
 
-        <span>Automatic Lint Fixing<span className="badge badge--success margin-left--sm">Beta</span> </span>
+        <span>Automatic Lint Fixing<Badge className="margin-left--sm" type="success">Beta</Badge></span>
     </div>
 
 </div>
@@ -810,8 +811,9 @@ export default Nav;
 
 ### Formatting (beta)
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-bottom--md">templates@>v1.2.1</span>
+<BadgeList>
+    <VersionBadge version=">=v1.2.1" />
+</BadgeList>
 
 By default, this template does not automatically run any formatters (e.g.,
 [Prettier](https://prettier.io/)). However, you can enable automatic formatting
@@ -875,8 +877,9 @@ experience.
 
 ### Linting (beta)
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-bottom--md">templates@>v1.2.1</span>
+<BadgeList>
+    <VersionBadge version=">=v1.2.1" />
+</BadgeList>
 
 By default, this template does not automatically run any linters (e.g.,
 [eslint](https://eslint.org/)). However, you can enable lint fixing by using the

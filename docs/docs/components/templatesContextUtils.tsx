@@ -4,6 +4,7 @@ import CodeBlock from '@docusaurus/theme-live-codeblock/lib/theme/CodeBlock';
 import { Example } from '@site/docs/components/example';
 import Heading from '@theme/Heading';
 import * as infection from 'inflection';
+import { BadgeList, Badge } from './badges';
 
 const INFLECTION_URL = 'https://github.com/dreamerslab/node.inflection';
 const CHANGE_CASE_URL = 'https://github.com/blakeembrey/change-case';
@@ -123,16 +124,16 @@ export const TemplatesContextUtils = () => {
 					<Heading id={name} as="h2">
 						{name}
 					</Heading>
-					<p>
-						<span className="badge badge--primary margin-left--xs">
+					<BadgeList>
+						<Badge>
 							<a
 								href={isInfection(name) ? INFLECTION_URL : CHANGE_CASE_URL}
 								style={{ color: 'inherit' }}
 							>
 								{isInfection(name) ? 'inflection' : 'change-case'}
 							</a>
-						</span>
-						<span className="badge badge--secondary margin-left--xs">
+						</Badge>
+						<Badge type="secondary">
 							<a
 								href={
 									isInfection(name) ? infectionLink(name) : changeCaseLink(name)
@@ -140,8 +141,8 @@ export const TemplatesContextUtils = () => {
 							>
 								docs
 							</a>
-						</span>
-					</p>
+						</Badge>
+					</BadgeList>
 					<CodeBlock language="jsx" metastring="title='Usage'">
 						{`{{= tps.utils.${name}(${(
 							overrideExample[name]?.params || ['str']

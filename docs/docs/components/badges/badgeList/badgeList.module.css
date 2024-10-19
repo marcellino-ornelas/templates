@@ -1,0 +1,9 @@
+.badgeList {
+	display: flex;
+	margin-bottom: var(--ifm-leading);
+}
+
+.badgeListItem {
+	/* display: inline-block; */
+	margin-right: 7px;
+}
