@@ -193,5 +193,59 @@ following command to start the app:
 npm run start
 
 # dev mode with nodemon
-npm start:dev
+npm run dev
+```
+
+### Typescript
+
+Use the `typescript` option to create a express app in typescript. This option
+will change all `js` extensions to `ts`, add a `tsconfig.json` file, add some
+types to various areas of the codebase, and modify the `package.json` to support
+typescript.
+
+**Example:**
+
+If you're building a new Express app for a restaurant called `chickens-burgers`,
+you would run the following command:
+
+```bash
+tps express-app chickens-burgers --typescript
+
+# if you want this directory in say a directory called projects, then run the following command
+tps express-app ./project/chickens-burgers --typescript
+```
+
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your Express app, and install the required
+packages using your preferred package manager.
+
+```txt
+|- funny-gifs/
+    | node_modules/
+        | - all libraries node modules...
+    | - src
+        | - config/
+            | - constrants.ts
+        | - middlewares/
+            | - error-handler.ts
+        | - routes
+            | - index.ts
+        | app.ts
+    | - .env
+    | - package.json
+    | - package-lock.json
+    | - tsconfig.json
+```
+
+Once your template is created, you can cd into the directory and run the
+following command to start the app:
+
+```bash
+npm run build && npm run start
+
+# Dev mode with nodemon
+npm run dev
+
+# Use serve if you want to run with ts-node
+npm run serve
 ```
