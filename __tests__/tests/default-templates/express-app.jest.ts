@@ -6,7 +6,6 @@ import { CWD } from '@tps/utilities/constants';
 import { reset } from '@test/utilities/vol';
 import path from 'path';
 import { sync } from 'cross-spawn';
-// import { mockConsoleLog } from '@test/utilities/mocks';
 
 interface ExpressAppAnswers {
 	port: string | number;
