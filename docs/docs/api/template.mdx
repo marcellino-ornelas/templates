@@ -5,6 +5,7 @@ sidebar_position: 2
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
 
 # Template
 
@@ -488,8 +489,9 @@ Notice how this no longer creates a `app` directory.
 
 ### Hidden
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs margin-bottom--lg">templates@>v1.1.1</span>
+<BadgeList>
+    <VersionBadge version=">=v1.1.1" />
+</BadgeList>
 
 ```ts title="Type"
 boolean;
