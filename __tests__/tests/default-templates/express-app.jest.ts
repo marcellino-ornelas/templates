@@ -272,6 +272,34 @@ app.use('/', router);
 			);
 		});
 
+		it('should use correct npm packages to support typescript', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			const checks = [
+				'@types/compression',
+				'@types/cookie-parser',
+				'@types/cors',
+				'@types/express',
+				'@types/morgan',
+				'@types/node',
+				'typescript',
+				'ts-node',
+			];
+
+			checks.forEach((check) => {
+				// @ts-expect-error no types for extending jest functions
+				expect(path.join(CWD, 'app/package.json')).toHaveFileContents(check);
+			});
+		});
+
 		it('should add correct types to express functions', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
