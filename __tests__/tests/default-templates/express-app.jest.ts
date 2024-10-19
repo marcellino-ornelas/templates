@@ -20,7 +20,6 @@ jest.mock('cross-spawn');
 
 describe('Express app', () => {
 	beforeEach(() => {
-		// mockConsoleLog();
 		jest.resetAllMocks();
 		reset();
 	});
