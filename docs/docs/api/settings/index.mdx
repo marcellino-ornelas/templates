@@ -1,11 +1,13 @@
 import { Example } from '@site/docs/components/example';
+import { BadgeList, VersionBadge } from '@site/docs/components/badges';
 
 # Settings File
 
 ## Opts
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs margin-bottom--lg">templates@v1.0.21</span>
+<BadgeList>
+    <VersionBadge version=">=v1.0.21" />
+</BadgeList>
 
 ```ts title="Type"
 TemplateOptions;

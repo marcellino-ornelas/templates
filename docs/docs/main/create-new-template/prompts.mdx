@@ -8,6 +8,7 @@ import { Example } from '@site/docs/components/example';
 import { Dot } from '@site/docs/components/dot';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { BadgeList, VersionBadge } from '@site/docs/components/badges';
 
 # Prompting
 
@@ -641,8 +642,9 @@ tps.setAnswers({ f: 'react' });
 
 ### Hidden
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs margin-bottom--lg">templates@>v1.1.1</span>
+<BadgeList>
+    <VersionBadge version=">=v1.1.1" />
+</BadgeList>
 
 The `hidden` option makes the prompt a hidden prompt. Hidden prompts do not get
 prompted by default. This is useful when you want to add more customizable logic

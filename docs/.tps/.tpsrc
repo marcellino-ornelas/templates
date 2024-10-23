@@ -1,0 +1,14 @@
+{
+	"react-component": {
+		"answers": {
+			"typescript": true,
+			"functionStyle": "arrow",
+			"extension": "tsx",
+			"cssExtension": "module.css",
+			"test": false,
+			"index": true,
+			"formatter": "prettier",
+			"export": "named"
+		}
+	}
+}

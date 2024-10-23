@@ -2,15 +2,13 @@ import { TemplateOptions } from '@site/docs/components/templateOptions';
 import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { VersionBadge, BadgeList } from '@site/docs/components/badges';
 
 # yargs-cli-cmd
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs">templates@>v1.0.19</span>
-
-<br />
-
-<br />
+<BadgeList>
+    <VersionBadge version=">=v1.0.19" />
+</BadgeList>
 
 Create a yargs cli command module using
 [ESM syntax](https://github.com/yargs/yargs/blob/main/docs/advanced.md#example-command-hierarchy-using-indexmjs).

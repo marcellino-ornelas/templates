@@ -15,17 +15,14 @@ import { Example } from '@site/docs/components/example';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import { Button } from '@site/docs/components/button';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
 
 # express-app
 
-<span className="badge badge--success margin-left--sm">alpha</span>
-
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs">templates@>=v1.2.3</span>
-
-<br />
-
-<br />
+<BadgeList>
+    <Badge type="success">alpha</Badge>
+    <VersionBadge version=">=v1.2.3" />
+</BadgeList>
 
 Create a fully functional Express app using ESM modules.
 
@@ -198,11 +195,9 @@ npm run dev
 
 ### Typescript
 
-{/* prettier-ignore */}
-<span className="badge badge--secondary margin-left--xs">templates@>=v1.2.5</span>
-
-<br />
-<br />
+<BadgeList>
+    <VersionBadge version=">=v1.2.5" />
+</BadgeList>
 
 Use the `typescript` option to create a express app in typescript. This option
 will change all `js` extensions to `ts`, add a `tsconfig.json` file, add some
