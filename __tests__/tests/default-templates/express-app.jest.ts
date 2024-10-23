@@ -203,7 +203,7 @@ app.use('/', router);
 			);
 		});
 
-		it('should use correct gitignore file for lock file when npm', async () => {
+		it('should use correct .gitignore file for lock file when npm', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
@@ -241,7 +241,7 @@ app.use('/', router);
 			);
 		});
 
-		it('should use correct gitignore file for lock file when yarn', async () => {
+		it('should use correct .gitignore file for lock file when yarn', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
