@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Badge } from '@site/docs/components/badges/badge';
 
 interface VersionBadgeProps {
