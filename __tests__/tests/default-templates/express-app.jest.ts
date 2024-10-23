@@ -203,6 +203,25 @@ app.use('/', router);
 			);
 		});
 
+		it('should use correct .gitignore file for lock file when npm', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({ packageManager: 'npm' });
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.gitignore')).toHaveFileContents(
+				'package-lock.json',
+			);
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.gitignore')).not.toHaveFileContents(
+				'yarn.lock',
+			);
+		});
+
 		it('should be able to render the express app template with yarn', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
 				default: true,
@@ -219,6 +238,24 @@ app.use('/', router);
 				'yarn',
 				['install', '--cwd', path.join(CWD, 'app')],
 				expect.objectContaining({}),
+			);
+		});
+
+		it('should use correct .gitignore file for lock file when yarn', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({ packageManager: 'yarn' });
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.gitignore')).toHaveFileContents('yarn.lock');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/.gitignore')).not.toHaveFileContents(
+				'package-lock.json',
 			);
 		});
 	});
