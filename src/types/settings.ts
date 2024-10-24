@@ -31,20 +31,58 @@ export interface PromptChoiceObject {
 export type PromptChoice = string | PromptChoiceObject;
 
 export interface SettingsFilePrompt {
+	/**
+	 * Name of your prompt.
+	 */
 	name: string;
-
+	/**
+	 * Message that will be shown to users when generating a new instance.
+	 */
 	message: string;
-
+	/**
+	 * Prompt description.
+	 *
+	 * This description will be used on the templates options table for
+	 * the template and in the on the cli when `--help` is used.
+	 */
 	description?: string;
-
+	/**
+	 * Behavior of prompt.
+	 *
+	 * @link https://marcellino-ornelas.github.io/templates/docs/main/create-new-template/prompts#tps-type
+	 */
 	tpsType: keyof typeof SettingsFilePromptTpsType;
-
+	/**
+	 * Type of inquirer prompt you would like to use
+	 *
+	 * @link https://github.com/SBoudrias/Inquirer.js/tree/v6.0.0
+	 */
 	type: keyof typeof SettingsFilePromptType;
-
+	/**
+	 * Choices for your prompt.
+	 *
+	 * Only needed for prompts of type `list`, `rawlist` or `checkbox`
+	 */
 	choices?: PromptChoice[];
-
+	/**
+	 * Makes this prompt a hidden prompt.
+	 *
+	 * Hidden prompts dont get prompted to users by default but can
+	 * still be answered via a confiuration file or on the cli
+	 *
+	 * @version templates@>v1.1.1
+	 */
 	hidden?: boolean;
-
+	/**
+	 * Prompt aliases
+	 *
+	 * @example
+	 * 	{
+	 * 		name: 'example',
+	 * 		aliases: ['e', 'ex'],
+	 * 		// other options...
+	 * 	}
+	 */
 	aliases?: string[];
 
 	pageSize?: number;
@@ -52,7 +90,9 @@ export interface SettingsFilePrompt {
 	prefix?: string;
 
 	suffix?: string;
-
+	/**
+	 * Default value for this prompt
+	 */
 	default?:
 		| string
 		| number
@@ -66,7 +106,9 @@ export interface SettingsFilePrompt {
 	filter?: (input: string) => Promise<string> | string;
 
 	transformer?: (input: string) => string | Promise<string>;
-
+	/**
+	 * Prompts user prompt when this function returns true
+	 */
 	when?: boolean | WhenFn;
 }
 
