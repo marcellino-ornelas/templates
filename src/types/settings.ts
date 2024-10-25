@@ -43,7 +43,7 @@ export interface SettingsFilePrompt {
 	 * Prompt description.
 	 *
 	 * This description will be used on the templates options table for
-	 * the template and in the on the cli when `--help` is used.
+	 * the template and on the cli when `--help` is used.
 	 */
 	description?: string;
 	/**
