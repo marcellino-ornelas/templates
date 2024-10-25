@@ -149,11 +149,6 @@ module.exports = {
 			await tps.render(CWD, 'example');
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(
-				'module.exports = {',
-			);
-
-			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, `example/settings.js`)).not.toHaveFileContents(`\
 // @ts-check
 
@@ -163,6 +158,25 @@ module.exports = {
 			expect(path.join(CWD, `example/settings.js`)).not.toHaveFileContents(`\
 	events: {
 `);
+		});
+	});
+
+	describe('websiteUrl.def', () => {
+		it('should be able to render url', async () => {
+			const tps = new Templates<TemplateAnswers>('new-template', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				annotate: true,
+			});
+
+			await tps.render(CWD, 'example');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(
+				'https://marcellino-ornelas.github.io/templates/docs/main/create-new-template/prompts',
+			);
 		});
 	});
 });
