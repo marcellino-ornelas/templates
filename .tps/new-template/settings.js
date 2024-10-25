@@ -4,16 +4,6 @@
 module.exports = {
 	prompts: [
 		{
-			name: 'annotate',
-			type: 'confirm',
-			tpsType: 'data',
-			message:
-				'Do you want to include helpful comments to help you get started?',
-			description:
-				'Generates more verbose comments in the output to help users get started',
-			default: true,
-		},
-		{
 			name: 'type',
 			type: 'list',
 			tpsType: 'package',
@@ -22,6 +12,17 @@ module.exports = {
 			choices: ['js', 'json'],
 			hidden: true,
 			default: 'js',
+		},
+		{
+			name: 'annotate',
+			type: 'confirm',
+			tpsType: 'data',
+			message:
+				'Do you want to include helpful comments to help you get started?',
+			description:
+				'Generates more verbose comments in the output to help users get started',
+			when: (answers) => answers.type === 'js',
+			default: true,
 		},
 		{
 			name: 'experimental',
@@ -33,5 +34,4 @@ module.exports = {
 			default: false,
 		},
 	],
-	events: {},
 };
