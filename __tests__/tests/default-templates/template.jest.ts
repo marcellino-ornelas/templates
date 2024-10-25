@@ -105,6 +105,13 @@ module.exports = {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(`\
+// @ts-check
+
+/** @type {import('templates-mo/lib/types/settings').SettingsFile} */
+`);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(`\
 	*/
 	events: {
 `);
@@ -124,14 +131,7 @@ module.exports = {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(`\
-// @ts-check
-
-/** @type {import('templates-mo/lib/types/settings').SettingsFile} */
-module.exports = {
-`);
-
-			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, `example/settings.js`)).toHaveFileContents(`\
+	prompts: [],
 	events: {
 		// async onRender(tps) {},
 `);
