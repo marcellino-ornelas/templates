@@ -55,6 +55,7 @@ describe('Template', () => {
 
 			tps.setAnswers({
 				annotate: true,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
@@ -79,6 +80,7 @@ module.exports = {
 
 			tps.setAnswers({
 				annotate: false,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
@@ -99,6 +101,7 @@ module.exports = {
 
 			tps.setAnswers({
 				experimental: true,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
@@ -125,6 +128,7 @@ module.exports = {
 			tps.setAnswers({
 				experimental: true,
 				annotate: false,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
@@ -144,6 +148,7 @@ module.exports = {
 
 			tps.setAnswers({
 				experimental: false,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
@@ -169,6 +174,7 @@ module.exports = {
 
 			tps.setAnswers({
 				annotate: true,
+				type: 'js',
 			});
 
 			await tps.render(CWD, 'example');
