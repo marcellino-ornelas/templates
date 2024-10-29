@@ -3,6 +3,7 @@ import Template from '@tps/templates';
 import * as TPS from '@tps/utilities/constants';
 import { isDir } from '@tps/utilities/fileSystem';
 import { CommandModule } from 'yargs';
+import { getCliArgsFromTemplate } from '@tps/cli/utils/helpers';
 
 interface NewTemplateArgv {
 	template: string;
@@ -13,7 +14,13 @@ export default {
 
 	description: 'create a new template',
 
-	builder: {},
+	builder: (yargs) => {
+		const options = getCliArgsFromTemplate('new-template');
+
+		yargs.options(options);
+
+		return yargs;
+	},
 
 	handler(argv) {
 		const tps = new Template('new-template', {

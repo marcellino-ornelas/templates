@@ -11,7 +11,7 @@ module.exports = {
 			description: 'Type of settings file you want generated',
 			choices: ['js', 'json'],
 			hidden: true,
-			default: 'js',
+			default: 'json',
 		},
 		{
 			name: 'annotate',

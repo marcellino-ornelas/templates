@@ -1,10 +1,10 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
 import Template from '@tps/templates';
-import { sentenceCase } from '@tps/templates/utils';
 import type { TemplateOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
+import { getCliArgsFromTemplate } from './helpers';
 
 export interface UseArgv {
 	use: string;
@@ -61,47 +61,9 @@ export const options = (yargs) => {
 
 	if (!template) return yargs;
 
-	const tps = new Template(template);
+	const templateOptions = getCliArgsFromTemplate(template);
 
-	// eslint-disable-next-line no-underscore-dangle
-	if (!tps?._prompts) return yargs;
-
-	// eslint-disable-next-line no-underscore-dangle
-	const templateOptions = tps._prompts.prompts.map((prompt) => {
-		const type = ((): string => {
-			switch (prompt.type ?? 'input') {
-				case 'confirm':
-					return 'boolean';
-				case 'input':
-				case 'list':
-				case 'rawlist':
-				case 'password':
-					return 'string';
-				case 'checkbox':
-					return 'array';
-				default:
-					throw new Error(`Unsupported type: ${prompt.type}`);
-			}
-		})();
-
-		return {
-			describe: prompt.description,
-			type,
-			name: prompt.name,
-			alias: prompt.aliases,
-			...(prompt?.choices && { choices: prompt.choices }),
-			// TODO: Will need to strip `tps-` prefix off of third party templates
-			group: `${sentenceCase(tps.template)}:`,
-			demandOption: false,
-		};
-	});
-
-	const templateOptionsMap = templateOptions?.reduce((acc, next) => {
-		acc[next.name] = next;
-		return acc;
-	}, {});
-
-	yargs.options(templateOptionsMap);
+	yargs.options(templateOptions);
 
 	return yargs;
 };
