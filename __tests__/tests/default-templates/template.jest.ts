@@ -91,6 +91,44 @@ module.exports = {
 	prompts: [],
 `);
 		});
+
+		it('should be able to render annotations in a json file', async () => {
+			const tps = new Templates<TemplateAnswers>('new-template', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				annotate: true,
+				type: 'json',
+			});
+
+			await tps.render(CWD, 'example');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, `example/settings.json`)).toHaveFileContents(`\
+	"prompts": [
+		{
+			"name": "example",
+`);
+		});
+
+		it('should be able to not render annotations in a json file', async () => {
+			const tps = new Templates<TemplateAnswers>('new-template', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				annotate: false,
+				type: 'json',
+			});
+
+			await tps.render(CWD, 'example');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, `example/settings.json`)).toHaveFileContents(`\
+	"prompts": []
+`);
+		});
 	});
 
 	describe('experimental', () => {

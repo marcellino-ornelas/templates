@@ -18,10 +18,9 @@ module.exports = {
 			type: 'confirm',
 			tpsType: 'data',
 			message:
-				'Do you want to include helpful comments to help you get started?',
+				'Do you want to include helpful comments and examples to help you get started?',
 			description:
-				'Generates more verbose comments in the output to help users get started',
-			when: (answers) => answers.type === 'js',
+				'Generates more verbose comments and examples in the output to help users get started',
 			default: true,
 		},
 		{

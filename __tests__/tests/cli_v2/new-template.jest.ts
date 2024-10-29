@@ -14,7 +14,7 @@ describe('Command Line: new template', () => {
 	it('should be able to create a new template', async () => {
 		const parser = yargs().command(newCommand).fail(false);
 
-		await parser.parseAsync('new template my-template');
+		await parser.parseAsync('new template my-template --annotate');
 
 		// @ts-expect-error not typed yet
 		expect(path.join(CWD, '.tps/my-template')).toBeDirectory();
@@ -29,7 +29,7 @@ describe('Command Line: new template', () => {
 		expect(path.join(CWD, '.tps/my-template')).toBeDirectory();
 
 		await expect(
-			parser.parseAsync('new template my-template'),
+			parser.parseAsync('new template my-template --annotate'),
 		).rejects.toThrowError('TPS template is already created.');
 	});
 
