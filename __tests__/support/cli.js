@@ -50,7 +50,7 @@ export const newTemplate = (cwd, template) => {
 
 	expect(testTemplateDefault).not.toBeDirectory();
 
-	return tpsCli(`new template ${template}`, { cwd }).then(() => {
+	return tpsCli(`new template ${template} --annotate`, { cwd }).then(() => {
 		expect(testTemplateDefault).toBeDirectory();
 		expect(`${testTemplatePath}/settings.json`).toBeFile();
 		expect(gitKeepFile).not.toBeFile();
