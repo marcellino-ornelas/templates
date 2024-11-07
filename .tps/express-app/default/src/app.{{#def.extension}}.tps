@@ -1,4 +1,3 @@
-import 'dotenv/config'; // Load environment variables
 import express from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
@@ -60,11 +59,5 @@ app.use(notFoundHandler);
 
 // Global error handling
 app.use(errorHandler);
-
-// === Start the server ===
-const PORT = process.env.PORT || {{= tps.answers.port }};
-app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`);
-});
 
 export default app;
