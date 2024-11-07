@@ -60,7 +60,7 @@ describe('Express app', () => {
 
 		// @ts-expect-error no types for extending jest functions
 		expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
-			'"main": "src/app.js",',
+			'"main": "src/server.js",',
 		);
 
 		// @ts-expect-error no types for extending jest functions
@@ -68,8 +68,8 @@ describe('Express app', () => {
 			`\
 	"scripts": {
 		"test": "echo \\"Error: no test specified\\" && exit 1",
-		"start": "node src/app.js",
-		"dev": "nodemon src/app.js"
+		"start": "node src/server.js",
+		"dev": "nodemon src/server.js"
 	},`,
 		);
 	});
@@ -93,7 +93,7 @@ describe('Express app', () => {
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+			expect(path.join(CWD, 'app/src/server.js')).toHaveFileContents(
 				'const PORT = process.env.PORT || 5000;',
 			);
 		});
@@ -116,7 +116,7 @@ describe('Express app', () => {
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+			expect(path.join(CWD, 'app/src/server.js')).toHaveFileContents(
 				'const PORT = process.env.PORT || 5000;',
 			);
 		});
@@ -293,7 +293,7 @@ app.use('/', router);
 
 			// @ts-expect-error no types for extending jest functions
 			expect(path.join(CWD, 'app/package.json')).toHaveFileContents(
-				'"main": "dist/app.js",',
+				'"main": "dist/server.js",',
 			);
 
 			// @ts-expect-error no types for extending jest functions
@@ -301,10 +301,10 @@ app.use('/', router);
 				`\
 	"scripts": {
 		"test": "echo \\"Error: no test specified\\" && exit 1",
-		"start": "node dist/app.js",
+		"start": "node dist/server.js",
 		"build": "tsc",
-		"dev": "tsc && nodemon dist/app.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/app.ts"
+		"dev": "tsc && nodemon dist/server.js",
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/server.ts"
 	},`,
 			);
 		});

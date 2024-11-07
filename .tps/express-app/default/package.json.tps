@@ -4,20 +4,20 @@
 	"description": "",
 	"type": "module",
 	{{{? tps.answers.typescript }}}
-	"main": "dist/app.js",
+	"main": "dist/server.js",
 	{{{??}}}
-	"main": "src/app.js",
+	"main": "src/server.js",
 	{{{?}}}
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		{{{? tps.answers.typescript }}}
-		"start": "node dist/app.js",
+		"start": "node dist/server.js",
 		"build": "tsc",
-		"dev": "tsc && nodemon dist/app.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/app.ts"
+		"dev": "tsc && nodemon dist/server.js",
+		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/server.ts"
 		{{{??}}}
-		"start": "node src/app.js",
-		"dev": "nodemon src/app.js"
+		"start": "node src/server.js",
+		"dev": "nodemon src/server.js"
 		{{{?}}}
 	},
 	"keywords": [],
