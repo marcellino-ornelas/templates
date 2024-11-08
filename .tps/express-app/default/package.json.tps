@@ -33,6 +33,9 @@
 		"express-rate-limit": "^7.4.0",
 		"express-validator": "^7.2.0",
 		"helmet": "^7.1.0",
+		{{{? tps.answers.database === 'mongoose' }}}
+		"mongoose": "^8.8.1",
+		{{{?}}}
 		"morgan": "^1.10.0",
 		"winston": "^3.14.2"
 	},
