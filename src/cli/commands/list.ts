@@ -28,7 +28,13 @@ const removeConfigFileNames = (arr: string[]) => {
 	});
 };
 
-export const BANNED_TEMPLATES: string[] = ['init', 'new-template', 'new-test'];
+export const BANNED_TEMPLATES: string[] = [
+	'init',
+	'new-template',
+	'new-test',
+	// Not ready for public use
+	'react-app',
+];
 
 export default {
 	command: ['list', 'ls'],
