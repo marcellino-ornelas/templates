@@ -11,7 +11,8 @@ interface ExpressAppAnswers {
 	port: string | number;
 	packageManager?: 'npm' | 'yarn';
 	api?: boolean;
-	typescript: true;
+	typescript?: boolean;
+	database?: 'none' | 'mongoose';
 }
 
 jest.mock('fs');
@@ -375,6 +376,53 @@ const router = express.Router();
 // Web route for the homepage
 router.get('/', (req: Request, res: Response) => {`,
 				);
+		});
+	});
+
+	describe('database', () => {
+		it('should be able to use no database', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				database: 'none',
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/models')).not.toBeDirectory();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/server.js')).toHaveFileContents(`\
+// === Start the server ===
+app.listen(PORT, () => {
+`);
+		});
+
+		it('should be able to use mongoose database', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				database: 'mongoose',
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/models/')).toBeDirectory();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/src/server.js')).toHaveFileContents(`\
+// === Start the server ===
+(async () => {
+	await connectDB();
+
+	app.listen(PORT, () => {
+`);
 		});
 	});
 });

@@ -40,6 +40,16 @@ module.exports = {
 			type: 'confirm',
 			default: false,
 		},
+		{
+			name: 'database',
+			aliases: ['db'],
+			description: 'Type of database to use',
+			message: 'What type of database do you want to use?',
+			tpsType: 'package',
+			type: 'list',
+			choices: ['none', 'mongoose'],
+			default: 'none',
+		},
 	],
 	events: {
 		onRendered(tps, { dest, buildPaths }) {
