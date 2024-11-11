@@ -48,7 +48,7 @@ export default {
 		},
 		local: {
 			type: 'boolean',
-			description: 'List out global files',
+			description: 'List out local files',
 			alias: 'l',
 			default: true,
 		},
