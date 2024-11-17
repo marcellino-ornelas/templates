@@ -168,8 +168,21 @@ const root = ReactDOM.createRoot(
 				.toHaveFileContents(`\
 import { ReportHandler } from 'web-vitals';
 
-const reportWebVitals = (onPerfEntry) => {
+const reportWebVitals = (onPerfEntry?: ReportHandler) => {
 `);
+		});
+
+		it('should not add type in src/reportWebVitals.js', async () => {
+			const tps = new Templates<ReactAppAnswers>('react-app', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			expect(
+				path.join(CWD, 'App/src/reportWebVitals.js'),
+				// @ts-expect-error no types for extending jest functions
+			).not.toHaveFileContents(`import { ReportHandler } from 'web-vitals';`);
 		});
 	});
 });
