@@ -28,6 +28,17 @@ describe('React app', () => {
 		expect(path.join(CWD, 'App')).toBeDirectory();
 	});
 
+	it('should be able to render name in README', async () => {
+		const tps = new Templates('react-app', { default: true });
+
+		await tps.render(CWD, 'food-app');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'food-app/README.md')).toHaveFileContents(
+			'# Food App',
+		);
+	});
+
 	describe('packageManager', () => {
 		it('should be able to render the express app template with npm', async () => {
 			const tps = new Templates<ReactAppAnswers>('react-app', {
