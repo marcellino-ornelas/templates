@@ -24,9 +24,9 @@ npm test
 
 This will launch the test runner in the interactive watch mode.
 
-### Production build
+### Deployment
 
-Run the following command to create a production build.
+In order to deploy this app, we need to create a production build. You can do this by by running the following command:
 
 ```bash
 npm run build
@@ -38,7 +38,11 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
-You can use any of [create-react-app](https://facebook.github.io/create-react-app) [deployment](https://facebook.github.io/create-react-app/docs/deployment) options.
+To deploy the app, you can use any of [create-react-app](https://facebook.github.io/create-react-app) [deployment](https://facebook.github.io/create-react-app/docs/deployment) options.
+
+### Debugging
+
+<!-- debugging section ... -->
 
 ### Eject
 
