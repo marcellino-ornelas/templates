@@ -1,0 +1,7 @@
+{{{##def.componentExtension:
+{{= tps.answers.typescript ? 'tsx' : 'js'}}
+#}}}
+
+{{{##def.jsOnlyExtension:
+{{= tps.answers.typescript ? 'ts' : 'js'}}
+#}}}

@@ -9,6 +9,7 @@ import { sync } from 'cross-spawn';
 
 interface ReactAppAnswers {
 	packageManager?: 'npm' | 'yarn';
+	typescript: boolean;
 }
 
 jest.mock('fs');
@@ -20,7 +21,7 @@ describe('React app', () => {
 	});
 
 	it('should be able to render an react app', async () => {
-		const tps = new Templates('react-app', { default: true });
+		const tps = new Templates<ReactAppAnswers>('react-app', { default: true });
 
 		await tps.render(CWD, 'App');
 
@@ -29,7 +30,7 @@ describe('React app', () => {
 	});
 
 	it('should be able to render name in README', async () => {
-		const tps = new Templates('react-app', { default: true });
+		const tps = new Templates<ReactAppAnswers>('react-app', { default: true });
 
 		await tps.render(CWD, 'food-app');
 
@@ -57,6 +58,52 @@ describe('React app', () => {
 				['install', '--prefix', path.join(CWD, 'app')],
 				expect.objectContaining({}),
 			);
+		});
+	});
+
+	describe('typescript', () => {
+		it('should use js files by default', async () => {
+			const tps = new Templates<ReactAppAnswers>('react-app', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App')).toHaveAllFilesAndDirectories([
+				'./src/index.js',
+				'./src/App.test.js',
+				'./src/App.js',
+				'./src/routes/Home/index.js',
+				'./src/routes/Home/Home.js',
+				'./src/routes/Home/Home.test.js',
+				'./src/reportWebVitals.js',
+				'./src/setupTests.js',
+			]);
+		});
+
+		it('should use ts(x) files when typescript is true', async () => {
+			const tps = new Templates<ReactAppAnswers>('react-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'App')).toHaveAllFilesAndDirectories([
+				'./src/index.tsx',
+				'./src/App.test.tsx',
+				'./src/App.tsx',
+				'./src/routes/Home/index.ts',
+				'./src/routes/Home/Home.tsx',
+				'./src/routes/Home/Home.test.tsx',
+				'./src/reportWebVitals.ts',
+				'./src/setupTests.ts',
+			]);
 		});
 	});
 });

@@ -7,7 +7,7 @@ function Home() {
 			<header className="Home-header">
 				<img src={logo} className="Home-logo" alt="logo" />
 				<p>
-					Edit <code>src/routers/Home.js</code> and save to reload.
+					Edit <code>src/routers/Home</code> and save to reload.
 				</p>
 				<a
 					className="Home-link"
