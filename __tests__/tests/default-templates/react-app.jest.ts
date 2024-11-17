@@ -184,5 +184,50 @@ const reportWebVitals = (onPerfEntry?: ReportHandler) => {
 				// @ts-expect-error no types for extending jest functions
 			).not.toHaveFileContents(`import { ReportHandler } from 'web-vitals';`);
 		});
+
+		it('should not add react import when js', async () => {
+			const tps = new Templates<ReactAppAnswers>('react-app', {
+				default: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			[
+				'./src/App.test.js',
+				'./src/App.js',
+				'./src/routes/Home/Home.js',
+				'./src/routes/Home/Home.test.js',
+			].forEach((subPath) => {
+				// @ts-expect-error no types for extending jest functions
+				expect(path.join(CWD, 'App', subPath)).not.toHaveFileContents(`\
+import React from 'react';
+import
+`);
+			});
+		});
+
+		it('should add react import when tsx', async () => {
+			const tps = new Templates<ReactAppAnswers>('react-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'App');
+
+			[
+				'./src/App.test.tsx',
+				'./src/App.tsx',
+				'./src/routes/Home/Home.tsx',
+				'./src/routes/Home/Home.test.tsx',
+			].forEach((subPath) => {
+				// @ts-expect-error no types for extending jest functions
+				expect(path.join(CWD, 'App', subPath)).toHaveFileContents(`\
+import React from 'react';
+import`);
+			});
+		});
 	});
 });
