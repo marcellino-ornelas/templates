@@ -20,7 +20,7 @@ module.exports = {
 			description: 'Generate typescript files',
 			aliases: ['t'],
 			type: 'confirm',
-			tpsType: 'data',
+			tpsType: 'package',
 			message: 'Would you like to use typescript?',
 			default: false,
 		},
