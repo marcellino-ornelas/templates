@@ -15,6 +15,15 @@ module.exports = {
 			choices: ['npm', 'yarn'],
 			default: 'npm',
 		},
+		{
+			name: 'typescript',
+			description: 'Generate typescript files',
+			aliases: ['t'],
+			type: 'confirm',
+			tpsType: 'package',
+			message: 'Would you like to use typescript?',
+			default: false,
+		},
 	],
 	events: {
 		async onRendered(tps, { dest, buildPaths }) {
