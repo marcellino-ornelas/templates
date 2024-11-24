@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Link from '@docusaurus/Link';
 import clsx from 'clsx';
 import styles from './CommunityTemplates.module.css';
