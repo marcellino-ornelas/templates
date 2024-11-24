@@ -6,7 +6,7 @@ import CommunityImg from './community.svg';
 
 export const CommunityTemplates = () => {
 	return (
-		<div className={styles.CommunityTemplateContainer}>
+		<div className={styles.CommunityContainer}>
 			<div className={clsx('container', styles.communityInnerContainer)}>
 				<div className="display--flex justify-content--center">
 					<CommunityImg className={styles.communityImg} title="community" />
