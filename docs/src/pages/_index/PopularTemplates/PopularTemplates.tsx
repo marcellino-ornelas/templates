@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { Icon } from '@iconify/react';
 import Link from '@docusaurus/Link';
 import styles from './PopularTemplates.module.css';
-import CommunityImg from './community.svg';
 import yargsPic from './yargs-logo.png';
 
 export const PopularTemplates = () => {
