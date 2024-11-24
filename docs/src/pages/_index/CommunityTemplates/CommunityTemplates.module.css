@@ -1,0 +1,23 @@
+.CommunityContainer {
+	padding-top: 4rem;
+	padding-bottom: 4rem;
+	min-height: 500px;
+	background-color: var(--ifm-color-emphasis-200);
+}
+
+.communityHeader {
+	font-size: 2rem;
+	font-family: monospace;
+}
+
+.communityImg {
+	height: 150px;
+}
+
+.communityInnerContainer {
+	max-width: calc(var(--ifm-container-width) - 300px);
+}
+
+[data-theme='dark'] .communityImg path {
+	fill: white;
+}

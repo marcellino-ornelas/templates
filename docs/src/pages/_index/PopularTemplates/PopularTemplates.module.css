@@ -1,0 +1,59 @@
+.popularTemplatesContainer {
+	padding-top: 4rem;
+	padding-bottom: 4rem;
+	min-height: 500px;
+}
+
+.popularTemplate {
+	text-align: center;
+	margin-top: 3rem;
+	padding: 0px 2rem;
+}
+
+.popularTemplate h3 {
+	font-family: monospace;
+}
+
+.popularTemplate:nth-child(2) {
+	margin-top: 0rem;
+}
+
+.popularTemplate rect {
+	fill: #ebedf0;
+}
+
+.popularHeader {
+	margin-bottom: 1em;
+	font-size: 2rem;
+	text-align: center;
+	font-family: monospace;
+}
+
+.popularTemplateDescription {
+	text-align: justify;
+}
+
+.communityImg {
+	width: 75px;
+	height: 75px;
+}
+
+.popularTemplateActions {
+	text-align: center;
+}
+
+@media screen and (max-width: 996px) {
+	.popularTemplatesContainer :global(.row) {
+		justify-content: center;
+	}
+
+	.popularTemplate {
+		margin-bottom: 4rem;
+		margin-top: 0em;
+		max-width: 80%;
+	}
+
+	.popularTemplate :global(.button) {
+		width: 100%;
+	}
+}

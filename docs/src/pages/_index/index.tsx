@@ -6,6 +6,8 @@ import Layout from '@theme/Layout';
 import { How } from './how';
 
 import styles from './index.module.css';
+import { CommunityTemplates } from './CommunityTemplates';
+import { PopularTemplates } from './PopularTemplates';
 
 const HomepageHeader = () => {
 	const { siteConfig } = useDocusaurusContext();
@@ -53,6 +55,10 @@ const Home = (): JSX.Element => {
 				</div>
 
 				{/* <HomepageFeatures /> */}
+
+				<CommunityTemplates />
+
+				<PopularTemplates />
 
 				<How />
 			</main>
