@@ -165,4 +165,105 @@ tps copy react-app
 
 ### How to use
 
-...
+This template generates a fully functional react app. The name you provide to
+the CLI will be used for both the app's directory and the `package.json` name.
+To create the app in a specific directory, prepend the directory path to the
+name.
+
+**Example:**
+
+If you're building a new react app for a restaurant called `chickens-burgers`,
+you would run the following command:
+
+```bash
+tps react-app chickens-burgers
+
+# if you want this directory in say a directory called projects, then run the following command
+tps react-app ./project/chickens-burgers
+```
+
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your react app, and install the required
+packages using your preferred package manager.
+
+```txt
+|- chickens-burgers/
+    | public/
+        | - ...
+    | - src/
+        | routes/
+            | - Home/
+                | - Home.js
+                | - Home.css
+                | - Home.test.js
+                | index.js
+        | - App.js
+        | - App.test.js
+        | - index.js
+        | - index.css
+        | reportWebVitals.js
+        | setupTests.js
+    | - .gitignore
+    | - package.json
+    | - package-lock.json
+    | - README.md
+```
+
+Once your template is created, you can cd into the directory and run the
+following command to start the app:
+
+```bash
+npm run start
+
+# dev mode with nodemon
+npm run dev
+```
+
+### Typescript
+
+Use the `typescript` option to create a react app in typescript. This option
+will change all `js` extensions to `tsx` or `ts`, adds a `tsconfig.json` file,
+add some types to various areas of the codebase, and modify the package.json to
+support typescript.
+
+**Example:**
+
+If you're building a new Express app for a restaurant called chickens-burgers,
+you would run the following command:
+
+```bash
+tps react-app chickens-burgers --typescript
+
+# if you want this directory in say a directory called projects, then run the following command
+
+tps react-app ./project/chickens-burgers --typescript
+```
+
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your react app, and install the required
+packages using your preferred package manager.
+
+```txt
+|- chickens-burgers/
+    | public/
+        | - ...
+    | - src/
+        | routes/
+            | - Home/
+                | - Home.tsx
+                | - Home.css
+                | - Home.test.tsx
+                | index.ts
+        | - App.tsx
+        | - App.test.tsx
+        | - index.tsx
+        | - index.css
+        | - react-app-env.d.ts
+        | - reportWebVitals.ts
+        | - setupTests.ts
+    | - .gitignore
+    | - package.json
+    | - package-lock.json
+    | - tsconfig.json
+    | - README.md
+```
