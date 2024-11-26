@@ -17,7 +17,12 @@ const config: Config = {
 		[
 			TemplatesLibrariesPlugin,
 			{
-				templates: ['react-component', 'yargs-cli-cmd', 'express-app'],
+				templates: [
+					'react-component',
+					'yargs-cli-cmd',
+					'express-app',
+					'react-app',
+				],
 			},
 		],
 		'@docusaurus/theme-live-codeblock',
