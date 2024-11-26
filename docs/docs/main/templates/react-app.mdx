@@ -1,0 +1,271 @@
+---
+description: Template to generate react app
+keywords:
+    - react app
+    - react app scaffold
+    - react app boilerplate
+    - react app generator
+    - create react app
+    - create-react-app
+sidebar_label: react-app (alpha)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
+
+# react-app
+
+<BadgeList>
+    <Badge type="success">alpha</Badge>
+    <VersionBadge version=">=v1.2.7" />
+</BadgeList>
+
+Generate a fully functioning react app. This templates is heavily inspired from
+[create-react-app](https://create-react-app.dev/). However we support
+[react-router](https://reactrouter.com/), typescript, and different package
+managers by default.
+
+:::caution
+
+This template is in its alpha stage and will be evolving rapidly with new
+features and updates. Changes may include directory structures, react app
+patterns, and more. We are also planning to support:
+
+-   css languages
+    -   scss
+    -   less
+    -   css modules
+    -   css
+-   bundlers
+    -   webpack
+    -   esbuild
+    -   vite
+-   compilers
+    -   babel
+    -   swc
+-   state managment
+    -   redux
+    -   Zustand
+    -   React Query
+-   Linters
+    -   biome
+    -   eslint
+
+We welcome your feedback! Feel free to share ideas for tools or linraries you'd
+like to see supported, or any thoughts you have on the structure of the react
+app and the libraries we use.
+
+<Button
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/react-app-feature-requests-feedback"
+    text="Submit feature request"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'react-app',
+            });
+        }
+    }}
+/>
+
+:::
+
+## Usage
+
+```bash title="Usage"
+tps react-app <app-name>
+
+# or in a directory
+
+tps react-app path/to/dir/<app-name>
+```
+
+```txt title="Creates"
+| - <app-name>/
+    | public/
+        | - ...
+    | - src/
+        | routes/
+            | - Home/
+                | - Home.js
+                | - Home.css
+                | - Home.test.js
+                | index.js
+        | - App.js
+        | - App.test.js
+        | - index.js
+        | - index.css
+        | reportWebVitals.js
+        | setupTests.js
+    | - .gitignore
+    | - package.json
+    | - package-lock.json
+    | - README.md
+```
+
+<Example>
+
+<Tabs>
+
+<TabItem value="default">
+
+```bash
+tps react-app funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps react-app projects/funny-gifs
+```
+
+</TabItem>
+
+</Tabs>
+
+</Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
+
+## Installation
+
+This templates is a part of Templates library. If you've already installed
+Templates, you'll have instant access to this template, and you can disregard
+this command.
+
+```bash
+npm i -g templates-mo
+```
+
+## Options
+
+<TemplateOptions template="react-app" type="js" />
+
+## Copy
+
+If you like this template, but want to modify a few things use the copy command.
+It allows you to duplicate the template into your project and tailor it to your
+needs.
+
+```bash
+# if your not initialized run
+tps init
+
+# copy template
+tps copy react-app
+```
+
+## Examples
+
+### How to use
+
+This template generates a fully functional react app. The name you provide to
+the CLI will be used for both the app's directory and the `package.json` name.
+To create the app in a specific directory, prepend the directory path to the
+name.
+
+**Example:**
+
+If you're building a new react app for a restaurant called `chickens-burgers`,
+you would run the following command:
+
+```bash
+tps react-app chickens-burgers
+
+# if you want this directory in say a directory called projects, then run the following command
+tps react-app ./project/chickens-burgers
+```
+
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your react app, and install the required
+packages using your preferred package manager.
+
+```txt
+|- chickens-burgers/
+    | public/
+        | - ...
+    | - src/
+        | routes/
+            | - Home/
+                | - Home.js
+                | - Home.css
+                | - Home.test.js
+                | index.js
+        | - App.js
+        | - App.test.js
+        | - index.js
+        | - index.css
+        | reportWebVitals.js
+        | setupTests.js
+    | - .gitignore
+    | - package.json
+    | - package-lock.json
+    | - README.md
+```
+
+Once your template is created, you can cd into the directory and run the
+following command to start the app:
+
+```bash
+npm run start
+
+# dev mode with nodemon
+npm run dev
+```
+
+### Typescript
+
+Use the `typescript` option to create a react app in typescript. This option
+will change all `js` extensions to `tsx` or `ts`, adds a `tsconfig.json` file,
+add some types to various areas of the codebase, and modify the package.json to
+support typescript.
+
+**Example:**
+
+If you're building a new Express app for a restaurant called chickens-burgers,
+you would run the following command:
+
+```bash
+tps react-app chickens-burgers --typescript
+
+# if you want this directory in say a directory called projects, then run the following command
+
+tps react-app ./project/chickens-burgers --typescript
+```
+
+This will create a new directory called `chickens-burgers`, set up all the
+necessary files and directories for your react app, and install the required
+packages using your preferred package manager.
+
+```txt
+|- chickens-burgers/
+    | public/
+        | - ...
+    | - src/
+        | routes/
+            | - Home/
+                | - Home.tsx
+                | - Home.css
+                | - Home.test.tsx
+                | index.ts
+        | - App.tsx
+        | - App.test.tsx
+        | - index.tsx
+        | - index.css
+        | - react-app-env.d.ts
+        | - reportWebVitals.ts
+        | - setupTests.ts
+    | - .gitignore
+    | - package.json
+    | - package-lock.json
+    | - tsconfig.json
+    | - README.md
+```

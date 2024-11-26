@@ -32,8 +32,7 @@ export const BANNED_TEMPLATES: string[] = [
 	'init',
 	'new-template',
 	'new-test',
-	// Not ready for public use
-	'react-app',
+	'tps-docs',
 ];
 
 export default {
