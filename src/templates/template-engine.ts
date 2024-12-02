@@ -33,7 +33,7 @@ const doT: any = {
 		defineBlockParams: /^\s*([\w$]+):\n?([\s\S]+)/,
 		conditional: /\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}/g,
 		conditionalBlock:
-			/^[^\S\r\n]*?\{\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}\}[^\S\r\n]*\n?/gm,
+			/[^\S\r\n]*?\{\{\{\?(\?)?\s*([\s\S]*?)\s*\}\}\}[^\S\r\n]*\n?/gm,
 		iterate:
 			/\{\{~\s*(?:\}\}|([\s\S]+?)\s*\:\s*([\w$]+)\s*(?:\:\s*([\w$]+))?\s*\}\})/g,
 		iterateBlock:
