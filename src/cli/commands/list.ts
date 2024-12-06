@@ -141,7 +141,7 @@ export default {
 					return [];
 				}
 
-				if (templateDir.includes('node_modules')) {
+				if (path.parse(templateDir).base === 'node_modules') {
 					/**
 					 * Only print out packages that start with `tps`
 					 */
