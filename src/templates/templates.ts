@@ -467,8 +467,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			);
 		}
 
-		await this._emitEvent('onRender');
-
 		// if were building in the destination. then we aren't creating any new folders
 		const buildNewFolder = buildInDest ? false : this.opts.newFolder;
 		logger.tps.info('Build paths: %n', pathsToCreate);
@@ -495,6 +493,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		await this._answerRestOfPrompts();
 
 		logger.tps.info('Rendering template at %s', finalDest);
+
+		await this._emitEvent('onRender');
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
 			return this._renderBuildPath(
@@ -1084,6 +1084,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				// @ts-expect-error idk lol
 				await events[event]?.(this, ...args);
 			} catch (e) {
+				console.log(e);
 				logger.tps.error(`Event ${event} failed: %n`, e);
 			}
 		}
