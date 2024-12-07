@@ -494,7 +494,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Rendering template at %s', finalDest);
 
-		await this._emitEvent('onRender');
+		await this._emitEvent('onRender', {
+			dest: finalDest,
+			buildPaths: pathsToCreate,
+		});
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
 			return this._renderBuildPath(
