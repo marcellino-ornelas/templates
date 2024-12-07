@@ -1,0 +1,102 @@
+---
+description: Template to generate ai
+
+keywords:
+    - ai
+    - ai scaffold
+    - ai boilerplate
+    - ai generator
+sidebar_label: ai (alpha)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
+
+# ai
+
+<BadgeList>
+    <Badge type="success">alpha</Badge>
+    <VersionBadge version="1.0.0" />
+</BadgeList>
+
+description....
+
+## Usage
+
+```bash title="Usage"
+tps ai <app-name>
+
+# or in a directory
+
+tps ai path/to/dir/<app-name>
+```
+
+```txt title="Creates"
+| - <app-name>/
+    | ...
+```
+
+<Example>
+
+<Tabs>
+
+<TabItem value="default">
+
+```bash
+tps ai funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps ai projects/funny-gifs
+```
+
+</TabItem>
+
+</Tabs>
+
+</Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
+
+## Installation
+
+This templates is a part of Templates library. If you've already installed
+Templates, you'll have instant access to this template, and you can disregard
+this command.
+
+```bash
+npm i -g templates-mo tps-ai
+```
+
+## Options
+
+<TemplateOptions template="tps-ai" type="js" />
+
+## Copy
+
+If you like this template, but want to modify a few things use the copy command.
+It allows you to duplicate the template into your project and tailor it to your
+needs.
+
+```bash
+# if your not initialized run
+tps init
+
+# copy template
+tps copy ai
+```
+
+## Examples
+
+### How to use
+
+...
