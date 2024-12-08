@@ -20,24 +20,25 @@ import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
 
 <BadgeList>
     <Badge type="success">alpha</Badge>
-    <VersionBadge version="1.0.0" />
+    <VersionBadge version="1.0.0" library="tps-ai" />
+    <VersionBadge version=">1.2.9" library="templates" />
 </BadgeList>
 
-description....
+Template to generate any type of folder/file structure using AI.
 
 ## Usage
 
 ```bash title="Usage"
-tps ai <app-name>
+tps ai [app-name]
 
 # or in a directory
 
-tps ai path/to/dir/<app-name>
+tps ai [app-name]
 ```
 
 ```txt title="Creates"
-| - <app-name>/
-    | ...
+| - [app-name]/
+    | <files and directories llm creates>
 ```
 
 <Example>
@@ -75,6 +76,9 @@ this command.
 
 ```bash
 npm i -g templates-mo tps-ai
+
+# Or if you already have templates installed
+npm i -g tps-ai
 ```
 
 ## Options
@@ -99,4 +103,63 @@ tps copy ai
 
 ### How to use
 
-...
+Use our AI template to generate anything you mind desires.
+
+> Currently, only openai is supported. However, we plan on supporting more
+> providers in the future.
+
+In order to use this template, you need to know what llm provider you want to
+use, know the model you'll want to use, and have a valid API token for the llm
+provider. You can learn how to make a API key with your preferred llm provider
+with one of the following:
+
+-   [openai](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
+
+When generating a new instance, you will be prompted for your token, llm type,
+and model. However we recommend answering these questions on the CLI or even
+better in your [global config file](../tpsrc.mdx).
+
+<Tabs>
+
+<TabItem value="~/.tps/.tpsrc">
+
+You can add the following to your global config fie (E.g: `~/.tps/.tpsrc`). We
+only recommending adding this to your global config file because you local
+config file is more likley to be checked into your codebase thus leaking your
+credentials.
+
+If you havent already initialize your global config file:
+
+```bash
+tps init -g
+```
+
+Then add your preferred llm, model, and api token to this file similar to the
+following:
+
+```json title="~/.tps/.tpsrc"
+{
+    "ai": {
+        "answers": {
+            "token": "your-token",
+            "model": "gpt-4o",
+            "llm": "openai"
+        }
+    }
+}
+```
+
+</TabItem>
+
+<TabItem value="cli">
+
+You can pass in your preferred llm, model, and api token when generating your
+new instance similar to the following:
+
+```bash
+tps ai --llm openai --model gpt-4o --token <some-token>
+```
+
+</TabItem>
+
+</Tabs>
