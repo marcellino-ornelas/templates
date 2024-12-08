@@ -1,0 +1,165 @@
+---
+description: Template to generate ai
+
+keywords:
+    - ai
+    - ai scaffold
+    - ai boilerplate
+    - ai generator
+sidebar_label: ai (alpha)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
+
+# ai
+
+<BadgeList>
+    <Badge type="success">alpha</Badge>
+    <VersionBadge version="1.0.0" library="tps-ai" />
+    <VersionBadge version=">1.2.9" library="templates" />
+</BadgeList>
+
+Template to generate any type of folder/file structure using AI.
+
+## Usage
+
+```bash title="Usage"
+tps ai [app-name]
+
+# or in a directory
+
+tps ai [app-name]
+```
+
+```txt title="Creates"
+| - [app-name]/
+    | <files and directories llm creates>
+```
+
+<Example>
+
+<Tabs>
+
+<TabItem value="default">
+
+```bash
+tps ai funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps ai projects/funny-gifs
+```
+
+</TabItem>
+
+</Tabs>
+
+</Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
+
+## Installation
+
+This templates is a part of Templates library. If you've already installed
+Templates, you'll have instant access to this template, and you can disregard
+this command.
+
+```bash
+npm i -g templates-mo tps-ai
+
+# Or if you already have templates installed
+npm i -g tps-ai
+```
+
+## Options
+
+<TemplateOptions template="tps-ai" type="js" />
+
+## Copy
+
+If you like this template, but want to modify a few things use the copy command.
+It allows you to duplicate the template into your project and tailor it to your
+needs.
+
+```bash
+# if your not initialized run
+tps init
+
+# copy template
+tps copy ai
+```
+
+## Examples
+
+### How to use
+
+Use our AI template to generate anything you mind desires.
+
+> Currently, only openai is supported. However, we plan on supporting more
+> providers in the future.
+
+In order to use this template, you need to know what llm provider you want to
+use, know the model you'll want to use, and have a valid API token for the llm
+provider. You can learn how to make a API key with your preferred llm provider
+with one of the following:
+
+-   [openai](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
+
+When generating a new instance, you will be prompted for your token, llm type,
+and model. However we recommend answering these questions on the CLI or even
+better in your [global config file](../tpsrc.mdx).
+
+<Tabs>
+
+<TabItem value="~/.tps/.tpsrc">
+
+You can add the following to your global config fie (E.g: `~/.tps/.tpsrc`). We
+only recommending adding this to your global config file because you local
+config file is more likley to be checked into your codebase thus leaking your
+credentials.
+
+If you havent already initialize your global config file:
+
+```bash
+tps init -g
+```
+
+Then add your preferred llm, model, and api token to this file similar to the
+following:
+
+```json title="~/.tps/.tpsrc"
+{
+    "ai": {
+        "answers": {
+            "token": "your-token",
+            "model": "gpt-4o",
+            "llm": "openai"
+        }
+    }
+}
+```
+
+</TabItem>
+
+<TabItem value="cli">
+
+You can pass in your preferred llm, model, and api token when generating your
+new instance similar to the following:
+
+```bash
+tps ai --llm openai --model gpt-4o --token <some-token>
+```
+
+</TabItem>
+
+</Tabs>

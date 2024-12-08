@@ -22,6 +22,7 @@ const config: Config = {
 					'yargs-cli-cmd',
 					'express-app',
 					'react-app',
+					'tps-ai',
 				],
 			},
 		],
