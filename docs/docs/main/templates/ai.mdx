@@ -1,6 +1,5 @@
 ---
 description: Template to generate ai
-
 keywords:
     - ai
     - ai scaffold
@@ -24,7 +23,32 @@ import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
     <VersionBadge version=">1.2.9" library="templates" />
 </BadgeList>
 
-Template to generate any type of folder/file structure using AI.
+Generate any codebase in any language, setup files for any library, or anything
+else your mind envisions—all powered by AI.
+
+:::info
+
+At the moment, this template supports only OpenAI's models with
+[structured outputs](https://platform.openai.com/docs/guides/structured-outputs?lang=node.js&context=ex3#structured-outputs-vs-json-mode)
+support, which generally includes the GPT-4 Series. We plan to support more
+models and LLM providers in the future. Let us know what ones you want us to
+prioritize or how we can improve this template.
+
+<Button
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/tps-ai-feature-requests-feedback"
+    text="Submit feature request"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'tps-ai',
+            });
+        }
+    }}
+/>
+
+:::
 
 ## Usage
 
@@ -61,6 +85,14 @@ tps ai projects/funny-gifs
 
 </TabItem>
 
+<TabItem value="no build path">
+
+```bash
+tps ai
+```
+
+</TabItem>
+
 </Tabs>
 
 </Example>
@@ -70,14 +102,13 @@ to use this template.
 
 ## Installation
 
-This templates is a part of Templates library. If you've already installed
-Templates, you'll have instant access to this template, and you can disregard
-this command.
+This template is not included in the templates library and must be installed
+separately.
 
 ```bash
 npm i -g templates-mo tps-ai
 
-# Or if you already have templates installed
+# Or if you already have the templates library installed
 npm i -g tps-ai
 ```
 
@@ -85,63 +116,49 @@ npm i -g tps-ai
 
 <TemplateOptions template="tps-ai" type="js" />
 
-## Copy
+## Prerequisites
 
-If you like this template, but want to modify a few things use the copy command.
-It allows you to duplicate the template into your project and tailor it to your
-needs.
-
-```bash
-# if your not initialized run
-tps init
-
-# copy template
-tps copy ai
-```
-
-## Examples
-
-### How to use
-
-Use our AI template to generate anything you mind desires.
-
-> Currently, only openai is supported. However, we plan on supporting more
-> providers in the future.
-
-In order to use this template, you need to know what llm provider you want to
-use, know the model you'll want to use, and have a valid API token for the llm
-provider. You can learn how to make a API key with your preferred llm provider
-with one of the following:
+To use this template, you need to know which LLM provider you want to use, the
+model you'll use, and have a valid API token for the LLM provider. You can learn
+how to create an API key with your preferred LLM provider using one of the
+following:
 
 -   [openai](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
 
-When generating a new instance, you will be prompted for your token, llm type,
-and model. However we recommend answering these questions on the CLI or even
-better in your [global config file](../tpsrc.mdx).
+When generating a new instance, you will be prompted for your token, LLM type,
+and model. However, we recommend using one of the following methods to answer
+these questions:
+
+-   **Global Config File (recommended)**
+-   **On the CLI**
 
 <Tabs>
 
-<TabItem value="~/.tps/.tpsrc">
+<TabItem value="Global Config (recommended)">
 
-You can add the following to your global config fie (E.g: `~/.tps/.tpsrc`). We
-only recommending adding this to your global config file because you local
-config file is more likley to be checked into your codebase thus leaking your
-credentials.
+You can define your preferred LLM, model, and API token in your
+[global config file](../tpsrc.mdx#make-a-global-configuration-file) (e.g.,
+`~/.tps/.tpsrc`). We recommend adding this to your global config file because
+your local config file is more likely to be checked into your codebase,
+potentially leaking your credentials. Plus, defining these at a global level
+allows you to use these credentials throughout your file system.
 
-If you havent already initialize your global config file:
+Run the following command to initialize your
+[global config file](../tpsrc.mdx#make-a-global-configuration-file) if you
+haven't already:
 
 ```bash
 tps init -g
 ```
 
-Then add your preferred llm, model, and api token to this file similar to the
-following:
+Then add your preferred LLM, model, and API token to `~/.tps/.tpsrc`, as shown
+below:
 
 ```json title="~/.tps/.tpsrc"
 {
     "ai": {
         "answers": {
-            "token": "your-token",
+            "token": "<token>",
             "model": "gpt-4o",
             "llm": "openai"
         }
@@ -151,15 +168,80 @@ following:
 
 </TabItem>
 
-<TabItem value="cli">
+<TabItem value="CLI">
 
-You can pass in your preferred llm, model, and api token when generating your
-new instance similar to the following:
+You can pass in your preferred LLM, model, and API token when generating your
+new instance, as shown below:
 
 ```bash
-tps ai --llm openai --model gpt-4o --token <some-token>
+tps ai --llm openai --model gpt-4o --token <token>
 ```
 
 </TabItem>
 
 </Tabs>
+
+## Examples
+
+### How to use
+
+Use our AI template to generate anything your mind desires. If you haven't
+already, please follow our [prerequisites](#prerequisites) before using this
+template.
+
+Once configured, you're ready to use this template. This template can be used in
+two ways:
+
+-   With a build path
+-   Without a build path
+
+#### Build path
+
+When generating a new instance with a build path, any files or folders the LLM
+creates will be placed into your build path.
+
+_Example:_
+
+If you want to build an Express app for your new `food-app`, you can run the
+following command:
+
+```bash
+tps ai food-app
+? What would you like to build? Create the contents of an Express app. I want all the bells and whistles. It should have a MongoDB connection as well.
+```
+
+This will generate a `food-app` directory in your `CWD` and place all files and
+directories the LLM creates inside it.
+
+```txt title="Creates"
+| - <food-app>/
+    | - <files and directories created by LLM...>
+```
+
+#### No Build Path
+
+When generating a new instance with no build path, all files or folders the LLM
+creates will be placed into your `CWD`. This is useful if you want content to be
+generated inside your current working directory or when you want the LLM to
+generate a directory for you. However, **you need to explicitly tell the LLM to
+do this.**
+
+_Example:_
+
+If you have an existing repo and want to add Jest support, placing all unit
+tests inside a `__tests__` directory:
+
+```bash
+tps ai
+? What would you like to build? Create a jest.config.js file that will run my Node library. Its all written in JavaScript, and at least one test file should live in the `__tests__` folder.
+```
+
+This will generate a `__tests__` directory and a `jest.config.js` file inside
+your `CWD`.
+
+```txt title="Creates"
+| - <cwd>/
+    | - __tests__/
+        | - <test files and directories created by LLM...>
+    | - jest.config.js
+```
