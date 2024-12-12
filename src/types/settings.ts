@@ -126,7 +126,10 @@ interface SettingsFileEvents {
 	/**
 	 * Callback function to call before build paths are rendered
 	 */
-	onRender?: (tps: Templates) => Promise<void>;
+	onRender?: (
+		tps: Templates,
+		args: { dest: string; buildPaths: string[] },
+	) => Promise<void>;
 	/**
 	 * Callback function to call before an build path is rendered
 	 */

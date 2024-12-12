@@ -67,7 +67,7 @@ export const TemplateOptions = ({ template }: Props) => {
 									)
 									.join(', ')}
 							</td>
-							<td>{prompt.default.toString()}</td>
+							<td>{prompt?.default?.toString()}</td>
 							<td>{(prompt.hidden ?? false).toString()}</td>
 						</tr>
 					))}

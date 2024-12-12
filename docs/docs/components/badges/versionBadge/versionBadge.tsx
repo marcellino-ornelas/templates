@@ -3,8 +3,16 @@ import { Badge } from '@site/docs/components/badges/badge';
 
 interface VersionBadgeProps {
 	version: string;
+	library: string;
 }
 
-export const VersionBadge = ({ version }: VersionBadgeProps) => {
-	return <Badge type="secondary">templates@{version}</Badge>;
+export const VersionBadge = ({
+	version,
+	library = 'templates',
+}: VersionBadgeProps) => {
+	return (
+		<Badge type="secondary">
+			{library}@{version}
+		</Badge>
+	);
 };
