@@ -24,6 +24,7 @@ import {
 	hasProp,
 	getNpmPaths,
 	getAllDirectoriesAndUp,
+	stripPrefix,
 } from '@tps/utilities/helpers';
 import {
 	TemplateNotFoundError,
@@ -1053,7 +1054,11 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	private _loadTpsSpecificConfig(templateName: string, config: Tpsrc): void {
-		const templateConfig = config[templateName] ?? null;
+		const templateConfig =
+			config[templateName] ??
+			config[`tps-${templateName}`] ??
+			config[stripPrefix(templateName, 'tps-')] ??
+			null;
 
 		if (templateConfig && is.object(templateConfig)) {
 			logger.tps.info('Loading configuration: %n', templateConfig);

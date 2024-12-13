@@ -148,3 +148,16 @@ export const unique = <T extends string | number>(array: T[]): T[] => {
 
 	return uniqueArray;
 };
+
+/**
+ * strip the prefix from the provided string
+ *
+ * @example
+ * 		stripPrefix("tps-app", "tps-"); // "app"
+ */
+export const stripPrefix = (str: string, prefix: string): string => {
+	if (str.startsWith(prefix)) {
+		return str.slice(prefix.length);
+	}
+	return str;
+};
