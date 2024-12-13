@@ -14,6 +14,7 @@ import {
 	mkPrompt,
 	mkTpsrc,
 	mk3rdPartyTemplate,
+	mkTemplate,
 } from '@test/utilities/templates';
 
 jest.mock('fs');
@@ -283,6 +284,48 @@ testing-prompt-core:
 
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.prompt1).toBeTruthy();
+	});
+
+	it('should be able to load settings for template that uses tps-prefix', () => {
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			'tps-app': {
+				opts: {
+					extendedDest: './app',
+				},
+			},
+		});
+
+		const tps = mkTemplate('tps-app');
+
+		expect(tps.opts.extendedDest).toBe('./app');
+	});
+
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			app: {
+				opts: {
+					extendedDest: './app',
+				},
+			},
+		});
+
+		const tps = mkTemplate('tps-app');
+
+		expect(tps.opts.extendedDest).toBe('./app');
+	});
+
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
+			'tps-app': {
+				opts: {
+					extendedDest: './app',
+				},
+			},
+		});
+
+		const tps = mkTemplate('app');
+
+		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
 	// it('should be able to override a tpsrc file location', () => {
