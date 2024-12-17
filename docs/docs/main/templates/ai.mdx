@@ -123,7 +123,7 @@ model you'll use, and have a valid API token for the LLM provider. You can learn
 how to create an API key with your preferred LLM provider using one of the
 following:
 
--   [openai](https://platform.openai.com/docs/quickstart#create-and-export-an-api-key)
+-   [openai](https://medium.com/@duncanrogoff/how-to-get-your-openai-api-key-in-2024-the-complete-guide-6b52d82c7362)
 
 When generating a new instance, you will be prompted for your token, LLM type,
 and model. However, we recommend using one of the following methods to answer
@@ -195,6 +195,25 @@ two ways:
 -   With a build path
 -   Without a build path
 
+:::tip Tip: What is a Build Path?
+
+The build path is the name and location you provide for your new template.
+Templates uses it to create a directory and render its contents there.
+
+_example:_
+
+```bash
+tps ai food-app
+      # ^^^^^^^
+      # build path
+
+tps ai ./project/food-app
+      # ^^^^^^^^^^^^^^^^
+      # long build path
+```
+
+:::
+
 #### Build path
 
 When generating a new instance with a build path, any files or folders the LLM
@@ -245,3 +264,37 @@ your `CWD`.
         | - <test files and directories created by LLM...>
     | - jest.config.js
 ```
+
+:::tip
+
+The more specific you are with the LLM, the better outcome you will get.
+
+For example:
+
+-   **Vague:** "Create an API."
+-   **Specific:** "Create a RESTful API using Express with routes for user
+    authentication and a MongoDB connection."
+
+Providing clear details helps the LLM understand your exact needs and deliver
+more accurate results.
+
+:::
+
+### Inspiration
+
+Need some inspiration on what you can do? Here are some examples:
+
+-   `tps ai`: Generate a README file for my library. This will be published on
+    GitHub, so include common sections and best practices for a Node.js library.
+
+-   `tps ai`: Create a jest.config.js file to run tests for my Node.js library,
+    which is currently written in JavaScript. Include at least one test file
+    located in the \_\_test\_\_ folder.
+
+-   `tps ai`: Create a GitHub Action file for my Node.js library. The action,
+    named ci, should run npm test using Node.js v18. It should trigger on pull
+    requests when I push a commit.
+
+-   `tps ai <app-name>`: Create the contents of a full-featured Express app
+    called food-app, with all the bells and whistles. Include a MongoDB
+    connection as part of the setup.
