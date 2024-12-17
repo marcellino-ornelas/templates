@@ -1,0 +1,303 @@
+---
+description: Template to generate ai
+keywords:
+    - ai
+    - ai scaffold
+    - ai boilerplate
+    - ai generator
+    - chatgpt
+    - Large Language Models
+    - code gen
+sidebar_label: ai (alpha)
+---
+
+import { TemplateOptions } from '@site/docs/components/templateOptions';
+import { Example } from '@site/docs/components/example';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Button } from '@site/docs/components/button';
+import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
+
+# ai
+
+<BadgeList>
+    <Badge type="success">alpha</Badge>
+    <VersionBadge version="1.0.1" library="tps-ai" />
+    <VersionBadge version=">1.2.10" library="templates" />
+</BadgeList>
+
+Generate any codebase in any language, setup files for any library, or bring any
+idea to life—all powered by AI.
+
+:::info
+
+At the moment, this template supports only OpenAI's models with
+[structured outputs](https://platform.openai.com/docs/guides/structured-outputs?lang=node.js&context=ex3#structured-outputs-vs-json-mode)
+support, which generally includes the GPT-4 Series. We plan to support more
+models and LLM providers in the future. Let us know what ones you want us to
+prioritize or how we can improve this template.
+
+<Button
+    to="https://github.com/marcellino-ornelas/templates/discussions/categories/tps-ai-feature-requests-feedback"
+    text="Submit feature request"
+    size="sm"
+    onClick={() => {
+        if (typeof gtag === 'function') {
+            gtag('event', 'feedback_request_click', {
+                event_category: 'Feedback',
+                event_label: 'tps-ai',
+            });
+        }
+    }}
+/>
+
+:::
+
+## Usage
+
+```bash title="Usage"
+tps ai [app-name]
+
+# or in a directory
+
+tps ai [app-name]
+```
+
+```txt title="Creates"
+| - [app-name]/
+    | <files and directories llm creates>
+```
+
+<Example>
+
+<Tabs>
+
+<TabItem value="default">
+
+```bash
+tps ai funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="long build path">
+
+```bash
+tps ai projects/funny-gifs
+```
+
+</TabItem>
+
+<TabItem value="no build path">
+
+```bash
+tps ai
+```
+
+</TabItem>
+
+</Tabs>
+
+</Example>
+
+Check out our [examples section](#examples) to see detailed instructions on how
+to use this template.
+
+## Installation
+
+This template is not included in the templates library and must be installed
+separately.
+
+```bash
+npm i -g templates-mo tps-ai
+
+# Or if you already have the templates library installed
+npm i -g tps-ai
+```
+
+## Options
+
+<TemplateOptions template="tps-ai" type="js" />
+
+## Prerequisites
+
+To use this template, you need to know which LLM provider you want to use, the
+model you'll use, and have a valid API token for the LLM provider. You can learn
+how to create an API key with your preferred LLM provider using one of the
+following:
+
+-   [openai](https://medium.com/@duncanrogoff/how-to-get-your-openai-api-key-in-2024-the-complete-guide-6b52d82c7362)
+
+When generating a new instance, you will be prompted for your token, LLM type,
+and model. However, we recommend using one of the following methods to answer
+these questions:
+
+-   **Global Config File (recommended)**
+-   **On the CLI**
+
+<Tabs>
+
+<TabItem value="Global Config (recommended)">
+
+You can define your preferred LLM, model, and API token in your
+[global config file](../tpsrc.mdx#make-a-global-configuration-file) (e.g.,
+`~/.tps/.tpsrc`). We recommend adding this to your global config file because
+your local config file is more likely to be checked into your codebase,
+potentially leaking your credentials. Plus, defining these at a global level
+allows you to use these credentials throughout your file system.
+
+Run the following command to initialize your
+[global config file](../tpsrc.mdx#make-a-global-configuration-file) if you
+haven't already:
+
+```bash
+tps init -g
+```
+
+Then add your preferred LLM, model, and API token to `~/.tps/.tpsrc`, as shown
+below:
+
+```json title="~/.tps/.tpsrc"
+{
+    "ai": {
+        "answers": {
+            "token": "<token>",
+            "model": "gpt-4o",
+            "llm": "openai"
+        }
+    }
+}
+```
+
+</TabItem>
+
+<TabItem value="CLI">
+
+You can pass in your preferred LLM, model, and API token when generating your
+new instance, as shown below:
+
+```bash
+tps ai --llm openai --model gpt-4o --token <token>
+```
+
+</TabItem>
+
+</Tabs>
+
+## Examples
+
+### How to use
+
+Use our AI template to generate anything your mind desires. If you haven't
+already, please follow our [prerequisites](#prerequisites) before using this
+template.
+
+Once configured, you're ready to use this template. This template can be used in
+two ways:
+
+-   With a build path
+-   Without a build path
+
+:::tip Tip: What is a Build Path?
+
+The build path is the name and location you provide for your new template.
+Templates uses it to create a directory and render its contents there.
+
+_example:_
+
+```bash
+tps ai food-app
+      # ^^^^^^^
+      # build path
+
+tps ai ./project/food-app
+      # ^^^^^^^^^^^^^^^^
+      # long build path
+```
+
+:::
+
+#### Build path
+
+When generating a new instance with a build path, any files or folders the LLM
+creates will be placed into your build path.
+
+_Example:_
+
+If you want to build an Express app for your new `food-app`, you can run the
+following command:
+
+```bash
+tps ai food-app
+? What would you like to build? Create the contents of an Express app. I want all the bells and whistles. It should have a MongoDB connection as well.
+```
+
+This will generate a `food-app` directory in your `CWD` and place all files and
+directories the LLM creates inside it.
+
+```txt title="Creates"
+| - <food-app>/
+    | - <files and directories created by LLM...>
+```
+
+#### No Build Path
+
+When generating a new instance with no build path, all files or folders the LLM
+creates will be placed into your `CWD`. This is useful if you want content to be
+generated inside your current working directory or when you want the LLM to
+generate a directory for you. However, **you need to explicitly tell the LLM to
+do this.**
+
+_Example:_
+
+If you have an existing repo and want to add Jest support, placing all unit
+tests inside a `__tests__` directory:
+
+```bash
+tps ai
+? What would you like to build? Create a jest.config.js file that will run my Node library. Its all written in JavaScript, and at least one test file should live in the `__tests__` folder.
+```
+
+This will generate a `__tests__` directory and a `jest.config.js` file inside
+your `CWD`.
+
+```txt title="Creates"
+| - <cwd>/
+    | - __tests__/
+        | - <test files and directories created by LLM...>
+    | - jest.config.js
+```
+
+:::tip
+
+The more specific you are with the LLM, the better outcome you will get.
+
+For example:
+
+-   **Vague:** "Create an API."
+-   **Specific:** "Create a RESTful API using Express with routes for user
+    authentication and a MongoDB connection."
+
+Providing clear details helps the LLM understand your exact needs and deliver
+more accurate results.
+
+:::
+
+### Inspiration
+
+Need some inspiration on what you can do? Here are some examples:
+
+-   `tps ai`: Generate a README file for my library. This will be published on
+    GitHub, so include common sections and best practices for a Node.js library.
+
+-   `tps ai`: Create a jest.config.js file to run tests for my Node.js library,
+    which is currently written in JavaScript. Include at least one test file
+    located in the \_\_tests\_\_ folder.
+
+-   `tps ai`: Create a GitHub Action file for my Node.js library. The action,
+    named ci, should run npm test using Node.js v18. It should trigger on pull
+    requests when I push a commit.
+
+-   `tps ai <app-name>`: Create the contents of a full-featured Express app
+    called food-app, with all the bells and whistles. Include a MongoDB
+    connection as part of the setup.
