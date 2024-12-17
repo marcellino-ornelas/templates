@@ -77,9 +77,11 @@ describe('[Templates] Settings:', () => {
 			tps.templateSettings.events.onRendered = jest
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.mockImplementation((_, createdPath) => {
+				.mockImplementation((_, { buildPaths }) => {
 					// all build paths should be completed
-					expect(createdPath).toBeDirectory();
+					buildPaths.forEach((createdPath) => {
+						expect(createdPath).toBeDirectory();
+					});
 				});
 
 			await tps.render(CWD, 'App');
@@ -99,9 +101,9 @@ describe('[Templates] Settings:', () => {
 			tps.templateSettings.events.onRendered = jest
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.mockImplementation((_, createdPaths) => {
+				.mockImplementation((_, { buildPaths }) => {
 					// all build paths should be completed
-					createdPaths.forEach((createdPath) => {
+					buildPaths.forEach((createdPath) => {
 						expect(createdPath).toBeDirectory();
 					});
 				});
@@ -123,7 +125,7 @@ describe('[Templates] Settings:', () => {
 			tps.templateSettings.events.onBuildPathRender = jest
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.mockImplementation((_, buildPath) => {
+				.mockImplementation((_, { buildPath }) => {
 					expect(buildPath).not.toBeDirectory();
 				});
 
@@ -155,7 +157,7 @@ describe('[Templates] Settings:', () => {
 			tps.templateSettings.events.onBuildPathRendered = jest
 				.fn()
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				.mockImplementation((_, buildPath) => {
+				.mockImplementation((_, { buildPath }) => {
 					expect(buildPath).toBeDirectory();
 				});
 
