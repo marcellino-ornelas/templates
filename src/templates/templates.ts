@@ -511,6 +511,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		await Promise.all(builders);
 
+		// TODO: When a event fails should we clean up the build path?
 		await this._emitEvent('onRendered', {
 			dest: finalDest,
 			buildPaths: pathsToCreate,
@@ -1088,13 +1089,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		const events = this.templateSettings?.events ?? null;
 		if (events && event in events && typeof events[event] === 'function') {
 			logger.tps.info(`Running ${event} function...`);
-			try {
-				// @ts-expect-error idk lol
-				await events[event]?.(this, ...args);
-			} catch (e) {
-				console.log(e);
-				logger.tps.error(`Event ${event} failed: %n`, e);
-			}
+			// @ts-expect-error idk lol
+			await events[event]?.(this, ...args);
 		}
 	}
 }
