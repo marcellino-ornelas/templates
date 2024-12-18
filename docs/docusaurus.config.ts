@@ -146,8 +146,8 @@ const config: Config = {
 			style: 'dark',
 			logo: {
 				alt: 'Templates Logo',
+				// Always use white logo
 				src: 'img/templates-logo-dark.svg',
-				// srcDark: 'img/templates-logo-dark.svg',
 				width: 75,
 				height: 75,
 				href: '/',
@@ -177,6 +177,10 @@ const config: Config = {
 						{
 							label: 'Discussions',
 							href: 'https://github.com/marcellino-ornelas/templates/discussions',
+						},
+						{
+							label: 'Help',
+							href: 'https://github.com/marcellino-ornelas/templates/discussions/categories/q-a',
 						},
 						//   {
 						//     label: 'Discord',
