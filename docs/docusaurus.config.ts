@@ -144,6 +144,15 @@ const config: Config = {
 		},
 		footer: {
 			style: 'dark',
+			logo: {
+				alt: 'Templates Logo',
+				src: 'img/templates-logo-dark.svg',
+				// srcDark: 'img/templates-logo-dark.svg',
+				width: 75,
+				height: 75,
+				href: '/',
+				target: '_self',
+			},
 			links: [
 				{
 					title: 'Docs',
@@ -164,6 +173,10 @@ const config: Config = {
 						{
 							label: 'Stack Overflow',
 							href: 'https://stackoverflow.com/questions/tagged/templates-mo',
+						},
+						{
+							label: 'Discussions',
+							href: 'https://github.com/marcellino-ornelas/templates/discussions',
 						},
 						//   {
 						//     label: 'Discord',
@@ -189,6 +202,10 @@ const config: Config = {
 						{
 							label: 'GitHub Issues',
 							href: 'https://github.com/marcellino-ornelas/templates/issues',
+						},
+						{
+							label: 'Roadmap',
+							href: 'https://github.com/users/marcellino-ornelas/projects/2',
 						},
 					],
 				},
