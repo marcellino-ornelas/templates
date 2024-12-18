@@ -3,17 +3,18 @@ import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
+import { TemplatesLogo } from '@site/src/components/TemplatesLogo';
 import { How } from './how';
-
-import styles from './index.module.css';
 import { CommunityTemplates } from './CommunityTemplates';
 import { PopularTemplates } from './PopularTemplates';
+import styles from './index.module.css';
 
 const HomepageHeader = () => {
 	const { siteConfig } = useDocusaurusContext();
 	return (
 		<header className={clsx('hero', styles.heroBanner)}>
 			<div className="container">
+				<TemplatesLogo white />
 				<h1 className="hero__title">{siteConfig.title}</h1>
 				<p className="hero__subtitle">{siteConfig.tagline}</p>
 				<div className={styles.buttons}>

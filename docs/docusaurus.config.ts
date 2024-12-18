@@ -79,15 +79,38 @@ const config: Config = {
 		],
 	],
 
+	headTags: [
+		{
+			tagName: 'link',
+			attributes: {
+				rel: 'icon',
+				href: '/templates/img/templates-logo.ico',
+				type: 'image/x-icon',
+				media: '(prefers-color-scheme: light)',
+			},
+		},
+		{
+			tagName: 'link',
+			attributes: {
+				rel: 'icon',
+				href: '/templates/img/templates-logo-dark.ico',
+				type: 'image/x-icon',
+				media: '(prefers-color-scheme: dark)',
+			},
+		},
+	],
 	themeConfig: {
 		// Replace with your project's social card
 		//   image: 'img/docusaurus-social-card.jpg',
 		navbar: {
 			title: 'Templates',
-			// logo: {
-			//   alt: 'My Site Logo',
-			//   //   src: 'img/logo.svg',
-			// },
+			logo: {
+				alt: 'Templates Logo',
+				src: 'img/templates-logo.svg',
+				srcDark: 'img/templates-logo-dark.svg',
+				href: '/',
+				target: '_self',
+			},
 			items: [
 				{
 					type: 'docSidebar',
@@ -121,6 +144,15 @@ const config: Config = {
 		},
 		footer: {
 			style: 'dark',
+			logo: {
+				alt: 'Templates Logo',
+				// Always use white logo
+				src: 'img/templates-logo-dark.svg',
+				width: 75,
+				height: 75,
+				href: '/',
+				target: '_self',
+			},
 			links: [
 				{
 					title: 'Docs',
@@ -141,6 +173,14 @@ const config: Config = {
 						{
 							label: 'Stack Overflow',
 							href: 'https://stackoverflow.com/questions/tagged/templates-mo',
+						},
+						{
+							label: 'Discussions',
+							href: 'https://github.com/marcellino-ornelas/templates/discussions',
+						},
+						{
+							label: 'Help',
+							href: 'https://github.com/marcellino-ornelas/templates/discussions/categories/q-a',
 						},
 						//   {
 						//     label: 'Discord',
@@ -166,6 +206,10 @@ const config: Config = {
 						{
 							label: 'GitHub Issues',
 							href: 'https://github.com/marcellino-ornelas/templates/issues',
+						},
+						{
+							label: 'Roadmap',
+							href: 'https://github.com/users/marcellino-ornelas/projects/2',
 						},
 					],
 				},
