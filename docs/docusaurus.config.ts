@@ -79,15 +79,38 @@ const config: Config = {
 		],
 	],
 
+	headTags: [
+		{
+			tagName: 'link',
+			attributes: {
+				rel: 'icon',
+				href: '/templates/img/templates-logo.ico',
+				type: 'image/x-icon',
+				media: '(prefers-color-scheme: light)',
+			},
+		},
+		{
+			tagName: 'link',
+			attributes: {
+				rel: 'icon',
+				href: '/templates/img/templates-logo-dark.ico',
+				type: 'image/x-icon',
+				media: '(prefers-color-scheme: dark)',
+			},
+		},
+	],
 	themeConfig: {
 		// Replace with your project's social card
 		//   image: 'img/docusaurus-social-card.jpg',
 		navbar: {
 			title: 'Templates',
-			// logo: {
-			//   alt: 'My Site Logo',
-			//   //   src: 'img/logo.svg',
-			// },
+			logo: {
+				alt: 'Templates Logo',
+				src: 'img/templates-logo.svg',
+				srcDark: 'img/templates-logo-dark.svg',
+				href: '/',
+				target: '_self',
+			},
 			items: [
 				{
 					type: 'docSidebar',
