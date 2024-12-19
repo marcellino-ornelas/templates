@@ -6,20 +6,277 @@ pagination_prev: null
 ---
 
 import { Button } from '@site/docs/components/button';
+import { Example } from '@site/docs/components/example';
 import styles from './intro.module.css';
 
 # Generating an Instance
 
 Generating an instance of a template involves creating a new entity based on the
 contents of your template. During this process, templates will take the files
-and folders defined in your template and render them to your build path(s).
+and folders defined in the template and render them to your build path(s).
 
-### Build paths
+## What is a Build Path
 
-The build path is the information you provide to TPS to specify the location and
-details of the new template to be created. It can be thought of as the name or
-identifier for the new instance. When TPS receives the build path, it creates a
-directory with that name and renders all the files and folders from your
-template packages into this newly created directory. In essence, the build path
-acts as a directive to TPS, guiding it in assembling the new template by
-organizing the appropriate files and folders in the designated directory.
+The build path is a combination of an name and an optional location that you
+provide to templates. Templates uses this build path to determine where to
+render your instance file and folders.
+
+The `name` represents the instance identifer. Templates will create a new
+directory based off the name supplied and generate all templates contents into
+that directory.
+
+The `location` tell templates where to put this new instance. This is useful if
+you dont want your instance generated in the directory your in.
+
+The build path resembles a linux file path pattern and there are 4 main
+variations you can utilize:
+
+-   Short build path
+-   Long build path
+-   Multiple build paths
+-   No build path
+
+### Short build path
+
+A short build path is a build path that only contains a `name`.
+
+```text
+// highlight-next-line
+my-food-app
+|__________|
+ ^ Build path and instance name
+```
+
+Like mentioned before, templates creates a new directory with this `name` and
+renders the tenmplates contents into the directory. Templates also assigns this
+`name` as the instances `name`. This `name` can also be used internally by the
+template in places that require a name.
+
+Some examples of this could be:
+
+-   The name of a react component
+-   The name of your new express app and name in package json
+-   etc, etc
+
+<Example>
+
+If we were generating a new instance of a template name `node-server` and we
+have the build path of `my-food-app` then templates will create a new directory
+called `my-food-app` and render all the templates contents inside of it
+
+```text
+// highlight-start
+| - my-food-app/
+    | - <node-server contents...>
+// highlight-end
+```
+
+</Example>
+
+### Long build path
+
+A long build path is a build path that contains a `location` and `name`.
+
+```text
+// highlight-next-line
+projects/my-food-app
+|______| |_________|
+^ location    ^ instance name
+|___________________|
+       ^ build path
+```
+
+Templates still follows all the rules of a single build path. However the
+directory thats created based on the `name` is created inside the `location`. In
+case above, `my-food-app` instance will be created in the `projects` directory.
+
+:::note
+
+If the `location` is not a valid directory, then directory will be created in
+this process
+
+:::
+
+<Example>
+
+If we were generating a new instance of a template named `node-server` and we
+have the build path `code/projects/my-food-app` then templates will create a new
+directory called `my-food-app` inside of `<cwd>/code/projects` and render all
+the templates contents inside.
+
+```text title="Rendered instance"
+|- code
+    |- projects
+        // highlight-start
+        | - my-food-app/
+            | - <node-server contents...>
+        // highlight-end
+```
+
+</Example>
+
+### Multiple build paths
+
+Multiple build paths are a way to create multiple instances of a template in a
+single process. When defining multile build paths you can use a mix of short and
+long builds paths:
+
+```text
+projects/my-food-app projects/my-gas-app my-food-app-2
+|__________________| |_________________| |____________|
+    ^ build path 1        ^ build path 2      ^ build path 3
+```
+
+Templates will generate instances for all build paths and each instance's build
+path will follow the same rules as if you were just generating a single
+instance. While generating multiple instances may not make sense for every
+single template, this is very powerful when using a template that generates a
+subset of your application like a react component, Api route, background job
+file, etc.
+
+<Example>
+
+If we were generating a new instance of a template named `node-server` and we
+have the build paths `projects/my-food-app` & `projects/my-gas-app` then
+templates will create both instances in the `projects` directory.
+
+```text title="Rendered instance"
+|- projects
+    // highlight-start
+    | - my-food-app/
+        | - <node-server contents...>
+    | - my-gas-app/
+        | - <node-server contents...>
+    // highlight-end
+```
+
+</Example>
+
+### No Build path
+
+Some template's dont need a build path to generate a new instance. This is
+because they dont need a new folder or any unique instance name to generate your
+content. Some examples of this can be a template that creates a eslint
+configuration file, jest configuration file, or anything in this similar vain.
+
+:::caution
+
+Always refer to the template's documention page to see how they want you to use
+their template
+
+:::
+
+<Example>
+
+If we were generating a new instance of a template named `eslint` and we didnt
+specific a build path, it could create something like the following:
+
+```text title="Rendered instance"
+|- <cwd>
+    // highlight-start
+    | - <eslint contents...>
+    // highlight-end
+```
+
+</Example>
+
+:::note
+
+Templates will still allow you to provide a build path to a template that
+doesn't require one. Templates will still follow the rules of a build path and
+place all templates contents into it.
+
+If a build path is not supplied to a template that requires one, you will have
+unexpected result's. Templates has no knowledge of whether or not a template
+requires a build path and will not error out. This may change in future versions
+of templates. Always refer to the template's documention recommended way to use
+the template.
+
+:::
+
+## How to generate a new instance
+
+Our CLI is our primary way to generate new instances of a template. You can
+access the CLI after [installation](./intro#installation) with the `tps`
+command:
+
+```bash
+tps <template-name> [build-paths...]
+```
+
+Replace `<template-name>` with the name of the template you want to use and add
+any build paths afterward.
+
+```bash
+# Short build path
+tps my-template instance1
+
+# Long build path
+tps my-template path/to/dir/instance1
+
+# Multiple build paths
+tps my-template instance1 path/to/dir/instance2
+
+# No build path
+tps my-template
+```
+
+<Example>
+
+If you wanted to use our [`react-component`](./templates/react-component.mdx)
+template you would replace `<template-name>` with `react-component` and then the
+component you want to create afterwards (E.g.
+[build path](#what-is-a-build-path)). For this demo, well be creating a `Nav`
+component:
+
+```bash
+tps react-component Nav
+```
+
+This will then generate something similar to the follow:
+
+```text
+| - <cwd>
+    | - Nav/
+        | - <react-component contents...>
+```
+
+You can use a [long build path](#long-build-path) if you want to place this
+instance in a sub directory.
+
+Example, its common for some components like a nav to live in a
+`src/components/` directory so using the same
+[`react-component`](./templates/react-component.mdx) template and component
+`Nav`, you can use the following to generate the `Nav` instance in
+`src/components/`:
+
+```bash
+tps react-component src/components/Nav
+```
+
+If you want to generate multiple instances at the same time you can use
+something similar to the following:
+
+```bash
+tps react-component src/components/Nav src/components/Footer
+```
+
+</Example>
+
+## Using a Template's Options
+
+### Prompting
+
+### cli
+
+### Configuration file
+
+## Options
+
+### Wipe
+
+### Force
+
+### Extending directory
+
+### default
