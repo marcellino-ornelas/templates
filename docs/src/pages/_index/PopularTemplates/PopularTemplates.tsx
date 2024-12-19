@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { Icon } from '@iconify/react';
 import Link from '@docusaurus/Link';
 import styles from './PopularTemplates.module.css';
-import yargsPic from './yargs-logo.png';
 
 export const PopularTemplates = () => {
 	return (
