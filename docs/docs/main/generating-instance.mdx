@@ -1,0 +1,25 @@
+---
+sidebar_label: 'Generating an Instance'
+
+pagination_next: null
+pagination_prev: null
+---
+
+import { Button } from '@site/docs/components/button';
+import styles from './intro.module.css';
+
+# Generating an Instance
+
+Generating an instance of a template involves creating a new entity based on the
+contents of your template. During this process, templates will take the files
+and folders defined in your template and render them to your build path(s).
+
+### Build paths
+
+The build path is the information you provide to TPS to specify the location and
+details of the new template to be created. It can be thought of as the name or
+identifier for the new instance. When TPS receives the build path, it creates a
+directory with that name and renders all the files and folders from your
+template packages into this newly created directory. In essence, the build path
+acts as a directive to TPS, guiding it in assembling the new template by
+organizing the appropriate files and folders in the designated directory.
