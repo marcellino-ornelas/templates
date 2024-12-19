@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { Icon } from '@iconify/react';
 import Link from '@docusaurus/Link';
 import styles from './PopularTemplates.module.css';
-import yargsPic from './yargs-logo.png';
 
 export const PopularTemplates = () => {
 	return (
@@ -37,6 +36,23 @@ export const PopularTemplates = () => {
 					</div>
 				</div>
 				<div className={clsx('col col--4', styles.popularTemplate)}>
+					<Icon icon="eos-icons:ai" className={styles.communityImg} />
+					<h3>ai</h3>
+					<p className={styles.popularTemplateDescription}>
+						Generate complete codebases in any programming language,
+						configuration files for any library or framework, or anything else
+						your heart desires—all powered by AI.
+					</p>
+					<div className={styles.popularTemplateActions}>
+						<Link
+							className="button button--primary"
+							to="/docs/main/templates/ai"
+						>
+							view
+						</Link>
+					</div>
+				</div>
+				<div className={clsx('col col--4', styles.popularTemplate)}>
 					<Icon icon="logos:react" className={styles.communityImg} />
 					<h3>react-component</h3>
 					<p className={styles.popularTemplateDescription}>
@@ -49,28 +65,6 @@ export const PopularTemplates = () => {
 						<Link
 							className="button button--primary"
 							to="/docs/main/templates/react-component"
-						>
-							view
-						</Link>
-					</div>
-				</div>
-				<div className={clsx('col col--4', styles.popularTemplate)}>
-					<img
-						alt="yargs-cli-cmd"
-						className={styles.communityImg}
-						src={yargsPic}
-					/>
-					<h3>yargs-cli-cmd</h3>
-					<p className={styles.popularTemplateDescription}>
-						Generates a Yargs CLI command to extend your existing command-line
-						interface with new commands. This template uses ESM modules,
-						supports TypeScript, and includes options for automatic formatting,
-						making it easier to add commands to your yargs CLI&apos;s.
-					</p>
-					<div className={styles.popularTemplateActions}>
-						<Link
-							className="button button--primary"
-							to="/docs/main/templates/yargs-cli-cmd"
 						>
 							view
 						</Link>
