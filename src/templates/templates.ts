@@ -47,6 +47,7 @@ import {
 	getDefaultSearchPlacesSync,
 } from 'cosmiconfig';
 import * as utils from './utils';
+import { Build } from './build';
 
 interface BuildErrors {
 	error: Error;
@@ -501,12 +502,9 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		});
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
-			return this._renderBuildPath(
-				buildPath,
-				buildInDest,
-				buildNewFolder,
-				data,
-			);
+			const build = new Build(buildPath, buildInDest, buildNewFolder);
+
+			return this._renderBuildPath(build, data);
 		});
 
 		await Promise.all(builders);
@@ -540,14 +538,12 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	private async _renderBuildPath(
-		buildPath: string,
-		buildInDest: boolean,
-		buildNewFolder: boolean,
+		build: Build,
 		data: RenderData,
 	): Promise<void> {
-		await this._emitEvent('onBuildPathRender', { buildPath });
+		await this._emitEvent('onBuildPathRender', { buildPath: build.buildPath });
 
-		const { name, dir } = path.parse(buildPath);
+		// const { name, dir } = path.parse(buildPath);
 		/**
 		 * @example
 		 *  if
@@ -595,7 +591,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		 *    - A directory named `test` needs to be created if not already exists
 		 *
 		 */
-		const realBuildPath = buildInDest || buildNewFolder ? buildPath : dir;
+		const realBuildPath =
+			build.buildInDest || build.buildNewFolder
+				? build.buildPath
+				: build.directory;
 		const answers = this.hasPrompts() ? this._prompts.answers : {};
 
 		const renderData = {
@@ -606,27 +605,27 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			a: answers,
 			utils,
 			u: utils,
-			name,
-			dir,
+			name: build.name,
+			dir: build.directory,
 		};
 		let doesBuildPathExist = isDir(realBuildPath);
 
-		const groupName = `render_${buildPath}`;
+		const groupName = `render_${build.buildPath}`;
 		const loggerGroup = logger.tps.group(groupName, {
 			clear: true,
 		});
 
-		const marker = colors.magenta('*'.repeat(buildPath.length + 12));
+		const marker = colors.magenta('*'.repeat(build.buildPath.length + 12));
 
-		loggerGroup.info(`\n${marker}\nBuild Path: ${buildPath}\n${marker}`);
+		loggerGroup.info(`\n${marker}\nBuild Path: ${build.buildPath}\n${marker}`);
 
 		loggerGroup.info('Render config: %n', {
 			name: renderData.name,
-			buildPath,
+			buildPath: build.buildPath,
 			'Final Destination': realBuildPath,
 			doesBuildPathExist,
-			buildInDest,
-			buildNewFolder,
+			buildInDest: build.buildInDest,
+			buildNewFolder: build.buildNewFolder,
 		});
 
 		return Promise.resolve()
@@ -638,8 +637,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 					 * If `wipe=true` then we need to delete the directory that we will be overriding.
 					 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
 					 */
-					if (wipe && !buildInDest) {
-						if (!buildNewFolder) {
+					if (wipe && !build.buildInDest) {
+						if (!build.buildNewFolder) {
 							loggerGroup.info(
 								'Skipping wipe because we are not building a new folder',
 							);
@@ -668,7 +667,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			.then(() => {
 				// Create a new folder unless told not to
 				// if we are building the template in dest folder don't create new folder
-				if (!buildInDest && (buildNewFolder || !doesBuildPathExist)) {
+				if (
+					!build.buildInDest &&
+					(build.buildNewFolder || !doesBuildPathExist)
+				) {
 					loggerGroup.info('Creating real build path %s', realBuildPath);
 					return fs.promises
 						.mkdir(realBuildPath, { recursive: true })
@@ -687,15 +689,17 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			.then(() => {
 				loggerGroup.success(
 					`Build Path: %s ${colors.green.italic('(created)')}`,
-					buildPath,
+					build.buildPath,
 				);
 			})
 			.catch((err) => {
-				loggerGroup.error('Build Path: %s %n', buildPath, err);
+				loggerGroup.error('Build Path: %s %n', build.buildPath, err);
 				this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
 			})
 			.then(() => logger.tps.printGroup(groupName))
-			.then(() => this._emitEvent('onBuildPathRendered', { buildPath }));
+			.then(() =>
+				this._emitEvent('onBuildPathRendered', { buildPath: build.buildPath }),
+			);
 	}
 
 	async _wipe(realBuildPath: string): Promise<void> {
