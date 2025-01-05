@@ -32,13 +32,23 @@ export class Build {
 		public readonly buildInDest: boolean,
 		public readonly buildNewFolder: boolean,
 	) {
-		// do nothing.
+		// should only happen if build in folder is false
+		// if (buildNewFolder) {
+		const { name, dir } = path.parse(buildPath);
 
-		if (buildNewFolder) {
-			const { name, dir } = path.parse(buildPath);
+		this.name = name;
+		this.directory = dir;
+		// }
+	}
 
-			this.name = name;
-			this.directory = dir;
-		}
+	/**
+	 * Final directory to create instance contents in.
+	 *
+	 *
+	 */
+	public getFinalDirectory() {
+		return this.buildInDest || this.buildNewFolder
+			? this.buildPath
+			: this.directory;
 	}
 }

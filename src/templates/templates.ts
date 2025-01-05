@@ -543,7 +543,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	): Promise<void> {
 		await this._emitEvent('onBuildPathRender', { buildPath: build.buildPath });
 
-		// const { name, dir } = path.parse(buildPath);
 		/**
 		 * @example
 		 *  if
