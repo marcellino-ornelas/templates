@@ -542,7 +542,7 @@ app.use(helmet());
 ### Aliases
 
 The `aliases` option allows you to give aliases to your prompts. These aliases
-can be used when answer prompts either through the command line, node, or a
+can be used when answering prompts either through the command line, node, or a
 [configuration file](../tpsrc.mdx). Take a look at our
 [aliases docs](../generating-instance.mdx#aliases) to learn how to use them.
 
@@ -648,8 +648,10 @@ tps.setAnswers({ f: 'react' });
 
 The `hidden` option makes the prompt a hidden prompt. Hidden prompts do not get
 prompted by default. This is useful when you want to add more customizable logic
-in your template but dont want to overwhelm users with a tons of prompt
-questions.
+in your template but don't want to overwhelm users with a ton of prompt
+questions. Check out the
+[hidden prompts guide](../generating-instance.mdx#hidden-options) to see how to
+use them.
 
 ```json
 {
@@ -694,143 +696,6 @@ so only `prompt1` will be prompted to the user.
 
 ```bash
 tps hidden-prompt-test test
-? Would you like to include prompt1 (n/Y)
-```
-
-</Example>
-
-Hidden prompts can still be answered and prompted.
-
-#### Prompting all hidden prompts
-
-Use can use the [hidden option](../../api/template.mdx#hidden) to prompt all
-hidden prompts.
-
-<Tabs>
-<TabItem value="cli" label="CLI">
-
-```bash
-tps hidden-prompt-test test --hidden
-```
-
-</TabItem>
-
-<TabItem value="tpsrc" label=".tpsrc">
-
-```json title=".tpsrc"
-{
-    "hidden-prompt-test": {
-        "opts": {
-            // highlight-next-line
-            "hidden": true
-        }
-    }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-<Example>
-
-Lets say we had a template named `hidden-prompt-test` that had these two
-prompts, one being a hidden prompt and the not.
-
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "prompt1",
-            "message": "Would you like to include prompt1",
-            "tpsType": "data",
-            "type": "confirm"
-        },
-        {
-            "name": "prompt2",
-            "message": "Would you like to include prompt2",
-            "tpsType": "data",
-            "type": "confirm",
-            // highlight-next-line
-            "hidden": true
-        }
-    ]
-}
-```
-
-If we wanted to get prompted hidden prompts, we can use the hidden option and
-all hidden prompts will now be prompted to you
-
-```bash
-tps hidden-prompt-test test --hidden
-? Would you like to include prompt1 (n/Y)
-? Would you like to include prompt2 (n/Y)
-```
-
-</Example>
-
-#### Answering hidden prompts
-
-You can also answer hidden prompt just like any normal prompt which we will
-cover in the [next section](#how-to-answer-prompts)
-
-<Tabs>
-<TabItem value="cli" label="CLI">
-
-```bash
-tps hidden-prompt-test test --hiddenPrompt
-```
-
-</TabItem>
-
-<TabItem value="tpsrc" label=".tpsrc">
-
-```json title=".tpsrc"
-{
-    "hidden-prompt-test": {
-        "opts": {
-            // highlight-next-line
-            "hiddenPrompt": true
-        }
-    }
-}
-```
-
-</TabItem>
-
-</Tabs>
-
-<Example>
-
-Lets say we had a template named `hidden-prompt-test` that had these two
-prompts, one being a hidden prompt and the not.
-
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "prompt1",
-            "message": "Would you like to include prompt1",
-            "tpsType": "data",
-            "type": "confirm"
-        },
-        {
-            "name": "prompt2",
-            "message": "Would you like to include prompt2",
-            "tpsType": "data",
-            "type": "confirm",
-            // highlight-next-line
-            "hidden": true
-        }
-    ]
-}
-```
-
-If we wanted to answer `prompt2` without being prompted we can pass in the
-`prompt2` flag.
-
-```bash
-tps hidden-prompt-test test --prompt2
 ? Would you like to include prompt1 (n/Y)
 ```
 
