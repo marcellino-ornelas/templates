@@ -17,7 +17,7 @@ export interface FileSystemNodeCallback<TReturn = void>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export abstract class FileSystemNode extends Tree<null, FileSystemNode> {
-	static ignoreFiles = '';
+	static ignoreFiles: string[] = [];
 
 	public depth: number;
 

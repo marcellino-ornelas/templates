@@ -57,7 +57,7 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 
 	it('should exclude files that match ignore files', () => {
 		const filename = 'extras2.js';
-		FileSystemNode.ignoreFiles = `**/${filename}.js`;
+		FileSystemNode.ignoreFiles = [`**/${filename}.js`];
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 		const files = mainDir.find({ name: filename });
 		expect(files).toHaveLength(0);

@@ -72,7 +72,7 @@ if (TPS.IS_TESTING) {
 	logger.tps.opts.disableLog = true;
 }
 
-FileSystemNode.ignoreFiles = '**/.gitkeep';
+FileSystemNode.ignoreFiles = ['**/.gitkeep', '**/.tpskeep'];
 
 const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
 	cache: !TPS.IS_TESTING,
