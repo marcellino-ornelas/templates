@@ -5,12 +5,8 @@ import * as path from 'path';
 import fs from 'fs';
 import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import { TESTING_TPS } from '@test/utilities/constants';
-import { reset, vol } from '@test/utilities/vol';
 
 jest.mock('fs');
-
-const PATH = '/temp/random';
-const MAIN_PATH = path.join(PATH, 'main');
 
 /*
  * Constants
@@ -21,14 +17,7 @@ const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 describe('[FileSystemTree] DirectoryNode:', () => {
 	let mainDir: DirNode;
 
-	beforeEach(() => {
-		reset();
-		FileSystemNode.ignoreFiles = [];
-		vol.toJSON(PATH, {
-			'./main/index.js': 'index',
-			'./main/.tpskeep': '',
-			'./main/.gitkeep': '',
-		});
+	beforeAll(() => {
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 	});
 
@@ -68,7 +57,7 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 
 	it('should exclude files that match ignore files', () => {
 		const filename = 'extras2.js';
-		FileSystemNode.ignoreFiles = [`**/${filename}.js`];
+		FileSystemNode.ignoreFiles = `**/${filename}.js`;
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 		const files = mainDir.find({ name: filename });
 		expect(files).toHaveLength(0);
