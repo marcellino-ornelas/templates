@@ -1,0 +1,743 @@
+---
+sidebar_label: 'Generating an Instance'
+
+pagination_next: null
+pagination_prev: null
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { Example } from '@site/docs/components/example';
+
+# Generating an Instance
+
+Generating an instance of a template involves creating a new entity based on the
+template's contents. During this process, Templates takes the files and folders
+defined in the template and renders them to your build path(s).
+
+## What is a Build Path
+
+The build path is a combination of a name and an optional location that you
+provide to Templates. Templates uses this build path to determine where to
+render your instance.
+
+The `name` represents the instance identifier. Templates creates a new directory
+based on the supplied name—unless told not to—and generates all template
+contents into that directory. This `name` may also be used internally by the
+template in areas requiring a unique identifier.
+
+The `location` specifies where Templates should place the new instance. This is
+useful if you don&apos;t want the instance generated in your current directory.
+
+The build path follows a Linux-style file path pattern, and there are four main
+variations you can use
+
+-   Short build path
+-   Long build path
+-   Multiple build paths
+-   No build path
+
+### Short build path
+
+A short build path is a build path that only contains a `name`.
+
+```text
+// highlight-next-line
+my-food-app
+|__________|
+ ^ Build path and instance name
+```
+
+Like mentioned earlier, Templates creates a new directory with this `name` in
+your cwd. It then renders the template’s contents into that directory and
+assigns the name as the instance’s identifier.
+
+Some examples of this could be:
+
+-   The name of a react component
+-   The name of your new express app and name in package json
+-   etc, etc
+
+<Example>
+
+If we were generating a new instance of a template name `node-server` and we
+have the build path of `my-food-app` then Templates will create a new directory
+called `my-food-app` and render all the templates contents inside of it
+
+```text
+// highlight-start
+| - my-food-app/
+    | - <node-server contents...>
+// highlight-end
+```
+
+</Example>
+
+### Long build path
+
+A long build path is a build path that contains a `location` and `name`.
+
+```text
+// highlight-next-line
+projects/my-food-app
+|______| |_________|
+^ location    ^ instance name
+|___________________|
+       ^ build path
+```
+
+Templates still follows all the rules of a single build path. However, the
+directory thats created based on the `name` is created inside the `location`
+directory. If the `location` directory doesnt exist it will be created. In case
+above, `my-food-app` instance will be created in the `projects` directory.
+
+<Example>
+
+If we were generating a new instance of a template named `node-server` and we
+have the build path `code/projects/my-food-app` then Templates will create a new
+directory called `my-food-app` inside of `<cwd>/code/projects` and render all
+the templates contents inside.
+
+```text title="Rendered instance"
+|- code
+    |- projects
+        // highlight-start
+        | - my-food-app/
+            | - <node-server contents...>
+        // highlight-end
+```
+
+</Example>
+
+### Multiple build paths
+
+Multiple build paths are a way to create multiple instances of a template in a
+single process. When defining multiple build paths, you can use a mix of short
+and long builds paths:
+
+```text
+projects/my-food-app projects/my-gas-app my-food-app-2
+|__________________| |_________________| |____________|
+    ^ build path 1        ^ build path 2      ^ build path 3
+```
+
+Templates generates an instance for every build path. Each instance is
+independant and follows the same process as if you were just generating the
+single instance. Generating multiple instances may not be ideal for every
+template, but it&apos;s especially useful for templates that create sections or
+pieces of an existing app—such as new React components, API routes, background
+job files, and more.
+
+<Example>
+
+If we were generating a new instance of a template named `node-server` and we
+have the build paths `projects/my-food-app` & `projects/my-gas-app` then
+emplates will create both instances in the `projects` directory.
+
+```text title="Rendered instance"
+|- projects
+    // highlight-start
+    | - my-food-app/
+        | - <node-server contents...>
+    | - my-gas-app/
+        | - <node-server contents...>
+    // highlight-end
+```
+
+</Example>
+
+### No Build path
+
+Some template's dont need a build path to generate a new instance. This is
+because they dont need a new folder or any unique instance name to generate your
+content. However, you will only be able to generate this instance in the
+directory you are located in. Some examples of this can be a eslint
+configuration file, jest configuration file, or anything in this similar vain.
+
+:::caution
+
+Always refer to the template's documention page to see how they want you to use
+their template
+
+:::
+
+<Example>
+
+If we were generating a new instance of a template named `eslint` and we didnt
+specific a build path, it could create something like the following:
+
+```text title="Rendered instance"
+|- <cwd>
+    // highlight-start
+    | - <eslint contents...>
+    // highlight-end
+```
+
+</Example>
+
+:::note
+
+Templates allow you to provide a build path to a template that doesn&apos;t
+require one. Currently, Templates have no way of determining whether a build
+path is required for a given template. However, this behavior may change in
+future versions. Always refer to the template&apos;s documentation for the
+recommended usage
+
+:::
+
+## How to generate a new instance
+
+Our CLI is our primary way to generate new instances of a template. You can
+access the CLI after [installation](./intro#installation) with the `tps`
+command:
+
+```bash
+tps <template-name> [build-paths...]
+```
+
+Replace `<template-name>` with the name of the template you want to use and add
+any build paths afterward.
+
+```bash
+# Short build path
+tps my-template buildPath1
+
+# Long build path
+tps my-template path/to/dir/buildPath1
+
+# Multiple build paths
+tps my-template buildPath1 path/to/dir/buildPath2
+
+# No build path
+tps my-template
+```
+
+:::tip
+
+Use the [list command](../api/cli#list) to see what templates are available.
+
+```bash
+tps list
+```
+
+:::
+
+<Example>
+
+If you wanted to use our [`react-component`](./templates/react-component.mdx)
+template you would replace `<template-name>` with `react-component` and then the
+component you want to create afterwards (E.g.
+[build path](#what-is-a-build-path)). For this demo, well be creating a `Nav`
+component:
+
+```bash
+tps react-component Nav
+```
+
+This will then generate something similar to the follow:
+
+```text
+| - <cwd>
+    | - Nav/
+        | - <react-component contents...>
+```
+
+You can use a [long build path](#long-build-path) if you want to place this
+instance in a sub directory.
+
+Example, its common for some components like a nav to live in a
+`src/components/` directory so using the same
+[`react-component`](./templates/react-component.mdx) template and component
+`Nav`, you can use the following to generate the `Nav` instance in
+`src/components/`:
+
+```bash
+tps react-component src/components/Nav
+```
+
+If you want to generate multiple instances at the same time you can use
+something similar to the following:
+
+```bash
+tps react-component src/components/Nav src/components/Footer
+```
+
+</Example>
+
+## Using a Template's Options
+
+Template's can define options to make their template more dynamic. Templates
+allows you to use these options in 4 main ways:
+
+-   Interactive
+-   CLI
+-   Config file
+-   Aliases
+
+Hidden options are a special type of option that we will cover in the
+[hidden options section](#hidden-options).
+
+### Interactive
+
+The primary method of answering options is through interactive prompts. When you
+generate a new instance of a template, Templates will prompt you in the terminal
+all non hidden options then generate your instance.
+
+```bash
+tps react-component Nav
+? Would you like to use typescript (y/N)
+```
+
+If you press `Enter` without typing anything, Templates will use the option's
+default value as the answer. You can also cancel the process by sending an
+interrupt signal (E.g `ctrl + c`).
+
+### CLI
+
+Templates supports using options directly on the command line, allowing you to
+quickly provide answers without going through all the prompts interactively. The
+command-line flag for each option corresponds to its name, prefixed with `--`.
+For example, if an option is named `hey`, the corresponding CLI flag would be
+`--hey`. **When you provide an answer using a CLI flag, Templates will skip
+prompting for that option.**
+
+```bash
+tps some-template instance1 --optionName [value]
+```
+
+We recommend adding all options after your build path(s) in order to prevent
+needing a CLI separator `--`.
+
+<Tabs>
+
+<TabItem value="recommended" label="Recommended">
+
+```bash
+tps my-template app --option1 value1 --option2 value2 value3
+```
+
+</TabItem>
+<TabItem value="not-recommended" label="Not Recommended">
+
+```bash
+tps my-template --option1 value1 --option2 value2 value3 -- app
+```
+
+</TabItem>
+</Tabs>
+
+<Example>
+
+To use the `extension` option from
+[`react-component`](./templates/react-component.mdx), you can add a
+`--extension` flag to the CLI command:
+
+```bash
+tps express-app my-app --extension jsx
+```
+
+</Example>
+
+Now lets go over how to answer different types of prompts:
+
+###### Boolean
+
+When dealing with options that accept boolean values, specify the option name on
+the CLI without any value. To use a `true` value, simply use the option name as
+shown below:
+
+```bash
+--typescript
+```
+
+To use a `false` value, add the `no-` prefix in front of the option name:
+
+```bash
+--no-typescript
+```
+
+<Example>
+
+To use the `typescript` option from
+[`react-component`](./templates/react-component.mdx), you can do the following:
+
+```bash
+tps react-component Nav --typescript
+```
+
+If you don't want to use `typescript`, then you can do the following:
+
+```bash
+tps react-component Nav --no-typescript
+```
+
+</Example>
+
+###### Single values
+
+When dealing with options that accept a single value, specify the option name
+and value afterwards:
+
+```bash
+--cssType less
+
+# or a number
+
+--age 23
+
+# or with =
+
+--type=something
+
+# if your value has spaces, wrap it with quotes
+
+--message "hey there everyone"
+```
+
+<Example>
+
+To use the `cssExtension` option from
+[`react-component`](./templates/react-component.mdx), you can do the following:
+
+```bash
+tps express-app app --cssExtension react
+```
+
+</Example>
+
+###### List
+
+When dealing with options that accept a list of values, specify the option name
+and all values afterwards:
+
+```bash
+--ages 23 45 65
+
+# or strings
+
+--numbers ten nine five "forty five"
+```
+
+<Example>
+
+To use the `extras` option from a template named `my-template`, you can do the
+following:
+
+```bash
+tps my-template app --extras metrics unit e2e
+```
+
+</Example>
+
+### Configuration file
+
+Templates also support answering options in our
+[configuration file](./tpsrc.mdx). When adding an answer to our config file,
+Templates will use this answer when generating a new instance, and you will no
+longer be prompted for the option.
+
+To answer a template's option, you need to first specify the template name. Then
+you can add your answer to the `answers` object, which takes a key/value pair of
+optionName/optionAnswer.
+
+```json title=".tpsrc"
+{
+    "<template-name>": {
+        "answers": {
+            "<option-name>": "<option-answer>"
+        }
+    }
+}
+```
+
+You can read more about how to use our configuration file in our
+[configuration guide](./tpsrc.mdx).
+
+<Example>
+
+To use the `typescript` option from
+[`react-component`](./templates/react-component.mdx), you can add `true` for the
+`typescript` option in your config file like the following:
+
+```json title=".tpsrc"
+{
+    "react-component": {
+        "answers": {
+            "typescript": true
+        }
+    }
+}
+```
+
+Afterward, you will no longer be prompted if you want to use TypeScript, and
+your React components will always be generated in TypeScript.
+
+</Example>
+
+### Aliases
+
+Some Templates option's have aliases that you can use to answer the option. You
+can find these in the `aliases` column for your template's options. You can use
+these aliases just like any normal option name. The only exeption is single
+charater aliases which can be used on the CLI with only one `-` and then the
+single charater.
+
+```bash
+tps my-template app -t
+```
+
+<Example>
+
+To use the `typescript` option alias, `t`, from
+[`react-component`](./templates/react-component.mdx), you can do the following:
+
+```bash
+tps react-component Nav -t
+```
+
+If you dont want to use `typescript`, then you can do the following:
+
+```bash
+tps react-component Nav --no-typescript
+```
+
+</Example>
+
+### Hidden Options
+
+Hidden options are options that don't get prompted by default. These options
+usually allow for more fine modifications that are too cumbersome to ask every
+time. You can answer hidden options just like normal prompts (e.g., CLI, config
+file) with the exception of being asked interactively. In order to have hidden
+options get prompted, you can use the `hidden` option on the command line when
+generating a new instance.
+
+```bash
+tps my-template app --hidden
+```
+
+## Core Options
+
+Below will show you how to use some of Template's core options. You can find a
+full list of these options in the [Templates API docs](./../api/template.mdx).
+All core options can be specified on the CLI or in our
+[config file](./tpsrc.mdx).
+
+To use core options on the CLI, use the option name as a flag similar to how you
+would with [template's options](#cli).
+
+```bash
+tps my-template app --optionName optionValue
+```
+
+To use core options in our [config file](./tpsrc.mdx), add them to the `opts`
+object for the template you want the options to have effect on.
+
+```json title=".tps/tpsrc"
+{
+    "my-template": {
+        "opts": {
+            "optionName": "optionValue"
+        }
+    }
+}
+```
+
+:::caution
+
+Defining options in our [config file](./tpsrc.mdx) is only allowed at the
+template level. We don't support defining options that affect all templates.
+However, this may change in the future.
+
+:::
+
+### Default
+
+By default, Templates will prompt you for every non-hidden option that does not
+have a defined value. To skip all these interactive prompts, you can use the
+`default` option which will have Templates use default values for each option.
+
+```bash
+tps my-template app --default
+```
+
+You can use this in conjunction with options on the CLI and in your
+[config file](./tpsrc.mdx):
+
+```bash
+tps my-template app --default --option1 value1 --option2
+```
+
+### Wipe
+
+By default, Templates will throw an error if the directory it needs to create is
+already created or if any of the files it needs to create are already created.
+To force the creation of this instance, you can use the `wipe` option. The
+`wipe` option will delete any directories or files that Templates need to create
+first, then render your instance.
+
+```bash
+tps my-template app --wipe
+```
+
+This is very useful when you want to render a new instance of an instance you
+just created but with different options.
+
+<Example>
+
+Let's say you have the following directory structure:
+
+```text
+| - app
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - ...
+        // highlight-end
+```
+
+If you were trying to render a new instance of the `react-component` template
+and called this `Home`, tps would error out because a `Home` directory already
+exists. However, if you add the `--wipe` flag, tps will delete this directory
+first, then render your new instance in its place.
+
+```bash
+tps react-component src/Home --wipe
+```
+
+This will produce:
+
+```text
+| - app
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - <react-component template files ...>
+        // highlight-end
+```
+
+</Example>
+
+### Force
+
+Very similar to the [`wipe`](#wipe) command, the `force` option will force the
+creation of any files that already exist. The main difference between these
+commands is that `wipe` deletes folders and files while `force` only overrides
+any files that have conflicts.
+
+```bash
+tps my-template app --force
+```
+
+This is useful when you created an instance and added additional files and
+folders in your instance but you want to regenerate the instance with different
+options without losing your additional work.
+
+<Example>
+
+Let's say you have the following directory structure:
+
+```text
+| - app
+    | - .tps/
+        | - ...
+    | - src/
+        // highlight-start
+        | - Home/
+            | - some-file.js
+        // highlight-end
+```
+
+If you were trying to render a new instance of the `react-component` template
+and called this `Home`, tps would error out because a `Home` directory already
+exists. However, if you add the `--force` flag, tps will force the creation of
+your instance but will only overwrite conflicting files.
+
+```bash
+tps react-component src/Home --force
+```
+
+<Tabs>
+<TabItem value="no-conflict" label="No conflicts">
+
+If the `react-component` template doesn't create a `some-file.js`, then the
+original file will be left in place and not touched.
+
+```text
+| - app
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js
+            | - <react-component template files ...>
+```
+
+</TabItem>
+
+<TabItem value="conflict" label="Conflicting file">
+
+If the `react-component` template was going to render a `some-file.js`, then the
+file will be overridden by the template's `some-file.js`.
+
+```text
+| - app
+    | - .tps/
+        | - ...
+    | - src/
+        | - Home/
+            // highlight-next-line
+            | - some-file.js <--- from react-component
+            | - <react-component template files ...>
+```
+
+</TabItem>
+</Tabs>
+
+</Example>
+
+### Extending Directory
+
+Templates `extendDest` option allows you to extend each build path with a
+additional path. This additional path is added to the front of your build path
+and can be used in conjunction with a [long build path](#long-build-path).
+
+| Build Path(s) | extendDest | Result                 |
+| ------------- | ---------- | ---------------------- |
+| app           | myPath/    | myPath/app             |
+| subPath/app   | myPath/    | myPath/subPath/app     |
+| app app2      | myPath/    | myPath/app myPath/app2 |
+
+This option is very useful when you know your instances will be generated in a
+paticular directory every time and you dont want to type this out every time.
+
+<Tabs>
+    <TabItem value="config" label="Config File">
+
+        You can add the `extendDest` to the `opts` object in your config file to always append a
+        path to every instance you create.
+
+        ```txt title=".tps/tpsrc"
+        {
+            "my-template": {
+                "opts": {
+                    "extendDest": "path/to/directory",
+                }
+            }
+        }
+        ```
+
+    </TabItem>
+
+    <TabItem value="CLI" label="CLI Option">
+
+        Sorry, not supported yet! Coming soon...
+
+    </TabItem>
+
+</Tabs>
