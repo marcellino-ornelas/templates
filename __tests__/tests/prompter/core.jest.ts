@@ -260,4 +260,30 @@ describe('[Prompter] Core:', () => {
 			]),
 		);
 	});
+
+	it('should always have prompt default value in answers', async () => {
+		const prompter = new Prompter([
+			mkPrompt({
+				name: 'prompt1',
+				default: true,
+			}),
+			mkPrompt({
+				name: 'prompt2',
+				default: 'hey',
+			}),
+		]);
+
+		prompter.setAnswers({ prompt1: false });
+
+		jest.mocked(inquirer.prompt).mockResolvedValue({});
+
+		const answers = await prompter.getAnswers();
+
+		expect(answers).toEqual(
+			expect.objectContaining({
+				prompt1: false,
+				prompt2: 'hey',
+			}),
+		);
+	});
 });
