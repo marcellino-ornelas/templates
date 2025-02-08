@@ -8,7 +8,7 @@ keywords:
     - chatgpt
     - Large Language Models
     - code gen
-sidebar_label: ai (alpha)
+sidebar_label: ai
 ---
 
 import { TemplateOptions } from '@site/docs/components/templateOptions';
@@ -21,9 +21,8 @@ import { Badge, BadgeList, VersionBadge } from '@site/docs/components/badges';
 # ai
 
 <BadgeList>
-    <Badge type="success">alpha</Badge>
-    <VersionBadge version="1.0.1" library="tps-ai" />
-    <VersionBadge version=">1.2.10" library="templates" />
+    <VersionBadge version="1.0.2" library="tps-ai" />
+    <VersionBadge version=">1.2.11" library="templates" />
 </BadgeList>
 
 Generate any codebase in any language, setup files for any library, or bring any
@@ -31,11 +30,8 @@ idea to life—all powered by AI.
 
 :::info
 
-At the moment, this template supports only OpenAI's models with
-[structured outputs](https://platform.openai.com/docs/guides/structured-outputs?lang=node.js&context=ex3#structured-outputs-vs-json-mode)
-support, which generally includes the GPT-4 Series. We plan to support more
-models and LLM providers in the future. Let us know what ones you want us to
-prioritize or how we can improve this template.
+Have ideas for new features or improvements? We'd love to hear from you! Please
+share your thoughts by submitting a feature request using the button below.
 
 <Button
     to="https://github.com/marcellino-ornelas/templates/discussions/categories/tps-ai-feature-requests-feedback"
@@ -60,7 +56,7 @@ tps ai [app-name]
 
 # or in a directory
 
-tps ai [app-name]
+tps ai ./path/to/dir/[app-name]
 ```
 
 ```txt title="Creates"
@@ -119,27 +115,26 @@ npm i -g tps-ai
 
 <TemplateOptions template="tps-ai" type="js" />
 
-## Prerequisites
+## Configuration
 
 To use this template, you need to know which LLM provider you want to use, the
-model you'll use, and have a valid API token for the LLM provider. You can learn
-how to create an API key with your preferred LLM provider using one of the
-following:
+model you'll use, and have all the required credentials. Each LLM provider
+required different credentials, so refer to [AI providers](#ai-providers)
+section to learn how to configure that llm provider.
 
--   [openai](https://medium.com/@duncanrogoff/how-to-get-your-openai-api-key-in-2024-the-complete-guide-6b52d82c7362)
-
-When generating a new instance, you will be prompted for your token, LLM type,
-and model. However, we recommend using one of the following methods to answer
-these questions:
+When generating a new instance, you will be prompted for your token, AI
+provider, and model. However, we recommend using one of the following methods to
+answer these questions:
 
 -   **Global Config File (recommended)**
+-   **Env variables**
 -   **On the CLI**
 
 <Tabs>
 
 <TabItem value="Global Config (recommended)">
 
-You can define your preferred LLM, model, and API token in your
+You can define your preferred AI provider, model, and API token in your
 [global config file](../tpsrc.mdx#make-a-global-configuration-file) (e.g.,
 `~/.tps/.tpsrc`). We recommend adding this to your global config file because
 your local config file is more likely to be checked into your codebase,
@@ -154,8 +149,8 @@ haven't already:
 tps init -g
 ```
 
-Then add your preferred LLM, model, and API token to `~/.tps/.tpsrc`, as shown
-below:
+Then add your preferred AI provider, model, and API token to `~/.tps/.tpsrc`, as
+shown below:
 
 ```json title="~/.tps/.tpsrc"
 {
@@ -171,10 +166,32 @@ below:
 
 </TabItem>
 
+<TabItem value="Env variables">
+
+Each LLM provider supports a unique enviroment varible that you can use for
+their credentials. You can refer to the [AI provider](#ai-providers) section for
+the provider your using to see what ENV varible you need to use. Its important
+to remember that only the provider credentials are supported by ENV variables.
+The models and provider will still need to be specified using one of our other
+[methods](../generating-instance#using-a-templates-options).
+
+Templates does not load environment variables by default, so you will need to
+set these in your
+[shell before running the command](https://chlee.co/how-to-setup-environment-variables-for-windows-mac-and-linux/).
+
+:::tip
+
+Templates plans on supporting loading environment variables automatically from a
+`.env` file in a future release.
+
+:::
+
+</TabItem>
+
 <TabItem value="CLI">
 
-You can pass in your preferred LLM, model, and API token when generating your
-new instance, as shown below:
+You can pass in your preferred AI provider, model, and API token when generating
+your new instance, as shown below:
 
 ```bash
 tps ai --llm openai --model gpt-4o --token <token>
@@ -183,6 +200,167 @@ tps ai --llm openai --model gpt-4o --token <token>
 </TabItem>
 
 </Tabs>
+
+## AI Providers
+
+Templates supports multiple AI providers, each with its own unique setup. Below
+are the supported AI providers and how to configure them.
+
+Templates uses Vercel's [AI SDK](https://sdk.vercel.ai/) to interact with the AI
+providers. Currently, we only support a subset of the
+[providers](https://sdk.vercel.ai/providers/ai-sdk-providers) that the AI SDK
+supports. The model you choose needs to support object generation in order to
+use it with this template. If you would like to see a provider that we don't
+support, drop us a
+[request](https://github.com/marcellino-ornelas/templates/discussions/categories/tps-ai-feature-requests-feedback).
+
+:::caution
+
+Templates does not support passing options to the LLM models at the moment.
+However, this is a feature that we are looking to support in the future.
+
+:::
+
+### OpenAI
+
+**Supported models:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/openai#model-capabilities
+
+**Env variable:** `OPENAI_API_KEY`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/openai
+
+**API key Guide:**
+https://medium.com/@duncanrogoff/how-to-get-your-openai-api-key-in-2024-the-complete-guide-6b52d82c7362
+
+To use OpenAI, you need to have an API key. You can get one by following the
+[OpenAI API key guide](https://medium.com/@duncanrogoff/how-to-get-your-openai-api-key-in-2024-the-complete-guide-6b52d82c7362).
+
+Once you have your API key, you can follow the [configuration](#configuration)
+section to set it up. This provider supports specifing your API token using the
+`OPENAI_API_KEY` ENV variable.
+
+### Anthropic (alpha)
+
+**Supported models:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/anthropic#model-capabilities
+
+**Env variable:** `ANTHROPIC_API_KEY`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/anthropic
+
+**API key docs:**
+https://docs.anthropic.com/en/api/getting-started#accessing-the-api
+
+To use Anthropic, you need to have an API key. You can get one by following the
+[Anthropic API key docs](https://docs.anthropic.com/en/api/getting-started#accessing-the-api).
+
+Once you have your API key, you can follow the [configuration](#configuration)
+section to set it up. This provider supports specifing your API token using the
+`ANTHROPIC_API_KEY` ENV variable.
+
+### Amazon Bedrock (alpha)
+
+**Supported models:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/amazon-bedrock#model-capabilities
+
+**Env variable:** `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/amazon-bedrock
+
+**API key docs:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/amazon-bedrock#authentication
+
+:::danger
+
+This providers require `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+`AWS_REGION` env variables.
+
+:::
+
+:::caution
+
+The `token` and `baseUrl` options are not supported by this provider.
+
+:::
+
+To use Amazon Bedrock you will need a access key, secret access key, and the
+[Amazon Bedrock authentication docs](https://sdk.vercel.ai/providers/ai-sdk-providers/amazon-bedrock#authentication).
+
+Once you have your credentials, you will need to provide them via ENV variables.
+You can provided these env variables by following the env variables tab in
+[configuration](#configuration) section. You will need to provide all the
+folllowing env variables `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`,
+`AWS_REGION`.
+
+### Google (alpha)
+
+**Supported models:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/google-generative-ai#model-capabilities
+
+**Env variable:** `GOOGLE_GENERATIVE_AI_API_KEY`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/google-generative-ai
+
+**API key docs:** https://ai.google.dev/gemini-api/docs/api-key
+
+To use Google, you need to have an API key. You can get one by following the
+[Google API key docs](https://ai.google.dev/gemini-api/docs/api-key).
+
+Once you have your API key, you can follow the [configuration](#configuration)
+section to set it up. This provider supports specifing your API token using the
+`GOOGLE_GENERATIVE_AI_API_KEY` ENV variable.
+
+### Deepseek (alpha)
+
+**Supported models:**
+https://sdk.vercel.ai/providers/ai-sdk-providers/deepseek#model-capabilities
+
+**Env variable:** `DEEPSEEK_API_KEY`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/deepseek
+
+**API key docs:** https://api-docs.deepseek.com/
+
+To use Deepseek, you need to have an API key. You can get one by following the
+[Deepseek API key docs](https://api-docs.deepseek.com/).
+
+Once you have your API key, you can follow the [configuration](#configuration)
+section to set it up. This provider supports specifing your API token using the
+`DEEPSEEK_API_KEY` ENV variable.
+
+### Azure (alpha)
+
+**Env variable:** `AZURE_API_KEY`, `AZURE_RESOURCE_NAME`
+
+**Docs:** https://sdk.vercel.ai/providers/ai-sdk-providers/azure
+
+**API key docs:**
+https://docs.mindmac.app/how-to.../add-api-key/create-azure-openai-api-key
+
+:::danger
+
+This providers requires the `AZURE_RESOURCE_NAME` env variable.
+
+:::
+
+:::tip
+
+Use the `model` option to specify azures deployment name.
+
+:::
+
+To use Azure, you need to have an API key. You can get one by following the
+[Azure API key docs](https://docs.mindmac.app/how-to.../add-api-key/create-azure-openai-api-key).
+
+Once you have your API key, you can follow the [configuration](#configuration)
+section to set it up. This provider supports specifing your API token using the
+`AZURE_API_KEY` ENV variable.
+
+You also need to specify a `AZURE_RESOURCE_NAME` ENV variable to use this
+provider. This is the name of the auzure resource you want to use. You can
+provided these env variables by following the env variables tab in
+[configuration](#configuration) section.
 
 ## Examples
 
@@ -200,32 +378,38 @@ two ways:
 
 :::tip Tip: What is a Build Path?
 
-The build path is the name and location you provide for your new template.
+The build path is the name and location you provide for your new instance.
 Templates uses it to create a directory and render its contents there.
 
 _example:_
 
 ```bash
 tps ai food-app
-      # ^^^^^^^
-      # build path
+    #  |_______|
+    #    ^ Build path and instance name
 
 tps ai ./project/food-app
-      # ^^^^^^^^^^^^^^^^
-      # long build path
+    #  |________| |______|
+    #   ^ location    ^ instance name
+    #  |_________________|
+    #      ^ build path
 ```
+
+You can learn more about build paths in the
+[build path docs](../generating-instance.mdx#what-is-a-build-path).
 
 :::
 
 #### Build path
 
-When generating a new instance with a build path, any files or folders the LLM
-creates will be placed into your build path.
+When generating a new instance with a build path, Templates will create a new
+directory based on this build path and put any files or folders the LLM creates
+into this directory.
 
 _Example:_
 
-If you want to build an Express app for your new `food-app`, you can run the
-following command:
+If you want to build an Express app for your new food app idea named `food-app`,
+you can run the following command:
 
 ```bash
 tps ai food-app
@@ -236,7 +420,7 @@ This will generate a `food-app` directory in your `CWD` and place all files and
 directories the LLM creates inside it.
 
 ```txt title="Creates"
-| - <food-app>/
+| - food-app/
     | - <files and directories created by LLM...>
 ```
 
@@ -278,12 +462,45 @@ For example:
 -   **Specific:** "Create a RESTful API using Express with routes for user
     authentication and a MongoDB connection."
 
-Providing clear details helps the LLM understand your exact needs and deliver
+Providing clear details helps the ai understand your exact needs and deliver
 more accurate results.
 
 :::
 
-### Inspiration
+### Base Url
+
+The `baseUrl` option lets you change the base url that this template sends the
+request to. This is useful when you want to interact with different
+environments. Most AI providers supports this base URL option but always refer
+to the [provider's docs](#ai-providers) to make sure.
+
+<Tabs>
+
+<TabItem value="Config">
+
+```json title=".tps/.tpsrc"
+{
+    "ai": {
+        "answers": {
+            "baseUrl": "https://my-custom-ai.com/api"
+        }
+    }
+}
+```
+
+</TabItem>
+
+<TabItem value="CLI">
+
+```bash
+tps ai --baseUrl https://my-custom-ai.com/api
+```
+
+</TabItem>
+
+</Tabs>
+
+## Inspiration
 
 Need some inspiration on what you can do? Here are some examples:
 
