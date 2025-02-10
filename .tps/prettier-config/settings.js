@@ -31,10 +31,4 @@ module.exports = {
 			default: true,
 		},
 	],
-	// events: {
-	// 	// async onRender(tps) {},
-	// 	// async onBuildPathRender(tps, { buildPath }) {},
-	// 	// async onBuildPathRendered(tps, { buildPath }) {},
-	// 	// async onRendered(tps, { dest, buildPaths }) {}
-	// },
 };
