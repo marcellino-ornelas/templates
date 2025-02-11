@@ -33,6 +33,7 @@ export const BANNED_TEMPLATES: string[] = [
 	'new-template',
 	'new-test',
 	'tps-docs',
+	'prettier-config',
 ];
 
 export default {
