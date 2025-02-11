@@ -24,7 +24,7 @@ module.exports = {
 		{
 			name: 'ignore',
 			hidden: true,
-			description: 'Renders a .prettierignore file',
+			description: 'Generates a .prettierignore file',
 			message: 'Do you want a .prettierignore file?',
 			type: 'confirm',
 			tpsType: 'package',
