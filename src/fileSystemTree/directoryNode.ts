@@ -47,7 +47,13 @@ export class DirectoryNode extends FileSystemNode {
 		}
 
 		directoryChildren
-			.filter((child) => !minimatch(child, FileSystemNode.ignoreFiles))
+			// TODO: should probably be done in the templates file instead
+			// Filter out files that match the ignoreFiles pattern
+			.filter((child) => {
+				return !FileSystemNode.ignoreFiles.some((ignoreFile) =>
+					minimatch(child, ignoreFile),
+				);
+			})
 			.forEach((name) => {
 				const dirContentPath = path.join(this.path, name);
 				const ContentType = isDir(dirContentPath) ? DirectoryNode : FileNode;

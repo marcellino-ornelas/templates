@@ -337,4 +337,29 @@ describe('[Templates] Render Process:', () => {
 			expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
 		});
 	});
+
+	// TODO: remove .gitkeep
+	it('should ignore .tpskeep & .gitkeep files', () => {
+		const tps = mkTemplate('my-template', undefined, {
+			'./default/some-directory/.tpskeep': '',
+			'./default/some-directory-nested/nested/.tpskeep': '',
+			'./default/some-directory/.gitkeep': '',
+			'./default/some-directory-nested/nested/.gitkeep': '',
+			'./default/index.js': '',
+		});
+
+		return tps.render(playground.box(), 'app').then(() => {
+			expect(
+				playground.pathTo('app/some-directory'),
+			).not.toHaveAllFilesAndDirectories(['.tpskeep', '.gitkeep']);
+
+			expect(
+				playground.pathTo('app/some-directory-nested/nested'),
+			).not.toHaveAllFilesAndDirectories(['.tpskeep', '.gitkeep']);
+
+			expect(playground.pathTo('app/')).toHaveAllFilesAndDirectories([
+				'index.js',
+			]);
+		});
+	});
 });

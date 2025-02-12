@@ -107,9 +107,10 @@ export default class Prompter<TAnswers = AnswersHash> {
 
 	async getAnswers(): Promise<TAnswers> {
 		logger.prompter.info('Fetching answers...');
+		let promptsLeft = this._getPromptsThatNeedAnswers();
+
 		if (!this.needsAnswers()) return this.answers;
 
-		let promptsLeft = this._getPromptsThatNeedAnswers();
 		logger.prompter.info('Current Answers: %n', this.answers);
 		logger.prompter.info(
 			'Prompts that need answers: %n',
@@ -128,6 +129,7 @@ export default class Prompter<TAnswers = AnswersHash> {
 
 			return this.setAnswers(allDefaults);
 		}
+
 		const hiddenPrompts = promptsLeft.filter((prompt) => prompt.hidden);
 
 		// remove hidden prompts if we arent showing them
@@ -161,6 +163,15 @@ export default class Prompter<TAnswers = AnswersHash> {
 			this.setAnswers(allHiddenDefaults);
 		}
 
-		return this.answers;
+		const allDefaults = {};
+		promptsLeft.forEach((prompt) => {
+			// TODO: should default to null
+			allDefaults[prompt.name] = prompt.getDefaultValue({
+				...allDefaults,
+				...this.answers,
+			});
+		});
+
+		return this.setAnswers({ ...allDefaults, ...this.answers });
 	}
 }
