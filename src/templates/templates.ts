@@ -668,14 +668,9 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 					(build.buildNewFolder || !doesBuildPathExist)
 				) {
 					loggerGroup.info('Creating real build path %s', realBuildPath);
-					return fs.promises
-						.mkdir(realBuildPath, { recursive: true })
-						.catch((err) => {
-							loggerGroup.warn(
-								'Building build path folder had a issue %n',
-								err,
-							);
-						});
+					return build.createDirectory().catch((err) => {
+						loggerGroup.warn('Building build path folder had a issue %n', err);
+					});
 				}
 
 				loggerGroup.info('Not creating real build path %s', realBuildPath);

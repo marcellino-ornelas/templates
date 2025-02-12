@@ -72,10 +72,14 @@ export class Build {
 		return isDirAsync(this.getDirectory());
 	}
 
+	public async createDirectory() {
+		return fs.mkdir(this.getDirectory(), { recursive: true });
+	}
+
 	/**
 	 * Destroy the final directory
 	 */
-	async wipe(): Promise<void> {
+	public async wipe(): Promise<void> {
 		// we can only remove a directory thats going to be built.
 		if (this.buildInDest || !this.buildNewFolder) {
 			throw new Error(
