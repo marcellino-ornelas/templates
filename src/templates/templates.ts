@@ -590,10 +590,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		 *    - A directory named `test` needs to be created if not already exists
 		 *
 		 */
-		const realBuildPath =
-			build.buildInDest || build.buildNewFolder
-				? build.buildPath
-				: build.directory;
+		const realBuildPath = build.getFinalDirectory();
 		const answers = this.hasPrompts() ? this._prompts.answers : {};
 
 		const renderData = {
@@ -607,7 +604,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			name: build.name,
 			dir: build.directory,
 		};
-		let doesBuildPathExist = isDir(realBuildPath);
+		let doesBuildPathExist = await build.exists();
 
 		const groupName = `render_${build.buildPath}`;
 		const loggerGroup = logger.tps.group(groupName, {
@@ -652,7 +649,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 						}
 						loggerGroup.info('Wiping destination %s', realBuildPath);
 						doesBuildPathExist = false;
-						return this._wipe(realBuildPath);
+						return build.wipe();
 					}
 
 					if (!force && !wipe) {
@@ -699,10 +696,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			.then(() =>
 				this._emitEvent('onBuildPathRendered', { buildPath: build.buildPath }),
 			);
-	}
-
-	async _wipe(realBuildPath: string): Promise<void> {
-		await fs.promises.rm(realBuildPath, { force: true, recursive: true });
 	}
 
 	_scheduleCleanUpForBuild(

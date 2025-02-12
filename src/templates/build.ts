@@ -1,4 +1,6 @@
 import * as path from 'path';
+import fs from 'fs/promises';
+import { isDirAsync } from '@tps/utilities/fileSystem';
 
 interface BuildBuilt {
 	files: string[];
@@ -28,6 +30,13 @@ export class Build {
 	public built: BuildBuilt = { files: [], directories: [] };
 
 	constructor(
+		/**
+		 * Full absolute build path
+		 *
+		 * @example "/Users/lornelas/Templates/my-instance"
+		 * @example "/Users/lornelas/Templates/some/extra/path/my-instance"
+		 * @example "/Users/lornelas/Templates"
+		 */
 		public readonly buildPath: string,
 		public readonly buildInDest: boolean,
 		public readonly buildNewFolder: boolean,
@@ -36,6 +45,7 @@ export class Build {
 		// if (buildNewFolder) {
 		const { name, dir } = path.parse(buildPath);
 
+		// TODO: when `buildInDest` is true, `name` should be null
 		this.name = name;
 		this.directory = dir;
 		// }
@@ -44,11 +54,35 @@ export class Build {
 	/**
 	 * Final directory to create instance contents in.
 	 *
+	 * If `buildInDest` or `buildNewFolder` then we use the supplied buildPath. Note!
+	 * when `buildInDest` is true, the build path wont have a instance name.
 	 *
+	 * TODO: when `buildInDest` is true, `name` should be null
 	 */
 	public getFinalDirectory() {
 		return this.buildInDest || this.buildNewFolder
 			? this.buildPath
 			: this.directory;
+	}
+
+	/**
+	 * Checks to see if the final directory exists or not
+	 */
+	public async exists(): Promise<boolean> {
+		return isDirAsync(this.getFinalDirectory());
+	}
+
+	/**
+	 * Destroy the final directory
+	 */
+	async wipe(): Promise<void> {
+		// we can only remove a directory thats going to be built.
+		if (this.buildInDest || !this.buildNewFolder) {
+			throw new Error(
+				'Cannot wipe directory that is being build in dest or without a new folder',
+			);
+		}
+
+		await fs.rm(this.getFinalDirectory(), { force: true, recursive: true });
 	}
 }
