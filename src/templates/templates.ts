@@ -590,7 +590,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		 *    - A directory named `test` needs to be created if not already exists
 		 *
 		 */
-		const realBuildPath = build.getFinalDirectory();
+		const realBuildPath = build.getDirectory();
 		const answers = this.hasPrompts() ? this._prompts.answers : {};
 
 		const renderData = {
@@ -604,7 +604,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			name: build.name,
 			dir: build.directory,
 		};
-		let doesBuildPathExist = await build.exists();
+		let doesBuildPathExist = await build.directoryExists();
 
 		const groupName = `render_${build.buildPath}`;
 		const loggerGroup = logger.tps.group(groupName, {

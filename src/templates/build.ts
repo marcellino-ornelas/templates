@@ -59,7 +59,7 @@ export class Build {
 	 *
 	 * TODO: when `buildInDest` is true, `name` should be null
 	 */
-	public getFinalDirectory() {
+	public getDirectory() {
 		return this.buildInDest || this.buildNewFolder
 			? this.buildPath
 			: this.directory;
@@ -68,8 +68,8 @@ export class Build {
 	/**
 	 * Checks to see if the final directory exists or not
 	 */
-	public async exists(): Promise<boolean> {
-		return isDirAsync(this.getFinalDirectory());
+	public async directoryExists(): Promise<boolean> {
+		return isDirAsync(this.getDirectory());
 	}
 
 	/**
@@ -83,6 +83,6 @@ export class Build {
 			);
 		}
 
-		await fs.rm(this.getFinalDirectory(), { force: true, recursive: true });
+		await fs.rm(this.getDirectory(), { force: true, recursive: true });
 	}
 }
