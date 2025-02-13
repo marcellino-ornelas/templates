@@ -1,10 +1,18 @@
 import * as path from 'path';
 import { promises as fs } from 'fs';
 import { isDirAsync } from '@tps/utilities/fileSystem';
+import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 
 interface BuildBuilt {
 	files: string[];
 	directories: string[];
+}
+
+interface BuildOptions {
+	buildInDest: boolean;
+	buildNewFolder: boolean;
+	wipe: boolean;
+	force: boolean;
 }
 
 export class Build {
@@ -38,8 +46,7 @@ export class Build {
 		 * @example "/Users/lornelas/Templates"
 		 */
 		public readonly buildPath: string,
-		public readonly buildInDest: boolean,
-		public readonly buildNewFolder: boolean,
+		public opts: BuildOptions,
 	) {
 		// should only happen if build in folder is false
 		// if (buildNewFolder) {
@@ -60,7 +67,7 @@ export class Build {
 	 * TODO: when `buildInDest` is true, `name` should be null
 	 */
 	public getDirectory() {
-		return this.buildInDest || this.buildNewFolder
+		return this.opts.buildInDest || this.opts.buildNewFolder
 			? this.buildPath
 			: this.directory;
 	}
@@ -81,7 +88,7 @@ export class Build {
 	 */
 	public async wipe(): Promise<void> {
 		// we can only remove a directory thats going to be built.
-		if (this.buildInDest || !this.buildNewFolder) {
+		if (this.opts.buildInDest || !this.opts.buildNewFolder) {
 			throw new Error(
 				'Cannot wipe directory that is being build in dest or without a new folder',
 			);
@@ -89,4 +96,8 @@ export class Build {
 
 		await fs.rm(this.getDirectory(), { force: true, recursive: true });
 	}
+
+	// public getLogger(): CreateDebugGroup {
+
+	// }
 }

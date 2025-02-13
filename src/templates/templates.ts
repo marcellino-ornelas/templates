@@ -502,7 +502,12 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		});
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
-			const build = new Build(buildPath, buildInDest, buildNewFolder);
+			const build = new Build(buildPath, {
+				buildInDest,
+				buildNewFolder,
+				wipe: this.opts.wipe,
+				force: this.opts.force,
+			});
 
 			return this._renderBuildPath(build, data);
 		});
@@ -620,8 +625,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			buildPath: build.buildPath,
 			'Final Destination': realBuildPath,
 			doesBuildPathExist,
-			buildInDest: build.buildInDest,
-			buildNewFolder: build.buildNewFolder,
+			buildInDest: build.opts.buildInDest,
+			buildNewFolder: build.opts.buildNewFolder,
 		});
 
 		return Promise.resolve()
@@ -633,8 +638,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 					 * If `wipe=true` then we need to delete the directory that we will be overriding.
 					 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
 					 */
-					if (wipe && !build.buildInDest) {
-						if (!build.buildNewFolder) {
+					if (wipe && !build.opts.buildInDest) {
+						if (!build.opts.buildNewFolder) {
 							loggerGroup.info(
 								'Skipping wipe because we are not building a new folder',
 							);
@@ -664,8 +669,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				// Create a new folder unless told not to
 				// if we are building the template in dest folder don't create new folder
 				if (
-					!build.buildInDest &&
-					(build.buildNewFolder || !doesBuildPathExist)
+					!build.opts.buildInDest &&
+					(build.opts.buildNewFolder || !doesBuildPathExist)
 				) {
 					loggerGroup.info('Creating real build path %s', realBuildPath);
 					return build.createDirectory().catch((err) => {
