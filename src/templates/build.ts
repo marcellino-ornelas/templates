@@ -2,6 +2,7 @@ import * as path from 'path';
 import { promises as fs } from 'fs';
 import { isDirAsync } from '@tps/utilities/fileSystem';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
+import logger from '@tps/utilities/logger';
 
 interface BuildBuilt {
 	files: string[];
@@ -97,7 +98,51 @@ export class Build {
 		await fs.rm(this.getDirectory(), { force: true, recursive: true });
 	}
 
-	// public getLogger(): CreateDebugGroup {
+	/**
+	 * Wipes the directory if it should. Will return a boolean on whether or not
+	 * directory was wiped.
+	 */
+	public async maybeWipe(
+		hackyCallbackWhenFilesNeedToBeWiped: () => void,
+	): Promise<boolean> {
+		const loggerGroup = this.getLogger();
+		if (await this.directoryExists()) {
+			/**
+			 * If `wipe=true` then we need to delete the directory that we will be overriding.
+			 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
+			 */
+			if (this.opts.wipe && !this.opts.buildInDest) {
+				if (!this.opts.buildNewFolder) {
+					loggerGroup.info(
+						'Skipping wipe because we are not building a new folder',
+					);
 
-	// }
+					hackyCallbackWhenFilesNeedToBeWiped();
+					return false;
+				}
+				loggerGroup.info('Wiping destination %s', this.getDirectory());
+				await this.wipe();
+				return true;
+			}
+
+			// if (!force && !wipe) {
+			// 	loggerGroup.info('Checking to see if there are duplicate files');
+			// 	return this._checkForFiles(realBuildPath, renderData);
+			// }
+		} else {
+			loggerGroup.info('Build path does not exist...');
+		}
+
+		return false;
+	}
+
+	public getLoggerName(): string {
+		return `render_${this.buildPath}`;
+	}
+
+	public getLogger(clear: boolean = false): CreateDebugGroup {
+		return logger.tps.group(this.getLoggerName(), {
+			clear,
+		});
+	}
 }

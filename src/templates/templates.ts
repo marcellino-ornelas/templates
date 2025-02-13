@@ -611,10 +611,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		};
 		let doesBuildPathExist = await build.directoryExists();
 
-		const groupName = `render_${build.buildPath}`;
-		const loggerGroup = logger.tps.group(groupName, {
-			clear: true,
-		});
+		const loggerGroup = build.getLogger();
 
 		const marker = colors.magenta('*'.repeat(build.buildPath.length + 12));
 
@@ -629,41 +626,54 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			buildNewFolder: build.opts.buildNewFolder,
 		});
 
+		const wasWiped = build.maybeWipe(() => {
+			// super hacky yes i know. The reason this needs to happen is because
+			// when were using wipe but were not building a new folder we need to make sure all
+			// files that already exist get overridden
+			this.compiledFiles.forEach((file) => {
+				// eslint-disable-next-line no-param-reassign
+				file.opts.force = true;
+			});
+		});
+
+		if (!wasWiped) {
+			loggerGroup.info('Checking to see if there are duplicate files');
+			return this._checkForFiles(realBuildPath, renderData);
+		}
+
 		return Promise.resolve()
 			.then(() => {
-				const { wipe, force } = this.opts;
-
-				if (doesBuildPathExist) {
-					/**
-					 * If `wipe=true` then we need to delete the directory that we will be overriding.
-					 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
-					 */
-					if (wipe && !build.opts.buildInDest) {
-						if (!build.opts.buildNewFolder) {
-							loggerGroup.info(
-								'Skipping wipe because we are not building a new folder',
-							);
-							// super hacky yes i know. The reason this needs to happen is because
-							// when were using wipe but were not building a new folder we need to make sure all
-							// files that already exist get overridden
-							this.compiledFiles.forEach((file) => {
-								// eslint-disable-next-line no-param-reassign
-								file.opts.force = true;
-							});
-							return;
-						}
-						loggerGroup.info('Wiping destination %s', realBuildPath);
-						doesBuildPathExist = false;
-						return build.wipe();
-					}
-
-					if (!force && !wipe) {
-						loggerGroup.info('Checking to see if there are duplicate files');
-						return this._checkForFiles(realBuildPath, renderData);
-					}
-				} else {
-					loggerGroup.info('Build path does not exist...');
-				}
+				// const { wipe, force } = this.opts;
+				// if (doesBuildPathExist) {
+				/**
+				 * If `wipe=true` then we need to delete the directory that we will be overriding.
+				 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
+				 */
+				// if (wipe && !build.opts.buildInDest) {
+				// 	if (!build.opts.buildNewFolder) {
+				// 		loggerGroup.info(
+				// 			'Skipping wipe because we are not building a new folder',
+				// 		);
+				// 		// super hacky yes i know. The reason this needs to happen is because
+				// 		// when were using wipe but were not building a new folder we need to make sure all
+				// 		// files that already exist get overridden
+				// 		this.compiledFiles.forEach((file) => {
+				// 			// eslint-disable-next-line no-param-reassign
+				// 			file.opts.force = true;
+				// 		});
+				// 		return;
+				// 	}
+				// 	loggerGroup.info('Wiping destination %s', realBuildPath);
+				// 	doesBuildPathExist = false;
+				// 	return build.wipe();
+				// }
+				// 	if (!force && !wipe) {
+				// 		loggerGroup.info('Checking to see if there are duplicate files');
+				// 		return this._checkForFiles(realBuildPath, renderData);
+				// 	}
+				// } else {
+				// 	loggerGroup.info('Build path does not exist...');
+				// }
 			})
 			.then(() => {
 				// Create a new folder unless told not to
@@ -692,7 +702,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				loggerGroup.error('Build Path: %s %n', build.buildPath, err);
 				this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
 			})
-			.then(() => logger.tps.printGroup(groupName))
+			.then(() => logger.tps.printGroup(build.getLoggerName()))
 			.then(() =>
 				this._emitEvent('onBuildPathRendered', { buildPath: build.buildPath }),
 			);
