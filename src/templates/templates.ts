@@ -609,7 +609,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			name: build.name,
 			dir: build.directory,
 		};
-		let doesBuildPathExist = await build.directoryExists();
+		const doesBuildPathExist = await build.directoryExists();
 
 		const loggerGroup = build.getLogger();
 
@@ -622,8 +622,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			buildPath: build.buildPath,
 			'Final Destination': realBuildPath,
 			doesBuildPathExist,
-			buildInDest: build.opts.buildInDest,
-			buildNewFolder: build.opts.buildNewFolder,
+			buildInDest: build.options.buildInDest,
+			buildNewFolder: build.options.buildNewFolder,
 		});
 
 		const wasWiped = build.maybeWipe(() => {
@@ -636,51 +636,18 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			});
 		});
 
-		if (!wasWiped) {
+		if (!wasWiped && !this.opts.force) {
 			loggerGroup.info('Checking to see if there are duplicate files');
 			return this._checkForFiles(realBuildPath, renderData);
 		}
 
 		return Promise.resolve()
 			.then(() => {
-				// const { wipe, force } = this.opts;
-				// if (doesBuildPathExist) {
-				/**
-				 * If `wipe=true` then we need to delete the directory that we will be overriding.
-				 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
-				 */
-				// if (wipe && !build.opts.buildInDest) {
-				// 	if (!build.opts.buildNewFolder) {
-				// 		loggerGroup.info(
-				// 			'Skipping wipe because we are not building a new folder',
-				// 		);
-				// 		// super hacky yes i know. The reason this needs to happen is because
-				// 		// when were using wipe but were not building a new folder we need to make sure all
-				// 		// files that already exist get overridden
-				// 		this.compiledFiles.forEach((file) => {
-				// 			// eslint-disable-next-line no-param-reassign
-				// 			file.opts.force = true;
-				// 		});
-				// 		return;
-				// 	}
-				// 	loggerGroup.info('Wiping destination %s', realBuildPath);
-				// 	doesBuildPathExist = false;
-				// 	return build.wipe();
-				// }
-				// 	if (!force && !wipe) {
-				// 		loggerGroup.info('Checking to see if there are duplicate files');
-				// 		return this._checkForFiles(realBuildPath, renderData);
-				// 	}
-				// } else {
-				// 	loggerGroup.info('Build path does not exist...');
-				// }
-			})
-			.then(() => {
 				// Create a new folder unless told not to
 				// if we are building the template in dest folder don't create new folder
 				if (
-					!build.opts.buildInDest &&
-					(build.opts.buildNewFolder || !doesBuildPathExist)
+					!build.options.buildInDest &&
+					(build.options.buildNewFolder || !doesBuildPathExist)
 				) {
 					loggerGroup.info('Creating real build path %s', realBuildPath);
 					return build.createDirectory().catch((err) => {

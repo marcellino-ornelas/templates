@@ -1,8 +1,12 @@
 import * as path from 'path';
 import { promises as fs } from 'fs';
-import { isDirAsync } from '@tps/utilities/fileSystem';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
+import { FileExistError } from '@tps/errors';
+import { isFileAsync, isDirAsync } from '@tps/utilities/fileSystem';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RenderData = Record<string, any>;
 
 interface BuildBuilt {
 	files: string[];
@@ -15,6 +19,13 @@ interface BuildOptions {
 	wipe: boolean;
 	force: boolean;
 }
+
+const DEFAULT_OPTS: BuildOptions = {
+	buildInDest: false,
+	buildNewFolder: true,
+	wipe: false,
+	force: false,
+};
 
 export class Build {
 	/**
@@ -38,6 +49,8 @@ export class Build {
 	 */
 	public built: BuildBuilt = { files: [], directories: [] };
 
+	public options: BuildOptions;
+
 	constructor(
 		/**
 		 * Full absolute build path
@@ -47,7 +60,7 @@ export class Build {
 		 * @example "/Users/lornelas/Templates"
 		 */
 		public readonly buildPath: string,
-		public opts: BuildOptions,
+		options: Partial<BuildOptions> = {},
 	) {
 		// should only happen if build in folder is false
 		// if (buildNewFolder) {
@@ -57,6 +70,11 @@ export class Build {
 		this.name = name;
 		this.directory = dir;
 		// }
+
+		this.options = {
+			...DEFAULT_OPTS,
+			...options,
+		};
 	}
 
 	/**
@@ -68,7 +86,7 @@ export class Build {
 	 * TODO: when `buildInDest` is true, `name` should be null
 	 */
 	public getDirectory() {
-		return this.opts.buildInDest || this.opts.buildNewFolder
+		return this.options.buildInDest || this.options.buildNewFolder
 			? this.buildPath
 			: this.directory;
 	}
@@ -87,9 +105,9 @@ export class Build {
 	/**
 	 * Destroy the final directory
 	 */
-	public async wipe(): Promise<void> {
+	private async wipe(): Promise<void> {
 		// we can only remove a directory thats going to be built.
-		if (this.opts.buildInDest || !this.opts.buildNewFolder) {
+		if (this.options.buildInDest || !this.options.buildNewFolder) {
 			throw new Error(
 				'Cannot wipe directory that is being build in dest or without a new folder',
 			);
@@ -103,7 +121,7 @@ export class Build {
 	 * directory was wiped.
 	 */
 	public async maybeWipe(
-		hackyCallbackWhenFilesNeedToBeWiped: () => void,
+		hackyCallbackWhenFilesNeedToBeWiped?: () => void,
 	): Promise<boolean> {
 		const loggerGroup = this.getLogger();
 		if (await this.directoryExists()) {
@@ -111,24 +129,19 @@ export class Build {
 			 * If `wipe=true` then we need to delete the directory that we will be overriding.
 			 * But if `newFolder=false` then we need to skip the wipe command because we are not creating a new directory.
 			 */
-			if (this.opts.wipe && !this.opts.buildInDest) {
-				if (!this.opts.buildNewFolder) {
+			if (this.options.wipe && !this.options.buildInDest) {
+				if (!this.options.buildNewFolder) {
 					loggerGroup.info(
 						'Skipping wipe because we are not building a new folder',
 					);
 
-					hackyCallbackWhenFilesNeedToBeWiped();
+					hackyCallbackWhenFilesNeedToBeWiped?.();
 					return false;
 				}
 				loggerGroup.info('Wiping destination %s', this.getDirectory());
 				await this.wipe();
 				return true;
 			}
-
-			// if (!force && !wipe) {
-			// 	loggerGroup.info('Checking to see if there are duplicate files');
-			// 	return this._checkForFiles(realBuildPath, renderData);
-			// }
 		} else {
 			loggerGroup.info('Build path does not exist...');
 		}
@@ -145,4 +158,35 @@ export class Build {
 			clear,
 		});
 	}
+
+	// private async checkForFiles(renderData: RenderData): Promise<void> {
+	// 	const directory = this.getDirectory();
+
+	// 	for (let i = 0; i < this.compiledFiles.length; i++) {
+	// 		const file = this.compiledFiles[i];
+	// 		const finalDest = file.dest(directory, renderData, this._defs);
+
+	// 		// eslint-disable-next-line no-await-in-loop -- we want to go one by one and not send tons of requests
+	// 		if (await isFileAsync(finalDest)) {
+	// 			throw new FileExistError(finalDest);
+	// 		}
+	// 	}
+	// }
+
+	// /**
+	//  * Render the build path
+	//  */
+	// public async render(
+	// 	renderData: RenderData,
+	// 	hackyCallbackWhenFilesNeedToBeWiped?: () => void,
+	// ): Promise<void> {
+	// 	const loggerGroup = this.getLogger();
+
+	// 	const wasWiped = this.maybeWipe(hackyCallbackWhenFilesNeedToBeWiped);
+
+	// 	if (!wasWiped && !this.options.force) {
+	// 		loggerGroup.info('Checking to see if there are duplicate files');
+	// 		return this.checkForFiles(renderData);
+	// 	}
+	// }
 }
