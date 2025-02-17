@@ -210,6 +210,8 @@ describe('[TPS] Render with Wipe:', () => {
 			expect(destPath).toHaveAllFilesAndDirectories(['index.js', 'app.js']);
 			expect(indexFileInParentPath).toHaveFileContents('clean up worked');
 			expect(playground.pathTo('my/personal/app')).not.toBeDirectory();
+
+			// original file that already existed shouldnt be wiped
 			expect(randomDest).toBeFile();
 		});
 	});
