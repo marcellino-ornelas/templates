@@ -2,11 +2,7 @@ import * as path from 'path';
 import { promises as fs } from 'fs';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
-import { FileExistError } from '@tps/errors';
-import { isFileAsync, isDirAsync } from '@tps/utilities/fileSystem';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type RenderData = Record<string, any>;
+import { isDirAsync } from '@tps/utilities/fileSystem';
 
 interface BuildBuilt {
 	files: string[];
