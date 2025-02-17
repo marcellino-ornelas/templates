@@ -173,7 +173,7 @@ describe('[TPS] Render with Wipe:', () => {
 	 * This test was added because when using newFolder=false and using wipe and using a long build path.
 	 *
 	 */
-	it.only('should be able to use wipe=true and newFolder=false with a long build path', () => {
+	it('should be able to use wipe=true and newFolder=false with a long build path', () => {
 		/**
 		 * directory structure before:
 		 *
