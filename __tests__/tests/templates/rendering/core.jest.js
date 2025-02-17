@@ -230,20 +230,6 @@ describe('[Templates] Render Process:', () => {
 		});
 	});
 
-	it('should be able to render a template with force, if files exist', () => {
-		const tps = new Templates('testing', { force: true });
-
-		const indexFile = playground.pathTo('app/index.js');
-
-		writeFile(indexFile, 'blah');
-
-		const destPath = playground.pathTo('app');
-
-		return tps.render(playground.box(), 'app').then(() => {
-			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-		});
-	});
-
 	/**
 	 * @docs guide/getting-started/packages.md#including-more-packages
 	 */

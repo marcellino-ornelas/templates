@@ -41,6 +41,18 @@ export function isFile(filePath: string): boolean {
 	return file.isFile();
 }
 
+/**
+ * Check to see if the `path` is a valid file
+ */
+export async function isFileAsync(filePath: string): Promise<boolean> {
+	try {
+		const file = await fs.promises.lstat(filePath);
+		return file.isFile();
+	} catch (e) {
+		return false;
+	}
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function json(jsonFile: string): any {
 	try {
