@@ -548,6 +548,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	): Promise<void> {
 		const realBuildPath = build.getDirectory();
 		const loggerGroup = build.getLogger();
+		const doesBuildPathExist = await build.directoryExists();
 
 		try {
 			await this._emitEvent('onBuildPathRender', {
@@ -615,7 +616,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				name: build.name,
 				dir: build.directory,
 			};
-			const doesBuildPathExist = await build.directoryExists();
 
 			const marker = colors.magenta('*'.repeat(build.buildPath.length + 12));
 
@@ -644,7 +644,20 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 			loggerGroup.info('Build was wiped', wasWiped);
 
-			if (!wasWiped && !this.opts.force) {
+			/**
+			 * when wipe=true but buildNewFolder=false we need to act like `force` and not
+			 * check for files.
+			 */
+			const shouldWipeButNoNewFolder =
+				this.opts.wipe && !build.options.buildNewFolder;
+
+			/**
+			 * Check for file conflicts when:
+			 * - folder was not wiped
+			 * - force option is not true
+			 * - when wipe but no new folder
+			 */
+			if (!wasWiped && !this.opts.force && !shouldWipeButNoNewFolder) {
 				loggerGroup.info('Checking to see if there are duplicate files');
 				this._checkForFiles(realBuildPath, renderData);
 			}
@@ -672,11 +685,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			);
 		} catch (err) {
 			loggerGroup.error('Build Path: %s %n', build.buildPath, err);
-			this._scheduleCleanUpForBuild(
-				realBuildPath,
-				err,
-				await build.directoryExists(),
-			);
+			this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
 		} finally {
 			logger.tps.printGroup(build.getLoggerName());
 			await this._emitEvent('onBuildPathRendered', {
