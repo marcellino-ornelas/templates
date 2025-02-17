@@ -76,17 +76,4 @@ describe('Build', () => {
 			expect(hackyForceFunction).toBeCalled();
 		});
 	});
-
-	// it('should ....', async () => {
-	// 	const templateName = 'build';
-
-	// 	mkTemplate(templateName);
-
-	// 	const tps = new Templates(templateName);
-
-	// 	await tps.render(CWD, 'App');
-
-	// 	// @ts-expect-error no types for extending jest functions
-	// 	expect(path.join(CWD, 'App')).toBeDirectory();
-	// });
 });
