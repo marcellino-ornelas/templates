@@ -88,17 +88,4 @@ describe('Force', () => {
 		// @ts-expect-error no types for extending jest functions
 		expect(indexFilePath).toHaveFileContents('template-file');
 	});
-
-	// it('should ...', async () => {
-	// 	const templateName = 'force';
-
-	// 	mkTemplate(templateName);
-
-	// 	const tps = new Templates(templateName);
-
-	// 	await tps.render(CWD, 'App');
-
-	// 	// @ts-expect-error no types for extending jest functions
-	// 	expect(path.join(CWD, 'App')).toBeDirectory();
-	// });
 });
