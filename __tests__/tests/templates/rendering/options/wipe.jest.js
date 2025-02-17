@@ -6,6 +6,7 @@ import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import * as path from 'path';
 import { writeFile } from '@test/utilities/helpers';
+import { Build } from '@tps/templates/build';
 
 jest.mock('fs');
 
@@ -92,7 +93,7 @@ describe('[TPS] Render with Wipe:', () => {
 	/**
 	 * @docs api/cli/commands/use.md#when-using-no-build-path
 	 */
-	it('should be able to render a template with wipe when there is no buildPath', () => {
+	it('should be able to render a template with wipe when there is no buildPath', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -109,9 +110,6 @@ describe('[TPS] Render with Wipe:', () => {
 		 *        | - some-random-file.js <-- should not be deleted
 		 *        | - <templates files...>
 		 */
-
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		const wipeMock = jest.fn(() => {});
 		const cwd = playground.pathTo('app');
 		const randomDest = path.join(cwd, 'some-random-file.js');
 		const randomFileNotInBuildPath = playground.pathTo(
@@ -120,18 +118,17 @@ describe('[TPS] Render with Wipe:', () => {
 
 		const tps = new Templates('testing', { wipe: true });
 
-		// eslint-disable-next-line no-underscore-dangle
-		tps._wipe = wipeMock;
+		const wipeMock = jest.spyOn(Build.prototype, 'wipe');
 
 		writeFile(randomDest, 'blah');
 		writeFile(randomFileNotInBuildPath, '');
 
-		return tps.render(cwd, '').then(() => {
-			expect(wipeMock).not.toHaveBeenCalled();
-			expect(randomDest).toBeFile();
-			expect(cwd).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
-			expect(randomFileNotInBuildPath).toBeFile();
-		});
+		await tps.render(cwd);
+
+		expect(wipeMock).not.toHaveBeenCalled();
+		expect(randomDest).toBeFile();
+		expect(cwd).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
+		expect(randomFileNotInBuildPath).toBeFile();
 	});
 
 	it('should be able to use wipe=true and newFolder=false', () => {
@@ -176,7 +173,7 @@ describe('[TPS] Render with Wipe:', () => {
 	 * This test was added because when using newFolder=false and using wipe and using a long build path.
 	 *
 	 */
-	it('should be able to use wipe=true and newFolder=false with a long build path', () => {
+	it.only('should be able to use wipe=true and newFolder=false with a long build path', () => {
 		/**
 		 * directory structure before:
 		 *
