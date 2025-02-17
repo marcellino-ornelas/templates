@@ -1,6 +1,3 @@
-/*
- * Modules
- */
 import { mkTemplate } from '@test/utilities/templates';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
@@ -11,7 +8,6 @@ jest.mock('fs');
 
 describe('Force', () => {
 	beforeEach(() => {
-		// jest.resetAllMocks();
 		reset();
 	});
 
