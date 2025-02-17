@@ -84,4 +84,24 @@ describe('Force', () => {
 		// @ts-expect-error no types for extending jest functions
 		expect(indexFilePath).toHaveFileContents('template-file');
 	});
+
+	it('should be able to render a template with force, when building in dest and file exists', async () => {
+		const indexFilePath = path.join(CWD, 'index.js');
+
+		const files = {
+			'default/index.js': 'template-file',
+		};
+
+		const tps = mkTemplate('testing-force', CWD, files, {
+			force: true,
+			newFolder: false,
+		});
+
+		vol.writeFileSync(indexFilePath, 'original-file');
+
+		await tps.render(CWD, 'app');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(indexFilePath).toHaveFileContents('template-file');
+	});
 });
