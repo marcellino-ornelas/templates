@@ -175,16 +175,12 @@ However, the `model` and `provider` options will still need to be specified
 using one of our other
 [methods](../generating-instance#using-a-templates-options).
 
-Templates does not load environment variables by default, so you will need to
+When using the Templates CLI, it will load the first `.env` file it finds while
+walking up parent directories. You can learn more about how environments are
+loaded in our [env docs](../generating-instance.mdx#env). You can also pass
+environment variables on the command line or
 [set these in your shell](https://chlee.co/how-to-setup-environment-variables-for-windows-mac-and-linux/)
 before running the command.
-
-:::tip
-
-Templates plans to support loading environment variables automatically from a
-`.env` file in a future release.
-
-:::
 
 </TabItem>
 

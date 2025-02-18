@@ -157,17 +157,20 @@ tps [use] [buildPaths...]
 render a new instance from a template
 
 Options:
-  --version        Show version number                                 [boolean]
-  --verbose, -v    More in-depth logging              [boolean] [default: false]
-  --help           Show help                                           [boolean]
-  --use, -u        Template package to create your with                 [string]
-  --packages, -p   Additional Packages to use when building your template[array]
-  --default, -d    Use all default answers to all prompts              [boolean]
-  --newFolder, -f  Create a new folder                 [boolean] [default: true]
-  --force          force the template to be made. This will override any files
+      --version    Show version number                                 [boolean]
+  -v, --verbose    More in-depth logging              [boolean] [default: false]
+      --env        Load environment variables from a .env file
+                                                       [boolean] [default: true]
+      --help       Show help                                           [boolean]
+  -u, --use        Template package to create your with                 [string]
+  -p, --packages   Additional Packages to use when building your template[array]
+  -d, --default    Use all default answers to all prompts              [boolean]
+  -f, --newFolder  Create a new folder                                 [boolean]
+      --force      force the template to be made. This will override any files
                    that tps needs to create                            [boolean]
-  --wipe           force the template to be made. This will delete the directory
+      --wipe       force the template to be made. This will delete the directory
                    if exists                                           [boolean]
+      --hidden     Prompt all hidden prompts                           [boolean]
 ```
 
 Render a new instance of a template.
