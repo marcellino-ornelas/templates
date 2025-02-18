@@ -741,3 +741,24 @@ paticular directory every time and you dont want to type this out every time.
     </TabItem>
 
 </Tabs>
+
+### Env
+
+:::caution
+
+This option is only available on the Templates CLI
+
+:::
+
+When using the Template's CLI, Templates CLI will load environment variables
+from the first `.env` file it finds while walking up parent directories. We use
+[dotenvx](https://dotenvx.com/) to load your environment variables. However,
+only the `.env` file is supported at the moment. If you would like any other
+features of [dotenvx](https://dotenvx.com/) supported, drop us a
+[feature request](https://github.com/marcellino-ornelas/templates/discussions/categories/feature-requests-feedback)
+
+To disable this behavior, add `--no-env` to your CLI command:
+
+```bash
+tps some-template --no-env app
+```
