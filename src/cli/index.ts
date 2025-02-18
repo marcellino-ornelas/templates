@@ -3,6 +3,7 @@
 
 import yargs from 'yargs/yargs';
 import { commands } from './commands';
+import { middleware } from './middleware';
 
 // eslint-disable-next-line no-unused-expressions
 yargs(process.argv.slice(2))
@@ -14,7 +15,14 @@ yargs(process.argv.slice(2))
 			required: false,
 			default: false,
 		},
+		env: {
+			describe: 'Load environment variables from a .env file',
+			type: 'boolean',
+			required: false,
+			default: true,
+		},
 	})
+	.middleware(middleware)
 	.command(commands)
 	.help()
 	.parse();
