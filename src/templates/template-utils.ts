@@ -39,7 +39,7 @@ export const findTemplate = (
 	return path.join(homeDirectory, templateName);
 };
 
-export const directoryIsTpsInitialized = (
+export const directoryIsTpsInitialized = async (
 	location: string,
 ): Promise<boolean> => {
 	return isDirAsync(path.join(location, TPS.TPS_FOLDER));
