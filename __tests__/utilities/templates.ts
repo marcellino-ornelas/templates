@@ -91,10 +91,17 @@ export const mkGlobalTemplate = (
 	return mkTemplate(name, USER_HOME, json, opts);
 };
 
+export const DEFAULT_SETTINGS_FILE: SettingsFile = {
+	opts: {},
+	prompts: [],
+};
+
 export type OptionsSettingsFile = RecursivePartial<SettingsFile>;
 
-export const mkSettingsFileJSON = (settings: OptionsSettingsFile): string => {
-	return JSON.stringify(settings);
+export const mkSettingsFileJSON = (
+	settings: OptionsSettingsFile = {},
+): string => {
+	return JSON.stringify({ ...DEFAULT_SETTINGS_FILE, ...settings });
 };
 
 export const DEFAULT_PROMPT: SettingsFilePrompt = {
