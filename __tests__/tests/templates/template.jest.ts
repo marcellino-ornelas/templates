@@ -8,7 +8,7 @@ import {
 } from '@test/utilities/templates';
 import { Template } from '@tps/templates/template';
 import { CWD, USER_HOME } from '@tps/utilities/constants';
-import { reset, vol } from '@test/utilities/vol';
+import { reset } from '@test/utilities/vol';
 import path from 'path';
 import DirectoryNode from '@tps/fileSystemTree';
 
