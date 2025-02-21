@@ -75,13 +75,13 @@ if (TPS.IS_TESTING) {
 
 FileSystemNode.ignoreFiles = ['**/.gitkeep', '**/.tpskeep'];
 
-// const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
-// 	cache: !TPS.IS_TESTING,
-// 	searchPlaces: [
-// 		`${TPS.TEMPLATE_SETTINGS_FILE}.json`,
-// 		`${TPS.TEMPLATE_SETTINGS_FILE}.js`,
-// 	],
-// });
+const settingsConfig = cosmiconfigSync(TPS.TEMPLATE_SETTINGS_FILE, {
+	cache: !TPS.IS_TESTING,
+	searchPlaces: [
+		`${TPS.TEMPLATE_SETTINGS_FILE}.json`,
+		`${TPS.TEMPLATE_SETTINGS_FILE}.js`,
+	],
+});
 
 const tpsConfigName = 'tps';
 
@@ -301,8 +301,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		try {
 			logger.tps.info('Loading template settings file...');
 			// eslint-disable-next-line
-			this.templateSettings =
-				/* settingsConfig.search(this.src)?.config || */ {};
+			this.templateSettings = settingsConfig.search(this.src)?.config || {};
 		} catch (e) {
 			logger.tps.info(`Template has no Settings file`, e);
 			this.templateSettings = {} as SettingsFile;
