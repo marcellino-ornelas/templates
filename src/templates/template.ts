@@ -1,12 +1,7 @@
-import DirectoryNode, { DirNode } from '@tps/fileSystemTree';
+import { DirNode } from '@tps/fileSystemTree';
 import { SettingsFile } from '@tps/types/settings';
 import { TEMPLATE_SETTINGS_FILE, IS_TESTING } from '@tps/utilities/constants';
-import {
-	cosmiconfig,
-	cosmiconfigSync,
-	defaultLoaders,
-	getDefaultSearchPlaces,
-} from 'cosmiconfig';
+import { cosmiconfig, getDefaultSearchPlaces } from 'cosmiconfig';
 import {
 	findTemplate,
 	getTemplateLocations,
