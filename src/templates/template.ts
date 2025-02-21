@@ -24,15 +24,7 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 
 export class Template {
 	/**
-	 * What I need?
-	 * - template name
-	 * - settings file
-	 * - options
-	 *
-	 * What will it do?
-	 * - asyncly load template packages including all package files and directorys
-	 * - compile dot files so they are ready to render (once)
-	 * - asyncly load the settings file
+	 * Get a template
 	 */
 	public static async get(templateName: string): Promise<Template> {
 		const location = await Template.fetchTemplateLocation(templateName);

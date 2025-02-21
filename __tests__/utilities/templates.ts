@@ -96,12 +96,18 @@ export const DEFAULT_SETTINGS_FILE: SettingsFile = {
 	prompts: [],
 };
 
-export type OptionsSettingsFile = RecursivePartial<SettingsFile>;
+export type OptionsSettingsFile = Partial<SettingsFile>;
+
+export const mkSettingsFile = (
+	settings: OptionsSettingsFile = {},
+): SettingsFile => {
+	return { ...DEFAULT_SETTINGS_FILE, ...settings };
+};
 
 export const mkSettingsFileJSON = (
 	settings: OptionsSettingsFile = {},
 ): string => {
-	return JSON.stringify({ ...DEFAULT_SETTINGS_FILE, ...settings });
+	return JSON.stringify(mkSettingsFile(settings));
 };
 
 export const DEFAULT_PROMPT: SettingsFilePrompt = {
