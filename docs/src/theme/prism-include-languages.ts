@@ -30,7 +30,10 @@ export default function prismIncludeLanguages(
 
 	// eslint-disable-next-line no-param-reassign
 	PrismObject.languages.bash = PrismObject.languages.extend('bash', {
-		function: [PrismObject.languages.bash.function as any, /^tps/m],
+		function: [
+			PrismObject.languages.bash.function as PrismNamespace.TokenObject,
+			/^tps/m,
+		],
 		'inquirer-prompt': {
 			// This pattern captures the whole Inquirer.js prompt line
 			pattern: /^\? .*$/m,
