@@ -49,6 +49,12 @@ export default function prismIncludeLanguages(
 					pattern: /.*?\?/,
 					lookbehind: true,
 				},
+				//  The question text (everything between "? " and before the answer)
+				'inquirer-default-value': {
+					pattern: /\s\(.*?\)\s?/,
+					lookbehind: true,
+					alias: 'comment',
+				},
 				// The answer text (everything after the question)
 				'inquirer-answer': {
 					pattern: /.*$/,
