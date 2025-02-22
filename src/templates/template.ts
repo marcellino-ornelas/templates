@@ -31,7 +31,7 @@ export class Template {
 
 		const settingsFile = await Template.fetchSettingsFile(location);
 
-		const template = new Template(templateName, location, settingsFile);
+		const template = new Template(templateName, location, settingsFile, {}, []);
 
 		template.fetchPackage('default');
 
@@ -90,6 +90,10 @@ export class Template {
 		 * packages that are requests are loaded
 		 */
 		public packages: Record<string, DirNode> = {},
+		/**
+		 * Packages used
+		 */
+		public packagesUsed: string[],
 	) {
 		// do nothing
 	}
@@ -141,6 +145,6 @@ export class Template {
 	 * packages that will be used in the render process
 	 */
 	public usedPackages(): DirectoryNode[] {
-		return Object.values(this.packages);
+		return this.packagesUsed.map((pkgName) => this.packages[pkgName]);
 	}
 }

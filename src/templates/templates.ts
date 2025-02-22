@@ -502,6 +502,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.src,
 			this.templateSettings,
 			this.packages,
+			this.packagesUsed,
 		);
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
