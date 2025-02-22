@@ -77,7 +77,15 @@ const config = {
 			rules: {
 				'import/no-unresolved': [
 					ERROR,
-					{ ignore: ['^@theme', '^@docusaurus', '^@site', '^templates-mo'] },
+					{
+						ignore: [
+							'^@theme',
+							'^@docusaurus',
+							'^@site',
+							'^templates-mo',
+							'^@generated',
+						],
+					},
 				],
 			},
 		},
