@@ -38,12 +38,13 @@ describe('Templates library plugin', () => {
 		expect(setGlobalData).toHaveBeenCalledWith(
 			expect.objectContaining({
 				templates: expect.objectContaining({
-					[templateName]: {
+					[templateName]: expect.objectContaining({
 						name: templateName,
 						settings: {
+							opts: {},
 							prompts: expect.arrayContaining([DEFAULT_PROMPT]),
 						},
-					},
+					}),
 				}),
 			}),
 		);

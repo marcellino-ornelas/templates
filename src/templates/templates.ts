@@ -3,12 +3,7 @@
 import * as path from 'path';
 import fs from 'fs';
 import * as is from 'is';
-import {
-	DirectoryNode,
-	DirNode,
-	FileNode,
-	FileSystemNode,
-} from '@tps/fileSystemTree';
+import { DirNode, FileNode, FileSystemNode } from '@tps/fileSystemTree';
 import File from '@tps/File';
 import * as TPS from '@tps/utilities/constants';
 import {
@@ -48,10 +43,11 @@ import {
 } from 'cosmiconfig';
 import * as utils from './utils';
 import { Build } from './build';
+import { Template } from './template';
 
 interface BuildErrors {
 	error: Error;
-	buildPath: string;
+	build: Build;
 	didBuildPathExist: boolean;
 }
 
@@ -501,8 +497,16 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			buildPaths: pathsToCreate,
 		});
 
+		const template = new Template(
+			this.template,
+			this.src,
+			this.templateSettings,
+			this.packages,
+			this.packagesUsed,
+		);
+
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
-			const build = new Build(buildPath, {
+			const build = new Build(buildPath, template, {
 				buildInDest,
 				buildNewFolder,
 				wipe: this.opts.wipe,
@@ -531,10 +535,10 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		logger.tps.info('Build Errors: %o', this.buildErrors.length);
 		logger.tps.info(
 			'Build Paths need to be cleaned %n',
-			this.buildErrors.map(({ buildPath }) => buildPath),
+			this.buildErrors.map(({ build }) => build.getDirectory()),
 		);
-		this.buildErrors.forEach(({ buildPath, didBuildPathExist }) => {
-			this._cleanUpFailBuild(buildPath, buildNewFolder && !didBuildPathExist);
+		this.buildErrors.forEach(({ build, didBuildPathExist }) => {
+			this._cleanUpFailBuild(build, buildNewFolder && !didBuildPathExist);
 		});
 
 		const errors = this.buildErrors.map(({ error }) => error);
@@ -676,7 +680,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 			loggerGroup.info('Not creating real build path %s', realBuildPath);
 
-			await this._renderAllDirectories(realBuildPath);
+			await build.renderDirectories();
+
 			await this._renderAllFiles(realBuildPath, renderData);
 
 			loggerGroup.success(
@@ -685,7 +690,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			);
 		} catch (err) {
 			loggerGroup.error('Build Path: %s %n', build.buildPath, err);
-			this._scheduleCleanUpForBuild(realBuildPath, err, doesBuildPathExist);
+			this._scheduleCleanUpForBuild(build, err, doesBuildPathExist);
 		} finally {
 			logger.tps.printGroup(build.getLoggerName());
 			await this._emitEvent('onBuildPathRendered', {
@@ -695,28 +700,29 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	_scheduleCleanUpForBuild(
-		buildPath: string,
+		build: Build,
 		err: Error,
 		didBuildPathExist: boolean,
 	): void {
-		logger.tps
-			.group(`render_${buildPath}`)
-			.info('Build Path schedule for cleaning %s %o', buildPath, {
+		build
+			.getLogger()
+			.info('Build Path schedule for cleaning %s %o', build.buildPath, {
 				didBuildPathExist,
 			});
 		this.buildErrors.push({
-			buildPath,
+			build,
 			error: err,
 			didBuildPathExist,
 		});
 	}
 
-	_cleanUpFailBuild(buildError: string, buildNewFolder: boolean): void {
-		logger.tps.info('Processing build cleanup %s %o', buildError, {
+	_cleanUpFailBuild(build: Build, buildNewFolder: boolean): void {
+		let buildPath = build.getDirectory();
+
+		logger.tps.info('Processing build cleanup %s %o', buildPath, {
 			buildNewFolder,
 		});
 
-		let buildPath = buildError;
 		const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
 
 		if (!buildPathNeedsSlash) {
@@ -728,7 +734,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		}
 
 		// eslint-disable-next-line prefer-const
-		let { files, dirs } = this.successfulBuilds;
+		let { files } = this.successfulBuilds;
+		const dirs = build.built.directories;
 
 		// @ts-expect-error need to fix library
 		const filesIsEmpty: boolean = is.array.empty(files);
@@ -865,71 +872,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 
 	/**
-	 * Creates all directories that our template uses in `buildPath` folder
-	 * @param buildPath - destination path to make all directories. Should be a folder
-	 */
-	private async _renderAllDirectories(buildPath: string): Promise<void> {
-		const dirTracker: Record<string, boolean> = {};
-
-		const loggerGroup = logger.tps.group(`render_${buildPath}`);
-		loggerGroup.info('Rendering directories in %s', buildPath);
-
-		const dirsInProgress = this._getPackageArray().map(
-			async (pkg): Promise<void> => {
-				const dirs = pkg.find({ type: 'dir' });
-
-				const dirsGettingCreated = dirs.map(
-					async (dirNode: DirectoryNode): Promise<void> => {
-						/* skip if directory has already been made */
-						if (hasProp(dirTracker, dirNode.path)) return;
-						const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(
-							pkg,
-							false,
-						);
-						const dirPathInNewLocation = path.join(
-							buildPath,
-							dirPathRelativeFromPkg,
-						);
-
-						dirTracker[dirNode.path] = true;
-						if (await isDirAsync(dirPathInNewLocation)) {
-							return;
-						}
-
-						try {
-							await fs.promises.mkdir(dirPathInNewLocation, {
-								recursive: true,
-							});
-
-							this.successfulBuilds.dirs.push(dirPathInNewLocation);
-
-							loggerGroup.info(
-								`   - %s ${colors.green.italic('(created)')}`,
-								dirPathRelativeFromPkg,
-							);
-						} catch (err) {
-							/* do nothing if dir already exist */
-							loggerGroup.warn(
-								`   - %s ${colors.red.italic('failed')} %n`,
-								dirPathRelativeFromPkg,
-								err,
-							);
-
-							return Promise.reject(err);
-						}
-					},
-				);
-
-				await Promise.all(dirsGettingCreated);
-			},
-		);
-
-		await Promise.all(dirsInProgress);
-
-		// return dirsInProgress.length && Promise.all(dirsInProgress);
-	}
-
-	/**
 	 * Compile all files that need to be made for render process
 	 * @private
 	 * @param {String} packageName - name of package
@@ -976,13 +918,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				);
 				this.compiledFiles.push(file);
 			});
-	}
-
-	/**
-	 * Creates a array of all packages user wants for render process successful
-	 */
-	private _getPackageArray(): DirNode[] {
-		return this.packagesUsed.map((pkgName) => this.pkg(pkgName));
 	}
 
 	async _answerRestOfPrompts(): Promise<void> {

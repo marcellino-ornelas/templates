@@ -1,8 +1,11 @@
+import colors from 'ansi-colors';
 import * as path from 'path';
 import { promises as fs } from 'fs';
+import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync } from '@tps/utilities/fileSystem';
+import type { Template } from './template';
 
 interface BuildBuilt {
 	files: string[];
@@ -56,6 +59,7 @@ export class Build {
 		 * @example "/Users/lornelas/Templates"
 		 */
 		public readonly buildPath: string,
+		public readonly template: Template,
 		options: Partial<BuildOptions> = {},
 	) {
 		// should only happen if build in folder is false
@@ -185,4 +189,71 @@ export class Build {
 	// 		return this.checkForFiles(renderData);
 	// 	}
 	// }
+
+	/**
+	 * Creates all directories our instance needs. This will use all
+	 * directories in any package that was loaded.
+	 */
+	public async renderDirectories() {
+		const dirTracker: Record<string, boolean> = {};
+
+		const directory = this.getDirectory();
+
+		const loggerGroup = this.getLogger();
+		loggerGroup.info('Rendering directories in %s', directory);
+
+		const dirsInProgress = this.template
+			.usedPackages()
+			.map(async (pkg): Promise<void> => {
+				const dirs = pkg.find({ type: 'dir' });
+
+				const dirsGettingCreated = dirs.map(
+					async (dirNode: DirectoryNode): Promise<void> => {
+						/* skip if directory has already been made */
+						if (dirNode.path in dirTracker) return;
+						const dirPathRelativeFromPkg = dirNode.getRelativePathFrom(
+							pkg,
+							false,
+						);
+						const dirPathInNewLocation = path.join(
+							directory,
+							dirPathRelativeFromPkg,
+						);
+
+						dirTracker[dirNode.path] = true;
+						if (await isDirAsync(dirPathInNewLocation)) {
+							return;
+						}
+
+						try {
+							await fs.mkdir(dirPathInNewLocation, {
+								recursive: true,
+							});
+
+							this.built.directories.push(dirPathInNewLocation);
+
+							loggerGroup.info(
+								`   - %s ${colors.green.italic('(created)')}`,
+								dirPathRelativeFromPkg,
+							);
+						} catch (err) {
+							/* do nothing if dir already exist */
+							loggerGroup.warn(
+								`   - %s ${colors.red.italic('failed')} %n`,
+								dirPathRelativeFromPkg,
+								err,
+							);
+
+							return Promise.reject(err);
+						}
+					},
+				);
+
+				await Promise.all(dirsGettingCreated);
+			});
+
+		await Promise.all(dirsInProgress);
+
+		loggerGroup.info('All directories have been created');
+	}
 }

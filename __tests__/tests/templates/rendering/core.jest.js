@@ -67,6 +67,26 @@ describe('[Templates] Render Process:', () => {
 		expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 	});
 
+	it('should render all directories', async () => {
+		const tps = mkTemplate('testing-directories', CWD, {
+			'default/index.js': 'hey',
+			'default/folder1': {},
+			'default/folder2': {},
+			'default/folder3/folder31': {},
+		});
+
+		const destPath = playground.pathTo('app');
+
+		const results = await tps.render(playground.box(), 'app');
+
+		expect(results).toEqual(destPath);
+
+		expect(path.join(destPath, 'index.js')).toBeFile();
+		expect(path.join(destPath, 'folder1')).toBeDirectory();
+		expect(path.join(destPath, 'folder2')).toBeDirectory();
+		expect(path.join(destPath, 'folder3/folder31')).toBeDirectory();
+	});
+
 	it('should be able to render a local template without tps prefix', async () => {
 		mkTemplate('tps-test-template-prefix');
 

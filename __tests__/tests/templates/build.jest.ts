@@ -1,21 +1,31 @@
+import path from 'path';
 import { Build } from '@tps/templates/build';
+import { Template } from '@tps/templates/template';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
-import path from 'path';
+import { mkTemplate } from '@test/utilities/templates';
 
 jest.mock('fs');
 
 const BUILD_PATH = path.join(CWD, 'App');
 
+const templateName = 'testing_build';
+
 describe('Build', () => {
 	beforeEach(() => {
 		jest.restoreAllMocks();
 		reset();
+
+		mkTemplate(templateName);
 	});
 
 	describe('maybeWipe', () => {
 		it('should be false when directory doesnt exist', async () => {
-			const build = new Build(BUILD_PATH, { wipe: true });
+			const template = await Template.get(templateName);
+
+			const build = new Build(BUILD_PATH, template, {
+				wipe: true,
+			});
 
 			// @ts-expect-error(TS2769)
 			const spy = jest.spyOn(build, 'wipe');
@@ -30,7 +40,11 @@ describe('Build', () => {
 		it('should be true when directory exist and was wiped', async () => {
 			vol.mkdirSync(BUILD_PATH);
 
-			const build = new Build(BUILD_PATH, { wipe: true });
+			const template = await Template.get(templateName);
+
+			const build = new Build(BUILD_PATH, template, {
+				wipe: true,
+			});
 
 			// @ts-expect-error(TS2769)
 			const spy = jest.spyOn(build, 'wipe');
@@ -43,7 +57,9 @@ describe('Build', () => {
 		});
 
 		it('should be false when building in the destination directory', async () => {
-			const build = new Build(CWD, { wipe: true, buildInDest: true });
+			const template = await Template.get(templateName);
+
+			const build = new Build(CWD, template, { wipe: true, buildInDest: true });
 
 			// @ts-expect-error(TS2769)
 			const spy = jest.spyOn(build, 'wipe');
@@ -59,7 +75,9 @@ describe('Build', () => {
 			const hackyForceFunction = jest.fn();
 			vol.mkdirSync(BUILD_PATH);
 
-			const build = new Build(BUILD_PATH, {
+			const template = await Template.get(templateName);
+
+			const build = new Build(BUILD_PATH, template, {
 				wipe: true,
 				buildNewFolder: false,
 			});
