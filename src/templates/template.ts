@@ -93,7 +93,7 @@ export class Template {
 		/**
 		 * Packages used
 		 */
-		public packagesUsed: string[],
+		public packagesUsed: string[] = [],
 	) {
 		// do nothing
 	}
