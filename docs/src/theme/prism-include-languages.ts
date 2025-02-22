@@ -20,7 +20,7 @@ export default function prismIncludeLanguages(
 
 	additionalLanguages.forEach((lang) => {
 		if (lang === 'php') {
-			// eslint-disable-next-line global-require
+			// eslint-disable-next-line global-require , import/extensions, import/no-extraneous-dependencies -- How docusaurus renders this code
 			require('prismjs/components/prism-markup-templating.js');
 		}
 		// eslint-disable-next-line global-require, import/no-dynamic-require
