@@ -81,7 +81,6 @@ describe('[Templates] Render Process:', () => {
 
 		expect(results).toEqual(destPath);
 
-		// expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 		expect(path.join(destPath, 'index.js')).toBeFile();
 		expect(path.join(destPath, 'folder1')).toBeDirectory();
 		expect(path.join(destPath, 'folder2')).toBeDirectory();

@@ -229,7 +229,6 @@ export class Build {
 								recursive: true,
 							});
 
-							// this.successfulBuilds.dirs.push(dirPathInNewLocation);
 							this.built.directories.push(dirPathInNewLocation);
 
 							loggerGroup.info(
