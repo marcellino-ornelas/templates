@@ -202,8 +202,9 @@ export class Build {
 		const loggerGroup = this.getLogger();
 		loggerGroup.info('Rendering directories in %s', directory);
 
-		const dirsInProgress = Object.entries(this.template.packages).map(
-			async ([, pkg]): Promise<void> => {
+		const dirsInProgress = this.template
+			.usedPackages()
+			.map(async (pkg): Promise<void> => {
 				const dirs = pkg.find({ type: 'dir' });
 
 				const dirsGettingCreated = dirs.map(
@@ -249,8 +250,7 @@ export class Build {
 				);
 
 				await Promise.all(dirsGettingCreated);
-			},
-		);
+			});
 
 		await Promise.all(dirsInProgress);
 

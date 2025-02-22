@@ -1,4 +1,4 @@
-import { DirNode } from '@tps/fileSystemTree';
+import DirectoryNode, { DirNode } from '@tps/fileSystemTree';
 import { SettingsFile } from '@tps/types/settings';
 import { TEMPLATE_SETTINGS_FILE, IS_TESTING } from '@tps/utilities/constants';
 import { cosmiconfig, getDefaultSearchPlaces } from 'cosmiconfig';
@@ -138,16 +138,9 @@ export class Template {
 	}
 
 	/**
-	 * Get directory tree representation of package
-	 */
-	public pkg(packageName: string): DirNode {
-		return this.packages[packageName];
-	}
-
-	/**
 	 * packages that will be used in the render process
 	 */
-	public usedPackages(): string[] {
-		return Object.keys(this.packages);
+	public usedPackages(): DirectoryNode[] {
+		return Object.values(this.packages);
 	}
 }
