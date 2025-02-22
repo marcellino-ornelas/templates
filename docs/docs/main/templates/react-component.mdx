@@ -226,7 +226,7 @@ If you wanted to generate a new nav component in the components folder, you
 could use the following command:
 
 ```bash
-> tps react-component src/components/Nav
+tps react-component src/components/Nav
 ```
 
 :::tip
@@ -240,13 +240,13 @@ can also use those naming conventions.
 
 ```bash
 # camel case
-> tps react-component src/components/navItem
+tps react-component src/components/navItem
 
 # or param case
-> tps react-component src/components/nav-item
+tps react-component src/components/nav-item
 
 # or snake case
-> tps react-component src/components/nav_item
+tps react-component src/components/nav_item
 ```
 
 Your component name will be the name you passed in converted into
@@ -256,14 +256,14 @@ Your component name will be the name you passed in converted into
 
 Once the command is run, you will be prompted some questions:
 
-```
-? Would you like to use typescript?
-? What type of extension do you want for your component?
-? Would you like to include a css file?
-? What type of css extension would you like?
-? Would you like to include unit tests?
-? Would you like to include a index file?
-? Would you like to include a storybook file?
+```bash
+? Would you like to use typescript? yes
+? What type of extension do you want for your component? jsx
+? Would you like to include a css file? yes
+? What type of css extension would you like? css
+? Would you like to include unit tests? no
+? Would you like to include a index file? no
+? Would you like to include a storybook file? no
 ```
 
 Depending on your answers, you'll end up with something similar to the
@@ -287,7 +287,7 @@ If you used another naming format, such as
 called `nav-item`:
 
 ```bash
-> tps react-component src/components/nav-item
+tps react-component src/components/nav-item
 ```
 
 Depending on your answers, you'll end up with something similar to the
