@@ -44,14 +44,12 @@ const Home = (): JSX.Element => {
 			<main>
 				<div className={styles.introduction}>
 					<p className="container">
-						Templates is a powerful filesystem generator that aims to simplify
-						the process of getting started with and maintaining code
-						applications. Its purpose is to provide developers with a friendly
-						tool that streamlines their common day-to-day workflows. The
-						versatility of templates extends to various scenarios, such as
-						creating web applications in any programming language or generating
-						new sections within a project, such as web controllers with unit
-						tests or React components integrated with Redux and TypeScript.
+						Templates is a scaffolding framework built to streamline development
+						workflows. It makes code generation simple, dynamic, and
+						reusable—whether you&apos;re scaffolding individual files, parts of
+						your application, or full project structures. Say goodbye to
+						copy-pasting code and let Templates handle the heavy lifting, so you
+						can focus on building what matters!
 					</p>
 				</div>
 
