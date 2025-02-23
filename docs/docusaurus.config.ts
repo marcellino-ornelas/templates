@@ -56,6 +56,7 @@ const config: Config = {
 			},
 		],
 		'@docusaurus/theme-live-codeblock',
+		'@docusaurus/plugin-sitemap',
 	],
 
 	// GitHub pages deployment config.
