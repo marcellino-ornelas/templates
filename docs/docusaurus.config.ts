@@ -170,12 +170,6 @@ const config: Config = {
 							'https://marcellino-ornelas.github.io/templates/docs/main/templates',
 					},
 					{
-						'@type': 'CreateAction',
-						name: 'Create a new template',
-						target:
-							'https://marcellino-ornelas.github.io/templates/?action=create',
-					},
-					{
 						'@type': 'InstallAction',
 						name: 'Install Templates CLI',
 						target:
