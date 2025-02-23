@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://marcellino-ornelas.github.io/templates/sitemap.xml

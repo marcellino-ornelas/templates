@@ -1,6 +1,34 @@
 import type { Config } from '@docusaurus/types';
 import { themes } from 'prism-react-renderer';
+
 import { TemplatesLibrariesPlugin } from './plugins';
+
+const keywords = [
+	'web',
+	'tool',
+	'scaffold',
+	'boilerplate',
+	'code generation',
+	'developer tools',
+	'project templates',
+	'generator',
+	'generate',
+	'template',
+	'templates',
+	'build-tools',
+	'tps',
+	'cli',
+	'library',
+	'starter',
+	'node',
+	'cli-app',
+	'cli',
+	'development',
+	'dev',
+	'build',
+	'stack',
+	'app',
+].join(', ');
 
 const config: Config = {
 	title: 'Templates',
@@ -98,10 +126,81 @@ const config: Config = {
 				media: '(prefers-color-scheme: dark)',
 			},
 		},
+		// SEO json-ld
+		{
+			tagName: 'script',
+			attributes: {
+				type: 'application/ld+json',
+			},
+			innerHTML: JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'SoftwareApplication',
+				name: 'Templates',
+				url: 'https://marcellino-ornelas.github.io/templates/',
+				author: {
+					'@type': 'Person',
+					name: 'Marcellino Ornelas',
+				},
+				description:
+					"Templates is a scaffolding framework built to streamline development workflows. It makes code generation simple, dynamic, and reusable—whether you're scaffolding individual files, parts of your application, or full project structures. Say goodbye to copy-pasting code and let Templates handle the heavy lifting, so you can focus on building what matters!",
+				image: [
+					'https://marcellino-ornelas.github.io/img/templates-logo.svg',
+					// 'https://marcellino-ornelas.github.io/templates/logo.png',
+				],
+				// "thumbnailUrl": "https://marcellino-ornelas.github.io/templates/social-card.png",
+				applicationCategory: 'DeveloperTool',
+				operatingSystem: 'All',
+				additionalType: 'https://schema.org/SoftwareFramework',
+				publisher: {
+					'@type': 'Organization',
+					name: 'Templates',
+					url: 'https://marcellino-ornelas.github.io/templates/',
+				},
+				keywords,
+				codeRepository: 'https://github.com/marcellino-ornelas/templates',
+				documentation:
+					'https://marcellino-ornelas.github.io/templates/docs/main/intro',
+				programmingLanguage: 'JavaScript',
+				softwareRequirements: 'Node.js',
+				potentialAction: [
+					{
+						'@type': 'ViewAction',
+						name: 'Browse available templates',
+						target:
+							'https://marcellino-ornelas.github.io/templates/docs/main/templates',
+					},
+					{
+						'@type': 'CreateAction',
+						name: 'Create a new template',
+						target:
+							'https://marcellino-ornelas.github.io/templates/?action=create',
+					},
+					{
+						'@type': 'InstallAction',
+						name: 'Install Templates CLI',
+						target:
+							'https://marcellino-ornelas.github.io/templates/docs/main/intro#installation',
+					},
+					{
+						'@type': 'ViewAction',
+						name: 'Read the documentation',
+						target:
+							'https://marcellino-ornelas.github.io/templates/docs/main/intro',
+					},
+				],
+			}),
+		},
 	],
 	themeConfig: {
 		// Replace with your project's social card
 		//   image: 'img/docusaurus-social-card.jpg',
+		metadata: [
+			{
+				name: 'keywords',
+				content: keywords,
+			},
+			// { name: 'twitter:card', content: 'summary_large_image' },
+		],
 		navbar: {
 			title: 'Templates',
 			logo: {
