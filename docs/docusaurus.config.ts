@@ -8,6 +8,9 @@ const keywords = [
 	'tool',
 	'scaffold',
 	'boilerplate',
+	'code generation',
+	'developer tools',
+	'project templates',
 	'generator',
 	'generate',
 	'template',
@@ -20,15 +23,11 @@ const keywords = [
 	'node',
 	'cli-app',
 	'cli',
-	'front-end',
 	'development',
 	'dev',
 	'build',
 	'stack',
 	'app',
-	'react',
-	'typescript',
-	'yargs',
 ].join(', ');
 
 const config: Config = {
