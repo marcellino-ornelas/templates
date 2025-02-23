@@ -127,7 +127,7 @@ const config: Config = {
 				media: '(prefers-color-scheme: dark)',
 			},
 		},
-		// Declare some json-ld structured data
+		// SEO json-ld
 		{
 			tagName: 'script',
 			attributes: {
