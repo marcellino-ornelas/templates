@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { usePluginData } from '@docusaurus/useGlobalData';
 import type {
 	SettingsFile,
@@ -34,6 +34,22 @@ export const TemplateOptions = ({ template }: Props) => {
 
 	const { settings } = templates[template];
 
+	const getDefault = useCallback((defaultValue) => {
+		switch (typeof defaultValue) {
+			case 'string':
+			case 'number':
+				return defaultValue;
+
+			case 'boolean':
+			case 'object':
+				if (defaultValue === null) return '';
+
+				return JSON.stringify(defaultValue);
+			default:
+				return '';
+		}
+	}, []);
+
 	return (
 		<div className={styles.tableContainer}>
 			<table>
@@ -67,7 +83,7 @@ export const TemplateOptions = ({ template }: Props) => {
 									)
 									.join(', ')}
 							</td>
-							<td>{prompt?.default?.toString()}</td>
+							<td>{getDefault(prompt.default ?? null)}</td>
 							<td>{(prompt.hidden ?? false).toString()}</td>
 						</tr>
 					))}
