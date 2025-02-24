@@ -503,6 +503,40 @@ tps ai --baseUrl https://my-custom-ai.com/api
 
 </Tabs>
 
+### Additional Prompts
+
+The `prompts` option lets you add additional prompts to the AI in order to
+customize it or give it specific instructions.
+
+<Tabs>
+
+<TabItem value="Config">
+
+```json title=".tps/.tpsrc"
+{
+    "ai": {
+        "answers": {
+            "prompts": ["I use mjs for my js files"]
+        }
+    }
+}
+```
+
+</TabItem>
+
+<TabItem value="CLI">
+
+```bash
+tps ai --prompts "I use the .mjs extension for my javascript files"
+```
+
+</TabItem>
+
+</Tabs>
+
+Now when the AI generates javascript files, it will use the `.mjs` extension
+instead of a `.js`.
+
 ## Inspiration
 
 Need some inspiration on what you can do? Here are some examples:
