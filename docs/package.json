@@ -33,7 +33,7 @@
 		"react-dom": "18.2.0",
 		"react-waypoint": "^10.3.0",
 		"templates-mo": "../",
-		"tps-ai": "^1.0.2"
+		"tps-ai": "^1.0.5"
 	},
 	"devDependencies": {
 		"@docusaurus/eslint-plugin": "^3.5.1",
