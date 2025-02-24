@@ -509,33 +509,47 @@ The `prompts` option lets you add additional prompts to the AI in order to
 customize it or give it specific instructions.
 
 <Tabs>
+    <TabItem value="Config">
 
-<TabItem value="Config">
-
-```json title=".tps/.tpsrc"
-{
-    "ai": {
-        "answers": {
-            "prompts": ["I use mjs for my js files"]
+        ```json title=".tps/.tpsrc"
+        {
+            "ai": {
+                "answers": {
+                    "prompts": ["I use mjs for my js files"]
+                }
+            }
         }
-    }
-}
-```
+        ```
 
-</TabItem>
+    </TabItem>
 
-<TabItem value="CLI">
+    <TabItem value="CLI">
 
-```bash
-tps ai --prompts "I use the .mjs extension for my javascript files"
-```
+        ```bash
+        tps ai --prompts "I use the .mjs extension for my javascript files"
+        ```
 
-</TabItem>
+    </TabItem>
 
 </Tabs>
 
-Now when the AI generates javascript files, it will use the `.mjs` extension
-instead of a `.js`.
+Now when the AI generates JavaScript files, it will use the `.mjs` extension
+instead of `.js`.
+
+:::caution
+
+Templates does not extend the `prompts` option, and any values defined higher in
+your filesystem will be overridden.
+
+_example:_
+
+If you declare `prompts` in your
+[global config file](../tpsrc.mdx#make-a-global-configuration-file) and some in
+your repo's config file, then Templates will only use the value from your repo's
+config file and not your global config. We are actively looking into solutions
+to support extending template options.
+
+:::
 
 ## Inspiration
 
