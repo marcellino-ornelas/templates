@@ -28,26 +28,141 @@ let's start with the basics.
 
 ## Where do templates live
 
-All templates need to live in a `.tps` folder. Subdirectories of the `.tps`
+Templates need to live in a `.tps` folder. Subdirectories of the `.tps`
 directory are your templates. You may have as many templates as you wish.
 
+:::tip
+
+You can create this `.tps` folder by running the init command:
+
+```bash
+tps init
+```
+
+:::
+
+## Template Types
+
+There are 3 main types of templates:
+
+-   [Local Templates](#local-templates)
+-   [Global Templates](#global-templates)
+-   [3rd Party Templates](#3rd-party-templates)
+
+### Local Templates
+
+Local templates are templates that live in your local directories. This could be
+your repository directory, subdirectories of your repository directory, or any
+directory on your file system. This is useful if you have repository-specific
+flows you are trying to automate. Local templates live in a `.tps` folder.
+Subdirectories of the `.tps` directory are your templates.
+
 ```text
-| - .tps/
-    // highlight-next-line
-    | - <templates...>/
+| - <your-repo>/
+    | - .tps/
+        // highlight-next-line
+        | - <templates...>/
 ```
 
 <Example>
 
-If I were to make a new template called `react-component` then my folder
-structure would look like this:
+If I were to make a new template called `react-component` that will generate
+React components, then my folder structure would look like this:
 
 ```text
-| - .tps/
-    | - react-component/
+| - <your-repo>/
+    | - .tps/
+        // highlight-next-line
+        | - react-component/
+            | - <template code...>
 ```
 
 </Example>
+
+:::tip
+
+You can create this `.tps` directory by running:
+
+```bash
+tps init
+```
+
+:::
+
+#### Multiple Template Folders
+
+When using the Templates CLI, Templates can use any template that's defined in a
+`.tps` directory in your current working directory or any parent directory. This
+means you can define multiple template folders in your repository. This can be
+useful when you want to segregate certain templates to specific parts of the
+codebase. Keep in mind that in order to use subdirectory templates, your
+terminal's current working directory needs to be that subdirectory.
+
+```text
+| - <your-repo>/
+    // highlight-start
+    | - .tps/
+        | - <templates...>/
+    // highlight-end
+    | - some-sub-directory
+        // highlight-start
+        | - .tps/
+            | - <templates...>/
+        // highlight-end
+```
+
+<Example>
+
+If you had a separate folder for your app's frontend codebase, then you can
+define a `.tps` folder at the repo level and inside the frontend folder. This
+would allow you to keep frontend-specific templates out of the main directory.
+
+```text
+| - my-repo/
+    // highlight-start
+    | - .tps/
+        | - backend-api
+         // highlight-end
+    | - frontend
+        // highlight-start
+        | - .tps/
+            | - react-component
+         // highlight-end
+```
+
+Now if your current working directory is `my-repo`, you will be able to use the
+`backend-api` template. If your current working directory is `frontend`, then
+you can use both `backend-api` and `react-component`.
+
+</Example>
+
+### Global Templates
+
+Global templates are similar to local templates but they live in your home
+directory. This is useful when you want to share templates across your whole
+file system. These templates still need to live in a `.tps` directory.
+
+```text
+| - ~/
+    | - .tps/
+        // highlight-next-line
+        | - <templates...>/
+```
+
+You can create this global `.tps` directory by running:
+
+```bash
+tps init --global
+```
+
+{/* prettier-ignore */}
+{/* ### 3rd party Templates
+
+3rd party templates are templates that will be published to your choice of
+package manager like npm/yarn/pnpm. This allows other developers to use your
+template by installing it globally or locally. There are special considerations
+you need to think about when making 3rd party template that we will touch on in
+our [3rd party templates guide](./3rd-party-templates.mdx). \*/}
 
 ## Packages
 
