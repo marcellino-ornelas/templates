@@ -16,12 +16,12 @@ We will be referring to `<some-name>` in our guide to represent any directory.
 
 :::
 
-A tps template is a collection of folders and files that acts as a blueprint for
+A template is a collection of folders and files that acts as a blueprint for
 recreating identical file structures in different locations. Think of this as a
 google doc template but for files and folders. When generating a new instance of
 this template, all files and directories within the template folder are rendered
-into the your new instance's directory. Tps also supports conditionally rending
-files and folders and dynamiclly rendering files and folders.
+into the your new instance's directory. Templates also supports conditionally
+rending files and folders and dynamiclly rendering files and folders.
 
 Don't worry about all this right now! More will be discussed later on. First,
 let's start with the basics.
@@ -66,16 +66,16 @@ Subdirectories of the `.tps` directory are your templates.
 
 <Example>
 
-If I were to make a new template called `react-component` that will generate
-React components, then my folder structure would look like this:
+    If I were to make a new template called `react-component` that will generate
+    React components, then my folder structure would look like this:
 
-```text
-| - <your-repo>/
-    | - .tps/
-        // highlight-next-line
-        | - react-component/
-            | - <template code...>
-```
+    ```text
+    | - <your-repo>/
+        | - .tps/
+            // highlight-next-line
+            | - react-component/
+                | - <template code...>
+    ```
 
 </Example>
 
@@ -113,26 +113,26 @@ terminal's current working directory needs to be that subdirectory.
 
 <Example>
 
-If you had a separate folder for your app's frontend codebase, then you can
-define a `.tps` folder at the repo level and inside the frontend folder. This
-would allow you to keep frontend-specific templates out of the main directory.
+    If you had a separate folder for your app's frontend codebase, then you can
+    define a `.tps` folder at the repo level and inside the frontend folder. This
+    would allow you to keep frontend-specific templates out of the main directory.
 
-```text
-| - my-repo/
-    // highlight-start
-    | - .tps/
-        | - backend-api
-         // highlight-end
-    | - frontend
+    ```text
+    | - my-repo/
         // highlight-start
         | - .tps/
-            | - react-component
-         // highlight-end
-```
+            | - backend-api
+            // highlight-end
+        | - frontend
+            // highlight-start
+            | - .tps/
+                | - react-component
+            // highlight-end
+    ```
 
-Now if your current working directory is `my-repo`, you will be able to use the
-`backend-api` template. If your current working directory is `frontend`, then
-you can use both `backend-api` and `react-component`.
+    Now if your current working directory is `my-repo`, you will be able to use the
+    `backend-api` template. If your current working directory is `frontend`, then
+    you can use both `backend-api` and `react-component`.
 
 </Example>
 
@@ -178,10 +178,10 @@ Inside of each `template` you can have directories referred to as `packages`.
 Within each package directory, you have the freedom to add an unlimited number
 of files and directories. These resources will then be utilized when generating
 a new instance of your template. You can name packages anything you wish, but
-TPS treats the `default` package as special. When rendering a new instance of a
-template, TPS will automatically include all the contents _(files/directories)_
-within your `default` package. All other packages will only be included if
-explicitly specified.
+Templates treats the `default` package as special. When rendering a new instance
+of a template, Templates will automatically include all the contents
+_(files/directories)_ within your `default` package. All other packages will
+only be included if explicitly specified.
 
 <Example open>
 
