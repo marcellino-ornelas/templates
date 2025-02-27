@@ -134,9 +134,24 @@ file system. These templates still need to live in a `.tps` directory.
         | - <templates...>/
 ```
 
-You can create this global `.tps` directory by running:
+<Example>
+
+    If I were to make a new template called `github-pull-request-template` that will generate
+    React components, then my folder structure would look like this:
+
+    ```text
+    | - <your-repo>/
+        | - .tps/
+            // highlight-next-line
+            | - react-component/
+                | - <template code...>
+    ```
+
+</Example>
 
 :::tip
+
+You can create this global `.tps` directory by running:
 
 ```bash
 tps init --global
