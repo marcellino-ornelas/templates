@@ -6,7 +6,7 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import { writeFile } from '@test/utilities/helpers';
-import { reset, vol } from '@test/utilities/vol';
+import { reset } from '@test/utilities/vol';
 import { mkTemplate } from '@test/utilities/templates';
 import { CWD } from '@tps/utilities/constants';
 import { FileExistError } from '@tps/errors';
