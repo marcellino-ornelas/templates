@@ -549,7 +549,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		build: Build,
 		data: RenderData,
 	): Promise<void> {
-		// const realBuildPath = build.getDirectory();
 		const loggerGroup = build.getLogger();
 		const doesBuildPathExist = await build.directoryExists();
 
