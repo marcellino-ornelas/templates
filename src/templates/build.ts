@@ -6,6 +6,8 @@ import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
 import { FileExistError } from '@tps/errors';
+import { AnswersHash } from '@tps/types/settings';
+import * as utils from './utils';
 import type { Template } from './template';
 
 interface BuildBuilt {
@@ -180,28 +182,145 @@ export class Build {
 		}
 	}
 
-	// /**
-	//  * Render the build path
-	//  */
-	// public async render(
-	// 	renderData: RenderData,
-	// 	hackyCallbackWhenFilesNeedToBeWiped?: () => void,
-	// ): Promise<void> {
-	// 	const loggerGroup = this.getLogger();
+	/**
+	 * Render the build path
+	 */
+	public async render(answers: AnswersHash, data: RenderData): Promise<void> {
+		const realBuildPath = this.getDirectory();
+		const loggerGroup = this.getLogger();
+		const doesBuildPathExist = await this.directoryExists();
+		/**
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test' // short build path
+		 *    new folder: true
+		 *  then
+		 *    realBuildPath: '/User/home/app/test'
+		 *    - A new directory named `test` needs to be created
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test/test2' // long build path
+		 *    new folder: true
+		 *  then
+		 *    realBuildPath: '/User/home/app/test/test2'
+		 *    - A new directory named `test` needs to be created if doesn't exist already, `test2` should be created regardless
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: '' // build in dest
+		 *    new folder: true??
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - this directory should not be created or overridden since it should exist.
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test' // short build path
+		 *    new folder: false
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - this directory should not be created or overridden since it should exist.
+		 *
+		 * @example
+		 *  if
+		 *    cwd: '/User/home/app'
+		 *    build path: 'test/test2' // short build path
+		 *    new folder: false
+		 *  then
+		 *    realBuildPath: '/User/home/app'
+		 *    - A directory named `test` needs to be created if not already exists
+		 *
+		 */
 
-	// 	const wasWiped = this.maybeWipe(hackyCallbackWhenFilesNeedToBeWiped);
+		const renderData = {
+			...data,
+			packages: this.template.packagesUsed,
+			template: this.template.name,
+			answers,
+			a: answers,
+			utils,
+			u: utils,
+			name: this.name,
+			dir: this.directory,
+		};
 
-	// 	if (!wasWiped && !this.options.force) {
-	// 		loggerGroup.info('Checking to see if there are duplicate files');
-	// 		return this.checkForConlficts(renderData);
-	// 	}
-	// }
+		const marker = colors.magenta('*'.repeat(this.buildPath.length + 12));
+
+		loggerGroup.info(`\n${marker}\nBuild Path: ${this.buildPath}\n${marker}`);
+
+		loggerGroup.info('Render config: %n', {
+			name: renderData.name,
+			buildPath: this.buildPath,
+			'Final Destination': realBuildPath,
+			doesBuildPathExist,
+			buildInDest: this.options.buildInDest,
+			buildNewFolder: this.options.buildNewFolder,
+		});
+
+		const wasWiped = await this.maybeWipe(() => {
+			// super hacky yes i know. The reason this needs to happen is because
+			// when were using wipe but were not building a new folder we need to make sure all
+			// files that already exist get overridden
+			this.template.compiledFiles.forEach((file) => {
+				// eslint-disable-next-line no-param-reassign
+				file.opts.force = true;
+			});
+		});
+
+		loggerGroup.info('Build was wiped', wasWiped);
+
+		/**
+		 * when wipe=true but buildNewFolder=false we need to act like `force` and not
+		 * check for files.
+		 */
+		const shouldWipeButNoNewFolder =
+			this.options.wipe && !this.options.buildNewFolder;
+
+		/**
+		 * Check for file conflicts when:
+		 * - folder was not wiped
+		 * - force option is not true
+		 * - when wipe but no new folder
+		 */
+		if (!wasWiped && !this.options.force && !shouldWipeButNoNewFolder) {
+			loggerGroup.info('Checking to see if there are duplicate files');
+			await this.checkForConflicts(realBuildPath, renderData);
+		}
+
+		// Create a new folder unless told not to
+		// if we are building the template in dest folder don't create new folder
+		if (
+			!this.options.buildInDest &&
+			(this.options.buildNewFolder || !(await this.directoryExists()))
+		) {
+			loggerGroup.info('Creating real build path %s', realBuildPath);
+			await this.createDirectory().catch((err) => {
+				loggerGroup.warn('Building build path folder had a issue %n', err);
+			});
+		}
+
+		loggerGroup.info('Not creating real build path %s', realBuildPath);
+
+		await this.renderDirectories();
+
+		await this.renderFiles(realBuildPath, renderData);
+
+		loggerGroup.success(
+			`Build Path: %s ${colors.green.italic('(created)')}`,
+			this.buildPath,
+		);
+	}
 
 	/**
 	 * Creates all directories our instance needs. This will use all
 	 * directories in any package that was loaded.
 	 */
-	public async renderDirectories() {
+	private async renderDirectories() {
 		const dirTracker: Record<string, boolean> = {};
 
 		const directory = this.getDirectory();
@@ -269,7 +388,10 @@ export class Build {
 	 * @param {String} buildPath - destination path to render all files to
 	 * @param {Object} [data={}] - data passed in for dot
 	 */
-	renderFiles(buildPath: string, data: RenderData): Promise<void> {
+	private async renderFiles(
+		buildPath: string,
+		data: RenderData,
+	): Promise<void> {
 		const loggerGroup = logger.tps.group(`render_${buildPath}`);
 		loggerGroup.info('Rendering files');
 
