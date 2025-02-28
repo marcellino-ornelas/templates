@@ -263,4 +263,72 @@ export class Build {
 
 		loggerGroup.info('All directories have been created');
 	}
+
+	/**
+	 * Creates all files that our template uses in `buildPath` folder
+	 * @param {String} buildPath - destination path to render all files to
+	 * @param {Object} [data={}] - data passed in for dot
+	 */
+	renderFiles(buildPath: string, data: RenderData): Promise<void> {
+		const loggerGroup = logger.tps.group(`render_${buildPath}`);
+		loggerGroup.info('Rendering files');
+
+		const files = this.template.compiledFiles.filter((file) => !file.isDot);
+		const dotFiles = this.template.compiledFiles.filter((file) => file.isDot);
+		const dotContents = dotFiles.map((file) => {
+			/**
+			 * Will throw error if something is wrong with doT
+			 */
+			return [
+				file,
+				file.dest(buildPath, data, this.template.defs),
+				file.fileDataTemplate(data, this.template.defs, buildPath),
+			];
+		});
+
+		const filesInProgress = [];
+		let hasErroredOut = false;
+		let error;
+
+		const handleFileErrorCatch = (dest, type, err) => {
+			loggerGroup.error(
+				`Error happened when rendering a ${type} %s %n`,
+				dest,
+				err,
+			);
+			if (!hasErroredOut) {
+				hasErroredOut = true;
+				error = err;
+			}
+		};
+
+		dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
+			loggerGroup.info(` - %s ${colors.cyan.italic('(Dot file)')}`, finalDest);
+			filesInProgress.push(
+				file
+					.renderDotFile(finalDest, dotContentsForFile)
+					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err)),
+			);
+		});
+
+		files.forEach((file) => {
+			const finalDest = file.dest(buildPath, data, this.template.defs);
+			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
+			filesInProgress.push(
+				file
+					.renderFile(finalDest)
+					.catch((err) => handleFileErrorCatch(finalDest, 'file', err)),
+			);
+		});
+
+		return Promise.all(filesInProgress).then(() => {
+			if (hasErroredOut) {
+				loggerGroup.error(
+					'There was a error when rendering template to %s',
+					buildPath,
+				);
+				return Promise.reject(error);
+			}
+		});
+	}
 }
