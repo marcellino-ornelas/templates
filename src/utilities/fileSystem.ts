@@ -31,19 +31,6 @@ export async function isDirAsync(filePath: string): Promise<boolean> {
 /**
  * Check to see if the `path` is a valid file
  */
-export function isFile(filePath: string): boolean {
-	let file;
-	try {
-		file = fs.lstatSync(filePath);
-	} catch (e) {
-		return false;
-	}
-	return file.isFile();
-}
-
-/**
- * Check to see if the `path` is a valid file
- */
 export async function isFileAsync(filePath: string): Promise<boolean> {
 	try {
 		const file = await fs.promises.lstat(filePath);

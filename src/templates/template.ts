@@ -6,6 +6,7 @@ import {
 	findTemplate,
 	getTemplateLocations,
 } from '@tps/templates/template-utils';
+import File from '@tps/File';
 import {
 	PackageAlreadyCompiledError,
 	RequiresTemplateError,
@@ -94,6 +95,14 @@ export class Template {
 		 * Packages used
 		 */
 		public packagesUsed: string[] = [],
+		/**
+		 * Compiled Files
+		 */
+		public compiledFiles: File[] = [],
+		/**
+		 * Def files
+		 */
+		public defs: Record<string, string> = {},
 	) {
 		// do nothing
 	}

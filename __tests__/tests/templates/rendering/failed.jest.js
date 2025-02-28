@@ -7,6 +7,10 @@ import { TESTING_DIR, TESTING_PACKAGE_FILES } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import { writeFile } from '@test/utilities/helpers';
 import { reset } from '@test/utilities/vol';
+import { mkTemplate } from '@test/utilities/templates';
+import { CWD } from '@tps/utilities/constants';
+import { FileExistError } from '@tps/errors';
+import path from 'path';
 
 jest.mock('fs');
 
@@ -51,6 +55,26 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		});
 	});
 
+	it('should throw error if dot file is already created when creating a new folder', async () => {
+		tps = mkTemplate('dynamic-file-failed', CWD, {
+			'default/index.txt': 'hey',
+			'default/{{=tps.name}}.txt.dot': 'hey',
+		});
+
+		const appFile = path.join(CWD, 'App/App.txt');
+		const appDir = path.join(CWD, 'App/');
+
+		writeFile(appFile, 'blah');
+
+		expect(appFile).toBeFile();
+
+		await expect(tps.render(CWD, 'App')).rejects.toThrow(FileExistError);
+
+		expect(appFile).toHaveFileContents('blah');
+
+		expect(appDir).not.toHaveAllFilesAndDirectories(['index.txt']);
+	});
+
 	it('should throw error if file is already created when building in CWD', () => {
 		const box = playground.box();
 		const indexFile = playground.pathTo('index.js');
@@ -68,6 +92,25 @@ describe('[TPS] Rendered Failed Cases:', () => {
 			]);
 			expect(indexFile).toBeFile();
 		});
+	});
+
+	it('should throw error if dot file is already created when building in CWD', async () => {
+		tps = mkTemplate('dynamic-file-failed', CWD, {
+			'default/index.txt': 'hey',
+			'default/{{=tps.packages[0]}}.txt.dot': 'hey',
+		});
+
+		const defaultFile = path.join(CWD, 'default.txt');
+		const indexFile = path.join(CWD, 'index.txt');
+
+		writeFile(defaultFile, 'blah');
+
+		expect(defaultFile).toBeFile();
+
+		await expect(tps.render(CWD)).rejects.toThrow(FileExistError);
+
+		expect(defaultFile).toHaveFileContents('blah');
+		expect(indexFile).not.toBeFile();
 	});
 
 	it('should throw error if file is already created in nested folder', () => {
@@ -88,6 +131,25 @@ describe('[TPS] Rendered Failed Cases:', () => {
 				'index.js',
 			]);
 		});
+	});
+
+	it('should throw error if dot file is already created in nested folder', async () => {
+		tps = mkTemplate('dynamic-file-failed', CWD, {
+			'default/storeUtils/index.txt': 'hey',
+			'default/storeUtils/{{=tps.name}}.txt.dot': 'hey',
+		});
+
+		const defaultFile = path.join(CWD, 'App/storeUtils/App.txt');
+		const indexFile = path.join(CWD, 'App/storeUtils/index.txt');
+
+		writeFile(defaultFile, 'blah');
+
+		expect(defaultFile).toBeFile();
+
+		await expect(tps.render(CWD, 'App')).rejects.toThrow(FileExistError);
+
+		expect(defaultFile).toHaveFileContents('blah');
+		expect(indexFile).not.toBeFile();
 	});
 
 	it('should create templates for every build path regardless if one build path fails', () => {

@@ -10,7 +10,6 @@ import {
 	cosmiconfigAllExampleSync,
 	findUp,
 	isDir,
-	isFile,
 	isDirAsync,
 } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
@@ -26,7 +25,6 @@ import {
 	RequiresTemplateError,
 	PackageAlreadyCompiledError,
 	DirectoryNotFoundError,
-	FileExistError,
 	NoPromptsError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
@@ -503,6 +501,8 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.templateSettings,
 			this.packages,
 			this.packagesUsed,
+			this.compiledFiles,
+			this._defs,
 		);
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
@@ -663,7 +663,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			 */
 			if (!wasWiped && !this.opts.force && !shouldWipeButNoNewFolder) {
 				loggerGroup.info('Checking to see if there are duplicate files');
-				this._checkForFiles(realBuildPath, renderData);
+				await build.checkForConflicts(realBuildPath, renderData);
 			}
 
 			// Create a new folder unless told not to
@@ -790,17 +790,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		}
 
 		logger.tps.success('Clean up finished');
-	}
-
-	_checkForFiles(dest: string, data: RenderData): void {
-		for (let i = 0; i < this.compiledFiles.length; i++) {
-			const file = this.compiledFiles[i];
-			const finalDest = file.dest(dest, data, this._defs);
-
-			if (isFile(finalDest)) {
-				throw new FileExistError(finalDest);
-			}
-		}
 	}
 
 	/**

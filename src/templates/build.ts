@@ -4,7 +4,8 @@ import { promises as fs } from 'fs';
 import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
-import { isDirAsync } from '@tps/utilities/fileSystem';
+import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
+import { FileExistError } from '@tps/errors';
 import type { Template } from './template';
 
 interface BuildBuilt {
@@ -25,6 +26,9 @@ const DEFAULT_OPTS: BuildOptions = {
 	wipe: false,
 	force: false,
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RenderData = Record<string, any>;
 
 export class Build {
 	/**
@@ -159,19 +163,22 @@ export class Build {
 		});
 	}
 
-	// private async checkForFiles(renderData: RenderData): Promise<void> {
-	// 	const directory = this.getDirectory();
+	public async checkForConflicts(
+		dest: string,
+		data: RenderData,
+	): Promise<void> {
+		const { compiledFiles, defs } = this.template;
 
-	// 	for (let i = 0; i < this.compiledFiles.length; i++) {
-	// 		const file = this.compiledFiles[i];
-	// 		const finalDest = file.dest(directory, renderData, this._defs);
+		for (let i = 0; i < compiledFiles.length; i++) {
+			const file = compiledFiles[i];
+			const finalDest = file.dest(dest, data, defs);
 
-	// 		// eslint-disable-next-line no-await-in-loop -- we want to go one by one and not send tons of requests
-	// 		if (await isFileAsync(finalDest)) {
-	// 			throw new FileExistError(finalDest);
-	// 		}
-	// 	}
-	// }
+			// eslint-disable-next-line no-await-in-loop
+			if (await isFileAsync(finalDest)) {
+				throw new FileExistError(finalDest);
+			}
+		}
+	}
 
 	// /**
 	//  * Render the build path
@@ -186,7 +193,7 @@ export class Build {
 
 	// 	if (!wasWiped && !this.options.force) {
 	// 		loggerGroup.info('Checking to see if there are duplicate files');
-	// 		return this.checkForFiles(renderData);
+	// 		return this.checkForConlficts(renderData);
 	// 	}
 	// }
 
