@@ -10,7 +10,6 @@ import {
 	cosmiconfigAllExampleSync,
 	findUp,
 	isDir,
-	isFile,
 	isDirAsync,
 } from '@tps/utilities/fileSystem';
 import Prompter from '@tps/prompter';
@@ -26,7 +25,6 @@ import {
 	RequiresTemplateError,
 	PackageAlreadyCompiledError,
 	DirectoryNotFoundError,
-	FileExistError,
 	NoPromptsError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';

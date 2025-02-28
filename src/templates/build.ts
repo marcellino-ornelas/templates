@@ -5,8 +5,8 @@ import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
-import type { Template } from './template';
 import { FileExistError } from '@tps/errors';
+import type { Template } from './template';
 
 interface BuildBuilt {
 	files: string[];
