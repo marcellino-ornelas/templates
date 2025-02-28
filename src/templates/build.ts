@@ -4,8 +4,9 @@ import { promises as fs } from 'fs';
 import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
-import { isDirAsync } from '@tps/utilities/fileSystem';
+import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
 import type { Template } from './template';
+import { FileExistError } from '@tps/errors';
 
 interface BuildBuilt {
 	files: string[];
@@ -25,6 +26,9 @@ const DEFAULT_OPTS: BuildOptions = {
 	wipe: false,
 	force: false,
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type RenderData = Record<string, any>;
 
 export class Build {
 	/**
@@ -172,6 +176,20 @@ export class Build {
 	// 		}
 	// 	}
 	// }
+
+	public async checkForFiles(dest: string, data: RenderData): Promise<void> {
+		const { compiledFiles, defs } = this.template;
+
+		for (let i = 0; i < compiledFiles.length; i++) {
+			const file = compiledFiles[i];
+			const finalDest = file.dest(dest, data, defs);
+
+			// eslint-disable-next-line no-await-in-loop
+			if (await isFileAsync(finalDest)) {
+				throw new FileExistError(finalDest);
+			}
+		}
+	}
 
 	// /**
 	//  * Render the build path
