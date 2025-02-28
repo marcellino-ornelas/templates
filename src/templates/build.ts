@@ -163,21 +163,10 @@ export class Build {
 		});
 	}
 
-	// private async checkForFiles(renderData: RenderData): Promise<void> {
-	// 	const directory = this.getDirectory();
-
-	// 	for (let i = 0; i < this.compiledFiles.length; i++) {
-	// 		const file = this.compiledFiles[i];
-	// 		const finalDest = file.dest(directory, renderData, this._defs);
-
-	// 		// eslint-disable-next-line no-await-in-loop -- we want to go one by one and not send tons of requests
-	// 		if (await isFileAsync(finalDest)) {
-	// 			throw new FileExistError(finalDest);
-	// 		}
-	// 	}
-	// }
-
-	public async checkForFiles(dest: string, data: RenderData): Promise<void> {
+	public async checkForConflicts(
+		dest: string,
+		data: RenderData,
+	): Promise<void> {
 		const { compiledFiles, defs } = this.template;
 
 		for (let i = 0; i < compiledFiles.length; i++) {
@@ -204,7 +193,7 @@ export class Build {
 
 	// 	if (!wasWiped && !this.options.force) {
 	// 		loggerGroup.info('Checking to see if there are duplicate files');
-	// 		return this.checkForFiles(renderData);
+	// 		return this.checkForConlficts(renderData);
 	// 	}
 	// }
 

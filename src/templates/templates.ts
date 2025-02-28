@@ -665,7 +665,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			 */
 			if (!wasWiped && !this.opts.force && !shouldWipeButNoNewFolder) {
 				loggerGroup.info('Checking to see if there are duplicate files');
-				await build.checkForFiles(realBuildPath, renderData);
+				await build.checkForConflicts(realBuildPath, renderData);
 			}
 
 			// Create a new folder unless told not to
