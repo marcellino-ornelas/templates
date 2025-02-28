@@ -443,6 +443,8 @@ export class Build {
 			);
 		});
 
+		// TODO: we arent adding these created files to built
+
 		return Promise.all(filesInProgress).then(() => {
 			if (hasErroredOut) {
 				loggerGroup.error(
