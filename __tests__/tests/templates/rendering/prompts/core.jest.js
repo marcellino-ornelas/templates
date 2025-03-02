@@ -7,6 +7,7 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import inquirer from 'inquirer';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('inquirer');
 jest.mock('fs');
@@ -27,6 +28,8 @@ describe('[Templates] Prompts Process:', () => {
 	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
+		reset();
+
 		tps = new Templates('testing-prompt-core');
 		return playground.createBox('render_process_prompts_core');
 	});
@@ -72,7 +75,4 @@ describe('[Templates] Prompts Process:', () => {
 			expect(playground.pathTo('App/package1.js')).toBeFile();
 		});
 	});
-
-	it.todo('should add the prompt answer to tps.answers');
-	it.todo('should be able to use tpsType');
 });

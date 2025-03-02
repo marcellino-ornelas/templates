@@ -725,6 +725,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				switch (true) {
 					// @ts-expect-error need to fix library
 					case is.undef(answer):
+					case answer === null:
 						break;
 					// @ts-expect-error need to fix library
 					case is.bool(answer):
@@ -741,7 +742,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 						break;
 					default:
 						throw new Error(
-							'Data type is not supported as answer to a tps prompt',
+							`Data type '${typeof answer}' is not supported as answer to a tps prompt`,
 						);
 				}
 			}

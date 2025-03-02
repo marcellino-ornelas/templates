@@ -195,14 +195,14 @@ tps react-component Nav
 
 ---
 
-### Tps Type
+### Templates Type
 
-The next field is `tpsType`. This field tells tps how it should process the
-users answer. There are two options `package` or `data`.
+The next field is `tpsType`. This field tells Templates how it should process
+the users answer. There are two options `package` or `data`.
 
 :::note
 
-If you don't specify a `tpsType` field. Tps will use `package` by default.
+If you don't specify a `tpsType` field. Templates will use `package` by default.
 
 :::
 
@@ -220,17 +220,17 @@ If you don't specify a `tpsType` field. Tps will use `package` by default.
 }
 ```
 
-When you have `package` as the `tpsType`, tps will try to use the users value to
-render a package that is in your template. Different values passed in will have
-different behaviors.
+When you have `package` as the `tpsType`, Templates will try to use the users
+value to render a package that is in your template. Different values passed in
+will have different behaviors.
 
 ##### boolean
 
-In the case where a prompt's answer is a boolean and its value is `true`, Tps
-will utilize the **name** of the prompt to search for a package with the same
-name. If such a package is found, tps will include it during the rendering
-process of the new instance. When the value is `false`, tps will disregard the
-prompt and do nothing.
+In the case where a prompt's answer is a boolean and its value is `true`,
+Templates will utilize the **name** of the prompt to search for a package with
+the same name. If such a package is found, Templates will include it during the
+rendering process of the new instance. When the value is `false`, Templates will
+disregard the prompt and do nothing.
 
 :::important
 
@@ -240,79 +240,80 @@ Prompts of type `confirm` will return their answers as booleans.
 
 <Example>
 
-Say were rendering a new `express-app` instance and we have a prompt like so
+    Say were rendering a new `express-app` instance and we have a prompt like so
 
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "unit",
-            "tpsType": "package",
-            "type": "confirm",
-            "message": "Do you want to include unit tests?"
-        }
-    ]
-}
-```
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "unit",
+                "tpsType": "package",
+                "type": "confirm",
+                "message": "Do you want to include unit tests?"
+            }
+        ]
+    }
+    ```
 
-since this is declared as a package type, this needs a corresponding package in
-the template
+    since this is declared as a package type, this needs a corresponding package in
+    the template
 
-```text
-| - .tps/
-    | - express-app/
-        | settings.json
-        | - default/
-            | - server.js
-        // highlight-next-line
-        | - unit/        <-- matches name of prompt
-            | - server.test.js
-```
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
+            // highlight-next-line
+            | - unit/        <-- matches name of prompt
+                | - server.test.js
+    ```
 
-When the user is rendering a new template, the prompt will be displayed and they
-can answer.
+    When the user is rendering a new template, the prompt will be displayed and they
+    can answer.
 
-```bash
-tps express-app newApp
-? Would you like to include unit tests?
-```
+    ```bash
+    tps express-app newApp
+    ? Would you like to include unit tests?
+    ```
 
-Depending on what the user answers depends on what will happen:
+    Depending on what the user answers depends on what will happen:
 
-<Tabs>
-<TabItem value="yes" label="User answers yes">
+    <Tabs>
+        <TabItem value="yes" label="User answers yes">
 
-If user answers `yes`, then the `unit` package will be included in the rendering
-process so a `server.test.js` will be added
+            If user answers `yes`, then the `unit` package will be included in the rendering
+            process so a `server.test.js` will be added
 
-```text
-| - newApp/
-    | - server.js
-    // highlight-next-line
-    | - server.test.js
-```
+            ```text
+            | - newApp/
+                | - server.js
+                // highlight-next-line
+                | - server.test.js
+            ```
 
-</TabItem>
+        </TabItem>
 
-<TabItem value="no"  label="User answers no">
+        <TabItem value="no"  label="User answers no">
 
-If user answers `no`, then the `unit` package will not be include in the
-rendering process so no `server.test.js`.
+            If user answers `no`, then the `unit` package will not be include in the
+            rendering process so no `server.test.js`.
 
-```text
-| - newApp/
-    | - server.js
-```
+            ```text
+            | - newApp/
+                | - server.js
+            ```
 
-</TabItem>
-</Tabs>
+        </TabItem>
+    </Tabs>
+
 </Example>
 
-###### string
+##### string
 
-When a prompt's answer is a string, word or name, tps will take that answer and
-attempt to find a package that corresponds to it. If one is found then tps will
-include it in the rendering process.
+When a prompt's answer is a string, word or name, Templates will take that
+answer and attempt to find a package that corresponds to it. If one is found
+then Templates will include it in the rendering process.
 
 :::important
 
@@ -322,89 +323,89 @@ Prompts of type `list` and `input` will return their answers as strings.
 
 <Example>
 
-Say were rendering a new `express-app` instance and we have a prompt like so
+    Say were rendering a new `express-app` instance and we have a prompt like so
 
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "framework",
-            "tpsType": "package",
-            "message": "What type of frontend framework would you like to use?",
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "framework",
+                "tpsType": "package",
+                "message": "What type of frontend framework would you like to use?",
+                // highlight-start
+                "type": "list", // <--- makes prompt accept strings
+                "choices": ["react", "angular"]
+                // highlight-end
+            }
+        ]
+    }
+    ```
+
+    since this is declared as a package type, the choices to the question must match
+    a package in our template.
+
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
             // highlight-start
-            "type": "list", // <--- makes prompt accept strings
-            "choices": ["react", "angular"]
+            | - react/
+                | - react.js
+            | - angular/
+                | - angular.js
             // highlight-end
-        }
-    ]
-}
-```
+    ```
 
-since this is declared as a package type, the choices to the question must match
-a package in our template.
+    When the user is rendering a new instance, the prompt will be displayed and the
+    user can answer.
 
-```text
-| - .tps/
-    | - express-app/
-        | settings.json
-        | - default/
-            | - server.js
-        // highlight-start
-        | - react/
-            | - react.js
-        | - angular/
-            | - angular.js
-        // highlight-end
-```
+    ```bash
+    tps express-app newApp
+    ? What type of framework would you like to use?
+    > react
+    angular
+    ```
 
-When the user is rendering a new instance, the prompt will be displayed and the
-user can answer.
+    With the choice the user selects, Templates will then include a package that matches
+    the answer
 
-```bash
-tps express-app newApp
-? What type of framework would you like to use?
-> react
-  angular
-```
+    <Tabs>
+        <TabItem value="react" label="User answers react">
 
-With the choice the user selects, tps will then include a package that matches
-the answer
+            If user answers `react`, then the `react` package will be included in the
+            rendering process so a `react.js` will be added
 
-<Tabs>
-<TabItem value="react" label="User answers react">
+            ```text
+            | - newApp/
+                | - server.js
+                // highlight-next-line
+                | - react.js
+            ```
 
-If user answers `react`, then the `react` package will be included in the
-rendering process so a `react.js` will be added
+        </TabItem>
 
-```text
-| - newApp/
-    | - server.js
-    // highlight-next-line
-    | - react.js
-```
+        <TabItem value="angular"  label="User answers angular">
 
-</TabItem>
+            If user answers `angular`, then the `angular` package will be included in the
+            rendering process so a `angular.js` will be added
 
-<TabItem value="angular"  label="User answers angular">
+            ```text
+            | - newApp/
+                | - server.js
+                // highlight-next-line
+                | - angular.js
+            ```
 
-If user answers `angular`, then the `angular` package will be included in the
-rendering process so a `angular.js` will be added
-
-```text
-| - newApp/
-    | - server.js
-    // highlight-next-line
-    | - angular.js
-```
-
-</TabItem>
-</Tabs>
+        </TabItem>
+    </Tabs>
 
 </Example>
 
-###### list
+##### list
 
-If a prompt's answer consists of a list of strings, tps will consider each
+If a prompt's answer consists of a list of strings, Templates will consider each
 individual answer and locate the corresponding packages associated with them.
 These packages will then be included during the rendering process.
 
@@ -416,64 +417,119 @@ Prompts of type `checkbox` will return their answer as list of strings.
 
 <Example>
 
-Say were rendering a new `express-app` instance and we have a prompt like so
+    Say were rendering a new `express-app` instance and we have a prompt like so
 
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "extras",
-            "message": "Would you like to include any other features?",
-            "tpsType": "package",
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "extras",
+                "message": "Would you like to include any other features?",
+                "tpsType": "package",
+                // highlight-start
+                "type": "checkbox", // <--- makes prompt accept list of strings
+                "choices": ["metrics", "unit", "e2e", "api"]
+                // highlight-end
+            }
+        ]
+    }
+    ```
+
+    since this is declared as a package type, the choices to the question must match
+    a package in our template.
+
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
             // highlight-start
-            "type": "checkbox", // <--- makes prompt accept list of strings
-            "choices": ["metrics", "unit", "e2e", "api"]
+            | - metrics/
+                | - metrics.js
+            | - unit/
+                | - server.test.js
+            | - e2e/
+                | - website.test.js
+            | - api/
+                | - api.js
             // highlight-end
-        }
-    ]
-}
-```
+    ```
 
-since this is declared as a package type, the choices to the question must match
-a package in our template.
+    When the user renders a new template. Templates will ask for an list of inputs.
+    Whatever the user answers, Templates will take all of the values and try to find
+    a packages that matches the answers.
 
-```text
-| - .tps/
-    | - express-app/
-        | settings.json
-        | - default/
-            | - server.js
-        // highlight-start
-        | - metrics/
-            | - metrics.js
-        | - unit/
-            | - server.test.js
-        | - e2e/
-            | - website.test.js
-        | - api/
-            | - api.js
-        // highlight-end
-```
+    If the user answers `metrics` and `unit` then both packages will be included in
+    the rendering process
 
-When the user renders a new template. tps will ask for an list of inputs.
-Whatever the user answers, tps will take all of the values and try to find a
-packages that matches the answers.
-
-If the user answers `metrics` and `unit` then both packages will be included in
-the rendering process
-
-```text
-| - newApp/
-    // highlight-next-line
-    | - metrics.js
-    // highlight-next-line
-    | - server.test.js
-    | - server.js
-```
+    ```text
+    | - newApp/
+        // highlight-next-line
+        | - metrics.js
+        // highlight-next-line
+        | - server.test.js
+        | - server.js
+    ```
 
 </Example>
 
+##### null
+
+If the value is `null` or `undefined`, Templates will disregard the prompt and
+do nothing. This is useful in choice `list` and `input` prompt types because you
+can have a choice that doesnt use any package.
+
+<Example>
+
+    Lets say we have a `express-app` template that looks like this:
+
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
+            // highlight-start
+            | - mongoose/
+                | - <mongoose code...>
+            // highlight-end
+    ```
+
+    And we have a `database` prompt that looks like this:
+
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "database",
+                "tpsType": "package",
+                "type": "list",
+                // highlight-start
+                "choices": [{ "name": "none", "value": null }, "mongoose"],
+                "default": null
+                // highlight-end
+            }
+        ]
+    }
+    ```
+
+    If the user selects `none` then no package will not be included in the instance.
+    However, if the user choses `mongoose` then the mongoose template will be
+    included in the instance.
+
+</Example>
+
+---
+
 #### data
+
+When the `tpsType` is set to `data`, Templates will leave the data untouched.
+This data type is designed to allow you to retrieve additional information from
+the user, which you can then process according to your specific needs. One
+common use case for this is to conditionally render specific code within the
+file based on the user's response to a certain question. Any inquirer
+[type](#type) can be used.
 
 ```json
 {
@@ -486,13 +542,6 @@ the rendering process
     ]
 }
 ```
-
-When the `tpsType` is set to `data`, tps will leave the data untouched. This
-data type is designed to allow you to retrieve additional information from the
-user, which you can then process according to your specific needs. One common
-use case for this is to conditionally render specific code within the file based
-on the user's response to a certain question. Any inquirer [type](#type) can be
-used.
 
 <Example>
 
