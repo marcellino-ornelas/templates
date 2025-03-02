@@ -47,8 +47,8 @@ module.exports = {
 			message: 'What type of database do you want to use?',
 			tpsType: 'package',
 			type: 'list',
-			choices: ['none', 'mongoose'],
-			default: 'none',
+			choices: [{ label: 'none', value: null }, 'mongoose'],
+			default: null,
 		},
 	],
 	events: {

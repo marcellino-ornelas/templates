@@ -386,7 +386,7 @@ router.get('/', (req: Request, res: Response) => {`,
 			});
 
 			tps.setAnswers({
-				database: 'none',
+				database: null,
 			});
 
 			await tps.render(CWD, 'app');

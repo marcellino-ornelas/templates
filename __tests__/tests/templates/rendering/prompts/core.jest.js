@@ -75,7 +75,4 @@ describe('[Templates] Prompts Process:', () => {
 			expect(playground.pathTo('App/package1.js')).toBeFile();
 		});
 	});
-
-	it.todo('should add the prompt answer to tps.answers');
-	it.todo('should be able to use tpsType');
 });
