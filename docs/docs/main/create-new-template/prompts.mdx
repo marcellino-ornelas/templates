@@ -417,64 +417,119 @@ Prompts of type `checkbox` will return their answer as list of strings.
 
 <Example>
 
-Say were rendering a new `express-app` instance and we have a prompt like so
+    Say were rendering a new `express-app` instance and we have a prompt like so
 
-```json title="settings.json"
-{
-    "prompts": [
-        {
-            "name": "extras",
-            "message": "Would you like to include any other features?",
-            "tpsType": "package",
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "extras",
+                "message": "Would you like to include any other features?",
+                "tpsType": "package",
+                // highlight-start
+                "type": "checkbox", // <--- makes prompt accept list of strings
+                "choices": ["metrics", "unit", "e2e", "api"]
+                // highlight-end
+            }
+        ]
+    }
+    ```
+
+    since this is declared as a package type, the choices to the question must match
+    a package in our template.
+
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
             // highlight-start
-            "type": "checkbox", // <--- makes prompt accept list of strings
-            "choices": ["metrics", "unit", "e2e", "api"]
+            | - metrics/
+                | - metrics.js
+            | - unit/
+                | - server.test.js
+            | - e2e/
+                | - website.test.js
+            | - api/
+                | - api.js
             // highlight-end
-        }
-    ]
-}
-```
+    ```
 
-since this is declared as a package type, the choices to the question must match
-a package in our template.
+    When the user renders a new template. Templates will ask for an list of inputs.
+    Whatever the user answers, Templates will take all of the values and try to find
+    a packages that matches the answers.
 
-```text
-| - .tps/
-    | - express-app/
-        | settings.json
-        | - default/
-            | - server.js
-        // highlight-start
-        | - metrics/
-            | - metrics.js
-        | - unit/
-            | - server.test.js
-        | - e2e/
-            | - website.test.js
-        | - api/
-            | - api.js
-        // highlight-end
-```
+    If the user answers `metrics` and `unit` then both packages will be included in
+    the rendering process
 
-When the user renders a new template. Templates will ask for an list of inputs.
-Whatever the user answers, Templates will take all of the values and try to find
-a packages that matches the answers.
-
-If the user answers `metrics` and `unit` then both packages will be included in
-the rendering process
-
-```text
-| - newApp/
-    // highlight-next-line
-    | - metrics.js
-    // highlight-next-line
-    | - server.test.js
-    | - server.js
-```
+    ```text
+    | - newApp/
+        // highlight-next-line
+        | - metrics.js
+        // highlight-next-line
+        | - server.test.js
+        | - server.js
+    ```
 
 </Example>
 
+##### null
+
+If the value is `null` or `undefined`, Templates will disregard the prompt and
+do nothing. This is useful in choice `list` and `input` prompt types because you
+can have a choice that doesnt use any package.
+
+<Example>
+
+    Lets say we have a `express-app` template that looks like this:
+
+    ```text
+    | - .tps/
+        | - express-app/
+            | settings.json
+            | - default/
+                | - server.js
+            // highlight-start
+            | - mongoose/
+                | - <mongoose code...>
+            // highlight-end
+    ```
+
+    And we have a `database` prompt that looks like this:
+
+    ```json title="settings.json"
+    {
+        "prompts": [
+            {
+                "name": "database",
+                "tpsType": "package",
+                "type": "list",
+                // highlight-start
+                "choices": [{ "name": "none", "value": null }, "mongoose"],
+                "default": null
+                // highlight-end
+            }
+        ]
+    }
+    ```
+
+    If the user selects `none` then no package will not be included in the instance.
+    However, if the user choses `mongoose` then the mongoose template will be
+    included in the instance.
+
+</Example>
+
+---
+
 #### data
+
+When the `tpsType` is set to `data`, Templates will leave the data untouched.
+This data type is designed to allow you to retrieve additional information from
+the user, which you can then process according to your specific needs. One
+common use case for this is to conditionally render specific code within the
+file based on the user's response to a certain question. Any inquirer
+[type](#type) can be used.
 
 ```json
 {
@@ -487,13 +542,6 @@ the rendering process
     ]
 }
 ```
-
-When the `tpsType` is set to `data`, Templates will leave the data untouched.
-This data type is designed to allow you to retrieve additional information from
-the user, which you can then process according to your specific needs. One
-common use case for this is to conditionally render specific code within the
-file based on the user's response to a certain question. Any inquirer
-[type](#type) can be used.
 
 <Example>
 
