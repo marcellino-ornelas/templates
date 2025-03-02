@@ -7,6 +7,10 @@ import Playground from '@test/utilities/playground';
 import { TESTING_DIR } from '@test/utilities/constants';
 import Templates from '@test/templates';
 import inquirer from 'inquirer';
+import { mkSettingsFileJSON, mkTemplate } from '@test/utilities/templates';
+import { CWD } from '@tps/utilities/constants';
+import path from 'path';
+import { reset } from '@test/utilities/vol';
 
 jest.mock('inquirer');
 jest.mock('fs');
@@ -27,6 +31,8 @@ describe('[Templates] Prompts Process:', () => {
 	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
+		reset();
+
 		tps = new Templates('testing-prompt-core');
 		return playground.createBox('render_process_prompts_core');
 	});

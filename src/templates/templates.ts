@@ -725,6 +725,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 				switch (true) {
 					// @ts-expect-error need to fix library
 					case is.undef(answer):
+					case answer === null:
 						break;
 					// @ts-expect-error need to fix library
 					case is.bool(answer):

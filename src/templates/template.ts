@@ -34,7 +34,7 @@ export class Template {
 
 		const template = new Template(templateName, location, settingsFile, {}, []);
 
-		template.fetchPackage('default');
+		await template.fetchPackage('default');
 
 		return template;
 	}
