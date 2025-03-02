@@ -12,7 +12,7 @@ interface ExpressAppAnswers {
 	packageManager?: 'npm' | 'yarn';
 	api?: boolean;
 	typescript?: boolean;
-	database?: 'none' | 'mongoose';
+	database?: null | 'mongoose';
 }
 
 jest.mock('fs');
