@@ -1,0 +1,170 @@
+import { Example } from '@site/docs/components/example';
+
+# 3rd Party Templates
+
+3rd party templates are templates that can be published to your choice of
+package manager like npm, yarn, or pnpm. This allows other developers to use
+your template by installing it globally or locally. There are special
+considerations you need to think about that we'll cover in this guide:
+
+-   [Naming](#naming)
+-   [Where to store them](#where-to-store-them)
+-   [How to publish them](#publishing)
+-   [Dev and Production](#dev-and-production)
+
+## Naming
+
+The only requirement for 3rd party templates is that their name starts with
+`tps-`. The main reason for this is to prevent naming conflicts with other
+packages and to ensure your template shows up when running the
+[list command](../../api/cli.mdx#list). Due to the number of folders that could
+be present in `node_modules`, Templates does not search for templates that are
+not prefixed with `tps-` in all `node_modules` directories. Don't worry! You can
+still render instances on the CLI without the `tps-` prefix in the template
+name.
+
+Make sure your `package.json` name also uses this prefix! Using this prefix in
+your GitHub repo name is not required but is considered good practice.
+
+<Example>
+
+    If you wanted to create a 3rd party template called
+    `github-pull-request-template` then add the `tps-` prefix in the front of the
+    name.
+
+    ```text
+    | - .tps/
+        // highlight-next-line
+        | - tps-github-pull-request-template/
+            | - <template code...>
+    ```
+
+    Make sure to have a `package.json` and make sure the `name` property is the same as your template name:
+
+    ```json
+    {
+        "name": "tps-github-pull-request-template"
+    }
+    ```
+
+    When rendering new instance you can use the prefixed version or non prefixed
+    version
+
+    ```bash
+    tps github-pull-request-template
+
+    # Prefixed version
+    tps tps-github-pull-request-template
+    ```
+
+</Example>
+
+## Where to store them?
+
+We recommend that you put 3rd party templates in your
+[global `.tps`](./templates.mdx#global-templates) directory. This is because
+global templates can be used anywhere in your file system. This allows you to
+generate instances of this template for testing or use. Remember, Templates will
+load templates from a `.tps` folder in your current working directory or any
+parent directories, so you won't be able to test your template if it is not in a
+`.tps` folder.
+
+<Example>
+
+    If you wanted to create a 3rd party template called
+    `github-pull-request-template` that will generate a GitHub pull request template
+    file, then your folder structure would look like this:
+
+    ```text
+    | - ~/
+        | - .tps/
+            | - tps-github-pull-request-template/
+                | - <template code...>
+    ```
+
+</Example>
+
+## Publishing
+
+When you are ready to publish your template, you can publish it to your package
+manager of choice. This will allow other developers to install your template and
+use it in their projects. Templates don't require anything special when
+publishing templates, so follow your favorite guide or video to publish npm,
+yarn, or pnpm packages.
+
+-   [npm](https://docs.npmjs.com/cli/v9/commands/npm-publish)
+-   [yarn](https://classic.yarnpkg.com/lang/en/docs/cli/publish/)
+-   [pnpm](https://pnpm.io/cli/publish)
+
+:::caution
+
+We have only tested using templates globally installed with `npm`. Please use
+`npm` for global templates until we can verify other package managers. If you
+try this and it doesn't work, please drop us an
+[issue on GitHub](https://github.com/marcellino-ornelas/templates/issues).
+
+Templates installed locally with `npm`, `yarn`, and `pnpm` shouldn't have any
+issues.
+
+:::
+
+## Dev and Production
+
+At times, you may want to have both a development and production version of your
+template. This can be helpful for making changes locally and testing them
+without affecting your production version, while still being able to access the
+production version to ensure you are not causing any regressions.
+
+To do this, you can prefix your global template folder with `-dev` in your
+global `.tps` directory. This will allow you to render this template with
+`<template-name>-dev`. Now you can install your template globally or locally and
+use the production version with `<template-name>` and the development version
+with `<template-name>-dev`.
+
+:::danger
+
+Don't change the name of the template in your `package.json`.
+
+:::
+
+<Example>
+
+    If you had a 3rd party template called `tps-github-pull-request-template` and
+    you want to have a dev and production version, you can change the folder name in your
+    global `.tps` directory to `tps-github-pull-request-template-dev`.
+
+    ```text
+    | - ~/
+        | - .tps/
+            // highlight-next-line
+            | - tps-github-pull-request-template-dev/
+                | - <template code...>
+    ```
+
+    Now you can install your production version from npm, yarn, or pnpm with
+    `tps-github-pull-request-template`.
+
+    ```bash
+    npm install -g tps-github-pull-request-template
+    ```
+
+    Now when you want to use your dev version you can use `tps-github-pull-request-template-dev`:
+
+    ```bash
+    tps github-pull-request-template-dev
+    ```
+
+    and when you want to use your PROD version you can use `tps-github-pull-request-template`:
+
+    ```bash
+    tps github-pull-request-template
+    ```
+
+</Example>
+
+## Example
+
+If you want an example of a 3rd party template, you can check out the
+[ai template](https://github.com/marcellino-ornelas/tps-ai) for inspiration. We
+use Github Actions to deploy our template to `npm`. Just be aware that this
+template doesnt use any packages so it only contains a `settings.js` file.
