@@ -429,7 +429,8 @@ export class Build {
 			filesInProgress.push(
 				file
 					.renderDotFile(finalDest, dotContentsForFile)
-					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err)),
+					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err))
+					.then(() => this.built.files.push(finalDest)),
 			);
 		});
 
@@ -439,7 +440,8 @@ export class Build {
 			filesInProgress.push(
 				file
 					.renderFile(finalDest)
-					.catch((err) => handleFileErrorCatch(finalDest, 'file', err)),
+					.catch((err) => handleFileErrorCatch(finalDest, 'file', err))
+					.then(() => this.built.files.push(finalDest)),
 			);
 		});
 
@@ -454,5 +456,92 @@ export class Build {
 				return Promise.reject(error);
 			}
 		});
+	}
+
+	public async cleanUp(buildNewFolder: boolean): Promise<void> {
+		// _cleanUpFailBuild(build: Build, buildNewFolder: boolean): void {
+		let buildPath = this.getDirectory();
+
+		logger.tps.info('Processing build cleanup %s %o', buildPath, {
+			buildNewFolder,
+		});
+
+		const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
+
+		if (!buildPathNeedsSlash) {
+			buildPath += path.sep;
+		}
+
+		if (buildNewFolder) {
+			await fs.rm(buildPath, { force: true, recursive: true });
+		}
+
+		// eslint-disable-next-line prefer-const
+		let { directories, files } = this.built;
+
+		// @ts-expect-error need to fix library
+		const filesIsEmpty: boolean = is.array.empty(files);
+
+		// @ts-expect-error need to fix library
+		const dirsIsEmpty: boolean = is.array.empty(directories);
+
+		if (filesIsEmpty && dirsIsEmpty) {
+			logger.tps.success('Nothing to clean... Moving on to next');
+			return;
+		}
+
+		if (!dirsIsEmpty) {
+			const dirsThatMatch = directories.filter((dir) =>
+				dir.includes(buildPath),
+			);
+
+			// @ts-expect-error need to fix library
+			if (!is.array.empty(dirsThatMatch)) {
+				logger.tps.info('Cleaning directories %n', dirsThatMatch);
+			}
+
+			for (let i = 0; i < dirsThatMatch.length; i++) {
+				const dir = dirsThatMatch[i];
+
+				try {
+					// eslint-disable-next-line no-await-in-loop
+					await fs.rm(dir, { force: true, recursive: true });
+					logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
+				} catch (err) {
+					logger.tps.error('Clean up failed when deleting directories %n', err);
+				}
+
+				// if directory is removed then we can remove all child files
+				if (!filesIsEmpty) {
+					files = files.filter((file) => !file.includes(dir));
+				}
+			}
+		}
+
+		if (!filesIsEmpty) {
+			const filesThatMatch = files.filter((file) => file.includes(buildPath));
+
+			// @ts-expect-error need to fix library
+			if (!is.array.empty(filesThatMatch)) {
+				logger.tps.info('Cleaning files %n', filesThatMatch);
+			}
+
+			await Promise.all(
+				files.map(async (file) => {
+					try {
+						await fs.rm(buildPath, { force: true });
+						logger.tps.success(
+							` - %s ${colors.green.italic('(deleted)')}`,
+							file,
+						);
+					} catch (err) {
+						logger.tps.error('Clean up failed when deleting files %n', err);
+					}
+				}),
+			);
+		}
+
+		logger.tps.success('Clean up finished');
+		// }
 	}
 }
