@@ -151,7 +151,7 @@ describe('Command Line: list', () => {
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list']);
 
-		expect(log.get()).toContain('tps-testing-3rd-party-template');
+		expect(log.get()).toContain('testing-3rd-party-template');
 	});
 
 	it('should ignore local 3rd party templates if option provided', async () => {
@@ -162,10 +162,10 @@ describe('Command Line: list', () => {
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list', '--no-node-modules']);
 
-		expect(log.get()).not.toContain('tps-testing-3rd-party-template');
+		expect(log.get()).not.toContain('testing-3rd-party-template');
 	});
 
-	it('should ignore local 3rd party templates if no  3rd party templates', async () => {
+	it('should ignore local 3rd party templates if no 3rd party templates', async () => {
 		await vol.promises.mkdir(path.join(CWD, 'node_modules'), {
 			recursive: true,
 		});
@@ -183,7 +183,7 @@ describe('Command Line: list', () => {
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list']);
 
-		expect(log.get()).toContain('tps-testing-3rd-party-template');
+		expect(log.get()).toContain('testing-3rd-party-template');
 	});
 
 	it('should ignore global 3rd party templates if option provided', async () => {
@@ -194,7 +194,7 @@ describe('Command Line: list', () => {
 		// ignore default folder, no need to do extra work
 		await parser.parseAsync(['list', '--no-node-modules']);
 
-		expect(log.get()).not.toContain('tps-testing-3rd-party-template');
+		expect(log.get()).not.toContain('testing-3rd-party-template');
 	});
 
 	it('should ignore global 3rd party templates if no  3rd party templates', async () => {
