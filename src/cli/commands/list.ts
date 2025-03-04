@@ -170,7 +170,7 @@ export default {
 		const templates = unique(flatten(templatesNested));
 
 		templates.forEach((template) => {
-			console.log(template);
+			console.log(template.replace(/^tps-/, ''));
 		});
 	},
 } as CommandModule<object, ListArgv>;
