@@ -185,7 +185,10 @@ export class Build {
 	/**
 	 * Render the build path
 	 */
-	public async render(answers: AnswersHash, data: RenderData): Promise<void> {
+	public async render(
+		answers: AnswersHash = {},
+		data: RenderData = {},
+	): Promise<void> {
 		const realBuildPath = this.getDirectory();
 		const loggerGroup = this.getLogger();
 		const doesBuildPathExist = await this.directoryExists();
@@ -392,7 +395,7 @@ export class Build {
 		buildPath: string,
 		data: RenderData,
 	): Promise<void> {
-		const loggerGroup = logger.tps.group(`render_${buildPath}`);
+		const loggerGroup = this.getLogger();
 		loggerGroup.info('Rendering files');
 
 		const files = this.template.compiledFiles.filter((file) => !file.isDot);
@@ -458,8 +461,12 @@ export class Build {
 		});
 	}
 
-	public async cleanUp(buildNewFolder: boolean): Promise<void> {
-		// _cleanUpFailBuild(build: Build, buildNewFolder: boolean): void {
+	/**
+	 * Delete everything that was created in this build. This will run if any file or directory
+	 * error when being created. We dont want to leave broken templates created 
+	 * so this function will delete everything that this template built
+	 */
+	public async clean(buildNewFolder: boolean): Promise<void> {
 		let buildPath = this.getDirectory();
 
 		logger.tps.info('Processing build cleanup %s %o', buildPath, {
@@ -479,11 +486,8 @@ export class Build {
 		// eslint-disable-next-line prefer-const
 		let { directories, files } = this.built;
 
-		// @ts-expect-error need to fix library
-		const filesIsEmpty: boolean = is.array.empty(files);
-
-		// @ts-expect-error need to fix library
-		const dirsIsEmpty: boolean = is.array.empty(directories);
+		const filesIsEmpty: boolean = !files.length;
+		const dirsIsEmpty: boolean = !directories.length;
 
 		if (filesIsEmpty && dirsIsEmpty) {
 			logger.tps.success('Nothing to clean... Moving on to next');
@@ -495,8 +499,7 @@ export class Build {
 				dir.includes(buildPath),
 			);
 
-			// @ts-expect-error need to fix library
-			if (!is.array.empty(dirsThatMatch)) {
+			if (dirsThatMatch.length) {
 				logger.tps.info('Cleaning directories %n', dirsThatMatch);
 			}
 
@@ -521,8 +524,7 @@ export class Build {
 		if (!filesIsEmpty) {
 			const filesThatMatch = files.filter((file) => file.includes(buildPath));
 
-			// @ts-expect-error need to fix library
-			if (!is.array.empty(filesThatMatch)) {
+			if (filesThatMatch.length) {
 				logger.tps.info('Cleaning files %n', filesThatMatch);
 			}
 
@@ -542,6 +544,5 @@ export class Build {
 		}
 
 		logger.tps.success('Clean up finished');
-		// }
 	}
 }

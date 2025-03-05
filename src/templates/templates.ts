@@ -539,7 +539,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		await Promise.all(
 			this.buildErrors.map(async ({ build, didBuildPathExist }) => {
-				await build.cleanUp(buildNewFolder && !didBuildPathExist);
+				await build.clean(buildNewFolder && !didBuildPathExist);
 			}),
 		);
 
@@ -590,82 +590,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			didBuildPathExist,
 		});
 	}
-
-	// _cleanUpFailBuild(build: Build, buildNewFolder: boolean): void {
-	// 	let buildPath = build.getDirectory();
-
-	// 	logger.tps.info('Processing build cleanup %s %o', buildPath, {
-	// 		buildNewFolder,
-	// 	});
-
-	// 	const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
-
-	// 	if (!buildPathNeedsSlash) {
-	// 		buildPath += path.sep;
-	// 	}
-
-	// 	if (buildNewFolder) {
-	// 		fs.rmSync(buildPath, { force: true, recursive: true });
-	// 	}
-
-	// 	// eslint-disable-next-line prefer-const
-	// 	let { files } = this.successfulBuilds;
-	// 	const dirs = build.built.directories;
-
-	// 	// @ts-expect-error need to fix library
-	// 	const filesIsEmpty: boolean = is.array.empty(files);
-
-	// 	// @ts-expect-error need to fix library
-	// 	const dirsIsEmpty: boolean = is.array.empty(dirs);
-
-	// 	if (filesIsEmpty && dirsIsEmpty) {
-	// 		logger.tps.success('Nothing to clean... Moving on to next');
-	// 		return;
-	// 	}
-
-	// 	if (!dirsIsEmpty) {
-	// 		const dirsThatMatch = dirs.filter((dir) => dir.includes(buildPath));
-
-	// 		// @ts-expect-error need to fix library
-	// 		if (!is.array.empty(dirsThatMatch)) {
-	// 			logger.tps.info('Cleaning directories %n', dirsThatMatch);
-	// 		}
-
-	// 		dirsThatMatch.forEach((dir) => {
-	// 			try {
-	// 				fs.rmSync(dir, { force: true, recursive: true });
-	// 				logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
-	// 			} catch (err) {
-	// 				logger.tps.error('Clean up failed when deleting directories %n', err);
-	// 			}
-
-	// 			// if directory is removed then we can remove all child files
-	// 			if (!filesIsEmpty) {
-	// 				files = files.filter((file) => !file.includes(dir));
-	// 			}
-	// 		});
-	// 	}
-
-	// 	if (!filesIsEmpty) {
-	// 		const filesThatMatch = files.filter((file) => file.includes(buildPath));
-
-	// 		// @ts-expect-error need to fix library
-	// 		if (!is.array.empty(filesThatMatch)) {
-	// 			logger.tps.info('Cleaning files %n', filesThatMatch);
-	// 		}
-
-	// 		files.forEach((file) => {
-	// 			try {
-	// 				fs.rmSync(buildPath, { force: true });
-	// 				logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, file);
-	// 			} catch (err) {
-	// 				logger.tps.error('Clean up failed when deleting files %n', err);
-	// 			}
-	// 		});
-	// 	}
-
-	// 	logger.tps.success('Clean up finished');
-	// }
 
 	/**
 	 * Compile all files that need to be made for render process

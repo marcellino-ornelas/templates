@@ -19,6 +19,56 @@ describe('Build', () => {
 		mkTemplate(templateName);
 	});
 
+	it('should be able to track directories and files built', async () => {
+		const tps = mkTemplate('testing_build_built', CWD, {
+			'default/index.txt': 'index.txt',
+			'default/dynamic.txt.dot': 'dynamic.txt.dot',
+			'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
+			'default/myDirectory/.tpskeep': '',
+			// @ts-expect-error - something
+			'default/myDirectory/myDirectory2/': {},
+			'default/myDirectory/myDirectory2/index.txt': '',
+			'package1/package1.txt': 'package1.txt',
+			'package2/package2.txt': 'package2.txt',
+		});
+
+		tps.loadPackage('package1');
+
+		const template = new Template(
+			tps.template,
+			tps.src,
+			tps.templateSettings,
+			tps.packages,
+			tps.packagesUsed,
+			tps.compiledFiles,
+			// @ts-expect-error - private
+			// eslint-disable-next-line no-underscore-dangle
+			tps._defs,
+		);
+
+		const build = new Build(BUILD_PATH, template);
+
+		await build.render();
+
+		expect(build.built).toStrictEqual(
+			expect.objectContaining({
+				files: expect.arrayContaining([
+					path.join(BUILD_PATH, 'index.js'),
+					path.join(BUILD_PATH, 'index.txt'),
+					// default file thats included in `mkTemplate`
+					path.join(BUILD_PATH, 'dynamic.txt'),
+					path.join(BUILD_PATH, 'App.txt'),
+					path.join(BUILD_PATH, 'package1.txt'),
+					path.join(BUILD_PATH, 'myDirectory/myDirectory2/index.txt'),
+				]),
+				directories: [
+					path.join(BUILD_PATH, 'myDirectory'),
+					path.join(BUILD_PATH, 'myDirectory/myDirectory2'),
+				],
+			}),
+		);
+	});
+
 	describe('maybeWipe', () => {
 		it('should be false when directory doesnt exist', async () => {
 			const template = await Template.get(templateName);
@@ -92,6 +142,65 @@ describe('Build', () => {
 			expect(spy).not.toBeCalled();
 
 			expect(hackyForceFunction).toBeCalled();
+		});
+	});
+
+	describe('clean', () => {
+		it('should be able to track directories and files built', async () => {
+			const tps = mkTemplate('testing_build_built', CWD, {
+				'default/index.txt': 'index.txt',
+				'default/dynamic.txt.dot': 'dynamic.txt.dot',
+				'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
+				'default/myDirectory/.tpskeep': '',
+				// @ts-expect-error - something
+				'default/myDirectory/myDirectory2/': {},
+				'default/myDirectory/myDirectory2/index.txt': '',
+				'package1/package1.txt': 'package1.txt',
+				'package2/package2.txt': 'package2.txt',
+			});
+
+			tps.loadPackage('package1');
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				'index.js',
+				'index.txt',
+				'dynamic.txt',
+				'App.txt',
+				'package1.txt',
+				'myDirectory/myDirectory2/index.txt',
+			]);
+
+			await build.clean(true);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).not.toBeDirectory();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).not.toHaveAllFilesAndDirectories([
+				'index.js',
+				'index.txt',
+				'dynamic.txt',
+				'App.txt',
+				'package1.txt',
+				'myDirectory/myDirectory2/index.txt',
+			]);
 		});
 	});
 });
