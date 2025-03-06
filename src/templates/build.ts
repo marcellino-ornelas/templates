@@ -531,7 +531,7 @@ export class Build {
 			await Promise.all(
 				files.map(async (file) => {
 					try {
-						await fs.rm(buildPath, { force: true });
+						await fs.rm(file, { force: true });
 						logger.tps.success(
 							` - %s ${colors.green.italic('(deleted)')}`,
 							file,

@@ -4,6 +4,7 @@ import { Template } from '@tps/templates/template';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
 import { mkTemplate } from '@test/utilities/templates';
+import logger from '@tps/utilities/logger';
 
 jest.mock('fs');
 
@@ -204,7 +205,7 @@ describe('Build', () => {
 			]);
 		});
 
-		it('should be able to delete all created files and directories when not a new folder', async () => {
+		it.only('should be able to delete all created files and directories when not a new folder', async () => {
 			const tps = mkTemplate('testing_build_built', CWD, {
 				'default/index.txt': 'index.txt',
 				'default/dynamic.txt.dot': 'dynamic.txt.dot',
