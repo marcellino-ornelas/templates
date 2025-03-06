@@ -4,7 +4,6 @@ import { Template } from '@tps/templates/template';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
 import { mkTemplate } from '@test/utilities/templates';
-import logger from '@tps/utilities/logger';
 
 jest.mock('fs');
 
