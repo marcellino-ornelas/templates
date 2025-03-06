@@ -205,7 +205,7 @@ describe('Build', () => {
 			]);
 		});
 
-		it.only('should be able to delete all created files and directories when not a new folder', async () => {
+		it('should be able to delete all created files and directories when not a new folder', async () => {
 			const tps = mkTemplate('testing_build_built', CWD, {
 				'default/index.txt': 'index.txt',
 				'default/dynamic.txt.dot': 'dynamic.txt.dot',
