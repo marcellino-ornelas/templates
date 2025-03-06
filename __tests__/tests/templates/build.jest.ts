@@ -146,7 +146,7 @@ describe('Build', () => {
 	});
 
 	describe('clean', () => {
-		it('should be able to track directories and files built', async () => {
+		it('should be able delete all created files and directories', async () => {
 			const tps = mkTemplate('testing_build_built', CWD, {
 				'default/index.txt': 'index.txt',
 				'default/dynamic.txt.dot': 'dynamic.txt.dot',
@@ -200,6 +200,65 @@ describe('Build', () => {
 				'App.txt',
 				'package1.txt',
 				'myDirectory/myDirectory2/index.txt',
+				'myDirectory/',
+			]);
+		});
+
+		it('should be able to delete all created files and directories when not a new folder', async () => {
+			const tps = mkTemplate('testing_build_built', CWD, {
+				'default/index.txt': 'index.txt',
+				'default/dynamic.txt.dot': 'dynamic.txt.dot',
+				'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
+				'default/myDirectory/.tpskeep': '',
+				// @ts-expect-error - something
+				'default/myDirectory/myDirectory2/': {},
+				'default/myDirectory/myDirectory2/index.txt': '',
+				'package1/package1.txt': 'package1.txt',
+				'package2/package2.txt': 'package2.txt',
+			});
+
+			tps.loadPackage('package1');
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				'index.js',
+				'index.txt',
+				'dynamic.txt',
+				'App.txt',
+				'package1.txt',
+				'myDirectory/myDirectory2/index.txt',
+			]);
+
+			await build.clean(false);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toBeDirectory();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).not.toHaveAllFilesAndDirectories([
+				'index.js',
+				'index.txt',
+				'dynamic.txt',
+				'App.txt',
+				'package1.txt',
+				'myDirectory/myDirectory2/index.txt',
+				'myDirectory/',
 			]);
 		});
 	});

@@ -463,7 +463,7 @@ export class Build {
 
 	/**
 	 * Delete everything that was created in this build. This will run if any file or directory
-	 * error when being created. We dont want to leave broken templates created 
+	 * error when being created. We dont want to leave broken templates created
 	 * so this function will delete everything that this template built
 	 */
 	public async clean(buildNewFolder: boolean): Promise<void> {
