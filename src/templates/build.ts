@@ -5,7 +5,7 @@ import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
-import { FileExistError } from '@tps/errors';
+import { BuildError, FileExistError } from '@tps/errors';
 import { AnswersHash } from '@tps/types/settings';
 import * as utils from './utils';
 import type { Template } from './template';
@@ -392,67 +392,39 @@ export class Build {
 		buildPath: string,
 		data: RenderData,
 	): Promise<void> {
-		const loggerGroup = logger.tps.group(`render_${buildPath}`);
+		const loggerGroup = logger.tps.group(`render_${this.buildPath}`);
 		loggerGroup.info('Rendering files');
 
-		const files = this.template.compiledFiles.filter((file) => !file.isDot);
-		const dotFiles = this.template.compiledFiles.filter((file) => file.isDot);
-		const dotContents = dotFiles.map((file) => {
-			/**
-			 * Will throw error if something is wrong with doT
-			 */
-			return [
-				file,
-				file.dest(buildPath, data, this.template.defs),
-				file.fileDataTemplate(data, this.template.defs, buildPath),
-			];
-		});
+		const results = await Promise.allSettled(
+			this.template.compiledFiles.map(async (file) => {
+				const type = file.isDot ? 'Dot file' : 'File';
+				let failed = false;
 
-		const filesInProgress = [];
-		let hasErroredOut = false;
-		let error;
+				try {
+					await file.render(this.buildPath, data, this.template.defs);
+				} catch (error) {
+					failed = true;
+					throw error;
+				} finally {
+					const status = failed
+						? colors.red('Failed')
+						: colors.green('Created');
 
-		const handleFileErrorCatch = (dest, type, err) => {
-			loggerGroup.error(
-				`Error happened when rendering a ${type} %s %n`,
-				dest,
-				err,
-			);
-			if (!hasErroredOut) {
-				hasErroredOut = true;
-				error = err;
-			}
-		};
+					loggerGroup.info(
+						` - %s ${colors.cyan.italic(`(${type})`)} (${status})`,
+						file.dest(this.buildPath, data, this.template.defs),
+					);
+				}
+			}),
+		);
 
-		dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
-			loggerGroup.info(` - %s ${colors.cyan.italic('(Dot file)')}`, finalDest);
-			filesInProgress.push(
-				file
-					.renderDotFile(finalDest, dotContentsForFile)
-					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err)),
-			);
-		});
+		const errors: Error[] = results
+			.filter((result) => result.status === 'rejected')
+			.map((result) => result.reason);
 
-		files.forEach((file) => {
-			const finalDest = file.dest(buildPath, data, this.template.defs);
-			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
-			filesInProgress.push(
-				file
-					.renderFile(finalDest)
-					.catch((err) => handleFileErrorCatch(finalDest, 'file', err)),
-			);
-		});
-
-		// TODO: we arent adding these created files to built
-
-		return Promise.all(filesInProgress).then(() => {
-			if (hasErroredOut) {
-				loggerGroup.error(
-					'There was a error when rendering template to %s',
-					buildPath,
-				);
-				return Promise.reject(error);
-			}
-		});
+		if (errors.length) {
+			loggerGroup.error('Build path failed %s', this.buildPath);
+			throw new BuildError(this.buildPath, errors);
+		}
 	}
 }

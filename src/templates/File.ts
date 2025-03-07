@@ -3,8 +3,8 @@ import templateEngine from '@tps/templates/template-engine';
 import dot from '@tps/templates/dot';
 import * as path from 'path';
 import fs from 'fs';
-import { DotError } from '@tps/errors';
-import { FileNode } from './fileSystemTree';
+import { DotError, FileError } from '@tps/errors';
+import { FileNode } from '../fileSystemTree';
 
 interface FileOptions {
 	force?: boolean;
@@ -97,24 +97,22 @@ class File {
 		return this._addDefaultExtention(fileName);
 	}
 
-	renderDotFile(dest: string, fileData: string): Promise<string> {
-		return Promise.resolve()
-			.then(() => this.opts.force && fs.promises.rm(dest, { force: true }))
-			.catch((e) => {
-				console.log('this should be force', e);
-			})
-			.then(() => fs.promises.writeFile(dest, fileData, { flag: 'w' }))
+	async render(
+		location: string,
+		data: Record<string, any>,
+		defs: any,
+	): Promise<string> {
+		const dest = this.dest(location, data, defs);
 
-			.then(() => Promise.resolve(dest))
-			.catch((error) => Promise.reject(error));
-	}
-
-	async renderFile(dest: string): Promise<string> {
 		if (this.opts.force) {
 			await fs.promises.rm(dest, { force: true });
 		}
 
-		await fs.promises.writeFile(dest, this.fileData);
+		const fileData = this.isDot
+			? this.fileDataTemplate(data, defs, dest)
+			: this.fileData;
+
+		await fs.promises.writeFile(dest, fileData, { flag: 'w' });
 
 		return dest;
 	}

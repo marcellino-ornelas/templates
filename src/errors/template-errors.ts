@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { Build } from '@tps/templates/build';
 import { AnswersHash } from '@tps/types/settings';
 
 export class TemplateNotFoundError extends Error {
@@ -96,5 +97,32 @@ export class GlobalInitializedAlreadyError extends Error {
 	constructor(filePath) {
 		super('tps is already initialized globally initialized');
 		this.path = filePath;
+	}
+}
+
+export class BuildError extends Error {
+	public name = 'BuildError';
+
+	constructor(
+		public buildPath: string,
+		public errors: Error[],
+	) {
+		super(
+			[
+				`Instance failed to get created ${buildPath}:`,
+				errors.map((error) => `- ${error.message}`).join('\n'),
+			].join('\n'),
+		);
+	}
+}
+
+export class FileError extends Error {
+	public name = 'FileError';
+
+	constructor(
+		public file: string,
+		public error: Error,
+	) {
+		super(`Failed to create ${file} due to ${error}`);
 	}
 }

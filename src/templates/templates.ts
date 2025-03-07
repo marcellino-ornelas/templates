@@ -4,7 +4,7 @@ import * as path from 'path';
 import fs from 'fs';
 import * as is from 'is';
 import { DirNode, FileNode, FileSystemNode } from '@tps/fileSystemTree';
-import File from '@tps/File';
+import File from '@tps/templates/File';
 import * as TPS from '@tps/utilities/constants';
 import {
 	cosmiconfigAllExampleSync,
