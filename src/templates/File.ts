@@ -26,7 +26,7 @@ class File {
 
 	public location: string;
 
-	public isDot: boolean;
+	public isDot: boolean = false;
 
 	public engine: any;
 
@@ -157,7 +157,5 @@ class File {
 		return path.join(this._buildParentDir(dest), this.fileName(data, defs));
 	}
 }
-
-File.prototype.isDot = false;
 
 export default File;
