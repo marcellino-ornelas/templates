@@ -701,7 +701,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		pkg
 			.find({ type: 'file', ext: { not: '.def' } })
 			.forEach((fileNode: FileNode) => {
-				const file = new File(fileNode, {
+				const file = File.fromFileNode(fileNode, {
 					force,
 					useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
 				});

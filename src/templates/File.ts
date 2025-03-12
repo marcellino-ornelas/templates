@@ -19,16 +19,18 @@ const DEFAULT_OPTS: FileOptions = {
 /*
  * File
  */
-const DOT_EXTENTION_MATCH = /.(dot|jst|tps|def)$/i;
+const DOT_EXTENTION_MATCH = /\.(dot|jst|tps|def)$/i;
 
 class File {
-	public _name: string;
+	public name: string;
+
+	public location: string;
 
 	public isDot: boolean;
 
 	public engine: any;
 
-	public relDirectoryFromPkg: string;
+	// public relDirectoryFromPkg: string;
 
 	public opts: FileOptions;
 
@@ -49,27 +51,49 @@ class File {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	) => any;
 
-	constructor(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
-		let fileName = fileNode.name;
+	static fromFileNode(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
+		return new File(
+			// pathFromRoot excludes the package name
+			path.join(path.dirname(fileNode.pathFromRoot), fileNode.name),
+			fs.readFileSync(fileNode.path)?.toString(),
+			fileNode,
+			opts,
+		);
+	}
 
-		if (DOT_EXTENTION_MATCH.test(fileName)) {
+	constructor(
+		/**
+		 * Relative File path
+		 */
+		public filePath: string,
+		/**
+		 * File contents
+		 */
+		public contents: string,
+		fileNode: FileNode,
+		opts: Partial<FileOptions> = {},
+	) {
+		const { dir, base } = path.parse(filePath);
+
+		this.name = base;
+
+		this.location = dir;
+
+		if (DOT_EXTENTION_MATCH.test(this.name)) {
 			// strip dot extension
 			this.isDot = true;
-			fileName = fileName.replace(DOT_EXTENTION_MATCH, '').trim();
+			this.name = this.name.replace(DOT_EXTENTION_MATCH, '').trim();
 		}
-		this.relDirectoryFromPkg = path.dirname(fileNode.pathFromRoot);
+
 		this.opts = {
 			...DEFAULT_OPTS,
 			...opts,
 		};
-		this._name = fileName;
 		this.engine = this.opts.useExperimentalTemplateEngine
 			? templateEngine
 			: dot;
 		this.src = fileNode.path;
 		this.fileNode = fileNode;
-		const fileData = fs.readFileSync(this.src)?.toString();
-		this.fileData = fileData;
 		this.fileDataTemplate = (data, defs, dest) => {
 			const realData = {
 				...data,
@@ -79,8 +103,8 @@ class File {
 			try {
 				return this.isDot
 					? // How could we cache this here :thinking: this is happening for every dot file
-						this.engine.template(fileData, null, defs)(realData)
-					: fileData;
+						this.engine.template(this.contents, null, defs)(realData)
+					: this.contents;
 			} catch (e) {
 				throw new DotError(this.fileNode, e.message);
 			}
@@ -90,7 +114,7 @@ class File {
 	fileName(data: Record<string, any> = {}, defs = {}): string {
 		let fileName;
 		try {
-			fileName = this.engine.template(this._name, null, defs)(data);
+			fileName = this.engine.template(this.name, null, defs)(data);
 		} catch (e) {
 			console.log('file name error', e);
 		}
@@ -129,7 +153,7 @@ class File {
 	}
 
 	_buildParentDir(newDest: string): string {
-		return path.join(newDest, this.relDirectoryFromPkg);
+		return path.join(newDest, this.location);
 	}
 
 	dest(dest: string, data: Record<string, any>, defs: any): string {
