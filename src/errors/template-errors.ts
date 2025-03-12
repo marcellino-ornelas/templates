@@ -115,14 +115,3 @@ export class BuildError extends Error {
 		);
 	}
 }
-
-export class FileError extends Error {
-	public name = 'FileError';
-
-	constructor(
-		public file: string,
-		public error: Error,
-	) {
-		super(`Failed to create ${file} due to ${error}`);
-	}
-}

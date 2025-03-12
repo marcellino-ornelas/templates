@@ -385,7 +385,6 @@ export class Build {
 
 	/**
 	 * Creates all files that our template uses in `buildPath` folder
-	 * @param {String} buildPath - destination path to render all files to
 	 * @param {Object} [data={}] - data passed in for dot
 	 */
 	private async renderFiles(data: RenderData): Promise<void> {

@@ -3,7 +3,7 @@ import templateEngine from '@tps/templates/template-engine';
 import dot from '@tps/templates/dot';
 import * as path from 'path';
 import fs from 'fs';
-import { DotError, FileError } from '@tps/errors';
+import { DotError } from '@tps/errors';
 import { FileNode } from '../fileSystemTree';
 
 interface FileOptions {
