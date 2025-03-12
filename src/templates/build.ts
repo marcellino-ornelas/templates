@@ -308,7 +308,7 @@ export class Build {
 
 		await this.renderDirectories();
 
-		await this.renderFiles(realBuildPath, renderData);
+		await this.renderFiles(renderData);
 
 		loggerGroup.success(
 			`Build Path: %s ${colors.green.italic('(created)')}`,
@@ -388,11 +388,9 @@ export class Build {
 	 * @param {String} buildPath - destination path to render all files to
 	 * @param {Object} [data={}] - data passed in for dot
 	 */
-	private async renderFiles(
-		buildPath: string,
-		data: RenderData,
-	): Promise<void> {
-		const loggerGroup = logger.tps.group(`render_${this.buildPath}`);
+	private async renderFiles(data: RenderData): Promise<void> {
+		const loggerGroup = this.getLogger();
+		const location = this.getDirectory();
 		loggerGroup.info('Rendering files');
 
 		const results = await Promise.allSettled(
@@ -401,7 +399,7 @@ export class Build {
 				let failed = false;
 
 				try {
-					await file.render(this.buildPath, data, this.template.defs);
+					await file.render(location, data, this.template.defs);
 				} catch (error) {
 					failed = true;
 					throw error;

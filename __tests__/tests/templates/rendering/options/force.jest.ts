@@ -99,6 +99,7 @@ describe('Force', () => {
 
 		vol.writeFileSync(indexFilePath, 'original-file');
 
+		console.log(vol.toTree({ dir: CWD }));
 		await tps.render(CWD, 'app');
 
 		// @ts-expect-error no types for extending jest functions
