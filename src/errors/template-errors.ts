@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import { Build } from '@tps/templates/build';
 import { AnswersHash } from '@tps/types/settings';
 
 export class TemplateNotFoundError extends Error {
