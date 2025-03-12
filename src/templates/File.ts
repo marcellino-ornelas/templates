@@ -36,11 +36,9 @@ class File {
 
 	public _dotNameCompiled: dot.RenderFunction;
 
-	public src: string;
-
 	public fileNode: FileNode;
 
-	public fileData: string;
+	// public fileData: string;
 
 	public fileDataTemplate: (
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,7 +54,6 @@ class File {
 			// pathFromRoot excludes the package name
 			path.join(path.dirname(fileNode.pathFromRoot), fileNode.name),
 			fs.readFileSync(fileNode.path)?.toString(),
-			fileNode,
 			opts,
 		);
 	}
@@ -70,7 +67,6 @@ class File {
 		 * File contents
 		 */
 		public contents: string,
-		fileNode: FileNode,
 		opts: Partial<FileOptions> = {},
 	) {
 		const { dir, base } = path.parse(filePath);
@@ -92,23 +88,6 @@ class File {
 		this.engine = this.opts.useExperimentalTemplateEngine
 			? templateEngine
 			: dot;
-		this.src = fileNode.path;
-		this.fileNode = fileNode;
-		this.fileDataTemplate = (data, defs, dest) => {
-			const realData = {
-				...data,
-				file: this.fileName(data, defs),
-				dest: this.dest(dest, data, defs),
-			};
-			try {
-				return this.isDot
-					? // How could we cache this here :thinking: this is happening for every dot file
-						this.engine.template(this.contents, null, defs)(realData)
-					: this.contents;
-			} catch (e) {
-				throw new DotError(this.fileNode, e.message);
-			}
-		};
 	}
 
 	fileName(data: Record<string, any> = {}, defs = {}): string {
@@ -119,6 +98,26 @@ class File {
 			console.log('file name error', e);
 		}
 		return this._addDefaultExtention(fileName);
+	}
+
+	private async getContents(
+		location: string,
+		data: Record<string, any> = {},
+		defs: Record<string, string> = {},
+	) {
+		const realData = {
+			...data,
+			file: this.fileName(data, defs),
+			dest: this.dest(location, data, defs),
+		};
+		try {
+			return this.isDot
+				? // How could we cache this here :thinking: this is happening for every dot file
+					this.engine.template(this.contents, null, defs)(realData)
+				: this.contents;
+		} catch (e) {
+			throw new DotError(this.name, this.filePath, e.message);
+		}
 	}
 
 	async render(
@@ -132,11 +131,9 @@ class File {
 			await fs.promises.rm(dest, { force: true });
 		}
 
-		const fileData = this.isDot
-			? this.fileDataTemplate(data, defs, dest)
-			: this.fileData;
+		const contents = await this.getContents(location, data, defs);
 
-		await fs.promises.writeFile(dest, fileData, { flag: 'w' });
+		await fs.promises.writeFile(dest, contents, { flag: 'w' });
 
 		return dest;
 	}

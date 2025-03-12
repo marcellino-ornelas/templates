@@ -30,7 +30,7 @@ describe('Force', () => {
 		);
 	});
 
-	it('should be able to render a template with force, if files exist', async () => {
+	it.only('should be able to render a template with force, if files exist', async () => {
 		const indexFilePath = path.join(CWD, 'app', 'index.js');
 
 		const files = {
