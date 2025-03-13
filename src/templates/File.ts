@@ -6,6 +6,9 @@ import fs from 'fs';
 import { DotError } from '@tps/errors';
 import { FileNode } from '../fileSystemTree';
 
+type Defs = Record<string, string>;
+type Data = Record<string, unknown>;
+
 interface FileOptions {
 	force?: boolean;
 	useExperimentalTemplateEngine?: boolean;
@@ -111,7 +114,7 @@ class File {
 	 * @param data - Meta data to pass to the template engine
 	 * @param defs - defs to send to the temnplate engine
 	 */
-	private fileName(data: Record<string, any> = {}, defs = {}): string {
+	private fileName(data: Data = {}, defs: Defs = {}): string {
 		let fileName;
 		try {
 			fileName = this.engine.template(this.name, null, defs)(data);
@@ -131,8 +134,8 @@ class File {
 	 */
 	private async getContents(
 		location: string,
-		data: Record<string, any> = {},
-		defs: Record<string, string> = {},
+		data: Data = {},
+		defs: Defs = {},
 	) {
 		const realData = {
 			...data,
@@ -158,8 +161,8 @@ class File {
 	 */
 	public async render(
 		location: string,
-		data: Record<string, any>,
-		defs: any,
+		data: Data,
+		defs: Defs,
 	): Promise<string> {
 		const dest = this.dest(location, data, defs);
 
@@ -196,7 +199,7 @@ class File {
 	 * @param data - Meta data to pass to the template engine
 	 * @param defs - defs to send to the temnplate engine
 	 */
-	public dest(location: string, data: Record<string, any>, defs: any): string {
+	public dest(location: string, data: Data, defs: Defs): string {
 		return path.join(this._buildParentDir(location), this.fileName(data, defs));
 	}
 }
