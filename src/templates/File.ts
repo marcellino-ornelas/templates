@@ -17,10 +17,13 @@ const DEFAULT_OPTS: FileOptions = {
 };
 
 /**
+ * Extensions that should be considered as dynamic files
+ */
+const DYNAMIC_EXTENTION_MATCH = /\.(dot|jst|tps|def)$/i;
+
+/**
  * File
  */
-const DOT_EXTENTION_MATCH = /\.(dot|jst|tps|def)$/i;
-
 class File {
 	/**
 	 * Name of the file with all extensions. If the name includes a `.tps`, `.def`,
@@ -85,12 +88,12 @@ class File {
 	) {
 		const { dir, base } = path.parse(file);
 
-		this.isDynamic = DOT_EXTENTION_MATCH.test(base);
+		this.isDynamic = DYNAMIC_EXTENTION_MATCH.test(base);
 
 		this.location = dir;
 
 		this.name = this.isDynamic
-			? base.replace(DOT_EXTENTION_MATCH, '').trim()
+			? base.replace(DYNAMIC_EXTENTION_MATCH, '').trim()
 			: base;
 
 		this.options = {
@@ -132,6 +135,13 @@ class File {
 		}
 	}
 
+	/**
+	 * Render this file to a specific location
+	 *
+	 * @param location - directory to render this file into
+	 * @param data - Meta data to pass to the template engine
+	 * @param defs - defs to send to the temnplate engine
+	 */
 	public async render(
 		location: string,
 		data: Record<string, any>,
@@ -165,8 +175,15 @@ class File {
 		return path.join(newDest, this.location);
 	}
 
-	public dest(dest: string, data: Record<string, any>, defs: any): string {
-		return path.join(this._buildParentDir(dest), this.fileName(data, defs));
+	/**
+	 * Full destination to render this file to.
+	 *
+	 * @param location - directory to render this file into
+	 * @param data - Meta data to pass to the template engine
+	 * @param defs - defs to send to the temnplate engine
+	 */
+	public dest(location: string, data: Record<string, any>, defs: any): string {
+		return path.join(this._buildParentDir(location), this.fileName(data, defs));
 	}
 }
 
