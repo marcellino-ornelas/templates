@@ -75,7 +75,7 @@ class File {
 			: dot;
 	}
 
-	fileName(data: Record<string, any> = {}, defs = {}): string {
+	private fileName(data: Record<string, any> = {}, defs = {}): string {
 		let fileName;
 		try {
 			fileName = this.engine.template(this.name, null, defs)(data);
@@ -105,7 +105,7 @@ class File {
 		}
 	}
 
-	async render(
+	public async render(
 		location: string,
 		data: Record<string, any>,
 		defs: any,
@@ -123,7 +123,7 @@ class File {
 		return dest;
 	}
 
-	_addDefaultExtention(name: string): string {
+	private _addDefaultExtention(name: string): string {
 		let fileName = name;
 
 		// Might need to change
@@ -134,11 +134,11 @@ class File {
 		return fileName;
 	}
 
-	_buildParentDir(newDest: string): string {
+	private _buildParentDir(newDest: string): string {
 		return path.join(newDest, this.location);
 	}
 
-	dest(dest: string, data: Record<string, any>, defs: any): string {
+	public dest(dest: string, data: Record<string, any>, defs: any): string {
 		return path.join(this._buildParentDir(dest), this.fileName(data, defs));
 	}
 }
