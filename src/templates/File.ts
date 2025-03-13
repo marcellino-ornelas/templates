@@ -16,45 +16,74 @@ const DEFAULT_OPTS: FileOptions = {
 	useExperimentalTemplateEngine: false,
 };
 
-/*
+/**
  * File
  */
 const DOT_EXTENTION_MATCH = /\.(dot|jst|tps|def)$/i;
 
 class File {
+	/**
+	 * Name of the file with all extensions. If the name includes a `.tps`, `.def`,
+	 * `.jst`, or `.dot` extension we strip this from the name and mark `isDot` as true
+	 *
+	 * @example "index.js"
+	 * @example "nav.css"
+	 * @example ".tpsrc"
+	 */
 	public name: string;
 
+	/**
+	 * The directory this file should be in when rendered
+	 *
+	 * @example "./path/to/folder"
+	 */
 	public location: string;
 
+	/**
+	 * File should be processed as a dynamic file
+	 */
 	public isDot: boolean = false;
 
+	/**
+	 * The templating language engine
+	 */
 	public engine: any;
 
-	public opts: FileOptions;
+	/**
+	 * File options
+	 */
+	public options: FileOptions;
 
 	public _dotNameCompiled: dot.RenderFunction;
 
-	static fromFileNode(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
+	/**
+	 * Generate a File from a FileNode
+	 */
+	static fromFileNode(fileNode: FileNode, options: Partial<FileOptions> = {}) {
 		return new File(
 			// pathFromRoot excludes the package name
 			path.join(path.dirname(fileNode.pathFromRoot), fileNode.name),
 			fs.readFileSync(fileNode.path)?.toString(),
-			opts,
+			options,
 		);
 	}
 
 	constructor(
 		/**
-		 * Relative File path
+		 * Full path to the file. This value will preserve the
+		 * `.tps`, `.def`, `.jst` or `.dot`
+		 *
+		 * @example "./path/to/file/index.js"
+		 * @example "./path/to/file/index.js.dot"
 		 */
-		public filePath: string,
+		public file: string,
 		/**
 		 * File contents
 		 */
 		public contents: string,
-		opts: Partial<FileOptions> = {},
+		options: Partial<FileOptions> = {},
 	) {
-		const { dir, base } = path.parse(filePath);
+		const { dir, base } = path.parse(file);
 
 		this.name = base;
 
@@ -66,11 +95,11 @@ class File {
 			this.name = this.name.replace(DOT_EXTENTION_MATCH, '').trim();
 		}
 
-		this.opts = {
+		this.options = {
 			...DEFAULT_OPTS,
-			...opts,
+			...options,
 		};
-		this.engine = this.opts.useExperimentalTemplateEngine
+		this.engine = this.options.useExperimentalTemplateEngine
 			? templateEngine
 			: dot;
 	}
@@ -101,7 +130,7 @@ class File {
 					this.engine.template(this.contents, null, defs)(realData)
 				: this.contents;
 		} catch (e) {
-			throw new DotError(this.name, this.filePath, e.message);
+			throw new DotError(this.name, this.file, e.message);
 		}
 	}
 
@@ -112,7 +141,7 @@ class File {
 	): Promise<string> {
 		const dest = this.dest(location, data, defs);
 
-		if (this.opts.force) {
+		if (this.options.force) {
 			await fs.promises.rm(dest, { force: true });
 		}
 

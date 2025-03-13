@@ -268,7 +268,7 @@ export class Build {
 			// files that already exist get overridden
 			this.template.compiledFiles.forEach((file) => {
 				// eslint-disable-next-line no-param-reassign
-				file.opts.force = true;
+				file.options.force = true;
 			});
 		});
 
