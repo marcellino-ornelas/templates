@@ -52,7 +52,7 @@ class File {
 	/**
 	 * File options
 	 */
-	public readonly options: FileOptions;
+	public options: FileOptions;
 
 	public _dotNameCompiled: dot.RenderFunction;
 
@@ -87,12 +87,12 @@ class File {
 
 		this.location = dir;
 
+		this.name = base;
+
 		if (DOT_EXTENTION_MATCH.test(this.name)) {
 			// strip dot extension
 			this.isDot = true;
 			this.name = this.name.replace(DOT_EXTENTION_MATCH, '').trim();
-		} else {
-			this.name = base;
 		}
 
 		this.options = {
