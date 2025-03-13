@@ -1,5 +1,3 @@
-import { FileNode } from '@tps/fileSystemTree';
-
 export class DotError extends Error {
 	public name = 'DotError';
 

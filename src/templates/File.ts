@@ -30,24 +30,9 @@ class File {
 
 	public engine: any;
 
-	// public relDirectoryFromPkg: string;
-
 	public opts: FileOptions;
 
 	public _dotNameCompiled: dot.RenderFunction;
-
-	public fileNode: FileNode;
-
-	// public fileData: string;
-
-	public fileDataTemplate: (
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		data: Record<string, any>,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		defs: any,
-		dest: string,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	) => any;
 
 	static fromFileNode(fileNode: FileNode, opts: Partial<FileOptions> = {}) {
 		return new File(
