@@ -24,7 +24,7 @@ const DOT_EXTENTION_MATCH = /\.(dot|jst|tps|def)$/i;
 class File {
 	/**
 	 * Name of the file with all extensions. If the name includes a `.tps`, `.def`,
-	 * `.jst`, or `.dot` extension we strip this from the name and mark `isDot` as true
+	 * `.jst`, or `.dot` extension we strip this from the name and mark `isDynamic` as true
 	 *
 	 * @example "index.js"
 	 * @example "nav.css"
@@ -42,7 +42,7 @@ class File {
 	/**
 	 * File should be processed as a dynamic file
 	 */
-	public readonly isDot: boolean = false;
+	public readonly isDynamic: boolean = false;
 
 	/**
 	 * The templating language engine
@@ -85,15 +85,13 @@ class File {
 	) {
 		const { dir, base } = path.parse(file);
 
+		this.isDynamic = DOT_EXTENTION_MATCH.test(base);
+
 		this.location = dir;
 
-		this.name = base;
-
-		if (DOT_EXTENTION_MATCH.test(this.name)) {
-			// strip dot extension
-			this.isDot = true;
-			this.name = this.name.replace(DOT_EXTENTION_MATCH, '').trim();
-		}
+		this.name = this.isDynamic
+			? base.replace(DOT_EXTENTION_MATCH, '').trim()
+			: base;
 
 		this.options = {
 			...DEFAULT_OPTS,
@@ -125,7 +123,7 @@ class File {
 			dest: this.dest(location, data, defs),
 		};
 		try {
-			return this.isDot
+			return this.isDynamic
 				? // How could we cache this here :thinking: this is happening for every dot file
 					this.engine.template(this.contents, null, defs)(realData)
 				: this.contents;

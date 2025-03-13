@@ -394,7 +394,7 @@ export class Build {
 
 		const results = await Promise.allSettled(
 			this.template.compiledFiles.map(async (file) => {
-				const type = file.isDot ? 'Dot file' : 'File';
+				const type = file.isDynamic ? 'Dynamic File' : 'File';
 				let failed = false;
 
 				try {
