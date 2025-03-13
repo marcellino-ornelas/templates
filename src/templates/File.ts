@@ -30,29 +30,29 @@ class File {
 	 * @example "nav.css"
 	 * @example ".tpsrc"
 	 */
-	public name: string;
+	public readonly name: string;
 
 	/**
 	 * The directory this file should be in when rendered
 	 *
 	 * @example "./path/to/folder"
 	 */
-	public location: string;
+	public readonly location: string;
 
 	/**
 	 * File should be processed as a dynamic file
 	 */
-	public isDot: boolean = false;
+	public readonly isDot: boolean = false;
 
 	/**
 	 * The templating language engine
 	 */
-	public engine: any;
+	public readonly engine: any;
 
 	/**
 	 * File options
 	 */
-	public options: FileOptions;
+	public readonly options: FileOptions;
 
 	public _dotNameCompiled: dot.RenderFunction;
 
@@ -85,14 +85,14 @@ class File {
 	) {
 		const { dir, base } = path.parse(file);
 
-		this.name = base;
-
 		this.location = dir;
 
 		if (DOT_EXTENTION_MATCH.test(this.name)) {
 			// strip dot extension
 			this.isDot = true;
 			this.name = this.name.replace(DOT_EXTENTION_MATCH, '').trim();
+		} else {
+			this.name = base;
 		}
 
 		this.options = {
