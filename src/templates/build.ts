@@ -185,7 +185,10 @@ export class Build {
 	/**
 	 * Render the build path
 	 */
-	public async render(answers: AnswersHash, data: RenderData): Promise<void> {
+	public async render(
+		answers: AnswersHash = {},
+		data: RenderData = {},
+	): Promise<void> {
 		const realBuildPath = this.getDirectory();
 		const loggerGroup = this.getLogger();
 		const doesBuildPathExist = await this.directoryExists();
@@ -395,10 +398,13 @@ export class Build {
 		const results = await Promise.allSettled(
 			this.template.compiledFiles.map(async (file) => {
 				const type = file.isDynamic ? 'Dynamic File' : 'File';
+				const dest = file.dest(this.buildPath, data, this.template.defs);
 				let failed = false;
 
 				try {
 					await file.render(location, data, this.template.defs);
+
+					this.built.files.push(dest);
 				} catch (error) {
 					failed = true;
 					throw error;
@@ -423,5 +429,90 @@ export class Build {
 			loggerGroup.error('Build path failed %s', this.buildPath);
 			throw new BuildError(this.buildPath, errors);
 		}
+	}
+
+	/**
+	 * Delete everything that was created in this build. This will run if any file or directory
+	 * error when being created. We dont want to leave broken templates created
+	 * so this function will delete everything that this template built
+	 */
+	public async clean(buildNewFolder: boolean): Promise<void> {
+		let buildPath = this.getDirectory();
+
+		logger.tps.info('Processing build cleanup %s %o', buildPath, {
+			buildNewFolder,
+		});
+
+		const buildPathNeedsSlash = buildPath[buildPath.length - 1] === path.sep;
+
+		if (!buildPathNeedsSlash) {
+			buildPath += path.sep;
+		}
+
+		if (buildNewFolder) {
+			await fs.rm(buildPath, { force: true, recursive: true });
+		}
+
+		// eslint-disable-next-line prefer-const
+		let { directories, files } = this.built;
+
+		const filesIsEmpty: boolean = !files.length;
+		const dirsIsEmpty: boolean = !directories.length;
+
+		if (filesIsEmpty && dirsIsEmpty) {
+			logger.tps.success('Nothing to clean... Moving on to next');
+			return;
+		}
+
+		if (!dirsIsEmpty) {
+			const dirsThatMatch = directories.filter((dir) =>
+				dir.includes(buildPath),
+			);
+
+			if (dirsThatMatch.length) {
+				logger.tps.info('Cleaning directories %n', dirsThatMatch);
+			}
+
+			for (let i = 0; i < dirsThatMatch.length; i++) {
+				const dir = dirsThatMatch[i];
+
+				try {
+					// eslint-disable-next-line no-await-in-loop
+					await fs.rm(dir, { force: true, recursive: true });
+					logger.tps.success(` - %s ${colors.green.italic('(deleted)')}`, dir);
+				} catch (err) {
+					logger.tps.error('Clean up failed when deleting directories %n', err);
+				}
+
+				// if directory is removed then we can remove all child files
+				if (!filesIsEmpty) {
+					files = files.filter((file) => !file.includes(dir));
+				}
+			}
+		}
+
+		if (!filesIsEmpty) {
+			const filesThatMatch = files.filter((file) => file.includes(buildPath));
+
+			if (filesThatMatch.length) {
+				logger.tps.info('Cleaning files %n', filesThatMatch);
+			}
+
+			await Promise.all(
+				files.map(async (file) => {
+					try {
+						await fs.rm(file, { force: true });
+						logger.tps.success(
+							` - %s ${colors.green.italic('(deleted)')}`,
+							file,
+						);
+					} catch (err) {
+						logger.tps.error('Clean up failed when deleting files %n', err);
+					}
+				}),
+			);
+		}
+
+		logger.tps.success('Clean up finished');
 	}
 }
