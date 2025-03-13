@@ -115,13 +115,11 @@ class File {
 	 * @param defs - defs to send to the temnplate engine
 	 */
 	private fileName(data: Data = {}, defs: Defs = {}): string {
-		let fileName;
 		try {
-			fileName = this.engine.template(this.name, null, defs)(data);
+			return this.engine.template(this.name, null, defs)(data);
 		} catch (e) {
 			console.log('file name error', e);
 		}
-		return this._addDefaultExtention(fileName);
 	}
 
 	/**
@@ -175,17 +173,6 @@ class File {
 		await fs.promises.writeFile(dest, contents, { flag: 'w' });
 
 		return dest;
-	}
-
-	private _addDefaultExtention(name: string): string {
-		let fileName = name;
-
-		// Might need to change
-		if (!/\./g.test(name)) {
-			fileName += '.js';
-		}
-
-		return fileName;
 	}
 
 	private _buildParentDir(newDest: string): string {
