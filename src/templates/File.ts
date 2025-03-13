@@ -105,6 +105,12 @@ class File {
 			: dot;
 	}
 
+	/**
+	 * Get the final result of the file name for this file. If the name has any
+	 *
+	 * @param data - Meta data to pass to the template engine
+	 * @param defs - defs to send to the temnplate engine
+	 */
 	private fileName(data: Record<string, any> = {}, defs = {}): string {
 		let fileName;
 		try {
@@ -115,6 +121,14 @@ class File {
 		return this._addDefaultExtention(fileName);
 	}
 
+	/**
+	 * Get the file contents for this file. If file is a dynamic file then
+	 * this will be the final result after the template engine process it.
+	 *
+	 * @param location - directory to render this file into
+	 * @param data - Meta data to pass to the template engine
+	 * @param defs - defs to send to the temnplate engine
+	 */
 	private async getContents(
 		location: string,
 		data: Record<string, any> = {},
