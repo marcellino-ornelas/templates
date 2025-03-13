@@ -87,18 +87,47 @@ describe('[Templates] Render Process:', () => {
 		expect(path.join(destPath, 'folder3/folder31')).toBeDirectory();
 	});
 
-	it('should be able to render a local template without tps prefix', async () => {
-		mkTemplate('tps-test-template-prefix');
+	it('should be able to use dynamic files', async () => {
+		const tps = mkTemplate('test-dynamic-file', undefined, {
+			// single extension
+			'./default/index.js.tps': `{{=tps.name}}`,
+			// single extension
+			'./default/file.js.dot': `{{=tps.name}}`,
+			// no extension
+			'./default/.tpsrc.tps': `{{=tps.name}}`,
+			// no extension no dot
+			'./default/settings.tps': `{{=tps.name}}`,
+			// more than one extensions
+			'./default/tps.config.js.tps': `{{=tps.name}}`,
+		});
 
-		const tps = new Templates('test-template-prefix');
+		await tps.render(CWD, ['App']);
 
-		const destPath = playground.pathTo('app');
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents('App');
+		expect(path.join(CWD, 'App/file.js')).toHaveFileContents('App');
+		expect(path.join(CWD, 'App/.tpsrc')).toHaveFileContents('App');
+		expect(path.join(CWD, 'App/settings')).toHaveFileContents('App');
+		expect(path.join(CWD, 'App/tps.config.js')).toHaveFileContents('App');
+	});
 
-		const results = await tps.render(playground.box(), 'app');
+	it('should be able to use any type of file', async () => {
+		const tps = mkTemplate('test-file', undefined, {
+			// single extension
+			'./default/index.js': 'hey',
+			// no extension
+			'./default/.tpsrc': 'hey',
+			// no extension no dot
+			'./default/settings': 'hey',
+			// more than one extensions
+			'./default/tps.config.js': 'hey',
+		});
 
-		expect(results).toEqual(destPath);
+		await tps.render(CWD, ['App']);
 
-		expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
+		expect(path.join(CWD, 'App/index.js')).toHaveFileContents('hey');
+		expect(path.join(CWD, 'App/.tpsrc')).toHaveFileContents('hey');
+		expect(path.join(CWD, 'App/settings')).toHaveFileContents('hey');
+		expect(path.join(CWD, 'App/tps.config.js')).toHaveFileContents('hey');
 	});
 
 	it('should be able to render a template with nested files and folders', async () => {
@@ -177,6 +206,20 @@ describe('[Templates] Render Process:', () => {
 
 			expect(destPath).toHaveAllFilesAndDirectories(TESTING_PACKAGE_FILES);
 		});
+	});
+
+	it('should be able to render a local template without tps prefix', async () => {
+		mkTemplate('tps-test-template-prefix');
+
+		const tps = new Templates('test-template-prefix');
+
+		const destPath = playground.pathTo('app');
+
+		const results = await tps.render(playground.box(), 'app');
+
+		expect(results).toEqual(destPath);
+
+		expect(destPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
 
 	it('should be able to render a local template with long build path', async () => {

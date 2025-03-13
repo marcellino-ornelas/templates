@@ -98,3 +98,19 @@ export class GlobalInitializedAlreadyError extends Error {
 		this.path = filePath;
 	}
 }
+
+export class BuildError extends Error {
+	public name = 'BuildError';
+
+	constructor(
+		public buildPath: string,
+		public errors: Error[],
+	) {
+		super(
+			[
+				`Instance failed to get created ${buildPath}:`,
+				errors.map((error) => `- ${error.message}`).join('\n'),
+			].join('\n'),
+		);
+	}
+}

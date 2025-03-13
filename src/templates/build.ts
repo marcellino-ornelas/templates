@@ -5,7 +5,7 @@ import DirectoryNode from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
-import { FileExistError } from '@tps/errors';
+import { BuildError, FileExistError } from '@tps/errors';
 import { AnswersHash } from '@tps/types/settings';
 import * as utils from './utils';
 import type { Template } from './template';
@@ -271,7 +271,7 @@ export class Build {
 			// files that already exist get overridden
 			this.template.compiledFiles.forEach((file) => {
 				// eslint-disable-next-line no-param-reassign
-				file.opts.force = true;
+				file.options.force = true;
 			});
 		});
 
@@ -311,7 +311,7 @@ export class Build {
 
 		await this.renderDirectories();
 
-		await this.renderFiles(realBuildPath, renderData);
+		await this.renderFiles(renderData);
 
 		loggerGroup.success(
 			`Build Path: %s ${colors.green.italic('(created)')}`,
@@ -388,77 +388,47 @@ export class Build {
 
 	/**
 	 * Creates all files that our template uses in `buildPath` folder
-	 * @param {String} buildPath - destination path to render all files to
 	 * @param {Object} [data={}] - data passed in for dot
 	 */
-	private async renderFiles(
-		buildPath: string,
-		data: RenderData,
-	): Promise<void> {
+	private async renderFiles(data: RenderData): Promise<void> {
 		const loggerGroup = this.getLogger();
+		const location = this.getDirectory();
 		loggerGroup.info('Rendering files');
 
-		const files = this.template.compiledFiles.filter((file) => !file.isDot);
-		const dotFiles = this.template.compiledFiles.filter((file) => file.isDot);
-		const dotContents = dotFiles.map((file) => {
-			/**
-			 * Will throw error if something is wrong with doT
-			 */
-			return [
-				file,
-				file.dest(buildPath, data, this.template.defs),
-				file.fileDataTemplate(data, this.template.defs, buildPath),
-			];
-		});
+		const results = await Promise.allSettled(
+			this.template.compiledFiles.map(async (file) => {
+				const type = file.isDynamic ? 'Dynamic File' : 'File';
+				const dest = file.dest(this.buildPath, data, this.template.defs);
+				let failed = false;
 
-		const filesInProgress = [];
-		let hasErroredOut = false;
-		let error;
+				try {
+					await file.render(location, data, this.template.defs);
 
-		const handleFileErrorCatch = (dest, type, err) => {
-			loggerGroup.error(
-				`Error happened when rendering a ${type} %s %n`,
-				dest,
-				err,
-			);
-			if (!hasErroredOut) {
-				hasErroredOut = true;
-				error = err;
-			}
-		};
+					this.built.files.push(dest);
+				} catch (error) {
+					failed = true;
+					throw error;
+				} finally {
+					const status = failed
+						? colors.red('Failed')
+						: colors.green('Created');
 
-		dotContents.forEach(([file, finalDest, dotContentsForFile]) => {
-			loggerGroup.info(` - %s ${colors.cyan.italic('(Dot file)')}`, finalDest);
-			filesInProgress.push(
-				file
-					.renderDotFile(finalDest, dotContentsForFile)
-					.catch((err) => handleFileErrorCatch(finalDest, 'dot file', err))
-					.then(() => this.built.files.push(finalDest)),
-			);
-		});
+					loggerGroup.info(
+						` - %s ${colors.cyan.italic(`(${type})`)} (${status})`,
+						file.dest(this.buildPath, data, this.template.defs),
+					);
+				}
+			}),
+		);
 
-		files.forEach((file) => {
-			const finalDest = file.dest(buildPath, data, this.template.defs);
-			loggerGroup.info(` - %s ${colors.cyan.italic('(File)')}`, finalDest);
-			filesInProgress.push(
-				file
-					.renderFile(finalDest)
-					.catch((err) => handleFileErrorCatch(finalDest, 'file', err))
-					.then(() => this.built.files.push(finalDest)),
-			);
-		});
+		const errors: Error[] = results
+			.filter((result) => result.status === 'rejected')
+			.map((result) => result.reason);
 
-		// TODO: we arent adding these created files to built
-
-		return Promise.all(filesInProgress).then(() => {
-			if (hasErroredOut) {
-				loggerGroup.error(
-					'There was a error when rendering template to %s',
-					buildPath,
-				);
-				return Promise.reject(error);
-			}
-		});
+		if (errors.length) {
+			loggerGroup.error('Build path failed %s', this.buildPath);
+			throw new BuildError(this.buildPath, errors);
+		}
 	}
 
 	/**

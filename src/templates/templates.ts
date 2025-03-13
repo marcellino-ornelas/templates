@@ -4,7 +4,7 @@ import * as path from 'path';
 import fs from 'fs';
 import * as is from 'is';
 import { DirNode, FileNode, FileSystemNode } from '@tps/fileSystemTree';
-import File from '@tps/File';
+import File from '@tps/templates/File';
 import * as TPS from '@tps/utilities/constants';
 import {
 	cosmiconfigAllExampleSync,
@@ -628,7 +628,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		pkg
 			.find({ type: 'file', ext: { not: '.def' } })
 			.forEach((fileNode: FileNode) => {
-				const file = new File(fileNode, {
+				const file = File.fromFileNode(fileNode, {
 					force,
 					useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
 				});

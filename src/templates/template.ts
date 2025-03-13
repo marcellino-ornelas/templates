@@ -6,7 +6,7 @@ import {
 	findTemplate,
 	getTemplateLocations,
 } from '@tps/templates/template-utils';
-import File from '@tps/File';
+import File from '@tps/templates/File';
 import {
 	PackageAlreadyCompiledError,
 	RequiresTemplateError,
