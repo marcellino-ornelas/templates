@@ -53,7 +53,6 @@ describe('Build', () => {
 		expect(build.built).toStrictEqual(
 			expect.objectContaining({
 				files: expect.arrayContaining([
-					path.join(BUILD_PATH, 'index.js'),
 					path.join(BUILD_PATH, 'index.txt'),
 					// default file thats included in `mkTemplate`
 					path.join(BUILD_PATH, 'dynamic.txt'),
@@ -179,7 +178,6 @@ describe('Build', () => {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
-				'index.js',
 				'index.txt',
 				'dynamic.txt',
 				'App.txt',
@@ -194,7 +192,6 @@ describe('Build', () => {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(BUILD_PATH).not.toHaveAllFilesAndDirectories([
-				'index.js',
 				'index.txt',
 				'dynamic.txt',
 				'App.txt',
@@ -237,7 +234,6 @@ describe('Build', () => {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
-				'index.js',
 				'index.txt',
 				'dynamic.txt',
 				'App.txt',
@@ -252,7 +248,6 @@ describe('Build', () => {
 
 			// @ts-expect-error no types for extending jest functions
 			expect(BUILD_PATH).not.toHaveAllFilesAndDirectories([
-				'index.js',
 				'index.txt',
 				'dynamic.txt',
 				'App.txt',

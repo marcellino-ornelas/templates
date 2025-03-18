@@ -383,6 +383,15 @@ export class Build {
 
 		await Promise.all(dirsInProgress);
 
+		/**
+		 * Create all extra directories
+		 */
+		await Promise.all(
+			this.template.extraDirectories.map(async (dir) => {
+				return fs.mkdir(path.join(directory, dir), { recursive: true });
+			}),
+		);
+
 		loggerGroup.info('All directories have been created');
 	}
 
