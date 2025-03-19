@@ -3,7 +3,9 @@ import { Build } from '@tps/templates/build';
 import { Template } from '@tps/templates/template';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
-import { mkTemplate } from '@test/utilities/templates';
+import { DEFAULT_BUILD_FILES, mkTemplate } from '@test/utilities/templates';
+import { BuildError, FileExistError } from '@tps/errors';
+import { writeFile } from '@test/utilities/helpers';
 
 jest.mock('fs');
 
@@ -254,6 +256,273 @@ describe('Build', () => {
 				'package1.txt',
 				'myDirectory/myDirectory2/index.txt',
 				'myDirectory/',
+			]);
+		});
+	});
+
+	describe('create', () => {
+		it('should be able to create custom files', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createFile('./custom.txt', 'hey');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./custom.txt',
+			]);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './custom.txt')).toHaveFileContents('hey');
+		});
+
+		it('should be able to create custom files in sub directories', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createFile('./path/to/dir/custom.txt', 'hey');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./path/to/dir/custom.txt',
+			]);
+
+			expect(
+				path.join(BUILD_PATH, './path/to/dir/custom.txt'),
+				// @ts-expect-error no types for extending jest functions
+			).toHaveFileContents('hey');
+		});
+
+		it('should be able to create custom dynamic files', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createFile('./custom.txt.tps', '{{=tps.name}}');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./custom.txt',
+			]);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './custom.txt')).toHaveFileContents('App');
+		});
+
+		it('should be able to create custom files that use dynamic names', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createFile('./{{=tps.name}}.txt', 'hey');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./App.txt',
+			]);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './App.txt')).toHaveFileContents('hey');
+		});
+
+		// it('should fail if file creates a conflict', async () => {
+		// 	const tps = mkTemplate('testing_build_built', CWD);
+
+		// 	const template = new Template(
+		// 		tps.template,
+		// 		tps.src,
+		// 		tps.templateSettings,
+		// 		tps.packages,
+		// 		tps.packagesUsed,
+		// 		tps.compiledFiles,
+		// 		// @ts-expect-error - private
+		// 		// eslint-disable-next-line no-underscore-dangle
+		// 		tps._defs,
+		// 	);
+
+		// 	const build = new Build(BUILD_PATH, template);
+
+		// 	template.createFile(DEFAULT_BUILD_FILES[0], 'hey');
+
+		// 	await expect(build.render()).rejects.toThrowError(BuildError);
+		// });
+
+		it('should create custom file if already exists but force', async () => {
+			const tps = mkTemplate('testing_build_built', CWD, undefined, {
+				force: true,
+			});
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template, { force: true });
+
+			writeFile(path.join(CWD, './App/custom.txt'), 'original');
+
+			template.createFile('./custom.txt', 'hey', {
+				// mimics how normal flow works
+				force: tps.opts.force,
+			});
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './custom.txt')).toHaveFileContents('hey');
+		});
+
+		it('should create custom file if already exists but wipe', async () => {
+			const tps = mkTemplate('testing_build_built', CWD, undefined, {
+				wipe: true,
+			});
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template, { wipe: true });
+
+			writeFile(path.join(CWD, './App/custom.txt'), 'original');
+
+			template.createFile('./custom.txt', 'hey');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './custom.txt')).toHaveFileContents('hey');
+		});
+
+		it('should be able to create custom directory', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createDirectory('./custom');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./custom',
+			]);
+		});
+
+		it('should be able to create custom sub directories', async () => {
+			const tps = mkTemplate('testing_build_built', CWD);
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			template.createDirectory('./custom/path/to');
+
+			await build.render();
+
+			// @ts-expect-error no types for extending jest functions
+			expect(BUILD_PATH).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./custom/path/to',
 			]);
 		});
 	});

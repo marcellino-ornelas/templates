@@ -168,7 +168,7 @@ export class Template {
 	public createFile(
 		file: string,
 		content: string,
-		options: Partial<FileOptions>,
+		options: Partial<FileOptions> = {},
 	): void {
 		// TODO: should remove
 		this.createDirectory(path.dirname(file));
