@@ -4,7 +4,7 @@ import { Template } from '@tps/templates/template';
 import { CWD } from '@tps/utilities/constants';
 import { reset, vol } from '@test/utilities/vol';
 import { DEFAULT_BUILD_FILES, mkTemplate } from '@test/utilities/templates';
-import { BuildError, FileExistError } from '@tps/errors';
+import { FileExistError } from '@tps/errors';
 import { writeFile } from '@test/utilities/helpers';
 
 jest.mock('fs');
