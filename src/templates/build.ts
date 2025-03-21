@@ -305,9 +305,9 @@ export class Build {
 			await this.createDirectory().catch((err) => {
 				loggerGroup.warn('Building build path folder had a issue %n', err);
 			});
+		} else {
+			loggerGroup.info('Not creating real build path %s', realBuildPath);
 		}
-
-		loggerGroup.info('Not creating real build path %s', realBuildPath);
 
 		await this.renderDirectories();
 
@@ -383,12 +383,33 @@ export class Build {
 
 		await Promise.all(dirsInProgress);
 
+		loggerGroup.info(
+			'Extra directories that need to be created %n',
+			this.template.extraDirectories,
+		);
+
+		loggerGroup.info('Creating extra directories:');
 		/**
 		 * Create all extra directories
 		 */
 		await Promise.all(
 			this.template.extraDirectories.map(async (dir) => {
-				return fs.mkdir(path.join(directory, dir), { recursive: true });
+				const newDir = path.join(directory, dir);
+
+				try {
+					await fs.mkdir(newDir, { recursive: true });
+
+					this.built.directories.push(newDir);
+
+					loggerGroup.info(
+						`   - %s ${colors.green.italic('(created)')}`,
+						newDir,
+					);
+				} catch (e) {
+					loggerGroup.info(`   - %s ${colors.red.italic('(Failed)')}`, newDir);
+
+					throw e;
+				}
 			}),
 		);
 

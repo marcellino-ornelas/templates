@@ -409,6 +409,35 @@ describe('Build', () => {
 		// 	await expect(build.render()).rejects.toThrowError(BuildError);
 		// });
 
+		it('should fail to create custom file if already exists', async () => {
+			const tps = mkTemplate('testing_build_built');
+
+			const template = new Template(
+				tps.template,
+				tps.src,
+				tps.templateSettings,
+				tps.packages,
+				tps.packagesUsed,
+				tps.compiledFiles,
+				// @ts-expect-error - private
+				// eslint-disable-next-line no-underscore-dangle
+				tps._defs,
+			);
+
+			const build = new Build(BUILD_PATH, template);
+
+			writeFile(path.join(CWD, './App/custom.txt'), 'original');
+
+			template.createFile('./custom.txt', 'hey');
+
+			await expect(build.render()).rejects.toThrowError(FileExistError);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(BUILD_PATH, './custom.txt')).toHaveFileContents(
+				'original',
+			);
+		});
+
 		it('should create custom file if already exists but force', async () => {
 			const tps = mkTemplate('testing_build_built', CWD, undefined, {
 				force: true,
