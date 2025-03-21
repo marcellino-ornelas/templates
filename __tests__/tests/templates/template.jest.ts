@@ -1,5 +1,6 @@
 import {
 	DEFAULT_SETTINGS_FILE,
+	DEFAULT_TEMPLATE_FILES,
 	mk3rdPartyTemplate,
 	mkGlobal3rdPartyTemplate,
 	mkGlobalTemplate,
@@ -26,6 +27,7 @@ describe('Template', () => {
 	describe('Fetching Template', () => {
 		it('should be able to get a template', async () => {
 			mkTemplate(templateName, undefined, {
+				...DEFAULT_TEMPLATE_FILES,
 				'./.settingsrc': mkSettingsFileJSON(),
 			});
 
@@ -39,6 +41,7 @@ describe('Template', () => {
 
 		it('should be able to get a local template', async () => {
 			mkTemplate(templateName, undefined, {
+				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
 
@@ -50,6 +53,7 @@ describe('Template', () => {
 
 		it('should be able to get a global template', async () => {
 			mkGlobalTemplate(templateName, {
+				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
 
@@ -63,6 +67,7 @@ describe('Template', () => {
 
 		it('should be able to get a global template', async () => {
 			mkGlobalTemplate(templateName, {
+				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
 
@@ -77,6 +82,7 @@ describe('Template', () => {
 		it('should be able to get a 3rd party template', async () => {
 			const templateNameTps = `tps-${templateName}`;
 			mk3rdPartyTemplate(templateNameTps, undefined, {
+				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
 
@@ -91,6 +97,7 @@ describe('Template', () => {
 		it('should be able to get a global 3rd party template', async () => {
 			const templateNameTps = `tps-${templateName}`;
 			mkGlobal3rdPartyTemplate(templateNameTps, {
+				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
 
@@ -105,6 +112,7 @@ describe('Template', () => {
 
 	it('should load the default package by default', async () => {
 		mkTemplate(templateName, undefined, {
+			...DEFAULT_TEMPLATE_FILES,
 			'./.settingsrc': mkSettingsFileJSON(),
 		});
 

@@ -1,18 +1,19 @@
 import DirectoryNode, { DirNode } from '@tps/fileSystemTree';
-import { SettingsFile } from '@tps/types/settings';
+import type { SettingsFile } from '@tps/types/settings';
 import { TEMPLATE_SETTINGS_FILE, IS_TESTING } from '@tps/utilities/constants';
 import { cosmiconfig, getDefaultSearchPlaces } from 'cosmiconfig';
 import {
 	findTemplate,
 	getTemplateLocations,
 } from '@tps/templates/template-utils';
-import File from '@tps/templates/File';
+import File, { type FileOptions } from '@tps/templates/File';
 import {
 	PackageAlreadyCompiledError,
 	RequiresTemplateError,
 	TemplateNotFoundError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
+import path from 'path';
 
 const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	cache: !IS_TESTING,
@@ -72,6 +73,13 @@ export class Template {
 
 		return location;
 	}
+
+	/**
+	 * Extra Relative directories to create in instances
+	 *
+	 * TODO: This is not the best way to do this but at the moment
+	 */
+	public extraDirectories: string[] = [];
 
 	constructor(
 		/**
@@ -155,5 +163,23 @@ export class Template {
 	 */
 	public usedPackages(): DirectoryNode[] {
 		return this.packagesUsed.map((pkgName) => this.packages[pkgName]);
+	}
+
+	public createFile(
+		file: string,
+		content: string,
+		options: Partial<FileOptions> = {},
+	): void {
+		// TODO: should remove
+		this.createDirectory(path.dirname(file));
+		this.compiledFiles.push(File.from(file, content, options));
+	}
+
+	/**
+	 * Create a directory in the template. When instances are created these directories
+	 * will be created in the instance
+	 */
+	public createDirectory(dir: string): void {
+		this.extraDirectories.push(dir);
 	}
 }

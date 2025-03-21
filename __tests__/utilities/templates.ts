@@ -30,8 +30,11 @@ export const mkFile = (file: string, data: string): void => {
 
 	vol.writeFileSync(file, data);
 };
+export const DEFAULT_TEMPLATE_FILES: DirectoryJSON = {
+	'./default/index.js': 'hey',
+};
 
-const DEFAULT_TEMPLATE_FILES: DirectoryJSON = { './default/index.js': 'hey' };
+export const DEFAULT_BUILD_FILES = ['index.js'];
 
 export const mkTemplateBase = (
 	/**
@@ -41,10 +44,10 @@ export const mkTemplateBase = (
 	 * @example /usr/lib/node_modules/<template-name>
 	 */
 	location: string,
-	json: DirectoryJSON = {},
+	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Templates => {
-	vol.fromJSON({ ...DEFAULT_TEMPLATE_FILES, ...json }, location);
+	vol.fromJSON(json, location);
 
 	const templatename = path.basename(location);
 
@@ -57,7 +60,7 @@ export const mkTemplateBase = (
 export const mkTemplate = (
 	name: string,
 	directory: string = CWD,
-	json: DirectoryJSON = {},
+	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Templates => {
 	return mkTemplateBase(path.join(directory, `.tps/${name}/`), json, opts);
@@ -66,7 +69,7 @@ export const mkTemplate = (
 export const mk3rdPartyTemplate = (
 	name: string,
 	location: string = CWD,
-	json: DirectoryJSON = {},
+	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Templates => {
 	if (!name.startsWith('tps-')) {
@@ -77,7 +80,7 @@ export const mk3rdPartyTemplate = (
 
 export const mkGlobal3rdPartyTemplate = (
 	name: string,
-	json: DirectoryJSON = {},
+	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Templates => {
 	return mk3rdPartyTemplate(name, '/usr/lib', json, opts);
@@ -85,7 +88,7 @@ export const mkGlobal3rdPartyTemplate = (
 
 export const mkGlobalTemplate = (
 	name: string,
-	json: DirectoryJSON = {},
+	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Templates => {
 	return mkTemplate(name, USER_HOME, json, opts);

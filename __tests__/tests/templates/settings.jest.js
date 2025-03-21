@@ -2,7 +2,7 @@
  * Modules
  */
 import Templates from '@test/templates';
-import { mkTemplate } from '@test/utilities/templates';
+import { DEFAULT_BUILD_FILES, mkTemplate } from '@test/utilities/templates';
 import { CWD } from '@tps/utilities/constants';
 import { reset } from '@test/utilities/vol';
 import path from 'path';
@@ -178,6 +178,52 @@ describe('[Templates] Settings:', () => {
 			).toHaveBeenNthCalledWith(2, tps, {
 				buildPath: path.join(CWD, 'App2'),
 			});
+		});
+
+		it('Should be able to create files from events', async () => {
+			const tps = mkTemplate('test-events-on-build-path-rendered');
+
+			tps.templateSettings.events = {};
+			tps.templateSettings.events.onRender = jest.fn(
+				async (_, { createFile }) => {
+					createFile('./custom.txt', 'hey');
+					createFile('custom2.txt', 'hey');
+					createFile('./some/path/custom.txt', 'hey');
+				},
+			);
+
+			const resultPath = await tps.render(CWD, 'App');
+
+			expect(tps.templateSettings.events.onRender).toHaveBeenCalledTimes(1);
+
+			expect(resultPath).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'custom.txt',
+				'custom2.txt',
+				'some/path/custom.txt',
+			]);
+		});
+
+		it('Should be able to create directories from events', async () => {
+			const tps = mkTemplate('test-events-on-build-path-rendered');
+
+			tps.templateSettings.events = {};
+			tps.templateSettings.events.onRender = jest.fn(
+				async (_, { createDirectory }) => {
+					createDirectory('./dir');
+					createDirectory('./dir/dir2');
+				},
+			);
+
+			const resultPath = await tps.render(CWD, 'App');
+
+			expect(tps.templateSettings.events.onRender).toHaveBeenCalledTimes(1);
+
+			expect(resultPath).toHaveAllFilesAndDirectories([
+				...DEFAULT_BUILD_FILES,
+				'./dir',
+				'./dir/dir2',
+			]);
 		});
 	});
 });

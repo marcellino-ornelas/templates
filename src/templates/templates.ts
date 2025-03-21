@@ -4,7 +4,6 @@ import * as path from 'path';
 import fs from 'fs';
 import * as is from 'is';
 import { DirNode, FileNode, FileSystemNode } from '@tps/fileSystemTree';
-import File from '@tps/templates/File';
 import * as TPS from '@tps/utilities/constants';
 import {
 	cosmiconfigAllExampleSync,
@@ -41,6 +40,7 @@ import {
 } from 'cosmiconfig';
 import { Build } from './build';
 import { Template } from './template';
+import File from './File';
 
 interface BuildErrors {
 	error: Error;
@@ -489,11 +489,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Rendering template at %s', finalDest);
 
-		await this._emitEvent('onRender', {
-			dest: finalDest,
-			buildPaths: pathsToCreate,
-		});
-
 		const template = new Template(
 			this.template,
 			this.src,
@@ -503,6 +498,17 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.compiledFiles,
 			this._defs,
 		);
+
+		await this._emitEvent('onRender', {
+			dest: finalDest,
+			buildPaths: pathsToCreate,
+			createFile: (name: string, content: string) => {
+				template.createFile(name, content, { force: this.opts.force });
+			},
+			createDirectory: (dir: string) => {
+				template.createDirectory(dir);
+			},
+		});
 
 		const builders: Promise<void>[] = pathsToCreate.map((buildPath) => {
 			const build = new Build(buildPath, template, {
