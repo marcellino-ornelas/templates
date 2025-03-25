@@ -502,6 +502,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		await this._emitEvent('onRender', {
 			dest: finalDest,
 			buildPaths: pathsToCreate,
+			hasBuildPaths: buildInDest,
 			createFile: (name: string, content: string) => {
 				template.createFile(name, content, { force: this.opts.force });
 			},
