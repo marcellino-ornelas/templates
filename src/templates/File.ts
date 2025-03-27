@@ -9,7 +9,7 @@ import { FileNode } from '../fileSystemTree';
 type Defs = Record<string, string>;
 type Data = Record<string, unknown>;
 
-interface FileOptions {
+export interface FileOptions {
 	force?: boolean;
 	useExperimentalTemplateEngine?: boolean;
 }
@@ -72,6 +72,17 @@ class File {
 			fs.readFileSync(fileNode.path)?.toString(),
 			options,
 		);
+	}
+
+	/**
+	 * Generate a File from a FileObject
+	 */
+	static from(
+		file: string,
+		content: string,
+		options: Partial<FileOptions> = {},
+	) {
+		return new File(file, content, options);
 	}
 
 	constructor(
@@ -164,13 +175,11 @@ class File {
 	): Promise<string> {
 		const dest = this.dest(location, data, defs);
 
-		if (this.options.force) {
-			await fs.promises.rm(dest, { force: true });
-		}
+		const flag = this.options.force ? 'w' : 'wx';
 
 		const contents = await this.getContents(location, data, defs);
 
-		await fs.promises.writeFile(dest, contents, { flag: 'w' });
+		await fs.promises.writeFile(dest, contents, { flag });
 
 		return dest;
 	}

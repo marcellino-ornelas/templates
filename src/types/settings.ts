@@ -128,7 +128,22 @@ interface SettingsFileEvents {
 	 */
 	onRender?: (
 		tps: Templates,
-		args: { dest: string; buildPaths: string[] },
+		args: {
+			dest: string;
+			buildPaths: string[];
+			/**
+			 * Whether or not the process are building using build paths
+			 */
+			hasBuildPaths: boolean;
+			/**
+			 * Creates a new file in each instance
+			 */
+			createFile: (file: string, content: string) => void;
+			/**
+			 * Creates a new directory in each instance
+			 */
+			createDirectory: (dir: string) => void;
+		},
 	) => Promise<void>;
 	/**
 	 * Callback function to call before an build path is rendered
