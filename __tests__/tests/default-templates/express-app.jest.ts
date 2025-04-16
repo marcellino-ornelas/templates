@@ -319,7 +319,7 @@ app.use('/', router);
 	"scripts": {
 		"test": "echo \\"Error: no test specified\\" && exit 1",
 		"start": "node dist/server.js",
-		"dev": "nodemon src/server.js",
+		"dev": "nodemon src/server.ts",
 		"build": "tsc",
 		"typecheck": "tsc --noEmit"
 	},`,
