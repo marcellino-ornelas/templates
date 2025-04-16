@@ -13,8 +13,7 @@
 		{{{? tps.answers.typescript }}}
 		"start": "node dist/server.js",
 		"build": "tsc",
-		"dev": "tsc && nodemon dist/server.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/server.ts"
+		"dev": "tsx src/server.ts"
 		{{{??}}}
 		"start": "node src/server.js",
 		"dev": "nodemon src/server.js"
@@ -41,6 +40,7 @@
 	},
 	"devDependencies": {
 		{{{? tps.answers.typescript }}}
+		"tsx": "^4.19.3",
 		"@types/compression": "^1.7.5",
 		"@types/cookie-parser": "^1.4.7",
 		"@types/cors": "^2.8.17",
@@ -48,7 +48,6 @@
 		"@types/morgan": "^1.9.9",
 		"@types/node": "^22.7.5",
 		"typescript": "^5.6.3",
-		"ts-node": "^10.9.2",
 		{{{?}}}
 		"nodemon": "^3.1.7"
 	}
