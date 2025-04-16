@@ -319,9 +319,9 @@ app.use('/', router);
 	"scripts": {
 		"test": "echo \\"Error: no test specified\\" && exit 1",
 		"start": "node dist/server.js",
+		"dev": "nodemon src/server.js",
 		"build": "tsc",
-		"dev": "tsc && nodemon dist/server.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/server.ts"
+		"typecheck": "tsc --noEmit"
 	},`,
 			);
 		});
@@ -345,7 +345,7 @@ app.use('/', router);
 				'@types/morgan',
 				'@types/node',
 				'typescript',
-				'ts-node',
+				'tsx',
 			];
 
 			checks.forEach((check) => {
