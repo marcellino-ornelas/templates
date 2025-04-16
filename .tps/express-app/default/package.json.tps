@@ -11,9 +11,10 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		{{{? tps.answers.typescript }}}
-		"start": "node dist/server.js",
 		"build": "tsc",
-		"dev": "tsx src/server.ts"
+		"dev": "tsx src/server.ts",
+		"start": "node dist/server.js",
+		"typecheck": "tsc --noEmit"
 		{{{??}}}
 		"start": "node src/server.js",
 		"dev": "nodemon src/server.js"
