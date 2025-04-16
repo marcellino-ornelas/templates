@@ -1,5 +1,5 @@
 {
-	"name": "default",
+	"name": "{{= tps.utils.paramCase(tps.name)}}",
 	"version": "1.0.0",
 	"description": "",
 	"type": "module",
@@ -12,7 +12,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		{{{? tps.answers.typescript }}}
 		"build": "tsc",
-		"dev": "tsx src/server.ts",
+		"dev": "nodemon src/server.ts",
 		"start": "node dist/server.js",
 		"typecheck": "tsc --noEmit"
 		{{{??}}}

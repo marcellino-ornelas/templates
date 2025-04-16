@@ -75,6 +75,22 @@ describe('Express app', () => {
 		);
 	});
 
+	it('should use correct configs for javascript', async () => {
+		const tps = new Templates<ExpressAppAnswers>('express-app', {
+			default: true,
+		});
+
+		await tps.render(CWD, 'app');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents(
+			'"ext": "json,js",',
+		);
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/nodemon.json')).not.toHaveFileContents('"exec"');
+	});
+
 	describe('port', () => {
 		it('should support custom ports', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
@@ -376,6 +392,26 @@ const router = express.Router();
 // Web route for the homepage
 router.get('/', (req: Request, res: Response) => {`,
 				);
+		});
+
+		it('should use correct configs for typescript', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents(
+				'"ext": "json,ts",',
+			);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents('"exec"');
 		});
 	});
 
