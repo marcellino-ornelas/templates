@@ -7,6 +7,5 @@
 	{{{? tps.answers.typescript}}}
 	"exec": "tsx",
 	{{{?}}}
-	"delay": "500",
-	"verbose": true
+	"delay": "500"
 }
