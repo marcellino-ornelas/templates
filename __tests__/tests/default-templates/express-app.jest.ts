@@ -161,7 +161,7 @@ describe('Express app', () => {
 			expect(path.join(CWD, 'app/src/routes/index.js')).toHaveFileContents(`\
 const router = express.Router();
 
-app.use('/api', apiRouter);
+router.use('/api', apiRouter);
 
 `);
 
