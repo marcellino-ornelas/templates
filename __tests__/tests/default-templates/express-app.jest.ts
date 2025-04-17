@@ -75,6 +75,22 @@ describe('Express app', () => {
 		);
 	});
 
+	it('should use correct configs for javascript', async () => {
+		const tps = new Templates<ExpressAppAnswers>('express-app', {
+			default: true,
+		});
+
+		await tps.render(CWD, 'app');
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents(
+			'"ext": "json,js",',
+		);
+
+		// @ts-expect-error no types for extending jest functions
+		expect(path.join(CWD, 'app/nodemon.json')).not.toHaveFileContents('"exec"');
+	});
+
 	describe('port', () => {
 		it('should support custom ports', async () => {
 			const tps = new Templates<ExpressAppAnswers>('express-app', {
@@ -137,23 +153,20 @@ describe('Express app', () => {
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+			expect(path.join(CWD, 'app/src/routes/index.js')).toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
-// === Routes ===
+			expect(path.join(CWD, 'app/src/routes/index.js')).toHaveFileContents(`\
+const router = express.Router();
 
-app.use('/', router);
+router.use('/api', apiRouter);
 
-app.use('/api', apiRouter);
-
-// === Error Handling ===
 `);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/api/index.js')).toBeFile();
+			expect(path.join(CWD, 'app/src/routes/api/index.js')).toBeFile();
 		});
 
 		it('should be able to not add an API route', async () => {
@@ -169,18 +182,14 @@ app.use('/api', apiRouter);
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).not.toHaveFileContents(
+			expect(path.join(CWD, 'app/src/routes/index.js')).not.toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
-// === Routes ===
-
-app.use('/', router);
-
-// === Error Handling ===
-`);
+			expect(path.join(CWD, 'app/src/routes/index.js')).not.toHaveFileContents(
+				"app.use('/api', apiRouter);",
+			);
 		});
 	});
 
@@ -303,9 +312,9 @@ app.use('/', router);
 	"scripts": {
 		"test": "echo \\"Error: no test specified\\" && exit 1",
 		"start": "node dist/server.js",
+		"dev": "nodemon src/server.ts",
 		"build": "tsc",
-		"dev": "tsc && nodemon dist/server.js",
-		"serve": "nodemon --watch 'src/**/*.ts' --exec 'ts-node --esm' src/server.ts"
+		"typecheck": "tsc --noEmit"
 	},`,
 			);
 		});
@@ -329,7 +338,7 @@ app.use('/', router);
 				'@types/morgan',
 				'@types/node',
 				'typescript',
-				'ts-node',
+				'tsx',
 			];
 
 			checks.forEach((check) => {
@@ -376,6 +385,26 @@ const router = express.Router();
 // Web route for the homepage
 router.get('/', (req: Request, res: Response) => {`,
 				);
+		});
+
+		it('should use correct configs for typescript', async () => {
+			const tps = new Templates<ExpressAppAnswers>('express-app', {
+				default: true,
+			});
+
+			tps.setAnswers({
+				typescript: true,
+			});
+
+			await tps.render(CWD, 'app');
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents(
+				'"ext": "json,ts",',
+			);
+
+			// @ts-expect-error no types for extending jest functions
+			expect(path.join(CWD, 'app/nodemon.json')).toHaveFileContents('"exec"');
 		});
 	});
 
