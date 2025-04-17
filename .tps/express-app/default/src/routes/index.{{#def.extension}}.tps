@@ -10,7 +10,7 @@ import apiRouter from './api/index.js'
 const router = express.Router();
 
 {{{? tps.answers.api}}}
-router.use('/api', apiRouter)
+router.use('/api', apiRouter);
 
 {{{?}}}
 // Web route for the homepage
