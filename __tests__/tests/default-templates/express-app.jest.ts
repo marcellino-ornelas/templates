@@ -153,19 +153,16 @@ describe('Express app', () => {
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+			expect(path.join(CWD, 'app/src/routes/index.js')).toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
-// === Routes ===
-
-app.use('/', router);
+			expect(path.join(CWD, 'app/src/routes/index.js')).toHaveFileContents(`\
+const router = express.Router();
 
 app.use('/api', apiRouter);
 
-// === Error Handling ===
 `);
 
 			// @ts-expect-error no types for extending jest functions
@@ -185,18 +182,14 @@ app.use('/api', apiRouter);
 			expect(path.join(CWD, 'app')).toBeDirectory();
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).not.toHaveFileContents(
+			expect(path.join(CWD, 'app/src/routes/index.js')).not.toHaveFileContents(
 				"import apiRouter from './api/index.js",
 			);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(`\
-// === Routes ===
-
-app.use('/', router);
-
-// === Error Handling ===
-`);
+			expect(path.join(CWD, 'app/src/app.js')).toHaveFileContents(
+				'app/src/routes/index.js',
+			);
 		});
 	});
 
