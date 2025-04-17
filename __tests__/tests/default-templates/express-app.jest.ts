@@ -166,7 +166,7 @@ router.use('/api', apiRouter);
 `);
 
 			// @ts-expect-error no types for extending jest functions
-			expect(path.join(CWD, 'app/src/api/index.js')).toBeFile();
+			expect(path.join(CWD, 'app/src/routes/api/index.js')).toBeFile();
 		});
 
 		it('should be able to not add an API route', async () => {
