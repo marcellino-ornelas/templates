@@ -6,9 +6,6 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import createError from 'http-errors';
-{{{? tps.answers.api }}}
-import apiRouter from './api/index.js';
-{{{?}}}
 import { IS_DEV } from './config/constrants.js';
 import { errorHandler, notFoundHandler } from './middlewares/error-handler.js';
 import router from './routes/index.js';
@@ -48,10 +45,6 @@ if ( IS_DEV ) {
 
 app.use('/', router);
 
-{{{? tps.answers.api }}}
-app.use('/api', apiRouter);
-
-{{{?}}}
 // === Error Handling ===
 
 // Handle 404 errors
