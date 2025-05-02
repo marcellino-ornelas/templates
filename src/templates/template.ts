@@ -30,10 +30,12 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 
 interface TemplateOptions {
 	force: boolean;
+	useExperimentalTemplateEngine: boolean;
 }
 
 const DEFAULT_OPTS: TemplateOptions = {
 	force: false,
+	useExperimentalTemplateEngine: true,
 };
 
 export class Template {
@@ -203,7 +205,7 @@ export class Template {
 		await forEachAsync(this.packagesUsed, async (packageName) => {
 			const pkg = this.pkg(packageName);
 
-			const { force } = this.options;
+			const { force, useExperimentalTemplateEngine } = this.options;
 			const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
 			if (!defFiles.length) {
@@ -230,6 +232,7 @@ export class Template {
 				async (fileNode: FileNode) => {
 					const file = File.fromFileNode(fileNode, {
 						force,
+						useExperimentalTemplateEngine,
 					});
 					logger.tps.info(
 						`  - %s ${colors.green.italic('compiled')}`,
