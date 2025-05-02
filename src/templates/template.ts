@@ -195,6 +195,9 @@ export class Template {
 		this.extraDirectories.push(dir);
 	}
 
+	/**
+	 * Compile all files that need to be made for render process
+	 */
 	public async compile(): Promise<void> {
 		await forEachAsync(this.packagesUsed, async (packageName) => {
 			const pkg = this.pkg(packageName);
