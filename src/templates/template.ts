@@ -164,12 +164,9 @@ export class Template {
 			throw new PackageAlreadyCompiledError(newPackageName);
 		}
 
-		this.packages[newPackageName] = new DirNode(newPackageName, this.location);
-
 		logger.tps.info('Loading package %s', newPackageName);
 
-		// TODO: implement some sort of compiled files
-		// this._compileFilesFromPackage(newPackageName);
+		this.packages[newPackageName] = new DirNode(newPackageName, this.location);
 
 		logger.tps.success('Added package %s', newPackageName);
 	}
