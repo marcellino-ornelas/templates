@@ -208,7 +208,7 @@ export class Template {
 			const { force, useExperimentalTemplateEngine } = this.options;
 			const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
-			if (!defFiles.length) {
+			if (defFiles.length) {
 				logger.tps.info('Compiling def files %o', { force });
 
 				await forEachAsync(defFiles, async (fileNode) => {
