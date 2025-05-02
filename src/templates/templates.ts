@@ -41,6 +41,7 @@ import {
 import { Build } from './build';
 import { Template } from './template';
 import File from './File';
+import { TemplateFiles } from './template-files';
 
 interface BuildErrors {
 	error: Error;
@@ -391,7 +392,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		logger.tps.info('Loading package %s', newPackageName);
 
-		this._compileFilesFromPackage(newPackageName);
+		// this._compileFilesFromPackage(newPackageName);
 
 		logger.tps.success('Added package %s', newPackageName);
 
@@ -495,9 +496,12 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.templateSettings,
 			this.packages,
 			this.packagesUsed,
-			this.compiledFiles,
-			this._defs,
+			{
+				force: this.opts.force,
+			},
 		);
+
+		await template.compile();
 
 		await this._emitEvent('onRender', {
 			dest: finalDest,
@@ -603,49 +607,49 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 * @private
 	 * @param {String} packageName - name of package
 	 */
-	_compileFilesFromPackage(packageName: string): void {
-		const pkg = this.pkg(packageName);
-		const { force } = this.opts;
+	// _compileFilesFromPackage(packageName: string): void {
+	// 	const pkg = this.pkg(packageName);
+	// 	const { force } = this.opts;
 
-		const defFiles = pkg.find({ type: 'file', ext: '.def' });
+	// 	const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
-		// @ts-expect-error need to fix library
-		if (!is.array.empty(defFiles)) {
-			logger.tps.info('Compiling def files %o', { force });
+	// 	// @ts-expect-error need to fix library
+	// 	if (!is.array.empty(defFiles)) {
+	// 		logger.tps.info('Compiling def files %o', { force });
 
-			defFiles.forEach((fileNode) => {
-				logger.tps.info(
-					`  - %s ${colors.green.italic('compiled')}`,
-					fileNode.name,
-				);
-				const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
-				this._defs[name] = fs.readFileSync(fileNode.path).toString();
+	// 		defFiles.forEach((fileNode) => {
+	// 			logger.tps.info(
+	// 				`  - %s ${colors.green.italic('compiled')}`,
+	// 				fileNode.name,
+	// 			);
+	// 			const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
+	// 			this._defs[name] = fs.readFileSync(fileNode.path).toString();
 
-				// When def files have more than one def. In order to use them we need to call the main file def first.
-				// this fixes problems when any def can be available at render time
-				this.engine.template(`{{#def.${name}}}`, null, this._defs);
-			});
-		}
+	// 			// When def files have more than one def. In order to use them we need to call the main file def first.
+	// 			// this fixes problems when any def can be available at render time
+	// 			this.engine.template(`{{#def.${name}}}`, null, this._defs);
+	// 		});
+	// 	}
 
-		logger.tps.info('Compiling files %n', {
-			force,
-			useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
-		});
+	// 	logger.tps.info('Compiling files %n', {
+	// 		force,
+	// 		useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+	// 	});
 
-		pkg
-			.find({ type: 'file', ext: { not: '.def' } })
-			.forEach((fileNode: FileNode) => {
-				const file = File.fromFileNode(fileNode, {
-					force,
-					useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
-				});
-				logger.tps.info(
-					`  - %s ${colors.green.italic('compiled')}`,
-					fileNode.path,
-				);
-				this.compiledFiles.push(file);
-			});
-	}
+	// 	pkg
+	// 		.find({ type: 'file', ext: { not: '.def' } })
+	// 		.forEach((fileNode: FileNode) => {
+	// 			const file = File.fromFileNode(fileNode, {
+	// 				force,
+	// 				useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+	// 			});
+	// 			logger.tps.info(
+	// 				`  - %s ${colors.green.italic('compiled')}`,
+	// 				fileNode.path,
+	// 			);
+	// 			this.compiledFiles.push(file);
+	// 		});
+	// }
 
 	async _answerRestOfPrompts(): Promise<void> {
 		if (!this._prompts) return;

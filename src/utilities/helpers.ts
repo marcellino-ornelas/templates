@@ -161,3 +161,12 @@ export const stripPrefix = (str: string, prefix: string): string => {
 	}
 	return str;
 };
+
+export async function forEachAsync<T>(
+	array: T[],
+	asyncCallback: (item: T, index: number, array: T[]) => Promise<void>,
+): Promise<void> {
+	for (let i = 0; i < array.length; i++) {
+		await asyncCallback(array[i], i, array);
+	}
+}

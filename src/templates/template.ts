@@ -1,4 +1,4 @@
-import DirectoryNode, { DirNode } from '@tps/fileSystemTree';
+import DirectoryNode, { DirNode, FileNode } from '@tps/fileSystemTree';
 import type { SettingsFile } from '@tps/types/settings';
 import { TEMPLATE_SETTINGS_FILE, IS_TESTING } from '@tps/utilities/constants';
 import { cosmiconfig, getDefaultSearchPlaces } from 'cosmiconfig';
@@ -14,6 +14,10 @@ import {
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import path from 'path';
+import * as colors from 'ansi-colors';
+import templateEngine from '@tps/templates/template-engine';
+import { forEachAsync } from '@tps/utilities/helpers';
+import fs from 'fs/promises';
 
 const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	cache: !IS_TESTING,
@@ -24,7 +28,15 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	],
 });
 
+const DEFAULT_OPTS: FileOptions = {
+	force: false,
+};
+
 export class Template {
+	public files: File[] = [];
+
+	public defs: Record<string, string> = {};
+
 	/**
 	 * Get a template
 	 */
@@ -104,15 +116,15 @@ export class Template {
 		 */
 		public packagesUsed: string[] = [],
 		/**
-		 * Compiled Files
+		 *
 		 */
-		public compiledFiles: File[] = [],
-		/**
-		 * Def files
-		 */
-		public defs: Record<string, string> = {},
+		public options: FileOptions = DEFAULT_OPTS,
 	) {
 		// do nothing
+	}
+
+	public pkg(packageName: string): DirNode | null {
+		return this.packages[packageName] ?? null;
 	}
 
 	/**
@@ -172,7 +184,7 @@ export class Template {
 	): void {
 		// TODO: should remove
 		this.createDirectory(path.dirname(file));
-		this.compiledFiles.push(File.from(file, content, options));
+		this.files.push(File.from(file, content, options));
 	}
 
 	/**
@@ -181,5 +193,48 @@ export class Template {
 	 */
 	public createDirectory(dir: string): void {
 		this.extraDirectories.push(dir);
+	}
+
+	public async compile(): Promise<void> {
+		await forEachAsync(this.packagesUsed, async (packageName) => {
+			const pkg = this.pkg(packageName);
+
+			const { force } = this.options;
+			const defFiles = pkg.find({ type: 'file', ext: '.def' });
+
+			// @ts-expect-error need to fix library
+			if (!is.array.empty(defFiles)) {
+				logger.tps.info('Compiling def files %o', { force });
+
+				await forEachAsync(defFiles, async (fileNode) => {
+					logger.tps.info(
+						`  - %s ${colors.green.italic('compiled')}`,
+						fileNode.name,
+					);
+					const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
+					this.defs[name] = (await fs.readFile(fileNode.path)).toString();
+					// When def files have more than one def. In order to use them we need to call the main file def first.
+					// this fixes problems when any def can be available at render time
+					templateEngine.template(`{{#def.${name}}}`, null, this.defs);
+				});
+			}
+			logger.tps.info('Compiling files %n', {
+				force,
+			});
+
+			await forEachAsync(
+				pkg.find({ type: 'file', ext: { not: '.def' } }),
+				async (fileNode: FileNode) => {
+					const file = File.fromFileNode(fileNode, {
+						force,
+					});
+					logger.tps.info(
+						`  - %s ${colors.green.italic('compiled')}`,
+						fileNode.path,
+					);
+					this.files.push(file);
+				},
+			);
+		});
 	}
 }

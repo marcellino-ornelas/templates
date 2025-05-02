@@ -1,14 +1,17 @@
 import colors from 'ansi-colors';
 import * as path from 'path';
 import { promises as fs } from 'fs';
-import DirectoryNode from '@tps/fileSystemTree';
+import DirectoryNode, { FileNode } from '@tps/fileSystemTree';
 import CreateDebugGroup from '@tps/utilities/logger/createDebugGroup';
 import logger from '@tps/utilities/logger';
 import { isDirAsync, isFileAsync } from '@tps/utilities/fileSystem';
 import { BuildError, FileExistError } from '@tps/errors';
 import { AnswersHash } from '@tps/types/settings';
+import templateEngine from '@tps/templates/template-engine';
 import * as utils from './utils';
 import type { Template } from './template';
+import File from './File';
+import { forEachAsync } from '@tps/utilities/helpers';
 
 interface BuildBuilt {
 	files: string[];
@@ -45,7 +48,7 @@ export class Build {
 	 *
 	 * If `buildInNewFolder` is `true`, then a directory of `name`
 	 * will be created in this directory and contents will be rendered in that directory.
-	 * Else contents will be rendered in `directory`
+	 * else contents will be rendered in `directory`
 	 */
 	public readonly directory: string;
 
