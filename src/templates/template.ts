@@ -209,8 +209,7 @@ export class Template {
 			const { force } = this.options;
 			const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
-			// @ts-expect-error need to fix library
-			if (!is.array.empty(defFiles)) {
+			if (!defFiles.length) {
 				logger.tps.info('Compiling def files %o', { force });
 
 				await forEachAsync(defFiles, async (fileNode) => {
