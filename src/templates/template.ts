@@ -17,7 +17,7 @@ import * as colors from 'ansi-colors';
 import File, { FileOptions } from '@tps/templates/File';
 import templateEngine from '@tps/templates/template-engine';
 import { forEachAsync } from '@tps/utilities/helpers';
-import fs from 'fs/promises';
+import fs from 'fs';
 
 const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	cache: !IS_TESTING,
@@ -217,7 +217,7 @@ export class Template {
 						fileNode.name,
 					);
 					const name = fileNode.name.substring(0, fileNode.name.indexOf('.'));
-					this.defs[name] = (await fs.readFile(fileNode.path)).toString();
+					this.defs[name] = (await fs..promises.readFile(fileNode.path)).toString();
 					// When def files have more than one def. In order to use them we need to call the main file def first.
 					// this fixes problems when any def can be available at render time
 					templateEngine.template(`{{#def.${name}}}`, null, this.defs);
