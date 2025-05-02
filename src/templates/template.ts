@@ -14,7 +14,7 @@ import {
 import logger from '@tps/utilities/logger';
 import path from 'path';
 import * as colors from 'ansi-colors';
-import File from '@tps/templates/File';
+import File, { FileOptions } from '@tps/templates/File';
 import templateEngine from '@tps/templates/template-engine';
 import { forEachAsync } from '@tps/utilities/helpers';
 import fs from 'fs/promises';
@@ -181,11 +181,11 @@ export class Template {
 	public createFile(
 		file: string,
 		content: string,
-		options: Partial<TemplateOptions> = {},
+		options: Partial<FileOptions> = {},
 	): void {
 		// TODO: should remove
 		this.createDirectory(path.dirname(file));
-		this.files.push(File.from(file, content, { ...options }));
+		this.files.push(File.from(file, content, options));
 	}
 
 	/**
