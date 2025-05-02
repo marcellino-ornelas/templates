@@ -1,9 +1,8 @@
 /* eslint-disable max-classes-per-file */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 import * as path from 'path';
-import fs from 'fs';
 import * as is from 'is';
-import { DirNode, FileNode, FileSystemNode } from '@tps/fileSystemTree';
+import { DirNode, FileSystemNode } from '@tps/fileSystemTree';
 import * as TPS from '@tps/utilities/constants';
 import {
 	cosmiconfigAllExampleSync,
@@ -27,7 +26,6 @@ import {
 	NoPromptsError,
 } from '@tps/errors';
 import logger from '@tps/utilities/logger';
-import * as colors from 'ansi-colors';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
 import { TemplateOptions } from '@tps/types/templates';
@@ -41,7 +39,6 @@ import {
 import { Build } from './build';
 import { Template } from './template';
 import File from './File';
-import { TemplateFiles } from './template-files';
 
 interface BuildErrors {
 	error: Error;
