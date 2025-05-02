@@ -48,6 +48,8 @@ describe('Build', () => {
 			tps._defs,
 		);
 
+		await template.compile();
+
 		const build = new Build(BUILD_PATH, template);
 
 		await build.render();
@@ -168,11 +170,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -224,11 +224,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -270,11 +268,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -301,11 +297,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -334,11 +328,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -365,11 +357,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -402,6 +392,8 @@ describe('Build', () => {
 		// 		tps._defs,
 		// 	);
 
+		// await template.compile();
+
 		// 	const build = new Build(BUILD_PATH, template);
 
 		// 	template.createFile(DEFAULT_BUILD_FILES[0], 'hey');
@@ -418,11 +410,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -449,10 +439,6 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
 
 			const build = new Build(BUILD_PATH, template, { force: true });
@@ -481,10 +467,6 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
 
 			const build = new Build(BUILD_PATH, template, { wipe: true });
@@ -508,11 +490,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 
@@ -536,11 +516,9 @@ describe('Build', () => {
 				tps.templateSettings,
 				tps.packages,
 				tps.packagesUsed,
-				tps.compiledFiles,
-				// @ts-expect-error - private
-				// eslint-disable-next-line no-underscore-dangle
-				tps._defs,
 			);
+
+			await template.compile();
 
 			const build = new Build(BUILD_PATH, template);
 

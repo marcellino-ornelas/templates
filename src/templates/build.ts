@@ -45,7 +45,7 @@ export class Build {
 	 *
 	 * If `buildInNewFolder` is `true`, then a directory of `name`
 	 * will be created in this directory and contents will be rendered in that directory.
-	 * Else contents will be rendered in `directory`
+	 * else contents will be rendered in `directory`
 	 */
 	public readonly directory: string;
 
@@ -169,10 +169,10 @@ export class Build {
 		dest: string,
 		data: RenderData,
 	): Promise<void> {
-		const { compiledFiles, defs } = this.template;
+		const { files, defs } = this.template;
 
-		for (let i = 0; i < compiledFiles.length; i++) {
-			const file = compiledFiles[i];
+		for (let i = 0; i < files.length; i++) {
+			const file = files[i];
 			const finalDest = file.dest(dest, data, defs);
 
 			// eslint-disable-next-line no-await-in-loop
@@ -269,7 +269,7 @@ export class Build {
 			// super hacky yes i know. The reason this needs to happen is because
 			// when were using wipe but were not building a new folder we need to make sure all
 			// files that already exist get overridden
-			this.template.compiledFiles.forEach((file) => {
+			this.template.files.forEach((file) => {
 				// eslint-disable-next-line no-param-reassign
 				file.options.force = true;
 			});
@@ -426,7 +426,7 @@ export class Build {
 		loggerGroup.info('Rendering files');
 
 		const results = await Promise.allSettled(
-			this.template.compiledFiles.map(async (file) => {
+			this.template.files.map(async (file) => {
 				const type = file.isDynamic ? 'Dynamic File' : 'File';
 				const dest = file.dest(this.buildPath, data, this.template.defs);
 				let failed = false;

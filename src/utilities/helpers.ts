@@ -161,3 +161,13 @@ export const stripPrefix = (str: string, prefix: string): string => {
 	}
 	return str;
 };
+
+export async function forEachAsync<T>(
+	array: T[],
+	asyncCallback: (item: T, index: number, arr: T[]) => Promise<void>,
+): Promise<void> {
+	for (let i = 0; i < array.length; i++) {
+		// eslint-disable-next-line no-await-in-loop
+		await asyncCallback(array[i], i, array);
+	}
+}
