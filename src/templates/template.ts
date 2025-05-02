@@ -185,7 +185,7 @@ export class Template {
 	): void {
 		// TODO: should remove
 		this.createDirectory(path.dirname(file));
-		this.files.push(File.from(file, content, options));
+		this.files.push(File.from(file, content, { ...options }));
 	}
 
 	/**
