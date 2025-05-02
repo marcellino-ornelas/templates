@@ -6,7 +6,6 @@ import {
 	findTemplate,
 	getTemplateLocations,
 } from '@tps/templates/template-utils';
-import File, { type FileOptions } from '@tps/templates/File';
 import {
 	PackageAlreadyCompiledError,
 	RequiresTemplateError,
@@ -15,6 +14,7 @@ import {
 import logger from '@tps/utilities/logger';
 import path from 'path';
 import * as colors from 'ansi-colors';
+import File from '@tps/templates/File';
 import templateEngine from '@tps/templates/template-engine';
 import { forEachAsync } from '@tps/utilities/helpers';
 import fs from 'fs/promises';
@@ -28,7 +28,11 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	],
 });
 
-const DEFAULT_OPTS: FileOptions = {
+interface TemplateOptions {
+	force: boolean;
+}
+
+const DEFAULT_OPTS: TemplateOptions = {
 	force: false,
 };
 
@@ -118,7 +122,7 @@ export class Template {
 		/**
 		 *
 		 */
-		public options: FileOptions = DEFAULT_OPTS,
+		public options: TemplateOptions = DEFAULT_OPTS,
 	) {
 		// do nothing
 	}
@@ -180,7 +184,7 @@ export class Template {
 	public createFile(
 		file: string,
 		content: string,
-		options: Partial<FileOptions> = {},
+		options: Partial<TemplateOptions> = {},
 	): void {
 		// TODO: should remove
 		this.createDirectory(path.dirname(file));
