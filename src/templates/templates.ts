@@ -126,8 +126,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 	private _defs: Record<string, string>;
 
-	public successfulBuilds: SuccessfulBuild;
-
 	public buildErrors: BuildErrors[];
 
 	public templateSettings: SettingsFile;
@@ -282,7 +280,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		this.packagesUsed = [];
 		this.compiledFiles = [];
 		this._defs = {};
-		this.successfulBuilds = new SuccessfulBuild();
 		this.buildErrors = [];
 		this.templateSettings = {} as SettingsFile;
 		this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
@@ -699,18 +696,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			await events[event]?.(this, ...args);
 		}
 	}
-}
-
-class SuccessfulBuild {
-	/**
-	 * Paths of files that were successfully built
-	 */
-	public files: string[] = [];
-
-	/**
-	 * Paths of directories that were successfully built
-	 */
-	public dirs: string[] = [];
 }
 
 export { TemplateOptions } from '@tps/types/templates';
