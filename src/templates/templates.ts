@@ -17,6 +17,7 @@ import {
 	getNpmPaths,
 	getAllDirectoriesAndUp,
 	stripPrefix,
+	pick,
 } from '@tps/utilities/helpers';
 import {
 	TemplateNotFoundError,
@@ -38,7 +39,7 @@ import {
 } from 'cosmiconfig';
 import { Build } from './build';
 import { Template } from './template';
-import File from './File';
+import { getTpsrc } from './tpsrc';
 
 interface BuildErrors {
 	error: Error;
@@ -124,8 +125,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 	public packagesUsed: string[];
 
-	private _defs: Record<string, string>;
-
 	public buildErrors: BuildErrors[];
 
 	public templateSettings: SettingsFile;
@@ -146,8 +145,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	public src: string;
 
 	public _prompts?: Prompter<TAnswers>;
-
-	public compiledFiles: File[];
 
 	/**
 	 * All tpsrc config file names.
@@ -251,6 +248,19 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		return !!Templates.getLocalTpsPath();
 	}
 
+	public static async get(
+		name: string,
+		options: Partial<TemplateOptions> = {},
+	): Promise<Templates> {
+		const tpsrc = await getTpsrc(name);
+
+		// options are being passed but we need to get this from tpsrc and settings
+		const template = Template.get(name, {
+			...pick(tpsrc?.opts, ['force', 'experimentalTemplateEngine']),
+			...pick(options, ['force', 'experimentalTemplateEngine']),
+		});
+	}
+
 	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
 		if (!templateName || !is.string(templateName)) {
 			throw new RequiresTemplateError();
@@ -278,8 +288,6 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 		this.packages = {};
 		this.packagesUsed = [];
-		this.compiledFiles = [];
-		this._defs = {};
 		this.buildErrors = [];
 		this.templateSettings = {} as SettingsFile;
 		this.templateSettingsPath = path.join(this.src, TPS.TEMPLATE_SETTINGS_FILE);
@@ -490,7 +498,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.packagesUsed,
 			{
 				force: this.opts.force,
-				useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+				experimentalTemplateEngine: this.opts.experimentalTemplateEngine,
 			},
 		);
 

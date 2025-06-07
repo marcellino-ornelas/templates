@@ -30,12 +30,12 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 
 interface TemplateOptions {
 	force: boolean;
-	useExperimentalTemplateEngine: boolean;
+	experimentalTemplateEngine: boolean;
 }
 
 const DEFAULT_OPTS: TemplateOptions = {
 	force: false,
-	useExperimentalTemplateEngine: true,
+	experimentalTemplateEngine: true,
 };
 
 export class Template {
@@ -43,15 +43,34 @@ export class Template {
 
 	public defs: Record<string, string> = {};
 
+	public options: TemplateOptions;
+
+	/**
+	 * Extra Relative directories to create in instances
+	 *
+	 * TODO: This is not the best way to do this but at the moment
+	 */
+	public extraDirectories: string[] = [];
+
 	/**
 	 * Get a template
 	 */
-	public static async get(templateName: string): Promise<Template> {
+	public static async get(
+		templateName: string,
+		options: TemplateOptions = DEFAULT_OPTS,
+	): Promise<Template> {
 		const location = await Template.fetchTemplateLocation(templateName);
 
 		const settingsFile = await Template.fetchSettingsFile(location);
 
-		const template = new Template(templateName, location, settingsFile, {}, []);
+		const template = new Template(
+			templateName,
+			location,
+			settingsFile,
+			{},
+			[],
+			options,
+		);
 
 		await template.fetchPackage('default');
 
@@ -92,13 +111,6 @@ export class Template {
 		return location;
 	}
 
-	/**
-	 * Extra Relative directories to create in instances
-	 *
-	 * TODO: This is not the best way to do this but at the moment
-	 */
-	public extraDirectories: string[] = [];
-
 	constructor(
 		/**
 		 * Name of template
@@ -124,9 +136,14 @@ export class Template {
 		/**
 		 *
 		 */
-		public options: TemplateOptions = DEFAULT_OPTS,
+		options: Partial<TemplateOptions> = {},
 	) {
-		// do nothing
+		// this handles default, settings, and passed
+		this.options = {
+			...DEFAULT_OPTS,
+			...settingsFile.opts,
+			...options,
+		};
 	}
 
 	public pkg(packageName: string): DirNode | null {
@@ -205,7 +222,7 @@ export class Template {
 		await forEachAsync(this.packagesUsed, async (packageName) => {
 			const pkg = this.pkg(packageName);
 
-			const { force, useExperimentalTemplateEngine } = this.options;
+			const { force, experimentalTemplateEngine } = this.options;
 			const defFiles = pkg.find({ type: 'file', ext: '.def' });
 
 			if (defFiles.length) {
@@ -234,7 +251,7 @@ export class Template {
 				async (fileNode: FileNode) => {
 					const file = File.fromFileNode(fileNode, {
 						force,
-						useExperimentalTemplateEngine,
+						experimentalTemplateEngine,
 					});
 					logger.tps.info(
 						`  - %s ${colors.green.italic('compiled')}`,
