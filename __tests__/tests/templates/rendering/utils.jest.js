@@ -18,12 +18,12 @@ describe('[TPS] Utils:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-utils');
+		tps = await Templates.get('testing-utils');
 
 		return playground.createBox('render_utils');
 	});
 
-	it('should be able to use change-case fn', () => {
+	it('should be able to use change-case fn', async () => {
 		const indexFile = playground.pathTo('App/index.txt');
 		const appFolder = playground.pathTo('App');
 
@@ -39,7 +39,7 @@ describe('[TPS] Utils:', () => {
 		});
 	});
 
-	it('should be able to use inflection fn', () => {
+	it('should be able to use inflection fn', async () => {
 		const indexFile = playground.pathTo('App/index.txt');
 		const appFolder = playground.pathTo('App');
 

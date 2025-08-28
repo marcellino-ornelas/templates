@@ -7,11 +7,11 @@ describe('conditionals', () => {
 			'{{? tps.one < 2 }}{{= tps.one }}{{?}}{{= tps.two }}',
 		];
 
-		it('should evaluate condition and include template if valid', () => {
+		it('should evaluate condition and include template if valid', async () => {
 			test(templates, { one: 1, two: 2 }, '12');
 		});
 
-		it('should evaluate condition and do NOT include template if invalid', () => {
+		it('should evaluate condition and do NOT include template if invalid', async () => {
 			test(templates, { one: 3, two: 2 }, '2');
 		});
 	});
@@ -22,11 +22,11 @@ describe('conditionals', () => {
 			'{{? tps.one < 2 }}{{= tps.one }}{{??}}{{= tps.two }}{{?}}',
 		];
 
-		it('should evaluate condition and include "if" template if valid', () => {
+		it('should evaluate condition and include "if" template if valid', async () => {
 			test(templates, { one: 1, two: 2 }, '1');
 		});
 
-		it('should evaluate condition and include "else" template if invalid', () => {
+		it('should evaluate condition and include "else" template if invalid', async () => {
 			test(templates, { one: 3, two: 2 }, '2');
 		});
 	});
@@ -37,21 +37,21 @@ describe('conditionals', () => {
 			'{{? tps.one < 2 }}{{= tps.one }}{{?? tps.two < 3 }}{{= tps.two }}{{??}}{{= tps.three }}{{?}}',
 		];
 
-		it('should evaluate condition and include "if" template if valid', () => {
+		it('should evaluate condition and include "if" template if valid', async () => {
 			test(templates, { one: 1, two: 2, three: 3 }, '1');
 		});
 
-		it('should evaluate condition and include "else if" template if second condition valid', () => {
+		it('should evaluate condition and include "else if" template if second condition valid', async () => {
 			test(templates, { one: 10, two: 2, three: 3 }, '2');
 		});
 
-		it('should evaluate condition and include "else" template if invalid', () => {
+		it('should evaluate condition and include "else" template if invalid', async () => {
 			test(templates, { one: 10, two: 20, three: 3 }, '3');
 		});
 	});
 
 	describe('block syntax', () => {
-		it('should be able to use block syntax', () => {
+		it('should be able to use block syntax', async () => {
 			const result = render(
 				`\
 {{{? tps.one}}}
@@ -68,7 +68,7 @@ This is my text
 hey`);
 		});
 
-		it('should be able to use block syntax thats indented', () => {
+		it('should be able to use block syntax thats indented', async () => {
 			const result = render(
 				`\
 				{{{? tps.one}}}
@@ -86,7 +86,7 @@ hey`);
 		});
 	});
 
-	it('should leave no new lines behind when value is false', () => {
+	it('should leave no new lines behind when value is false', async () => {
 		const result = render(
 			`\
 			{{{? tps.one}}}
@@ -98,7 +98,7 @@ hey`);
 		expect(result).toBe('');
 	});
 
-	it('should be able to use multiple', () => {
+	it('should be able to use multiple', async () => {
 		const result = render(
 			`\
 			{{{? tps.one}}}

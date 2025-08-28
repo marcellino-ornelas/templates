@@ -1,5 +1,5 @@
 // TODO: why cant I use @tps/templates :thinking:
-import type { TemplateOptions, Templates } from '@tps/templates/templates';
+import type { TemplatesOptions, Templates } from '@tps/templates/templates';
 
 // eslint-disable-next-line no-shadow
 export enum SettingsFilePromptTpsType {
@@ -176,7 +176,7 @@ interface SettingsFileEvents {
 }
 
 export interface SettingsFile {
-	opts?: Partial<TemplateOptions>;
+	opts?: Partial<TemplatesOptions>;
 	prompts?: SettingsFilePrompt[];
 	events?: SettingsFileEvents;
 }

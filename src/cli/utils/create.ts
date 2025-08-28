@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
 import Template from '@tps/templates';
-import type { TemplateOptions } from '@tps/templates/templates';
+import type { TemplatesOptions } from '@tps/templates/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
 import { getCliArgsFromTemplate } from './helpers';
@@ -86,7 +86,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 
 	const { packages, buildPaths, ...answers } = argv;
 
-	const tpsConfig: Partial<TemplateOptions> = {};
+	const tpsConfig: Partial<TemplatesOptions> = {};
 
 	if (argv.hasOwnProperty('newFolder')) tpsConfig.newFolder = argv.newFolder;
 	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;
@@ -95,12 +95,12 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.hidden;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
-	const tps = new Template(argv.use, tpsConfig);
+	const tps = await Template.get(argv.use, tpsConfig);
 
 	// @ts-expect-error wrong types for `is`
 	if (is.array(packages) && !is.array.empty(packages)) {
 		logger.cli.info('Loading packages:', packages);
-		tps.loadPackages(packages);
+		await tps.loadPackages(packages);
 	}
 
 	if (tps.hasPrompts()) {

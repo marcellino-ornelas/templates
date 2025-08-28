@@ -78,7 +78,7 @@ describe('[Prompter] Core:', () => {
 		);
 	});
 
-	it('should return true if prompt has a answer', () => {
+	it('should return true if prompt has a answer', async () => {
 		const prompter = new Prompter([
 			mkPrompt({
 				name: 'prompt1',
@@ -92,7 +92,7 @@ describe('[Prompter] Core:', () => {
 		expect(prompter.hasAnswerToPrompt('prompt1')).toBeTruthy();
 	});
 
-	it('should return true if prompt has an answer, by alias', () => {
+	it('should return true if prompt has an answer, by alias', async () => {
 		const prompter = new Prompter([
 			mkPrompt({
 				name: 'prompt1',
@@ -107,7 +107,7 @@ describe('[Prompter] Core:', () => {
 		expect(prompter.hasAnswerToPrompt('prompt1')).toBeTruthy();
 	});
 
-	it('should return false if prompt has an answer, by alias', () => {
+	it('should return false if prompt has an answer, by alias', async () => {
 		const prompter = new Prompter([
 			mkPrompt({
 				name: 'prompt1',
@@ -118,7 +118,7 @@ describe('[Prompter] Core:', () => {
 		expect(prompter.hasAnswerToPrompt('prompt1')).toBeFalsy();
 	});
 
-	it('should tell you if it has answer to a prompt', () => {
+	it('should tell you if it has answer to a prompt', async () => {
 		const prompter = new Prompter([
 			mkPrompt({
 				name: 'prompt1',

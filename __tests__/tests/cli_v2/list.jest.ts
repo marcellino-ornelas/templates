@@ -42,7 +42,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should be able to list out local templates', async () => {
-		mkTemplate('test-local-template');
+		await mkTemplate('test-local-template');
 
 		const parser = yargs().command(list);
 
@@ -52,7 +52,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should ignore local templates if option provided', async () => {
-		mkTemplate('test-local-template');
+		await mkTemplate('test-local-template');
 
 		const parser = yargs().command(list);
 
@@ -72,7 +72,7 @@ describe('Command Line: list', () => {
 	it('should be able to list out global templates', async () => {
 		globalInit();
 
-		mkGlobalTemplate('testing-global-template');
+		await mkGlobalTemplate('testing-global-template');
 
 		const parser = yargs().command(list);
 
@@ -85,7 +85,7 @@ describe('Command Line: list', () => {
 	it('should ignore global templates if option provided', async () => {
 		globalInit();
 
-		mkGlobalTemplate('testing-global-template');
+		await mkGlobalTemplate('testing-global-template');
 
 		const parser = yargs().command(list);
 
@@ -144,7 +144,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should be able to list out local 3rd party templates', async () => {
-		mk3rdPartyTemplate('tps-testing-3rd-party-template');
+		await mk3rdPartyTemplate('tps-testing-3rd-party-template');
 
 		const parser = yargs().command(list);
 
@@ -155,7 +155,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should ignore local 3rd party templates if option provided', async () => {
-		mk3rdPartyTemplate('tps-testing-3rd-party-template');
+		await mk3rdPartyTemplate('tps-testing-3rd-party-template');
 
 		const parser = yargs().command(list);
 
@@ -176,7 +176,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should be able to list out global 3rd party templates', async () => {
-		mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
+		await mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
 
 		const parser = yargs().command(list);
 
@@ -187,7 +187,7 @@ describe('Command Line: list', () => {
 	});
 
 	it('should ignore global 3rd party templates if option provided', async () => {
-		mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
+		await mkGlobal3rdPartyTemplate('tps-testing-3rd-party-template');
 
 		const parser = yargs().command(list);
 
@@ -221,10 +221,10 @@ describe('Command Line: list', () => {
 	])(
 		'should not display any config file: $location/$name',
 		async ({ name, location }) => {
-			mkTemplate('local-template');
-			mkGlobalTemplate('global-template');
-			mk3rdPartyTemplate('tps-local-3rd-party-template');
-			mkGlobal3rdPartyTemplate('tps-global-local-template');
+			await mkTemplate('local-template');
+			await mkGlobalTemplate('global-template');
+			await mk3rdPartyTemplate('tps-local-3rd-party-template');
+			await mkGlobal3rdPartyTemplate('tps-global-local-template');
 
 			mkTpsrc(path.join(location, name));
 

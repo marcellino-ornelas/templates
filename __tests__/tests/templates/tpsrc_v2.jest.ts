@@ -43,7 +43,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
 
@@ -56,7 +56,7 @@ describe('[TPS] Tpsrc', () => {
 	it('should work when there is no tpsrc', async () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
 
@@ -70,11 +70,11 @@ describe('[TPS] Tpsrc', () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		expect(() => {
-			return new Templates('testing-prompt-core');
-		}).not.toThrowError();
+			return Templates.get('testing-prompt-core');
+		}).resolves.not.toThrowError();
 	});
 
-	it('should load a local tpsrc file', () => {
+	it('should load a local tpsrc file', async () => {
 		mkTpsrc(LOCAL_CONFIG_PATH, {
 			'testing-prompt-core': {
 				opts: {
@@ -86,7 +86,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 
@@ -94,7 +94,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
-	it('should be able to use a prompt alias', () => {
+	it('should be able to use a prompt alias', async () => {
 		mkTpsrc(LOCAL_CONFIG_PATH, {
 			'testing-prompt-core': {
 				opts: {
@@ -106,7 +106,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 
@@ -114,7 +114,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
-	it('should load a parent tpsrc file', () => {
+	it('should load a parent tpsrc file', async () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
@@ -128,14 +128,14 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./parent-path');
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.test1).toBe('parent');
 	});
 
-	it('should load a parent tpsrc file', () => {
+	it('should load a parent tpsrc file', async () => {
 		mkGlobalTpsrc({
 			'testing-prompt-core': {
 				opts: {
@@ -147,7 +147,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./global-path');
 
@@ -180,7 +180,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 		// eslint-disable-next-line no-underscore-dangle
@@ -201,14 +201,14 @@ testing-prompt-core:
 `,
 		);
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./yaml-path');
 		// eslint-disable-next-line no-underscore-dangle
 		expect(tps._prompts.answers.test1).toBe('yaml');
 	});
 
-	it('should load a local tpsrc file not in a tps folder', () => {
+	it('should load a local tpsrc file not in a tps folder', async () => {
 		// TODO: Shouldnt have to do this but there is a tpsrc file here in templates.json
 		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 
@@ -226,7 +226,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-not-in-tps-path');
 
@@ -234,8 +234,8 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
 	});
 
-	it('should load local tpsrc file for local 3rd party template', () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
+	it('should load local tpsrc file for local 3rd party template', async () => {
+		await mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),
@@ -252,7 +252,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('tps-test-3rd-party-package');
+		const tps: Templates = await Templates.get('tps-test-3rd-party-package');
 
 		expect(tps.opts.extendedDest).toBe('./3rd-party');
 
@@ -260,8 +260,8 @@ testing-prompt-core:
 		expect(tps._prompts.answers.prompt1).toBeTruthy();
 	});
 
-	it('should load local tpsrc file for global 3rd party template', () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
+	it('should load local tpsrc file for global 3rd party template', async () => {
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),
@@ -278,7 +278,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('tps-test-3rd-party-package');
+		const tps: Templates = await Templates.get('tps-test-3rd-party-package');
 
 		expect(tps.opts.extendedDest).toBe('./3rd-party');
 
@@ -286,7 +286,7 @@ testing-prompt-core:
 		expect(tps._prompts.answers.prompt1).toBeTruthy();
 	});
 
-	it('should be able to load settings for template that uses tps-prefix', () => {
+	it('should be able to load settings for template that uses tps-prefix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-app': {
 				opts: {
@@ -295,12 +295,12 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('tps-app');
+		const tps = await mkTemplate('tps-app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			app: {
 				opts: {
@@ -309,12 +309,12 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('tps-app');
+		const tps = await mkTemplate('tps-app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-app': {
 				opts: {
@@ -323,12 +323,12 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('app');
+		const tps = await mkTemplate('app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	// it('should be able to override a tpsrc file location', () => {
+	// it('should be able to override a tpsrc file location', async () => {
 
 	// 	const randomDir = path.join(process.cwd(), './random/.tps/tpsrc');
 
@@ -343,7 +343,7 @@ testing-prompt-core:
 	// 		},
 	// 	});
 
-	// 	const tps: Templates = new Templates('testing-prompt-core');
+	// 	const tps: Templates = await Templates.get('testing-prompt-core');
 
 	// 	expect(tps.opts.extendedDest).toBe('./local-path');
 

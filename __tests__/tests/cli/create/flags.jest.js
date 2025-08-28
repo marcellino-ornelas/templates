@@ -27,7 +27,7 @@ describe('[cli] Create:', () => {
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created
 	 */
-	it('should be able to use --force flag', () => {
+	it('should be able to use --force flag', async () => {
 		mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
 		return expect(
@@ -80,7 +80,7 @@ describe('[cli] Create:', () => {
 	 * @docs api/cli/commands/create.md#wipe-a-template
 	 */
 	describe('wipe', () => {
-		it('should be able to override a file', () => {
+		it('should be able to override a file', async () => {
 			mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
 			return createTemplate(playground.box(), 'testing', 'app', {

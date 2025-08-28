@@ -1,5 +1,5 @@
 import DirectoryNode, { DirNode, FileNode } from '@tps/fileSystemTree';
-import type { SettingsFile } from '@tps/types/settings';
+import type { AnswersHash, SettingsFile } from '@tps/types/settings';
 import { TEMPLATE_SETTINGS_FILE, IS_TESTING } from '@tps/utilities/constants';
 import { cosmiconfig, getDefaultSearchPlaces } from 'cosmiconfig';
 import {
@@ -18,6 +18,8 @@ import File, { FileOptions } from '@tps/templates/File';
 import templateEngine from '@tps/templates/template-engine';
 import { forEachAsync } from '@tps/utilities/helpers';
 import fs from 'fs';
+import Prompter from '@tps/prompter';
+import { isDirAsync } from '@tps/utilities/fileSystem';
 
 const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	cache: !IS_TESTING,
@@ -28,22 +30,45 @@ const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {
 	],
 });
 
-interface TemplateOptions {
+export interface TemplateOptions {
+	/**
+	 * Whether or not to force the creation of all files
+	 */
 	force: boolean;
+	/**
+	 * Whether or not to use experimental template engine
+	 */
 	experimentalTemplateEngine: boolean;
+	/**
+	 * Whether or not we should use default values for all prompts
+	 */
+	default: boolean;
+	/**
+	 * Whether or not hidden prompts should be prompted
+	 */
+	hidden: boolean;
+	/**
+	 * Whether or not to load the default package
+	 */
+	defaultPackage: boolean;
 }
 
 const DEFAULT_OPTS: TemplateOptions = {
 	force: false,
 	experimentalTemplateEngine: true,
+	hidden: false,
+	default: false,
+	defaultPackage: true,
 };
 
-export class Template {
+export class Template<TAnswers = AnswersHash> {
 	public files: File[] = [];
 
 	public defs: Record<string, string> = {};
 
 	public options: TemplateOptions;
+
+	// private prompts: Prompter<TAnswers>;
 
 	/**
 	 * Extra Relative directories to create in instances
@@ -55,15 +80,20 @@ export class Template {
 	/**
 	 * Get a template
 	 */
-	public static async get(
+	public static async get<TTemplateAnswers>(
 		templateName: string,
-		options: TemplateOptions = DEFAULT_OPTS,
-	): Promise<Template> {
+		options: Partial<TemplateOptions> = {},
+	): Promise<Template<TTemplateAnswers>> {
 		const location = await Template.fetchTemplateLocation(templateName);
 
 		const settingsFile = await Template.fetchSettingsFile(location);
 
-		const template = new Template(
+		logger.tps.info('Template %n', {
+			name: templateName,
+			location,
+		});
+
+		const template = new Template<TTemplateAnswers>(
 			templateName,
 			location,
 			settingsFile,
@@ -72,7 +102,11 @@ export class Template {
 			options,
 		);
 
-		await template.fetchPackage('default');
+		logger.tps.info('Template Options: %n', template.options);
+
+		if (template.options.defaultPackage) {
+			await template.fetchPackage('default', false);
+		}
 
 		return template;
 	}
@@ -82,6 +116,14 @@ export class Template {
 	): Promise<SettingsFile | null> {
 		try {
 			const cosmiResult = await settingsConfig.search(location);
+
+			if (cosmiResult?.filepath) {
+				logger.tps.info('Settings file location: %s', cosmiResult.filepath);
+			}
+
+			if (cosmiResult?.config) {
+				logger.tps.info('Template settings: %n', cosmiResult.config);
+			}
 
 			// we should validate this
 			return (cosmiResult?.config satisfies SettingsFile) ?? null;
@@ -123,7 +165,7 @@ export class Template {
 		/**
 		 * Settings file of the template
 		 */
-		public settingsFile: SettingsFile,
+		public settingsFile: SettingsFile | null,
 		/**
 		 * Template's packages. By default all packages arent loaded into memory and only
 		 * packages that are requests are loaded
@@ -141,9 +183,23 @@ export class Template {
 		// this handles default, settings, and passed
 		this.options = {
 			...DEFAULT_OPTS,
-			...settingsFile.opts,
+			...(settingsFile?.opts ?? {}),
 			...options,
 		};
+
+		// if (this.settingsFile.prompts) {
+		// 	logger.tps.info('Loading prompts... %o', {
+		// 		defaultValues: this.options.default,
+		// 		showHiddenPrompts: this.options.hidden,
+		// 	});
+
+		// 	this.prompts = new Prompter<TAnswers>(this.settingsFile.prompts, {
+		// 		default: this.options.default,
+		// 		showHiddenPrompts: this.options.hidden,
+		// 	});
+		// } else {
+		// 	logger.tps.info('Template has no prompts %n', this.settingsFile);
+		// }
 	}
 
 	public pkg(packageName: string): DirNode | null {
@@ -162,7 +218,7 @@ export class Template {
 
 		const packages = isString ? [newPackages] : newPackages;
 
-		await Promise.all(packages.map((p) => this.fetchPackage(p)));
+		await Promise.all(packages.map(async (p) => this.fetchPackage(p)));
 	}
 
 	/**
@@ -170,11 +226,10 @@ export class Template {
 	 *
 	 * @param newPackage - package from the template you would like to use
 	 */
-	public async fetchPackage(newPackageName: string): Promise<void> {
-		if (!this.location) {
-			throw new RequiresTemplateError();
-		}
-
+	public async fetchPackage(
+		newPackageName: string,
+		fatal: boolean = true,
+	): Promise<void> {
 		if (!(typeof newPackageName === 'string')) {
 			throw new TypeError('Argument must be a string');
 		}
@@ -185,7 +240,20 @@ export class Template {
 
 		logger.tps.info('Loading package %s', newPackageName);
 
+		const packageExists = await isDirAsync(
+			path.join(this.location, newPackageName),
+		);
+
+		if (!packageExists) {
+			if (fatal) throw new Error('Package doesnt exist');
+
+			logger.tps.log('Template doesnt have package: %s', newPackageName);
+			return;
+		}
+
 		this.packages[newPackageName] = new DirNode(newPackageName, this.location);
+
+		this.packagesUsed.push(newPackageName);
 
 		logger.tps.success('Added package %s', newPackageName);
 	}
@@ -219,6 +287,8 @@ export class Template {
 	 * Compile all files that need to be made for render process
 	 */
 	public async compile(): Promise<void> {
+		logger.tps.info('Compiling Packages: %n', this.packagesUsed);
+
 		await forEachAsync(this.packagesUsed, async (packageName) => {
 			const pkg = this.pkg(packageName);
 
@@ -251,7 +321,7 @@ export class Template {
 				async (fileNode: FileNode) => {
 					const file = File.fromFileNode(fileNode, {
 						force,
-						experimentalTemplateEngine,
+						useExperimentalTemplateEngine: experimentalTemplateEngine,
 					});
 					logger.tps.info(
 						`  - %s ${colors.green.italic('compiled')}`,

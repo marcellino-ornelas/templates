@@ -23,7 +23,7 @@ describe('[FileSystemTree] FileNode:', () => {
 		indexFile = new FileNode(indexFileName, PATH_TO_MAIN_DIRECORY);
 	});
 
-	it('should have a name, path, parentPath, ext, fileName, data and type properties', () => {
+	it('should have a name, path, parentPath, ext, fileName, data and type properties', async () => {
 		const { ext, name } = path.parse(pathToFile);
 
 		expect(indexFile.name).toBe(indexFileName);

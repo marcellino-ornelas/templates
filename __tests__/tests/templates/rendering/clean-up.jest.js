@@ -34,12 +34,12 @@ describe('[Templates] Render Process:', () => {
 	afterAll(() => playground.destroy());
 
 	beforeEach(() => {
-		tps = new Templates('testing');
+		tps = await Templates.get('testing');
 
 		return playground.createBox('create_clean_up');
 	});
 
-	it('should clean up directory if encounters a error in _renderAllDirectories', () => {
+	it('should clean up directory if encounters a error in _renderAllDirectories', async () => {
 		tps.verbose = true;
 		const dest = playground.box();
 		const appDest = playground.pathTo('app');
@@ -53,7 +53,7 @@ describe('[Templates] Render Process:', () => {
 		});
 	});
 
-	it('should clean up directory if encounters a error in _renderAllFiles', () => {
+	it('should clean up directory if encounters a error in _renderAllFiles', async () => {
 		const dest = playground.box();
 		const appDest = playground.pathTo('app');
 

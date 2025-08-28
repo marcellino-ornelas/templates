@@ -28,7 +28,7 @@ describe('yargs-cli-cmd', () => {
 			recursive: true,
 		});
 
-		tps = new Templates('yargs-cli-cmd', {
+		tps = await Templates.get('yargs-cli-cmd', {
 			default: true,
 		});
 	});

@@ -1,4 +1,6 @@
-export interface TemplateOptions {
+import type { TemplateOptions } from '../templates/template';
+
+export interface TemplatesOptions extends TemplateOptions {
 	/**
 	 * Don't load local `.tps/` config folder
 	 */
@@ -7,22 +9,6 @@ export interface TemplateOptions {
 	 * Don't load global `.tps/` config folder
 	 */
 	noGlobalConfig: boolean;
-	/**
-	 * Don't load the default folder
-	 */
-	defaultPackage: boolean;
-	/**
-	 * Use all default prompt answers
-	 */
-	default: boolean;
-	/**
-	 * Show hidden prompts
-	 */
-	hidden: boolean;
-	/**
-	 * Force creation of template. This will over write files
-	 */
-	force: boolean;
 	/**
 	 * Force creation of template. This will over write files
 	 */
@@ -39,10 +25,6 @@ export interface TemplateOptions {
 	 * Directory to prepend to each build paths
 	 */
 	extendedDest: string;
-	/**
-	 * Use experimental template engine
-	 */
-	experimentalTemplateEngine: boolean;
 }
 
 export interface TemplateAnswers {

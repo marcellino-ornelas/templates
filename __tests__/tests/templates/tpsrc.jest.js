@@ -17,14 +17,14 @@ describe('[Templates] tpsrc:', () => {
 
 	let tps;
 	beforeAll(() => {
-		tps = new Templates('testing-tpsrc', {
+		tps = await Templates.get('testing-tpsrc', {
 			noGlobalConfig: true,
 		});
 	});
 
 	/* Should separate opts from answers */
 	// eslint-disable-next-line jest/no-commented-out-tests
-	// it('should load local tpsrc file', () => {
+	// it('should load local tpsrc file', async () => {
 	//   const { opts } = tps;
 	//   const { answers } = tps._prompts;
 
@@ -39,7 +39,7 @@ describe('[Templates] tpsrc:', () => {
 	//   );
 	// });
 
-	it('should be able to set opts in tpsrc', () => {
+	it('should be able to set opts in tpsrc', async () => {
 		const { opts } = tps;
 
 		expect(opts).toMatchObject({
@@ -47,7 +47,7 @@ describe('[Templates] tpsrc:', () => {
 		});
 	});
 
-	it('should be able to set answers in tpsrc', () => {
+	it('should be able to set answers in tpsrc', async () => {
 		// eslint-disable-next-line no-underscore-dangle
 		const { answers } = tps._prompts;
 
@@ -81,7 +81,7 @@ describe('[Templates] tpsrc:', () => {
 	describe('when adding options in tpsrc', () => {
 		beforeEach(() => playground.createBox('templates_tpsrc'));
 
-		it('should be able to use extendDest', () => {
+		it('should be able to use extendDest', async () => {
 			const dest = playground.pathTo(`${extendedDest}`);
 			const file = `${dest}/App/index.js`;
 			fs.mkdirSync(dest);

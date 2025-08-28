@@ -1,11 +1,11 @@
 import { sentenceCase } from 'change-case';
-import Template from '@tps/templates';
+import Templates from '@tps/templates';
 import { Options } from 'yargs';
 
-export const getCliArgsFromTemplate = (
+export const getCliArgsFromTemplate = async (
 	template: string,
-): Record<string, Options> => {
-	const tps = new Template(template);
+): Promise<Record<string, Options>> => {
+	const tps = await Templates.get(template);
 
 	// eslint-disable-next-line no-underscore-dangle
 	if (!tps?._prompts) return {};
@@ -35,7 +35,7 @@ export const getCliArgsFromTemplate = (
 			alias: prompt.aliases,
 			...(prompt?.choices && { choices: prompt.choices }),
 			// TODO: Will need to strip `tps-` prefix off of third party templates
-			group: `${sentenceCase(tps.template)}:`,
+			group: `${sentenceCase(tps.template.name)}:`,
 			demandOption: false,
 		};
 	});

@@ -1,7 +1,6 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import Template from '@tps/templates';
-import { TemplateOptions, Templates } from '@tps/templates/templates';
+import { TemplatesOptions, Templates } from '@tps/templates/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
 	InitializedAlreadyError,
@@ -36,14 +35,14 @@ export default {
 			debug.enable('tps:cli');
 		}
 
-		const tpsConfig: Partial<TemplateOptions> = {
+		const tpsConfig: Partial<TemplatesOptions> = {
 			force: argv.force,
 			tpsPath: TPS.DEFAULT_TPS,
 		};
 
 		logger.cli.info('Cli options: %n', tpsConfig);
 
-		const tps = new Template('init', tpsConfig);
+		const tps = await Templates.get('init', tpsConfig);
 
 		/**
 		 * tps global init

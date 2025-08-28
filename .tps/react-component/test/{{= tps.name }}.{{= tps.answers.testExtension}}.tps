@@ -8,7 +8,7 @@ import '@testing-library/jest-dom';
 {{#def.componentImport}}
 
 describe('{{#def.componentName}}', () => {
-	it('should render the component', () => {
+	it('should render the component', async () => {
 		{{{? tps.answers.reactTestingLibrary}}}
 		render(<{{#def.componentName}} />);
 

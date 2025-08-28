@@ -25,7 +25,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-dynamic');
+		tps = await Templates.get('testing-dynamic');
 		// For tests that dont care about answer
 		tps.setAnswers({
 			one: 'bad',
@@ -34,11 +34,11 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load a dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.tps': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -48,11 +48,11 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load legacy dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.dot': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -63,7 +63,7 @@ describe('[TPS] Rendering dynamic:', () => {
 
 	describe('File names', () => {
 		beforeEach(() => {
-			tps = new Templates('testing-dynamic-file-name');
+			tps = await Templates.get('testing-dynamic-file-name');
 
 			tps.setAnswers({
 				one: '',
@@ -150,7 +150,7 @@ describe('[TPS] Rendering dynamic:', () => {
 		/**
 		 * @docs guide/getting-started/dynamic-files.md#name
 		 */
-		it("should set 'tps.name' to the new template being created", () => {
+		it("should set 'tps.name' to the new template being created", async () => {
 			const destPath = path.join(playground.box(), 'App');
 			const indexFile = path.join(destPath, 'index.txt');
 			return tps.render(playground.box(), ['App']).then(() => {
@@ -162,7 +162,7 @@ describe('[TPS] Rendering dynamic:', () => {
 		/**
 		 * @docs guide/getting-started/dynamic-files.md#name
 		 */
-		it("should set 'tps.name' to the new template being created when using extended path", () => {
+		it("should set 'tps.name' to the new template being created when using extended path", async () => {
 			const destPath = path.join(playground.box(), 'App/Nav');
 			const indexFile = path.join(destPath, 'index.txt');
 			return tps.render(playground.box(), ['App/Nav']).then(() => {
@@ -174,7 +174,7 @@ describe('[TPS] Rendering dynamic:', () => {
 		/**
 		 * @docs guide/getting-started/dynamic-files.md#name
 		 */
-		it("should set 'tps.name' to the new template being created when using multiple build paths", () => {
+		it("should set 'tps.name' to the new template being created when using multiple build paths", async () => {
 			const destPaths = [
 				[path.join(playground.box(), 'App'), 'name: App'],
 				[path.join(playground.box(), 'Nav'), 'name: Nav'],
@@ -194,7 +194,7 @@ describe('[TPS] Rendering dynamic:', () => {
 		/**
 		 * @docs guide/getting-started/dynamic-files.md#templates
 		 */
-		it("should set 'tps.template' to the template being used as the blueprint", () => {
+		it("should set 'tps.template' to the template being used as the blueprint", async () => {
 			const dest = path.join(playground.box(), 'App');
 
 			return tps.render(playground.box(), 'App').then(() => {

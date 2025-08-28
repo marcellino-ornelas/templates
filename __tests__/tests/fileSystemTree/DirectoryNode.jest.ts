@@ -21,7 +21,7 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 	});
 
-	it('should have a name, path, fullPath and type properties', () => {
+	it('should have a name, path, fullPath and type properties', async () => {
 		expect(mainDir.name).toBe('main');
 		expect(mainDir.parentPath).toBe(PATH_TO_TEMPLATES);
 		expect(mainDir.type).toBe('dir');
@@ -29,13 +29,13 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 		expect(mainDir.pathFromRoot).toBe('.');
 	});
 
-	it('should render correct amount of child nodes', () => {
+	it('should render correct amount of child nodes', async () => {
 		const directoryCount = fs.readdirSync(PATH_TO_MAIN_DIRECORY).length;
 
 		expect(mainDir.children).toHaveLength(directoryCount);
 	});
 
-	it('should be able to find element with find function', () => {
+	it('should be able to find element with find function', async () => {
 		const fileName = 'index.js.dot';
 		const index = mainDir.find({ name: fileName });
 		expect(index).toHaveLength(1);
@@ -48,14 +48,14 @@ describe('[FileSystemTree] DirectoryNode:', () => {
 		);
 	});
 
-	it('should have a correct relative path from root node', () => {
+	it('should have a correct relative path from root node', async () => {
 		const fileName = 'db.js';
 		const dbFile = mainDir.find({ name: fileName })[0];
 		expect(dbFile.name).toEqual(fileName);
 		expect(dbFile.pathFromRoot).toEqual('db/db.js');
 	});
 
-	it('should exclude files that match ignore files', () => {
+	it('should exclude files that match ignore files', async () => {
 		const filename = 'extras2.js';
 		FileSystemNode.ignoreFiles = [`**/${filename}.js`];
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);

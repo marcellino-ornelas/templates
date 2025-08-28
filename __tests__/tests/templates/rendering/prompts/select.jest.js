@@ -21,7 +21,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
 	let tps;
 	beforeEach(() => {
 		// add no default to this test to only test packages
-		tps = new Templates('testing-prompt-types-select', {
+		tps = await Templates.get('testing-prompt-types-select', {
 			defaultPackage: false,
 		});
 
@@ -47,7 +47,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
 		},
 	);
 
-	it('should render a template when answering prompt with alias', () => {
+	it('should render a template when answering prompt with alias', async () => {
 		tps.verbose = true;
 		const destPath = playground.pathTo('App');
 

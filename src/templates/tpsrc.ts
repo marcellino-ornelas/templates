@@ -29,7 +29,10 @@ const nestedTpsrcSearches = defaultTpsrcSearches.map((location) => {
  * - .tps/.config/tpsrc
  * - .tps/package.json
  */
-const tpsrcSearchPlaces = [...defaultTpsrcSearches, ...nestedTpsrcSearches];
+export const tpsrcSearchPlaces = [
+	...defaultTpsrcSearches,
+	...nestedTpsrcSearches,
+];
 
 const tpsrcConfig = cosmiconfig(tpsConfigName, {
 	cache: !IS_TESTING,

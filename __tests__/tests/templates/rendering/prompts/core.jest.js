@@ -30,11 +30,11 @@ describe('[Templates] Prompts Process:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-prompt-core');
+		tps = await Templates.get('testing-prompt-core');
 		return playground.createBox('render_process_prompts_core');
 	});
 
-	it('should prompt user when needed', () => {
+	it('should prompt user when needed', async () => {
 		expect(tps._prompts.needsAnswers()).toBeTruthy();
 		inquirer.prompt = jest.fn().mockResolvedValue(defaultAnswers);
 
@@ -44,7 +44,7 @@ describe('[Templates] Prompts Process:', () => {
 		});
 	});
 
-	it('should not prompt a user when not needed', () => {
+	it('should not prompt a user when not needed', async () => {
 		expect(tps._prompts.needsAnswers()).toBeTruthy();
 		const mockFunc = jest.fn().mockResolvedValue(defaultAnswers);
 		inquirer.prompt = mockFunc;
@@ -58,7 +58,7 @@ describe('[Templates] Prompts Process:', () => {
 		});
 	});
 
-	it('should be able to answer prompt with alias', () => {
+	it('should be able to answer prompt with alias', async () => {
 		const { test1, ...restOfAnswers } = defaultAnswers;
 
 		expect(restOfAnswers).not.toHaveProperty('test1');

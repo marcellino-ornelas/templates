@@ -21,7 +21,7 @@ describe('[TPS] Render with Wipe:', () => {
 
 	beforeEach(() => playground.createBox('rendering_wipe'));
 
-	it('should be able to render a template with wipe.', () => {
+	it('should be able to render a template with wipe.', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -42,7 +42,7 @@ describe('[TPS] Render with Wipe:', () => {
 		// this index file comes from the template. old one gets deleted from wipe
 		const indexFile = playground.pathTo('app/index.js');
 
-		const tps = new Templates('testing', { wipe: true });
+		const tps = await Templates.get('testing', { wipe: true });
 
 		writeFile(randomDest, 'blah');
 		writeFile(indexFile, 'blah');
@@ -57,7 +57,7 @@ describe('[TPS] Render with Wipe:', () => {
 	/**
 	 * @docs api/cli/commands/use.md#when-using-a-long-build-path
 	 */
-	it('should be able to render a template with wipe and a long build path', () => {
+	it('should be able to render a template with wipe and a long build path', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -73,7 +73,7 @@ describe('[TPS] Render with Wipe:', () => {
 		const randomFileInApp = playground.pathTo('dest/app/random-file-2.js');
 		const indexFileInApp = playground.pathTo('dest/app/index.js');
 
-		const tps = new Templates('testing', { wipe: true });
+		const tps = await Templates.get('testing', { wipe: true });
 
 		// Make file in dest
 		writeFile(randomFileInDest, 'blah');
@@ -116,7 +116,7 @@ describe('[TPS] Render with Wipe:', () => {
 			'should-not-be-deleted.js',
 		);
 
-		const tps = new Templates('testing', { wipe: true });
+		const tps = await Templates.get('testing', { wipe: true });
 
 		const wipeMock = jest.spyOn(Build.prototype, 'wipe');
 
@@ -131,7 +131,7 @@ describe('[TPS] Render with Wipe:', () => {
 		expect(randomFileNotInBuildPath).toBeFile();
 	});
 
-	it('should be able to use wipe=true and newFolder=false', () => {
+	it('should be able to use wipe=true and newFolder=false', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -150,7 +150,7 @@ describe('[TPS] Render with Wipe:', () => {
 		const randomDest = playground.pathTo('some-random-file.js');
 		const indexFileInDest = playground.pathTo('index.js');
 
-		const tps = new Templates('testing-clean-up-wipe', {
+		const tps = await Templates.get('testing-clean-up-wipe', {
 			wipe: true,
 			newFolder: false,
 		});
@@ -173,7 +173,7 @@ describe('[TPS] Render with Wipe:', () => {
 	 * This test was added because when using newFolder=false and using wipe and using a long build path.
 	 *
 	 */
-	it('should be able to use wipe=true and newFolder=false with a long build path', () => {
+	it('should be able to use wipe=true and newFolder=false with a long build path', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -201,7 +201,7 @@ describe('[TPS] Render with Wipe:', () => {
 		expect(indexFileInParentPath).toBeFile();
 		expect(randomDest).toBeFile();
 
-		const tps = new Templates('testing-clean-up-wipe', {
+		const tps = await Templates.get('testing-clean-up-wipe', {
 			wipe: true,
 			newFolder: false,
 		});
@@ -223,7 +223,7 @@ describe('[TPS] Render with Wipe:', () => {
 	//   const destPath = playground.pathTo('app');
 	//   const randomDest = playground.pathTo('app/some-random-file.js');
 
-	//   const tps = new Templates('testing-clean-up-wipe', {
+	//   const tps = await Templates.get('testing-clean-up-wipe', {
 	//     wipe: true,
 	//     newFolder: false
 	//   });
