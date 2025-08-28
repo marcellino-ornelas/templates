@@ -29,7 +29,7 @@ interface ReactComponentAnswers {
 jest.mock('fs');
 
 describe('React component', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

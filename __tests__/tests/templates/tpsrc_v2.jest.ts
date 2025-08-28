@@ -20,7 +20,7 @@ import {
 jest.mock('fs');
 
 describe('[TPS] Tpsrc', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 
@@ -71,7 +71,7 @@ describe('[TPS] Tpsrc', () => {
 
 		expect(() => {
 			return Templates.get('testing-prompt-core');
-		}).resolves.not.toThrowError();
+		}).not.toThrowError();
 	});
 
 	it('should load a local tpsrc file', async () => {

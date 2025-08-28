@@ -20,7 +20,7 @@ jest.mock('fs');
 jest.mock('cross-spawn');
 
 describe('Express app', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.resetAllMocks();
 		reset();
 	});

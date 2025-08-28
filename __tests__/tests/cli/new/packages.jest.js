@@ -12,10 +12,10 @@ import { init, newTemplate } from '@test/support/cli';
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS][cli] new package', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() =>
+	beforeEach(async () =>
 		playground
 			.createBox('new_package')
 			.then(() => init(playground.box(), { force: true }))
@@ -25,7 +25,7 @@ describe('[TPS][cli] new package', () => {
 	/**
 	 * @docs api/cli/commands/new_commands/package.md
 	 */
-	it('should create a new package', () =>
+	it('should create a new package', async () =>
 		tpsCli('new package test test-package', {
 			cwd: playground.box(),
 		}).then(() => {

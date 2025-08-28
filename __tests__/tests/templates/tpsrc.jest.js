@@ -12,11 +12,11 @@ const playground = new Playground(TESTING_DIR);
 const extendedDest = './new-path';
 
 describe('[Templates] tpsrc:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	let tps;
-	beforeAll(() => {
+	beforeAll(async () => {
 		tps = await Templates.get('testing-tpsrc', {
 			noGlobalConfig: true,
 		});
@@ -79,16 +79,15 @@ describe('[Templates] tpsrc:', () => {
 	);
 
 	describe('when adding options in tpsrc', () => {
-		beforeEach(() => playground.createBox('templates_tpsrc'));
+		beforeEach(async () => playground.createBox('templates_tpsrc'));
 
 		it('should be able to use extendDest', async () => {
 			const dest = playground.pathTo(`${extendedDest}`);
 			const file = `${dest}/App/index.js`;
 			fs.mkdirSync(dest);
 
-			return tps.render(playground.box(), 'App').then(() => {
-				expect(file).toBeFile();
-			});
+			await tps.render(playground.box(), 'App');
+			expect(file).toBeFile();
 		});
 	});
 });

@@ -17,7 +17,7 @@ const PATH_TO_MAIN_DIRECORY = path.join(PATH_TO_TEMPLATES, 'main');
 describe('[FileSystemTree] DirectoryNode:', () => {
 	let mainDir: DirNode;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 	});
 

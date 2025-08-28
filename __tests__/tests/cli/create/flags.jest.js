@@ -19,10 +19,10 @@ const playground = new Playground(TESTING_DIR);
  * @docs api/cli/commands/create.md#flags
  */
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('cli_create_flags'));
+	beforeEach(async () => playground.createBox('cli_create_flags'));
 
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created
@@ -30,24 +30,20 @@ describe('[cli] Create:', () => {
 	it('should be able to use --force flag', async () => {
 		mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
-		return expect(
+		await expect(
 			createTemplate(playground.box(), 'testing', 'app', null, { fail: true }),
-		)
-			.rejects.toContain('FileExistError')
-			.then(() =>
-				createTemplate(playground.box(), 'testing', 'app', {
-					force: true,
-				}),
-			)
-			.then(() => {
-				// we should check the file contents here
-				checkFilesContentForTemplate(
-					playground.box(),
-					'app',
-					'./index.js',
-					"console.log('hey');",
-				);
-			});
+		).rejects.toContain('FileExistError');
+
+		await createTemplate(playground.box(), 'testing', 'app', {
+			force: true,
+		});
+		// we should check the file contents here
+		checkFilesContentForTemplate(
+			playground.box(),
+			'app',
+			'./index.js',
+			"console.log('hey');",
+		);
 	});
 
 	/**
@@ -56,25 +52,30 @@ describe('[cli] Create:', () => {
 	 *  guide/getting-started/packages.md#including-more-packages
 	 *
 	 */
-	it('should be able to use -p flag to all additional packages', () =>
-		createTemplate(playground.box(), 'testing', 'app', {
+	it('should be able to use -p flag to all additional packages', async () => {
+		await createTemplate(playground.box(), 'testing', 'app', {
 			packages: ['extras', 'extras2'],
-		}).then(() => {
-			checkFilesForTemplate(playground.box(), 'app', [
-				'./extras2.js',
-				'./extras.js',
-			]);
-		}));
+		});
+		checkFilesForTemplate(playground.box(), 'app', [
+			'./extras2.js',
+			'./extras.js',
+		]);
+	});
 
 	/**
 	 * @docs api/cli/commands/create.md#default
 	 */
-	it('should be able to use -d flag to use all default prompt answers', () =>
-		createTemplate(playground.box(), 'testing-prompt-types-select', 'app', {
-			d: true,
-		}).then(() => {
-			checkFilesForTemplate(playground.box(), 'app', ['./index.css']);
-		}));
+	it('should be able to use -d flag to use all default prompt answers', async () => {
+		await createTemplate(
+			playground.box(),
+			'testing-prompt-types-select',
+			'app',
+			{
+				d: true,
+			},
+		);
+		checkFilesForTemplate(playground.box(), 'app', ['./index.css']);
+	});
 
 	/**
 	 * @docs api/cli/commands/create.md#wipe-a-template
@@ -83,17 +84,16 @@ describe('[cli] Create:', () => {
 		it('should be able to override a file', async () => {
 			mockTemplateFileExistsError(playground.box(), 'app', './index.js');
 
-			return createTemplate(playground.box(), 'testing', 'app', {
+			await createTemplate(playground.box(), 'testing', 'app', {
 				wipe: true,
-			}).then(() => {
-				// we should check the file contents here
-				checkFilesContentForTemplate(
-					playground.box(),
-					'app',
-					'./index.js',
-					"console.log('hey');",
-				);
 			});
+			// we should check the file contents here
+			checkFilesContentForTemplate(
+				playground.box(),
+				'app',
+				'./index.js',
+				"console.log('hey');",
+			);
 		});
 	});
 
@@ -105,7 +105,7 @@ describe('[cli] Create:', () => {
 			newFolder: false,
 		};
 
-		it('with one buildPath', () =>
+		it('with one buildPath', async () =>
 			createTemplate(
 				playground.box(),
 				'testing-opt-new-flag',
@@ -115,7 +115,7 @@ describe('[cli] Create:', () => {
 				checkFilesForTemplate(playground.box(), 'app', null, flags);
 			}));
 
-		it('with multiple buildPaths', () =>
+		it('with multiple buildPaths', async () =>
 			createTemplate(
 				playground.box(),
 				'testing-opt-new-flag',

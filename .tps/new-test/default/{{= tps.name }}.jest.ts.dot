@@ -17,7 +17,7 @@ jest.mock('fs');
 
 describe('{{= tps.utils.sentenceCase(tps.name)}}', () => {
 	{{{? tps.answers.templates }}}
-	beforeEach(() => {
+	beforeEach(async () => {
 		// jest.resetAllMocks();
 		reset();
 	});

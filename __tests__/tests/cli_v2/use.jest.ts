@@ -11,7 +11,7 @@ import { SettingsFilePromptType } from '@tps/types/settings';
 jest.mock('fs');
 
 describe('Command Line: Use', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

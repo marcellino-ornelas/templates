@@ -16,7 +16,7 @@ jest.mock('fs');
 jest.mock('cross-spawn');
 
 describe('React app', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

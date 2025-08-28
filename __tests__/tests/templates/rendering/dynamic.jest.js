@@ -19,10 +19,10 @@ const playground = new Playground(TESTING_DIR);
 describe('[TPS] Rendering dynamic:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		tps = await Templates.get('testing-dynamic');
@@ -62,8 +62,16 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	describe('File names', () => {
+<<<<<<< HEAD
 		beforeEach(() => {
 			tps = await Templates.get('testing-dynamic-file-name');
+||||||| 511cf2e
+		beforeEach(() => {
+			tps = new Templates('testing-dynamic-file-name');
+=======
+		beforeEach(async () => {
+			tps = await Templates.get('testing-dynamic-file-name');
+>>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 			tps.setAnswers({
 				one: '',

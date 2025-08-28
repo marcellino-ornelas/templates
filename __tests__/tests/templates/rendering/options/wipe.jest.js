@@ -16,10 +16,10 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Render with Wipe:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('rendering_wipe'));
+	beforeEach(async () => playground.createBox('rendering_wipe'));
 
 	it('should be able to render a template with wipe.', async () => {
 		/**

@@ -30,11 +30,19 @@ const playground = new Playground(TESTING_DIR);
 describe('[Templates] Render Process:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
+<<<<<<< HEAD
 	beforeEach(() => {
 		tps = await Templates.get('testing');
+||||||| 511cf2e
+	beforeEach(() => {
+		tps = new Templates('testing');
+=======
+	beforeEach(async () => {
+		tps = await Templates.get('testing');
+>>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 		return playground.createBox('create_clean_up');
 	});

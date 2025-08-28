@@ -24,7 +24,7 @@ jest.mock('@tps/utilities/constants', () => {
 });
 
 describe('Command Line: init', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		// were mocking this out so ensure it exists

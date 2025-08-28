@@ -24,10 +24,10 @@ const playground = new Playground(TESTING_DIR);
 describe('[Templates] Prompts Process:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		tps = await Templates.get('testing-prompt-core');

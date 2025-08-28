@@ -24,7 +24,7 @@ const DEFAULT_COMMAND: OutputProcessor = {
 };
 
 describe('Tools:', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		mockConsoleLog();
 
 		jest.resetAllMocks();
