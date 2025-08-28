@@ -7,19 +7,19 @@ describe('doT', () => {
 	const basiccompiled = doT.template(basictemplate);
 
 	describe('.name', () => {
-		it('should have a name', () => {
+		it('should have a name', async () => {
 			expect(doT.name).toBe('doT');
 		});
 	});
 
 	describe('#template()', () => {
-		it('should return a function', () => {
+		it('should return a function', async () => {
 			expect(typeof basiccompiled).toBe('function');
 		});
 	});
 
 	describe('#()', () => {
-		it('should render the template', () => {
+		it('should render the template', async () => {
 			expect(basiccompiled({ foo: 'http' })).toBe('<div>http</div>');
 			expect(basiccompiled({ foo: 'http://abc.com' })).toBe(
 				'<div>http:&#47;&#47;abc.com</div>',
@@ -29,7 +29,7 @@ describe('doT', () => {
 	});
 
 	describe('encoding with doNotSkipEncoded=false', () => {
-		it('should not replace &', () => {
+		it('should not replace &', async () => {
 			global._encodeHTML = undefined;
 			doT.templateSettings.doNotSkipEncoded = false;
 			const fn = doT.template('<div>{{!tps.foo}}</div>');
@@ -38,7 +38,7 @@ describe('doT', () => {
 	});
 
 	describe('interpolate 2 numbers', () => {
-		it('should print numbers next to each other', () => {
+		it('should print numbers next to each other', async () => {
 			test(
 				[
 					'{{=tps.one}}{{=tps.two}}',
@@ -52,7 +52,7 @@ describe('doT', () => {
 	});
 
 	describe('evaluate JavaScript', () => {
-		it('should print numbers next to each other', () => {
+		it('should print numbers next to each other', async () => {
 			test(
 				['{{ tps.one = 1; tps.two = 2; }}{{= tps.one }}{{= tps.two }}'],
 				{},
@@ -62,7 +62,7 @@ describe('doT', () => {
 	});
 
 	describe('encoding with doNotSkipEncoded=true', () => {
-		it('should replace &', () => {
+		it('should replace &', async () => {
 			global._encodeHTML = undefined;
 			doT.templateSettings.doNotSkipEncoded = true;
 			expect(doT.template('<div>{{!tps.foo}}</div>')({ foo: '&amp;' })).toBe(
@@ -78,7 +78,7 @@ describe('doT', () => {
 	});
 
 	describe('invalid JS in templates', () => {
-		it('should throw exception', () => {
+		it('should throw exception', async () => {
 			expect(() => doT.template('<div>{{= foo + }}</div>')).toThrow();
 		});
 	});

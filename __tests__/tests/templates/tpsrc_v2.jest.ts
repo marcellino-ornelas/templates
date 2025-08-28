@@ -74,7 +74,7 @@ describe('[TPS] Tpsrc', () => {
 		}).not.toThrowError();
 	});
 
-	it('should load a local tpsrc file', () => {
+	it('should load a local tpsrc file', async () => {
 		mkTpsrc(LOCAL_CONFIG_PATH, {
 			'testing-prompt-core': {
 				opts: {
@@ -94,7 +94,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
-	it('should be able to use a prompt alias', () => {
+	it('should be able to use a prompt alias', async () => {
 		mkTpsrc(LOCAL_CONFIG_PATH, {
 			'testing-prompt-core': {
 				opts: {
@@ -114,7 +114,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('local');
 	});
 
-	it('should load a parent tpsrc file', () => {
+	it('should load a parent tpsrc file', async () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
@@ -135,7 +135,7 @@ describe('[TPS] Tpsrc', () => {
 		expect(tps._prompts.answers.test1).toBe('parent');
 	});
 
-	it('should load a parent tpsrc file', () => {
+	it('should load a parent tpsrc file', async () => {
 		mkGlobalTpsrc({
 			'testing-prompt-core': {
 				opts: {
@@ -208,7 +208,7 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('yaml');
 	});
 
-	it('should load a local tpsrc file not in a tps folder', () => {
+	it('should load a local tpsrc file not in a tps folder', async () => {
 		// TODO: Shouldnt have to do this but there is a tpsrc file here in templates.json
 		vol.rmSync(path.join(CWD, '.tps/.tpsrc'));
 
@@ -234,7 +234,7 @@ testing-prompt-core:
 		expect(tps._prompts.answers.test1).toBe('local-not-in-tps');
 	});
 
-	it('should load local tpsrc file for local 3rd party template', () => {
+	it('should load local tpsrc file for local 3rd party template', async () => {
 		mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
@@ -260,7 +260,7 @@ testing-prompt-core:
 		expect(tps._prompts.answers.prompt1).toBeTruthy();
 	});
 
-	it('should load local tpsrc file for global 3rd party template', () => {
+	it('should load local tpsrc file for global 3rd party template', async () => {
 		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
@@ -286,7 +286,7 @@ testing-prompt-core:
 		expect(tps._prompts.answers.prompt1).toBeTruthy();
 	});
 
-	it('should be able to load settings for template that uses tps-prefix', () => {
+	it('should be able to load settings for template that uses tps-prefix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-app': {
 				opts: {
@@ -300,7 +300,7 @@ testing-prompt-core:
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			app: {
 				opts: {
@@ -314,7 +314,7 @@ testing-prompt-core:
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', () => {
+	it('should be able to load settings for template when user doesnt use tps- prefix in tpsrc but template has tps- prefeix', async () => {
 		mkTpsrc(path.join(CWD, '.tps/.tpsrc'), {
 			'tps-app': {
 				opts: {
@@ -328,7 +328,7 @@ testing-prompt-core:
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
 
-	// it('should be able to override a tpsrc file location', () => {
+	// it('should be able to override a tpsrc file location', async () => {
 
 	// 	const randomDir = path.join(process.cwd(), './random/.tps/tpsrc');
 

@@ -121,12 +121,12 @@ describe('CreateDebug', () => {
 		beforeEach(() => {
 			createDebug = new CreateDebug('test');
 		});
-		it('should be enabled when debug is same name (DEBUG=test)', () => {
+		it('should be enabled when debug is same name (DEBUG=test)', async () => {
 			debug.enable('test');
 			expect(createDebug.isEnabled()).toBeTruthy();
 		});
 
-		it('should enabled child loggers log, error, debug, success, warn, log if debug is already enabled', () => {
+		it('should enabled child loggers log, error, debug, success, warn, log if debug is already enabled', async () => {
 			debug.enable('test');
 
 			// Needs to have this enabled already before creating debug
@@ -140,7 +140,7 @@ describe('CreateDebug', () => {
 			});
 		});
 
-		it('should enabled child loggers log, error, debug, success, warn, log even after enabling after', () => {
+		it('should enabled child loggers log, error, debug, success, warn, log even after enabling after', async () => {
 			debug.enable('test');
 
 			expect(createDebug.isEnabled()).toBeTruthy();
@@ -155,7 +155,7 @@ describe('CreateDebug', () => {
 			});
 		});
 
-		it('should enabled child loggers log, error, debug, success, warn, log when a log functions gets called', () => {
+		it('should enabled child loggers log, error, debug, success, warn, log when a log functions gets called', async () => {
 			const mockChildLogger = jest.fn();
 			const resyncMock = jest.fn(() =>
 				// eslint-disable-next-line no-underscore-dangle
@@ -219,7 +219,7 @@ describe('CreateDebug', () => {
 			createDebug = new CreateDebug('test');
 		});
 
-		it('should enable child logger `log` by default', () => {
+		it('should enable child logger `log` by default', async () => {
 			// disable logging
 			expect(createDebug.isEnabled()).toBeFalsy();
 
@@ -231,7 +231,7 @@ describe('CreateDebug', () => {
 			expect(data).toBe('test log hello');
 		});
 
-		it('should not enable child loggers by default', () => {
+		it('should not enable child loggers by default', async () => {
 			expect(createDebug.isEnabled()).toBeFalsy();
 
 			logFunctions
@@ -244,7 +244,7 @@ describe('CreateDebug', () => {
 			expect(data).toBe('');
 		});
 
-		it('should enable child logger `log` by default even when enabled after', () => {
+		it('should enable child logger `log` by default even when enabled after', async () => {
 			// disable logging
 			debug.enable('test');
 			createDebug = new CreateDebug('test');

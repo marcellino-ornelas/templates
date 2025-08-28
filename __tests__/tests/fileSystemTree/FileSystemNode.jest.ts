@@ -29,7 +29,7 @@ describe('[FileSystemTree] FileSystemNode:', () => {
 		dbFile = mainDir.find({ name: 'db.js' })[0] as FileNode;
 	});
 
-	it('should be able to get relative path from a parent node', () => {
+	it('should be able to get relative path from a parent node', async () => {
 		expect(indexFile.getRelativePathFrom(mainDir)).toEqual('main/index.js.dot');
 		expect(dbDir.getRelativePathFrom(mainDir)).toEqual('main/db');
 		expect(dbFile.getRelativePathFrom(mainDir)).toEqual('main/db/db.js');
@@ -41,7 +41,7 @@ describe('[FileSystemTree] FileSystemNode:', () => {
 		expect(dbFile.getRelativePathFrom(mainDir, false)).toEqual('db/db.js');
 	});
 
-	it('should have a property pathFromRoot', () => {
+	it('should have a property pathFromRoot', async () => {
 		expect(indexFile.pathFromRoot).toBe('index.js.dot');
 		expect(dbDir.pathFromRoot).toEqual('db');
 		expect(dbFile.pathFromRoot).toEqual('db/db.js');

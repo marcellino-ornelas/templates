@@ -21,7 +21,7 @@ describe('[TPS] Render with Wipe:', () => {
 
 	beforeEach(() => playground.createBox('rendering_wipe'));
 
-	it('should be able to render a template with wipe.', () => {
+	it('should be able to render a template with wipe.', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -57,7 +57,7 @@ describe('[TPS] Render with Wipe:', () => {
 	/**
 	 * @docs api/cli/commands/use.md#when-using-a-long-build-path
 	 */
-	it('should be able to render a template with wipe and a long build path', () => {
+	it('should be able to render a template with wipe and a long build path', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -131,7 +131,7 @@ describe('[TPS] Render with Wipe:', () => {
 		expect(randomFileNotInBuildPath).toBeFile();
 	});
 
-	it('should be able to use wipe=true and newFolder=false', () => {
+	it('should be able to use wipe=true and newFolder=false', async () => {
 		/**
 		 * directory structure before:
 		 *
@@ -173,7 +173,7 @@ describe('[TPS] Render with Wipe:', () => {
 	 * This test was added because when using newFolder=false and using wipe and using a long build path.
 	 *
 	 */
-	it('should be able to use wipe=true and newFolder=false with a long build path', () => {
+	it('should be able to use wipe=true and newFolder=false with a long build path', async () => {
 		/**
 		 * directory structure before:
 		 *

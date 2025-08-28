@@ -21,7 +21,7 @@ describe('[TPS] Def files', () => {
 		return playground.createBox('def_files');
 	});
 
-	it('should be able to use a def when its only a file', () => {
+	it('should be able to use a def when its only a file', async () => {
 		const tps = new Templates('testing-def-files');
 
 		const destPath = path.join(playground.box(), 'app');
@@ -33,7 +33,7 @@ describe('[TPS] Def files', () => {
 		});
 	});
 
-	it("should be able to use a def file when multiple def's are defined in the file", () => {
+	it("should be able to use a def file when multiple def's are defined in the file", async () => {
 		const tps = new Templates('testing-def-files');
 
 		tps.loadPackage('two');

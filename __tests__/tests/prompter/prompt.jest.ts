@@ -6,7 +6,7 @@ const prompter = new Prompter(PROMPTER_QUESTIONS);
 describe('[Prompter] Prompt:', () => {
 	const prompt = prompter.getPrompt('testingPrompt');
 
-	it('should have all correct properties', () => {
+	it('should have all correct properties', async () => {
 		expect(prompt).toMatchObject({
 			name: 'testingPrompt',
 			aliases: ['test1', 't'],
@@ -23,7 +23,7 @@ describe('[Prompter] Prompt:', () => {
 		expect(prompt.answerWith(answers)).toEqual('data');
 	});
 
-	it('should return undefined if not correct answers', () => {
+	it('should return undefined if not correct answers', async () => {
 		const answers = { randomKey: 'data' };
 		expect(prompt.answerWith(answers)).toBeUndefined();
 	});

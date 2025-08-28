@@ -4,17 +4,17 @@ import { render } from './util';
 
 describe('defines', () => {
 	describe('without parameters', () => {
-		it('should render define', () => {
+		it('should render define', async () => {
 			testDef('{{##def.tmp:<div>{{!tps.foo}}</div>#}}{{#def.tmp}}');
 		});
 
-		it('should render define if it is passed to doT.compile', () => {
+		it('should render define if it is passed to doT.compile', async () => {
 			testDef('{{#def.tmp}}', { tmp: '<div>{{!tps.foo}}</div>' });
 		});
 	});
 
 	describe('with parameters', () => {
-		it('should render define', () => {
+		it('should render define', async () => {
 			testDef(
 				'{{##def.tmp:foo:<div>{{!foo}}</div>#}}{{ var bar = tps.foo; }}{{# def.tmp:bar }}',
 			);
@@ -22,7 +22,7 @@ describe('defines', () => {
 	});
 
 	describe('block syntax', () => {
-		it('should be able to use block syntax', () => {
+		it('should be able to use block syntax', async () => {
 			const result = render(`\
 {{{##def.name:
 lino
@@ -39,7 +39,7 @@ lino
 `);
 		});
 
-		it('should not leave a new line behind', () => {
+		it('should not leave a new line behind', async () => {
 			const result = render(`\
 hey
 {{{##def.name:
@@ -54,7 +54,7 @@ lino
 `);
 		});
 
-		it('should be able to use on one line', () => {
+		it('should be able to use on one line', async () => {
 			const result = render(`\
 {{{##def.name:lino#}}}
 {{#def.name}}`);
@@ -62,7 +62,7 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
-		it('should be able to use args', () => {
+		it('should be able to use args', async () => {
 			const result = render(`\
 {{{##def.name:userName:
 {{= userName }}
@@ -72,7 +72,7 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
-		it('should catch new line right before the end', () => {
+		it('should catch new line right before the end', async () => {
 			const result = render(`\
 {{{##def.name:lino
 #}}}
@@ -81,7 +81,7 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
-		it('should catch any white space on front and end', () => {
+		it('should catch any white space on front and end', async () => {
 			const result = render(`\
    {{{##def.name:
 lino
@@ -91,7 +91,7 @@ lino
 			expect(result).toBe(`lino`);
 		});
 
-		it('should be able to use function syntax', () => {
+		it('should be able to use function syntax', async () => {
 			const result = render(`\
 {{{##def.name = () => {
 	return "lino";

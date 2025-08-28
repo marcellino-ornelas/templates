@@ -2,13 +2,13 @@ import { render } from './util';
 
 describe('evaluate', () => {
 	describe('block scope', () => {
-		it('Should not leave a new line in place', () => {
+		it('Should not leave a new line in place', async () => {
 			const result = render('{{{ const hey = "hey"; }}}');
 
 			expect(result).toBe(``);
 		});
 
-		it('Should be able to use more than one', () => {
+		it('Should be able to use more than one', async () => {
 			const result = render(`\
 				{{{ const name = 'lino'; }}}
 				{{{ const name2 = 'cassie'; }}}
@@ -22,7 +22,7 @@ describe('evaluate', () => {
 			`);
 		});
 
-		it('Should not render a new line when next to text', () => {
+		it('Should not render a new line when next to text', async () => {
 			const result = render(`\
 				{{{ const hey = 'hey'; }}}
 				hey
@@ -33,7 +33,7 @@ describe('evaluate', () => {
 			`);
 		});
 
-		it('Should be able to use variables defined in evaluation', () => {
+		it('Should be able to use variables defined in evaluation', async () => {
 			const result = render(`\
 				{{{ const name = 'lino'; }}}
 				{{= name }}
@@ -44,7 +44,7 @@ describe('evaluate', () => {
 			`);
 		});
 
-		it('Should be able remove spaces after brackets', () => {
+		it('Should be able remove spaces after brackets', async () => {
 			const result = render(`\
 				{{{ const name = 'lino'; }}}  	
 				{{= name }}

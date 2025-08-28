@@ -30,7 +30,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
 		});
 	});
 
-	it('should render a template when answering prompt with a default boolean answer', () => {
+	it('should render a template when answering prompt with a default boolean answer', async () => {
 		tps.opts.default = true;
 		tps._prompts.opts.default = true;
 
@@ -41,7 +41,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
 		});
 	});
 
-	it('should render a template when answering prompt with alias', () => {
+	it('should render a template when answering prompt with alias', async () => {
 		tps.setAnswers({ i: true });
 
 		expect(tps._prompts.needsAnswers()).toBeFalsy();
@@ -51,7 +51,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
 		});
 	});
 
-	it('should render a template when answering prompt with a boolean (true)', () => {
+	it('should render a template when answering prompt with a boolean (true)', async () => {
 		tps.setAnswers({ ignore: true });
 
 		expect(tps._prompts.needsAnswers()).toBeFalsy();
@@ -61,7 +61,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
 		});
 	});
 
-	it('should render a template when answering prompt with a boolean (false)', () => {
+	it('should render a template when answering prompt with a boolean (false)', async () => {
 		tps.setAnswers({ ignore: false });
 
 		expect(tps._prompts.needsAnswers()).toBeFalsy();

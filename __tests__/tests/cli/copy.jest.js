@@ -61,7 +61,7 @@ describe('Command Line: Copy', () => {
 		).rejects.toContain(`Template new-name already exists in your directory`);
 	});
 
-	it('should error if not initialized', () => {
+	it('should error if not initialized', async () => {
 		const cwd = playground.box();
 
 		return expect(

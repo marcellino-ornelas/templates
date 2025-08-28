@@ -30,7 +30,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		return playground.createBox('render_failed');
 	});
 
-	it('should throw error if file is already created when creating a new folder', () => {
+	it('should throw error if file is already created when creating a new folder', async () => {
 		const indexFile = playground.pathTo('App/index.js');
 		const appFolder = playground.pathTo('App');
 
@@ -75,7 +75,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		expect(appDir).not.toHaveAllFilesAndDirectories(['index.txt']);
 	});
 
-	it('should throw error if file is already created when building in CWD', () => {
+	it('should throw error if file is already created when building in CWD', async () => {
 		const box = playground.box();
 		const indexFile = playground.pathTo('index.js');
 
@@ -113,7 +113,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		expect(indexFile).not.toBeFile();
 	});
 
-	it('should throw error if file is already created in nested folder', () => {
+	it('should throw error if file is already created in nested folder', async () => {
 		const file = playground.pathTo('App/storeUtils/user.js');
 		const appFolder = playground.pathTo('App');
 
@@ -152,7 +152,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		expect(indexFile).not.toBeFile();
 	});
 
-	it('should create templates for every build path regardless if one build path fails', () => {
+	it('should create templates for every build path regardless if one build path fails', async () => {
 		const fileInApp = playground.pathTo('App/storeUtils/user.js');
 		const appFolder = playground.pathTo('App');
 		const app2Folder = playground.pathTo('App2');
@@ -176,7 +176,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		});
 	});
 
-	it('should return array of errors when multiple fail', () => {
+	it('should return array of errors when multiple fail', async () => {
 		const fileInApp = playground.pathTo('App/storeUtils/user.js');
 		const appFolder = playground.pathTo('App');
 		const app2Folder = playground.pathTo('App2');
@@ -210,7 +210,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 		});
 	});
 
-	it('should return error when one fails', () => {
+	it('should return error when one fails', async () => {
 		const fileInApp = playground.pathTo('App/storeUtils/user.js');
 		const appFolder = playground.pathTo('App');
 
