@@ -36,28 +36,12 @@ describe('[Templates] Render Process:', () => {
 		return playground.createBox('render_process');
 	});
 
-<<<<<<< HEAD
-	it('should throw RequiresTemplateError if no template was set', async () => {
-		expect(() => await Templates.get()).toThrow(RequiresTemplateError);
-||||||| 511cf2e
-	it('should throw RequiresTemplateError if no template was set', () => {
-		expect(() => new Templates()).toThrow(RequiresTemplateError);
-=======
 	it('should throw RequiresTemplateError if no template was set', async () => {
 		await expect(() => Templates.get()).rejects.toThrow(RequiresTemplateError);
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 	});
 
-<<<<<<< HEAD
-	it('should throw TemplateNotFound if no template is available', async () => {
-		expect(() => await Templates.get('some-random-template')).toThrow(
-||||||| 511cf2e
-	it('should throw TemplateNotFound if no template is available', () => {
-		expect(() => new Templates('some-random-template')).toThrow(
-=======
 	it('should throw TemplateNotFound if no template is available', async () => {
 		await expect(() => Templates.get('some-random-template')).rejects.toThrow(
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 			TemplateNotFoundError,
 		);
 	});
@@ -197,14 +181,8 @@ describe('[Templates] Render Process:', () => {
 		const all = [];
 
 		for (let i = 0; i < 1000; i++) {
-<<<<<<< HEAD
-			const tps = await Templates.get('testing');
-||||||| 511cf2e
-			const tps = new Templates('testing');
-=======
 			// eslint-disable-next-line no-await-in-loop
 			const tps = await Templates.get('testing');
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 			const destPath = playground.pathTo(`app_${i}`);
 			// eslint-disable-next-line jest/valid-expect-in-promise
 			const promise = tps.render(playground.box(), `app_${i}`).then(() => {
@@ -319,19 +297,9 @@ describe('[Templates] Render Process:', () => {
 	/**
 	 * @docs guide/getting-started/packages.md#including-more-packages
 	 */
-<<<<<<< HEAD
-	it('should be able to render packages', async () => {
-		const tps = await Templates.get('testing');
-		await tps.loadPackages(['extras', 'extras2']);
-||||||| 511cf2e
-	it('should be able to render packages', () => {
-		const tps = new Templates('testing');
-		tps.loadPackages(['extras', 'extras2']);
-=======
 	it('should be able to render packages', async () => {
 		const tps = await Templates.get('testing');
 		tps.loadPackages(['extras', 'extras2']);
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 		const destPath = playground.pathTo('app');
 
@@ -373,15 +341,9 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to use a local npm template', async () => {
 		await mk3rdPartyTemplate('tps-test-3rd-party-package');
 
-<<<<<<< HEAD
-		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
-||||||| 511cf2e
-		const tps = new Templates('tps-test-3rd-party-package', { default: true });
-=======
 		const tps = await Templates.get('tps-test-3rd-party-package', {
 			default: true,
 		});
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 		const appPath = playground.pathTo('app');
 
@@ -406,15 +368,9 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to use a global npm template', async () => {
 		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
-<<<<<<< HEAD
-		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
-||||||| 511cf2e
-		const tps = new Templates('tps-test-3rd-party-package', { default: true });
-=======
 		const tps = await Templates.get('tps-test-3rd-party-package', {
 			default: true,
 		});
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 		const appPath = playground.pathTo('app');
 

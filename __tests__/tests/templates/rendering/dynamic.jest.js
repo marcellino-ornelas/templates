@@ -62,16 +62,8 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	describe('File names', () => {
-<<<<<<< HEAD
-		beforeEach(() => {
-			tps = await Templates.get('testing-dynamic-file-name');
-||||||| 511cf2e
-		beforeEach(() => {
-			tps = new Templates('testing-dynamic-file-name');
-=======
 		beforeEach(async () => {
 			tps = await Templates.get('testing-dynamic-file-name');
->>>>>>> cbe053ccca2a44959855e2a09c65b8792e707c55
 
 			tps.setAnswers({
 				one: '',
