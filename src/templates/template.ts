@@ -18,7 +18,6 @@ import File, { FileOptions } from '@tps/templates/File';
 import templateEngine from '@tps/templates/template-engine';
 import { forEachAsync } from '@tps/utilities/helpers';
 import fs from 'fs';
-import Prompter from '@tps/prompter';
 import { isDirAsync } from '@tps/utilities/fileSystem';
 
 const settingsConfig = cosmiconfig(TEMPLATE_SETTINGS_FILE, {

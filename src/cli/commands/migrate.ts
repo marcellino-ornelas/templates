@@ -5,7 +5,7 @@ import { DirectoryNode } from '@tps/fileSystemTree/directoryNode';
 import { FileNode } from '@tps/fileSystemTree/fileNode';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json } from '@tps/utilities/fileSystem';
-import { TemplatesOptions } from '@tps/templates/templates';
+import { TemplatesOptions } from '@tps/types/templates';
 
 const changes = [
 	{

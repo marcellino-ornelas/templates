@@ -9,7 +9,6 @@ import { pick, forEachAsync } from '@tps/utilities/helpers';
 import { DirectoryNotFoundError, NoPromptsError } from '@tps/errors';
 import logger from '@tps/utilities/logger';
 import { TemplatesOptions } from '@tps/types/templates';
-import { TpsrcTemplateConfig } from '@tps/types/tpsrc';
 import { AnswersHash, SettingsFile } from '@tps/types/settings';
 import Prompter from '@tps/prompter';
 import { Build } from './build';
@@ -51,10 +50,180 @@ type RenderData = Record<string, any>;
  * @classdesc Create a new instance of a template
  */
 export class Templates<TAnswers extends AnswersHash = AnswersHash> {
+<<<<<<< HEAD
 	public buildErrors: BuildErrors[] = [];
+||||||| cbe053c
+	/**
+	 * name of template
+	 */
+	public template: string;
+
+	/**
+	 * Templates options
+	 */
+	public opts: TemplateOptions;
+
+	public packages: Record<string, DirNode>;
+
+	public packagesUsed: string[];
+
+	private _defs: Record<string, string>;
+
+	public buildErrors: BuildErrors[];
+
+	public templateSettings: SettingsFile;
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public engine: any;
+
+	// public engine: typeof templateEngine | typeof (doT as any);
+
+	/**
+	 * Path to the templates settings file
+	 */
+	public templateSettingsPath: string;
+
+	/**
+	 * Path to the templates directory
+	 */
+	public src: string;
+=======
+	/**
+	 * name of template
+	 */
+	public template: string;
+
+	/**
+	 * Templates options
+	 */
+	public opts: TemplatesOptions;
+
+	public packages: Record<string, DirNode>;
+
+	public packagesUsed: string[];
+
+	private _defs: Record<string, string>;
+
+	public buildErrors: BuildErrors[];
+
+	public templateSettings: SettingsFile;
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public engine: any;
+
+	// public engine: typeof templateEngine | typeof (doT as any);
+
+	/**
+	 * Path to the templates settings file
+	 */
+	public templateSettingsPath: string;
+
+	/**
+	 * Path to the templates directory
+	 */
+	public src: string;
+>>>>>>> 00ff3e278b9d5e31ddc02fcc6b2107cac1ea3aee
 
 	public _prompts?: Prompter<TAnswers>;
 
+<<<<<<< HEAD
+||||||| cbe053c
+	public compiledFiles: File[];
+
+	/**
+	 * All tpsrc config file names.
+	 *
+	 * @example
+	 *
+	 *	[
+	 *		'.tps/tps.config.cjs',
+	 *		'.tps/tps.config.ts',
+	 *		'.tps/tps.config.js',
+	 *		'.tps/.tpsrc.cjs',
+	 *		'.tps/.tpsrc.ts',
+	 *		'.tps/.tpsrc.js',
+	 *		'.tps/.tpsrc.yml',
+	 *		'.tps/.tpsrc.yaml',
+	 *		'.tps/.tpsrc.json',
+	 *		'.tps/.tpsrc',
+	 *		'tps.config.cjs',
+	 *		'tps.config.ts',
+	 *		'tps.config.js',
+	 *		'.config/tpsrc.cjs',
+	 *		'.config/tpsrc.ts',
+	 *		'.config/tpsrc.js',
+	 *		'.config/tpsrc.yml',
+	 *		'.config/tpsrc.yaml',
+	 *		'.config/tpsrc.json',
+	 *		'.config/tpsrc',
+	 *		'.tpsrc.cjs',
+	 *		'.tpsrc.ts',
+	 *		'.tpsrc.js',
+	 *		'.tpsrc.yml',
+	 *		'.tpsrc.yaml',
+	 *		'.tpsrc.json',
+	 *		'.tpsrc',
+	 *		'package.json'
+	 *	]
+	 */
+	public static readonly tpsrcConfigNames: string[] = tpsrcSearchPlaces;
+
+	public static async get<TPassedAnswers extends AnswersHash = AnswersHash>(
+		templateName: string,
+		opts: Partial<TemplateOptions> = {},
+	): Promise<Templates<TPassedAnswers>> {
+		return new Templates(templateName, opts);
+	}
+
+=======
+	public compiledFiles: File[];
+
+	/**
+	 * All tpsrc config file names.
+	 *
+	 * @example
+	 *
+	 *	[
+	 *		'.tps/tps.config.cjs',
+	 *		'.tps/tps.config.ts',
+	 *		'.tps/tps.config.js',
+	 *		'.tps/.tpsrc.cjs',
+	 *		'.tps/.tpsrc.ts',
+	 *		'.tps/.tpsrc.js',
+	 *		'.tps/.tpsrc.yml',
+	 *		'.tps/.tpsrc.yaml',
+	 *		'.tps/.tpsrc.json',
+	 *		'.tps/.tpsrc',
+	 *		'tps.config.cjs',
+	 *		'tps.config.ts',
+	 *		'tps.config.js',
+	 *		'.config/tpsrc.cjs',
+	 *		'.config/tpsrc.ts',
+	 *		'.config/tpsrc.js',
+	 *		'.config/tpsrc.yml',
+	 *		'.config/tpsrc.yaml',
+	 *		'.config/tpsrc.json',
+	 *		'.config/tpsrc',
+	 *		'.tpsrc.cjs',
+	 *		'.tpsrc.ts',
+	 *		'.tpsrc.js',
+	 *		'.tpsrc.yml',
+	 *		'.tpsrc.yaml',
+	 *		'.tpsrc.json',
+	 *		'.tpsrc',
+	 *		'package.json'
+	 *	]
+	 */
+	public static readonly tpsrcConfigNames: string[] = tpsrcSearchPlaces;
+
+	public static async get<TPassedAnswers extends AnswersHash = AnswersHash>(
+		templateName: string,
+		opts: Partial<TemplatesOptions> = {},
+	): Promise<Templates<TPassedAnswers>> {
+		return new Templates(templateName, opts);
+	}
+
+>>>>>>> 00ff3e278b9d5e31ddc02fcc6b2107cac1ea3aee
 	/**
 	 * Get all locations a template can be
 	 *
@@ -94,11 +263,23 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		return !!Templates.getLocalTpsPath();
 	}
 
+<<<<<<< HEAD
 	public static async get<TTemplateAnswers>(
 		name: string,
 		_options: Partial<TemplatesOptions> = {},
 	): Promise<Templates> {
 		const tpsrc = await getTpsrc(name);
+||||||| cbe053c
+	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
+		if (!templateName || !is.string(templateName)) {
+			throw new RequiresTemplateError();
+		}
+=======
+	constructor(templateName: string, opts: Partial<TemplatesOptions> = {}) {
+		if (!templateName || !is.string(templateName)) {
+			throw new RequiresTemplateError();
+		}
+>>>>>>> 00ff3e278b9d5e31ddc02fcc6b2107cac1ea3aee
 
 		const tpsrcOptions: Partial<TemplatesOptions> = tpsrc?.opts ?? {};
 

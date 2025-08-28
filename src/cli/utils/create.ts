@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
 import Template from '@tps/templates';
-import type { TemplatesOptions } from '@tps/templates/templates';
+import type { TemplatesOptions } from '@tps/types/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
 import { getCliArgsFromTemplate } from './helpers';
@@ -61,9 +61,9 @@ export const options = (yargs) => {
 
 	if (!template) return yargs;
 
-	const templateOptions = getCliArgsFromTemplate(template);
+	const templatesOptions = getCliArgsFromTemplate(template);
 
-	yargs.options(templateOptions);
+	yargs.options(templatesOptions);
 
 	return yargs;
 };
