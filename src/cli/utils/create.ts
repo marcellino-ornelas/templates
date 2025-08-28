@@ -1,7 +1,7 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
 import Template from '@tps/templates';
-import type { TemplateOptions } from '@tps/templates/templates';
+import type { TemplatesOptions } from '@tps/types/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
 import { getCliArgsFromTemplate } from './helpers';
@@ -61,9 +61,9 @@ export const options = (yargs) => {
 
 	if (!template) return yargs;
 
-	const templateOptions = getCliArgsFromTemplate(template);
+	const templatesOptions = getCliArgsFromTemplate(template);
 
-	yargs.options(templateOptions);
+	yargs.options(templatesOptions);
 
 	return yargs;
 };
@@ -86,7 +86,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 
 	const { packages, buildPaths, ...answers } = argv;
 
-	const tpsConfig: Partial<TemplateOptions> = {};
+	const tpsConfig: Partial<TemplatesOptions> = {};
 
 	if (argv.hasOwnProperty('newFolder')) tpsConfig.newFolder = argv.newFolder;
 	if (argv.hasOwnProperty('force')) tpsConfig.force = argv.force;

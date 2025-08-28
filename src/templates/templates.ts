@@ -28,7 +28,7 @@ import {
 import logger from '@tps/utilities/logger';
 import dot from '@tps/templates/dot';
 import templateEngine from '@tps/templates/template-engine';
-import { TemplateOptions } from '@tps/types/templates';
+import { TemplatesOptions } from '@tps/types/templates';
 import { Tpsrc } from '@tps/types/tpsrc';
 import { AnswersHash, SettingsFile } from '@tps/types/settings';
 import {
@@ -46,7 +46,7 @@ interface BuildErrors {
 	didBuildPathExist: boolean;
 }
 
-export const DEFAULT_OPTIONS: TemplateOptions = {
+export const DEFAULT_OPTIONS: TemplatesOptions = {
 	noLocalConfig: false,
 	noGlobalConfig: false,
 	defaultPackage: true,
@@ -118,7 +118,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	/**
 	 * Templates options
 	 */
-	public opts: TemplateOptions;
+	public opts: TemplatesOptions;
 
 	public packages: Record<string, DirNode>;
 
@@ -189,7 +189,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 
 	public static async get<TPassedAnswers extends AnswersHash = AnswersHash>(
 		templateName: string,
-		opts: Partial<TemplateOptions> = {},
+		opts: Partial<TemplatesOptions> = {},
 	): Promise<Templates<TPassedAnswers>> {
 		return new Templates(templateName, opts);
 	}
@@ -258,7 +258,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 		return !!Templates.getLocalTpsPath();
 	}
 
-	constructor(templateName: string, opts: Partial<TemplateOptions> = {}) {
+	constructor(templateName: string, opts: Partial<TemplatesOptions> = {}) {
 		if (!templateName || !is.string(templateName)) {
 			throw new RequiresTemplateError();
 		}
@@ -705,4 +705,4 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	}
 }
 
-export { TemplateOptions } from '@tps/types/templates';
+export { TemplatesOptions } from '@tps/types/templates';

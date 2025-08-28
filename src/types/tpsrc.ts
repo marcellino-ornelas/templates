@@ -1,10 +1,10 @@
-import { TemplateAnswers, TemplateOptions } from './templates';
+import { TemplateAnswers, TemplatesOptions } from './templates';
 
 export interface Tpsrc {
 	[templateName: string]: TpsrcTemplateConfig;
 }
 
 export interface TpsrcTemplateConfig {
-	opts: TemplateOptions;
+	opts: TemplatesOptions;
 	answers: TemplateAnswers;
 }

@@ -1,4 +1,4 @@
-export interface TemplateOptions {
+export interface TemplatesOptions {
 	/**
 	 * Don't load local `.tps/` config folder
 	 */

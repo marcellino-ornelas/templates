@@ -5,7 +5,7 @@ import { DirectoryNode } from '@tps/fileSystemTree/directoryNode';
 import { FileNode } from '@tps/fileSystemTree/fileNode';
 import * as TPS from '@tps/utilities/constants';
 import { isDir, json } from '@tps/utilities/fileSystem';
-import { TemplateOptions } from '@tps/templates/templates';
+import { TemplatesOptions } from '@tps/types/templates';
 
 const changes = [
 	{
@@ -103,7 +103,7 @@ export default {
 		const tpsrcPath = path.join(TPS.DEFAULT_TPS, '.tpsrc');
 		const tpsrc = json(tpsrcPath);
 
-		const opts: Partial<TemplateOptions> = {};
+		const opts: Partial<TemplatesOptions> = {};
 
 		if (extendCwd) opts.extendedDest = extendCwd;
 
