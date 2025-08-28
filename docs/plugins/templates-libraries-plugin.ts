@@ -48,7 +48,7 @@ const getTemplateSettings = async (
 ): Promise<TemplateSettings[]> => {
 	const templatesSettingsPromises: Promise<TemplateSettings>[] = templates.map(
 		async (template) => {
-			const tps = new Templates(template);
+			const tps = await Templates.get(template);
 
 			return {
 				name: tps.template,

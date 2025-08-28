@@ -17,7 +17,7 @@ describe('[Templates] tpsrc:', () => {
 
 	let tps;
 	beforeAll(() => {
-		tps = new Templates('testing-tpsrc', {
+		tps = await Templates.get('testing-tpsrc', {
 			noGlobalConfig: true,
 		});
 	});

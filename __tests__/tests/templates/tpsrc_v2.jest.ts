@@ -43,7 +43,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
 
@@ -56,7 +56,7 @@ describe('[TPS] Tpsrc', () => {
 	it('should work when there is no tpsrc', async () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts).toEqual(expect.objectContaining(DEFAULT_OPTIONS));
 
@@ -70,7 +70,7 @@ describe('[TPS] Tpsrc', () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		expect(() => {
-			return new Templates('testing-prompt-core');
+			return await Templates.get('testing-prompt-core');
 		}).not.toThrowError();
 	});
 
@@ -86,7 +86,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 
@@ -106,7 +106,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 
@@ -128,7 +128,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./parent-path');
 		// eslint-disable-next-line no-underscore-dangle
@@ -147,7 +147,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./global-path');
 
@@ -180,7 +180,7 @@ describe('[TPS] Tpsrc', () => {
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-path');
 		// eslint-disable-next-line no-underscore-dangle
@@ -201,7 +201,7 @@ testing-prompt-core:
 `,
 		);
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./yaml-path');
 		// eslint-disable-next-line no-underscore-dangle
@@ -226,7 +226,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('testing-prompt-core');
+		const tps: Templates = await Templates.get('testing-prompt-core');
 
 		expect(tps.opts.extendedDest).toBe('./local-not-in-tps-path');
 
@@ -252,7 +252,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('tps-test-3rd-party-package');
+		const tps: Templates = await Templates.get('tps-test-3rd-party-package');
 
 		expect(tps.opts.extendedDest).toBe('./3rd-party');
 
@@ -278,7 +278,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps: Templates = new Templates('tps-test-3rd-party-package');
+		const tps: Templates = await Templates.get('tps-test-3rd-party-package');
 
 		expect(tps.opts.extendedDest).toBe('./3rd-party');
 
@@ -343,7 +343,7 @@ testing-prompt-core:
 	// 		},
 	// 	});
 
-	// 	const tps: Templates = new Templates('testing-prompt-core');
+	// 	const tps: Templates = await Templates.get('testing-prompt-core');
 
 	// 	expect(tps.opts.extendedDest).toBe('./local-path');
 

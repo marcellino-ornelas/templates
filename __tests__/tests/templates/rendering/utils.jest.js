@@ -18,7 +18,7 @@ describe('[TPS] Utils:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-utils');
+		tps = await Templates.get('testing-utils');
 
 		return playground.createBox('render_utils');
 	});

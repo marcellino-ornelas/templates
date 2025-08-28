@@ -4,13 +4,13 @@ jest.mock('fs');
 
 describe('[Templates] options:', () => {
 	it('should prefer options from settings file vs defaults', async () => {
-		const tps = new Templates('testing-options-settings-file');
+		const tps = await Templates.get('testing-options-settings-file');
 
 		expect(tps.opts.newFolder).toBeFalsy();
 	});
 
 	it('should prefer user options over settings file', async () => {
-		const tps = new Templates('testing-options-settings-file', {
+		const tps = await Templates.get('testing-options-settings-file', {
 			newFolder: true,
 		});
 

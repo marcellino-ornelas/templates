@@ -25,7 +25,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-dynamic');
+		tps = await Templates.get('testing-dynamic');
 		// For tests that dont care about answer
 		tps.setAnswers({
 			one: 'bad',
@@ -38,7 +38,7 @@ describe('[TPS] Rendering dynamic:', () => {
 			'./default/index.js.tps': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -52,7 +52,7 @@ describe('[TPS] Rendering dynamic:', () => {
 			'./default/index.js.dot': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -63,7 +63,7 @@ describe('[TPS] Rendering dynamic:', () => {
 
 	describe('File names', () => {
 		beforeEach(() => {
-			tps = new Templates('testing-dynamic-file-name');
+			tps = await Templates.get('testing-dynamic-file-name');
 
 			tps.setAnswers({
 				one: '',

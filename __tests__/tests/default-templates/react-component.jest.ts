@@ -34,7 +34,7 @@ describe('React component', () => {
 	});
 
 	it('should be able to render a react component', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
+		const tps = await Templates.get<ReactComponentAnswers>('react-component', {
 			default: true,
 		});
 
@@ -54,7 +54,7 @@ describe('React component', () => {
 	});
 
 	it('should be able to use different types of file naming patterns', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
+		const tps = await Templates.get<ReactComponentAnswers>('react-component', {
 			default: true,
 		});
 
@@ -74,7 +74,7 @@ describe('React component', () => {
 	});
 
 	it('should be able to use all defaults', async () => {
-		const tps = new Templates<ReactComponentAnswers>('react-component', {
+		const tps = await Templates.get<ReactComponentAnswers>('react-component', {
 			default: true,
 		});
 
@@ -100,9 +100,12 @@ export default App;
 	describe('helpers.def', () => {
 		describe('componentImport', () => {
 			it('should support default export', async () => {
-				const tps = new Templates<ReactComponentAnswers>('react-component', {
-					default: true,
-				});
+				const tps = await Templates.get<ReactComponentAnswers>(
+					'react-component',
+					{
+						default: true,
+					},
+				);
 
 				tps.setAnswers({
 					export: 'default',
@@ -118,9 +121,12 @@ export default App;
 			});
 
 			it('should support named export', async () => {
-				const tps = new Templates<ReactComponentAnswers>('react-component', {
-					default: true,
-				});
+				const tps = await Templates.get<ReactComponentAnswers>(
+					'react-component',
+					{
+						default: true,
+					},
+				);
 
 				tps.setAnswers({
 					export: 'named',
@@ -140,9 +146,12 @@ export default App;
 	// default
 	describe('component', () => {
 		it('should be able to not use a css file', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				css: false,
@@ -157,9 +166,12 @@ export default App;
 		});
 
 		it('should support modules css import', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				css: true,
@@ -175,9 +187,12 @@ export default App;
 		});
 
 		it('should support modules less import', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				css: true,
@@ -193,9 +208,12 @@ export default App;
 		});
 
 		it('should always use pascal case for component name', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			await tps.render(CWD, 'nav_item');
 
@@ -206,9 +224,12 @@ export default App;
 		});
 
 		it('should always use pascal case in component contents', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			await tps.render(CWD, 'nav-item');
 
@@ -219,9 +240,12 @@ export default App;
 		});
 
 		it('should be able to use default export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -247,9 +271,12 @@ export default App;
 		});
 
 		it('should be able to use inline default export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -274,9 +301,12 @@ export default function App({}) {
 		});
 
 		it('should ignore inlineDefaultExport when export is not default', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'named',
@@ -301,9 +331,12 @@ export function App({}) {
 		});
 
 		it('should ignore inlineDefaultExport when functionStyle is arrow', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -331,9 +364,12 @@ export default App;
 		});
 
 		it('should be able to use default export with arrow style', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -360,9 +396,12 @@ export default App;
 		});
 
 		it('should be able to use named export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'named',
@@ -386,9 +425,12 @@ export function App({}) {
 		});
 
 		it('should be able to use named export with arrow style', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'named',
@@ -413,9 +455,12 @@ export const App = ({}) => {
 		});
 
 		it('should be able to use typescript', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				typescript: true,
@@ -445,9 +490,12 @@ export default App;
 		});
 
 		it('should be able to use set a base component', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				component: 'Box',
@@ -468,9 +516,12 @@ export default App;
 
 	describe('test', () => {
 		it('should support test file', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				test: true,
@@ -495,9 +546,12 @@ describe('App', () => {
 		});
 
 		it('should use the `extension` in `testExtension`', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				extension: 'js',
@@ -511,9 +565,12 @@ describe('App', () => {
 		});
 
 		it('should support different export statements in tests', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				test: true,
@@ -529,9 +586,12 @@ describe('App', () => {
 		});
 
 		it('should support test file with typescript', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				test: true,
@@ -557,9 +617,12 @@ describe('App', () => {
 		});
 
 		it('should support be able to not use react testing library', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				test: true,
@@ -582,9 +645,12 @@ describe('App', () => {
 		});
 
 		it('should support test file with react testing library and jest dom import', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				test: true,
@@ -613,9 +679,12 @@ describe('App', () => {
 	});
 	describe('index', () => {
 		it('should be able to use index file', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: true,
@@ -630,9 +699,12 @@ export { default } from './App';
 		});
 
 		it('should use the `extension` in `indexExtension`', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				extension: 'js',
@@ -646,9 +718,12 @@ export { default } from './App';
 		});
 
 		it('should strip ending x in the index file for jsx extensions', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: true,
@@ -662,9 +737,12 @@ export { default } from './App';
 		});
 
 		it('should strip ending x in the index file for tsx extensions', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: true,
@@ -678,9 +756,12 @@ export { default } from './App';
 		});
 
 		it('should be able to use default export with shorthand export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -697,9 +778,12 @@ export { default } from './App';
 		});
 
 		it('should be able to use default export with explicit export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				export: 'default',
@@ -718,9 +802,12 @@ export default App;
 		});
 
 		it('should support named export import statement with shorthand export', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: true,
@@ -737,9 +824,12 @@ export * from './App';
 		});
 
 		it('should support named export import statement with explicit import', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: true,
@@ -758,9 +848,12 @@ export { App };
 		});
 
 		it('should be able to not use a index file', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				index: false,
@@ -775,9 +868,12 @@ export { App };
 
 	describe('storybook', () => {
 		it('should be able to use storybook', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				storybook: true,
@@ -804,9 +900,12 @@ export const Primary = {
 		});
 
 		it('should support differnt types of exports in storybook', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				storybook: true,
@@ -834,9 +933,12 @@ export const Primary = {
 		});
 
 		it('should be able to use storybook with typescript', async () => {
-			const tps = new Templates<ReactComponentAnswers>('react-component', {
-				default: true,
-			});
+			const tps = await Templates.get<ReactComponentAnswers>(
+				'react-component',
+				{
+					default: true,
+				},
+			);
 
 			tps.setAnswers({
 				storybook: true,

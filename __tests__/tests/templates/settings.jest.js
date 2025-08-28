@@ -15,7 +15,7 @@ describe('[Templates] Settings:', () => {
 	});
 
 	it('should load json settings correctly', async () => {
-		const tps = new Templates('testing-settings-json');
+		const tps = await Templates.get('testing-settings-json');
 
 		expect(tps.templateSettings).toEqual({
 			name: 'lino',
@@ -23,7 +23,7 @@ describe('[Templates] Settings:', () => {
 	});
 
 	it('should load js settings correctly', async () => {
-		const tps = new Templates('testing-settings-js');
+		const tps = await Templates.get('testing-settings-js');
 
 		expect(tps.templateSettings).toEqual({
 			name: 'lino',
@@ -31,7 +31,7 @@ describe('[Templates] Settings:', () => {
 	});
 
 	it('should be empty when no settings file is found', async () => {
-		const tps = new Templates('testing-settings-no-settings');
+		const tps = await Templates.get('testing-settings-no-settings');
 
 		expect(tps.templateSettings).toEqual({});
 	});
@@ -40,7 +40,7 @@ describe('[Templates] Settings:', () => {
 		it('should ignore event if not specified', async () => {
 			mkTemplate('test-events-on-render');
 
-			const tps = new Templates('test-events-on-render');
+			const tps = await Templates.get('test-events-on-render');
 
 			await tps.render(CWD, 'App');
 
@@ -50,7 +50,7 @@ describe('[Templates] Settings:', () => {
 		it('Should be able to use onRender event', async () => {
 			mkTemplate('test-events-on-render');
 
-			const tps = new Templates('test-events-on-render');
+			const tps = await Templates.get('test-events-on-render');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onRender = jest
@@ -71,7 +71,7 @@ describe('[Templates] Settings:', () => {
 		it('Should be able to use onRendered event with single build path', async () => {
 			mkTemplate('test-events-on-rendered');
 
-			const tps = new Templates('test-events-on-rendered');
+			const tps = await Templates.get('test-events-on-rendered');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onRendered = jest
@@ -95,7 +95,7 @@ describe('[Templates] Settings:', () => {
 		it('Should be able to use onRendered event with multiple build paths', async () => {
 			mkTemplate('test-events-on-rendered');
 
-			const tps = new Templates('test-events-on-rendered');
+			const tps = await Templates.get('test-events-on-rendered');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onRendered = jest
@@ -119,7 +119,7 @@ describe('[Templates] Settings:', () => {
 		it('Should be able to use onBuildPathRender event', async () => {
 			mkTemplate('test-events-on-build-path-render');
 
-			const tps = new Templates('test-events-on-build-path-render');
+			const tps = await Templates.get('test-events-on-build-path-render');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onBuildPathRender = jest
@@ -151,7 +151,7 @@ describe('[Templates] Settings:', () => {
 		it('Should be able to use onBuildPathRendered event', async () => {
 			mkTemplate('test-events-on-build-path-rendered');
 
-			const tps = new Templates('test-events-on-build-path-rendered');
+			const tps = await Templates.get('test-events-on-build-path-rendered');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onBuildPathRendered = jest

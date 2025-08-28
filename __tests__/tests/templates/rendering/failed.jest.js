@@ -25,7 +25,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing');
+		tps = await Templates.get('testing');
 
 		return playground.createBox('render_failed');
 	});

@@ -21,7 +21,7 @@ describe('[Templates] Prompts Process: when using boolean prompts', () => {
 	let tps;
 	beforeEach(() => {
 		// add no default to this test to only test packages
-		tps = new Templates('testing-prompt-types-boolean', {
+		tps = await Templates.get('testing-prompt-types-boolean', {
 			defaultPackage: false,
 		});
 

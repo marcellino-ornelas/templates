@@ -51,7 +51,7 @@ export const mkTemplateBase = (
 
 	const templatename = path.basename(location);
 
-	return new Templates(templatename, {
+	return await Templates.get(templatename, {
 		default: true,
 		...opts,
 	});

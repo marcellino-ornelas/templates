@@ -30,7 +30,7 @@ describe('[Templates] Prompts Process:', () => {
 	beforeEach(() => {
 		reset();
 
-		tps = new Templates('testing-prompt-core');
+		tps = await Templates.get('testing-prompt-core');
 		return playground.createBox('render_process_prompts_core');
 	});
 

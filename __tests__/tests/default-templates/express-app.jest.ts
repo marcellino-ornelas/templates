@@ -26,7 +26,7 @@ describe('Express app', () => {
 	});
 
 	it('should be able to render the express app template', async () => {
-		const tps = new Templates<ExpressAppAnswers>('express-app', {
+		const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
 
@@ -37,7 +37,7 @@ describe('Express app', () => {
 	});
 
 	it('should use javascript files by default', async () => {
-		const tps = new Templates<ExpressAppAnswers>('express-app', {
+		const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
 
@@ -53,7 +53,7 @@ describe('Express app', () => {
 	});
 
 	it('should use npm scripts to support javascript', async () => {
-		const tps = new Templates<ExpressAppAnswers>('express-app', {
+		const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
 
@@ -76,7 +76,7 @@ describe('Express app', () => {
 	});
 
 	it('should use correct configs for javascript', async () => {
-		const tps = new Templates<ExpressAppAnswers>('express-app', {
+		const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 			default: true,
 		});
 
@@ -93,7 +93,7 @@ describe('Express app', () => {
 
 	describe('port', () => {
 		it('should support custom ports', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -116,7 +116,7 @@ describe('Express app', () => {
 		});
 
 		it('should support custom port when port is string', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -141,7 +141,7 @@ describe('Express app', () => {
 
 	describe('api', () => {
 		it('should be able to add an api route', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -170,7 +170,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should be able to not add an API route', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -195,7 +195,7 @@ router.use('/api', apiRouter);
 
 	describe('packageManager', () => {
 		it('should be able to render the express app template with npm', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -214,7 +214,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should use correct .gitignore file for lock file when npm', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -233,7 +233,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should be able to render the express app template with yarn', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -252,7 +252,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should use correct .gitignore file for lock file when yarn', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -272,7 +272,7 @@ router.use('/api', apiRouter);
 
 	describe('typescript', () => {
 		it('should use typescript files when enabled', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -291,7 +291,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should use npm scripts to support typescript', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -320,7 +320,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should use correct npm packages to support typescript', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -348,7 +348,7 @@ router.use('/api', apiRouter);
 		});
 
 		it('should add correct types to express functions', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -388,7 +388,7 @@ router.get('/', (req: Request, res: Response) => {`,
 		});
 
 		it('should use correct configs for typescript', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -410,7 +410,7 @@ router.get('/', (req: Request, res: Response) => {`,
 
 	describe('database', () => {
 		it('should be able to use no database', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
@@ -431,7 +431,7 @@ app.listen(PORT, () => {
 		});
 
 		it('should be able to use mongoose database', async () => {
-			const tps = new Templates<ExpressAppAnswers>('express-app', {
+			const tps = await Templates.get<ExpressAppAnswers>('express-app', {
 				default: true,
 			});
 
