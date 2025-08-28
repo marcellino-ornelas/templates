@@ -30,7 +30,7 @@ jest.mock('@tps/utilities/constants', () => {
 describe('Command Line: list', () => {
 	let log: MockedConsole;
 
-	beforeEach(async async () => {
+	beforeEach(async () => {
 		log = mockConsoleLog();
 		reset();
 

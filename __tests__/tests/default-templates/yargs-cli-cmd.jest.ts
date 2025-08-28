@@ -21,7 +21,7 @@ jest.mock('@tps/utilities/constants', () => {
 describe('yargs-cli-cmd', () => {
 	let tps: Templates;
 
-	beforeEach(async async () => {
+	beforeEach(async () => {
 		reset();
 
 		await vol.promises.mkdir(path.join(USER_HOME, 'Desktop', 'random'), {

@@ -14,7 +14,7 @@ const BUILD_PATH = path.join(CWD, 'App');
 const templateName = 'testing_build';
 
 describe('Build', () => {
-	beforeEach(async async () => {
+	beforeEach(async () => {
 		jest.restoreAllMocks();
 		reset();
 
