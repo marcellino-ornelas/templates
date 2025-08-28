@@ -70,7 +70,7 @@ describe('[TPS] Tpsrc', () => {
 		vol.rmSync(LOCAL_CONFIG_PATH);
 
 		expect(() => {
-			return await Templates.get('testing-prompt-core');
+			return Templates.get('testing-prompt-core');
 		}).not.toThrowError();
 	});
 

@@ -83,7 +83,7 @@ export const mkGlobal3rdPartyTemplate = async (
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Promise<Templates> => {
-	return await mk3rdPartyTemplate(name, '/usr/lib', json, opts);
+	return mk3rdPartyTemplate(name, '/usr/lib', json, opts);
 };
 
 export const mkGlobalTemplate = async (
@@ -91,7 +91,7 @@ export const mkGlobalTemplate = async (
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
 ): Promise<Templates> => {
-	return await mkTemplate(name, USER_HOME, json, opts);
+	return mkTemplate(name, USER_HOME, json, opts);
 };
 
 export const DEFAULT_SETTINGS_FILE: SettingsFile = {
