@@ -12,23 +12,23 @@ describe('[Templates] Packages:', () => {
 		tps = new Templates('testing');
 	});
 
-	it('should be able to compile default package', () => {
+	it('should be able to compile default package', async () => {
 		expect(tps.packages).toHaveProperty('default');
 	});
 
-	it('should not load default package if turn off', () => {
+	it('should not load default package if turn off', async () => {
 		const tpsNoDefault = new Templates('testing', { defaultPackage: false });
 
 		expect(tpsNoDefault.opts.default).toBeFalsy();
 		expect(tpsNoDefault.packages).not.toHaveProperty('default');
 	});
 
-	it('should be able to compile a package', () => {
+	it('should be able to compile a package', async () => {
 		tps.loadPackages('main');
 		expect(tps.packages).toHaveProperty('main');
 	});
 
-	it('should be able to compile many packages', () => {
+	it('should be able to compile many packages', async () => {
 		const pkgs = ['store', 'main'];
 		tps.loadPackages(pkgs);
 
@@ -36,7 +36,7 @@ describe('[Templates] Packages:', () => {
 			expect(tps.packages).toHaveProperty(pkg);
 		});
 	});
-	it("should throw an error when packages aren't passed in", () => {
+	it("should throw an error when packages aren't passed in", async () => {
 		const errArgs = ['', {}, null, true, false];
 
 		errArgs.forEach((errArg) => {
@@ -46,13 +46,13 @@ describe('[Templates] Packages:', () => {
 		});
 	});
 
-	it("should throw an error when packages aren't real", () => {
+	it("should throw an error when packages aren't real", async () => {
 		expect(() => {
 			tps.loadPackages(['fake-package']);
 		}).toThrow();
 	});
 
-	it('should not let you load a package if already loaded', () => {
+	it('should not let you load a package if already loaded', async () => {
 		tps.loadPackage('main');
 
 		expect(() => {

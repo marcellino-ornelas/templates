@@ -485,7 +485,7 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('App', () => {
-	it('should render the component', () => {
+	it('should render the component', async () => {
 		render(<App />);
 
 		expect(screen.getByText('App component')).toBeInTheDocument();
@@ -547,7 +547,7 @@ import { render, screen } from '@testing-library/react';
 import App from './App';
 
 describe('App', () => {
-	it('should render the component', () => {
+	it('should render the component', async () => {
 		render(<App />);
 
 		expect(screen.getByText('App component')).toBeInTheDocument();
@@ -574,7 +574,7 @@ import React from 'react';
 import App from './App';
 
 describe('App', () => {
-	it('should render the component', () => {
+	it('should render the component', async () => {
 		<App />
 	});
 });
@@ -602,7 +602,7 @@ import '@testing-library/jest-dom';
 import App from './App';
 
 describe('App', () => {
-	it('should render the component', () => {
+	it('should render the component', async () => {
 		render(<App />);
 
 		expect(screen.getByText('App component')).toBeInTheDocument();

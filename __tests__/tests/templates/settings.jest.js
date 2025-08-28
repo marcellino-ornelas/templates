@@ -14,7 +14,7 @@ describe('[Templates] Settings:', () => {
 		reset();
 	});
 
-	it('should load json settings correctly', () => {
+	it('should load json settings correctly', async () => {
 		const tps = new Templates('testing-settings-json');
 
 		expect(tps.templateSettings).toEqual({
@@ -22,7 +22,7 @@ describe('[Templates] Settings:', () => {
 		});
 	});
 
-	it('should load js settings correctly', () => {
+	it('should load js settings correctly', async () => {
 		const tps = new Templates('testing-settings-js');
 
 		expect(tps.templateSettings).toEqual({
@@ -30,7 +30,7 @@ describe('[Templates] Settings:', () => {
 		});
 	});
 
-	it('should be empty when no settings file is found', () => {
+	it('should be empty when no settings file is found', async () => {
 		const tps = new Templates('testing-settings-no-settings');
 
 		expect(tps.templateSettings).toEqual({});

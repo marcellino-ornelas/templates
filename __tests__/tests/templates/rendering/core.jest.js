@@ -36,17 +36,17 @@ describe('[Templates] Render Process:', () => {
 		return playground.createBox('render_process');
 	});
 
-	it('should throw RequiresTemplateError if no template was set', () => {
+	it('should throw RequiresTemplateError if no template was set', async () => {
 		expect(() => new Templates()).toThrow(RequiresTemplateError);
 	});
 
-	it('should throw TemplateNotFound if no template is available', () => {
+	it('should throw TemplateNotFound if no template is available', async () => {
 		expect(() => new Templates('some-random-template')).toThrow(
 			TemplateNotFoundError,
 		);
 	});
 
-	it('should throw DirectoryNotFoundError if dest does not exist', () => {
+	it('should throw DirectoryNotFoundError if dest does not exist', async () => {
 		const dest = playground.pathTo('non/existent/path');
 		const tps = new Templates('testing');
 
@@ -177,7 +177,7 @@ describe('[Templates] Render Process:', () => {
 		expect(destPath).toHaveAllFilesAndDirectories(expectedCreatedFiles);
 	});
 
-	it('should be able to render 1000 templates with no problems', () => {
+	it('should be able to render 1000 templates with no problems', async () => {
 		const all = [];
 
 		for (let i = 0; i < 1000; i++) {
@@ -279,7 +279,7 @@ describe('[Templates] Render Process:', () => {
 		});
 	});
 
-	it("should be able to render a local template and keep all files that don't interfere with the template", () => {
+	it("should be able to render a local template and keep all files that don't interfere with the template", async () => {
 		const tps = new Templates('testing');
 
 		const destPath = playground.pathTo('app');
@@ -296,7 +296,7 @@ describe('[Templates] Render Process:', () => {
 	/**
 	 * @docs guide/getting-started/packages.md#including-more-packages
 	 */
-	it('should be able to render packages', () => {
+	it('should be able to render packages', async () => {
 		const tps = new Templates('testing');
 		tps.loadPackages(['extras', 'extras2']);
 
@@ -374,7 +374,7 @@ describe('[Templates] Render Process:', () => {
 		expect(appPath).toHaveAllFilesAndDirectories(['index.js']);
 	});
 
-	it('should be able to render a global 3rd party template without tps prefix', () => {
+	it('should be able to render a global 3rd party template without tps prefix', async () => {
 		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		// Exclude tps prefix
@@ -388,7 +388,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	// TODO: remove .gitkeep
-	it('should ignore .tpskeep & .gitkeep files', () => {
+	it('should ignore .tpskeep & .gitkeep files', async () => {
 		const tps = mkTemplate('my-template', undefined, {
 			'./default/some-directory/.tpskeep': '',
 			'./default/some-directory-nested/nested/.tpskeep': '',

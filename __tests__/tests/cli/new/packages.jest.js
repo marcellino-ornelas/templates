@@ -25,7 +25,7 @@ describe('[TPS][cli] new package', () => {
 	/**
 	 * @docs api/cli/commands/new_commands/package.md
 	 */
-	it('should create a new package', () =>
+	it('should create a new package', async () =>
 		tpsCli('new package test test-package', {
 			cwd: playground.box(),
 		}).then(() => {
