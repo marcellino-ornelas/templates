@@ -37,11 +37,11 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should throw RequiresTemplateError if no template was set', async () => {
-		expect(() => Templates.get()).rejects.toThrow(RequiresTemplateError);
+		await expect(() => Templates.get()).rejects.toThrow(RequiresTemplateError);
 	});
 
 	it('should throw TemplateNotFound if no template is available', async () => {
-		expect(() => Templates.get('some-random-template')).rejects.toThrow(
+		await expect(() => Templates.get('some-random-template')).rejects.toThrow(
 			TemplateNotFoundError,
 		);
 	});
