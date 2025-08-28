@@ -13,7 +13,7 @@ const playground = new Playground(TESTING_DIR);
  * @docs api/cli/commands/create.md
  */
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 

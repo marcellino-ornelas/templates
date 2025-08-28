@@ -12,11 +12,11 @@ const playground = new Playground(TESTING_DIR);
 const extendedDest = './new-path';
 
 describe('[Templates] tpsrc:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	let tps;
-	beforeAll(() => {
+	beforeAll(async () => {
 		tps = await Templates.get('testing-tpsrc', {
 			noGlobalConfig: true,
 		});

@@ -10,7 +10,7 @@ import Playground from '@test/utilities/playground_legacy';
 const playground = new Playground(TESTING_DIR);
 
 describe('Command Line: Copy', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () => playground.createBox('copy'));

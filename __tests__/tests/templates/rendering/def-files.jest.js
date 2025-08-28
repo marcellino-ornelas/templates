@@ -14,7 +14,7 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Def files', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () => {

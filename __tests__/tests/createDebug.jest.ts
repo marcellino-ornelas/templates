@@ -193,7 +193,7 @@ describe('CreateDebug', () => {
 		let data = '';
 		const oldConsoleLog = console.log;
 
-		beforeAll(() => {
+		beforeAll(async () => {
 			// Do not show colors when testing
 			// @ts-expect-error not typed but available in debug
 			debug.useColors = () => false;

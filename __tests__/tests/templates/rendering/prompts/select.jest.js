@@ -14,7 +14,7 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[Templates] Prompts Process: when using select prompts', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 

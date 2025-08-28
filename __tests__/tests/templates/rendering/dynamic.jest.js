@@ -19,7 +19,7 @@ const playground = new Playground(TESTING_DIR);
 describe('[TPS] Rendering dynamic:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () => {

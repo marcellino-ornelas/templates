@@ -9,7 +9,7 @@ import { createTemplate, checkFilesForTemplate } from '@test/support/cli';
 const playground = new Playground(TESTING_DIR);
 
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 

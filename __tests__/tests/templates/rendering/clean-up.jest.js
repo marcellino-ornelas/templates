@@ -30,7 +30,7 @@ const playground = new Playground(TESTING_DIR);
 describe('[Templates] Render Process:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () => {

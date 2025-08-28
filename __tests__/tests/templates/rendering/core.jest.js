@@ -25,7 +25,7 @@ jest.mock('fs');
 const playground = new Playground();
 
 describe('[Templates] Render Process:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 
@@ -37,11 +37,11 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should throw RequiresTemplateError if no template was set', async () => {
-		expect(() => await Templates.get()).toThrow(RequiresTemplateError);
+		expect(() => Templates.get()).toThrow(RequiresTemplateError);
 	});
 
 	it('should throw TemplateNotFound if no template is available', async () => {
-		expect(() => await Templates.get('some-random-template')).toThrow(
+		expect(() => Templates.get('some-random-template')).toThrow(
 			TemplateNotFoundError,
 		);
 	});
@@ -181,6 +181,7 @@ describe('[Templates] Render Process:', () => {
 		const all = [];
 
 		for (let i = 0; i < 1000; i++) {
+			// eslint-disable-next-line no-await-in-loop
 			const tps = await Templates.get('testing');
 			const destPath = playground.pathTo(`app_${i}`);
 			// eslint-disable-next-line jest/valid-expect-in-promise
@@ -340,7 +341,9 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to use a local npm template', async () => {
 		await mk3rdPartyTemplate('tps-test-3rd-party-package');
 
-		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
+		const tps = await Templates.get('tps-test-3rd-party-package', {
+			default: true,
+		});
 
 		const appPath = playground.pathTo('app');
 
@@ -365,7 +368,9 @@ describe('[Templates] Render Process:', () => {
 	it('should be able to use a global npm template', async () => {
 		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
-		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
+		const tps = await Templates.get('tps-test-3rd-party-package', {
+			default: true,
+		});
 
 		const appPath = playground.pathTo('app');
 

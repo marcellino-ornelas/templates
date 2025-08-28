@@ -12,7 +12,7 @@ import { init, newTemplate } from '@test/support/cli';
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS][cli] new package', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () =>

@@ -16,7 +16,7 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Render with Wipe:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
 	beforeEach(async () => playground.createBox('rendering_wipe'));
