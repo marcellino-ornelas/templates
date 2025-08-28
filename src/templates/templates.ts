@@ -497,7 +497,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 			this.packagesUsed,
 			{
 				force: this.opts.force,
-				useExperimentalTemplateEngine: this.opts.experimentalTemplateEngine,
+				experimentalTemplateEngine: this.opts.experimentalTemplateEngine,
 			},
 		);
 
