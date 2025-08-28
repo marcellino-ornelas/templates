@@ -19,7 +19,7 @@ describe('Force', () => {
 			'default/index.js': 'template-file',
 		};
 
-		const tps = mkTemplate('testing-force', CWD, files);
+		const tps = await mkTemplate('testing-force', CWD, files);
 
 		vol.mkdirSync(path.join(CWD, 'app'));
 
@@ -37,7 +37,7 @@ describe('Force', () => {
 			'default/index.js': 'template-file',
 		};
 
-		const tps = mkTemplate('testing-force', CWD, files, { force: true });
+		const tps = await mkTemplate('testing-force', CWD, files, { force: true });
 
 		vol.mkdirSync(path.join(CWD, 'app'));
 
@@ -56,7 +56,7 @@ describe('Force', () => {
 			'default/index.js': 'template-file',
 		};
 
-		const tps = mkTemplate('testing-force', CWD, files, { force: true });
+		const tps = await mkTemplate('testing-force', CWD, files, { force: true });
 
 		vol.mkdirSync(path.join(CWD, 'some/path/app'), { recursive: true });
 
@@ -75,7 +75,7 @@ describe('Force', () => {
 			'default/index.js': 'template-file',
 		};
 
-		const tps = mkTemplate('testing-force', CWD, files, { force: true });
+		const tps = await mkTemplate('testing-force', CWD, files, { force: true });
 
 		vol.writeFileSync(indexFilePath, 'original-file');
 
@@ -92,7 +92,7 @@ describe('Force', () => {
 			'default/index.js': 'template-file',
 		};
 
-		const tps = mkTemplate('testing-force', CWD, files, {
+		const tps = await mkTemplate('testing-force', CWD, files, {
 			force: true,
 			newFolder: false,
 		});

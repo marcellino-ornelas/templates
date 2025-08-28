@@ -34,7 +34,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load a dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.tps': `{{=tps.name}}`,
 		});
 
@@ -48,7 +48,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load legacy dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.dot': `{{=tps.name}}`,
 		});
 

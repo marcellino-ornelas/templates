@@ -14,15 +14,15 @@ const BUILD_PATH = path.join(CWD, 'App');
 const templateName = 'testing_build';
 
 describe('Build', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.restoreAllMocks();
 		reset();
 
-		mkTemplate(templateName);
+		await mkTemplate(templateName);
 	});
 
 	it('should be able to track directories and files built', async () => {
-		const tps = mkTemplate('testing_build_built', CWD, {
+		const tps = await mkTemplate('testing_build_built', CWD, {
 			'default/index.txt': 'index.txt',
 			'default/dynamic.txt.dot': 'dynamic.txt.dot',
 			'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
@@ -150,7 +150,7 @@ describe('Build', () => {
 
 	describe('clean', () => {
 		it('should be able delete all created files and directories', async () => {
-			const tps = mkTemplate('testing_build_built', CWD, {
+			const tps = await mkTemplate('testing_build_built', CWD, {
 				'default/index.txt': 'index.txt',
 				'default/dynamic.txt.dot': 'dynamic.txt.dot',
 				'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
@@ -204,7 +204,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to delete all created files and directories when not a new folder', async () => {
-			const tps = mkTemplate('testing_build_built', CWD, {
+			const tps = await mkTemplate('testing_build_built', CWD, {
 				'default/index.txt': 'index.txt',
 				'default/dynamic.txt.dot': 'dynamic.txt.dot',
 				'default/{{=tps.name}}.txt.dot': '{{=tps.name}}.txt.dot',
@@ -260,7 +260,7 @@ describe('Build', () => {
 
 	describe('create', () => {
 		it('should be able to create custom files', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,
@@ -289,7 +289,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to create custom files in sub directories', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,
@@ -320,7 +320,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to create custom dynamic files', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,
@@ -349,7 +349,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to create custom files that use dynamic names', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,
@@ -378,7 +378,7 @@ describe('Build', () => {
 		});
 
 		// it('should fail if file creates a conflict', async () => {
-		// 	const tps = mkTemplate('testing_build_built', CWD);
+		// 	const tps = await mkTemplate('testing_build_built', CWD);
 
 		// 	const template = new Template(
 		// 		tps.template,
@@ -402,7 +402,7 @@ describe('Build', () => {
 		// });
 
 		it('should fail to create custom file if already exists', async () => {
-			const tps = mkTemplate('testing_build_built');
+			const tps = await mkTemplate('testing_build_built');
 
 			const template = new Template(
 				tps.template,
@@ -429,7 +429,7 @@ describe('Build', () => {
 		});
 
 		it('should create custom file if already exists but force', async () => {
-			const tps = mkTemplate('testing_build_built', CWD, undefined, {
+			const tps = await mkTemplate('testing_build_built', CWD, undefined, {
 				force: true,
 			});
 
@@ -457,7 +457,7 @@ describe('Build', () => {
 		});
 
 		it('should create custom file if already exists but wipe', async () => {
-			const tps = mkTemplate('testing_build_built', CWD, undefined, {
+			const tps = await mkTemplate('testing_build_built', CWD, undefined, {
 				wipe: true,
 			});
 
@@ -482,7 +482,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to create custom directory', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,
@@ -508,7 +508,7 @@ describe('Build', () => {
 		});
 
 		it('should be able to create custom sub directories', async () => {
-			const tps = mkTemplate('testing_build_built', CWD);
+			const tps = await mkTemplate('testing_build_built', CWD);
 
 			const template = new Template(
 				tps.template,

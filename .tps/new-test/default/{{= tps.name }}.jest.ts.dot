@@ -27,7 +27,7 @@ describe('{{= tps.utils.sentenceCase(tps.name)}}', () => {
 		{{{? tps.answers.templates }}}
 		const templateName = "{{= tps.utils.paramCase(tps.name)}}";
 		
-		mkTemplate(templateName)
+		await mkTemplate(templateName)
 
 		const tps = await Templates.get(templateName);
 		

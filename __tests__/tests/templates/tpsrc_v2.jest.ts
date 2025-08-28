@@ -235,7 +235,7 @@ testing-prompt-core:
 	});
 
 	it('should load local tpsrc file for local 3rd party template', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
+		await mk3rdPartyTemplate('tps-test-3rd-party-package', CWD, {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),
@@ -261,7 +261,7 @@ testing-prompt-core:
 	});
 
 	it('should load local tpsrc file for global 3rd party template', async () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package', {
 			'./settings.json': JSON.stringify({
 				prompts: [mkPrompt()],
 			}),
@@ -295,7 +295,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('tps-app');
+		const tps = await mkTemplate('tps-app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
@@ -309,7 +309,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('tps-app');
+		const tps = await mkTemplate('tps-app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});
@@ -323,7 +323,7 @@ testing-prompt-core:
 			},
 		});
 
-		const tps = mkTemplate('app');
+		const tps = await mkTemplate('app');
 
 		expect(tps.opts.extendedDest).toBe('./app');
 	});

@@ -33,7 +33,7 @@ describe('Tools:', () => {
 
 	describe('runCommand', () => {
 		it('should be able to run a command', async () => {
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -45,7 +45,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include templates main directory .bin in PATH', async () => {
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -67,7 +67,7 @@ describe('Tools:', () => {
 				recursive: true,
 			});
 
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -83,7 +83,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include node modules from parent directory from CWD in PATH', async () => {
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			await vol.promises.mkdir('/some/random/directory/inner', {
 				recursive: true,
@@ -114,7 +114,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include template directory in PATH', async () => {
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 
@@ -132,7 +132,7 @@ describe('Tools:', () => {
 		});
 
 		it('should include all bins from $PATH', async () => {
-			const tps = mkTemplate('run-comand');
+			const tps = await mkTemplate('run-comand');
 
 			runCommand(DEFAULT_COMMAND, CWD, [path.join(CWD, 'app')], tps);
 

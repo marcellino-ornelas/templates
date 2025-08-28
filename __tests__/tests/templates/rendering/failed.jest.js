@@ -56,7 +56,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 	});
 
 	it('should throw error if dot file is already created when creating a new folder', async () => {
-		tps = mkTemplate('dynamic-file-failed', CWD, {
+		tps = await mkTemplate('dynamic-file-failed', CWD, {
 			'default/index.txt': 'hey',
 			'default/{{=tps.name}}.txt.dot': 'hey',
 		});
@@ -95,7 +95,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 	});
 
 	it('should throw error if dot file is already created when building in CWD', async () => {
-		tps = mkTemplate('dynamic-file-failed', CWD, {
+		tps = await mkTemplate('dynamic-file-failed', CWD, {
 			'default/index.txt': 'hey',
 			'default/{{=tps.packages[0]}}.txt.dot': 'hey',
 		});
@@ -134,7 +134,7 @@ describe('[TPS] Rendered Failed Cases:', () => {
 	});
 
 	it('should throw error if dot file is already created in nested folder', async () => {
-		tps = mkTemplate('dynamic-file-failed', CWD, {
+		tps = await mkTemplate('dynamic-file-failed', CWD, {
 			'default/storeUtils/index.txt': 'hey',
 			'default/storeUtils/{{=tps.name}}.txt.dot': 'hey',
 		});

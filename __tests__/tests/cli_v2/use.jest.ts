@@ -19,7 +19,7 @@ describe('Command Line: Use', () => {
 		it('should display template options in help', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -39,7 +39,7 @@ describe('Command Line: Use', () => {
 		it('should display template name in sentence case', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -59,7 +59,7 @@ describe('Command Line: Use', () => {
 		it('should display nothing if no prompts', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({}),
 			});
 
@@ -73,7 +73,7 @@ describe('Command Line: Use', () => {
 		it('should display description if provided in help', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -121,7 +121,7 @@ describe('Command Line: Use', () => {
 			async ({ inquireType, yargsType }) => {
 				const templateName = 'testing-use-command';
 
-				mkTemplate(templateName, undefined, {
+				await mkTemplate(templateName, undefined, {
 					'settings.json': mkSettingsFileJSON({
 						prompts: [
 							mkPrompt({
@@ -143,7 +143,7 @@ describe('Command Line: Use', () => {
 		it('should display choices', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -165,7 +165,7 @@ describe('Command Line: Use', () => {
 		it('should not use default values', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -189,7 +189,7 @@ describe('Command Line: Use', () => {
 		it('should support aliases', async () => {
 			const templateName = 'testing-use-command';
 
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({

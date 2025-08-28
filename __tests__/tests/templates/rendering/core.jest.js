@@ -68,7 +68,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should render all directories', async () => {
-		const tps = mkTemplate('testing-directories', CWD, {
+		const tps = await mkTemplate('testing-directories', CWD, {
 			'default/index.js': 'hey',
 			'default/folder1': {},
 			'default/folder2': {},
@@ -88,7 +88,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use dynamic files', async () => {
-		const tps = mkTemplate('test-dynamic-file', undefined, {
+		const tps = await mkTemplate('test-dynamic-file', undefined, {
 			// single extension
 			'./default/index.js.tps': `{{=tps.name}}`,
 			// single extension
@@ -111,7 +111,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use any type of file', async () => {
-		const tps = mkTemplate('test-file', undefined, {
+		const tps = await mkTemplate('test-file', undefined, {
 			// single extension
 			'./default/index.js': 'hey',
 			// no extension
@@ -158,7 +158,7 @@ describe('[Templates] Render Process:', () => {
 			}
 		}
 
-		mkTemplate('test-template-nested-files', CWD, fileSystem);
+		await mkTemplate('test-template-nested-files', CWD, fileSystem);
 
 		const tps = await Templates.get('test-template-nested-files');
 
@@ -209,7 +209,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template without tps prefix', async () => {
-		mkTemplate('tps-test-template-prefix');
+		await mkTemplate('tps-test-template-prefix');
 
 		const tps = await Templates.get('test-template-prefix');
 
@@ -338,7 +338,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a local npm template', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package');
+		await mk3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
 
@@ -350,7 +350,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local 3rd party template without tps prefix', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+		await mk3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		// Exclude tps prefix
 		const tps = await Templates.get('test-3rd-template-prefix');
@@ -363,7 +363,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a global npm template', async () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
 		const tps = await Templates.get('tps-test-3rd-party-package', { default: true });
 
@@ -375,7 +375,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a global 3rd party template without tps prefix', async () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		// Exclude tps prefix
 		const tps = await Templates.get('test-3rd-template-prefix');
@@ -389,7 +389,7 @@ describe('[Templates] Render Process:', () => {
 
 	// TODO: remove .gitkeep
 	it('should ignore .tpskeep & .gitkeep files', async () => {
-		const tps = mkTemplate('my-template', undefined, {
+		const tps = await mkTemplate('my-template', undefined, {
 			'./default/some-directory/.tpskeep': '',
 			'./default/some-directory-nested/nested/.tpskeep': '',
 			'./default/some-directory/.gitkeep': '',

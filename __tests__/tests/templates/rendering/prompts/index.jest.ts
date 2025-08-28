@@ -21,7 +21,7 @@ describe('Prompting: ', () => {
 	});
 
 	it('should be able to use a template with no prompts', async () => {
-		const tps = mkTemplate('index', undefined, {
+		const tps = await mkTemplate('index', undefined, {
 			'./settings.json': JSON.stringify({}),
 		});
 
@@ -32,7 +32,7 @@ describe('Prompting: ', () => {
 	});
 
 	it('should be able to use a template with empty prompts', async () => {
-		const tps = mkTemplate('index', undefined, {
+		const tps = await mkTemplate('index', undefined, {
 			'./settings.json': JSON.stringify({
 				prompts: [],
 			}),
@@ -45,7 +45,7 @@ describe('Prompting: ', () => {
 	});
 
 	it('should be able use a prompt', async () => {
-		const tps = mkTemplate('prompts-core', CWD, {
+		const tps = await mkTemplate('prompts-core', CWD, {
 			'settings.json': mkSettingsFileJSON({
 				prompts: [
 					mkPrompt({
@@ -68,7 +68,7 @@ describe('Prompting: ', () => {
 	});
 
 	it('should add prompt to answers', async () => {
-		const tps = mkTemplate('prompts-core', CWD, {
+		const tps = await mkTemplate('prompts-core', CWD, {
 			'settings.json': mkSettingsFileJSON({
 				prompts: [
 					mkPrompt({
@@ -90,7 +90,7 @@ describe('Prompting: ', () => {
 
 	describe('typeType: ', () => {
 		it('should be able use null as answer for package', async () => {
-			const tps = mkTemplate('prompts-core', CWD, {
+			const tps = await mkTemplate('prompts-core', CWD, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -116,7 +116,7 @@ describe('Prompting: ', () => {
 		});
 
 		it('should be able use undefined as answer for package', async () => {
-			const tps = mkTemplate('prompts-core', CWD, {
+			const tps = await mkTemplate('prompts-core', CWD, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -143,7 +143,7 @@ describe('Prompting: ', () => {
 		});
 
 		it('should be able use string as answer for package', async () => {
-			const tps = mkTemplate('prompts-core', CWD, {
+			const tps = await mkTemplate('prompts-core', CWD, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -169,7 +169,7 @@ describe('Prompting: ', () => {
 		});
 
 		it('should be able use array as answer for package', async () => {
-			const tps = mkTemplate('prompts-core', CWD, {
+			const tps = await mkTemplate('prompts-core', CWD, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({
@@ -200,7 +200,7 @@ describe('Prompting: ', () => {
 		});
 
 		it('should be able use data', async () => {
-			const tps = mkTemplate('prompts-core', CWD, {
+			const tps = await mkTemplate('prompts-core', CWD, {
 				'settings.json': mkSettingsFileJSON({
 					prompts: [
 						mkPrompt({

@@ -23,7 +23,7 @@ describe('Templates library plugin', () => {
 		const setGlobalData = jest.fn();
 		const templateName = 'templates-library-plugin';
 
-		mkTemplate(templateName, undefined, {
+		await mkTemplate(templateName, undefined, {
 			'settings.json': mkSettingsFileJSON({
 				prompts: [mkPrompt()],
 			}),
@@ -54,7 +54,7 @@ describe('Templates library plugin', () => {
 	// 	const setGlobalData = jest.fn();
 	// 	const templateName = 'templates-library-plugin';
 
-	// 	mkTemplate(templateName);
+	// 	await mkTemplate(templateName);
 
 	// 	await TemplatesLibrariesPlugin(null, {
 	// 		templates: [templateName],

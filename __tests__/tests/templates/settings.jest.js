@@ -38,7 +38,7 @@ describe('[Templates] Settings:', () => {
 
 	describe('events', () => {
 		it('should ignore event if not specified', async () => {
-			mkTemplate('test-events-on-render');
+			await mkTemplate('test-events-on-render');
 
 			const tps = await Templates.get('test-events-on-render');
 
@@ -48,7 +48,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to use onRender event', async () => {
-			mkTemplate('test-events-on-render');
+			await mkTemplate('test-events-on-render');
 
 			const tps = await Templates.get('test-events-on-render');
 
@@ -69,7 +69,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to use onRendered event with single build path', async () => {
-			mkTemplate('test-events-on-rendered');
+			await mkTemplate('test-events-on-rendered');
 
 			const tps = await Templates.get('test-events-on-rendered');
 
@@ -93,7 +93,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to use onRendered event with multiple build paths', async () => {
-			mkTemplate('test-events-on-rendered');
+			await mkTemplate('test-events-on-rendered');
 
 			const tps = await Templates.get('test-events-on-rendered');
 
@@ -117,7 +117,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to use onBuildPathRender event', async () => {
-			mkTemplate('test-events-on-build-path-render');
+			await mkTemplate('test-events-on-build-path-render');
 
 			const tps = await Templates.get('test-events-on-build-path-render');
 
@@ -149,7 +149,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to use onBuildPathRendered event', async () => {
-			mkTemplate('test-events-on-build-path-rendered');
+			await mkTemplate('test-events-on-build-path-rendered');
 
 			const tps = await Templates.get('test-events-on-build-path-rendered');
 
@@ -181,7 +181,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to create files from events', async () => {
-			const tps = mkTemplate('test-events-on-build-path-rendered');
+			const tps = await mkTemplate('test-events-on-build-path-rendered');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onRender = jest.fn(
@@ -205,7 +205,7 @@ describe('[Templates] Settings:', () => {
 		});
 
 		it('Should be able to create directories from events', async () => {
-			const tps = mkTemplate('test-events-on-build-path-rendered');
+			const tps = await mkTemplate('test-events-on-build-path-rendered');
 
 			tps.templateSettings.events = {};
 			tps.templateSettings.events.onRender = jest.fn(

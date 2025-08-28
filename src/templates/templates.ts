@@ -187,7 +187,7 @@ export class Templates<TAnswers extends AnswersHash = AnswersHash> {
 	 */
 	public static readonly tpsrcConfigNames: string[] = tpsrcSearchPlaces;
 
-	public async get<TPassedAnswers extends AnswersHash = AnswersHash>(
+	public static async get<TPassedAnswers extends AnswersHash = AnswersHash>(
 		templateName: string,
 		opts: Partial<TemplateOptions> = {},
 	): Promise<Templates<TPassedAnswers>> {

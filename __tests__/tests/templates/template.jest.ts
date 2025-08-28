@@ -26,7 +26,7 @@ describe('Template', () => {
 
 	describe('Fetching Template', () => {
 		it('should be able to get a template', async () => {
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				...DEFAULT_TEMPLATE_FILES,
 				'./.settingsrc': mkSettingsFileJSON(),
 			});
@@ -40,7 +40,7 @@ describe('Template', () => {
 		});
 
 		it('should be able to get a local template', async () => {
-			mkTemplate(templateName, undefined, {
+			await mkTemplate(templateName, undefined, {
 				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
@@ -52,7 +52,7 @@ describe('Template', () => {
 		});
 
 		it('should be able to get a global template', async () => {
-			mkGlobalTemplate(templateName, {
+			await mkGlobalTemplate(templateName, {
 				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
@@ -66,7 +66,7 @@ describe('Template', () => {
 		});
 
 		it('should be able to get a global template', async () => {
-			mkGlobalTemplate(templateName, {
+			await mkGlobalTemplate(templateName, {
 				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
@@ -81,7 +81,7 @@ describe('Template', () => {
 
 		it('should be able to get a 3rd party template', async () => {
 			const templateNameTps = `tps-${templateName}`;
-			mk3rdPartyTemplate(templateNameTps, undefined, {
+			await mk3rdPartyTemplate(templateNameTps, undefined, {
 				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
@@ -96,7 +96,7 @@ describe('Template', () => {
 
 		it('should be able to get a global 3rd party template', async () => {
 			const templateNameTps = `tps-${templateName}`;
-			mkGlobal3rdPartyTemplate(templateNameTps, {
+			await mkGlobal3rdPartyTemplate(templateNameTps, {
 				...DEFAULT_TEMPLATE_FILES,
 				'settings.json': mkSettingsFileJSON(),
 			});
@@ -111,7 +111,7 @@ describe('Template', () => {
 	});
 
 	it('should load the default package by default', async () => {
-		mkTemplate(templateName, undefined, {
+		await mkTemplate(templateName, undefined, {
 			...DEFAULT_TEMPLATE_FILES,
 			'./.settingsrc': mkSettingsFileJSON(),
 		});
