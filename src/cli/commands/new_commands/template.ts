@@ -1,5 +1,5 @@
 import path from 'path';
-import Template from '@tps/templates';
+import Templates from '@tps/templates';
 import * as TPS from '@tps/utilities/constants';
 import { isDirAsync } from '@tps/utilities/fileSystem';
 import { CommandModule } from 'yargs';
@@ -17,8 +17,8 @@ export default {
 
 	description: 'create a new template',
 
-	builder: (yargs) => {
-		const options = getCliArgsFromTemplate('new-template');
+	builder: async (yargs) => {
+		const options = await getCliArgsFromTemplate('new-template');
 
 		yargs.options(options);
 
@@ -26,7 +26,7 @@ export default {
 	},
 
 	async handler(argv) {
-		const tps = new Template('new-template', {
+		const tps = await Templates.get('new-template', {
 			tpsPath: TPS.DEFAULT_TPS,
 		});
 

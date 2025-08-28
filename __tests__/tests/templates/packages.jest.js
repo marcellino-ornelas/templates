@@ -32,7 +32,7 @@ describe('[Templates] Packages:', () => {
 
 	it('should be able to compile many packages', async () => {
 		const pkgs = ['store', 'main'];
-		tps.loadPackages(pkgs);
+		await tps.loadPackages(pkgs);
 
 		pkgs.forEach((pkg) => {
 			expect(tps.packages).toHaveProperty(pkg);
@@ -43,14 +43,14 @@ describe('[Templates] Packages:', () => {
 
 		errArgs.forEach((errArg) => {
 			expect(() => {
-				tps.loadPackages(errArg);
+				return tps.loadPackages(errArg);
 			}).toThrow();
 		});
 	});
 
 	it("should throw an error when packages aren't real", async () => {
 		expect(() => {
-			tps.loadPackages(['fake-package']);
+			return tps.loadPackages(['fake-package']);
 		}).toThrow();
 	});
 
@@ -58,7 +58,7 @@ describe('[Templates] Packages:', () => {
 		tps.loadPackage('main');
 
 		expect(() => {
-			tps.loadPackage('main');
+			return tps.loadPackage('main');
 		}).toThrow();
 	});
 });

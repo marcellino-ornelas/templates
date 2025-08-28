@@ -95,12 +95,12 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.hidden;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
-	const tps = new Template(argv.use, tpsConfig);
+	const tps = await Template.get(argv.use, tpsConfig);
 
 	// @ts-expect-error wrong types for `is`
 	if (is.array(packages) && !is.array.empty(packages)) {
 		logger.cli.info('Loading packages:', packages);
-		tps.loadPackages(packages);
+		await tps.loadPackages(packages);
 	}
 
 	if (tps.hasPrompts()) {

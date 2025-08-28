@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { errorExit } from '@tps/cli/utils/error-exit';
-import Template from '@tps/templates';
+import Templates from '@tps/templates';
 import * as TPS from '@tps/utilities/constants';
 import { CommandModule } from 'yargs';
 import { isDir } from '@tps/utilities/fileSystem';
@@ -14,8 +14,8 @@ interface CopyArgv {
 export default {
 	command: ['copy <template> [name]', 'cp <template> [name]'],
 	description: 'Copy a template',
-	handler(argv) {
-		const template = new Template(argv.template);
+	async handler(argv) {
+		const tps = await Templates.get(argv.template);
 
 		const newLocation = path.join(TPS.LOCAL_PATH, argv.name || argv.template);
 
@@ -38,7 +38,7 @@ export default {
 		}
 
 		fs.promises
-			.cp(template.src, newLocation, { recursive: true })
+			.cp(tps.template.location, newLocation, { recursive: true })
 			.then(() => {
 				process.exit(0);
 			})

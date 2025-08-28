@@ -120,7 +120,7 @@ export const runCommand = (
 		: [];
 
 	const templateNodeModuleBin = tps
-		? [path.resolve(tps.src, 'node_modules', '.bin')]
+		? [path.resolve(tps.template.location, 'node_modules', '.bin')]
 		: [];
 
 	const bins = [
