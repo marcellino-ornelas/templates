@@ -19,7 +19,7 @@ describe('[FileSystemTree] FileNode:', () => {
 	const indexFileName = 'index.js.dot';
 	const pathToFile = path.join(PATH_TO_MAIN_DIRECORY, indexFileName);
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		indexFile = new FileNode(indexFileName, PATH_TO_MAIN_DIRECORY);
 	});
 

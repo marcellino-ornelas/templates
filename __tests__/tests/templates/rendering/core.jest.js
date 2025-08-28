@@ -25,11 +25,11 @@ jest.mock('fs');
 const playground = new Playground();
 
 describe('[Templates] Render Process:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.resetAllMocks();
 		reset();
 
@@ -37,18 +37,18 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should throw RequiresTemplateError if no template was set', async () => {
-		expect(() => new Templates()).toThrow(RequiresTemplateError);
+		await expect(() => Templates.get()).rejects.toThrow(RequiresTemplateError);
 	});
 
 	it('should throw TemplateNotFound if no template is available', async () => {
-		expect(() => new Templates('some-random-template')).toThrow(
+		await expect(() => Templates.get('some-random-template')).rejects.toThrow(
 			TemplateNotFoundError,
 		);
 	});
 
 	it('should throw DirectoryNotFoundError if dest does not exist', async () => {
 		const dest = playground.pathTo('non/existent/path');
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		return expect(tps.render(dest, 'app')).rejects.toThrow(
 			DirectoryNotFoundError,
@@ -56,7 +56,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template', async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		const destPath = playground.pathTo('app');
 
@@ -68,7 +68,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should render all directories', async () => {
-		const tps = mkTemplate('testing-directories', CWD, {
+		const tps = await mkTemplate('testing-directories', CWD, {
 			'default/index.js': 'hey',
 			'default/folder1': {},
 			'default/folder2': {},
@@ -88,7 +88,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use dynamic files', async () => {
-		const tps = mkTemplate('test-dynamic-file', undefined, {
+		const tps = await mkTemplate('test-dynamic-file', undefined, {
 			// single extension
 			'./default/index.js.tps': `{{=tps.name}}`,
 			// single extension
@@ -111,7 +111,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use any type of file', async () => {
-		const tps = mkTemplate('test-file', undefined, {
+		const tps = await mkTemplate('test-file', undefined, {
 			// single extension
 			'./default/index.js': 'hey',
 			// no extension
@@ -158,9 +158,9 @@ describe('[Templates] Render Process:', () => {
 			}
 		}
 
-		mkTemplate('test-template-nested-files', CWD, fileSystem);
+		await mkTemplate('test-template-nested-files', CWD, fileSystem);
 
-		const tps = new Templates('test-template-nested-files');
+		const tps = await Templates.get('test-template-nested-files');
 
 		const results = await tps.render(CWD, 'app');
 
@@ -181,7 +181,8 @@ describe('[Templates] Render Process:', () => {
 		const all = [];
 
 		for (let i = 0; i < 1000; i++) {
-			const tps = new Templates('testing');
+			// eslint-disable-next-line no-await-in-loop
+			const tps = await Templates.get('testing');
 			const destPath = playground.pathTo(`app_${i}`);
 			// eslint-disable-next-line jest/valid-expect-in-promise
 			const promise = tps.render(playground.box(), `app_${i}`).then(() => {
@@ -195,7 +196,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render with multiple build paths', async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		const buildPaths = Array.from({ length: 100 }, (_, i) => `app_${i + 1}`);
 
@@ -209,9 +210,9 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template without tps prefix', async () => {
-		mkTemplate('tps-test-template-prefix');
+		await mkTemplate('tps-test-template-prefix');
 
-		const tps = new Templates('test-template-prefix');
+		const tps = await Templates.get('test-template-prefix');
 
 		const destPath = playground.pathTo('app');
 
@@ -223,7 +224,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template with long build path', async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		const destPath = playground.pathTo('hey/app');
 
@@ -235,7 +236,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template with short build path with no new folder', async () => {
-		const tps = new Templates('testing', {
+		const tps = await Templates.get('testing', {
 			newFolder: false,
 		});
 
@@ -249,7 +250,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template with long build path with no new folder', async () => {
-		const tps = new Templates('testing', {
+		const tps = await Templates.get('testing', {
 			newFolder: false,
 		});
 
@@ -263,7 +264,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local template with multiple build paths', async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		const buildPaths = ['app', 'Box', 'New'];
 
@@ -280,7 +281,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it("should be able to render a local template and keep all files that don't interfere with the template", async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 
 		const destPath = playground.pathTo('app');
 		const randomDest = playground.pathTo('app/some-random-file.js');
@@ -297,7 +298,7 @@ describe('[Templates] Render Process:', () => {
 	 * @docs guide/getting-started/packages.md#including-more-packages
 	 */
 	it('should be able to render packages', async () => {
-		const tps = new Templates('testing');
+		const tps = await Templates.get('testing');
 		tps.loadPackages(['extras', 'extras2']);
 
 		const destPath = playground.pathTo('app');
@@ -312,7 +313,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should use experimental template engine by default', async () => {
-		const tps = new Templates('testing-experimental-template-engine');
+		const tps = await Templates.get('testing-experimental-template-engine');
 
 		tps.setAnswers({ one: true });
 
@@ -324,7 +325,7 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to turn off experimental template engine', async () => {
-		const tps = new Templates('testing-experimental-template-engine', {
+		const tps = await Templates.get('testing-experimental-template-engine', {
 			experimentalTemplateEngine: false,
 		});
 
@@ -338,9 +339,11 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a local npm template', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-party-package');
+		await mk3rdPartyTemplate('tps-test-3rd-party-package');
 
-		const tps = new Templates('tps-test-3rd-party-package', { default: true });
+		const tps = await Templates.get('tps-test-3rd-party-package', {
+			default: true,
+		});
 
 		const appPath = playground.pathTo('app');
 
@@ -350,10 +353,10 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a local 3rd party template without tps prefix', async () => {
-		mk3rdPartyTemplate('tps-test-3rd-template-prefix');
+		await mk3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		// Exclude tps prefix
-		const tps = new Templates('test-3rd-template-prefix');
+		const tps = await Templates.get('test-3rd-template-prefix');
 
 		const appPath = playground.pathTo('app');
 
@@ -363,9 +366,11 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to use a global npm template', async () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-party-package');
 
-		const tps = new Templates('tps-test-3rd-party-package', { default: true });
+		const tps = await Templates.get('tps-test-3rd-party-package', {
+			default: true,
+		});
 
 		const appPath = playground.pathTo('app');
 
@@ -375,10 +380,10 @@ describe('[Templates] Render Process:', () => {
 	});
 
 	it('should be able to render a global 3rd party template without tps prefix', async () => {
-		mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
+		await mkGlobal3rdPartyTemplate('tps-test-3rd-template-prefix');
 
 		// Exclude tps prefix
-		const tps = new Templates('test-3rd-template-prefix');
+		const tps = await Templates.get('test-3rd-template-prefix');
 
 		const destPath = playground.pathTo('app');
 
@@ -389,7 +394,7 @@ describe('[Templates] Render Process:', () => {
 
 	// TODO: remove .gitkeep
 	it('should ignore .tpskeep & .gitkeep files', async () => {
-		const tps = mkTemplate('my-template', undefined, {
+		const tps = await mkTemplate('my-template', undefined, {
 			'./default/some-directory/.tpskeep': '',
 			'./default/some-directory-nested/nested/.tpskeep': '',
 			'./default/some-directory/.gitkeep': '',

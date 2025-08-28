@@ -19,10 +19,10 @@ const playground = new Playground(TESTING_DIR);
  * @docs api/cli/commands/create.md#flags
  */
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('cli_create_flags'));
+	beforeEach(async () => playground.createBox('cli_create_flags'));
 
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created

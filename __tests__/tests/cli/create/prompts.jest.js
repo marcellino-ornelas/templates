@@ -9,11 +9,11 @@ import { createTemplate, checkFilesForTemplate } from '@test/support/cli';
 const playground = new Playground(TESTING_DIR);
 
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('create_prompt'));
+	beforeEach(async () => playground.createBox('create_prompt'));
 
 	// eslint-disable-next-line jest/expect-expect
 	it.each([['less'], ['css']])(

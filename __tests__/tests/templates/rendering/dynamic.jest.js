@@ -19,13 +19,13 @@ const playground = new Playground(TESTING_DIR);
 describe('[TPS] Rendering dynamic:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
-		tps = new Templates('testing-dynamic');
+		tps = await Templates.get('testing-dynamic');
 		// For tests that dont care about answer
 		tps.setAnswers({
 			one: 'bad',
@@ -34,11 +34,11 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load a dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.tps': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -48,11 +48,11 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	it('should load legacy dynamic file', async () => {
-		mkTemplate('test-dynamic-file', undefined, {
+		await mkTemplate('test-dynamic-file', undefined, {
 			'./default/index.js.dot': `{{=tps.name}}`,
 		});
 
-		tps = new Templates('test-dynamic-file');
+		tps = await Templates.get('test-dynamic-file');
 
 		await tps.render(CWD, ['App']);
 
@@ -62,8 +62,8 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	describe('File names', () => {
-		beforeEach(() => {
-			tps = new Templates('testing-dynamic-file-name');
+		beforeEach(async () => {
+			tps = await Templates.get('testing-dynamic-file-name');
 
 			tps.setAnswers({
 				one: '',

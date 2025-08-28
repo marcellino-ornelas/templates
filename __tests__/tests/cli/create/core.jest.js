@@ -13,11 +13,11 @@ const playground = new Playground(TESTING_DIR);
  * @docs api/cli/commands/create.md
  */
 describe('[cli] Create:', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('create_core'));
+	beforeEach(async () => playground.createBox('create_core'));
 
 	/**
 	 * @docs api/cli/commands/create.md#create-a-single-template

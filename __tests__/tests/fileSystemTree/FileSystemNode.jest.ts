@@ -19,7 +19,7 @@ describe('[FileSystemTree] FileSystemNode:', () => {
 	let dbFile: FileNode;
 	let mainDir: DirNode;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		mainDir = new DirNode('main', PATH_TO_TEMPLATES);
 		// eslint-disable-next-line prefer-destructuring
 		indexFile = mainDir.find({ name: 'index.js.dot' })[0] as FileNode;

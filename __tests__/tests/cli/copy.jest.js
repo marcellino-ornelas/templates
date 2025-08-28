@@ -10,10 +10,10 @@ import Playground from '@test/utilities/playground_legacy';
 const playground = new Playground(TESTING_DIR);
 
 describe('Command Line: Copy', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('copy'));
+	beforeEach(async () => playground.createBox('copy'));
 
 	it('should be able to copy a template', async () => {
 		const cwd = playground.box();

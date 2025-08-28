@@ -12,12 +12,12 @@ interface TemplateAnswers {
 }
 
 describe('Template', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 
 	it('should be able to render a new template', async () => {
-		const tps = new Templates<TemplateAnswers>('new-template', {
+		const tps = await Templates.get<TemplateAnswers>('new-template', {
 			default: true,
 		});
 
@@ -31,7 +31,7 @@ describe('Template', () => {
 		it.each(['js', 'json'])(
 			'it should render a %s settings file',
 			async (type: TemplateAnswers['type']) => {
-				const tps = new Templates<TemplateAnswers>('new-template', {
+				const tps = await Templates.get<TemplateAnswers>('new-template', {
 					default: true,
 				});
 
@@ -49,7 +49,7 @@ describe('Template', () => {
 
 	describe('annotate', () => {
 		it('should be able to render annotations in a js file', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -74,7 +74,7 @@ module.exports = {
 		});
 
 		it('should be able to not render annotations in a js file', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -93,7 +93,7 @@ module.exports = {
 		});
 
 		it('should be able to render annotations in a json file', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -113,7 +113,7 @@ module.exports = {
 		});
 
 		it('should be able to not render annotations in a json file', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -133,7 +133,7 @@ module.exports = {
 
 	describe('experimental', () => {
 		it('should be able to render experimental features', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -159,7 +159,7 @@ module.exports = {
 		});
 
 		it('should be able to render experimental features without annotations', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -180,7 +180,7 @@ module.exports = {
 		});
 
 		it('should be able to not render experimental features', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 
@@ -206,7 +206,7 @@ module.exports = {
 
 	describe('websiteUrl.def', () => {
 		it('should be able to render url', async () => {
-			const tps = new Templates<TemplateAnswers>('new-template', {
+			const tps = await Templates.get<TemplateAnswers>('new-template', {
 				default: true,
 			});
 

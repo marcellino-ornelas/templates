@@ -24,13 +24,13 @@ const playground = new Playground(TESTING_DIR);
 describe('[Templates] Prompts Process:', () => {
 	let tps;
 
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
-		tps = new Templates('testing-prompt-core');
+		tps = await Templates.get('testing-prompt-core');
 		return playground.createBox('render_process_prompts_core');
 	});
 

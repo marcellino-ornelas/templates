@@ -36,7 +36,7 @@ export const DEFAULT_TEMPLATE_FILES: DirectoryJSON = {
 
 export const DEFAULT_BUILD_FILES = ['index.js'];
 
-export const mkTemplateBase = (
+export const mkTemplateBase = async (
 	/**
 	 * full path to the template folder including name
 	 *
@@ -46,51 +46,51 @@ export const mkTemplateBase = (
 	location: string,
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
-): Templates => {
+): Promise<Templates> => {
 	vol.fromJSON(json, location);
 
 	const templatename = path.basename(location);
 
-	return new Templates(templatename, {
+	return Templates.get(templatename, {
 		default: true,
 		...opts,
 	});
 };
 
-export const mkTemplate = (
+export const mkTemplate = async (
 	name: string,
 	directory: string = CWD,
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
-): Templates => {
+): Promise<Templates> => {
 	return mkTemplateBase(path.join(directory, `.tps/${name}/`), json, opts);
 };
 
-export const mk3rdPartyTemplate = (
+export const mk3rdPartyTemplate = async (
 	name: string,
 	location: string = CWD,
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
-): Templates => {
+): Promise<Templates> => {
 	if (!name.startsWith('tps-')) {
 		throw new Error('3rd party template must with tps- ');
 	}
 	return mkTemplateBase(path.join(location, 'node_modules', name), json, opts);
 };
 
-export const mkGlobal3rdPartyTemplate = (
+export const mkGlobal3rdPartyTemplate = async (
 	name: string,
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
-): Templates => {
+): Promise<Templates> => {
 	return mk3rdPartyTemplate(name, '/usr/lib', json, opts);
 };
 
-export const mkGlobalTemplate = (
+export const mkGlobalTemplate = async (
 	name: string,
 	json: DirectoryJSON = DEFAULT_TEMPLATE_FILES,
 	opts: Partial<TemplateOptions> = {},
-): Templates => {
+): Promise<Templates> => {
 	return mkTemplate(name, USER_HOME, json, opts);
 };
 

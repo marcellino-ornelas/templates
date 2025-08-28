@@ -14,14 +14,14 @@ jest.mock('fs');
 const playground = new Playground(TESTING_DIR);
 
 describe('[Templates] Prompts Process: when using select prompts', () => {
-	beforeAll(() => playground.create());
+	beforeAll(async () => playground.create());
 
 	afterAll(() => playground.destroy());
 
 	let tps;
-	beforeEach(() => {
+	beforeEach(async () => {
 		// add no default to this test to only test packages
-		tps = new Templates('testing-prompt-types-select', {
+		tps = await Templates.get('testing-prompt-types-select', {
 			defaultPackage: false,
 		});
 

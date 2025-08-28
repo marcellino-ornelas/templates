@@ -118,7 +118,7 @@ describe('CreateDebug', () => {
 	let createDebug;
 
 	describe('basic', () => {
-		beforeEach(() => {
+		beforeEach(async () => {
 			createDebug = new CreateDebug('test');
 		});
 		it('should be enabled when debug is same name (DEBUG=test)', async () => {
@@ -193,7 +193,7 @@ describe('CreateDebug', () => {
 		let data = '';
 		const oldConsoleLog = console.log;
 
-		beforeAll(() => {
+		beforeAll(async () => {
 			// Do not show colors when testing
 			// @ts-expect-error not typed but available in debug
 			debug.useColors = () => false;
@@ -213,7 +213,7 @@ describe('CreateDebug', () => {
 			console.log = oldConsoleLog;
 		});
 
-		beforeEach(() => {
+		beforeEach(async () => {
 			data = '';
 			debug.enable('');
 			createDebug = new CreateDebug('test');
