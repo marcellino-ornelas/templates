@@ -79,7 +79,7 @@ describe('[Templates] tpsrc:', () => {
 	);
 
 	describe('when adding options in tpsrc', () => {
-		beforeEach(() => playground.createBox('templates_tpsrc'));
+		beforeEach(async () => playground.createBox('templates_tpsrc'));
 
 		it('should be able to use extendDest', async () => {
 			const dest = playground.pathTo(`${extendedDest}`);

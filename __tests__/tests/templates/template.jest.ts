@@ -19,7 +19,7 @@ jest.mock('fs/promises');
 const templateName = 'template-core';
 
 describe('Template', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		// jest.resetAllMocks();
 		reset();
 	});

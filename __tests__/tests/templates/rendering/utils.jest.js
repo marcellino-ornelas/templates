@@ -15,7 +15,7 @@ const playground = new Playground(TESTING_DIR);
 
 describe('[TPS] Utils:', () => {
 	let tps;
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		tps = await Templates.get('testing-utils');

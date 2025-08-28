@@ -13,7 +13,7 @@ describe('Command Line: Copy', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('copy'));
+	beforeEach(async () => playground.createBox('copy'));
 
 	it('should be able to copy a template', async () => {
 		const cwd = playground.box();

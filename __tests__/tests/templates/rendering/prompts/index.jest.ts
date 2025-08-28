@@ -15,7 +15,7 @@ jest.mock('inquirer');
 jest.mock('fs');
 
 describe('Prompting: ', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		// jest.resetAllMocks();
 		reset();
 	});

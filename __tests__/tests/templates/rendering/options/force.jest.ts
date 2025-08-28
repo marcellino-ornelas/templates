@@ -7,7 +7,7 @@ import { FileExistError } from '@tps/errors';
 jest.mock('fs');
 
 describe('Force', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

@@ -20,7 +20,7 @@ import {
 jest.mock('fs');
 
 describe('[TPS] Tpsrc', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

@@ -19,7 +19,7 @@ describe('[Templates] Prompts Process: when using select prompts', () => {
 	afterAll(() => playground.destroy());
 
 	let tps;
-	beforeEach(() => {
+	beforeEach(async () => {
 		// add no default to this test to only test packages
 		tps = await Templates.get('testing-prompt-types-select', {
 			defaultPackage: false,

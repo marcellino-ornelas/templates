@@ -7,7 +7,7 @@ import path from 'path';
 jest.mock('fs');
 
 describe('Command Line: new template', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

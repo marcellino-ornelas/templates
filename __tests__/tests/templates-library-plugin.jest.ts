@@ -14,7 +14,7 @@ import { TemplatesLibrariesPlugin } from '../../docs/plugins/templates-libraries
 jest.mock('fs');
 
 describe('Templates library plugin', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.resetAllMocks();
 		reset();
 	});

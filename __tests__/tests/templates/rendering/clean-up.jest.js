@@ -33,7 +33,7 @@ describe('[Templates] Render Process:', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		tps = await Templates.get('testing');
 
 		return playground.createBox('create_clean_up');

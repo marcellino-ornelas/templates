@@ -22,7 +22,7 @@ describe('[cli] Create:', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('cli_create_flags'));
+	beforeEach(async () => playground.createBox('cli_create_flags'));
 
 	/**
 	 * @docs api/cli/commands/create.md#force-a-template-to-be-created

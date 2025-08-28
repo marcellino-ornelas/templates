@@ -17,7 +17,7 @@ describe('[TPS] Def files', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		return playground.createBox('def_files');
 	});
 

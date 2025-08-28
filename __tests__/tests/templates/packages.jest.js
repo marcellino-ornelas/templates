@@ -8,7 +8,7 @@ jest.mock('fs');
 describe('[Templates] Packages:', () => {
 	let tps;
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		tps = await Templates.get('testing');
 	});
 
@@ -17,7 +17,9 @@ describe('[Templates] Packages:', () => {
 	});
 
 	it('should not load default package if turn off', async () => {
-		const tpsNoDefault = await Templates.get('testing', { defaultPackage: false });
+		const tpsNoDefault = await Templates.get('testing', {
+			defaultPackage: false,
+		});
 
 		expect(tpsNoDefault.opts.default).toBeFalsy();
 		expect(tpsNoDefault.packages).not.toHaveProperty('default');

@@ -15,7 +15,7 @@ describe('[TPS][cli] new package', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() =>
+	beforeEach(async () =>
 		playground
 			.createBox('new_package')
 			.then(() => init(playground.box(), { force: true }))

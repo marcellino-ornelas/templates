@@ -12,7 +12,7 @@ interface TemplateAnswers {
 }
 
 describe('Template', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 

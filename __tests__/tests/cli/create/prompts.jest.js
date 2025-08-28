@@ -13,7 +13,7 @@ describe('[cli] Create:', () => {
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('create_prompt'));
+	beforeEach(async () => playground.createBox('create_prompt'));
 
 	// eslint-disable-next-line jest/expect-expect
 	it.each([['less'], ['css']])(

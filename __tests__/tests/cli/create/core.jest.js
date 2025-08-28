@@ -17,7 +17,7 @@ describe('[cli] Create:', () => {
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => playground.createBox('create_core'));
+	beforeEach(async () => playground.createBox('create_core'));
 
 	/**
 	 * @docs api/cli/commands/create.md#create-a-single-template

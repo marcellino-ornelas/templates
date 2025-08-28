@@ -27,7 +27,7 @@ describe('[Templates] Prompts Process:', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		tps = await Templates.get('testing-prompt-core');

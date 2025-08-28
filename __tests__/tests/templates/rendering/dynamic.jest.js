@@ -22,7 +22,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	beforeAll(() => playground.create());
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 
 		tps = await Templates.get('testing-dynamic');
@@ -62,7 +62,7 @@ describe('[TPS] Rendering dynamic:', () => {
 	});
 
 	describe('File names', () => {
-		beforeEach(() => {
+		beforeEach(async () => {
 			tps = await Templates.get('testing-dynamic-file-name');
 
 			tps.setAnswers({

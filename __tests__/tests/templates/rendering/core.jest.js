@@ -29,7 +29,7 @@ describe('[Templates] Render Process:', () => {
 
 	afterAll(() => playground.destroy());
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		jest.resetAllMocks();
 		reset();
 

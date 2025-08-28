@@ -10,7 +10,7 @@ import path from 'path';
 jest.mock('fs');
 
 describe('[Templates] Settings:', () => {
-	beforeEach(() => {
+	beforeEach(async () => {
 		reset();
 	});
 
