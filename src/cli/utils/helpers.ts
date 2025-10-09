@@ -1,11 +1,11 @@
 import { sentenceCase } from 'change-case';
-import Template from '@tps/templates';
+import Templates from '@tps/templates';
 import { Options } from 'yargs';
 
-export const getCliArgsFromTemplate = (
+export const getCliArgsFromTemplate = async (
 	template: string,
-): Record<string, Options> => {
-	const tps = new Template(template);
+): Promise<Record<string, Options>> => {
+	const tps = await Templates.get(template);
 
 	// eslint-disable-next-line no-underscore-dangle
 	if (!tps?._prompts) return {};
