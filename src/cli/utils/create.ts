@@ -1,6 +1,6 @@
 /* eslint-disable no-prototype-builtins */
 import is from 'is';
-import Template from '@tps/templates';
+import Templates from '@tps/templates';
 import type { TemplatesOptions } from '@tps/types/templates';
 import logger from '@tps/utilities/logger';
 import { CommandModule } from 'yargs';
@@ -18,7 +18,7 @@ export interface UseArgv {
 }
 
 // TODO: async is not working. need to debug. Completely ignores this function when its async
-export const options = (yargs) => {
+export const options = async (yargs) => {
 	const { argv } = yargs;
 	const template = argv._[0];
 
@@ -61,7 +61,7 @@ export const options = (yargs) => {
 
 	if (!template) return yargs;
 
-	const templatesOptions = getCliArgsFromTemplate(template);
+	const templatesOptions = await getCliArgsFromTemplate(template);
 
 	yargs.options(templatesOptions);
 
@@ -95,7 +95,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	if (argv.hasOwnProperty('hidden')) tpsConfig.hidden = argv.hidden;
 
 	logger.cli.info('Tps Config: %n', tpsConfig);
-	const tps = new Template(argv.use, tpsConfig);
+	const tps = await Templates.get(argv.use, tpsConfig);
 
 	// @ts-expect-error wrong types for `is`
 	if (is.array(packages) && !is.array.empty(packages)) {

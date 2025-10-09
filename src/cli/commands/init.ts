@@ -1,7 +1,6 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import Template from '@tps/templates';
-import { Templates } from '@tps/templates/templates';
+import Templates from '@tps/templates';
 import { TemplatesOptions } from '@tps/types/templates';
 import * as TPS from '@tps/utilities/constants';
 import {
@@ -44,7 +43,7 @@ export default {
 
 		logger.cli.info('Cli options: %n', tpsConfig);
 
-		const tps = new Template('init', tpsConfig);
+		const tps = await Templates.get('init', tpsConfig);
 
 		/**
 		 * tps global init
