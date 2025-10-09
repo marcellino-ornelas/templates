@@ -34,23 +34,23 @@ describe('Build', () => {
 			'package2/package2.txt': 'package2.txt',
 		});
 
-		tps.loadPackage('package1');
+		await tps.loadPackage('package1');
 
-		const template = new Template(
-			tps.template,
-			tps.src,
-			tps.templateSettings,
-			tps.packages,
-			tps.packagesUsed,
-			tps.compiledFiles,
-			// @ts-expect-error - private
-			// eslint-disable-next-line no-underscore-dangle
-			tps._defs,
-		);
+		// const template = new Template(
+		// 	tps.template,
+		// 	tps.src,
+		// 	tps.templateSettings,
+		// 	tps.packages,
+		// 	tps.packagesUsed,
+		// 	tps.compiledFiles,
+		// 	// @ts-expect-error - private
+		// 	// eslint-disable-next-line no-underscore-dangle
+		// 	tps._defs,
+		// );
 
-		await template.compile();
+		// await tps.compile();
 
-		const build = new Build(BUILD_PATH, template);
+		const build = new Build(BUILD_PATH, tps.template);
 
 		await build.render();
 
@@ -80,7 +80,7 @@ describe('Build', () => {
 				wipe: true,
 			});
 
-			// @ts-expect-error(TS2769)
+			// @ts-expect-error idk whats wrong
 			const spy = jest.spyOn(build, 'wipe');
 
 			const wasWiped = await build.maybeWipe();
@@ -99,7 +99,7 @@ describe('Build', () => {
 				wipe: true,
 			});
 
-			// @ts-expect-error(TS2769)
+			// @ts-expect-error idk whats wrong
 			const spy = jest.spyOn(build, 'wipe');
 
 			const wasWiped = await build.maybeWipe();
@@ -114,7 +114,7 @@ describe('Build', () => {
 
 			const build = new Build(CWD, template, { wipe: true, buildInDest: true });
 
-			// @ts-expect-error(TS2769)
+			// @ts-expect-error idk whats wrong
 			const spy = jest.spyOn(build, 'wipe');
 
 			const wasWiped = await build.maybeWipe();
@@ -135,7 +135,7 @@ describe('Build', () => {
 				buildNewFolder: false,
 			});
 
-			// @ts-expect-error(TS2769)
+			// @ts-expect-error idk whats wrong
 			const spy = jest.spyOn(build, 'wipe');
 
 			const wasWiped = await build.maybeWipe(hackyForceFunction);
@@ -162,19 +162,19 @@ describe('Build', () => {
 				'package2/package2.txt': 'package2.txt',
 			});
 
-			tps.loadPackage('package1');
+			await tps.loadPackage('package1');
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
 			await build.render();
 
@@ -216,19 +216,19 @@ describe('Build', () => {
 				'package2/package2.txt': 'package2.txt',
 			});
 
-			tps.loadPackage('package1');
+			await tps.loadPackage('package1');
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
 			await build.render();
 
@@ -262,19 +262,19 @@ describe('Build', () => {
 		it('should be able to create custom files', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createFile('./custom.txt', 'hey');
+			tps.template.createFile('./custom.txt', 'hey');
 
 			await build.render();
 
@@ -291,19 +291,19 @@ describe('Build', () => {
 		it('should be able to create custom files in sub directories', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createFile('./path/to/dir/custom.txt', 'hey');
+			tps.template.createFile('./path/to/dir/custom.txt', 'hey');
 
 			await build.render();
 
@@ -322,19 +322,19 @@ describe('Build', () => {
 		it('should be able to create custom dynamic files', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createFile('./custom.txt.tps', '{{=tps.name}}');
+			tps.template.createFile('./custom.txt.tps', '{{=tps.name}}');
 
 			await build.render();
 
@@ -351,19 +351,19 @@ describe('Build', () => {
 		it('should be able to create custom files that use dynamic names', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createFile('./{{=tps.name}}.txt', 'hey');
+			tps.template.createFile('./{{=tps.name}}.txt', 'hey');
 
 			await build.render();
 
@@ -404,21 +404,21 @@ describe('Build', () => {
 		it('should fail to create custom file if already exists', async () => {
 			const tps = await mkTemplate('testing_build_built');
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
 			writeFile(path.join(CWD, './App/custom.txt'), 'original');
 
-			template.createFile('./custom.txt', 'hey');
+			tps.template.createFile('./custom.txt', 'hey');
 
 			await expect(build.render()).rejects.toThrowError(FileExistError);
 
@@ -433,19 +433,19 @@ describe('Build', () => {
 				force: true,
 			});
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			const build = new Build(BUILD_PATH, template, { force: true });
+			const build = new Build(BUILD_PATH, tps.template, { force: true });
 
 			writeFile(path.join(CWD, './App/custom.txt'), 'original');
 
-			template.createFile('./custom.txt', 'hey', {
+			tps.template.createFile('./custom.txt', 'hey', {
 				// mimics how normal flow works
 				force: tps.opts.force,
 			});
@@ -461,19 +461,19 @@ describe('Build', () => {
 				wipe: true,
 			});
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			const build = new Build(BUILD_PATH, template, { wipe: true });
+			const build = new Build(BUILD_PATH, tps.template, { wipe: true });
 
 			writeFile(path.join(CWD, './App/custom.txt'), 'original');
 
-			template.createFile('./custom.txt', 'hey');
+			tps.template.createFile('./custom.txt', 'hey');
 
 			await build.render();
 
@@ -484,19 +484,19 @@ describe('Build', () => {
 		it('should be able to create custom directory', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createDirectory('./custom');
+			tps.template.createDirectory('./custom');
 
 			await build.render();
 
@@ -510,19 +510,19 @@ describe('Build', () => {
 		it('should be able to create custom sub directories', async () => {
 			const tps = await mkTemplate('testing_build_built', CWD);
 
-			const template = new Template(
-				tps.template,
-				tps.src,
-				tps.templateSettings,
-				tps.packages,
-				tps.packagesUsed,
-			);
+			// const template = new Template(
+			// 	tps.template,
+			// 	tps.src,
+			// 	tps.templateSettings,
+			// 	tps.packages,
+			// 	tps.packagesUsed,
+			// );
 
-			await template.compile();
+			// await template.compile();
 
-			const build = new Build(BUILD_PATH, template);
+			const build = new Build(BUILD_PATH, tps.template);
 
-			template.createDirectory('./custom/path/to');
+			tps.template.createDirectory('./custom/path/to');
 
 			await build.render();
 

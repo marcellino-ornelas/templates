@@ -36,7 +36,7 @@ describe('[TPS] Def files', () => {
 	it("should be able to use a def file when multiple def's are defined in the file", async () => {
 		const tps = await Templates.get('testing-def-files');
 
-		tps.loadPackage('two');
+		await tps.loadPackage('two');
 
 		const destPath = path.join(playground.box(), 'app');
 		const twoFile = path.join(destPath, 'two.txt');

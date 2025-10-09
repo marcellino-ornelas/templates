@@ -15,7 +15,7 @@ export default {
 	command: ['copy <template> [name]', 'cp <template> [name]'],
 	description: 'Copy a template',
 	async handler(argv) {
-		const template = await Templates.get(argv.template);
+		const tps = await Templates.get(argv.template);
 
 		const newLocation = path.join(TPS.LOCAL_PATH, argv.name || argv.template);
 
@@ -38,7 +38,7 @@ export default {
 		}
 
 		fs.promises
-			.cp(template.src, newLocation, { recursive: true })
+			.cp(tps.template.location, newLocation, { recursive: true })
 			.then(() => {
 				process.exit(0);
 			})

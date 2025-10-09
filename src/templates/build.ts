@@ -331,6 +331,8 @@ export class Build {
 		const loggerGroup = this.getLogger();
 		loggerGroup.info('Rendering directories in %s', directory);
 
+		loggerGroup.info('Packages: %n', this.template.packagesUsed);
+
 		const dirsInProgress = this.template
 			.usedPackages()
 			.map(async (pkg): Promise<void> => {

@@ -100,7 +100,7 @@ export const createHandler: CommandModule<object, UseArgv>['handler'] = async (
 	// @ts-expect-error wrong types for `is`
 	if (is.array(packages) && !is.array.empty(packages)) {
 		logger.cli.info('Loading packages:', packages);
-		tps.loadPackages(packages);
+		await tps.loadPackages(packages);
 	}
 
 	if (tps.hasPrompts()) {

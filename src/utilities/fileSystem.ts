@@ -1,7 +1,11 @@
 import fs from 'fs';
 import * as findFileUp from 'find-up';
 import path from 'path';
-import { CosmiconfigResult, PublicExplorerSync } from 'cosmiconfig';
+import {
+	CosmiconfigResult,
+	PublicExplorer,
+	PublicExplorerSync,
+} from 'cosmiconfig';
 
 /**
  * Check to see if the `path` is a valid directory
@@ -92,6 +96,42 @@ export function cosmiconfigAllExampleSync(
 	}
 
 	getNext(searchPath);
+
+	return results;
+}
+
+export async function cosmiconfigAll(
+	searchPath: string,
+	explorer: PublicExplorer,
+	searchPlaces: string[],
+): Promise<CosmiconfigResult[]> {
+	const results = [];
+	const sortedSearchPlaces = searchPlaces.sort((a, b) => {
+		return countDirectories(b) - countDirectories(a);
+	});
+
+	async function getNext(currentPath): Promise<CosmiconfigResult | null> {
+		const currentResult = await explorer.search(currentPath);
+
+		// if no result found, end search
+		if (!currentResult) {
+			return;
+		}
+
+		// add current result to end of array
+		results.push(currentResult);
+
+		const dir = sortedSearchPlaces.reduce((acc, next) => {
+			return acc.replace(next, '');
+		}, currentResult.filepath);
+
+		const nextPath = path.dirname(dir);
+
+		// eslint-disable-next-line consistent-return
+		return getNext(nextPath);
+	}
+
+	await getNext(searchPath);
 
 	return results;
 }

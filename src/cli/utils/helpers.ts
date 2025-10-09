@@ -35,7 +35,7 @@ export const getCliArgsFromTemplate = async (
 			alias: prompt.aliases,
 			...(prompt?.choices && { choices: prompt.choices }),
 			// TODO: Will need to strip `tps-` prefix off of third party templates
-			group: `${sentenceCase(tps.template)}:`,
+			group: `${sentenceCase(tps.template.name)}:`,
 			demandOption: false,
 		};
 	});

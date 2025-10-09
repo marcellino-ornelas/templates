@@ -5,6 +5,7 @@ import Templates from '@tps/templates';
 import logger from '@tps/utilities/logger';
 import path from 'path';
 import { flatten, unique } from '@tps/utilities/helpers';
+import { tpsrcSearchPlaces } from '@tps/templates/tpsrc';
 
 interface ListArgv {
 	global: boolean;
@@ -13,14 +14,15 @@ interface ListArgv {
 	nodeModules: boolean;
 }
 
-const removeConfigFileNames = (arr: string[]) => {
-	const configFilesMap = Templates.tpsrcConfigNames.reduce<
-		Record<string, boolean>
-	>((mapping, name) => {
-		// eslint-disable-next-line no-param-reassign -- adding to object not reassigning
-		mapping[name] = true;
-		return mapping;
-	}, {});
+const removeConfigFileNames = async (arr: string[]) => {
+	const configFilesMap = tpsrcSearchPlaces.reduce<Record<string, boolean>>(
+		(mapping, name) => {
+			// eslint-disable-next-line no-param-reassign -- adding to object not reassigning
+			mapping[name] = true;
+			return mapping;
+		},
+		{},
+	);
 
 	return arr.filter((item) => {
 		// if item is not a config file

@@ -677,7 +677,7 @@ tps express-app app -f react
 ```js
 const Templates = require('tps');
 
-const tps = new Templates('express-app');
+const tps = await Templates.get('express-app');
 
 tps.setAnswers({ f: 'react' });
 ```

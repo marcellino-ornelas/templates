@@ -16,7 +16,7 @@ interface Template {
 ```
 
 ```ts title="Usage"
-new Templates('<template-name>', {
+await Templates.get('<template-name>', {
     /* template options ... */
 });
 ```
@@ -24,7 +24,7 @@ new Templates('<template-name>', {
 <Example>
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     wipe: true,
 });
 ```
@@ -73,7 +73,7 @@ Optional path to add prepend to each
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     extendDest: './path/to/some/directory',
 });
 ```
@@ -144,7 +144,7 @@ value.
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     // highlight-next-line
     extendDest: './src',
 });
@@ -209,7 +209,7 @@ potential conflicts during the rendering process.
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     // highlight-next-line
     wipe: true,
 });
@@ -302,7 +302,7 @@ conflicts.
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     // highlight-next-line
     force: true,
 });
@@ -429,7 +429,7 @@ in progress.
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     // highlight-next-line
     newFolder: false,
 });
@@ -533,7 +533,7 @@ tps react-component Nav --hidden
 <TabItem value="node" label="Node">
 
 ```ts
-new Templates('react-component', {
+await Templates.get('react-component', {
     // highlight-next-line
     hidden: true,
 });
