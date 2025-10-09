@@ -11,12 +11,12 @@ type Data = Record<string, unknown>;
 
 export interface FileOptions {
 	force?: boolean;
-	useExperimentalTemplateEngine?: boolean;
+	experimentalTemplateEngine?: boolean;
 }
 
 const DEFAULT_OPTS: FileOptions = {
 	force: false,
-	useExperimentalTemplateEngine: false,
+	experimentalTemplateEngine: false,
 };
 
 /**
@@ -114,7 +114,7 @@ class File {
 			...DEFAULT_OPTS,
 			...options,
 		};
-		this.engine = this.options.useExperimentalTemplateEngine
+		this.engine = this.options.experimentalTemplateEngine
 			? templateEngine
 			: dot;
 	}

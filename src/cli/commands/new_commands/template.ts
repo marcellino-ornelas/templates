@@ -17,7 +17,7 @@ export default {
 
 	description: 'create a new template',
 
-	builder: async (yargs) => {
+	async builder(yargs) {
 		const options = await getCliArgsFromTemplate('new-template');
 
 		yargs.options(options);

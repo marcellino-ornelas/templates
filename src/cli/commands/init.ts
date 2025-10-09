@@ -1,6 +1,6 @@
 import { CommandModule } from 'yargs';
 import debug from 'debug';
-import { Templates } from '@tps/templates/templates';
+import Templates from '@tps/templates';
 import { TemplatesOptions } from '@tps/types/templates';
 import * as TPS from '@tps/utilities/constants';
 import {

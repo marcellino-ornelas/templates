@@ -320,7 +320,7 @@ export class Template<TAnswers = AnswersHash> {
 				async (fileNode: FileNode) => {
 					const file = File.fromFileNode(fileNode, {
 						force,
-						useExperimentalTemplateEngine: experimentalTemplateEngine,
+						experimentalTemplateEngine,
 					});
 					logger.tps.info(
 						`  - %s ${colors.green.italic('compiled')}`,
