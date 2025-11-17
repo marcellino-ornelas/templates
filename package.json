@@ -100,7 +100,7 @@
 		"dot": "^1.1.3",
 		"find-up": "3.0.0",
 		"inflection": "^2.0.1",
-		"inquirer": "6.2.2",
+		"inquirer": "13.0.1",
 		"is": "3.3.0",
 		"memfs": "^4.2.1",
 		"minimatch": "^9.0.5",
